@@ -597,8 +597,52 @@ adp_results <- lapply(seq_len(nrow(adp_institutions)), function(i) {
 })
 adp_df <- bind_rows(adp_results)
 
+# Salish Kootenai College, Little Big Horn College, and Fort Peck
+# Community College also have no structured ATS -- each gets its own
+# heuristic scraper in misc_college_scrapers.R tailored to its real page
+# structure, same caveats as the other heuristic sources above.
+skc_institutions <- he_registry[he_registry$Platform == "SKCHeuristic", ]
+skc_results <- lapply(seq_len(nrow(skc_institutions)), function(i) {
+  row <- skc_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_skc_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+skc_df <- bind_rows(skc_results)
+
+lbhc_institutions <- he_registry[he_registry$Platform == "LBHCHeuristic", ]
+lbhc_results <- lapply(seq_len(nrow(lbhc_institutions)), function(i) {
+  row <- lbhc_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_lbhc_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+lbhc_df <- bind_rows(lbhc_results)
+
+fpcc_institutions <- he_registry[he_registry$Platform == "FPCCHeuristic", ]
+fpcc_results <- lapply(seq_len(nrow(fpcc_institutions)), function(i) {
+  row <- fpcc_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_fpcc_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+fpcc_df <- bind_rows(fpcc_results)
+
 hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, dawsoncc_df,
-                         isolvedhire_df, neogov_df, carroll_df, rockymtn_df, adp_df)
+                         isolvedhire_df, neogov_df, carroll_df, rockymtn_df, adp_df,
+                         skc_df, lbhc_df, fpcc_df)
 ```
 
 ### Combine all HE data, classify, archive, and accumulate history

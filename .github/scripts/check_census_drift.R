@@ -18,11 +18,11 @@ he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALS
 #
 # ACS county context is COUNTY-level, not row-level -- salarymap2.csv has
 # 30 K-12 district rows across 18 distinct counties (grew from 18/12 when
-# MT_SAIPE_DISTRICT_MAP was extended 2026-08-07), salarymap.csv has 13 HE
-# institution rows across only 7 distinct counties -- confirmed live
+# MT_SAIPE_DISTRICT_MAP was extended 2026-08-07), salarymap.csv has 16 HE
+# institution rows across 14 distinct counties -- confirmed live
 # 2026-08-07 that Cascade County (Great Falls College MSU + University of
 # Providence) and Yellowstone County (MSU Billings + Rocky Mountain
-# College) each now hold 2 institutions, unlike the original 6 (no two of
+# College) each hold 2 institutions, unlike the original 6 (no two of
 # which shared a county at all). Counting distinct counties WITH a non-NA
 # figure (not just nrow()) is the structural signal that matches how many
 # counties are actually represented.
@@ -38,7 +38,7 @@ k12_saipe_covered <- sum(!is.na(k12$Child_Poverty_Rate))
 
 flags <- rbind(
   check_salary_coverage("K-12 county context (Census ACS)", k12_counties_covered, expected = 18L),
-  check_salary_coverage("HE county context (Census ACS)", he_counties_covered, expected = 7L),
+  check_salary_coverage("HE county context (Census ACS)", he_counties_covered, expected = 14L),
   check_salary_coverage("K-12 district child poverty (Census SAIPE)", k12_saipe_covered, expected = 30L)
 )
 
@@ -50,7 +50,7 @@ coverage_lines <- if (is.null(flags) || nrow(flags) == 0) {
   lines <- c(
     paste0("Automated Census source coverage check flagged ", nrow(flags), " source(s) as of ", Sys.Date(), "."),
     "",
-    "Like the salary coverage check, this is a hard assertion against a known, essentially-fixed universe (18 counties across the 30 registered K-12 districts, 7 counties across the 13 registered HE institutions, 30 districts) rather than a trailing statistical baseline -- Census data updates at most once a year. A source landing below its expected count usually means the Census API changed its response shape (a variable code retired, a geography type renamed) and the parser is silently extracting less real data.",
+    "Like the salary coverage check, this is a hard assertion against a known, essentially-fixed universe (18 counties across the 30 registered K-12 districts, 14 counties across the 16 registered HE institutions, 30 districts) rather than a trailing statistical baseline -- Census data updates at most once a year. A source landing below its expected count usually means the Census API changed its response shape (a variable code retired, a geography type renamed) and the parser is silently extracting less real data.",
     ""
   )
   for (i in seq_len(nrow(flags))) {

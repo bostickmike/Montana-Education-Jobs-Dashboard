@@ -134,6 +134,126 @@ parse_dawson_cc_postings <- function(html_text, url) {
   do.call(rbind, rows)
 }
 
+# Salish Kootenai College (skc.edu/employment/) -- real, current openings
+# under an accordion widget, confirmed live 2026-08-07: every
+# `.uabb-adv-accordion-button-label` on the page is a real job title (the
+# page has exactly one "Available Positions" accordion group, no unrelated
+# accordion elsewhere), 17 real postings. No per-posting URL (application
+# by email/mail to Human Resources), no Posted_Date, single real campus
+# (Pablo) -- same honest-fallback pattern as Carroll College above.
+fetch_skc_postings <- function(url = "https://www.skc.edu/employment/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_skc_postings(resp_body_string(resp), url)
+}
+
+parse_skc_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  titles <- rvest::html_text2(rvest::html_elements(page, ".uabb-adv-accordion-button-label"))
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Pablo",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# Little Big Horn College (lbhc.edu/Job_opportunities) -- real, current
+# openings in a plain HTML table inside the page's own Drupal body field,
+# each title a real link to its own PDF position announcement (confirmed
+# live 2026-08-07, relative hrefs resolved against the site's own domain
+# since the page doesn't ship a <base> tag). No Posted_Date -- every real
+# row's "Closing Date" column says "Open Until Filled", not an actual
+# date, so it isn't stored as one. Single real campus (Crow Agency).
+LBHC_BASE_URL <- "http://lbhc.edu"
+
+fetch_lbhc_postings <- function(url = "http://lbhc.edu/Job_opportunities") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_lbhc_postings(resp_body_string(resp))
+}
+
+parse_lbhc_postings <- function(html_text) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  links <- rvest::html_elements(page, ".field--name-body table a[href$='.pdf']")
+  if (length(links) == 0) return(empty)
+
+  hrefs <- rvest::html_attr(links, "href")
+  hrefs <- ifelse(grepl("^https?://", hrefs), hrefs, paste0(LBHC_BASE_URL, hrefs))
+
+  data.frame(
+    Title = rvest::html_text2(links),
+    Location = "Crow Agency",
+    Posted_Date = NA_character_,
+    Link = hrefs,
+    stringsAsFactors = FALSE
+  )
+}
+
+# Fort Peck Community College (fpcc.edu/about-fpcc/employment/) -- real,
+# current openings in a Webflow CMS collection list (`.tile.w-dyn-item`),
+# confirmed live 2026-08-07: each item's real fields are Title
+# (`h2.heading-h4`), then 4 `h3.heading-h5` siblings in a fixed order
+# (Employment Type, Location, an empty Category field, Status) -- Location
+# is always the 2nd. Real per-posting PDF link via `a.btn-secondary`. No
+# Posted_Date -- Status is always a state like "Until Filled", not a date.
+# Genuinely the smallest of these three sources (1 real posting confirmed
+# live), but real and cleanly structured, unlike Chief Dull Knife
+# College's page (checked the same session, found to have no real job
+# content at all -- not built).
+fetch_fpcc_postings <- function(url = "https://www.fpcc.edu/about-fpcc/employment/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_fpcc_postings(resp_body_string(resp))
+}
+
+parse_fpcc_postings <- function(html_text) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  items <- rvest::html_elements(page, ".tile.w-dyn-item")
+  if (length(items) == 0) return(empty)
+
+  rows <- lapply(items, function(item) {
+    title <- rvest::html_text2(rvest::html_element(item, "h2.heading-h4"))
+    if (is.na(title) || !nzchar(title)) return(NULL)
+
+    fields <- rvest::html_text2(rvest::html_elements(item, "h3.heading-h5"))
+    location <- if (length(fields) >= 2 && nzchar(fields[2])) fields[2] else NA_character_
+
+    link_el <- rvest::html_element(item, "a.btn-secondary")
+    link <- if (!is.na(link_el)) rvest::html_attr(link_el, "href") else NA_character_
+
+    data.frame(
+      Title = title,
+      Location = location,
+      Posted_Date = NA_character_,
+      Link = link,
+      stringsAsFactors = FALSE
+    )
+  })
+  rows <- rows[!vapply(rows, is.null, logical(1))]
+
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
 # Carroll College (carroll.edu/faculty-staff-positions) -- real, current
 # openings under an accordion widget, confirmed live 2026-08-07: every
 # `.accordion__trigger` button on the page is a real job title (the page

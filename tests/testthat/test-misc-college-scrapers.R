@@ -163,3 +163,103 @@ test_that("fetch_rocky_mountain_college_postings fetches and parses a live-shape
 
   expect_equal(nrow(result), 7)
 })
+
+# Real fixture captured 2026-08-07 from https://www.skc.edu/employment/.
+
+test_that("parse_skc_postings extracts all 17 real accordion job titles", {
+  html <- paste(readLines(test_path("fixtures", "skc_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_skc_postings(html, "https://www.skc.edu/employment/")
+
+  expect_equal(nrow(result), 17)
+  expect_true("Accounting Assistant" %in% result$Title)
+  expect_true(all(result$Location == "Pablo"))
+  expect_true(all(result$Link == "https://www.skc.edu/employment/"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_skc_postings returns zero rows (not an error) when there's no accordion", {
+  result <- parse_skc_postings("<html><body><p>no openings</p></body></html>", "https://www.skc.edu/employment/")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_skc_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "skc_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_skc_postings()
+
+  expect_equal(nrow(result), 17)
+})
+
+# Real fixture captured 2026-08-07 from http://lbhc.edu/Job_opportunities.
+
+test_that("parse_lbhc_postings extracts all 4 real postings with resolved absolute PDF links", {
+  html <- paste(readLines(test_path("fixtures", "lbhc_job_opportunities.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_lbhc_postings(html)
+
+  expect_equal(nrow(result), 4)
+  expect_equal(result$Title[1], "Chief Finance Officer")
+  # Real relative href resolved against the site's own domain (no <base>
+  # tag on the page to resolve against otherwise).
+  expect_equal(result$Link[1], "http://lbhc.edu/sites/default/files/lbhc/humanresources/2026_CFO_LBHC_final.pdf")
+  expect_true(all(result$Location == "Crow Agency"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_lbhc_postings returns zero rows (not an error) when there's no positions table", {
+  result <- parse_lbhc_postings("<html><body><p>no openings</p></body></html>")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_lbhc_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "lbhc_job_opportunities.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_lbhc_postings()
+
+  expect_equal(nrow(result), 4)
+})
+
+# Real fixture captured 2026-08-07 from
+# https://www.fpcc.edu/about-fpcc/employment/.
+
+test_that("parse_fpcc_postings extracts the 1 real posting with its real location and PDF link", {
+  html <- paste(readLines(test_path("fixtures", "fpcc_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_fpcc_postings(html)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title[1], "Agriculture Assistant")
+  # Location is the 2nd of 4 real h3.heading-h5 siblings (Employment Type,
+  # Location, an empty Category field, Status) -- confirmed live, not
+  # assumed to always be a fixed campus city the way the other heuristic
+  # HE sources are.
+  expect_equal(result$Location[1], "Poplar")
+  expect_true(grepl("Ag-Assistant-Job-Description\\.pdf$", result$Link[1]))
+  expect_true(is.na(result$Posted_Date[1]))
+})
+
+test_that("parse_fpcc_postings returns zero rows (not an error) when there are no real listing items", {
+  result <- parse_fpcc_postings("<html><body><p>no openings</p></body></html>")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_fpcc_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "fpcc_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_fpcc_postings()
+
+  expect_equal(nrow(result), 1)
+})
