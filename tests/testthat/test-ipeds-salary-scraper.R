@@ -5,15 +5,17 @@
 # MT_IPEDS_UNITID_MAP was extended to cover the rest of the registry
 # captured 2026-08-07, the 4 tribal colleges (Fort Peck CC, Little Big Horn
 # College, Salish Kootenai College, Stone Child College) appended the same
-# day when their own fast-follow gap closed -- all trimmed to just the
-# unitids MT_IPEDS_UNITID_MAP actually needs (all academic_rank x
-# contract_length x sex combinations for each, real data not synthetic).
+# day when their own fast-follow gap closed, and Aaniiih Nakoda College /
+# Chief Dull Knife College appended once their own new heuristic scrapers
+# (misc_college_scrapers.R) went live -- all trimmed to just the unitids
+# MT_IPEDS_UNITID_MAP actually needs (all academic_rank x contract_length
+# x sex combinations for each, real data not synthetic).
 
-test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 17 institutions", {
+test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 19 institutions", {
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_he_salaries(df, 2024)
 
-  expect_equal(nrow(result), 17)
+  expect_equal(nrow(result), 19)
 
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
@@ -82,7 +84,7 @@ test_that("parse_ipeds_salary_trend_year extracts just the headline overall figu
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_salary_trend_year(df, 2024)
 
-  expect_equal(nrow(result), 17)
+  expect_equal(nrow(result), 19)
   expect_equal(names(result), c("Name", "Year", "Faculty_Avg_Salary"))
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)

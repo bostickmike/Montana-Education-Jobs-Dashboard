@@ -74,7 +74,12 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
   180212L, "Fort Peck Community College",
   180328L, "Little Big Horn College",
   180647L, "Salish Kootenai College",
-  366340L, "Stone Child College"
+  366340L, "Stone Child College",
+  # Added 2026-08-07 alongside their new heuristic scrapers
+  # (misc_college_scrapers.R) -- confirmed live against the Urban
+  # Institute's college directory and real 2024 salary response.
+  180203L, "Aaniiih Nakoda College",
+  180160L, "Chief Dull Knife College"
 )
 
 # Follows the API's `next` pagination link until exhausted, returning every

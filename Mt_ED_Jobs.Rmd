@@ -694,9 +694,41 @@ stonechild_results <- lapply(seq_len(nrow(stonechild_institutions)), function(i)
 })
 stonechild_df <- bind_rows(stonechild_results)
 
+# Aaniiih Nakoda College and Chief Dull Knife College also have no
+# structured ATS -- each gets its own heuristic scraper in
+# misc_college_scrapers.R tailored to its real page structure. CDKC's
+# scraper is expected to return zero rows most weeks (see that scraper's
+# own header comment) -- its one real current File block is a Trustee
+# board-seat notice, not a job posting.
+ancollege_institutions <- he_registry[he_registry$Platform == "AnCollegeHeuristic", ]
+ancollege_results <- lapply(seq_len(nrow(ancollege_institutions)), function(i) {
+  row <- ancollege_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_ancollege_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+ancollege_df <- bind_rows(ancollege_results)
+
+cdkc_institutions <- he_registry[he_registry$Platform == "CDKCHeuristic", ]
+cdkc_results <- lapply(seq_len(nrow(cdkc_institutions)), function(i) {
+  row <- cdkc_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_cdkc_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+cdkc_df <- bind_rows(cdkc_results)
+
 hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, dawsoncc_df,
                          isolvedhire_df, neogov_df, carroll_df, rockymtn_df, adp_df,
-                         skc_df, lbhc_df, fpcc_df, stonechild_df)
+                         skc_df, lbhc_df, fpcc_df, stonechild_df, ancollege_df, cdkc_df)
 ```
 
 ### Combine all HE data, classify, archive, and accumulate history

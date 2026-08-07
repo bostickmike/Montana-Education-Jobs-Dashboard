@@ -378,3 +378,116 @@ parse_rocky_mountain_college_postings <- function(html_text) {
   if (length(rows) == 0) return(empty)
   do.call(rbind, rows)
 }
+
+# Aaniiih Nakoda College (ancollege.edu/careers) -- a Wix-hosted static
+# page, real current postings in free-text blocks (confirmed live
+# 2026-08-07, no client-side rendering gap: a plain httr2 GET already
+# ships the real postings in the raw HTML, no chromote needed unlike
+# Stone Child's Wix site). No stable per-posting section markup (no
+# heading tags, no repeatable class -- Wix's own generated classes are
+# per-component GUIDs, not a reusable selector) -- but each posting's
+# real title is itself a hyperlink to that posting's PDF/DOCX description
+# (e.g. "CIS Assistant" linking to the same file its own "Read the full
+# job description here." link right after it points to), the same href
+# on both anchors. Recovered by pairing every `<a>` whose trimmed text is
+# "here"/"here." with the anchor immediately before it in document order
+# -- the intro paragraph's 3 unrelated links (Campus Safety/Clery Act,
+# Catalog, the blank job Application form) are never immediately followed
+# by a "here" link, so they're naturally excluded, not filtered by name.
+# No Posted_Date (free-text prose, no consistent date field), single real
+# campus (Harlem/Fort Belknap Agency).
+fetch_ancollege_postings <- function(url = "https://www.ancollege.edu/careers") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_ancollege_postings(resp_body_string(resp))
+}
+
+parse_ancollege_postings <- function(html_text) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  links <- rvest::html_elements(page, "a[href*='_files/ugd']")
+  if (length(links) < 2) return(empty)
+
+  texts <- trimws(rvest::html_text2(links))
+  hrefs <- rvest::html_attr(links, "href")
+  is_here <- grepl("^here\\.?$", texts, ignore.case = TRUE)
+
+  # A "here" link's title is whatever real (non-"here") anchor came right
+  # before it -- guards against two "here" links in a row (shouldn't
+  # happen, but would otherwise silently pair a "here" with another
+  # "here" instead of a real title).
+  title_idx <- which(is_here) - 1L
+  valid <- title_idx >= 1 & !is_here[pmax(title_idx, 1)]
+  title_idx <- title_idx[valid]
+  here_idx <- which(is_here)[valid]
+
+  if (length(title_idx) == 0) return(empty)
+
+  data.frame(
+    Title = texts[title_idx],
+    Location = "Harlem",
+    Posted_Date = NA_character_,
+    Link = hrefs[here_idx],
+    stringsAsFactors = FALSE
+  )
+}
+
+# Chief Dull Knife College (cdkc.edu/faculty-staff/employment/) -- a
+# WordPress site using the Gutenberg "File" block for each real posting:
+# a `div.wp-block-file` with two real anchors, the title (no class,
+# e.g. "Birney Trustee App 08 2026") and a "Download" button (real class
+# "wp-block-file__button") pointing at the same PDF -- confirmed live
+# 2026-08-07, a plain httr2 GET already ships the real content, no
+# chromote needed.
+#
+# As of 2026-08-07 the page's one real File block is "Birney Trustee App"
+# -- a school-board trustee-seat application, not an employment posting
+# (a real, recurring non-job category on tribal college sites, not a
+# one-off) -- so CDKC_NON_JOB_TITLE_PATTERN excludes it by keyword rather
+# than by its exact dated filename, the same way MILES_CC_NON_TITLE_LABELS
+# excludes section labels above: this scraper is expected to return zero
+# real rows right now, and start surfacing real postings the moment CDKC
+# publishes one, without code changes. No Posted_Date (the file title
+# sometimes embeds a date, but it's not a structured field), single real
+# campus (Lame Deer).
+CDKC_NON_JOB_TITLE_PATTERN <- "trustee"
+
+fetch_cdkc_postings <- function(url = "https://www.cdkc.edu/faculty-staff/employment/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_cdkc_postings(resp_body_string(resp))
+}
+
+parse_cdkc_postings <- function(html_text) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  blocks <- rvest::html_elements(page, "div.wp-block-file")
+  if (length(blocks) == 0) return(empty)
+
+  rows <- lapply(blocks, function(block) {
+    title_el <- rvest::html_element(block, "a:not([class])")
+    title <- rvest::html_text2(title_el)
+    if (is.na(title) || !nzchar(title)) return(NULL)
+    if (grepl(CDKC_NON_JOB_TITLE_PATTERN, title, ignore.case = TRUE)) return(NULL)
+
+    data.frame(
+      Title = title,
+      Location = "Lame Deer",
+      Posted_Date = NA_character_,
+      Link = rvest::html_attr(title_el, "href"),
+      stringsAsFactors = FALSE
+    )
+  })
+  rows <- rows[!vapply(rows, is.null, logical(1))]
+
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}

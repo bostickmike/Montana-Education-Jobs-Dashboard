@@ -310,3 +310,96 @@ test_that("fetch_stonechild_postings drives a chromote session and parses its re
 
   expect_equal(nrow(result), 5)
 })
+
+# Real fixture captured 2026-08-07 from https://www.ancollege.edu/careers.
+
+test_that("parse_ancollege_postings pairs each real title with the 'here' link right after it", {
+  html <- paste(readLines(test_path("fixtures", "ancollege_careers.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_ancollege_postings(html)
+
+  expect_equal(nrow(result), 11)
+  expect_true("CIS Assistant" %in% result$Title)
+  expect_true("Traditional Ecological Knowledge (TEK) Education and Youth Development Coordinator" %in% result$Title)
+  expect_true(all(result$Location == "Harlem"))
+  expect_true(all(is.na(result$Posted_Date)))
+
+  cis <- result[result$Title == "CIS Assistant", ]
+  expect_equal(cis$Link, "https://www.ancollege.edu/_files/ugd/8f3705_0f4ab04d2b464123a8b3972d9bde23a4.pdf")
+
+  # Regression: the 3 unrelated intro links (Campus Safety/Clery Act,
+  # Catalog, the blank Application form) must not be misread as titles --
+  # none of them is immediately followed by a "here" link.
+  expect_false(any(result$Title %in% c("Campus Safety/Clery Act", "Catalog", "Application")))
+})
+
+test_that("parse_ancollege_postings returns zero rows (not an error) when there are no postings", {
+  result <- parse_ancollege_postings("<html><body><p>no openings</p></body></html>")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_ancollege_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "ancollege_careers.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_ancollege_postings()
+
+  expect_equal(nrow(result), 11)
+})
+
+# Real fixture captured 2026-08-07 from
+# https://www.cdkc.edu/faculty-staff/employment/ -- as of that date the
+# page's one real File block is a Trustee board-seat application, not a
+# job posting, so this fixture proves the exclusion filter, not real
+# postings extraction (see the synthetic test below for that).
+
+test_that("parse_cdkc_postings excludes the real Trustee board-seat notice, not a job posting", {
+  html <- paste(readLines(test_path("fixtures", "cdkc_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_cdkc_postings(html)
+
+  expect_equal(nrow(result), 0)
+})
+
+test_that("parse_cdkc_postings extracts a real job posting once one exists, alongside an excluded Trustee notice", {
+  html <- '
+    <html><body>
+      <div class="wp-block-file">
+        <a href="https://www.cdkc.edu/wp-content/uploads/Adjunct-Instructor.pdf">Adjunct Instructor - Mathematics</a>
+        <a href="https://www.cdkc.edu/wp-content/uploads/Adjunct-Instructor.pdf" class="wp-block-file__button">Download</a>
+      </div>
+      <div class="wp-block-file">
+        <a href="https://www.cdkc.edu/wp-content/uploads/Birney-Trustee-App.pdf">Birney Trustee App 08 2026</a>
+        <a href="https://www.cdkc.edu/wp-content/uploads/Birney-Trustee-App.pdf" class="wp-block-file__button">Download</a>
+      </div>
+    </body></html>
+  '
+
+  result <- parse_cdkc_postings(html)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Adjunct Instructor - Mathematics")
+  expect_equal(result$Location, "Lame Deer")
+  expect_true(is.na(result$Posted_Date))
+  expect_equal(result$Link, "https://www.cdkc.edu/wp-content/uploads/Adjunct-Instructor.pdf")
+})
+
+test_that("parse_cdkc_postings returns zero rows (not an error) when there are no File blocks", {
+  result <- parse_cdkc_postings("<html><body><p>no openings</p></body></html>")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_cdkc_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "cdkc_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_cdkc_postings()
+
+  expect_equal(nrow(result), 0)
+})
