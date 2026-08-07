@@ -68,6 +68,19 @@ One row per (`District`, `Archive_Date`), counting **every** position type, not 
 | `Archive_Date` | date | |
 | `n` | integer | All postings that district had that run, any position type. |
 
+### `k12_salary_history.csv` — multi-year K-12 salary archive
+
+Ported from the Wyoming Education Jobs Dashboard's own equivalent file. MT DLI publishes no historical archive of its own (only the current edition's PDFs are ever published, confirmed live) — this is this project's own accumulating record, one snapshot appended per new `Salary_Year` DLI publishes (not one row per weekly run; `needs_k12_salary_archive_update()` in `salary_scrapers.R` guards against duplicate-year appends). **Not currently read by `app.R`** — it exists to grow into a real multi-year trend as more `Salary_Year`s accumulate, the same way `salarymap.csv`'s `Faculty_Avg_Salary_Y1Ago`/`Y2Ago` already work on the HE side via IPEDS's deeper history. Columns are MT's own DLI shape, not Wyoming's WSBA-shaped `Teacher_Base_Salary`/`Superintendent_Salary` — MT genuinely has neither of those (see `salarymap2.csv`'s section below).
+
+| Column | Type | Notes |
+|---|---|---|
+| `District` | text | |
+| `Salary_Year` | text | |
+| `Teacher_Count` | numeric | |
+| `Teacher_Salary_10th_Pctile` | numeric | |
+| `Teacher_Avg_Salary` | numeric | |
+| `Teacher_Salary_90th_Pctile` | numeric | |
+
 ### `salarymap2.csv` — one row per registered district, static reference + refreshed figures
 
 One current row per this project's **32 directly-scraped K-12 districts** (`k12_district_registry.csv`) — not Montana's full ~398-district universe, matching this project's job-postings scraping scope. `District`/`County`/`Latitude`/`Longitude`/`Job_Link` come from the registry; everything else is refreshed from its live source every run (and left untouched if that run's fetch fails, rather than being blanked out). `MT_CCD_LEA_MAP`/`MT_OPI_FINANCE_LEA_MAP`/`MT_SAIPE_DISTRICT_MAP` (staffing, finance, child poverty) cover 30 of the 32 registered districts — Wolf Point and Plentywood (added 2026-08-07 via chromote-driven Apptegy scrapers, see `misc_district_scrapers.R`) aren't mapped into these yet, the ordinary "salary/staffing coverage is a separate fast-follow" gap every newly-added district has had. **One real, permanent exception on top of that**: `MT_DLI_DISTRICT_MAP` (teacher salary) covers only 25 of the 30 it does reach — Helena, Lockwood, and Glendive are genuinely "ND" (non-disclosable) in their own regional PDF row despite a real disclosed teacher count, and Lame Deer and Lodge Grass don't appear as a row in any of MT DLI's 9 regional PDFs at all. All five show real `NA` for `Teacher_Avg_Salary` and related columns — confirmed live, not an unfinished fast-follow.

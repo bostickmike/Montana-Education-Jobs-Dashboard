@@ -4,7 +4,10 @@
 # check_file_schema() itself is state-agnostic and kept as-is.
 # REQUIRED_SCHEMAS below reflects what Montana's pipeline actually produces
 # so far -- extended as each new data source gets built, the same way
-# Wyoming's own list grew over that project's history.
+# Wyoming's own list grew over that project's history. REQUIRED_SCHEMAS
+# reflects the columns app.R actually reads by name from each file --
+# k12_salary_history.csv is deliberately absent since nothing in app.R
+# reads it yet (same as Wyoming's own equivalent file).
 REQUIRED_SCHEMAS <- list(
   "combinedclean.csv" = c("title", "date_posted", "position", "location", "url", "District"),
   "k12jobanalysis.csv" = c("title", "Archive_Date", "location", "District"),

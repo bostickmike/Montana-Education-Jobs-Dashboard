@@ -374,6 +374,12 @@ if (nrow(teacher_salary) > 0) {
                       "Teacher_Salary_90th_Pctile", "Salary_Year", "Salary_Source"))) %>%
     left_join(teacher_salary, by = "District") %>%
     mutate(Salary_Source = "MT Dept. of Labor & Industry Teacher Compensation Report (lmi.mt.gov/publications)")
+
+  # Starts building a multi-year K-12 salary trend -- MT DLI has no public
+  # historical archive (only the current edition's PDFs are ever
+  # published, confirmed live), so this only accumulates real history
+  # going forward, one snapshot per new Salary_Year.
+  archive_k12_salary_snapshot(salarymap2, file.path("Mt_Ed_Jobs", "k12_salary_history.csv"))
 } else {
   message("MT DLI teacher compensation fetch failed -- leaving salarymap2.csv's salary columns untouched this run.")
 }
