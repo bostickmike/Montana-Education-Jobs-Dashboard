@@ -9,10 +9,33 @@ test_that("parse_neogov_postings extracts real University of Montana posting fie
   expect_equal(nrow(result), 44)
   expect_equal(result$Title[1], "Academic Advisor II, College of Humanities and Social Sciences and the College of Science")
   expect_equal(result$Location[1], "32 Campus Dr, Missoula, MT 59801, USA")
-  # Helena College UM and Missoula College UM postings both surface on this
-  # same board (confirmed by real Helena, MT addresses in the fixture) --
-  # neither branch campus needs its own registry row.
-  expect_true(any(grepl("Helena, MT", result$Location)))
+  expect_equal(result$Institution[1], "University of Montana")
+  # Helena College UM, Missoula College UM, and UM Western postings all
+  # surface on this same board (confirmed by real street addresses in the
+  # fixture) -- Institution (2026-08-07) attributes each posting to its
+  # real branch campus instead of lumping everything into University of
+  # Montana; none of the three needs its own scrape target, just its own
+  # registry row for map/salary reference data.
+  helena <- result[grepl("Helena, MT", result$Location), ]
+  expect_true(nrow(helena) > 0)
+  expect_true(all(helena$Institution == "Helena College"))
+
+  missoula_college <- result[grepl("1205 E Broadway St", result$Location), ]
+  expect_true(nrow(missoula_college) > 0)
+  expect_true(all(missoula_college$Institution == "Missoula College"))
+
+  um_western <- result[grepl("Dillon, MT", result$Location), ]
+  expect_true(nrow(um_western) > 0)
+  expect_true(all(um_western$Institution == "University of Montana Western"))
+
+  # A real remote/out-of-state posting with no MT branch-campus address
+  # (confirmed live, a research-center field position) falls back to
+  # University of Montana, the umbrella board owner -- not misattributed
+  # to any branch campus.
+  remote <- result[grepl("St. Clair County, IL", result$Location), ]
+  expect_true(nrow(remote) > 0)
+  expect_true(all(remote$Institution == "University of Montana"))
+
   # Session query params (visitor/session) are stripped -- confirmed live
   # that reusing another session's params 500s, while the bare URL 200s.
   expect_false(grepl("[?&]", result$Link[1]))
@@ -22,13 +45,22 @@ test_that("parse_neogov_postings extracts real University of Montana posting fie
   expect_true(all(is.na(result$Posted_Date)))
 })
 
+test_that("neogov_location_to_institution maps each real branch-campus address, falling back otherwise", {
+  expect_equal(neogov_location_to_institution("1205 E Broadway St, Missoula, MT 59802, USA", "University of Montana"), "Missoula College")
+  expect_equal(neogov_location_to_institution("1115 N Roberts St, Helena, MT 59601, USA", "University of Montana"), "Helena College")
+  expect_equal(neogov_location_to_institution("2300 Airport Rd, Helena, MT 59601, USA", "University of Montana"), "Helena College")
+  expect_equal(neogov_location_to_institution("710 S Atlantic St, Dillon, MT 59725, USA", "University of Montana"), "University of Montana Western")
+  expect_equal(neogov_location_to_institution("32 Campus Dr, Missoula, MT 59801, USA", "University of Montana"), "University of Montana")
+  expect_equal(neogov_location_to_institution("St. Clair County, IL, USA", "University of Montana"), "University of Montana")
+})
+
 test_that("parse_neogov_postings returns zero rows (not an error) for a genuinely empty board", {
   empty_fragment <- '<div class="wrapper__body"></div>'
 
   result <- parse_neogov_postings(empty_fragment, "University of Montana")
 
   expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Institution"))
 })
 
 test_that("fetch_neogov_postings requests the XMLHttpRequest-gated endpoint and stops paging on a short page", {

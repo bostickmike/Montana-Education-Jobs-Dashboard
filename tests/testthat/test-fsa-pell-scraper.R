@@ -10,14 +10,14 @@
 # the same year as the grants data (see this file's source header), not
 # the separately-fixtured 2023 "latest" enrollment used elsewhere.
 
-test_that("parse_ipeds_he_pell_share computes a real recipients-over-enrollment ratio for all 20 institutions", {
+test_that("parse_ipeds_he_pell_share computes a real recipients-over-enrollment ratio for all 22 institutions", {
   grants <- read.csv(test_path("fixtures", "fsa_mt_grants_2021.csv"))
   enrollment_raw <- read.csv(test_path("fixtures", "ipeds_mt_fall_enrollment_2021.csv"))
   enrollment <- parse_ipeds_he_enrollment(enrollment_raw, 2021)
 
   result <- parse_ipeds_he_pell_share(grants, enrollment, 2021)
 
-  expect_equal(nrow(result), 20)
+  expect_equal(nrow(result), 22)
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(msu$Pell_Recipient_Share, 2852 / 15083, tolerance = 1e-6)
   expect_equal(msu$Pell_Year, "2021")

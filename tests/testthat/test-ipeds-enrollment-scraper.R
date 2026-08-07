@@ -9,11 +9,11 @@
 # College appended once their own new heuristic scrapers
 # (misc_college_scrapers.R) went live.
 
-test_that("parse_ipeds_he_enrollment sums FTE across every level_of_study for all 20 institutions", {
+test_that("parse_ipeds_he_enrollment sums FTE across every level_of_study for all 22 institutions", {
   df <- read.csv(test_path("fixtures", "ipeds_mt_fall_enrollment_2023.csv"))
   result <- parse_ipeds_he_enrollment(df, 2023)
 
-  expect_equal(nrow(result), 20)
+  expect_equal(nrow(result), 22)
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(msu$Enrollment, 15586)
   expect_equal(msu$Enrollment_Year, "2023")
@@ -32,6 +32,14 @@ test_that("parse_ipeds_he_enrollment sums FTE across every level_of_study for al
   # MT_IPEDS_UNITID_MAP's comment) -- a real, structured number, not NA.
   highlands <- result[result$Name == "Highlands College", ]
   expect_equal(highlands$Enrollment, 864)
+
+  # Helena College and UM Western also report enrollment separately from
+  # University of Montana -- no gap, unlike Missoula College (which has
+  # no row here at all, not even NA -- it's simply absent from
+  # MT_IPEDS_UNITID_MAP, see that map's own comment).
+  helena <- result[result$Name == "Helena College", ]
+  expect_equal(helena$Enrollment, 1432)
+  expect_false("Missoula College" %in% result$Name)
 })
 
 test_that("parse_ipeds_he_enrollment returns an empty, correctly-shaped frame when given no rows", {

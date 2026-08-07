@@ -93,7 +93,25 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
   # for Highlands College every run. Fall-enrollment IS reported
   # separately (3 real rows confirmed live for 2023), so Enrollment/
   # Enrollment_Change_Pct/Students_Per_Teacher work normally.
-  180081L, "Highlands College"
+  180081L, "Highlands College",
+  # Helena College and University of Montana Western (180276, 180692) --
+  # added 2026-08-07 once their postings were split out from University
+  # of Montana's on the NEOGOV side (see neogov_location_to_institution()
+  # in direct_api_scrapers.R). Unlike Highlands College above, both
+  # report salary/enrollment/Pell data normally under their own real
+  # unitids -- confirmed live (48 and 120 salary rows, 5 Pell grant rows
+  # each for 2024/2021 respectively).
+  #
+  # Missoula College deliberately has NO entry here, a real permanent gap
+  # unlike every institution above: confirmed live it has no independent
+  # unitid in the Urban Institute's IPEDS directory for Montana at all
+  # (not a branch/8-digit ID either -- checked and ruled out), so its
+  # salary/enrollment/Pell figures are fully consolidated into University
+  # of Montana's own reporting with no separately-fetchable source, the
+  # same "no independent UNITID at all" structural case RESEARCH_NOTES
+  # already documented for Bitterroot College and Gallatin College MSU.
+  180276L, "Helena College",
+  180692L, "University of Montana Western"
 )
 
 # Follows the API's `next` pagination link until exhausted, returning every

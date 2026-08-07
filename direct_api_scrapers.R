@@ -680,9 +680,30 @@ parse_isolvedhire_postings <- function(json_text, institution_name) {
 # real street addresses in the Location field: Missoula College and Helena
 # College postings, plus University of Montana Western's -- e.g. "Vice
 # Chancellor of Administration and Finance" at 710 S Atlantic St, Dillon,
-# MT, UM Western's real campus address. None of the three need their own
-# registry row.)
+# MT, UM Western's real campus address.)
 # ---------------------------------------------------------------------------
+
+# Real street addresses seen live in this feed's Location field, mapped to
+# each posting's real institution (2026-08-07) -- "32 Campus Dr" (UM's own
+# main-campus address) and "1205 E Broadway St" (Missoula College's own
+# address) are BOTH in Missoula, so city alone can't disambiguate; street
+# match is required for those two. Helena and Dillon are each
+# unambiguous by city alone within this feed -- confirmed live two
+# distinct Helena street addresses (1115 N Roberts St, the main building,
+# and 2300 Airport Rd, a real trades-program annex -- e.g. "Diesel
+# Mechanics Instructor" posts there) both belong to Helena College, no
+# other UM-network entity is Helena-based. Anything that matches none of
+# these (e.g. a real remote/out-of-state posting confirmed live at
+# "St. Clair County, IL, USA" for a research-center field position) falls
+# back to institution_name -- the umbrella board owner, University of
+# Montana, is the honest default for a posting with no real MT branch-
+# campus address.
+neogov_location_to_institution <- function(location, default_institution) {
+  if (grepl("1205 E Broadway St", location, fixed = TRUE)) return("Missoula College")
+  if (grepl("Helena, MT", location, fixed = TRUE)) return("Helena College")
+  if (grepl("Dillon, MT", location, fixed = TRUE)) return("University of Montana Western")
+  default_institution
+}
 
 # The public careers page (e.g.
 # https://ummissoula.attract.neoed.com/p/careers) is server-rendered but
@@ -725,6 +746,7 @@ fetch_neogov_postings <- function(subdomain, institution_name, page_size = 50) {
   if (length(all_pages) == 0) {
     return(data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
+                       Institution = character(0),
                        stringsAsFactors = FALSE))
   }
   dplyr::bind_rows(all_pages)
@@ -733,7 +755,7 @@ fetch_neogov_postings <- function(subdomain, institution_name, page_size = 50) {
 parse_neogov_postings <- function(html_text, institution_name) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
+                       Institution = character(0), stringsAsFactors = FALSE)
 
   page <- rvest::read_html(html_text)
   boxes <- rvest::html_elements(page, "a.jobs__box")
@@ -748,6 +770,8 @@ parse_neogov_postings <- function(html_text, institution_name) {
     Location = locations,
     Posted_Date = NA_character_,
     Link = links,
+    Institution = vapply(locations, neogov_location_to_institution, character(1),
+                          default_institution = institution_name, USE.NAMES = FALSE),
     stringsAsFactors = FALSE
   )
 }

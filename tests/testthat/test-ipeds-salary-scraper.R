@@ -11,11 +11,11 @@
 # MT_IPEDS_UNITID_MAP actually needs (all academic_rank x contract_length
 # x sex combinations for each, real data not synthetic).
 
-test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 20 institutions", {
+test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 22 institutions", {
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_he_salaries(df, 2024)
 
-  expect_equal(nrow(result), 20)
+  expect_equal(nrow(result), 22)
 
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
@@ -63,6 +63,16 @@ test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salari
   expect_equal(nrow(highlands), 1)
   expect_true(is.na(highlands$Faculty_Avg_Salary))
   expect_true(is.na(highlands$Faculty_Avg_Salary_Professor))
+
+  # Helena College and UM Western both report real salary data under
+  # their own unitids -- unlike Highlands/Missoula College, no gap here.
+  helena <- result[result$Name == "Helena College", ]
+  expect_equal(round(helena$Faculty_Avg_Salary), 58911)
+  expect_equal(helena$Faculty_Count, 33)
+
+  um_western <- result[result$Name == "University of Montana Western", ]
+  expect_equal(round(um_western$Faculty_Avg_Salary), 70907)
+  expect_equal(round(um_western$Faculty_Avg_Salary_Professor), 80230)
 })
 
 test_that("parse_ipeds_he_salaries returns real NA for a unitid missing from that year's response", {
@@ -94,19 +104,23 @@ test_that("parse_ipeds_salary_trend_year extracts just the headline overall figu
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_salary_trend_year(df, 2024)
 
-  expect_equal(nrow(result), 20)
+  expect_equal(nrow(result), 22)
   expect_equal(names(result), c("Name", "Year", "Faculty_Avg_Salary"))
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
 })
 
-test_that("MT_IPEDS_UNITID_MAP covers every registered institution exactly, with every entry a real registry institution", {
-  # Back to an exact 1:1 match as of 2026-08-07: Salish Kootenai College,
-  # Little Big Horn College, Fort Peck Community College, and Stone Child
-  # College (all added to the registry via heuristic, non-platform-API
-  # scrapers) had their own real unitids confirmed live against the Urban
-  # Institute's college directory and folded in, closing the fast-follow
-  # gap.
+test_that("MT_IPEDS_UNITID_MAP covers every registered institution except Missoula College's real permanent gap", {
+  # Missoula College is the one deliberate exception: confirmed live it
+  # has no independent unitid in the Urban Institute's IPEDS directory
+  # for Montana at all (not even a branch/8-digit ID) -- its
+  # salary/enrollment/Pell figures are fully consolidated into
+  # University of Montana's own reporting, the same "no independent
+  # UNITID at all" structural case RESEARCH_NOTES documents for
+  # Bitterroot College and Gallatin College MSU. Every other institution
+  # (including Highlands College, whose salary/Pell are real NA but whose
+  # unitid IS in this map) is covered.
   registry <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
-  expect_setequal(MT_IPEDS_UNITID_MAP$Name, registry$Institution)
+  expect_setequal(setdiff(registry$Institution, MT_IPEDS_UNITID_MAP$Name), "Missoula College")
+  expect_true(all(MT_IPEDS_UNITID_MAP$Name %in% registry$Institution))
 })

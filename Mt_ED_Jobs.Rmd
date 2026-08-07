@@ -570,16 +570,20 @@ isolvedhire_df <- bind_rows(isolvedhire_results)
 # Montana Western (Dillon), so none of the three get their own registry
 # row, same "check the parent board before assuming a gap" logic as
 # Highlands College under Montana Tech.
+# Institution is NOT overwritten from the registry row here (unlike every
+# other platform below) -- parse_neogov_postings() already attributes
+# each posting to its real institution (University of Montana vs. Helena
+# College/Missoula College/UM Western, 2026-08-07) via
+# neogov_location_to_institution(), and blindly reassigning row$Institution
+# here would silently erase that split.
 neogov_institutions <- he_registry[he_registry$Platform == "Neogov", ]
 neogov_results <- lapply(seq_len(nrow(neogov_institutions)), function(i) {
   row <- neogov_institutions[i, ]
-  df <- safe_scrape(
+  safe_scrape(
     row$Institution,
     scrape_fn = function() fetch_neogov_postings(row$Feed_URL, row$Institution),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+    expected_cols = c("Title", "Location", "Posted_Date", "Link", "Institution")
   )
-  if (nrow(df) > 0) df$Institution <- row$Institution
-  df
 })
 neogov_df <- bind_rows(neogov_results)
 
