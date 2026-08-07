@@ -1,0 +1,49 @@
+                  MONTANA TEACHER COMPENSATION: MASS South Central Region
+
+Salary Distribution for Public School Teachers in the South Central Region
+                                                                                     Salary ($)
+Wes Region
+   Class    School System Name                    Teachers        Lowest 10%      Average Salary     Highest 10%
+    AA      Billings Public Schools                  852            45,400            66,100              82,600
+            Blue Creek Elementary                     10               ND             41,400                ND
+            Canyon Creek Elementary                   14               ND             38,800              46,200
+            Elder Grove Elementary                    41               ND               ND                  ND
+            Elysian Elementary                        21            37,300            50,100              63,600
+            Independent Elementary                    18            37,400            52,900                ND
+            Morin Elementary                          <5               ND               ND                  ND
+            Pioneer Elementary                        <5            36,500            37,900              41,000
+            Yellowstone Academy Elem                  13            43,100            58,200              84,000
+     A      Hardin Public Schools                    128            37,300            53,900              74,300
+            Laurel Public Schools                    102            42,000            56,000              73,300
+            Lockwood Public Schools                   98               ND               ND                  ND
+     B      Columbus Public Schools                   41            41,800            54,800              70,200
+            Huntley Project K-12 Schls                47            39,600            53,600              68,600
+            Joliet Public Schools                     26            33,800            45,700              63,600
+            Luther Elementary                         <5               ND               ND                  ND
+            Park City Public Schools                  20            35,400            42,000                ND
+            Red Lodge Public Schools                  34            36,700            52,400              61,800
+            Roundup Public Schools                    30            32,800            44,200              53,600
+            Shepherd Public Schools                   50            38,200            49,000              64,000
+     C      Absarokee Public Schools                  12            39,100            50,700              65,300
+            Belfry K-12 Schools                       7             38,000            45,800              53,800
+            Bridger K-12 Schools                      17            36,500            55,200                ND
+            Broadview Public Schools                  11               ND               ND                  ND
+            Custer K-12 Schools                       7             34,800            44,900              64,500
+            Fromberg K-12                             <5               ND               ND                  ND
+            Hysham K-12 Schools                       7             27,600            41,300              53,700
+            Lavina K-12 Schools                       9                ND               ND                  ND
+            Melstone Public Schools                   8                ND               ND                  ND
+            Pryor Public Schools                      11            50,500            64,400                ND
+            Rapelje Public Schools                    <5               ND               ND                  ND
+            Reed Point Public Schools                 7                ND               ND                  ND
+            Roberts K-12 Schools                      11            35,100            38,900              40,500
+            Ryegate K-12 Schools                      6                ND               ND                  ND
+ Source: OPI GEMS 2022-23. Summarized by MTDLI. Elementary district MHSA classification determined by
+ corresponding high school. ND = non-disclosable due to data inconsistencies. Teachers = Number of full-time
+ general education teachers.
+
+
+
+
+             For more information see the Montana Teacher Compensation Report, available at lmi.mt.gov/publications
+

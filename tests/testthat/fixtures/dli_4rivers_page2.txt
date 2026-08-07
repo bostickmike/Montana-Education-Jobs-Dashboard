@@ -1,0 +1,62 @@
+                                 MONTANA TEACHER COMPENSATION: MASS 4 Rivers Region
+
+Salary Distribution for Public School Teachers in the 4 Rivers Region
+                                                                                                 Salary ($)
+Wes
+ ClassRegion
+          School System Name                              Teachers          Lowest 10%         Average Salary         Highest 10%
+   AA      Anderson Elementary                               11                 ND                  ND                     ND
+           Belgrade Public Schools                          198               38,700              54,000                 74,600
+           Bozeman Public Schools                           384               47,600              64,700                 81,600
+           Butte Public Schools                             220               44,100              66,800                 79,700
+           Cottonwood Elementary                             <5                 ND                  ND                     ND
+           Gallatin Gateway Elem                              7               37,400              48,200                 61,300
+           Helena Public Schools                            423                 ND                  ND                     ND
+           LaMotte Elementary                                <5               35,200              43,400                 58,600
+           Monforton Elementary                              37               45,200              56,600                 72,300
+           Ramsay Elementary                                  9               33,700              42,200                 60,900
+           Springhill Elementary                             <5               43,000              43,000                 43,000
+           Trinity Elementary                                <5               43,500              44,500                 45,500
+    A      Arrowhead Schools                                 <5               30,300              36,700                 43,800
+           Beaverhead Co High School                         22               55,600              67,100                 76,900
+           Dillon Elementary                                 41               45,100              62,100                   ND
+           East Helena Public Schools                       103               44,200              54,900                 77,400
+           Livingston Public Schools                         72               41,600              53,900                 72,400
+           Reichle Elementary                                <5               40,200              40,200                 40,200
+           Wisdom Elementary                                 <5               32,400              32,400                 32,400
+    B      Amsterdam Elementary                               8               37,100              48,500                 63,200
+           Anaconda Public Schools                           66               38,400              56,400                   ND
+           Basin Elementary                                  <5               44,800              44,800                 44,800
+           Big Sky K-12 Schools                              25               43,300              57,100                 78,000
+           Big Timber Elementary                             22                 ND                  ND                     ND
+           Boulder Elementary                                13                 ND                56,400                 79,100
+           Cardwell Elementary                               <5                 ND                29,800                 45,800
+           Clancy Elementary                                 17                 ND                  ND                     ND
+           Ennis K-12 Schools                                26               36,800              51,600                 65,700
+           Jefferson High School                             18               39,600              53,800                 70,200
+           Manhattan Public Schools                          50               38,400              53,600                 65,900
+           Melville Elementary                               <5                 ND                52,500                 57,000
+           Montana City Elementary                           26               40,100              55,600                 72,700
+           Pass Creek Elementary                             <5               42,000              42,000                 42,000
+           Sweet Grass County HS                             15               39,500              53,900                 76,100
+           Three Forks Public Schls                          44               40,300              53,400                 70,800
+           Townsend K-12 Schools                             43               36,200              52,700                 64,800
+           Whitehall Public Schools                          25               36,200              47,800                 60,900
+    C      Alder-Upper Ruby Elem                             <5                 ND                  ND                     ND
+           Gardiner Public Schools                           13                 ND                  ND                     ND
+           Harrison K-12 Schools                             10                 ND                  ND                     ND
+           Lima K-12 Schools                                  7               38,500              49,500                 67,300
+           Sheridan Public Schools                           16               31,400              48,500                 65,900
+           Shields Valley Pub Schls                          15                 ND                45,500                 61,100
+           Twin Bridges K-12 Schools                         14               38,500              51,200                 67,300
+           West Yellowstone K-12 Schls                       18               36,300              53,400                 80,800
+           White Sul Spgs Pub Schls                          14                 ND                  ND                     ND
+           Willow Creek Public Schls                          8               30,500              35,700                 44,100
+ Source: OPI GEMS 2022-23. Summarized by MTDLI. Elementary district MHSA classification determined by corresponding high school. ND =
+ non-disclosable due to data inconsistencies. Teachers = Number of full-time general education teachers.
+
+
+
+
+               For more information see the Montana Teacher Compensation Report, available at lmi.mt.gov/publications
+
