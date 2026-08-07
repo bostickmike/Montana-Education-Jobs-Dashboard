@@ -483,16 +483,19 @@ peopleadmin_results <- lapply(seq_len(nrow(peopleadmin_institutions)), function(
 })
 peopleadmin_df <- bind_rows(peopleadmin_results)
 
+# Institution is NOT overwritten from the registry row here (unlike every
+# other platform below) -- parse_jazzhr_postings() already attributes each
+# posting to its real institution (Montana Tech vs. Highlands College,
+# 2026-08-07), and blindly reassigning row$Institution here would
+# silently erase that split.
 jazzhr_institutions <- he_registry[he_registry$Platform == "JazzHR", ]
 jazzhr_results <- lapply(seq_len(nrow(jazzhr_institutions)), function(i) {
   row <- jazzhr_institutions[i, ]
-  df <- safe_scrape(
+  safe_scrape(
     row$Institution,
     scrape_fn = function() fetch_jazzhr_postings(row$Feed_URL, row$Institution),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+    expected_cols = c("Title", "Location", "Posted_Date", "Link", "Institution")
   )
-  if (nrow(df) > 0) df$Institution <- row$Institution
-  df
 })
 jazzhr_df <- bind_rows(jazzhr_results)
 

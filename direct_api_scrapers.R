@@ -493,15 +493,26 @@ fetch_jazzhr_postings <- function(subdomain, institution_name) {
   parse_jazzhr_postings(resp_body_string(resp), institution_name)
 }
 
+# Highlands College's real department label on Montana Tech's own JazzHR
+# board -- exact match, not a substring/regex (confirmed live 2026-08-06,
+# re-confirmed 2026-08-07 when this became a real Institution split
+# instead of just a Location value; see this file's header for how the
+# other 3 "rides a parent's board" institutions -- Helena College, UM
+# Western, Missoula College -- get the same treatment on the NEOGOV
+# side).
+JAZZHR_HIGHLANDS_COLLEGE_DEPARTMENT <- "Highlands College"
+
 # Each posting shows a city (always "Butte, MT" here -- Montana Tech has one
 # campus, so it carries no distinguishing signal) and a department (e.g.
 # "Admissions", "Petroleum Engineering", "Highlands College") -- Location
 # uses the department, the more useful field, the same choice already made
-# for Montana's PeopleAdmin institutions above. Confirmed live 2026-08-06
-# that Highlands College postings appear on Montana Tech's own board with
-# department "Highlands College" rather than needing a separate registry
-# entry/scrape target, unlike every other platform here which is one
-# registry row per institution.
+# for Montana's PeopleAdmin institutions above. Institution is derived
+# per-posting from that same department field (2026-08-07): every posting
+# whose department is exactly "Highlands College" is attributed to
+# Highlands College's own registry row rather than lumped into Montana
+# Tech's count -- previously Location carried this distinction but every
+# posting was still counted/mapped under whatever institution_name the
+# caller passed in.
 #
 # No Posted_Date field exists anywhere on this listing page (confirmed real
 # absence, not a parsing gap -- same as some AppliTrack districts' missing
@@ -509,7 +520,7 @@ fetch_jazzhr_postings <- function(subdomain, institution_name) {
 parse_jazzhr_postings <- function(html_text, institution_name) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
+                       Institution = character(0), stringsAsFactors = FALSE)
 
   page <- rvest::read_html(html_text)
   items <- rvest::html_elements(page, ".jobs-list li.list-group-item")
@@ -526,6 +537,8 @@ parse_jazzhr_postings <- function(html_text, institution_name) {
       Location = department,
       Posted_Date = NA_character_,
       Link = link,
+      Institution = ifelse(identical(department, JAZZHR_HIGHLANDS_COLLEGE_DEPARTMENT),
+                            JAZZHR_HIGHLANDS_COLLEGE_DEPARTMENT, institution_name),
       stringsAsFactors = FALSE
     )
   }))

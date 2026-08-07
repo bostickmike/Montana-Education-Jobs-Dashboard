@@ -11,11 +11,11 @@
 # MT_IPEDS_UNITID_MAP actually needs (all academic_rank x contract_length
 # x sex combinations for each, real data not synthetic).
 
-test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 19 institutions", {
+test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 20 institutions", {
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_he_salaries(df, 2024)
 
-  expect_equal(nrow(result), 19)
+  expect_equal(nrow(result), 20)
 
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
@@ -53,6 +53,16 @@ test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salari
   expect_equal(round(stone_child$Faculty_Avg_Salary), 58915)
   expect_equal(stone_child$Faculty_Count, 12)
   expect_true(is.na(stone_child$Faculty_Avg_Salary_Professor))
+
+  # Highlands College has a real, permanent gap unlike every institution
+  # above: confirmed live across 2020-2024, IPEDS's salaries-instructional-
+  # staff endpoint has zero rows for its unitid in any year -- not a
+  # missing rank tier, no salary data reported under its own unitid at
+  # all (see MT_IPEDS_UNITID_MAP's own comment in ipeds_salary_scraper.R).
+  highlands <- result[result$Name == "Highlands College", ]
+  expect_equal(nrow(highlands), 1)
+  expect_true(is.na(highlands$Faculty_Avg_Salary))
+  expect_true(is.na(highlands$Faculty_Avg_Salary_Professor))
 })
 
 test_that("parse_ipeds_he_salaries returns real NA for a unitid missing from that year's response", {
@@ -84,7 +94,7 @@ test_that("parse_ipeds_salary_trend_year extracts just the headline overall figu
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_salary_trend_year(df, 2024)
 
-  expect_equal(nrow(result), 19)
+  expect_equal(nrow(result), 20)
   expect_equal(names(result), c("Name", "Year", "Faculty_Avg_Salary"))
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)

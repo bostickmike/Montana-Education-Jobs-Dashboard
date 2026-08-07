@@ -20,7 +20,14 @@ test_that("parse_jazzhr_postings extracts real Montana Tech posting fields, usin
   # Regression: Highlands College shares Montana Tech's own board rather
   # than having a separate one -- confirmed live, its postings show up here
   # with department "Highlands College", not on any separate registry entry.
+  # Institution (2026-08-07) now attributes those rows to Highlands College
+  # itself, not Montana Tech, while everything else still counts as Montana
+  # Tech -- Location keeps carrying the raw department either way.
   expect_true("Highlands College" %in% result$Location)
+  highlands_rows <- result[result$Location == "Highlands College", ]
+  expect_true(nrow(highlands_rows) > 0)
+  expect_true(all(highlands_rows$Institution == "Highlands College"))
+  expect_true(all(result$Institution[result$Location != "Highlands College"] == "Montana Tech"))
   expect_equal(result$Link[3], "https://montanatechuniversity.applytojob.com/apply/KObLHITePi/Admissions-Representative-II")
   # No Posted_Date field exists anywhere on this listing page -- confirmed
   # real absence, not a parsing gap.
@@ -30,7 +37,7 @@ test_that("parse_jazzhr_postings extracts real Montana Tech posting fields, usin
 test_that("parse_jazzhr_postings returns zero rows (not an error) when there's no jobs-list at all", {
   result <- parse_jazzhr_postings("<html><body><p>No jobs here</p></body></html>", "Montana Tech")
   expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Institution"))
 })
 
 test_that("fetch_jazzhr_postings fetches and parses a live-shaped response", {

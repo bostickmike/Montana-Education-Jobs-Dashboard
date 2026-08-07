@@ -79,7 +79,21 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
   # (misc_college_scrapers.R) -- confirmed live against the Urban
   # Institute's college directory and real 2024 salary response.
   180203L, "Aaniiih Nakoda College",
-  180160L, "Chief Dull Knife College"
+  180160L, "Chief Dull Knife College",
+  # Highlands College (180081) -- added 2026-08-07 once its postings were
+  # split out from Montana Tech's on direct_api_scrapers.R's JazzHR side.
+  # Real, permanent gap unlike every entry above: confirmed live across
+  # 2020-2024, IPEDS's salaries-instructional-staff and FSA's grants
+  # endpoints have ZERO rows for this unitid in any year checked -- not
+  # missing a rank tier like Blackfeet/Dawson/Miles/the tribal colleges
+  # above, genuinely no HR-survey or Pell data reported under its own
+  # unitid at all (almost certainly consolidated into Montana Tech's own
+  # HR/financial-aid reporting, since they share physical
+  # administration). Faculty_Avg_Salary/Pell_Recipient_Share are real NA
+  # for Highlands College every run. Fall-enrollment IS reported
+  # separately (3 real rows confirmed live for 2023), so Enrollment/
+  # Enrollment_Change_Pct/Students_Per_Teacher work normally.
+  180081L, "Highlands College"
 )
 
 # Follows the API's `next` pagination link until exhausted, returning every
