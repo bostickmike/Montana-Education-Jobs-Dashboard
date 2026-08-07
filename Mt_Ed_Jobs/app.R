@@ -648,7 +648,7 @@ ui <- dashboardPage(
             "K-12 vacancy rate is current teacher postings ÷ CCD teacher FTE; Higher Ed vacancy rate is current instructor/faculty postings ÷ IPEDS full-time instructional staff. ",
             "The two use different staffing sources and reporting years — compare rates within a type (district vs. district, institution vs. institution), not across K-12 and Higher Ed."),
         div(style = "text-align:center; color:#999; font-size:0.85em; padding:15px;",
-            paste0("Refreshed on: ", last_refreshed_date))
+            paste0("Refreshed on: ", last_refreshed_date, " · Created by Michael Bostick"))
       ),
 
       tabItem(

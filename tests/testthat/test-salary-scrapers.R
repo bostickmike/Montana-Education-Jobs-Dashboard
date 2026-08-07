@@ -74,7 +74,16 @@ test_that("parse_dli_numeric_field converts ND and <5 to real NA, and strips com
   expect_equal(parse_dli_numeric_field("852"), 852)
 })
 
-test_that("MT_DLI_DISTRICT_MAP covers exactly this project's 18 registered districts", {
+test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts, with every entry a real registry district", {
+  # No longer an exact 1:1 match -- districts added to k12_district_registry.csv
+  # after the original 18 (see the 2026-08-06 "wide net" expansion) don't
+  # automatically get DLI salary coverage; that's a separate, deliberate
+  # fast-follow research pass (finding each new district's real DLI region +
+  # report-name), not a requirement for a district to be job-postings-eligible.
+  # This test still catches the real regression that matters: a name in
+  # MT_DLI_DISTRICT_MAP that ISN'T a real registered district (a typo, a
+  # stale entry after a rename) would silently never get looked up anywhere.
   registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
-  expect_setequal(names(MT_DLI_DISTRICT_MAP), registry$District)
+  expect_true(all(names(MT_DLI_DISTRICT_MAP) %in% registry$District))
+  expect_gt(length(MT_DLI_DISTRICT_MAP), 0)
 })
