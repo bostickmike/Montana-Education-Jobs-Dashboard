@@ -52,7 +52,7 @@ jobs:
             "leaflet", "plotly", "scales", "shinycssloaders"
           ))'
 
-      - name: Install Chrome (for corroborate_drift.R's live corroboration check)
+      - name: Install Chrome (for the Apptegy K-12/HE scrapers and corroborate_drift.R's live corroboration check)
         id: setup-chrome
         uses: browser-actions/setup-chrome@v1
 

@@ -263,3 +263,50 @@ test_that("fetch_fpcc_postings fetches and parses a live-shaped response", {
 
   expect_equal(nrow(result), 1)
 })
+
+# Stone Child College (Apptegy, chromote-driven -- same platform as
+# misc_district_scrapers.R's Wolf Point/Plentywood). Real fixture:
+# document.body.innerText captured via a live chromote session 2026-08-07
+# (a plain httr2 request gets only a Fastly JS bot-challenge shell).
+
+test_that("parse_stonechild_postings extracts all 5 real postings, excluding the RFP section and application link", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_stonechild_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_stonechild_postings(text, "https://www.stonechild.edu/page/employment-rfps")
+
+  expect_equal(nrow(result), 5)
+  expect_setequal(result$Title, c(
+    "Liberal Arts Instructor", "Information Systems Instructor",
+    "NYCP (Native Youth Community Project) School Liaison",
+    "SCC Daycare Supervisor", "H1 B Hiring Notification"
+  ))
+  # Regression: "Open Bids/Requests for Proposals (RFP)" and "Grant
+  # Writing Service" are a genuinely different content type (RFPs, not
+  # jobs) further down the same page -- must not be swept in.
+  expect_false(any(grepl("RFP|Grant Writing", result$Title)))
+  expect_true(all(result$Location == "Box Elder"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_stonechild_postings returns zero rows (not an error) when there's no Current Job Openings section", {
+  result <- parse_stonechild_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_stonechild_postings drives a chromote session and parses its real rendered text", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_stonechild_rendered.txt"), warn = FALSE), collapse = "\n")
+  session <- list(
+    Page = list(
+      navigate = function(url) invisible(NULL),
+      loadEventFired = function(wait_ = TRUE, timeout_ = 30) invisible(NULL)
+    ),
+    Runtime = list(
+      evaluate = function(expr) list(result = list(value = text))
+    )
+  )
+
+  result <- fetch_stonechild_postings(session)
+
+  expect_equal(nrow(result), 5)
+})

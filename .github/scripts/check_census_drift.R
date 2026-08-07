@@ -17,27 +17,33 @@ he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALS
 # --------------------------------------------------------------------------
 #
 # ACS county context is COUNTY-level, not row-level -- salarymap2.csv has
-# 30 K-12 district rows across 18 distinct counties (grew from 18/12 when
-# MT_SAIPE_DISTRICT_MAP was extended 2026-08-07), salarymap.csv has 16 HE
-# institution rows across 14 distinct counties -- confirmed live
-# 2026-08-07 that Cascade County (Great Falls College MSU + University of
-# Providence) and Yellowstone County (MSU Billings + Rocky Mountain
-# College) each hold 2 institutions, unlike the original 6 (no two of
-# which shared a county at all). Counting distinct counties WITH a non-NA
+# 32 K-12 district rows (grew from 30 when Wolf Point/Plentywood were
+# added via the Apptegy/chromote build, 2026-08-07) across 19 distinct
+# counties (Plentywood's Sheridan County is new; Wolf Point's Roosevelt
+# County was already represented by Poplar/Fairview), salarymap.csv has
+# 17 HE institution rows across 14 distinct counties -- confirmed live
+# that Cascade County (Great Falls College MSU + University of
+# Providence), Yellowstone County (MSU Billings + Rocky Mountain
+# College), and Hill County (MSU-Northern + Stone Child College) each
+# hold 2 institutions, unlike the original 6 (no two of which shared a
+# county at all). Counting distinct counties WITH a non-NA
 # figure (not just nrow()) is the structural signal that matches how many
 # counties are actually represented.
 k12_counties_covered <- length(unique(k12$County[!is.na(k12$Median_Household_Income)]))
 he_counties_covered <- length(unique(he$County[!is.na(he$Median_Household_Income)]))
 
-# SAIPE is K-12-district-level with no HE equivalent. All 30 of Montana's
-# currently-registered districts resolved with real data on the live check
-# that extended MT_SAIPE_DISTRICT_MAP to cover them (2026-08-07) -- so
-# 30/30 is the expected full-health count here (unlike MT_DLI_DISTRICT_MAP,
-# SAIPE has no equivalent real gap for Lame Deer/Lodge Grass).
+# SAIPE is K-12-district-level with no HE equivalent. All 30 districts
+# MT_SAIPE_DISTRICT_MAP covers resolved with real data when it was
+# extended (2026-08-07) -- so 30 is the expected full-health count here,
+# NOT the current 32-district registry size: Wolf Point and Plentywood
+# (both added the same session via the Apptegy/chromote build) aren't in
+# this map yet, the ordinary "salary/census coverage is a separate fast-
+# follow" gap every other newly-added district has had, not a permanent
+# gap the way MT_DLI_DISTRICT_MAP's Lame Deer/Lodge Grass exclusion is.
 k12_saipe_covered <- sum(!is.na(k12$Child_Poverty_Rate))
 
 flags <- rbind(
-  check_salary_coverage("K-12 county context (Census ACS)", k12_counties_covered, expected = 18L),
+  check_salary_coverage("K-12 county context (Census ACS)", k12_counties_covered, expected = 19L),
   check_salary_coverage("HE county context (Census ACS)", he_counties_covered, expected = 14L),
   check_salary_coverage("K-12 district child poverty (Census SAIPE)", k12_saipe_covered, expected = 30L)
 )
@@ -50,7 +56,7 @@ coverage_lines <- if (is.null(flags) || nrow(flags) == 0) {
   lines <- c(
     paste0("Automated Census source coverage check flagged ", nrow(flags), " source(s) as of ", Sys.Date(), "."),
     "",
-    "Like the salary coverage check, this is a hard assertion against a known, essentially-fixed universe (18 counties across the 30 registered K-12 districts, 14 counties across the 16 registered HE institutions, 30 districts) rather than a trailing statistical baseline -- Census data updates at most once a year. A source landing below its expected count usually means the Census API changed its response shape (a variable code retired, a geography type renamed) and the parser is silently extracting less real data.",
+    "Like the salary coverage check, this is a hard assertion against a known, essentially-fixed universe (19 counties across the 32 registered K-12 districts, 14 counties across the 17 registered HE institutions, 30 districts with real SAIPE coverage) rather than a trailing statistical baseline -- Census data updates at most once a year. A source landing below its expected count usually means the Census API changed its response shape (a variable code retired, a geography type renamed) and the parser is silently extracting less real data.",
     ""
   )
   for (i in seq_len(nrow(flags))) {

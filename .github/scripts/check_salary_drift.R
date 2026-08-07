@@ -20,18 +20,21 @@ k12 <- read.csv(file.path("Mt_Ed_Jobs", "salarymap2.csv"), stringsAsFactors = FA
 he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALSE)
 
 # This project's K-12/HE registries have each grown since these maps were
-# first built (30 K-12 districts, 16 HE institutions as of 2026-08-07).
-# MT_CCD_LEA_MAP and MT_OPI_FINANCE_LEA_MAP cover every registered K-12
-# district (verified live 2026-08-07). MT_DLI_DISTRICT_MAP is the one K-12
-# exception with a real, permanent gap: Helena and Lockwood (both original
-# 18) are genuinely "ND"-suppressed in their own regional PDF row despite
-# real disclosed teacher counts, and Glendive (new) is the same; Lame Deer
-# and Lodge Grass (both new) don't appear as a row in ANY of MT DLI's 9
-# regional PDFs at all -- confirmed live, not a lookup miss. 30 - 5 = 25 is
-# this source's real full-health ceiling, not 30. On the HE side,
-# MT_IPEDS_UNITID_MAP covers 13 of 16 institutions -- Salish Kootenai
-# College, Little Big Horn College, and Fort Peck Community College (all
-# added 2026-08-07 via heuristic, non-platform-API scrapers) don't have
+# first built (32 K-12 districts, 17 HE institutions as of 2026-08-07,
+# Wolf Point/Plentywood/Stone Child College the newest 3 via the
+# Apptegy/chromote build). MT_CCD_LEA_MAP and MT_OPI_FINANCE_LEA_MAP
+# cover 30 of the 32 K-12 districts (Wolf Point/Plentywood not yet
+# mapped, the ordinary fast-follow gap, not a permanent one).
+# MT_DLI_DISTRICT_MAP has a real, permanent gap on TOP of that: Helena
+# and Lockwood (both original 18) are genuinely "ND"-suppressed in their
+# own regional PDF row despite real disclosed teacher counts, and
+# Glendive is the same; Lame Deer and Lodge Grass don't appear as a row
+# in ANY of MT DLI's 9 regional PDFs at all -- confirmed live, not a
+# lookup miss. 30 - 5 = 25 is this source's real full-health ceiling, not
+# 30 or 32. On the HE side, MT_IPEDS_UNITID_MAP covers 13 of 17
+# institutions -- Salish Kootenai College, Little Big Horn College, Fort
+# Peck Community College, and Stone Child College (all added 2026-08-07
+# via heuristic/chromote-driven, non-platform-API scrapers) don't have
 # IPEDS coverage yet, the same "salary coverage is a separate fast-follow"
 # gap Miles CC/Dawson CC/Blackfeet CC had before their own maps were
 # extended.

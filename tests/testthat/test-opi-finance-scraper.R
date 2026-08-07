@@ -63,9 +63,15 @@ test_that("parse_opi_district_expenditures returns an empty, correctly-shaped fr
   expect_equal(names(result), c("District", "Total_General_Fund_Expenditure", "Finance_FY"))
 })
 
-test_that("MT_OPI_FINANCE_LEA_MAP covers exactly this project's registered K-12 districts", {
+test_that("MT_OPI_FINANCE_LEA_MAP covers a real subset of the registered districts, with every entry a real registry district", {
+  # Was an exact 1:1 match until Wolf Point and Plentywood were added to
+  # the registry (2026-08-07, the Apptegy/chromote build) -- same
+  # deliberate "salary/finance coverage is a separate fast-follow" gap
+  # already established for MT_DLI_DISTRICT_MAP's own 2 real gaps.
   registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
-  expect_setequal(names(MT_OPI_FINANCE_LEA_MAP), registry$District)
+  expect_true(all(names(MT_OPI_FINANCE_LEA_MAP) %in% registry$District))
+  expect_setequal(setdiff(registry$District, names(MT_OPI_FINANCE_LEA_MAP)),
+                   c("Wolf Point Public Schools", "Plentywood Public Schools"))
 })
 
 test_that("fetch_opi_district_expenditures downloads the workbook and parses it", {

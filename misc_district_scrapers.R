@@ -9,19 +9,22 @@
 # Livingston (livingston.k12.mt.us) and Lodge Grass (lgschools.org) are the
 # first two entries, found via the OPI-gap analysis of 2026-08-07 (the
 # highest-volume OPI-only locations not yet on a supported platform).
+# Wolf Point and Plentywood (also from that analysis) are further down
+# this file -- both run Apptegy, a CMS whose pages need a real browser to
+# render (see the "Apptegy (chromote-driven)" section below for why).
+#
 # Two other candidates from that same analysis are NOT here:
-#   - Wolf Point and Plentywood run the same CMS (both share an identical
-#     Fastly bot-challenge response to a plain HTTP request -- confirmed
-#     live 2026-08-07) -- real content exists (confirmed via chromote,
-#     which passes the JS challenge) but scraping it in production would
-#     require a headless-browser dependency this pipeline doesn't have
-#     anywhere else. Left unbuilt pending that architecture decision.
 #   - "Box Elder" in the OPI gap list is very likely Rocky Boy Public
 #     Schools under its real town name (already a registered AppliTrack
 #     district; Rocky Boy is the reservation name, Box Elder the town,
 #     the same pattern as Blackfeet CC/Browning) rather than a genuinely
 #     separate uncovered district -- not independently verified further,
-#     but not built as a new scraper on that basis.
+#     but not built as a new scraper on that basis. (Later corrected --
+#     see Box Elder Public Schools' own investigation in this project's
+#     history: it IS a real, separate district, but its own real
+#     employment page turned out to be a static flyer IMAGE with no real
+#     text at all, needing OCR to extract -- deliberately not built, one
+#     confirmed case isn't worth a whole new extraction technique.)
 #   - "Busby" is Northern Cheyenne Tribal School, a BIE-funded tribal
 #     school -- explicitly out of scope per RESEARCH_NOTES.md's original
 #     K-12 scoping decision ("Montana has multiple BIE-funded/tribally-
@@ -148,4 +151,181 @@ parse_lodgegrass_postings <- function(html_text, location, url) {
     Link = url,
     stringsAsFactors = FALSE
   )
+}
+
+# ---------------------------------------------------------------------------
+# Apptegy (chromote-driven) -- Wolf Point, Plentywood
+# ---------------------------------------------------------------------------
+
+# Apptegy content pages are a client-side-rendered Nuxt app -- a plain
+# httr2 request gets a Fastly JS bot-challenge shell (3038 bytes, real
+# content never reaches a non-JS-executing client at all), confirmed live
+# 2026-08-07 for both districts. Real content only renders via an actual
+# browser (chromote passes the challenge the same way any real browser
+# would). This is the exact same platform Wyoming's own
+# misc_district_scrapers.R already built chromote support for (4 of its
+# own districts sit on Apptegy too) -- the browser-driving architecture
+# (a shared session across every district that needs one, injected as a
+# factory so the rest of this file's tests don't need a real browser) is
+# ported directly from Wyoming's fetch_all_misc_district_postings(). The
+# per-district PARSING is NOT ported, though -- Wyoming's 4 districts
+# write free, unstructured prose (needing 3 separate regex heuristics just
+# there); Montana's two are both cleanly structured (a real "Find Us"
+# footer line reliably marks the end of real page content on every
+# Apptegy page checked this session, used as a shared stop boundary
+# below), so each gets its own straightforward parser instead.
+#
+# Both fetch_*_postings() functions take a live chromote_session (created
+# once by fetch_apptegy_k12_postings() below and reused across both
+# districts) rather than creating their own -- avoids paying browser
+# startup cost twice.
+fetch_wolfpoint_postings <- function(chromote_session, url = "https://www.wolfpointschools.org/page/job-opportunities-1") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(5)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_wolfpoint_postings(text, url)
+}
+
+# Real postings are grouped under ALL-CAPS section headers ending in ":"
+# (ADMINISTRATIVE:, CERTIFIED OPENINGS:, CLASSIFIED OPENINGS:, DISTRICT:,
+# OTHER OPENINGS:, COACHES:) -- confirmed live 2026-08-07, 19 real
+# postings. One more header, "CERTIFIED POSITIONS CURRENTLY FILLED BY
+# EAE'S*:", is deliberately excluded -- these are positions currently
+# staffed by Emergency Authorized Educators, not real open postings (the
+# page's own footnote explains this), matched by "CURRENTLY FILLED" in
+# the header text. After the real section headers end, the page continues
+# with real prose (application instructions, benefits info, a "Join the
+# Team" staff-testimonial section) that a naive "everything after a
+# header" scrape would wrongly sweep in -- filtered out here two ways:
+# looks_like_wolfpoint_title() rejects anything that reads like a
+# sentence (ends in "." or ":", starts with a digit-dot list marker, or is
+# simply too long for a real job title), and the scan stops entirely at
+# "Find Us" or "Join the Team", two real, stable section boundaries on
+# this specific page (not a general Apptegy template guarantee -- a
+# future district might not have "Join the Team" at all, which is fine,
+# "Find Us" alone is confirmed present on every Apptegy page checked this
+# session as the real footer start).
+WOLFPOINT_STOP_LINES <- c("Find Us", "Join the Team")
+
+looks_like_wolfpoint_title <- function(line) {
+  if (nchar(line) > 55) return(FALSE)
+  if (grepl("[.:]$", line)) return(FALSE)
+  if (grepl("^[0-9]+\\.", line)) return(FALSE)
+  if (!grepl("[A-Za-z]", line)) return(FALSE)
+  if (grepl("^\\*", line)) return(FALSE)
+  TRUE
+}
+
+parse_wolfpoint_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "JOB OPENINGS")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  header_pattern <- "^[A-Z][A-Za-z0-9 /'*]+:$"
+  titles <- character(0)
+  current_header <- NA_character_
+  skipping <- FALSE
+  for (line in lines) {
+    if (line %in% WOLFPOINT_STOP_LINES) break
+    if (grepl(header_pattern, line)) {
+      current_header <- line
+      skipping <- grepl("CURRENTLY FILLED", line)
+      next
+    }
+    if (!skipping && !is.na(current_header) && looks_like_wolfpoint_title(line)) {
+      titles <- c(titles, line)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Wolf Point", Posted_Date = NA_character_,
+             Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_plentywood_postings <- function(chromote_session, url = "https://www.plentywood.k12.mt.us/o/plentywood/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(5)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_plentywood_postings(text, url)
+}
+
+# Real postings are a numbered list embedded mid-paragraph, not a real
+# HTML list -- confirmed live 2026-08-07: "Classified Positions available
+# (as of July 13,2026)Plentywood School has the following classified jobs
+# available immediately 1. Assistant Cook  2. Activities Bus Driver
+# 3. Substitute Teachers 4. Paraprofessional" is one single line of
+# rendered text. The "(as of <date>)" phrase in that same sentence is a
+# genuine Posted_Date signal (unlike Wolf Point/Stone Child, which have
+# none at all) -- applied to every title extracted from that paragraph,
+# since it's the one real date this page gives for the whole batch, not a
+# per-posting date. Only a "Classified Positions" paragraph was found live
+# -- no separate "Certified Positions" paragraph currently exists on the
+# page, a real absence (no certified vacancies posted right now), not a
+# parsing gap.
+parse_plentywood_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  target_lines <- lines[grepl("^Classified Positions available|^Certified Positions available", lines)]
+  if (length(target_lines) == 0) return(empty)
+
+  rows <- lapply(target_lines, function(target_line) {
+    date_match <- regmatches(target_line, regexpr("as of [A-Za-z]+ [0-9]+,\\s*[0-9]{4}", target_line))
+    posted_date <- if (length(date_match) > 0 && nzchar(date_match)) {
+      as.character(as.Date(sub("as of ", "", date_match), format = "%B %d,%Y"))
+    } else {
+      NA_character_
+    }
+
+    items <- regmatches(target_line, gregexpr("[0-9]+\\.\\s*[A-Za-z][A-Za-z '&/-]*", target_line))[[1]]
+    titles <- trimws(sub("^[0-9]+\\.\\s*", "", items))
+    titles <- titles[nzchar(titles)]
+    if (length(titles) == 0) return(NULL)
+
+    data.frame(Title = titles, Location = "Plentywood", Posted_Date = posted_date,
+               Link = url, stringsAsFactors = FALSE)
+  })
+  rows <- rows[!vapply(rows, is.null, logical(1))]
+
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+# Fetches both Apptegy districts sharing one chromote session (created
+# once here, closed at the end) -- mirrors Wyoming's
+# fetch_all_misc_district_postings()'s chromote_session_factory pattern,
+# just scoped to only the 2 districts that need it instead of being
+# threaded through every platform in this file. chromote_session_factory
+# defaults to NULL so this function -- and by extension
+# Mt_ED_Jobs.Rmd's own use of it -- stays testable without a real browser
+# available; passing NULL returns an empty result for both districts
+# (via safe_scrape's own error handling) rather than crashing.
+fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       District = character(0), stringsAsFactors = FALSE)
+  if (is.null(chromote_session_factory)) return(empty)
+
+  session <- chromote_session_factory()
+  on.exit(tryCatch(session$close(), error = function(e) NULL), add = TRUE)
+
+  wolfpoint <- fetch_wolfpoint_postings(session)
+  if (nrow(wolfpoint) > 0) wolfpoint$District <- "Wolf Point Public Schools"
+
+  plentywood <- fetch_plentywood_postings(session)
+  if (nrow(plentywood) > 0) plentywood$District <- "Plentywood Public Schools"
+
+  dplyr::bind_rows(wolfpoint, plentywood)
 }

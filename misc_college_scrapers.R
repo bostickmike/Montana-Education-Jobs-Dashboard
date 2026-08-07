@@ -254,6 +254,47 @@ parse_fpcc_postings <- function(html_text) {
   do.call(rbind, rows)
 }
 
+# Stone Child College (stonechild.edu/page/employment-rfps) -- Apptegy,
+# the same CMS platform as Wolf Point/Plentywood in
+# misc_district_scrapers.R (needs a live chromote_session; see that
+# file's "Apptegy (chromote-driven)" section for why a browser is
+# required at all -- a plain httr2 request gets a Fastly JS challenge
+# shell with no real content). Real postings sit in a plain bullet list
+# between the page's own "Current Job Openings" heading and its
+# "Download SCC Employment Application" link (a boilerplate form, not a
+# posting) -- confirmed live 2026-08-07, 5 real postings. A separate
+# "Open Bids/Requests for Proposals (RFP)" section further down the same
+# page is genuinely different content (grant/contract RFPs, not jobs) --
+# excluded by the same upper-bound scoping. No Posted_Date, single real
+# campus (Box Elder).
+fetch_stonechild_postings <- function(chromote_session, url = "https://www.stonechild.edu/page/employment-rfps") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(5)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_stonechild_postings(text, url)
+}
+
+parse_stonechild_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Current Job Openings")
+  end_idx <- which(lines == "Download SCC Employment Application")
+  if (length(start_idx) == 0 || length(end_idx) == 0 || end_idx[1] <= start_idx[1] + 1) return(empty)
+
+  titles <- lines[(start_idx[1] + 1):(end_idx[1] - 1)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Box Elder", Posted_Date = NA_character_,
+             Link = url, stringsAsFactors = FALSE)
+}
+
 # Carroll College (carroll.edu/faculty-staff-positions) -- real, current
 # openings under an accordion widget, confirmed live 2026-08-07: every
 # `.accordion__trigger` button on the page is a real job title (the page
