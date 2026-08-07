@@ -1,0 +1,205 @@
+name: Weekly job data refresh
+
+on:
+  schedule:
+    # Every Tuesday 13:00 UTC (~7am Mountain). Deliberately not Friday --
+    # this project shares one CENSUS_API_KEY with the Wyoming Education
+    # Jobs Dashboard's own weekly workflow, which runs Fridays; a different
+    # day avoids both pipelines' Census ACS/SAIPE calls landing at the same
+    # time (user request, 2026-08-06).
+    - cron: '0 13 * * 2'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev libpoppler-cpp-dev
+
+      - name: Install R packages
+        run: |
+          Rscript -e 'install.packages(c(
+            # Mt_ED_Jobs.Rmd (the scrape pipeline) dependencies
+            "rmarkdown", "dplyr", "purrr", "readr", "readxl", "rvest",
+            "stringr", "tidyverse", "writexl", "xml2", "jsonlite",
+            "httr2", "lubridate", "chromote", "rsconnect", "testthat",
+            "withr", "here", "pdftools", "tibble",
+            # app.R dependencies -- these never run in this workflow, but
+            # rsconnect::writeManifest() can only capture a package if it
+            # is actually installed in the environment generating the
+            # manifest. Omitting one of these would break the Connect
+            # Cloud redeploy silently (manifest missing that package
+            # entirely) -- see Wyoming's own 2026-08-03 incident.
+            "shiny", "shinydashboard", "shinyWidgets", "DT", "data.table",
+            "leaflet", "plotly", "scales", "shinycssloaders"
+          ))'
+
+      - name: Install Chrome (for corroborate_drift.R's live corroboration check)
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run test suite (abort before touching real data if red)
+        run: |
+          Rscript -e 'here::here(); testthat::test_dir("tests/testthat", stop_on_failure = TRUE)'
+
+      - name: Snapshot pre-run data for the sanity check
+        run: |
+          mkdir -p /tmp
+          cp Mt_Ed_Jobs/combinedclean.csv /tmp/baseline_combinedclean.csv
+          cp Mt_Ed_Jobs/hedata.xlsx /tmp/baseline_hedata.xlsx
+
+      - name: Run the scrape pipeline
+        env:
+          CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+        run: |
+          Rscript -e 'rmarkdown::render("Mt_ED_Jobs.Rmd")'
+
+      - name: Sanity-check the new data before committing anything
+        run: Rscript .github/scripts/sanity_check.R
+
+      - name: Verify every shipped dataset still has the columns app.R expects
+        run: Rscript .github/scripts/verify_schema.R
+
+      # These three steps are diagnostic/alerting only (see drift_check.R's
+      # header comment) -- a bug in any of them must never block the actual
+      # data commit + Connect Cloud redeploy below.
+      - name: Check each source for drift against its own history
+        id: check_drift
+        continue-on-error: true
+        run: Rscript .github/scripts/check_drift.R
+
+      - name: Corroborate any flagged sources with a live chromote check
+        id: corroborate_drift
+        continue-on-error: true
+        env:
+          CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: |
+          if [ -f /tmp/drift_flagged.csv ] && [ "$(tail -n +2 /tmp/drift_flagged.csv | wc -l)" -gt 0 ]; then
+            Rscript .github/scripts/corroborate_drift.R
+          else
+            echo "Nothing flagged, skipping."
+          fi
+
+      # Runs after corroborate_drift.R (which overwrites, not appends,
+      # /tmp/drift_report.md) so a flagged salary source never gets
+      # silently clobbered by that step running afterward.
+      - name: Check salary source coverage against its known-fixed universe
+        id: check_salary_drift
+        continue-on-error: true
+        run: Rscript .github/scripts/check_salary_drift.R
+
+      # Same shape of check as check_salary_drift.R above, for the Census
+      # ACS/SAIPE sources instead of DLI/IPEDS salary data.
+      - name: Check Census source coverage and value plausibility
+        id: check_census_drift
+        continue-on-error: true
+        run: Rscript .github/scripts/check_census_drift.R
+
+      # Closes the one real gap continue-on-error opens up: a bug that
+      # CRASHES one of the three monitoring steps above is indistinguishable
+      # from "ran fine, found nothing to report" unless something checks for
+      # it specifically.
+      - name: Verify the monitoring steps themselves didn't crash
+        run: |
+          FAILED=""
+          [ "${{ steps.check_drift.outcome }}" = "failure" ] && FAILED="$FAILED check_drift.R"
+          [ "${{ steps.corroborate_drift.outcome }}" = "failure" ] && FAILED="$FAILED corroborate_drift.R"
+          [ "${{ steps.check_salary_drift.outcome }}" = "failure" ] && FAILED="$FAILED check_salary_drift.R"
+          [ "${{ steps.check_census_drift.outcome }}" = "failure" ] && FAILED="$FAILED check_census_drift.R"
+
+          if [ -z "$FAILED" ]; then
+            echo "All monitoring steps ran without crashing."
+            exit 0
+          fi
+
+          echo "Monitoring step(s) crashed:$FAILED -- see this run's logs for the actual error."
+          {
+            echo ""
+            echo "---"
+            echo ""
+            echo "**Monitoring self-check:** the following alerting step(s) crashed this run (continue-on-error kept the pipeline going, but this means their findings for this run -- if any -- may be incomplete or missing):$FAILED. See [this run's logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for the actual error."
+            echo ""
+          } >> /tmp/drift_report.md
+
+      - name: File or update a GitHub Issue if anything needs a human look
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -f /tmp/drift_report.md ]; then
+            echo "No report generated, nothing to file."
+            exit 0
+          fi
+          EXISTING=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open \
+            --search "in:title \"Scraper drift check\"" --json number --jq '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --repo "$GITHUB_REPOSITORY" --body-file /tmp/drift_report.md
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" \
+              --title "Scraper drift check: sources need review" \
+              --body-file /tmp/drift_report.md
+          fi
+
+      - name: Regenerate the Connect Cloud manifest
+        run: |
+          Rscript -e 'rsconnect::writeManifest(appDir = "Mt_Ed_Jobs")'
+
+      - name: Verify the manifest actually includes app.R's packages
+        run: |
+          Rscript -e '
+          m <- jsonlite::fromJSON("Mt_Ed_Jobs/manifest.json", simplifyVector = FALSE)
+          required <- c("shiny", "shinydashboard", "shinyWidgets", "DT", "data.table", "leaflet", "plotly", "scales", "shinycssloaders")
+          missing <- setdiff(required, names(m$packages))
+          if (length(missing) > 0) {
+            stop(sprintf(
+              "manifest.json is missing %s -- writeManifest() only captures packages actually installed in this job, so this workflow'\''s own package-install step is now out of sync with app.R. Refusing to push a manifest that would break the Connect Cloud deploy.",
+              paste(missing, collapse = ", ")
+            ))
+          }
+          cat("Manifest includes all", length(required), "app.R packages.\n")
+          '
+
+      - name: Commit and push if anything changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add \
+            Mt_Ed_Jobs/combinedclean.csv \
+            Mt_Ed_Jobs/allsum.csv \
+            Mt_Ed_Jobs/allnow.csv \
+            Mt_Ed_Jobs/allsum_he.csv \
+            Mt_Ed_Jobs/allnow_he.csv \
+            Mt_Ed_Jobs/hedata.xlsx \
+            Mt_Ed_Jobs/k12jobanalysis.csv \
+            Mt_Ed_Jobs/facultydata.csv \
+            Mt_Ed_Jobs/k12_district_weekly_totals.csv \
+            Mt_Ed_Jobs/he_institution_weekly_totals.csv \
+            Mt_Ed_Jobs/salarymap2.csv \
+            Mt_Ed_Jobs/salarymap.csv \
+            Mt_Ed_Jobs/manifest.json \
+            Archived_HE_Data/*.xlsx \
+            Archivek12_Data/*.csv
+          if git diff --cached --quiet; then
+            echo "No data changes this run -- nothing to commit."
+          else
+            git commit -m "Automated weekly data refresh ($(date -u +%Y-%m-%d))"
+            git push
+          fi
