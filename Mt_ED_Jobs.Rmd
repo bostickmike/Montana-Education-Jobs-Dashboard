@@ -370,6 +370,7 @@ library(dplyr)
 source("scrape_helpers.R")
 source("census_acs_scraper.R")
 source("census_saipe_scraper.R")
+source("opi_finance_scraper.R")
 
 # CENSUS_API_KEY must be set (a GitHub Actions secret in CI, .Renviron
 # locally). safe_scrape() catches a missing/invalid key the same way it
@@ -405,6 +406,22 @@ if (nrow(child_poverty) > 0) {
   write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 } else {
   message("Census SAIPE child poverty fetch failed -- leaving salarymap2.csv untouched this run.")
+}
+
+district_finance <- safe_scrape(
+  "OPI per-district General Fund expenditures (MT)",
+  scrape_fn = fetch_opi_district_expenditures,
+  expected_cols = c("District", "Total_General_Fund_Expenditure", "Finance_FY")
+)
+
+if (nrow(district_finance) > 0) {
+  salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
+    select(-any_of(c("Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"))) %>%
+    left_join(district_finance, by = "District") %>%
+    mutate(Finance_Source = "OPI School Finance Data Files (opi.mt.gov/Leadership/Finance-Grants/School-Finance/OPI-Financial-Data-Files)")
+  write.csv(salarymap2, salarymap2_path, row.names = FALSE)
+} else {
+  message("OPI district finance fetch failed -- leaving salarymap2.csv untouched this run.")
 }
 ```
 

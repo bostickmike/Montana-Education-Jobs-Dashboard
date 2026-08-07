@@ -19,15 +19,17 @@ source("drift_check.R")
 k12 <- read.csv(file.path("Mt_Ed_Jobs", "salarymap2.csv"), stringsAsFactors = FALSE)
 he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALSE)
 
-# This project directly scrapes 18 K-12 districts and 6 HE institutions --
-# both counts are hardcoded in k12_district_registry.csv/
-# he_institution_registry.csv respectively, so salarymap2.csv/salarymap.csv
-# always have that many rows regardless of whether a given run's API/PDF
-# fetch actually matched real data. The meaningful signal is coverage of
-# the headline salary field.
+# This project's K-12/HE registries have each grown since these DLI/CCD/
+# IPEDS/FSA maps were first built (30 K-12 districts, 13 HE institutions
+# as of 2026-08-07) -- MT_DLI_DISTRICT_MAP/MT_CCD_LEA_MAP/MT_IPEDS_UNITID_MAP
+# still only cover the original 18/6, a real known coverage gap (see
+# DATA_COOKBOOK.md), so those expected counts below are deliberately still
+# 18/6, not the current registry size. MT_OPI_FINANCE_LEA_MAP (below) is
+# the one map already extended to cover all 30 K-12 districts.
 flags <- rbind(
   check_salary_coverage("K-12 teacher avg salary (MT DLI)", sum(!is.na(k12$Teacher_Avg_Salary)), expected = 18L, min_ok = 16L),
   check_salary_coverage("K-12 teacher FTE (CCD)", sum(!is.na(k12$Teachers_Total_FTE)), expected = 18L),
+  check_salary_coverage("K-12 General Fund expenditure (OPI Finance)", sum(!is.na(k12$Total_General_Fund_Expenditure)), expected = 30L),
   check_salary_coverage("HE avg faculty salary (IPEDS)", sum(!is.na(he$Faculty_Avg_Salary)), expected = 6L),
   check_salary_coverage("HE fall enrollment FTE (IPEDS)", sum(!is.na(he$Enrollment)), expected = 6L),
   check_salary_coverage("HE 5-year enrollment trend (IPEDS)", sum(!is.na(he$Enrollment_Change_Pct)), expected = 6L),
@@ -63,6 +65,7 @@ coverage_lines <- if (is.null(flags) || nrow(flags) == 0) {
 k12_avg <- setNames(k12$Teacher_Avg_Salary, k12$District)
 k12_10th <- setNames(k12$Teacher_Salary_10th_Pctile, k12$District)
 k12_90th <- setNames(k12$Teacher_Salary_90th_Pctile, k12$District)
+k12_genfund <- setNames(k12$Total_General_Fund_Expenditure, k12$District)
 he_current <- setNames(he$Faculty_Avg_Salary, he$Name)
 he_y1ago <- setNames(he$Faculty_Avg_Salary_Y1Ago, he$Name)
 
@@ -70,6 +73,11 @@ plausibility_flags <- list(
   check_salary_value_bounds("K-12 teacher avg salary (MT DLI)", k12_avg, min_ok = 25000, max_ok = 150000),
   check_salary_value_bounds("K-12 teacher 10th pctile salary (MT DLI)", k12_10th, min_ok = 20000, max_ok = 150000),
   check_salary_value_bounds("K-12 teacher 90th pctile salary (MT DLI)", k12_90th, min_ok = 25000, max_ok = 175000),
+  # Real range confirmed live 2026-08-07: Big Sandy ($2.1M, this project's
+  # smallest registered district) to Billings ($134.2M, its largest) --
+  # bounds set well outside that to catch a parser misread, not to flag
+  # genuine size variation between a tiny and a large district.
+  check_salary_value_bounds("K-12 General Fund expenditure (OPI Finance)", k12_genfund, min_ok = 500000, max_ok = 250000000),
   check_salary_value_bounds("HE avg faculty salary (IPEDS)", he_current, min_ok = 30000, max_ok = 150000),
   check_salary_yoy_plausibility(he_current, he_y1ago)
 )
