@@ -57,7 +57,15 @@ test_that("parse_ipeds_salary_trend_year extracts just the headline overall figu
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
 })
 
-test_that("MT_IPEDS_UNITID_MAP covers exactly this project's 6 registered HE institutions", {
+test_that("MT_IPEDS_UNITID_MAP covers a real subset of the registered institutions, with every entry a real registry institution", {
+  # No longer an exact 1:1 match -- institutions added to
+  # he_institution_registry.csv via a heuristic (non-platform-API) scraper,
+  # like Miles Community College, don't automatically get IPEDS salary
+  # coverage; that's a separate, deliberate fast-follow research pass, not
+  # a requirement for an institution to be job-postings-eligible. This test
+  # still catches the real regression that matters: a name in
+  # MT_IPEDS_UNITID_MAP that ISN'T a real registered institution.
   registry <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
-  expect_setequal(MT_IPEDS_UNITID_MAP$Name, registry$Institution)
+  expect_true(all(MT_IPEDS_UNITID_MAP$Name %in% registry$Institution))
+  expect_gt(nrow(MT_IPEDS_UNITID_MAP), 0)
 })
