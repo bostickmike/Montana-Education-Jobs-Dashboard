@@ -345,3 +345,124 @@ parse_tylerportico_positions <- function(json_text, institution_name, base_url) 
     stringsAsFactors = FALSE
   )
 }
+
+# ---------------------------------------------------------------------------
+# OPI "Jobs for Teachers" -- Montana's statewide fallback feed
+# (apps.opi.mt.gov/mtjobsforteachers/), covering every district not scraped
+# directly above, the Montana analog of Wyoming's WSBA vacancies page.
+# ---------------------------------------------------------------------------
+
+# This is a classic ASP.NET WebForms GridView with __VIEWSTATE-based postback
+# paging (100 rows/page, ~11+ pages live) rather than a real API or a normal
+# multi-page URL -- confirmed live (not guessed) that a bare
+# __EVENTTARGET/__EVENTARGUMENT POST 302-redirects to an ErrorPage.aspx
+# unless every other form field (every hidden __VIEWSTATE*/__EVENT* field
+# plus the current value of every filter <select>: ddlVacancyArea,
+# ddlGradeRange, ddlDistrict, ddlSchool) is resubmitted too -- ASP.NET
+# WebForms requires the full form round-tripped on every postback, not just
+# the fields that changed. extract_aspnet_postback_fields() below does that
+# generically (all hidden inputs + each select's selected/first option) so
+# it isn't tied to this page's specific field names, in case another
+# ASP.NET WebForms site needs the same treatment later. Each page's fresh
+# __VIEWSTATE/__EVENTVALIDATION must be used for the *next* page's request
+# -- confirmed live that page 1's tokens can't be reused for page 3.
+extract_aspnet_postback_fields <- function(html_text) {
+  page <- rvest::read_html(html_text)
+  form <- rvest::html_element(page, "form")
+  fields <- list()
+
+  inputs <- rvest::html_elements(form, "input")
+  for (inp in inputs) {
+    name <- rvest::html_attr(inp, "name")
+    if (is.na(name)) next
+    type <- rvest::html_attr(inp, "type")
+    if (is.na(type)) type <- "text"
+    if (type %in% c("submit", "button", "image")) next
+    if (type %in% c("checkbox", "radio")) {
+      if (!is.na(rvest::html_attr(inp, "checked"))) {
+        value <- rvest::html_attr(inp, "value")
+        fields[[name]] <- if (is.na(value)) "on" else value
+      }
+      next
+    }
+    value <- rvest::html_attr(inp, "value")
+    fields[[name]] <- if (is.na(value)) "" else value
+  }
+
+  selects <- rvest::html_elements(form, "select")
+  for (sel in selects) {
+    name <- rvest::html_attr(sel, "name")
+    if (is.na(name)) next
+    options <- rvest::html_elements(sel, "option")
+    selected <- Filter(function(o) !is.na(rvest::html_attr(o, "selected")), options)
+    opt <- if (length(selected) > 0) selected[[1]] else options[[1]]
+    value <- rvest::html_attr(opt, "value")
+    fields[[name]] <- if (is.na(value)) rvest::html_text2(opt) else value
+  }
+
+  fields
+}
+
+# Pages until a page comes back with fewer than page_size rows (same
+# stop-paging heuristic as fetch_schoolspring_postings() above), capped at
+# max_pages as a safety bound against an infinite loop if the site's paging
+# behavior ever changes. page_size is 50 -- confirmed live by counting
+# distinct grdJobListing row control IDs on a page (each row's control ID
+# appears twice in the raw HTML, once in its id= attribute and once inside
+# its own __doPostBack() call, so a naive substring count of
+# "btnJobDetailsPublic" reads 100 per page, double the real row count).
+fetch_opi_statewide_postings <- function(
+    url = "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx",
+    page_size = 50, max_pages = 60) {
+  resp <- request(url) %>% req_perform()
+  html <- resp_body_string(resp)
+
+  all_pages <- list(parse_opi_job_page(html, url))
+  page_num <- 2
+  while (nrow(all_pages[[length(all_pages)]]) == page_size && page_num <= max_pages) {
+    fields <- extract_aspnet_postback_fields(html)
+    fields[["__EVENTTARGET"]] <- "ctl00$ContentPlaceHolder1$grdJobListing"
+    fields[["__EVENTARGUMENT"]] <- paste0("Page$", page_num)
+
+    resp <- do.call(req_body_form, c(list(request(url)), fields)) %>% req_perform()
+    html <- resp_body_string(resp)
+    all_pages[[length(all_pages) + 1]] <- parse_opi_job_page(html, url)
+    page_num <- page_num + 1
+  }
+
+  dplyr::bind_rows(all_pages)
+}
+
+# The grid has no District column (only City) despite a District filter
+# dropdown existing elsewhere on the page -- Location is the posting's City
+# as the feed itself reports it, not a canonicalized legal district name.
+# Link is the same statewide listing URL for every row: confirmed live with
+# chromote that clicking a posting navigates to frmJobDetailsPublic.aspx
+# with no query string or job ID in the URL at all (the detail view is
+# session/ViewState-driven, like the rest of this ASP.NET WebForms page) --
+# there is no stable per-posting URL to construct here, unlike Tyler
+# Portico's SPA above.
+parse_opi_job_page <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  table <- rvest::html_element(page, "#ctl00_ContentPlaceHolder1_grdJobListing")
+  if (is.na(table)) return(empty)
+
+  rows <- rvest::html_elements(table, "tr")
+  job_rows <- Filter(function(r) length(rvest::html_elements(r, "a[id*='btnJobDetailsPublic']")) > 0, rows)
+  if (length(job_rows) == 0) return(empty)
+
+  do.call(rbind, lapply(job_rows, function(r) {
+    tds <- rvest::html_elements(r, "td")
+    data.frame(
+      Title = rvest::html_text2(tds[[1]]),
+      Location = rvest::html_text2(tds[[2]]),
+      Posted_Date = rvest::html_text2(tds[[4]]),
+      Link = url,
+      stringsAsFactors = FALSE
+    )
+  }))
+}

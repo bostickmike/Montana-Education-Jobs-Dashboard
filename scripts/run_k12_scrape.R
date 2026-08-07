@@ -1,5 +1,6 @@
 # Proves the K-12 pipeline end-to-end across every platform built so far
-# (AppliTrack, SchoolSpring, Tyler Portico, TedK12): reads the district registry,
+# (AppliTrack, SchoolSpring, Tyler Portico, TedK12, OPI statewide): reads the
+# district registry,
 # scrapes each district live via safe_scrape(), classifies the results, and
 # prints a summary. Not the final pipeline entry point (that will be
 # Mt_ED_Jobs.Rmd, mirroring Wyoming's Wy_ED_Jobs.Rmd) -- this is a standalone
@@ -99,6 +100,23 @@ tedk12_results <- lapply(seq_len(nrow(tedk12_districts)), function(i) {
 })
 tedk12_combined <- do.call(rbind, tedk12_results)
 
+# --- OPI statewide fallback feed ------------------------------------------
+
+# Not per-district like the platforms above -- one statewide call covering
+# every district, including the ones with no direct scraper at all (the
+# Montana analog of Wyoming's WSBA vacancies page). Deliberately not
+# deduplicated against the direct-scrape results above: cross-source
+# dedup is real pipeline-entry-point work (same principle already applied
+# to reconciling column schemas -- see this file's header comment), not
+# something this proof-of-concept script does.
+message("Scraping OPI statewide 'Jobs for Teachers' feed...")
+opi_expected_cols <- c("Title", "Location", "Posted_Date", "Link")
+opi_combined <- safe_scrape(
+  source_name = "OPI Jobs for Teachers (statewide)",
+  scrape_fn = fetch_opi_statewide_postings,
+  expected_cols = opi_expected_cols
+)
+
 # --- Summary -------------------------------------------------------------
 
 cat("\n=== Summary ===\n")
@@ -110,8 +128,10 @@ cat("Tyler Portico districts scraped:", nrow(tylerportico_districts),
     "| postings found:", nrow(tylerportico_combined), "\n")
 cat("TedK12 districts scraped:", nrow(tedk12_districts),
     "| postings found:", nrow(tedk12_combined), "\n")
+cat("OPI statewide postings found:", nrow(opi_combined), "\n")
 cat("Total K-12 postings found:",
-    nrow(applitrack_combined) + nrow(schoolspring_combined) + nrow(tylerportico_combined) + nrow(tedk12_combined), "\n\n")
+    nrow(applitrack_combined) + nrow(schoolspring_combined) + nrow(tylerportico_combined) +
+      nrow(tedk12_combined) + nrow(opi_combined), "\n\n")
 
 if (nrow(applitrack_combined) > 0) {
   cat("--- AppliTrack by district ---\n")
@@ -149,6 +169,13 @@ if (nrow(tedk12_combined) > 0) {
   tedk12_combined$position_bucket <- classify_k12_position(tedk12_combined$title)
   cat("\n=== TedK12 position buckets ===\n")
   print(tedk12_combined %>% count(position_bucket, sort = TRUE))
+}
+if (nrow(opi_combined) > 0) {
+  cat("\n--- OPI statewide feed: top locations by posting count ---\n")
+  print(opi_combined %>% count(Location, name = "n_postings", sort = TRUE) %>% head(10))
+  opi_combined$position_bucket <- classify_k12_position(opi_combined$Title)
+  cat("\n=== OPI statewide position buckets ===\n")
+  print(opi_combined %>% count(position_bucket, sort = TRUE))
 }
 
 cat("\nSee scrape_log.csv for per-district ok/empty/error status.\n")
