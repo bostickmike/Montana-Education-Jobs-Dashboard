@@ -426,6 +426,22 @@ milescc_results <- lapply(seq_len(nrow(milescc_institutions)), function(i) {
 })
 milescc_df <- bind_rows(milescc_results)
 
+# Dawson Community College also has no structured ATS -- DawsonCCHeuristic
+# scrapes its employment page's labeled "Openings" sections directly
+# (misc_college_scrapers.R), same heuristic-source caveat as Miles CC above.
+dawsoncc_institutions <- he_registry[he_registry$Platform == "DawsonCCHeuristic", ]
+dawsoncc_results <- lapply(seq_len(nrow(dawsoncc_institutions)), function(i) {
+  row <- dawsoncc_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_dawson_cc_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+dawsoncc_df <- bind_rows(dawsoncc_results)
+
 # Blackfeet Community College runs isolved Hire (applican) -- Feed_URL packs
 # "subdomain:domain_id" since the platform needs both to build its jobs API
 # URL (https://{subdomain}.isolvedhire.com/core/jobs/{domain_id}), and
@@ -445,7 +461,77 @@ isolvedhire_results <- lapply(seq_len(nrow(isolvedhire_institutions)), function(
 })
 isolvedhire_df <- bind_rows(isolvedhire_results)
 
-hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, isolvedhire_df)
+# University of Montana's NEOGOV Attract board also covers three branch/
+# affiliate campuses under the same feed -- real street addresses
+# confirmed live: Missoula College, Helena College, and University of
+# Montana Western (Dillon), so none of the three get their own registry
+# row, same "check the parent board before assuming a gap" logic as
+# Highlands College under Montana Tech.
+neogov_institutions <- he_registry[he_registry$Platform == "Neogov", ]
+neogov_results <- lapply(seq_len(nrow(neogov_institutions)), function(i) {
+  row <- neogov_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_neogov_postings(row$Feed_URL, row$Institution),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+neogov_df <- bind_rows(neogov_results)
+
+# Carroll College has no structured ATS -- CarrollCollegeHeuristic scrapes
+# its accordion-widget positions page directly (misc_college_scrapers.R),
+# same heuristic-source caveat as Miles/Dawson CC above.
+carroll_institutions <- he_registry[he_registry$Platform == "CarrollCollegeHeuristic", ]
+carroll_results <- lapply(seq_len(nrow(carroll_institutions)), function(i) {
+  row <- carroll_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_carroll_college_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+carroll_df <- bind_rows(carroll_results)
+
+# Rocky Mountain College also has no structured ATS -- its own
+# WordPress/Elementor employment page is heuristic-scraped the same way
+# (misc_college_scrapers.R), though its markup is cleaner than the other
+# heuristic sources (real per-posting detail URLs and department terms).
+rockymtn_institutions <- he_registry[he_registry$Platform == "RockyMountainCollegeHeuristic", ]
+rockymtn_results <- lapply(seq_len(nrow(rockymtn_institutions)), function(i) {
+  row <- rockymtn_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_rocky_mountain_college_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+rockymtn_df <- bind_rows(rockymtn_results)
+
+# University of Providence runs ADP Workforce Now -- Feed_URL packs
+# "cid:ccId" since the platform's job-requisitions API needs both to
+# identify the employer's career-center site.
+adp_institutions <- he_registry[he_registry$Platform == "AdpWorkforceNow", ]
+adp_results <- lapply(seq_len(nrow(adp_institutions)), function(i) {
+  row <- adp_institutions[i, ]
+  feed_parts <- strsplit(row$Feed_URL, ":")[[1]]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_adp_workforcenow_postings(feed_parts[1], feed_parts[2], row$Institution),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+adp_df <- bind_rows(adp_results)
+
+hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, dawsoncc_df,
+                         isolvedhire_df, neogov_df, carroll_df, rockymtn_df, adp_df)
 ```
 
 ### Combine all HE data, classify, archive, and accumulate history

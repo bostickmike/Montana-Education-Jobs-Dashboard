@@ -115,7 +115,7 @@ One row per open posting across this project's 6 directly-scraped HE institution
 | `Link` | text | Direct link to the posting. |
 | `Archive_Date` | date | |
 
-**Sources combined into this file**: PeopleAdmin (4 institutions), JazzHR (Montana Tech, which also covers Highlands College's postings under its own board), Paycom (Flathead Valley Community College), a heuristic free-text scraper (Miles Community College), and isolved Hire (Blackfeet Community College) — `he_institution_registry.csv`'s 8 institutions.
+**Sources combined into this file**: PeopleAdmin (4 institutions), JazzHR (Montana Tech, which also covers Highlands College's postings under its own board), Paycom (Flathead Valley Community College), NEOGOV Attract (University of Montana, which also covers Missoula College, Helena College, and University of Montana Western under its own board), ADP Workforce Now (University of Providence), isolved Hire (Blackfeet Community College), and heuristic free-text/DOM scrapers (Miles Community College, Dawson Community College, Carroll College, Rocky Mountain College) — `he_institution_registry.csv`'s 12 institutions.
 
 ### `facultydata.csv` — full history, faculty + adjunct postings only
 

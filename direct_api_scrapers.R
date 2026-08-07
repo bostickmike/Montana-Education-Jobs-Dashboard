@@ -650,3 +650,145 @@ parse_isolvedhire_postings <- function(json_text, institution_name) {
     stringsAsFactors = FALSE
   )
 }
+
+# ---------------------------------------------------------------------------
+# NEOGOV Attract -- University of Montana (whose board also covers three
+# branch/affiliate campuses under the same feed, confirmed live by their
+# real street addresses in the Location field: Missoula College and Helena
+# College postings, plus University of Montana Western's -- e.g. "Vice
+# Chancellor of Administration and Finance" at 710 S Atlantic St, Dillon,
+# MT, UM Western's real campus address. None of the three need their own
+# registry row.)
+# ---------------------------------------------------------------------------
+
+# The public careers page (e.g.
+# https://ummissoula.attract.neoed.com/p/careers) is server-rendered but
+# ships zero real job data in the initial HTML -- window.initialData's
+# "jobs" array is just a single widget-config placeholder object, not
+# actual postings. The real data comes from a same-origin JobList endpoint
+# the page's own JS calls client-side, requiring the
+# "X-Requested-With: XMLHttpRequest" header (a plain curl/httr2 request
+# without it 404s even with the right query string and session cookies --
+# confirmed by comparing a raw request against one replayed from inside a
+# real page load via chromote's Runtime.evaluate). Returns an HTML
+# fragment (job-card anchors), not JSON. Each posting's real detail-page
+# link embeds ephemeral visitor/session query params that 500 if reused
+# from a different session -- confirmed live the same link resolves fine
+# with that query string stripped, so Link stores the bare URL. No posted-
+# date field exists anywhere in the fragment -- a real absence, same
+# pattern as JazzHR/Paycom's missing date.
+fetch_neogov_postings <- function(subdomain, institution_name, page_size = 50) {
+  all_pages <- list()
+  page <- 1
+  repeat {
+    resp <- request(paste0("https://", subdomain, ".attract.neoed.com/JobList")) %>%
+      req_url_query(
+        layoutId = "Jobs-1",
+        websiteUrl = paste0("https://", subdomain, ".attract.neogov.com"),
+        themeId = "2", language = "en", subdomain = subdomain,
+        page = page, pageSize = page_size, contains = ""
+      ) %>%
+      req_headers(`X-Requested-With` = "XMLHttpRequest") %>%
+      req_perform()
+
+    page_df <- parse_neogov_postings(resp_body_string(resp), institution_name)
+    if (nrow(page_df) == 0) break
+
+    all_pages[[length(all_pages) + 1]] <- page_df
+    if (nrow(page_df) < page_size) break
+    page <- page + 1
+  }
+
+  if (length(all_pages) == 0) {
+    return(data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE))
+  }
+  dplyr::bind_rows(all_pages)
+}
+
+parse_neogov_postings <- function(html_text, institution_name) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  boxes <- rvest::html_elements(page, "a.jobs__box")
+  if (length(boxes) == 0) return(empty)
+
+  titles <- rvest::html_text2(rvest::html_elements(boxes, ".jobs__box__heading"))
+  locations <- rvest::html_text2(rvest::html_elements(boxes, ".jobs__box__text"))
+  links <- sub("\\?.*$", "", rvest::html_attr(boxes, "href"))
+
+  data.frame(
+    Title = titles,
+    Location = locations,
+    Posted_Date = NA_character_,
+    Link = links,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# ADP Workforce Now (careercenter) -- University of Providence
+# ---------------------------------------------------------------------------
+
+# The public recruitment page (e.g.
+# https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid={cid}&ccId={cc_id}&type=JS&lang=en_US)
+# is a client-rendered app shell -- ADP's frontend bundle varies between
+# page loads (observed both a "synerg-web-components" build and an
+# "mdf-wc" build fetching the same recruitment.html, an A/B-tested rollout
+# apparently keyed off something other than the URL) but both call the
+# same real, unauthenticated JSON API underneath:
+# mascsr/default/careercenter/public/events/staffing/v1/job-requisitions.
+# Requires cid (the employer's ADP client ID) and ccId (career-center ID,
+# "19000101_000001" for every real career-center site checked so far, but
+# treated as a real per-institution parameter rather than hardcoded, in
+# case a future institution's differs). Each posting's real detail-page
+# URL isn't returned in the JSON directly -- confirmed live with chromote
+# that clicking a posting appends "&jobId={ExternalJobID}" to the
+# recruitment.html URL itself (client-side routing, not a separate page),
+# where ExternalJobID is a stringField buried in each job's
+# customFieldGroup, not a top-level field.
+fetch_adp_workforcenow_postings <- function(cid, cc_id, institution_name, top = 100) {
+  resp <- request("https://workforcenow.adp.com/mascsr/default/careercenter/public/events/staffing/v1/job-requisitions") %>%
+    req_url_query(cid = cid, ccId = cc_id, lang = "en_US", locale = "en_US", `$top` = top) %>%
+    req_perform()
+  parse_adp_workforcenow_postings(resp_body_string(resp), cid, cc_id)
+}
+
+adp_extract_external_job_id <- function(job) {
+  string_fields <- job$customFieldGroup$stringFields
+  for (field in string_fields) {
+    if (identical(field$nameCode$codeValue, "ExternalJobID")) return(field$stringValue)
+  }
+  NA_character_
+}
+
+parse_adp_workforcenow_postings <- function(json_text, cid, cc_id) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  parsed <- jsonlite::fromJSON(json_text, simplifyVector = FALSE)
+  jobs <- parsed$jobRequisitions
+  if (is.null(jobs) || length(jobs) == 0) return(empty)
+
+  base_url <- paste0("https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=",
+                      cid, "&ccId=", cc_id, "&type=JS&lang=en_US")
+
+  rows <- lapply(jobs, function(job) {
+    city <- tryCatch(job$requisitionLocations[[1]]$address$cityName, error = function(e) NA_character_)
+    if (is.null(city)) city <- NA_character_
+    ext_id <- adp_extract_external_job_id(job)
+
+    data.frame(
+      Title = job$requisitionTitle,
+      Location = city,
+      Posted_Date = substr(job$postDate, 1, 10),
+      Link = paste0(base_url, "&jobId=", ext_id),
+      stringsAsFactors = FALSE
+    )
+  })
+  do.call(rbind, rows)
+}
