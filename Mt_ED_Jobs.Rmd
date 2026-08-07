@@ -18,6 +18,7 @@ library(dplyr)
 library(readr)
 source("scrape_helpers.R")
 source("direct_api_scrapers.R")
+source("misc_district_scrapers.R")
 
 registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
 
@@ -107,6 +108,52 @@ if (nrow(tedk12_df) == 0) {
   tedk12_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                            location = character(0), url = character(0), District = character(0))
 }
+
+# Livingston and Lodge Grass have no structured ATS -- heuristic scrapers
+# in misc_district_scrapers.R read their own site's real page structure
+# directly, same acknowledged-less-reliable-source spirit as
+# misc_college_scrapers.R on the HE side.
+livingston_districts <- registry[registry$Platform == "LivingstonHeuristic", ]
+livingston_results <- lapply(seq_len(nrow(livingston_districts)), function(i) {
+  row <- livingston_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_livingston_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+livingston_df <- bind_rows(livingston_results)
+if (nrow(livingston_df) > 0) {
+  livingston_df <- livingston_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District)
+} else {
+  livingston_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0))
+}
+
+lodgegrass_districts <- registry[registry$Platform == "LodgeGrassHeuristic", ]
+lodgegrass_results <- lapply(seq_len(nrow(lodgegrass_districts)), function(i) {
+  row <- lodgegrass_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_lodgegrass_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+lodgegrass_df <- bind_rows(lodgegrass_results)
+if (nrow(lodgegrass_df) > 0) {
+  lodgegrass_df <- lodgegrass_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District)
+} else {
+  lodgegrass_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0))
+}
 ```
 
 ### OPI "Jobs for Teachers" statewide fallback feed
@@ -178,9 +225,12 @@ applitrack_df <- applitrack_df %>% mutate(date_posted = standardize_date(date_po
 schoolspring_df <- schoolspring_df %>% mutate(date_posted = standardize_date(date_posted))
 tylerportico_df <- tylerportico_df %>% mutate(date_posted = standardize_date(date_posted))
 tedk12_df <- tedk12_df %>% mutate(date_posted = standardize_date(date_posted))
+livingston_df <- livingston_df %>% mutate(date_posted = standardize_date(date_posted))
+lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
-combined <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, opi_df) %>%
+combined <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
+                       livingston_df, lodgegrass_df, opi_df) %>%
   mutate(Archive_Date = Sys.Date())
 
 # fix_title_encoding() applied once here, at the point titles first enter
