@@ -426,7 +426,26 @@ milescc_results <- lapply(seq_len(nrow(milescc_institutions)), function(i) {
 })
 milescc_df <- bind_rows(milescc_results)
 
-hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df, milescc_df)
+# Blackfeet Community College runs isolved Hire (applican) -- Feed_URL packs
+# "subdomain:domain_id" since the platform needs both to build its jobs API
+# URL (https://{subdomain}.isolvedhire.com/core/jobs/{domain_id}), and
+# domain_id is a per-institution site ID with no derivable relationship to
+# the subdomain (only discoverable via live network capture).
+isolvedhire_institutions <- he_registry[he_registry$Platform == "IsolvedHire", ]
+isolvedhire_results <- lapply(seq_len(nrow(isolvedhire_institutions)), function(i) {
+  row <- isolvedhire_institutions[i, ]
+  feed_parts <- strsplit(row$Feed_URL, ":")[[1]]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_isolvedhire_postings(feed_parts[1], feed_parts[2], row$Institution),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+isolvedhire_df <- bind_rows(isolvedhire_results)
+
+hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, isolvedhire_df)
 ```
 
 ### Combine all HE data, classify, archive, and accumulate history

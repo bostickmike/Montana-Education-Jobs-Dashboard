@@ -605,3 +605,48 @@ parse_paycom_postings <- function(json_text, portal_key) {
     stringsAsFactors = FALSE
   )
 }
+
+# ---------------------------------------------------------------------------
+# isolved Hire (applican) -- Blackfeet Community College
+# ---------------------------------------------------------------------------
+
+# The public jobs page (e.g. https://bfcc.isolvedhire.com/jobs/) renders via
+# a Vue web-components bundle with no job data in the raw HTML or in any
+# request to the refer-io.appspot.com widget it also loads (that widget is
+# an unrelated employee-referral feature, a dead end confirmed by live
+# chromote network capture). The real source is the site's own backend at
+# {subdomain}.isolvedhire.com/core/jobs/{domain_id} -- domain_id is a
+# per-institution site ID (10334 for Blackfeet CC) only discoverable by
+# capturing the live page's network requests once per institution. Requires
+# a non-null getParams query param (the endpoint 500s without one) but an
+# empty JSON object is accepted and returns the full unfiltered list, same
+# 7 postings confirmed live 2026-08-06 matching what chromote rendered.
+fetch_isolvedhire_postings <- function(subdomain, domain_id, institution_name) {
+  api_url <- paste0("https://", subdomain, ".isolvedhire.com/core/jobs/", domain_id,
+                     "?getParams=%7B%7D")
+  resp <- request(api_url) %>% req_perform()
+  parse_isolvedhire_postings(resp_body_string(resp), institution_name)
+}
+
+# startDateRef is the posting's real open/start date (not the closing date,
+# which is endDateRef) -- confirmed against the live BFCC postings, where
+# startDateRef consistently precedes endDateRef by weeks to years (the
+# latter driven by untilFilled postings carrying a multi-year placeholder
+# close date).
+parse_isolvedhire_postings <- function(json_text, institution_name) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  parsed <- jsonlite::fromJSON(json_text, simplifyVector = TRUE)
+  jobs <- parsed$data$jobs
+  if (is.null(jobs) || length(jobs) == 0 || nrow(jobs) == 0) return(empty)
+
+  data.frame(
+    Title = trimws(jobs$title),
+    Location = jobs$city,
+    Posted_Date = as.character(as.Date(jobs$startDateRef, format = "%b %d, %Y")),
+    Link = jobs$jobUrl,
+    stringsAsFactors = FALSE
+  )
+}
