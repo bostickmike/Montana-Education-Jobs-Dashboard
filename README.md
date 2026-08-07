@@ -55,7 +55,7 @@ A GitHub Actions workflow runs weekly (Tuesdays — deliberately not Wyoming's F
 - `history_accumulator.R` — appends each week's newly classified rows onto the existing accumulated datasets (idempotent, schema-checked) instead of reprocessing the full raw archive every run.
 - `k12_district_registry.csv` / `he_institution_registry.csv` — the hand-maintained list of every directly-scraped district/institution, its platform, and its real feed/job-board URL.
 - `RESEARCH_NOTES.md` — the original WY→MT scoping research (district counts, salary-source gap, FIPS codes) that shaped every structural decision in this port.
-- `Archivek12_Data/`, `Archived_HE_Data/` — one dated raw snapshot per week, still written every run as the durable source of truth.
+- `Archivek12_Data/`, `Archived_HE_Data/` — one dated raw snapshot per week, still written every run as the durable source of truth. `scripts/rebuild_*_history_from_archive.R` rebuild the accumulated datasets from these from scratch, for disaster recovery or to verify the incremental path hasn't drifted.
 - `tests/testthat/` — the test suite, built almost entirely on real captured fixtures (real scraped HTML, real downloaded PDFs, real API responses) rather than synthetic data.
 - `.github/workflows/weekly-scrape.yml` — the automation described above.
 

@@ -1,14 +1,11 @@
 # append_weekly_rows()/check_total_matches_parts() unit tests. Ported from
 # the Wyoming Education Jobs Dashboard's test-history-accumulator.R --
 # these 8 are pure and state-agnostic (synthetic data, no real archive
-# needed), so they port directly. Wyoming's file also has two equivalence
-# tests proving the incremental-append path reproduces a full from-scratch
-# archive rebuild (rebuild_k12_history_from_archive.R /
-# rebuild_he_history_from_archive.R) -- not ported yet, since that needs at
-# least 2 real archived weeks on disk to compare against and Montana's
-# pipeline hasn't produced any archive history yet. Add those two tests
-# (and the rebuild scripts they check against) once Archivek12_Data/ and
-# Archived_HE_Data/ have real accumulated weeks.
+# needed), so they port directly. The two equivalence tests below (proving
+# the incremental-append path reproduces a full from-scratch archive
+# rebuild) were deliberately not ported until Montana's pipeline had at
+# least 2 real archived weeks on disk to compare against -- ported
+# 2026-08-07 now that Archivek12_Data/ and Archived_HE_Data/ both do.
 
 test_that("append_weekly_rows bootstraps from a missing file", {
   new_rows <- data.frame(District = c("A", "B"), Archive_Date = "2026-08-06", n = c(1, 2))
@@ -81,4 +78,182 @@ test_that("check_total_matches_parts stops when the Total doesn't equal the sum 
                        District = c("A", "B"), sum = c(2, 3))
   expect_error(check_total_matches_parts(total, parts, group_cols = c("Broad_Category", "Archive_Date")),
                "don't equal the sum")
+})
+
+# ---------------------------------------------------------------------------
+# Equivalence: incremental append vs. from-scratch rebuild, on real archives
+# ---------------------------------------------------------------------------
+
+k12_archive_dir <- here::here("Archivek12_Data")
+he_archive_dir <- here::here("Archived_HE_Data")
+
+sorted_archive_dates <- function(dir, pattern, date_regex = "[0-9]{4}-[0-9]{2}-[0-9]{2}") {
+  files <- list.files(dir, pattern = pattern, full.names = TRUE)
+  dates <- regmatches(files, regexpr(date_regex, files))
+  data.frame(file = files, date = dates, stringsAsFactors = FALSE)[order(dates), ]
+}
+
+# Row names get reset after sorting -- otherwise two data frames with
+# identical values in identical (sorted) order can still fail
+# expect_equal() over a spurious row.names mismatch, since sorting
+# preserves each row's original (pre-sort) row name rather than
+# renumbering, and the two sides being compared were built via different
+# code paths with different original row orders.
+sort_df <- function(df) {
+  out <- df[do.call(order, as.list(df)), , drop = FALSE]
+  rownames(out) <- NULL
+  out
+}
+
+test_that("incrementally appending the latest week reproduces a full rebuild through that week (K-12)", {
+  skip_if_not(dir.exists(k12_archive_dir), "Archivek12_Data not found -- skipping")
+  archive <- sorted_archive_dates(k12_archive_dir, "^combined_.*\\.csv$")
+  skip_if(nrow(archive) < 2, "need at least 2 archived weeks to test incremental append")
+
+  latest <- archive[nrow(archive), ]
+  prior_files <- archive$file[-nrow(archive)]
+
+  # "Old" accumulated state: full rebuild through every week EXCEPT the
+  # latest, using only the archive functions under test (not app.R/the Rmd).
+  old_dir <- withr::local_tempdir()
+  file.copy(prior_files, old_dir)
+  old_state <- rebuild_k12_history_from_archive(old_dir)
+
+  old_k12jobs_path <- withr::local_tempfile()
+  old_allsum_path <- withr::local_tempfile()
+  old_weekly_totals_path <- withr::local_tempfile()
+  write.csv(old_state$k12jobs, old_k12jobs_path, row.names = FALSE)
+  write.csv(old_state$allsum, old_allsum_path, row.names = FALSE)
+  write.csv(old_state$k12_district_weekly_totals, old_weekly_totals_path, row.names = FALSE)
+
+  # This week's newly classified rows, built the same way the Rmd's
+  # incremental path builds them -- directly from the latest raw archive
+  # file, not from re-reading everything.
+  raw_latest <- read.csv(latest$file, colClasses = c("Archive_Date" = "character"))
+  raw_latest <- raw_latest[, setdiff(names(raw_latest), c("X", "date_posted")), drop = FALSE]
+  raw_latest$Archive_Date <- as.character(as.Date(raw_latest$Archive_Date))
+
+  this_week_combinedclean <- raw_latest %>%
+    mutate(position = classify_k12_position(title),
+           District = canonicalize_k12_district(District)) %>%
+    select(title, Archive_Date, position, location, url, District)
+
+  this_week_k12jobs <- this_week_combinedclean %>%
+    filter(position == "Teacher") %>%
+    mutate(Category = classify_k12_subject(title),
+           Broad_Category = classify_k12_broad_category(Category)) %>%
+    select(title, Archive_Date, position, location, url, District, Category, Broad_Category)
+
+  this_week_weekly_totals <- this_week_combinedclean %>%
+    count(District, Archive_Date, name = "n")
+
+  this_week_k12sumdistrict <- this_week_k12jobs %>%
+    group_by(Broad_Category, Archive_Date, District) %>%
+    summarize(sum = n_distinct(paste(title, location)), .groups = "drop")
+  this_week_k12sum <- this_week_k12sumdistrict %>%
+    group_by(Broad_Category, Archive_Date) %>%
+    summarize(sum = sum(sum), .groups = "drop") %>%
+    mutate(District = "Total") %>%
+    select(Broad_Category, Archive_Date, District, sum)
+  check_total_matches_parts(this_week_k12sum, this_week_k12sumdistrict, group_cols = c("Broad_Category", "Archive_Date"))
+  this_week_allsum <- bind_rows(this_week_k12sum, this_week_k12sumdistrict)
+
+  # Incremental result: old accumulated state + this week's new rows.
+  incremental_k12jobs <- append_weekly_rows(old_k12jobs_path, this_week_k12jobs)
+  incremental_allsum <- append_weekly_rows(old_allsum_path, this_week_allsum)
+  incremental_weekly_totals <- append_weekly_rows(old_weekly_totals_path, this_week_weekly_totals)
+
+  # Ground truth: full rebuild through the latest week, via the same
+  # from-scratch logic the pipeline used before this change.
+  full_dir <- withr::local_tempdir()
+  file.copy(archive$file, full_dir)
+  full_state <- rebuild_k12_history_from_archive(full_dir)
+
+  # Row order legitimately differs (append puts new rows at the end;
+  # full rebuild's group_by/summarize doesn't preserve chronological
+  # order) -- sort both before comparing. Also round-trip BOTH sides
+  # through write.csv()/read.csv() before comparing, not just sides that
+  # happen to already be on disk: R's text-mode read.csv() normalizes an
+  # embedded "\r\n" inside a quoted field (present in some real scraped
+  # Location/Posted_Date values) down to "\n", which the incremental side
+  # already goes through (it reads the existing accumulated file back)
+  # but the full-rebuild side doesn't unless we do it here too. Comparing
+  # one CSV-round-tripped side against one pure-in-memory side would flag
+  # that normalization as a false equivalence failure -- what actually
+  # matters is that both end up identical once persisted, since that's
+  # the only form either one is ever read back in by the real pipeline.
+  norm <- function(df) {
+    df$Archive_Date <- as.character(df$Archive_Date)
+    tmp <- withr::local_tempfile()
+    write.csv(df, tmp, row.names = FALSE)
+    sort_df(read.csv(tmp, stringsAsFactors = FALSE))
+  }
+
+  expect_equal(norm(incremental_k12jobs), norm(as.data.frame(full_state$k12jobs)), ignore_attr = TRUE)
+  expect_equal(norm(incremental_allsum), norm(as.data.frame(full_state$allsum)), ignore_attr = TRUE)
+  expect_equal(norm(incremental_weekly_totals), norm(as.data.frame(full_state$k12_district_weekly_totals)), ignore_attr = TRUE)
+})
+
+test_that("incrementally appending the latest week reproduces a full rebuild through that week (Higher Ed)", {
+  skip_if_not(dir.exists(he_archive_dir), "Archived_HE_Data not found -- skipping")
+  skip_if_not_installed("readxl")
+  archive <- sorted_archive_dates(he_archive_dir, "^hedata_.*\\.xlsx$")
+  skip_if(nrow(archive) < 2, "need at least 2 archived weeks to test incremental append")
+
+  latest <- archive[nrow(archive), ]
+  prior_files <- archive$file[-nrow(archive)]
+
+  old_dir <- withr::local_tempdir()
+  file.copy(prior_files, old_dir)
+  old_state <- rebuild_he_history_from_archive(old_dir)
+
+  old_faculty_path <- withr::local_tempfile()
+  old_allsum_he_path <- withr::local_tempfile()
+  old_weekly_totals_path <- withr::local_tempfile()
+  write.csv(old_state$facultydata, old_faculty_path, row.names = FALSE)
+  write.csv(old_state$allsum_he, old_allsum_he_path, row.names = FALSE)
+  write.csv(old_state$he_institution_weekly_totals, old_weekly_totals_path, row.names = FALSE)
+
+  raw_latest <- readxl::read_xlsx(latest$file)
+  raw_latest$Archive_Date <- as.character(as.Date(raw_latest$Archive_Date))
+  raw_latest <- raw_latest %>% mutate(Institution = canonicalize_he_institution(Institution))
+
+  this_week_he_cat <- raw_latest %>% mutate(Job_Type = classify_he_job_type(Title))
+  this_week_facultydata <- this_week_he_cat %>%
+    filter(Job_Type %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")) %>%
+    mutate(Category = classify_he_faculty_category(Title))
+
+  this_week_weekly_totals <- raw_latest %>% count(Institution, Archive_Date, name = "n")
+
+  this_week_hesum <- this_week_facultydata %>%
+    group_by(Category, Archive_Date, Job_Type) %>%
+    summarize(sum = n(), .groups = "drop") %>%
+    mutate(Institution = "Total") %>%
+    select(Category, Archive_Date, Institution, Job_Type, sum)
+  this_week_hesuminst <- this_week_facultydata %>%
+    group_by(Category, Archive_Date, Institution, Job_Type) %>%
+    summarise(sum = n(), .groups = "drop")
+  check_total_matches_parts(this_week_hesum, this_week_hesuminst, group_cols = c("Category", "Archive_Date", "Job_Type"))
+  this_week_allsum_he <- bind_rows(this_week_hesum, this_week_hesuminst)
+
+  incremental_facultydata <- append_weekly_rows(old_faculty_path, as.data.frame(this_week_facultydata))
+  incremental_allsum_he <- append_weekly_rows(old_allsum_he_path, this_week_allsum_he)
+  incremental_weekly_totals <- append_weekly_rows(old_weekly_totals_path, this_week_weekly_totals)
+
+  full_dir <- withr::local_tempdir()
+  file.copy(archive$file, full_dir)
+  full_state <- rebuild_he_history_from_archive(full_dir)
+
+  # See the K-12 test's matching comment above for why both sides get
+  # round-tripped through write.csv()/read.csv() before comparing.
+  norm <- function(df) {
+    df$Archive_Date <- as.character(df$Archive_Date)
+    tmp <- withr::local_tempfile()
+    write.csv(df, tmp, row.names = FALSE)
+    sort_df(read.csv(tmp, stringsAsFactors = FALSE))
+  }
+
+  expect_equal(norm(incremental_facultydata), norm(as.data.frame(full_state$facultydata)), ignore_attr = TRUE)
+  expect_equal(norm(incremental_allsum_he), norm(as.data.frame(full_state$allsum_he)), ignore_attr = TRUE)
+  expect_equal(norm(incremental_weekly_totals), norm(as.data.frame(full_state$he_institution_weekly_totals)), ignore_attr = TRUE)
 })
