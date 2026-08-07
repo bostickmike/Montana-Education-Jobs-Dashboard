@@ -103,4 +103,4 @@ testthat::test_dir("tests/testthat")
 
 ## Contact
 
-Created by Michael Bostick.
+Created by Michael Bostick, adapted from the [Wyoming Education Jobs Dashboard](https://github.com/bostickmike/Wyoming-Education-Jobs-Dashboard) — originally built by Mark Perkins, substantially rewritten and extended since.
