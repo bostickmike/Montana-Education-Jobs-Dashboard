@@ -46,7 +46,8 @@ jobs:
             # is actually installed in the environment generating the
             # manifest. Omitting one of these would break the Connect
             # Cloud redeploy silently (manifest missing that package
-            # entirely) -- see Wyoming's own 2026-08-03 incident.
+            # entirely) -- a real incident already hit once in the sibling
+            # Wyoming project, avoided here from the start.
             "shiny", "shinydashboard", "shinyWidgets", "DT", "data.table",
             "leaflet", "plotly", "scales", "shinycssloaders"
           ))'
