@@ -8,23 +8,41 @@
 # filtered to fips=30 (Montana). Per NCES, HR/SAL data is reported "as of
 # November 1" of the same calendar year as the survey year.
 #
-# MT_IPEDS_UNITID_MAP covers exactly the 6 institutions this project already
+# MT_IPEDS_UNITID_MAP covers exactly the institutions this project already
 # job-scrapes (he_institution_registry.csv), matching Wyoming's own
 # salarymap.csv scope (its 9 rows are exactly its 9 job-scraped
-# institutions, not a broader MUS-wide reference set) -- confirmed live
-# against the Urban Institute's college directory 2026-08-06. Montana's own
+# institutions, not a broader MUS-wide reference set). Montana's own
 # structural quirks (RESEARCH_NOTES.md's Higher Ed section) don't need any
 # special-casing here the way Wyoming's Sheridan/Gillette shared-unitid case
 # does: Highlands College of Montana Tech has its own separate unitid
 # (180081) and reports its own faculty salary independently of Montana
-# Tech's (180416), so no merged-entity Salary_Note is needed for any of
-# these 6.
+# Tech's (180416), so no merged-entity Salary_Note is needed for any
+# institution in this map.
 #
 # Each institution reports one row per (academic_rank x contract_length x
 # sex) combination; academic_rank/contract_length/sex == 99 means "all
 # ranks/lengths/sexes combined". Negative values (-1, -2, -3) are IPEDS/
 # Urban sentinel codes for not-available/not-applicable/suppressed, not
 # real data, and are treated as NA.
+#
+# Extended 2026-08-07 from the original 6 (confirmed live 2026-08-06) to
+# cover the 7 HE institutions added to the registry since: Blackfeet CC,
+# Carroll College, Dawson CC, Miles CC, Rocky Mountain College, University
+# of Montana, and University of Providence -- each unitid confirmed live
+# against the Urban Institute's college directory AND its own real 2024
+# salaries-instructional-staff response (not just matched by name in the
+# directory). Three of these (Blackfeet CC, Dawson CC, Miles CC -- all
+# small 2-year colleges) genuinely have NO academic_rank=1 ("Professor")
+# rank-tier record at all in the 2024 data -- confirmed live, a real
+# absence (these institutions don't use a tenure-track Professor rank
+# system), not a query bug -- so Faculty_Avg_Salary_Professor is
+# real NA for all three via the existing left_join below, no special-
+# casing needed. University of Montana's real unitid (180489) is
+# "The University of Montana" in the directory, distinct from University
+# of Montana Western (180692) and Helena College (180276) -- neither of
+# which gets its own row here, matching he_institution_registry.csv's own
+# choice not to give either its own registry row (both ride UM's NEOGOV
+# jobs board, confirmed live in direct_api_scrapers.R's own comments).
 
 suppressMessages({
   library(httr2)
@@ -40,7 +58,14 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
   180522L, "Montana State University-Northern",
   180249L, "Great Falls College MSU",
   180416L, "Montana Tech",
-  180197L, "Flathead Valley Community College"
+  180197L, "Flathead Valley Community College",
+  180373L, "Miles Community College",
+  180151L, "Dawson Community College",
+  180054L, "Blackfeet Community College",
+  180489L, "University of Montana",
+  180106L, "Carroll College",
+  180595L, "Rocky Mountain College",
+  180258L, "University of Providence"
 )
 
 # Follows the API's `next` pagination link until exhausted, returning every

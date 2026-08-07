@@ -21,19 +21,21 @@ he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALS
 
 # This project's K-12/HE registries have each grown since these DLI/CCD/
 # IPEDS/FSA maps were first built (30 K-12 districts, 13 HE institutions
-# as of 2026-08-07) -- MT_DLI_DISTRICT_MAP/MT_CCD_LEA_MAP/MT_IPEDS_UNITID_MAP
-# still only cover the original 18/6, a real known coverage gap (see
-# DATA_COOKBOOK.md), so those expected counts below are deliberately still
-# 18/6, not the current registry size. MT_OPI_FINANCE_LEA_MAP (below) is
-# the one map already extended to cover all 30 K-12 districts.
+# as of 2026-08-07). MT_DLI_DISTRICT_MAP/MT_CCD_LEA_MAP still only cover
+# the original 18 K-12 districts, a real known coverage gap (see
+# DATA_COOKBOOK.md) -- those two expected counts below are deliberately
+# still 18, not 30. MT_OPI_FINANCE_LEA_MAP (K-12 finance) and
+# MT_IPEDS_UNITID_MAP (HE salary/enrollment/Pell) are both already
+# extended to cover every currently-registered institution (30 and 13
+# respectively) -- extended 2026-08-07 the same live-verification way.
 flags <- rbind(
   check_salary_coverage("K-12 teacher avg salary (MT DLI)", sum(!is.na(k12$Teacher_Avg_Salary)), expected = 18L, min_ok = 16L),
   check_salary_coverage("K-12 teacher FTE (CCD)", sum(!is.na(k12$Teachers_Total_FTE)), expected = 18L),
   check_salary_coverage("K-12 General Fund expenditure (OPI Finance)", sum(!is.na(k12$Total_General_Fund_Expenditure)), expected = 30L),
-  check_salary_coverage("HE avg faculty salary (IPEDS)", sum(!is.na(he$Faculty_Avg_Salary)), expected = 6L),
-  check_salary_coverage("HE fall enrollment FTE (IPEDS)", sum(!is.na(he$Enrollment)), expected = 6L),
-  check_salary_coverage("HE 5-year enrollment trend (IPEDS)", sum(!is.na(he$Enrollment_Change_Pct)), expected = 6L),
-  check_salary_coverage("HE Pell Grant recipient share (FSA)", sum(!is.na(he$Pell_Recipient_Share)), expected = 6L)
+  check_salary_coverage("HE avg faculty salary (IPEDS)", sum(!is.na(he$Faculty_Avg_Salary)), expected = 13L),
+  check_salary_coverage("HE fall enrollment FTE (IPEDS)", sum(!is.na(he$Enrollment)), expected = 13L),
+  check_salary_coverage("HE 5-year enrollment trend (IPEDS)", sum(!is.na(he$Enrollment_Change_Pct)), expected = 13L),
+  check_salary_coverage("HE Pell Grant recipient share (FSA)", sum(!is.na(he$Pell_Recipient_Share)), expected = 13L)
 )
 
 if (!is.null(flags) && nrow(flags) > 0) print(flags)
@@ -44,7 +46,7 @@ coverage_lines <- if (is.null(flags) || nrow(flags) == 0) {
   lines <- c(
     paste0("Automated salary-source coverage check flagged ", nrow(flags), " source(s) as of ", Sys.Date(), "."),
     "",
-    "Unlike the job-posting drift check above, these are hard assertions against a known, essentially-fixed universe (18 MT districts, 6 MT public HE institutions) rather than a trailing statistical baseline -- salary data updates far less often (once a year at most, not weekly), so a genuine week-to-week dip isn't expected. A source landing below its expected count usually means the source changed its page/PDF/API layout and the parser is silently extracting less real data, not that Montana lost school districts or colleges.",
+    "Unlike the job-posting drift check above, these are hard assertions against a known, essentially-fixed universe (30 MT K-12 districts, 13 MT HE institutions currently registered -- some sources still only cover a subset, a real known gap, see the expected counts above) rather than a trailing statistical baseline -- salary data updates far less often (once a year at most, not weekly), so a genuine week-to-week dip isn't expected. A source landing below its expected count usually means the source changed its page/PDF/API layout and the parser is silently extracting less real data, not that Montana lost school districts or colleges.",
     ""
   )
   for (i in seq_len(nrow(flags))) {
@@ -58,9 +60,12 @@ coverage_lines <- if (is.null(flags) || nrow(flags) == 0) {
 # Value plausibility -- catches a source that returns the RIGHT ROW COUNT
 # but the WRONG VALUES. Bounds are deliberately generous -- real MT
 # 2022-23 DLI data sits at $52k-$67k (teacher average), real 2024 IPEDS
-# data sits at $62k-$99k (HE faculty average); these bounds exist to catch
-# a parser reading a location code or a stray digit into a dollar column,
-# not to flag genuine, if unusual, salary growth over time.
+# data sits at $25.6k (Blackfeet CC, a real small tribal college with a
+# heavily adjunct/part-time-weighted instructional staff, confirmed live
+# 2026-08-07 -- not a parsing error) to $99k (HE faculty average); these
+# bounds exist to catch a parser reading a location code or a stray digit
+# into a dollar column, not to flag genuine, if unusual, salary growth
+# over time or a real small institution's real low average.
 # --------------------------------------------------------------------------
 k12_avg <- setNames(k12$Teacher_Avg_Salary, k12$District)
 k12_10th <- setNames(k12$Teacher_Salary_10th_Pctile, k12$District)
@@ -78,7 +83,7 @@ plausibility_flags <- list(
   # bounds set well outside that to catch a parser misread, not to flag
   # genuine size variation between a tiny and a large district.
   check_salary_value_bounds("K-12 General Fund expenditure (OPI Finance)", k12_genfund, min_ok = 500000, max_ok = 250000000),
-  check_salary_value_bounds("HE avg faculty salary (IPEDS)", he_current, min_ok = 30000, max_ok = 150000),
+  check_salary_value_bounds("HE avg faculty salary (IPEDS)", he_current, min_ok = 15000, max_ok = 150000),
   check_salary_yoy_plausibility(he_current, he_y1ago)
 )
 plausibility_flags <- plausibility_flags[!vapply(plausibility_flags, is.null, logical(1))]
