@@ -14,7 +14,9 @@ REQUIRED_SCHEMAS <- list(
   "salarymap2.csv" = c("District", "County", "Latitude", "Longitude", "Job_Link",
                         "Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
                         "Teacher_Salary_90th_Pctile", "Salary_Year", "Salary_Source",
-                        "Teachers_Total_FTE", "Enrollment", "CCD_Year", "CCD_Source"),
+                        "Teachers_Total_FTE", "Enrollment", "CCD_Year", "CCD_Source",
+                        "Median_Household_Income", "Median_Gross_Rent", "Mining_Employment_Share",
+                        "Population_Change_Pct", "ACS_Year", "Child_Poverty_Rate", "SAIPE_Year"),
   "facultydata.csv" = c("Title", "Location", "Institution", "Link", "Archive_Date", "Job_Type", "Category"),
   "allsum_he.csv" = c("Category", "Archive_Date", "Institution", "Job_Type", "sum"),
   "allnow_he.csv" = c("Category", "Job_Type", "Sum", "Institution"),
@@ -22,7 +24,9 @@ REQUIRED_SCHEMAS <- list(
   "salarymap.csv" = c("Name", "County", "Longitude", "Latitude", "Link",
                        "Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor", "Faculty_Count",
                        "Salary_Year", "Salary_Source", "Enrollment", "Enrollment_Year",
-                       "Enrollment_Change_Pct", "Pell_Recipient_Share", "Pell_Year")
+                       "Enrollment_Change_Pct", "Pell_Recipient_Share", "Pell_Year",
+                       "Median_Household_Income", "Median_Gross_Rent", "Mining_Employment_Share",
+                       "Population_Change_Pct", "ACS_Year")
 )
 
 REQUIRED_SCHEMAS_XLSX <- list(
