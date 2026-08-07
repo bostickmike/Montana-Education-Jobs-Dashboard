@@ -2,18 +2,19 @@
 #
 # Ported from the Wyoming Education Jobs Dashboard's schema_check.R --
 # check_file_schema() itself is state-agnostic and kept as-is.
-# REQUIRED_SCHEMAS below reflects only what Montana's pipeline actually
-# produces so far (the job-postings chunks) -- unlike Wyoming's version, it
-# does NOT yet include salarymap2.csv/salarymap.csv's salary/staffing/
-# Census columns, since Montana's salary/staffing/Census data sources
-# haven't been built yet. Extend this list as each of those gets added,
-# the same way Wyoming's own list grew over that project's history.
+# REQUIRED_SCHEMAS below reflects what Montana's pipeline actually produces
+# so far -- extended as each new data source gets built, the same way
+# Wyoming's own list grew over that project's history.
 REQUIRED_SCHEMAS <- list(
   "combinedclean.csv" = c("title", "date_posted", "position", "location", "url", "District"),
   "k12jobanalysis.csv" = c("title", "Archive_Date", "location", "District"),
   "allsum.csv" = c("Broad_Category", "Archive_Date", "District", "sum"),
   "allnow.csv" = c("Broad_Category", "Sum", "District"),
   "k12_district_weekly_totals.csv" = c("District", "Archive_Date", "n"),
+  "salarymap2.csv" = c("District", "County", "Latitude", "Longitude", "Job_Link",
+                        "Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
+                        "Teacher_Salary_90th_Pctile", "Salary_Year", "Salary_Source",
+                        "Teachers_Total_FTE", "Enrollment", "CCD_Year", "CCD_Source"),
   "facultydata.csv" = c("Title", "Location", "Institution", "Link", "Archive_Date", "Job_Type", "Category"),
   "allsum_he.csv" = c("Category", "Archive_Date", "Institution", "Job_Type", "sum"),
   "allnow_he.csv" = c("Category", "Job_Type", "Sum", "Institution"),

@@ -7,9 +7,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 source("k12_he_classification.R")
 ```
-# Scrapes Montana's K-12 and higher-ed job postings and combines them into the datasets Mt_Ed_Jobs/app.R reads.
-# Mirrors the Wyoming Education Jobs Dashboard's Wy_ED_Jobs.Rmd. Job-postings only for now -- salary/staffing/Census
-# data sources are separate, later chunks (see DATA_COOKBOOK.md once they exist).
+# Scrapes Montana's K-12 and higher-ed job postings, salary, and staffing data and combines them into the datasets
+# Mt_Ed_Jobs/app.R reads. Mirrors the Wyoming Education Jobs Dashboard's Wy_ED_Jobs.Rmd.
 
 ## Part 1: Montana K-12 Data
 
@@ -249,6 +248,70 @@ k12nowsum <- k12districtnowsum %>%
 
 Allnow <- bind_rows(k12nowsum, k12districtnowsum)
 write.csv(Allnow, file = file.path("Mt_Ed_Jobs", "allnow.csv"), row.names = FALSE)
+```
+
+### K-12 teacher salary (MT DLI Teacher Compensation Report) and staffing (CCD teacher FTE via Urban Institute)
+```{r k12 salary and staffing data, message=FALSE, warning=FALSE, echo=TRUE}
+library(dplyr)
+source("scrape_helpers.R")
+source("salary_scrapers.R")
+source("ccd_staff_scraper.R")
+
+teacher_salary <- safe_scrape(
+  "MT DLI teacher compensation",
+  scrape_fn = fetch_dli_teacher_compensation_all_districts,
+  expected_cols = c("District", "Teacher_Count", "Teacher_Salary_10th_Pctile",
+                     "Teacher_Avg_Salary", "Teacher_Salary_90th_Pctile", "Salary_Year")
+)
+
+teacher_fte <- safe_scrape(
+  "CCD district teacher FTE (MT)",
+  scrape_fn = fetch_ccd_teacher_fte,
+  expected_cols = c("District", "Teachers_Total_FTE", "Enrollment", "CCD_Year")
+)
+
+# Static geo/link fields (County, Latitude, Longitude, Job_Link) come from
+# the district registry -- salarymap2.csv doesn't exist as its own separate
+# hand-maintained file the way Wyoming's does (this project's registry
+# already carries the same hand-maintained columns). A failed fetch leaves
+# last run's good salary/staffing values untouched rather than blanking
+# them out, same "leave it alone, don't blank it out" behavior every other
+# salary/staffing chunk in this pipeline has (see Wyoming's equivalent
+# chunks) -- so salarymap2.csv is read back first (if it exists) rather
+# than rebuilt fresh from the registry every run.
+registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE) %>%
+  select(District, County, Latitude, Longitude, Job_Link)
+
+salarymap2_path <- file.path("Mt_Ed_Jobs", "salarymap2.csv")
+salarymap2 <- if (file.exists(salarymap2_path)) {
+  read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
+    select(-any_of(c("County", "Latitude", "Longitude", "Job_Link"))) %>%
+    right_join(registry, by = "District") %>%
+    select(District, County, Latitude, Longitude, Job_Link, everything())
+} else {
+  registry
+}
+
+if (nrow(teacher_salary) > 0) {
+  salarymap2 <- salarymap2 %>%
+    select(-any_of(c("Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
+                      "Teacher_Salary_90th_Pctile", "Salary_Year", "Salary_Source"))) %>%
+    left_join(teacher_salary, by = "District") %>%
+    mutate(Salary_Source = "MT Dept. of Labor & Industry Teacher Compensation Report (lmi.mt.gov/publications)")
+} else {
+  message("MT DLI teacher compensation fetch failed -- leaving salarymap2.csv's salary columns untouched this run.")
+}
+
+if (nrow(teacher_fte) > 0) {
+  salarymap2 <- salarymap2 %>%
+    select(-any_of(c("Teachers_Total_FTE", "Enrollment", "CCD_Year", "CCD_Source"))) %>%
+    left_join(teacher_fte, by = "District") %>%
+    mutate(CCD_Source = "NCES Common Core of Data via Urban Institute Education Data Portal (educationdata.urban.org)")
+} else {
+  message("CCD teacher FTE fetch failed -- leaving salarymap2.csv's staffing columns untouched this run.")
+}
+
+write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 ```
 
 
