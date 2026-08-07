@@ -1,5 +1,5 @@
 # Proves the Higher Ed pipeline end-to-end across every platform built so
-# far (PeopleAdmin, JazzHR): reads the HE institution registry, scrapes
+# far (PeopleAdmin, JazzHR, Paycom): reads the HE institution registry, scrapes
 # every institution live via safe_scrape(), classifies the results, and
 # prints a summary. Standalone check (not the final pipeline entry point),
 # mirroring scripts/run_k12_scrape.R for the K-12 side. Was
@@ -58,15 +58,37 @@ jazzhr_results <- lapply(seq_len(nrow(jazzhr_institutions)), function(i) {
 })
 jazzhr_combined <- do.call(rbind, jazzhr_results)
 
+# --- Paycom ----------------------------------------------------------------
+
+# Feed_URL holds the portal key here (fetch_paycom_postings() builds both
+# the career-page URL and the search API calls itself) -- same per-platform
+# meaning difference already noted for JazzHR's row above.
+paycom_institutions <- registry[registry$Platform == "Paycom", ]
+
+paycom_results <- lapply(seq_len(nrow(paycom_institutions)), function(i) {
+  row <- paycom_institutions[i, ]
+  message("Scraping ", row$Institution, " (Paycom: ", row$Feed_URL, ")...")
+  df <- safe_scrape(
+    source_name = row$Institution,
+    scrape_fn = function() fetch_paycom_postings(row$Feed_URL, row$Institution),
+    expected_cols = expected_cols
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+paycom_combined <- do.call(rbind, paycom_results)
+
 # --- Summary -------------------------------------------------------------
 
-combined <- dplyr::bind_rows(peopleadmin_combined, jazzhr_combined)
+combined <- dplyr::bind_rows(peopleadmin_combined, jazzhr_combined, paycom_combined)
 
 cat("\n=== Summary ===\n")
 cat("PeopleAdmin institutions scraped:", nrow(peopleadmin_institutions),
     "| postings found:", nrow(peopleadmin_combined), "\n")
 cat("JazzHR institutions scraped:", nrow(jazzhr_institutions),
     "| postings found:", nrow(jazzhr_combined), "\n")
+cat("Paycom institutions scraped:", nrow(paycom_institutions),
+    "| postings found:", nrow(paycom_combined), "\n")
 cat("Total HE postings found:", nrow(combined), "\n\n")
 
 if (nrow(combined) > 0) {

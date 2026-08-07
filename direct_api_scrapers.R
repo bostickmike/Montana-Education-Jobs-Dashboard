@@ -520,3 +520,88 @@ parse_jazzhr_postings <- function(html_text, institution_name) {
     )
   }))
 }
+
+# ---------------------------------------------------------------------------
+# Paycom -- Flathead Valley Community College
+# ---------------------------------------------------------------------------
+
+# Paycom has no public API (confirmed via web search) and its hosted career
+# page (paycomonline.net/v4/ats/web.php/portal/<portal_key>/career-page) is a
+# React SPA whose job data doesn't come from any request visible via normal
+# browser network-tab/CDP capture in the usual case -- found instead by
+# downloading the SPA's own compiled bundle
+# (portal-applicant-tracking.us-cent.paycomonline.net/career-portal/main/*.js,
+# itself only discoverable via a small sprawl.json build manifest referenced
+# from the career page's initial HTML) and reading its real
+# api/ats/job-posting-previews/search POST call and the exact
+# filtersForQuery shape it sends (every field below is required -- omitting
+# distanceFrom/sortOption, or a wrong header name, makes the same endpoint
+# 200-and-return zero results instead of erroring, which looks identical to
+# a genuinely empty board). The JWT it authenticates with is embedded
+# directly in the initial career-page HTML (no separate login step) and is
+# short-lived (~2 hour `exp` claim) -- fetched fresh on every call, never
+# cached or persisted.
+extract_paycom_jwt <- function(html_text) {
+  m <- regmatches(html_text, regexpr("eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+", html_text))
+  if (length(m) == 0) stop("No JWT found in Paycom career page HTML")
+  m
+}
+
+fetch_paycom_postings <- function(portal_key, institution_name, page_size = 100) {
+  career_page_url <- paste0("https://www.paycomonline.net/v4/ats/web.php/portal/", portal_key, "/career-page")
+  career_resp <- request(career_page_url) %>% req_perform()
+  token <- extract_paycom_jwt(resp_body_string(career_resp))
+
+  search_url <- "https://portal-applicant-tracking.us-cent.paycomonline.net/api/ats/job-posting-previews/search"
+  filters <- list(
+    distanceFrom = 0, workEnvironments = list(), positionTypes = list(),
+    educationLevels = list(), categories = list(), travelTypes = list(),
+    shiftTypes = list(), otherFilters = list(), keywordSearchText = "",
+    location = "", sortOption = "N"
+  )
+
+  all_pages <- list()
+  skip <- 0
+  repeat {
+    resp <- request(search_url) %>%
+      req_headers(Authorization = paste("Bearer", token), Locale = "en-US", `Translation-Highlights` = "false") %>%
+      req_body_json(list(skip = skip, take = page_size, filtersForQuery = filters)) %>%
+      req_perform()
+    page_df <- parse_paycom_postings(resp_body_string(resp), portal_key)
+    if (nrow(page_df) == 0) break
+
+    all_pages[[length(all_pages) + 1]] <- page_df
+    if (nrow(page_df) < page_size) break
+    skip <- skip + page_size
+  }
+
+  dplyr::bind_rows(all_pages)
+}
+
+# postedOn is genuinely empty ("") on every real posting checked (confirmed
+# live 2026-08-06, all 29 of FVCC's current postings) -- not a parsing gap,
+# same as JazzHR's completely absent Posted_Date field above. Link uses each
+# posting's real jobId in a route confirmed live with chromote (clicking a
+# posting navigates the browser to exactly this URL, and it resolves
+# standalone on a fresh unauthenticated request too, unlike the OPI
+# statewide feed's session-only detail view).
+parse_paycom_postings <- function(json_text, portal_key) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  parsed <- jsonlite::fromJSON(json_text, simplifyVector = TRUE)
+  jobs <- parsed$jobPostingPreviews
+  if (is.null(jobs) || length(jobs) == 0 || nrow(jobs) == 0) return(empty)
+
+  posted <- jobs$postedOn
+  posted[!nzchar(posted)] <- NA_character_
+
+  data.frame(
+    Title = jobs$jobTitle,
+    Location = jobs$locations,
+    Posted_Date = posted,
+    Link = paste0("https://www.paycomonline.net/v4/ats/web.php/portal/", portal_key, "/jobs/", jobs$jobId),
+    stringsAsFactors = FALSE
+  )
+}
