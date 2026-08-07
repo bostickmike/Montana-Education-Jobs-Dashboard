@@ -466,3 +466,57 @@ parse_opi_job_page <- function(html_text, url) {
     )
   }))
 }
+
+# ---------------------------------------------------------------------------
+# JazzHR -- Montana Tech (and Highlands College, which shares Montana Tech's
+# board rather than having its own -- see parse_jazzhr_postings() below)
+# ---------------------------------------------------------------------------
+
+# JazzHR's default hosted careers page lives at
+# https://<subdomain>.applytojob.com/apply -- Montana Tech's is
+# "montanatechuniversity" (confirmed via web search, not guessed). The
+# listing is plain server-rendered HTML (unlike Tyler Portico's SPA above),
+# so no API reverse-engineering was needed here.
+fetch_jazzhr_postings <- function(subdomain, institution_name) {
+  base_url <- paste0("https://", subdomain, ".applytojob.com/apply")
+  resp <- request(base_url) %>% req_perform()
+  parse_jazzhr_postings(resp_body_string(resp), institution_name)
+}
+
+# Each posting shows a city (always "Butte, MT" here -- Montana Tech has one
+# campus, so it carries no distinguishing signal) and a department (e.g.
+# "Admissions", "Petroleum Engineering", "Highlands College") -- Location
+# uses the department, the more useful field, the same choice already made
+# for Montana's PeopleAdmin institutions above. Confirmed live 2026-08-06
+# that Highlands College postings appear on Montana Tech's own board with
+# department "Highlands College" rather than needing a separate registry
+# entry/scrape target, unlike every other platform here which is one
+# registry row per institution.
+#
+# No Posted_Date field exists anywhere on this listing page (confirmed real
+# absence, not a parsing gap -- same as some AppliTrack districts' missing
+# closing_date) -- left NA.
+parse_jazzhr_postings <- function(html_text, institution_name) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  items <- rvest::html_elements(page, ".jobs-list li.list-group-item")
+  if (length(items) == 0) return(empty)
+
+  do.call(rbind, lapply(items, function(item) {
+    title <- rvest::html_text2(rvest::html_element(item, "h3 a"))
+    link <- rvest::html_attr(rvest::html_element(item, "h3 a"), "href")
+    detail_fields <- rvest::html_text2(rvest::html_elements(item, "ul.list-group-item-text > li"))
+    department <- if (length(detail_fields) >= 2) detail_fields[2] else institution_name
+
+    data.frame(
+      Title = title,
+      Location = department,
+      Posted_Date = NA_character_,
+      Link = link,
+      stringsAsFactors = FALSE
+    )
+  }))
+}
