@@ -19,18 +19,20 @@ source("drift_check.R")
 k12 <- read.csv(file.path("Mt_Ed_Jobs", "salarymap2.csv"), stringsAsFactors = FALSE)
 he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALSE)
 
-# This project's K-12/HE registries have each grown since these DLI/CCD/
-# IPEDS/FSA maps were first built (30 K-12 districts, 13 HE institutions
-# as of 2026-08-07). MT_DLI_DISTRICT_MAP/MT_CCD_LEA_MAP still only cover
-# the original 18 K-12 districts, a real known coverage gap (see
-# DATA_COOKBOOK.md) -- those two expected counts below are deliberately
-# still 18, not 30. MT_OPI_FINANCE_LEA_MAP (K-12 finance) and
-# MT_IPEDS_UNITID_MAP (HE salary/enrollment/Pell) are both already
-# extended to cover every currently-registered institution (30 and 13
-# respectively) -- extended 2026-08-07 the same live-verification way.
+# This project's K-12/HE registries have each grown since these maps were
+# first built (30 K-12 districts, 13 HE institutions as of 2026-08-07).
+# MT_CCD_LEA_MAP, MT_OPI_FINANCE_LEA_MAP, and MT_IPEDS_UNITID_MAP are all
+# now extended to cover every currently-registered institution (verified
+# live 2026-08-07). MT_DLI_DISTRICT_MAP is the one exception with a real,
+# permanent gap: Helena and Lockwood (both original 18) are genuinely
+# "ND"-suppressed in their own regional PDF row despite real disclosed
+# teacher counts, and Glendive (new) is the same; Lame Deer and Lodge
+# Grass (both new) don't appear as a row in ANY of MT DLI's 9 regional
+# PDFs at all -- confirmed live, not a lookup miss. 30 - 5 = 25 is this
+# source's real full-health ceiling, not 30.
 flags <- rbind(
-  check_salary_coverage("K-12 teacher avg salary (MT DLI)", sum(!is.na(k12$Teacher_Avg_Salary)), expected = 18L, min_ok = 16L),
-  check_salary_coverage("K-12 teacher FTE (CCD)", sum(!is.na(k12$Teachers_Total_FTE)), expected = 18L),
+  check_salary_coverage("K-12 teacher avg salary (MT DLI)", sum(!is.na(k12$Teacher_Avg_Salary)), expected = 25L, min_ok = 23L),
+  check_salary_coverage("K-12 teacher FTE (CCD)", sum(!is.na(k12$Teachers_Total_FTE)), expected = 30L),
   check_salary_coverage("K-12 General Fund expenditure (OPI Finance)", sum(!is.na(k12$Total_General_Fund_Expenditure)), expected = 30L),
   check_salary_coverage("HE avg faculty salary (IPEDS)", sum(!is.na(he$Faculty_Avg_Salary)), expected = 13L),
   check_salary_coverage("HE fall enrollment FTE (IPEDS)", sum(!is.na(he$Enrollment)), expected = 13L),

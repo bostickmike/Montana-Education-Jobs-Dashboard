@@ -1,0 +1,32 @@
+                    MONTANA TEACHER COMPENSATION: MASS South East Region
+
+Salary Distribution for Public School Teachers in the South East Region
+                                                                                  Salary ($)
+Wes Region
+ Class     School System Name                 Teachers        Lowest 10%       Average Salary   Highest 10%
+    A      Glendive Public Schools                73              ND                 ND                ND
+           Kinsey Elementary                      <5            34,700             39,500              ND
+           Kircher Elementary                     <5              ND                 ND                ND
+           Miles City Public Schools              82              ND                 ND                ND
+    B      Ashland Elementary                     8             37,400             46,900           65,200
+           Baker K-12 Schools                     36            41,800             61,700           80,200
+           Colstrip Public Schools                46              ND               56,000           76,600
+    C      Alzada Elementary                      <5              ND                 ND                ND
+           Broadus Public Schools                 16            38,800             50,500           63,000
+           Ekalaka Public Schools                 14            36,400             45,800           52,900
+           Forsyth Public Schools                 19            38,300             53,700              ND
+           Hawks Home Elementary                  <5            36,000             36,000           36,000
+           Jordan Public Schools                  17            34,000             42,400           55,100
+           Plevna K-12 Schools                    <5            41,000             48,500           62,900
+           Rosebud Public Schools                 <5            37,900             45,400           58,200
+           Terry K-12 Schools                     10              ND                 ND                ND
+           Wibaux K-12 Schools                    13            45,600             57,500           67,400
+ Source: OPI GEMS 2022-23. Summarized by MTDLI. Elementary district MHSA classification determined by
+ corresponding high school. ND = non-disclosable due to data inconsistencies. Teachers = Number of full-time
+ general education teachers.
+
+
+
+
+          For more information see the Montana Teacher Compensation Report, available at lmi.mt.gov/publications
+

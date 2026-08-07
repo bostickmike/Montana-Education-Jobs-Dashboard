@@ -1,9 +1,12 @@
-# Real fixtures: page 2 text extracted via pdftools from two of MT DLI's
-# real "Teacher Compensation Report" regional PDFs, captured 2026-08-06 --
-# South Central (Billings/Lockwood/Laurel/Hardin) and 4 Rivers (Bozeman/
-# Helena/Butte/Belgrade/East Helena, including Helena's real all-ND row --
-# a genuinely non-disclosable district in the live report, not a synthetic
-# edge case).
+# Real fixtures: page 2 text extracted via pdftools from MT DLI's real
+# "Teacher Compensation Report" regional PDFs -- South Central (Billings/
+# Lockwood/Laurel/Hardin) and 4 Rivers (Bozeman/Helena/Butte/Belgrade/East
+# Helena, including Helena's real all-ND row -- a genuinely non-
+# disclosable district in the live report, not a synthetic edge case)
+# captured 2026-08-06; North East (Sidney/Fairview/Poplar) and South East
+# (Glendive/Colstrip) captured 2026-08-07 when MT_DLI_DISTRICT_MAP was
+# extended -- the first time either region was needed, since none of the
+# original 18 districts fell in them.
 
 test_that("parse_dli_teacher_compensation extracts a real fully-disclosed district row", {
   page2 <- paste(readLines(test_path("fixtures", "dli_southcentral_page2.txt"), warn = FALSE), collapse = "\n")
@@ -74,16 +77,34 @@ test_that("parse_dli_numeric_field converts ND and <5 to real NA, and strips com
   expect_equal(parse_dli_numeric_field("852"), 852)
 })
 
+test_that("parse_dli_teacher_compensation extracts real North East and South East district rows", {
+  ne_page2 <- paste(readLines(test_path("fixtures", "dli_northeast_page2.txt"), warn = FALSE), collapse = "\n")
+  se_page2 <- paste(readLines(test_path("fixtures", "dli_southeast_page2.txt"), warn = FALSE), collapse = "\n")
+
+  sidney <- parse_dli_teacher_compensation(ne_page2, "Sidney Public Schools")
+  expect_equal(sidney$Teacher_Count, 74)
+  expect_equal(sidney$Teacher_Avg_Salary, 56200)
+
+  # Real row: "Glendive Public Schools   73   ND   ND   ND" -- fully
+  # suppressed, same real pattern as Helena/Lockwood above, just in a
+  # region this project didn't need until the 2026-08-07 K-12 expansion.
+  glendive <- parse_dli_teacher_compensation(se_page2, "Glendive Public Schools")
+  expect_equal(glendive$Teacher_Count, 73)
+  expect_true(is.na(glendive$Teacher_Avg_Salary))
+})
+
 test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts, with every entry a real registry district", {
-  # No longer an exact 1:1 match -- districts added to k12_district_registry.csv
-  # after the original 18 (see the 2026-08-06 "wide net" expansion) don't
-  # automatically get DLI salary coverage; that's a separate, deliberate
-  # fast-follow research pass (finding each new district's real DLI region +
-  # report-name), not a requirement for a district to be job-postings-eligible.
-  # This test still catches the real regression that matters: a name in
+  # Not an exact 1:1 match, on purpose: Lame Deer Public Schools and Lodge
+  # Grass Public Schools (both in the registry) are deliberately absent
+  # from this map -- confirmed live 2026-08-07 that neither appears as a
+  # row in ANY of MT DLI's 9 real regional PDFs (not suppressed as "ND"
+  # within a listed row -- genuinely not listed at all), a real gap in
+  # DLI's own source data, not a missed region guess. This test still
+  # catches the real regression that matters: a name in
   # MT_DLI_DISTRICT_MAP that ISN'T a real registered district (a typo, a
   # stale entry after a rename) would silently never get looked up anywhere.
   registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
   expect_true(all(names(MT_DLI_DISTRICT_MAP) %in% registry$District))
-  expect_gt(length(MT_DLI_DISTRICT_MAP), 0)
+  expect_setequal(setdiff(registry$District, names(MT_DLI_DISTRICT_MAP)),
+                   c("Lame Deer Public Schools", "Lodge Grass Public Schools"))
 })

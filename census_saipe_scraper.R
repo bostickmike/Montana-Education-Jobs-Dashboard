@@ -51,7 +51,27 @@ MT_SAIPE_DISTRICT_MAP <- list(
   "Lewistown Public Schools" = c("Lewistown Elementary School District", "Fergus High School District"),
   "Laurel Public Schools" = c("Laurel Elementary School District", "Laurel High School District"),
   "Kalispell Public Schools" = c("Kalispell Elementary School District", "Flathead High School District"),
-  "Hardin Public Schools" = c("Hardin Elementary School District", "Hardin High School District")
+  "Hardin Public Schools" = c("Hardin Elementary School District", "Hardin High School District"),
+  # Added 2026-08-07, confirmed live against the real 2024 SAIPE response
+  # for all three geography levels (unified/elementary/secondary) --
+  # SAIPE's own naming differs in small ways from CCD's/OPI finance's for
+  # the same district (e.g. "Big Sandy K-12 Schools" here vs. CCD's "Big
+  # Sandy K-12", no trailing "Schools"), so each name was independently
+  # verified rather than copied across files. Unlike MT_DLI_DISTRICT_MAP,
+  # both Lame Deer and Lodge Grass DO have real SAIPE data -- no equivalent
+  # gap here.
+  "Glendive Public Schools" = c("Glendive Elementary School District", "Dawson High School District"),
+  "Colstrip Public Schools" = c("Colstrip Elementary School District", "Colstrip High School District"),
+  "Sidney Public Schools" = c("Sidney Elementary School District", "Sidney High School District"),
+  "Stevensville Public Schools" = c("Stevensville Elementary School District", "Stevensville High School District"),
+  "Big Sandy Public Schools" = c("Big Sandy K-12 Schools"),
+  "Lame Deer Public Schools" = c("Lame Deer Elementary School District", "Lame Deer High School District"),
+  "Poplar Public Schools" = c("Poplar Elementary School District", "Poplar High School District"),
+  "Fairview Public Schools" = c("Fairview Elementary School District", "Fairview High School District"),
+  "Rocky Boy Public Schools" = c("Rocky Boy Elementary School District", "Rocky Boy High School District"),
+  "Ronan Public Schools" = c("Ronan Elementary School District", "Ronan High School District"),
+  "Livingston Public Schools" = c("Livingston Elementary School District", "Park High School District"),
+  "Lodge Grass Public Schools" = c("Lodge Grass Elementary School District", "Lodge Grass High School District")
 )
 
 # Pure transformation: SAIPE's array-of-arrays JSON shape has different

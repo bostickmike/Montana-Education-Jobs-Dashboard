@@ -1,6 +1,9 @@
 # Real fixtures: actual Montana (fips=30) responses from the Census Data
 # API's SAIPE School District endpoint, captured 2026-08-06 (2022 data),
-# across all three geography types (unified/elementary/secondary).
+# across all three geography types (unified/elementary/secondary) --
+# full statewide responses, not trimmed, so the 12 districts added to
+# MT_SAIPE_DISTRICT_MAP on 2026-08-07 already have real rows in these same
+# fixture files with no re-capture needed.
 
 test_that("parse_census_saipe_child_poverty averages a real elementary+HS pair (Billings)", {
   unified <- parse_saipe_json(paste(readLines(test_path("fixtures", "saipe_mt_unified_2022.json"), warn = FALSE), collapse = "\n"))
@@ -37,6 +40,31 @@ test_that("parse_census_saipe_child_poverty handles a county-named HS district (
 
   lewistown <- result[result$District == "Lewistown Public Schools", ]
   expect_equal(round(lewistown$Child_Poverty_Rate, 5), round(mean(c(14.2, 10.7)) / 100, 5))
+})
+
+test_that("parse_census_saipe_child_poverty covers all 12 districts added 2026-08-07, including a real naming difference from CCD", {
+  unified <- parse_saipe_json(paste(readLines(test_path("fixtures", "saipe_mt_unified_2022.json"), warn = FALSE), collapse = "\n"))
+  elem <- parse_saipe_json(paste(readLines(test_path("fixtures", "saipe_mt_elementary_2022.json"), warn = FALSE), collapse = "\n"))
+  sec <- parse_saipe_json(paste(readLines(test_path("fixtures", "saipe_mt_secondary_2022.json"), warn = FALSE), collapse = "\n"))
+
+  result <- parse_census_saipe_child_poverty(unified, elem, sec, 2022)
+
+  # Livingston's real HS district is "Park High School District" here too
+  # (same not-named-after-the-town pattern already confirmed in CCD/OPI
+  # finance data).
+  livingston <- result[result$District == "Livingston Public Schools", ]
+  expect_false(is.na(livingston$Child_Poverty_Rate))
+
+  # Real naming difference from CCD's "Big Sandy K-12" (no trailing
+  # "Schools") -- SAIPE's own name is "Big Sandy K-12 Schools", confirmed
+  # live, not copied across files.
+  big_sandy <- result[result$District == "Big Sandy Public Schools", ]
+  expect_false(is.na(big_sandy$Child_Poverty_Rate))
+
+  # Unlike MT_DLI_DISTRICT_MAP (where both are genuinely absent from every
+  # regional PDF), Lame Deer and Lodge Grass DO have real SAIPE data.
+  expect_false(is.na(result$Child_Poverty_Rate[result$District == "Lame Deer Public Schools"]))
+  expect_false(is.na(result$Child_Poverty_Rate[result$District == "Lodge Grass Public Schools"]))
 })
 
 test_that("parse_census_saipe_child_poverty returns real NA for a district entirely missing this run", {

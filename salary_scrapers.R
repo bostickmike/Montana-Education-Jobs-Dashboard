@@ -34,10 +34,11 @@ DLI_TEACHER_COMP_BASE_URL <- "https://lmi.mt.gov/_docs/Publications/LMI-Pubs/tea
 # Filenames aren't a single regular pattern (some regions carry a trailing
 # "1" after the year, some don't) -- hardcoded per-region rather than
 # templated, confirmed against the live lmi.mt.gov/publications listing
-# 2026-08-06. Only the 7 regions that actually contain one of this
-# project's 18 districts are listed -- North East and South East (no
-# matching district found in either, confirmed live) are omitted rather
-# than fetched and discarded every run.
+# 2026-08-06 (original 7 regions) and 2026-08-07 (NorthEast/SouthEast,
+# added once the 2026-08-07 K-12 registry expansion added districts that
+# actually fall in them -- Sidney/Fairview/Poplar in NorthEast,
+# Glendive/Colstrip in SouthEast). All 9 real MT DLI regions are covered
+# now.
 DLI_REGION_FILENAMES <- list(
   Central = "TeacherCompensation_Central_20241.pdf",
   `4Rivers` = "TeacherCompensation_4Rivers_2024.pdf",
@@ -45,7 +46,9 @@ DLI_REGION_FILENAMES <- list(
   NorthCentral = "TeacherCompensation_NorthCentral_20241.pdf",
   NorthWest = "TeacherCompensation_NorthWest_20241.pdf",
   SouthCentral = "TeacherCompensation_SouthCentral_20241.pdf",
-  Western = "TeacherCompensation_Western_20241.pdf"
+  Western = "TeacherCompensation_Western_20241.pdf",
+  NorthEast = "TeacherCompensation_NorthEast_2024.pdf",
+  SouthEast = "TeacherCompensation_SouthEast_20241.pdf"
 )
 
 # Maps this project's canonical District name to (a) which regional PDF
@@ -73,7 +76,27 @@ MT_DLI_DISTRICT_MAP <- list(
   "Lewistown Public Schools" = list(region = "Central", report_name = "Lewistown Public Schools"),
   "Laurel Public Schools" = list(region = "SouthCentral", report_name = "Laurel Public Schools"),
   "Kalispell Public Schools" = list(region = "NorthWest", report_name = "Kalispell Public Schools"),
-  "Hardin Public Schools" = list(region = "SouthCentral", report_name = "Hardin Public Schools")
+  "Hardin Public Schools" = list(region = "SouthCentral", report_name = "Hardin Public Schools"),
+  # Added 2026-08-07 -- each real report_name confirmed live against its
+  # region's actual page-2 table row, not assumed from the registry name
+  # (Stevensville's real report_name is abbreviated "Public Schls", not
+  # "Public Schools", the only one of these 10 that differs). Lame Deer
+  # and Lodge Grass (also added to the registry the same session) are
+  # deliberately NOT in this map -- confirmed absent from all 9 real
+  # regional PDFs (not suppressed as "ND" within a listed row, genuinely
+  # not listed as a row at all), a real gap in DLI's own source data, not
+  # a search miss -- so both correctly show real NA here rather than a
+  # wrong region guess.
+  "Sidney Public Schools" = list(region = "NorthEast", report_name = "Sidney Public Schools"),
+  "Fairview Public Schools" = list(region = "NorthEast", report_name = "Fairview Public Schools"),
+  "Poplar Public Schools" = list(region = "NorthEast", report_name = "Poplar Public Schools"),
+  "Glendive Public Schools" = list(region = "SouthEast", report_name = "Glendive Public Schools"),
+  "Colstrip Public Schools" = list(region = "SouthEast", report_name = "Colstrip Public Schools"),
+  "Livingston Public Schools" = list(region = "4Rivers", report_name = "Livingston Public Schools"),
+  "Rocky Boy Public Schools" = list(region = "HiLine", report_name = "Rocky Boy Public Schools"),
+  "Big Sandy Public Schools" = list(region = "NorthCentral", report_name = "Big Sandy Public Schools"),
+  "Ronan Public Schools" = list(region = "Western", report_name = "Ronan Public Schools"),
+  "Stevensville Public Schools" = list(region = "Western", report_name = "Stevensville Public Schls")
 )
 
 fetch_dli_region_pdf_text <- function(region) {

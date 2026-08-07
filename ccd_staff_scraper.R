@@ -18,6 +18,16 @@
 # MT_CCD_LEA_MAP below is hand-maintained and confirmed against the live
 # CCD directory response (2026-08-06, 2022 data), the same way Wyoming's
 # own IPEDS_UNITID_MAP is hand-maintained rather than derived.
+#
+# Extended 2026-08-07 from the original 18 districts to cover the 12
+# districts added to the registry since -- every one of these 12 real LEA
+# names is IDENTICAL to opi_finance_scraper.R's MT_OPI_FINANCE_LEA_MAP
+# entries for the same district (both independently confirmed live
+# against their own real 2024 API response, not copied from one to the
+# other) -- strong evidence CCD's own district names are themselves
+# sourced from OPI, not two coincidentally-matching naming schemes.
+# Livingston's real HS district is "Park H S" (named after Park County,
+# not the town) here too, same as it was in the OPI finance data.
 MT_CCD_LEA_MAP <- list(
   "Billings Public Schools" = c("Billings Elem", "Billings H S"),
   "Missoula County Public Schools" = c("Missoula Elem", "Missoula H S"),
@@ -36,7 +46,19 @@ MT_CCD_LEA_MAP <- list(
   "Lewistown Public Schools" = c("Lewistown Elem", "Fergus H S"),
   "Laurel Public Schools" = c("Laurel Elem", "Laurel H S"),
   "Kalispell Public Schools" = c("Kalispell Elem", "Flathead H S"),
-  "Hardin Public Schools" = c("Hardin Elem", "Hardin H S")
+  "Hardin Public Schools" = c("Hardin Elem", "Hardin H S"),
+  "Glendive Public Schools" = c("Glendive Elem", "Dawson H S"),
+  "Colstrip Public Schools" = c("Colstrip Elem", "Colstrip H S"),
+  "Sidney Public Schools" = c("Sidney Elem", "Sidney H S"),
+  "Stevensville Public Schools" = c("Stevensville Elem", "Stevensville H S"),
+  "Big Sandy Public Schools" = c("Big Sandy K-12"),
+  "Lame Deer Public Schools" = c("Lame Deer Elem", "Lame Deer H S"),
+  "Poplar Public Schools" = c("Poplar Elem", "Poplar H S"),
+  "Fairview Public Schools" = c("Fairview Elem", "Fairview H S"),
+  "Rocky Boy Public Schools" = c("Rocky Boy Elem", "Rocky Boy H S"),
+  "Ronan Public Schools" = c("Ronan Elem", "Ronan H S"),
+  "Livingston Public Schools" = c("Livingston Elem", "Park H S"),
+  "Lodge Grass Public Schools" = c("Lodge Grass Elem", "Lodge Grass H S")
 )
 
 suppressMessages({

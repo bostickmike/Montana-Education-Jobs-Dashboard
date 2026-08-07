@@ -1,11 +1,11 @@
 # Real fixture: the actual Montana (fips=30) response from the Urban
 # Institute's Education Data Portal school-districts/ccd/directory/2022
-# endpoint, captured 2026-08-06 -- trimmed to the 32 LEA records
-# MT_CCD_LEA_MAP actually needs (elementary + high-school pairs, or one
-# unified K-12 record, for each of the 18 districts this project scrapes
-# directly) plus a handful of real noise rows (agency_type != 1 coops/
-# county-level placeholder entries with 0 schools) to prove the filter
-# excludes them correctly.
+# endpoint -- the original 32 LEA records (for the original 18 districts)
+# captured 2026-08-06, the 23 more (for the 12 districts added when
+# MT_CCD_LEA_MAP was extended) captured 2026-08-07, same 2022 vintage for
+# both so the fixture stays internally consistent -- plus a handful of
+# real noise rows (agency_type != 1 coops/county-level placeholder
+# entries with 0 schools) to prove the filter excludes them correctly.
 
 test_that("parse_ccd_teacher_fte sums an elementary+HS pair into one combined District", {
   df <- read.csv(test_path("fixtures", "ccd_mt_directory_2022.csv"))
@@ -37,17 +37,38 @@ test_that("parse_ccd_teacher_fte passes through an already-unified K-12 record a
   expect_equal(east_helena$Enrollment, 1952)
 })
 
-test_that("parse_ccd_teacher_fte produces exactly the 18 registry districts, no more no less", {
+test_that("parse_ccd_teacher_fte produces exactly the registered districts in MT_CCD_LEA_MAP, no more no less", {
   df <- read.csv(test_path("fixtures", "ccd_mt_directory_2022.csv"))
   result <- parse_ccd_teacher_fte(df)
 
   expect_equal(nrow(result), length(MT_CCD_LEA_MAP))
   expect_setequal(result$District, names(MT_CCD_LEA_MAP))
+  expect_false(any(is.na(result$Teachers_Total_FTE)))
 
   # Regression: the coop/county-level placeholder noise rows (agency_type
   # != 1, or 0 schools) must not leak into the result or get summed into a
   # real district's FTE.
   expect_false(any(grepl("Coop|Joint Service", result$District)))
+})
+
+test_that("parse_ccd_teacher_fte handles Livingston's real HS district ('Park H S', not 'Livingston H S')", {
+  df <- read.csv(test_path("fixtures", "ccd_mt_directory_2022.csv"))
+  result <- parse_ccd_teacher_fte(df)
+
+  livingston <- result[result$District == "Livingston Public Schools", ]
+  expect_equal(nrow(livingston), 1)
+  expect_equal(livingston$Teachers_Total_FTE, 83 + 36)
+  expect_equal(livingston$Enrollment, 837 + 418)
+})
+
+test_that("parse_ccd_teacher_fte passes through Big Sandy's unified K-12 record among the newly-added districts", {
+  df <- read.csv(test_path("fixtures", "ccd_mt_directory_2022.csv"))
+  result <- parse_ccd_teacher_fte(df)
+
+  big_sandy <- result[result$District == "Big Sandy Public Schools", ]
+  expect_equal(nrow(big_sandy), 1)
+  expect_equal(big_sandy$Teachers_Total_FTE, 17)
+  expect_equal(big_sandy$Enrollment, 197)
 })
 
 test_that("parse_ccd_teacher_fte returns NA (not an error) for a district whose LEA rows are entirely absent this run", {

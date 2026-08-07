@@ -1,0 +1,40 @@
+                         MONTANA TEACHER COMPENSATION: MASS North East Region
+
+Salary Distribution for Public School Teachers in the North East Region
+                                                                                            Salary ($)
+Wes Region
+ Class School System Name                            Teachers          Lowest 10%         Average Salary         Highest 10%
+   A   Rau Elementary                                   6                39,800              44,800                49,800
+       Sidney Public Schools                            74               44,200              56,200                70,400
+   B   Fairview Public Schools                          25               35,500              47,800                65,900
+       Frontier Elementary                              8                44,500              51,400                61,600
+       Glasgow K-12 Schools                             53               35,000              51,800                64,300
+       Poplar Public Schools                            63               46,900              68,000                86,000
+       Wolf Point Public Schools                        55               38,800              54,600                73,800
+   C   Bainville K-12 Schools                           14               47,500              58,800                68,000
+       Brockton Public Schools                          15                 ND                52,300                66,200
+       Circle Public Schools                            11               38,400              51,200                67,300
+       Culbertson Public Schools                        22               50,100              58,600                64,500
+       Frazer Public Schools                            9                  ND                  ND                    ND
+       Froid Public Schools                             10               33,600              49,100                63,800
+       Hinsdale Public Schools                          10                 ND                  ND                    ND
+       Lambert Public Schools                           15               34,300              47,600                62,600
+       Lustre Elementary                                <5                 ND                32,600                  ND
+       Medicine Lake K-12 Schools                       10                 ND                56,600                70,700
+       Nashua K-12 Schools                              10               32,400              40,800                52,300
+       Opheim K-12 Schools                              7                  ND                  ND                    ND
+       Plentywood K-12 Schools                          27               34,900              47,900                65,900
+       Richey Public Schools                            11                 ND                  ND                    ND
+       Saco Public Schools                              6                37,800              49,800                59,500
+       Savage Public Schools                            10               39,700              48,600                67,600
+       Scobey K-12 Schools                              17                 ND                52,200                  ND
+       Vida Elementary                                  <5                 ND                  ND                    ND
+       Westby K-12 Schools                              6                  ND                45,700                62,500
+ Source: OPI GEMS 2022-23. Summarized by MTDLI. Elementary district MHSA classification determined by corresponding high school.
+ ND = non-disclosable due to data inconsistencies. Teachers = Number of full-time general education teachers.
+
+
+
+
+            For more information see the Montana Teacher Compensation Report, available at lmi.mt.gov/publications
+
