@@ -1,5 +1,5 @@
 # Proves the K-12 pipeline end-to-end across every platform built so far
-# (AppliTrack, SchoolSpring, Tyler Portico): reads the district registry,
+# (AppliTrack, SchoolSpring, Tyler Portico, TedK12): reads the district registry,
 # scrapes each district live via safe_scrape(), classifies the results, and
 # prints a summary. Not the final pipeline entry point (that will be
 # Mt_ED_Jobs.Rmd, mirroring Wyoming's Wy_ED_Jobs.Rmd) -- this is a standalone
@@ -81,6 +81,24 @@ tylerportico_results <- lapply(seq_len(nrow(tylerportico_districts)), function(i
 })
 tylerportico_combined <- do.call(rbind, tylerportico_results)
 
+# --- TedK12 --------------------------------------------------------------
+
+tedk12_districts <- registry[registry$Platform == "TedK12", ]
+tedk12_expected_cols <- c("title", "date_posted", "position", "location", "url")
+
+tedk12_results <- lapply(seq_len(nrow(tedk12_districts)), function(i) {
+  row <- tedk12_districts[i, ]
+  message("Scraping ", row$District, " (TedK12: ", row$Slug, ")...")
+  df <- safe_scrape(
+    source_name = row$District,
+    scrape_fn = function() fetch_tedk12_postings(row$Slug),
+    expected_cols = tedk12_expected_cols
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+tedk12_combined <- do.call(rbind, tedk12_results)
+
 # --- Summary -------------------------------------------------------------
 
 cat("\n=== Summary ===\n")
@@ -90,8 +108,10 @@ cat("SchoolSpring districts scraped:", nrow(schoolspring_districts),
     "| postings found:", nrow(schoolspring_combined), "\n")
 cat("Tyler Portico districts scraped:", nrow(tylerportico_districts),
     "| postings found:", nrow(tylerportico_combined), "\n")
+cat("TedK12 districts scraped:", nrow(tedk12_districts),
+    "| postings found:", nrow(tedk12_combined), "\n")
 cat("Total K-12 postings found:",
-    nrow(applitrack_combined) + nrow(schoolspring_combined) + nrow(tylerportico_combined), "\n\n")
+    nrow(applitrack_combined) + nrow(schoolspring_combined) + nrow(tylerportico_combined) + nrow(tedk12_combined), "\n\n")
 
 if (nrow(applitrack_combined) > 0) {
   cat("--- AppliTrack by district ---\n")
@@ -104,6 +124,10 @@ if (nrow(schoolspring_combined) > 0) {
 if (nrow(tylerportico_combined) > 0) {
   cat("\n--- Tyler Portico by district ---\n")
   print(tylerportico_combined %>% count(District, name = "n_postings") %>% arrange(desc(n_postings)))
+}
+if (nrow(tedk12_combined) > 0) {
+  cat("\n--- TedK12 by district ---\n")
+  print(tedk12_combined %>% count(District, name = "n_postings") %>% arrange(desc(n_postings)))
 }
 
 if (nrow(applitrack_combined) > 0) {
@@ -120,6 +144,11 @@ if (nrow(tylerportico_combined) > 0) {
   tylerportico_combined$position_bucket <- classify_k12_position(tylerportico_combined$Title)
   cat("\n=== Tyler Portico position buckets ===\n")
   print(tylerportico_combined %>% count(position_bucket, sort = TRUE))
+}
+if (nrow(tedk12_combined) > 0) {
+  tedk12_combined$position_bucket <- classify_k12_position(tedk12_combined$title)
+  cat("\n=== TedK12 position buckets ===\n")
+  print(tedk12_combined %>% count(position_bucket, sort = TRUE))
 }
 
 cat("\nSee scrape_log.csv for per-district ok/empty/error status.\n")
