@@ -18,9 +18,9 @@ One row per open K-12 posting, all position types (not just teachers). Rebuilt f
 | `position` | text | Coarse bucket from `classify_k12_position()` (Teacher, Support Services, Administration, etc. — see `k12_he_classification.R` for the full list). |
 | `location` | text | School/site name or district office, as scraped — format varies a lot by source platform. |
 | `url` | text | The district's job-board URL (one per district, not a per-posting deep link) for direct-scraped rows. For OPI-statewide-fallback rows, this is the shared statewide listing URL instead — see that source's own note below. |
-| `District` | text | Canonical district name for the 18 directly-scraped districts (`canonicalize_k12_district()` applied). For every other Montana district (surfaced only via the OPI statewide feed), this is that posting's raw City value instead — **not a canonical legal district name**, since the OPI feed exposes no district field at all. See "OPI statewide fallback feed" below. |
+| `District` | text | Canonical district name for the directly-scraped districts (`canonicalize_k12_district()` applied). For every other Montana district (surfaced only via the OPI statewide feed), this is that posting's raw City value instead — **not a canonical legal district name**, since the OPI feed exposes no district field at all. See "OPI statewide fallback feed" below. |
 
-**Sources combined into this file**: AppliTrack, SchoolSpring, Tyler Portico, and TedK12 direct-district scrapes (`k12_district_registry.csv`'s 18 districts), plus the OPI "Jobs for Teachers" statewide feed **filtered to districts not already covered directly** (matched on `k12_district_registry.csv`'s `City` column, to avoid double-counting a district like Kalispell that appears in both a direct scrape and the statewide feed).
+**Sources combined into this file**: AppliTrack, SchoolSpring, Tyler Portico, and TedK12 direct-district scrapes (`k12_district_registry.csv`'s directly-scraped districts), plus the OPI "Jobs for Teachers" statewide feed **filtered to districts not already covered directly** (matched on `k12_district_registry.csv`'s `City` column, to avoid double-counting a district like Kalispell that appears in both a direct scrape and the statewide feed).
 
 ### `k12jobanalysis.csv` — full history, Teacher postings only
 

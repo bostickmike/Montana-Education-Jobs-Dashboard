@@ -44,11 +44,11 @@ combineddata <- read.csv("combinedclean.csv", fileEncoding = "UTF-8") %>%
   rename(Title = title, Position = position, Location = location,
          `Date Posted` = date_posted, Link = url)
 
-# salarymap2.csv covers only this project's 18 directly-scraped districts
+# salarymap2.csv covers only this project's directly-scraped districts
 # (k12_district_registry.csv), not Montana's full ~398-district universe --
 # combineddata above has many more distinct District values (every district
-# the OPI statewide fallback feed surfaces), but only these 18 have a
-# Latitude/Longitude to put on the map. See DATA_COOKBOOK.md's "OPI
+# the OPI statewide fallback feed surfaces), but only the registry's districts
+# have a Latitude/Longitude to put on the map. See DATA_COOKBOOK.md's "OPI
 # statewide fallback feed" note.
 mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("District", "County", "Latitude", "Longitude", "Job_Link",
@@ -449,13 +449,13 @@ he_new_this_week <- {
 
 #--------------------------------------------------
 # Combined map dataset -- one row per K-12 district or HE institution
-# registered in this project's registries (18 + 6), merging each entity's
+# registered in this project's registries, merging each entity's
 # location/salary reference data with a live current-openings count.
 # Unlike Wyoming, there's no Data_Coverage "Partial" tier here (every
 # registered entity is scraped from a real structured platform) and no
-# merged-entity vacancy-rate case (each of Montana's 6 HE institutions has
-# its own independent IPEDS unitid) -- both of those pieces of Wyoming's
-# app.R are simply absent below rather than adapted.
+# merged-entity vacancy-rate case (each Montana HE institution has its own
+# independent IPEDS unitid) -- both of those pieces of Wyoming's app.R are
+# simply absent below rather than adapted.
 #--------------------------------------------------
 k12_current_counts <- combineddata %>% count(District, name = "CurrentCount")
 k12_sample_titles <- combineddata %>%
@@ -662,7 +662,13 @@ ui <- dashboardPage(
               inline = TRUE
             ),
             withSpinner(leafletOutput("combined_map", height = 650)),
-            helpText("Only this project's 18 directly-scraped K-12 districts and 6 directly-scraped Higher Ed institutions are shown here (with current openings). Postings from every other Montana school district also appear in the K-12 Jobs Table, via the state's own OPI \"Jobs for Teachers\" statewide feed -- but that feed has no map coordinates for those districts, so they aren't plotted. Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table.")
+            helpText(paste0(
+              "Only this project's ", n_distinct(map_k12$Name), " directly-scraped K-12 districts and ",
+              n_distinct(map_he$Name), " directly-scraped Higher Ed institutions are shown here (with current openings). ",
+              "Postings from every other Montana school district also appear in the K-12 Jobs Table, via the state's own OPI \"Jobs for Teachers\" statewide feed -- but that feed has no map coordinates for those districts, so they aren't plotted. ",
+              "Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table. ",
+              "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison."
+            ))
         )
       ),
 
