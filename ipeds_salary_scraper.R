@@ -65,7 +65,16 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
   180489L, "University of Montana",
   180106L, "Carroll College",
   180595L, "Rocky Mountain College",
-  180258L, "University of Providence"
+  180258L, "University of Providence",
+  # Added 2026-08-07, confirmed live against the Urban Institute's own
+  # college directory endpoint (college-university/ipeds/directory/2023)
+  # for the 4 tribal colleges added to the registry since -- Stone Child's
+  # unitid (366340) doesn't follow the 1804xx/1802xx pattern the rest of
+  # this map does, which is why it wasn't guessed at.
+  180212L, "Fort Peck Community College",
+  180328L, "Little Big Horn College",
+  180647L, "Salish Kootenai College",
+  366340L, "Stone Child College"
 )
 
 # Follows the API's `next` pagination link until exhausted, returning every

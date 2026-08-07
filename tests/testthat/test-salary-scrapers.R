@@ -91,6 +91,17 @@ test_that("parse_dli_teacher_compensation extracts real North East and South Eas
   glendive <- parse_dli_teacher_compensation(se_page2, "Glendive Public Schools")
   expect_equal(glendive$Teacher_Count, 73)
   expect_true(is.na(glendive$Teacher_Avg_Salary))
+
+  # Wolf Point and Plentywood's real rows were already on this same page
+  # (NorthEast region) -- MT_DLI_DISTRICT_MAP just didn't reference them
+  # until the fast-follow gap closed 2026-08-07.
+  wolf_point <- parse_dli_teacher_compensation(ne_page2, "Wolf Point Public Schools")
+  expect_equal(wolf_point$Teacher_Count, 55)
+  expect_equal(wolf_point$Teacher_Avg_Salary, 54600)
+
+  plentywood <- parse_dli_teacher_compensation(ne_page2, "Plentywood K-12 Schools")
+  expect_equal(plentywood$Teacher_Count, 27)
+  expect_equal(plentywood$Teacher_Avg_Salary, 47900)
 })
 
 test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts, with every entry a real registry district", {
@@ -100,19 +111,16 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
   # row in ANY of MT DLI's 9 real regional PDFs (not suppressed as "ND"
   # within a listed row -- genuinely not listed at all), a real gap in
   # DLI's own source data, not a missed region guess. Wolf Point and
-  # Plentywood (added the same session, the Apptegy/chromote build) are
-  # absent too, but for the ordinary "salary coverage is a separate
-  # fast-follow" reason every other newly-added district has, not DLI's
-  # own permanent gap -- not yet researched, not confirmed absent from
-  # DLI. This test still catches the real regression that matters: a name
-  # in MT_DLI_DISTRICT_MAP that ISN'T a real registered district (a typo,
-  # a stale entry after a rename) would silently never get looked up
+  # Plentywood no longer belong in this gap list -- both have real rows
+  # in the NorthEast regional PDF, added to the map 2026-08-07. This test
+  # still catches the real regression that matters: a name in
+  # MT_DLI_DISTRICT_MAP that ISN'T a real registered district (a typo, a
+  # stale entry after a rename) would silently never get looked up
   # anywhere.
   registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
   expect_true(all(names(MT_DLI_DISTRICT_MAP) %in% registry$District))
   expect_setequal(setdiff(registry$District, names(MT_DLI_DISTRICT_MAP)),
-                   c("Lame Deer Public Schools", "Lodge Grass Public Schools",
-                     "Wolf Point Public Schools", "Plentywood Public Schools"))
+                   c("Lame Deer Public Schools", "Lodge Grass Public Schools"))
 })
 
 # ---------------------------------------------------------------------------

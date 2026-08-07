@@ -57,7 +57,9 @@ MT_OPI_FINANCE_LEA_MAP <- list(
   "Rocky Boy Public Schools" = c("Rocky Boy Elem", "Rocky Boy H S"),
   "Ronan Public Schools" = c("Ronan Elem", "Ronan H S"),
   "Livingston Public Schools" = c("Livingston Elem", "Park H S"),
-  "Lodge Grass Public Schools" = c("Lodge Grass Elem", "Lodge Grass H S")
+  "Lodge Grass Public Schools" = c("Lodge Grass Elem", "Lodge Grass H S"),
+  "Wolf Point Public Schools" = c("Wolf Point Elem", "Wolf Point H S"),
+  "Plentywood Public Schools" = c("Plentywood K-12 Schools")
 )
 
 suppressMessages({

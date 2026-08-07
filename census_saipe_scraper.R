@@ -71,7 +71,9 @@ MT_SAIPE_DISTRICT_MAP <- list(
   "Rocky Boy Public Schools" = c("Rocky Boy Elementary School District", "Rocky Boy High School District"),
   "Ronan Public Schools" = c("Ronan Elementary School District", "Ronan High School District"),
   "Livingston Public Schools" = c("Livingston Elementary School District", "Park High School District"),
-  "Lodge Grass Public Schools" = c("Lodge Grass Elementary School District", "Lodge Grass High School District")
+  "Lodge Grass Public Schools" = c("Lodge Grass Elementary School District", "Lodge Grass High School District"),
+  "Wolf Point Public Schools" = c("Wolf Point Elementary School District", "Wolf Point High School District"),
+  "Plentywood Public Schools" = c("Plentywood K-12 Schools")
 )
 
 # Pure transformation: SAIPE's array-of-arrays JSON shape has different

@@ -6,6 +6,8 @@
 # both so the fixture stays internally consistent -- plus a handful of
 # real noise rows (agency_type != 1 coops/county-level placeholder
 # entries with 0 schools) to prove the filter excludes them correctly.
+# Wolf Point Elem/H S and Plentywood K-12 Schools' real 2022 rows were
+# appended 2026-08-07 when MT_CCD_LEA_MAP's fast-follow gap for them closed.
 
 test_that("parse_ccd_teacher_fte sums an elementary+HS pair into one combined District", {
   df <- read.csv(test_path("fixtures", "ccd_mt_directory_2022.csv"))

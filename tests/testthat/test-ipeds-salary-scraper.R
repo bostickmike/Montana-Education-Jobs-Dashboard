@@ -3,15 +3,17 @@
 # college-university/ipeds/salaries-instructional-staff/2024 endpoint --
 # the original 6 unitids captured 2026-08-06, the 7 added when
 # MT_IPEDS_UNITID_MAP was extended to cover the rest of the registry
-# captured 2026-08-07, both trimmed to just the unitids MT_IPEDS_UNITID_MAP
-# actually needs (all academic_rank x contract_length x sex combinations
-# for each, real data not synthetic).
+# captured 2026-08-07, the 4 tribal colleges (Fort Peck CC, Little Big Horn
+# College, Salish Kootenai College, Stone Child College) appended the same
+# day when their own fast-follow gap closed -- all trimmed to just the
+# unitids MT_IPEDS_UNITID_MAP actually needs (all academic_rank x
+# contract_length x sex combinations for each, real data not synthetic).
 
-test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 13 institutions", {
+test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salaries for all 17 institutions", {
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_he_salaries(df, 2024)
 
-  expect_equal(nrow(result), 13)
+  expect_equal(nrow(result), 17)
 
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
@@ -36,6 +38,19 @@ test_that("parse_ipeds_he_salaries extracts real overall + Professor-rank salari
   expect_equal(round(blackfeet$Faculty_Avg_Salary), 25621)
   expect_equal(blackfeet$Faculty_Count, 53)
   expect_true(is.na(blackfeet$Faculty_Avg_Salary_Professor))
+
+  # The 4 tribal colleges also have no academic_rank=1 "Professor" record
+  # in the real 2024 data -- same real absence as Blackfeet/Dawson/Miles
+  # above, not a fixture-trimming artifact.
+  skc <- result[result$Name == "Salish Kootenai College", ]
+  expect_equal(round(skc$Faculty_Avg_Salary), 54230)
+  expect_equal(skc$Faculty_Count, 69)
+  expect_true(is.na(skc$Faculty_Avg_Salary_Professor))
+
+  stone_child <- result[result$Name == "Stone Child College", ]
+  expect_equal(round(stone_child$Faculty_Avg_Salary), 58915)
+  expect_equal(stone_child$Faculty_Count, 12)
+  expect_true(is.na(stone_child$Faculty_Avg_Salary_Professor))
 })
 
 test_that("parse_ipeds_he_salaries returns real NA for a unitid missing from that year's response", {
@@ -67,22 +82,19 @@ test_that("parse_ipeds_salary_trend_year extracts just the headline overall figu
   df <- read.csv(test_path("fixtures", "ipeds_mt_salaries_2024.csv"))
   result <- parse_ipeds_salary_trend_year(df, 2024)
 
-  expect_equal(nrow(result), 13)
+  expect_equal(nrow(result), 17)
   expect_equal(names(result), c("Name", "Year", "Faculty_Avg_Salary"))
   msu <- result[result$Name == "Montana State University", ]
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
 })
 
-test_that("MT_IPEDS_UNITID_MAP covers a real subset of the registered institutions, with every entry a real registry institution", {
-  # Was briefly an exact 1:1 match after the 2026-08-07 extension to 13
-  # institutions, but Salish Kootenai College, Little Big Horn College,
-  # and Fort Peck Community College were added to the registry the same
-  # session via heuristic (non-platform-API) scrapers, same "salary
-  # coverage is a separate fast-follow, not a job-postings-eligibility
-  # requirement" pattern as Miles CC/Dawson CC before them. This test
-  # still catches the real regression that matters: a name in
-  # MT_IPEDS_UNITID_MAP that ISN'T a real registered institution.
+test_that("MT_IPEDS_UNITID_MAP covers every registered institution exactly, with every entry a real registry institution", {
+  # Back to an exact 1:1 match as of 2026-08-07: Salish Kootenai College,
+  # Little Big Horn College, Fort Peck Community College, and Stone Child
+  # College (all added to the registry via heuristic, non-platform-API
+  # scrapers) had their own real unitids confirmed live against the Urban
+  # Institute's college directory and folded in, closing the fast-follow
+  # gap.
   registry <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
-  expect_true(all(MT_IPEDS_UNITID_MAP$Name %in% registry$Institution))
-  expect_gt(nrow(MT_IPEDS_UNITID_MAP), 0)
+  expect_setequal(MT_IPEDS_UNITID_MAP$Name, registry$Institution)
 })

@@ -1,10 +1,11 @@
-# Real fixture: rows for all 30 registered districts' real LE names,
+# Real fixture: rows for all 32 registered districts' real LE names,
 # trimmed from the actual FY2025 OPIEXP25.xlsx ("ExpByLineItemByLE" sheet,
 # captured 2026-08-07) -- every General Fund (FundCode "01") row plus a
 # 20-row sample of non-General-Fund rows (to exercise the fund filter),
 # preserving the file's real 2-row header structure (merged title row,
 # then real column names) so it round-trips through the same skip=1 read
-# path the live fetch uses.
+# path the live fetch uses. Wolf Point/Plentywood's real GF rows were
+# appended 2026-08-07 when MT_OPI_FINANCE_LEA_MAP's gap for them closed.
 
 test_that("parse_opi_district_expenditures computes real General Fund totals for split and unified districts", {
   raw <- readxl::read_excel(test_path("fixtures", "opi_finance_fy2025_trimmed.xlsx"),
@@ -12,7 +13,7 @@ test_that("parse_opi_district_expenditures computes real General Fund totals for
 
   result <- parse_opi_district_expenditures(raw)
 
-  expect_equal(nrow(result), 30)
+  expect_equal(nrow(result), 32)
 
   # Billings Elem + Billings H S summed -- a real split district.
   billings <- result[result$District == "Billings Public Schools", ]
@@ -63,15 +64,12 @@ test_that("parse_opi_district_expenditures returns an empty, correctly-shaped fr
   expect_equal(names(result), c("District", "Total_General_Fund_Expenditure", "Finance_FY"))
 })
 
-test_that("MT_OPI_FINANCE_LEA_MAP covers a real subset of the registered districts, with every entry a real registry district", {
-  # Was an exact 1:1 match until Wolf Point and Plentywood were added to
-  # the registry (2026-08-07, the Apptegy/chromote build) -- same
-  # deliberate "salary/finance coverage is a separate fast-follow" gap
-  # already established for MT_DLI_DISTRICT_MAP's own 2 real gaps.
+test_that("MT_OPI_FINANCE_LEA_MAP covers every registered district exactly, with every entry a real registry district", {
+  # Wolf Point and Plentywood's real LE names were added 2026-08-07,
+  # closing the fast-follow gap left when they joined the registry --
+  # back to an exact 1:1 match, same as before that gap opened.
   registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
-  expect_true(all(names(MT_OPI_FINANCE_LEA_MAP) %in% registry$District))
-  expect_setequal(setdiff(registry$District, names(MT_OPI_FINANCE_LEA_MAP)),
-                   c("Wolf Point Public Schools", "Plentywood Public Schools"))
+  expect_setequal(names(MT_OPI_FINANCE_LEA_MAP), registry$District)
 })
 
 test_that("fetch_opi_district_expenditures downloads the workbook and parses it", {
@@ -85,6 +83,6 @@ test_that("fetch_opi_district_expenditures downloads the workbook and parses it"
 
   result <- fetch_opi_district_expenditures()
 
-  expect_equal(nrow(result), 30)
+  expect_equal(nrow(result), 32)
   expect_equal(result$Total_General_Fund_Expenditure[result$District == "Billings Public Schools"], 134234664)
 })

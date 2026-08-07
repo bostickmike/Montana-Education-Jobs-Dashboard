@@ -20,32 +20,26 @@ k12 <- read.csv(file.path("Mt_Ed_Jobs", "salarymap2.csv"), stringsAsFactors = FA
 he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALSE)
 
 # This project's K-12/HE registries have each grown since these maps were
-# first built (32 K-12 districts, 17 HE institutions as of 2026-08-07,
-# Wolf Point/Plentywood/Stone Child College the newest 3 via the
-# Apptegy/chromote build). MT_CCD_LEA_MAP and MT_OPI_FINANCE_LEA_MAP
-# cover 30 of the 32 K-12 districts (Wolf Point/Plentywood not yet
-# mapped, the ordinary fast-follow gap, not a permanent one).
-# MT_DLI_DISTRICT_MAP has a real, permanent gap on TOP of that: Helena
-# and Lockwood (both original 18) are genuinely "ND"-suppressed in their
-# own regional PDF row despite real disclosed teacher counts, and
-# Glendive is the same; Lame Deer and Lodge Grass don't appear as a row
-# in ANY of MT DLI's 9 regional PDFs at all -- confirmed live, not a
-# lookup miss. 30 - 5 = 25 is this source's real full-health ceiling, not
-# 30 or 32. On the HE side, MT_IPEDS_UNITID_MAP covers 13 of 17
-# institutions -- Salish Kootenai College, Little Big Horn College, Fort
-# Peck Community College, and Stone Child College (all added 2026-08-07
-# via heuristic/chromote-driven, non-platform-API scrapers) don't have
-# IPEDS coverage yet, the same "salary coverage is a separate fast-follow"
-# gap Miles CC/Dawson CC/Blackfeet CC had before their own maps were
-# extended.
+# first built (32 K-12 districts, 17 HE institutions as of 2026-08-07).
+# MT_CCD_LEA_MAP and MT_OPI_FINANCE_LEA_MAP now cover all 32 K-12
+# districts (Wolf Point/Plentywood's fast-follow gap closed 2026-08-07).
+# MT_DLI_DISTRICT_MAP has a real, permanent gap of its own: Helena and
+# Lockwood are genuinely "ND"-suppressed in their own regional PDF row
+# despite real disclosed teacher counts, and Glendive is the same; Lame
+# Deer and Lodge Grass don't appear as a row in ANY of MT DLI's 9
+# regional PDFs at all -- confirmed live, not a lookup miss. 32 - 5 = 27
+# is this source's real full-health ceiling, not 32. On the HE side,
+# MT_IPEDS_UNITID_MAP now covers all 17 institutions -- Salish Kootenai
+# College, Little Big Horn College, Fort Peck Community College, and
+# Stone Child College's fast-follow gap closed the same day.
 flags <- rbind(
-  check_salary_coverage("K-12 teacher avg salary (MT DLI)", sum(!is.na(k12$Teacher_Avg_Salary)), expected = 25L, min_ok = 23L),
-  check_salary_coverage("K-12 teacher FTE (CCD)", sum(!is.na(k12$Teachers_Total_FTE)), expected = 30L),
-  check_salary_coverage("K-12 General Fund expenditure (OPI Finance)", sum(!is.na(k12$Total_General_Fund_Expenditure)), expected = 30L),
-  check_salary_coverage("HE avg faculty salary (IPEDS)", sum(!is.na(he$Faculty_Avg_Salary)), expected = 13L),
-  check_salary_coverage("HE fall enrollment FTE (IPEDS)", sum(!is.na(he$Enrollment)), expected = 13L),
-  check_salary_coverage("HE 5-year enrollment trend (IPEDS)", sum(!is.na(he$Enrollment_Change_Pct)), expected = 13L),
-  check_salary_coverage("HE Pell Grant recipient share (FSA)", sum(!is.na(he$Pell_Recipient_Share)), expected = 13L)
+  check_salary_coverage("K-12 teacher avg salary (MT DLI)", sum(!is.na(k12$Teacher_Avg_Salary)), expected = 27L, min_ok = 25L),
+  check_salary_coverage("K-12 teacher FTE (CCD)", sum(!is.na(k12$Teachers_Total_FTE)), expected = 32L),
+  check_salary_coverage("K-12 General Fund expenditure (OPI Finance)", sum(!is.na(k12$Total_General_Fund_Expenditure)), expected = 32L),
+  check_salary_coverage("HE avg faculty salary (IPEDS)", sum(!is.na(he$Faculty_Avg_Salary)), expected = 17L),
+  check_salary_coverage("HE fall enrollment FTE (IPEDS)", sum(!is.na(he$Enrollment)), expected = 17L),
+  check_salary_coverage("HE 5-year enrollment trend (IPEDS)", sum(!is.na(he$Enrollment_Change_Pct)), expected = 17L),
+  check_salary_coverage("HE Pell Grant recipient share (FSA)", sum(!is.na(he$Pell_Recipient_Share)), expected = 17L)
 )
 
 if (!is.null(flags) && nrow(flags) > 0) print(flags)
@@ -56,7 +50,7 @@ coverage_lines <- if (is.null(flags) || nrow(flags) == 0) {
   lines <- c(
     paste0("Automated salary-source coverage check flagged ", nrow(flags), " source(s) as of ", Sys.Date(), "."),
     "",
-    "Unlike the job-posting drift check above, these are hard assertions against a known, essentially-fixed universe (30 MT K-12 districts, 13 MT HE institutions currently registered -- some sources still only cover a subset, a real known gap, see the expected counts above) rather than a trailing statistical baseline -- salary data updates far less often (once a year at most, not weekly), so a genuine week-to-week dip isn't expected. A source landing below its expected count usually means the source changed its page/PDF/API layout and the parser is silently extracting less real data, not that Montana lost school districts or colleges.",
+    "Unlike the job-posting drift check above, these are hard assertions against a known, essentially-fixed universe (32 MT K-12 districts, 17 MT HE institutions currently registered -- MT DLI teacher salary still only covers a subset, a real permanent gap, see the expected counts above) rather than a trailing statistical baseline -- salary data updates far less often (once a year at most, not weekly), so a genuine week-to-week dip isn't expected. A source landing below its expected count usually means the source changed its page/PDF/API layout and the parser is silently extracting less real data, not that Montana lost school districts or colleges.",
     ""
   )
   for (i in seq_len(nrow(flags))) {

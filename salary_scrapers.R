@@ -97,7 +97,12 @@ MT_DLI_DISTRICT_MAP <- list(
   "Rocky Boy Public Schools" = list(region = "HiLine", report_name = "Rocky Boy Public Schools"),
   "Big Sandy Public Schools" = list(region = "NorthCentral", report_name = "Big Sandy Public Schools"),
   "Ronan Public Schools" = list(region = "Western", report_name = "Ronan Public Schools"),
-  "Stevensville Public Schools" = list(region = "Western", report_name = "Stevensville Public Schls")
+  "Stevensville Public Schools" = list(region = "Western", report_name = "Stevensville Public Schls"),
+  # Added 2026-08-07, confirmed live against the NorthEast region PDF's
+  # real page-2 table rows -- both report_names match this project's
+  # registry name exactly.
+  "Wolf Point Public Schools" = list(region = "NorthEast", report_name = "Wolf Point Public Schools"),
+  "Plentywood Public Schools" = list(region = "NorthEast", report_name = "Plentywood K-12 Schools")
 )
 
 fetch_dli_region_pdf_text <- function(region) {
