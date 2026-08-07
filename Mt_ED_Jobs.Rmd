@@ -1,0 +1,375 @@
+---
+title: "MT Job Scrape"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("k12_he_classification.R")
+```
+# Scrapes Montana's K-12 and higher-ed job postings and combines them into the datasets Mt_Ed_Jobs/app.R reads.
+# Mirrors the Wyoming Education Jobs Dashboard's Wy_ED_Jobs.Rmd. Job-postings only for now -- salary/staffing/Census
+# data sources are separate, later chunks (see DATA_COOKBOOK.md once they exist).
+
+## Part 1: Montana K-12 Data
+
+### K-12 districts scraped directly (AppliTrack, SchoolSpring, Tyler Portico, TedK12)
+```{r k12 direct-platform districts, message=FALSE, warning=FALSE, echo=TRUE}
+library(dplyr)
+library(readr)
+source("scrape_helpers.R")
+source("direct_api_scrapers.R")
+
+registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
+
+# AppliTrack -- output columns (title/position/position2/date_posted/
+# location/closing_date) already match combinedclean's shape closely; only
+# District needs adding.
+applitrack_districts <- registry[registry$Platform == "AppliTrack", ]
+applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
+  row <- applitrack_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_applitrack_postings(row$Slug),
+    expected_cols = c("title", "position", "position2", "date_posted", "location", "closing_date")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+# url comes from a join back to the registry (one job-board URL per
+# district, matching every other source's convention -- not a per-posting
+# deep link) since AppliTrack's own fetch doesn't carry the district's URL
+# through per-row.
+applitrack_df <- bind_rows(applitrack_results) %>%
+  left_join(select(applitrack_districts, District, Job_Link), by = "District") %>%
+  transmute(title, date_posted, position = NA_character_, location, url = Job_Link, District)
+
+# SchoolSpring / Tyler Portico -- same output shape (Title/Location/
+# Posted_Date/Link), position is always recomputed from title downstream so
+# it's set NA_character_ here rather than kept from the source (matching
+# Wyoming's springer/SchoolSpring chunk's own convention).
+schoolspring_districts <- registry[registry$Platform == "SchoolSpring", ]
+schoolspring_results <- lapply(seq_len(nrow(schoolspring_districts)), function(i) {
+  row <- schoolspring_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_schoolspring_postings(row$Slug),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+schoolspring_df <- bind_rows(schoolspring_results)
+if (nrow(schoolspring_df) > 0) {
+  schoolspring_df <- schoolspring_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District)
+} else {
+  schoolspring_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                 location = character(0), url = character(0), District = character(0))
+}
+
+tylerportico_districts <- registry[registry$Platform == "TylerPortico", ]
+tylerportico_results <- lapply(seq_len(nrow(tylerportico_districts)), function(i) {
+  row <- tylerportico_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_tylerportico_postings(row$Slug, row$District),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+tylerportico_df <- bind_rows(tylerportico_results)
+if (nrow(tylerportico_df) > 0) {
+  tylerportico_df <- tylerportico_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District)
+} else {
+  tylerportico_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                 location = character(0), url = character(0), District = character(0))
+}
+
+# TedK12 -- output columns (title/date_posted/position/location/url) already
+# match combinedclean's shape; only District needs adding.
+tedk12_districts <- registry[registry$Platform == "TedK12", ]
+tedk12_results <- lapply(seq_len(nrow(tedk12_districts)), function(i) {
+  row <- tedk12_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_tedk12_postings(row$Slug),
+    expected_cols = c("title", "date_posted", "position", "location", "url")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+tedk12_df <- bind_rows(tedk12_results)
+if (nrow(tedk12_df) == 0) {
+  tedk12_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0))
+}
+```
+
+### OPI "Jobs for Teachers" statewide fallback feed
+```{r k12 opi statewide feed, message=FALSE, warning=FALSE, echo=TRUE}
+library(dplyr)
+source("scrape_helpers.R")
+source("direct_api_scrapers.R")
+
+# Montana's analog of Wyoming's WSBA vacancies page, but run differently:
+# WSBA in Wyoming only ever covers the small "misc" district list that has
+# no major platform. OPI's feed is genuinely statewide -- it includes the
+# SAME districts already scraped directly above (Kalispell, Billings, etc.),
+# so including every OPI row unfiltered would massively double-count those
+# districts' postings. Filtered here to just the districts NOT already
+# covered by a direct scraper (matched by whether OPI's own City field
+# contains a covered district's City, from k12_district_registry.csv --
+# case-insensitive, since OPI's City formatting is inconsistent, e.g. "Wolf
+# Point " vs "Wolf Point, Montana").
+opi_raw <- safe_scrape(
+  "OPI Jobs for Teachers (statewide)",
+  scrape_fn = fetch_opi_statewide_postings,
+  expected_cols = c("Title", "Location", "Posted_Date", "Link")
+)
+
+covered_cities <- registry$City
+is_covered <- function(location) {
+  if (is.na(location)) return(FALSE)
+  any(sapply(covered_cities, function(city) grepl(city, location, ignore.case = TRUE)))
+}
+
+opi_df <- opi_raw
+if (nrow(opi_df) > 0) {
+  opi_df <- opi_df[!sapply(opi_df$Location, is_covered), , drop = FALSE]
+}
+
+if (nrow(opi_df) > 0) {
+  # District is NOT a canonical legal district name here -- OPI's feed only
+  # exposes a City column, so District is that raw City value passed
+  # through, the closest available proxy (same honesty tradeoff as every
+  # other source's raw `location` field, just one level up). Flagged in
+  # DATA_COOKBOOK.md once that's written.
+  opi_df <- opi_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District = Location)
+} else {
+  opi_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                        location = character(0), url = character(0), District = character(0))
+}
+```
+
+### Combine all K-12 data, classify, archive, and accumulate history
+```{r combine k12 data, echo=TRUE, warning=FALSE, message=FALSE}
+library(stringr)
+library(dplyr)
+library(lubridate)
+
+standardize_date <- function(x) {
+  x <- as.character(x)
+  x <- str_remove(x, "\\s*\\(.*\\)$")
+  parsed <- parse_date_time(
+    x,
+    orders = c("b d Y h:M p", "B d Y h:M p", "ymd", "mdy", "dmy", "Y-m-d H:M:S"),
+    tz = "UTC", quiet = TRUE
+  )
+  as.Date(parsed)
+}
+
+applitrack_df <- applitrack_df %>% mutate(date_posted = standardize_date(date_posted))
+schoolspring_df <- schoolspring_df %>% mutate(date_posted = standardize_date(date_posted))
+tylerportico_df <- tylerportico_df %>% mutate(date_posted = standardize_date(date_posted))
+tedk12_df <- tedk12_df %>% mutate(date_posted = standardize_date(date_posted))
+opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
+
+combined <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, opi_df) %>%
+  mutate(Archive_Date = Sys.Date())
+
+# fix_title_encoding() applied once here, at the point titles first enter
+# the pipeline -- see k12_he_classification.R's own header for why.
+combined <- combined %>% mutate(title = fix_title_encoding(title))
+
+if (!dir.exists("Archivek12_Data")) dir.create("Archivek12_Data")
+file_name <- paste0("combined_", Sys.Date(), ".csv")
+write.csv(combined, file = file.path("Archivek12_Data", file_name), row.names = FALSE)
+
+combinedclean <- combined %>%
+  mutate(position = classify_k12_position(title),
+         District = canonicalize_k12_district(District)) %>%
+  select(title, Archive_Date, date_posted, position, location, url, District)
+
+if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
+write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)
+
+source("history_accumulator.R")
+
+this_week_k12jobs <- combinedclean %>%
+  filter(position == "Teacher") %>%
+  mutate(Category = classify_k12_subject(title),
+         Broad_Category = classify_k12_broad_category(Category)) %>%
+  select(title, Archive_Date, position, location, url, District, Category, Broad_Category)
+
+k12jobs <- append_weekly_rows(file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), this_week_k12jobs)
+write.csv(k12jobs, file = file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), row.names = FALSE)
+
+this_week_district_totals <- combinedclean %>%
+  count(District, Archive_Date, name = "n")
+k12_district_weekly_totals <- append_weekly_rows(
+  file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), this_week_district_totals)
+write.csv(k12_district_weekly_totals, file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), row.names = FALSE)
+
+# Dedup key is title+location, not title alone -- two different schools can
+# legitimately post the same generic title. See Wyoming's equivalent chunk
+# for the full reasoning (unchanged here).
+this_week_k12sumdistrict <- this_week_k12jobs %>%
+  group_by(Broad_Category, Archive_Date, District) %>%
+  summarize(sum = n_distinct(paste(title, location)), .groups = "drop")
+
+this_week_k12sum <- this_week_k12sumdistrict %>%
+  group_by(Broad_Category, Archive_Date) %>%
+  summarize(sum = sum(sum), .groups = "drop") %>%
+  mutate(District = "Total") %>%
+  select(Broad_Category, Archive_Date, District, sum)
+
+check_total_matches_parts(this_week_k12sum, this_week_k12sumdistrict,
+                           group_cols = c("Broad_Category", "Archive_Date"))
+
+this_week_allsum <- bind_rows(this_week_k12sum, this_week_k12sumdistrict)
+Allsum <- append_weekly_rows(file.path("Mt_Ed_Jobs", "allsum.csv"), this_week_allsum)
+write.csv(Allsum, file = file.path("Mt_Ed_Jobs", "allsum.csv"), row.names = FALSE)
+
+k12districtnowsum <- this_week_k12sumdistrict %>%
+  ungroup() %>%
+  rename(Sum = sum) %>%
+  select(Broad_Category, Sum, District)
+
+k12nowsum <- k12districtnowsum %>%
+  group_by(Broad_Category) %>%
+  summarize(Sum = sum(Sum), .groups = "drop") %>%
+  mutate(District = "Total")
+
+Allnow <- bind_rows(k12nowsum, k12districtnowsum)
+write.csv(Allnow, file = file.path("Mt_Ed_Jobs", "allnow.csv"), row.names = FALSE)
+```
+
+
+## Part 2: Montana Higher Ed Data
+
+### HE institutions scraped directly (PeopleAdmin, JazzHR, Paycom)
+```{r he direct-platform institutions, message=FALSE, warning=FALSE, echo=TRUE}
+library(dplyr)
+source("scrape_helpers.R")
+source("direct_api_scrapers.R")
+
+he_registry <- read.csv("he_institution_registry.csv", stringsAsFactors = FALSE)
+
+peopleadmin_institutions <- he_registry[he_registry$Platform == "PeopleAdmin", ]
+peopleadmin_results <- lapply(seq_len(nrow(peopleadmin_institutions)), function(i) {
+  row <- peopleadmin_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_peopleadmin_atom(row$Feed_URL, location_fallback = row$Institution),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+peopleadmin_df <- bind_rows(peopleadmin_results)
+
+jazzhr_institutions <- he_registry[he_registry$Platform == "JazzHR", ]
+jazzhr_results <- lapply(seq_len(nrow(jazzhr_institutions)), function(i) {
+  row <- jazzhr_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_jazzhr_postings(row$Feed_URL, row$Institution),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+jazzhr_df <- bind_rows(jazzhr_results)
+
+paycom_institutions <- he_registry[he_registry$Platform == "Paycom", ]
+paycom_results <- lapply(seq_len(nrow(paycom_institutions)), function(i) {
+  row <- paycom_institutions[i, ]
+  df <- safe_scrape(
+    row$Institution,
+    scrape_fn = function() fetch_paycom_postings(row$Feed_URL, row$Institution),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$Institution <- row$Institution
+  df
+})
+paycom_df <- bind_rows(paycom_results)
+
+hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df)
+```
+
+### Combine all HE data, classify, archive, and accumulate history
+```{r munge he data, message=FALSE, warning=FALSE, echo=TRUE}
+library(dplyr)
+library(writexl)
+
+hedata <- hedata_raw %>%
+  select(Title, Location, Posted_Date, Institution, Link) %>%
+  mutate(Posted_Date = as.character(Posted_Date),
+         Archive_Date = Sys.Date())
+
+if (!dir.exists("Archived_HE_Data")) dir.create("Archived_HE_Data")
+if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
+
+file_name <- paste0("hedata_", Sys.Date(), ".xlsx")
+write_xlsx(hedata, path = file.path("Archived_HE_Data", file_name))
+write_xlsx(hedata, path = file.path("Mt_Ed_Jobs", "hedata.xlsx"))
+
+# Fix historical institution-name typos before anything downstream keys off
+# Institution -- applied AFTER the xlsx archive writes above, so the
+# archived raw snapshot keeps whatever spelling the scraper actually
+# produced that week.
+hedata <- hedata %>% mutate(Institution = canonicalize_he_institution(Institution))
+
+this_week_he_cat <- hedata %>% mutate(Job_Type = classify_he_job_type(Title))
+this_week_facultydata <- this_week_he_cat %>%
+  filter(Job_Type %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")) %>%
+  mutate(Category = classify_he_faculty_category(Title))
+
+source("history_accumulator.R")
+
+facultydata <- append_weekly_rows(file.path("Mt_Ed_Jobs", "facultydata.csv"), as.data.frame(this_week_facultydata))
+write.csv(facultydata, file.path("Mt_Ed_Jobs", "facultydata.csv"), row.names = FALSE)
+
+this_week_he_totals <- hedata %>%
+  count(Institution, Archive_Date, name = "n")
+he_institution_weekly_totals <- append_weekly_rows(
+  file.path("Mt_Ed_Jobs", "he_institution_weekly_totals.csv"), this_week_he_totals)
+write.csv(he_institution_weekly_totals, file.path("Mt_Ed_Jobs", "he_institution_weekly_totals.csv"), row.names = FALSE)
+
+this_week_hesum <- this_week_facultydata %>%
+  group_by(Category, Archive_Date, Job_Type) %>%
+  summarize(sum = n(), .groups = "drop") %>%
+  mutate(Institution = "Total") %>%
+  select(Category, Archive_Date, Institution, Job_Type, sum)
+
+this_week_hesuminst <- this_week_facultydata %>%
+  group_by(Category, Archive_Date, Institution, Job_Type) %>%
+  summarise(sum = n(), .groups = "drop")
+
+check_total_matches_parts(this_week_hesum, this_week_hesuminst,
+                           group_cols = c("Category", "Archive_Date", "Job_Type"))
+
+this_week_allsum_he <- bind_rows(this_week_hesum, this_week_hesuminst)
+Allsum_he <- append_weekly_rows(file.path("Mt_Ed_Jobs", "allsum_he.csv"), this_week_allsum_he)
+write.csv(Allsum_he, file = file.path("Mt_Ed_Jobs", "allsum_he.csv"), row.names = FALSE)
+
+henowsum <- this_week_hesum %>%
+  ungroup() %>%
+  rename(Sum = sum) %>%
+  select(Category, Job_Type, Sum, Institution)
+
+henowinstsum <- this_week_facultydata %>%
+  group_by(Category, Institution, Job_Type) %>%
+  summarize(Sum = n(), .groups = "drop") %>%
+  select(Category, Sum, Institution, Job_Type)
+
+Allnow_he <- bind_rows(henowsum, henowinstsum)
+write.csv(Allnow_he, file = file.path("Mt_Ed_Jobs", "allnow_he.csv"), row.names = FALSE)
+```

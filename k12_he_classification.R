@@ -203,11 +203,11 @@ classify_k12_broad_category <- function(category) {
 # dashboard's dropdowns/trend lines. Empty for now -- no Montana district
 # name typos have been confirmed in scraped data yet. Add real cases here as
 # they're found, the same way Wyoming's list grew one confirmed case at a
-# time rather than being guessed in advance.
+# time rather than being guessed in advance. A plain passthrough rather than
+# case_when(TRUE ~ district) -- that form (scalar LHS, vector RHS) is
+# deprecated as of dplyr 1.2.0 and would warn on every pipeline run.
 canonicalize_k12_district <- function(district) {
-  dplyr::case_when(
-    TRUE ~ district
-  )
+  district
 }
 
 # ---------------------------------------------------------------------------
@@ -317,9 +317,9 @@ classify_he_faculty_category <- function(title) {
 
 # Fixes known misspellings of institution names at the source, the HE analog
 # of canonicalize_k12_district() above. Empty for now -- no Montana
-# institution name typos have been confirmed in scraped data yet.
+# institution name typos have been confirmed in scraped data yet. Plain
+# passthrough for the same case_when(TRUE ~ ...) deprecation reason as
+# canonicalize_k12_district() above.
 canonicalize_he_institution <- function(institution) {
-  dplyr::case_when(
-    TRUE ~ institution
-  )
+  institution
 }
