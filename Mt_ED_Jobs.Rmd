@@ -436,3 +436,90 @@ henowinstsum <- this_week_facultydata %>%
 Allnow_he <- bind_rows(henowsum, henowinstsum)
 write.csv(Allnow_he, file = file.path("Mt_Ed_Jobs", "allnow_he.csv"), row.names = FALSE)
 ```
+
+### HE faculty salary, enrollment, and Pell Grant recipient share (IPEDS via Urban Institute)
+```{r he salary enrollment pell data, message=FALSE, warning=FALSE, echo=TRUE}
+library(dplyr)
+source("scrape_helpers.R")
+source("ipeds_salary_scraper.R")
+source("ipeds_enrollment_scraper.R")
+source("fsa_pell_scraper.R")
+
+he_salary <- safe_scrape(
+  "IPEDS instructional staff salaries (MT)",
+  scrape_fn = fetch_ipeds_he_salaries,
+  expected_cols = c("Name", "Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor",
+                     "Faculty_Count", "Salary_Year")
+)
+
+he_enrollment <- safe_scrape(
+  "IPEDS fall enrollment FTE (MT)",
+  scrape_fn = fetch_ipeds_he_enrollment,
+  expected_cols = c("Name", "Enrollment", "Enrollment_Year")
+)
+
+he_enrollment_trend <- safe_scrape(
+  "IPEDS fall enrollment 5-year trend (MT)",
+  scrape_fn = fetch_ipeds_he_enrollment_trend,
+  expected_cols = c("Name", "Enrollment_Change_Pct")
+)
+
+he_pell_share <- safe_scrape(
+  "FSA Pell Grant recipient share (MT)",
+  scrape_fn = fetch_ipeds_he_pell_share,
+  expected_cols = c("Name", "Pell_Recipient_Share", "Pell_Year")
+)
+
+# Static geo/link fields (Name/County/Latitude/Longitude/Link) come from
+# he_institution_registry.csv, the same "read salarymap.csv back first if
+# it exists, don't blank out a failed fetch's columns" pattern
+# salarymap2.csv's chunk above uses.
+he_registry <- read.csv("he_institution_registry.csv", stringsAsFactors = FALSE) %>%
+  transmute(Name = Institution, County, Longitude, Latitude, Link = Job_Link)
+
+salarymap_path <- file.path("Mt_Ed_Jobs", "salarymap.csv")
+salarymap <- if (file.exists(salarymap_path)) {
+  read.csv(salarymap_path, fileEncoding = "UTF-8") %>%
+    select(-any_of(c("County", "Longitude", "Latitude", "Link"))) %>%
+    right_join(he_registry, by = "Name") %>%
+    select(Name, County, Longitude, Latitude, Link, everything())
+} else {
+  he_registry
+}
+
+if (nrow(he_salary) > 0) {
+  salarymap <- salarymap %>%
+    select(-any_of(c("Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor",
+                      "Faculty_Count", "Salary_Year", "Salary_Source"))) %>%
+    left_join(he_salary, by = "Name") %>%
+    mutate(Salary_Source = "IPEDS via Urban Institute Education Data Portal (educationdata.urban.org)")
+} else {
+  message("IPEDS salary fetch failed -- leaving salarymap.csv's salary columns untouched this run.")
+}
+
+if (nrow(he_enrollment) > 0) {
+  salarymap <- salarymap %>%
+    select(-any_of(c("Enrollment", "Enrollment_Year"))) %>%
+    left_join(he_enrollment, by = "Name")
+} else {
+  message("IPEDS fall enrollment fetch failed -- leaving salarymap.csv's Enrollment untouched this run.")
+}
+
+if (nrow(he_enrollment_trend) > 0) {
+  salarymap <- salarymap %>%
+    select(-any_of("Enrollment_Change_Pct")) %>%
+    left_join(he_enrollment_trend, by = "Name")
+} else {
+  message("IPEDS fall enrollment trend fetch failed -- leaving salarymap.csv's Enrollment_Change_Pct untouched this run.")
+}
+
+if (nrow(he_pell_share) > 0) {
+  salarymap <- salarymap %>%
+    select(-any_of(c("Pell_Recipient_Share", "Pell_Year"))) %>%
+    left_join(he_pell_share, by = "Name")
+} else {
+  message("FSA Pell Grant recipient share fetch failed -- leaving salarymap.csv's Pell columns untouched this run.")
+}
+
+write.csv(salarymap, salarymap_path, row.names = FALSE)
+```

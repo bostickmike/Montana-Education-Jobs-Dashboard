@@ -18,7 +18,11 @@ REQUIRED_SCHEMAS <- list(
   "facultydata.csv" = c("Title", "Location", "Institution", "Link", "Archive_Date", "Job_Type", "Category"),
   "allsum_he.csv" = c("Category", "Archive_Date", "Institution", "Job_Type", "sum"),
   "allnow_he.csv" = c("Category", "Job_Type", "Sum", "Institution"),
-  "he_institution_weekly_totals.csv" = c("Institution", "Archive_Date", "n")
+  "he_institution_weekly_totals.csv" = c("Institution", "Archive_Date", "n"),
+  "salarymap.csv" = c("Name", "County", "Longitude", "Latitude", "Link",
+                       "Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor", "Faculty_Count",
+                       "Salary_Year", "Salary_Source", "Enrollment", "Enrollment_Year",
+                       "Enrollment_Change_Pct", "Pell_Recipient_Share", "Pell_Year")
 )
 
 REQUIRED_SCHEMAS_XLSX <- list(
