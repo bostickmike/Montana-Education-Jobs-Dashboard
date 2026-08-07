@@ -29,6 +29,16 @@ suppressMessages({
 # Havre, and likely more as the district registry grows
 # ---------------------------------------------------------------------------
 
+# NOTE on MUS branch campuses with no independent UNITID (Gallatin College
+# MSU under Montana State University, City College at MSU Billings under
+# Montana State University Billings, per RESEARCH_NOTES.md): both already
+# appear in their parent institution's PeopleAdmin feed under real
+# "Gallatin College"/"City College" Location values, confirmed live
+# 2026-08-07 -- neither needs its own registry row or scraper. Bitterroot
+# College (merged into University of Montana's own reporting) had zero
+# open postings at the same check, so its coverage-via-parent-board status
+# is unconfirmed either way, unlike the other two.
+
 # tenant_path is everything between applitrack.com/ and /onlineapp/ in the
 # district's own URL, e.g. "billings" for
 # https://www.applitrack.com/billings/onlineapp/default.aspx. The listing
