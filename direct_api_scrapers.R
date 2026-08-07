@@ -288,3 +288,60 @@ parse_tedk12_postings <- function(html_text, url) {
 
   result[!is.na(result$title) & nzchar(result$title) & result$title != "Job Title", , drop = FALSE]
 }
+
+# ---------------------------------------------------------------------------
+# Tyler Portico -- Kalispell Public Schools (SD5), Montana's only top-tier
+# district on this platform; a genuine one-off, not part of a reusable
+# multi-district cluster like AppliTrack or SchoolSpring above.
+# ---------------------------------------------------------------------------
+
+# Tyler Portico has no public API documentation (confirmed via web search --
+# unlike PeopleAdmin/AppliTrack/SchoolSpring, this is a newer Tyler Technologies
+# product with nothing indexed). The endpoint below was found by downloading
+# the tenant's own Angular bundle (main.*.js from
+# https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/) and reading
+# its compiled source for the job-board service's HTTP calls -- not
+# trial-and-error path guessing. getOpenPositions() there calls
+# `${BaseJobBoardHref}/Positions` with BaseJobBoardHref == "api", unauthenticated
+# (no applicantId), which returns every open posting as one JSON array with no
+# pagination. tenant_subdomain is the part before ".tylerportico.com", e.g.
+# "kalispellpublicschoolsmt".
+fetch_tylerportico_postings <- function(tenant_subdomain, institution_name) {
+  base_url <- paste0("https://", tenant_subdomain, ".tylerportico.com/tess/citizen")
+  resp <- request(paste0(base_url, "/api/Positions")) %>% req_perform()
+  parse_tylerportico_positions(resp_body_string(resp), institution_name, base_url)
+}
+
+# institution_name is used as a Location fallback for every row: Kalispell's
+# live feed returns locationDescription: null on all 49 postings checked
+# (confirmed live 2026-08-06) -- this is a single-district job board like
+# Wyoming's PeopleAdmin colleges, not a multi-department one like Montana's
+# own PeopleAdmin institutions, so there's no finer-grained per-posting
+# location signal available here. The ifelse guard is kept anyway in case a
+# future Tyler Portico tenant (if this scraper gets reused) does populate it.
+#
+# Link is reconstructed as base_url/jobs/job-list/{id} -- confirmed live by
+# driving the real Angular app with chromote (headless Chrome), clicking a
+# posting, and reading window.location.href, since this route isn't a plain
+# <a href> in the markup (Tyler's Forge/Material components bind clicks in
+# JS) and isn't derivable from the minified bundle by string search alone.
+parse_tylerportico_positions <- function(json_text, institution_name, base_url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  positions <- jsonlite::fromJSON(json_text, simplifyVector = TRUE)
+  if (length(positions) == 0 || nrow(positions) == 0) return(empty)
+
+  locations <- positions$locationDescription
+  locations[is.na(locations)] <- ""
+  locations <- ifelse(nzchar(locations), locations, institution_name)
+
+  data.frame(
+    Title = positions$title,
+    Location = locations,
+    Posted_Date = substr(positions$postingStartDate, 1, 10),
+    Link = paste0(base_url, "/jobs/job-list/", positions$id),
+    stringsAsFactors = FALSE
+  )
+}
