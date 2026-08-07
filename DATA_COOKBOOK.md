@@ -179,6 +179,7 @@ One current row per this project's **6 directly-scraped HE institutions** — ma
 | `Faculty_Count` | numeric | IPEDS | Vacancy-rate denominator. |
 | `Salary_Year` | text | IPEDS | Calendar year IPEDS surveyed as of (Nov 1), not an academic year. |
 | `Salary_Source` | text | IPEDS | |
+| `Faculty_Avg_Salary_Y1Ago` / `Faculty_Avg_Salary_Y2Ago` | numeric | IPEDS via Urban Institute | Real multi-year trend — unlike the K-12 side's DLI data (only one published edition found so far), IPEDS is queryable by year indefinitely, so this goes back 2 years beyond `Salary_Year` on every run. |
 | `Enrollment` / `Enrollment_Year` | numeric / text | IPEDS via Urban Institute | Fall enrollment (FTE), summed across every `level_of_study` an institution reports. `Students_Per_Teacher` is computed on the fly in `app.R` (`Enrollment / Faculty_Count`), not stored here. |
 | `Enrollment_Change_Pct` | numeric | IPEDS via Urban Institute | Institution-level 5-year enrollment trend. Confirmed with real data: only Montana State University grew (+1.7%) over the 5-year window checked; the other 5 institutions all shrank. |
 | `Pell_Recipient_Share` / `Pell_Year` | numeric / text | US Dept. of Education FSA via Urban Institute | Real, unduplicated Pell Grant recipient count divided by `Enrollment` from the SAME year (FSA lags IPEDS by roughly 2 years) — an honest headcount-over-FTE-enrollment ratio, not two directly comparable counts. |

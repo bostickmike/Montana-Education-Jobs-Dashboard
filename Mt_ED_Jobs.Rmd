@@ -537,6 +537,25 @@ if (nrow(he_salary) > 0) {
                       "Faculty_Count", "Salary_Year", "Salary_Source"))) %>%
     left_join(he_salary, by = "Name") %>%
     mutate(Salary_Source = "IPEDS via Urban Institute Education Data Portal (educationdata.urban.org)")
+
+  # Multi-year salary trend (current + 2 prior years) -- IPEDS is queryable
+  # by year indefinitely, unlike the DLI Teacher Compensation Report (only
+  # one edition published so far -- see salary_scrapers.R). Pivoted to
+  # generic "N years ago" column names, not literal year numbers, so the
+  # schema stays stable as the calendar year rolls over.
+  salary_trend <- fetch_ipeds_he_salary_trend(n_years = 3)
+  if (nrow(salary_trend) > 0) {
+    latest_year <- max(salary_trend$Year)
+    salary_trend_wide <- salary_trend %>%
+      mutate(YearsAgo = latest_year - Year) %>%
+      filter(YearsAgo > 0) %>%
+      select(Name, YearsAgo, Faculty_Avg_Salary) %>%
+      tidyr::pivot_wider(names_from = YearsAgo, values_from = Faculty_Avg_Salary,
+                          names_glue = "Faculty_Avg_Salary_Y{YearsAgo}Ago")
+    salarymap <- salarymap %>%
+      select(-any_of(c("Faculty_Avg_Salary_Y1Ago", "Faculty_Avg_Salary_Y2Ago"))) %>%
+      left_join(salary_trend_wide, by = "Name")
+  }
 } else {
   message("IPEDS salary fetch failed -- leaving salarymap.csv's salary columns untouched this run.")
 }
