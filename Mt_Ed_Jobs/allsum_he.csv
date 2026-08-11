@@ -130,9 +130,9 @@
 "Uncategorized","2026-08-07","Montana Tech","Adjunct/Part-Time Faculty",2
 "Uncategorized","2026-08-07","Montana Tech","Instructor/Teacher/Faculty",1
 "CTE - Business & Computing","2026-08-11","Total","Instructor/Teacher/Faculty",11
-"CTE - Health Sciences","2026-08-11","Total","Adjunct/Part-Time Faculty",8
-"CTE - Health Sciences","2026-08-11","Total","Instructor/Teacher/Faculty",8
-"CTE - Trades & Engineering","2026-08-11","Total","Adjunct/Part-Time Faculty",2
+"CTE - Health Sciences","2026-08-11","Total","Adjunct/Part-Time Faculty",10
+"CTE - Health Sciences","2026-08-11","Total","Instructor/Teacher/Faculty",6
+"CTE - Trades & Engineering","2026-08-11","Total","Adjunct/Part-Time Faculty",3
 "CTE - Trades & Engineering","2026-08-11","Total","Instructor/Teacher/Faculty",19
 "Culinary/Hospitality","2026-08-11","Total","Adjunct/Part-Time Faculty",1
 "Culinary/Hospitality","2026-08-11","Total","Instructor/Teacher/Faculty",2
@@ -145,28 +145,29 @@
 "Language","2026-08-11","Total","Instructor/Teacher/Faculty",3
 "Legal","2026-08-11","Total","Instructor/Teacher/Faculty",1
 "Library","2026-08-11","Total","Instructor/Teacher/Faculty",2
-"Math","2026-08-11","Total","Instructor/Teacher/Faculty",3
+"Math","2026-08-11","Total","Instructor/Teacher/Faculty",4
 "Physical Education","2026-08-11","Total","Instructor/Teacher/Faculty",1
 "Science","2026-08-11","Total","Adjunct/Part-Time Faculty",3
 "Science","2026-08-11","Total","Instructor/Teacher/Faculty",17
 "Social Science","2026-08-11","Total","Instructor/Teacher/Faculty",2
 "The Arts","2026-08-11","Total","Adjunct/Part-Time Faculty",2
 "The Arts","2026-08-11","Total","Instructor/Teacher/Faculty",2
-"Uncategorized","2026-08-11","Total","Adjunct/Part-Time Faculty",10
-"Uncategorized","2026-08-11","Total","Instructor/Teacher/Faculty",57
+"Uncategorized","2026-08-11","Total","Adjunct/Part-Time Faculty",15
+"Uncategorized","2026-08-11","Total","Instructor/Teacher/Faculty",56
 "CTE - Business & Computing","2026-08-11","Montana State University","Instructor/Teacher/Faculty",11
 "CTE - Health Sciences","2026-08-11","Aaniiih Nakoda College","Instructor/Teacher/Faculty",1
-"CTE - Health Sciences","2026-08-11","Carroll College","Instructor/Teacher/Faculty",1
+"CTE - Health Sciences","2026-08-11","Carroll College","Adjunct/Part-Time Faculty",1
 "CTE - Health Sciences","2026-08-11","Flathead Valley Community College","Adjunct/Part-Time Faculty",1
 "CTE - Health Sciences","2026-08-11","Great Falls College MSU","Adjunct/Part-Time Faculty",2
 "CTE - Health Sciences","2026-08-11","Helena College","Adjunct/Part-Time Faculty",3
 "CTE - Health Sciences","2026-08-11","Montana State University","Instructor/Teacher/Faculty",3
 "CTE - Health Sciences","2026-08-11","Montana State University-Northern","Adjunct/Part-Time Faculty",1
 "CTE - Health Sciences","2026-08-11","Montana State University-Northern","Instructor/Teacher/Faculty",1
-"CTE - Health Sciences","2026-08-11","Salish Kootenai College","Instructor/Teacher/Faculty",1
+"CTE - Health Sciences","2026-08-11","Salish Kootenai College","Adjunct/Part-Time Faculty",1
 "CTE - Health Sciences","2026-08-11","Stone Child College","Instructor/Teacher/Faculty",1
 "CTE - Health Sciences","2026-08-11","University of Providence","Adjunct/Part-Time Faculty",1
 "CTE - Trades & Engineering","2026-08-11","Aaniiih Nakoda College","Instructor/Teacher/Faculty",1
+"CTE - Trades & Engineering","2026-08-11","Dawson Community College","Adjunct/Part-Time Faculty",1
 "CTE - Trades & Engineering","2026-08-11","Dawson Community College","Instructor/Teacher/Faculty",1
 "CTE - Trades & Engineering","2026-08-11","Flathead Valley Community College","Adjunct/Part-Time Faculty",2
 "CTE - Trades & Engineering","2026-08-11","Helena College","Instructor/Teacher/Faculty",1
@@ -188,6 +189,7 @@
 "Language","2026-08-11","Montana State University","Instructor/Teacher/Faculty",3
 "Legal","2026-08-11","Montana State University","Instructor/Teacher/Faculty",1
 "Library","2026-08-11","Montana State University","Instructor/Teacher/Faculty",2
+"Math","2026-08-11","Flathead Valley Community College","Instructor/Teacher/Faculty",1
 "Math","2026-08-11","Little Big Horn College","Instructor/Teacher/Faculty",1
 "Math","2026-08-11","Montana State University","Instructor/Teacher/Faculty",2
 "Physical Education","2026-08-11","Montana State University","Instructor/Teacher/Faculty",1
@@ -204,17 +206,19 @@
 "The Arts","2026-08-11","Montana State University","Instructor/Teacher/Faculty",2
 "The Arts","2026-08-11","Rocky Mountain College","Adjunct/Part-Time Faculty",1
 "Uncategorized","2026-08-11","Aaniiih Nakoda College","Instructor/Teacher/Faculty",1
+"Uncategorized","2026-08-11","Carroll College","Adjunct/Part-Time Faculty",2
 "Uncategorized","2026-08-11","Carroll College","Instructor/Teacher/Faculty",1
 "Uncategorized","2026-08-11","Flathead Valley Community College","Adjunct/Part-Time Faculty",4
 "Uncategorized","2026-08-11","Flathead Valley Community College","Instructor/Teacher/Faculty",1
 "Uncategorized","2026-08-11","Great Falls College MSU","Adjunct/Part-Time Faculty",3
 "Uncategorized","2026-08-11","Great Falls College MSU","Instructor/Teacher/Faculty",1
 "Uncategorized","2026-08-11","Little Big Horn College","Instructor/Teacher/Faculty",1
-"Uncategorized","2026-08-11","Miles Community College","Adjunct/Part-Time Faculty",1
+"Uncategorized","2026-08-11","Miles Community College","Adjunct/Part-Time Faculty",2
 "Uncategorized","2026-08-11","Miles Community College","Instructor/Teacher/Faculty",1
 "Uncategorized","2026-08-11","Montana State University","Instructor/Teacher/Faculty",39
-"Uncategorized","2026-08-11","Montana State University Billings","Instructor/Teacher/Faculty",2
-"Uncategorized","2026-08-11","Montana Tech","Adjunct/Part-Time Faculty",2
+"Uncategorized","2026-08-11","Montana State University Billings","Adjunct/Part-Time Faculty",1
+"Uncategorized","2026-08-11","Montana State University Billings","Instructor/Teacher/Faculty",1
+"Uncategorized","2026-08-11","Montana Tech","Adjunct/Part-Time Faculty",3
 "Uncategorized","2026-08-11","Montana Tech","Instructor/Teacher/Faculty",1
 "Uncategorized","2026-08-11","Rocky Mountain College","Instructor/Teacher/Faculty",1
 "Uncategorized","2026-08-11","Salish Kootenai College","Instructor/Teacher/Faculty",5
