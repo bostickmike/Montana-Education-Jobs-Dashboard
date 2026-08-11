@@ -12,13 +12,16 @@ One row per open K-12 posting, all position types (not just teachers). Rebuilt f
 
 | Column | Type | Notes |
 |---|---|---|
-| `title` | text | Job title as posted. Passed through `fix_title_encoding()` at ingestion. |
+| `title` | text | Job title as posted. `normalize_posting_text()` preserves valid UTF-8, repairs only invalid raw CP1252 bytes, and trims CR/whitespace at ingestion. |
 | `Archive_Date` | date | The date this snapshot was scraped. |
 | `date_posted` | text | Original posted-date text, format varies by source platform. |
 | `position` | text | Coarse bucket from `classify_k12_position()` (Teacher, Support Services, Administration, etc. — see `k12_he_classification.R` for the full list). |
 | `location` | text | School/site name or district office, as scraped — format varies a lot by source platform. |
-| `url` | text | The district's job-board URL (one per district, not a per-posting deep link) for direct-scraped rows. For OPI statewide-feed rows, this is the shared statewide listing URL instead — see that source's own note below. |
+| `url` | text | A direct per-posting URL when the source exposes one; otherwise its board/listing URL. OPI uses its shared statewide listing URL — see that source's own note below. |
 | `District` | text | Canonical district name for directly-scraped districts (`canonicalize_k12_district()` applied). For OPI statewide-feed rows, this is the posting's raw City value instead — **not a canonical legal district name**, since the OPI feed exposes no district field at all. See "OPI statewide feed" below. |
+| `Posting_Source` | text | Provenance shown in the Jobs Table and CSV export, e.g. the direct platform or `"OPI Jobs for Teachers (statewide)"`. |
+| `Posting_Identity_Method` | text | `"Stable per-posting URL"` where a source provides one; otherwise an explicit source/OPI fallback description. |
+| `Posting_ID` | text | Internal key used consistently for current counts, vacancy numerators, trends, and New This Week. See "Posting identity" below. |
 
 **Sources combined into this file**: AppliTrack, SchoolSpring, Tyler Portico, and TedK12 direct-district scrapes (`k12_district_registry.csv`'s directly-scraped districts), plus OPI's "Jobs for Teachers" statewide feed. An OPI row is removed only when its normalized title and posted date match a direct-board row in the same registered city; city-only filtering is deliberately not used, because it would hide independent employers that share a city with a covered district.
 
@@ -34,6 +37,7 @@ Row-level history of every Teacher-position posting ever scraped, one row per po
 | `location` | text | |
 | `url` | text | |
 | `District` | text | Canonical district name (or a raw OPI City value — see `combinedclean.csv` above). |
+| `Posting_Source` / `Posting_Identity_Method` / `Posting_ID` | text | Carried from `combinedclean.csv` so historical counts and week-over-week matching use the same identity contract as the current snapshot. |
 | `Category` | text | Fine-grained subject from `classify_k12_subject()`. |
 | `Broad_Category` | text | Coarser grouping from `classify_k12_broad_category()`; this is what the app's category color palettes and pickers use. |
 
@@ -46,7 +50,8 @@ One row per (`Broad_Category`, `Archive_Date`, `District`) combination, **plus**
 | `Broad_Category` | text | |
 | `Archive_Date` | date | |
 | `District` | text | A real district name, an OPI City value, or `"Total"`. |
-| `sum` | integer | Distinct (`title`, `location`) postings that run — deduplicated on the pair, not `title` alone, since two schools can legitimately post the same generic title. |
+| `Sum` | integer | Distinct `Posting_ID` values, using the same contract as `allsum.csv`. |
+| `sum` | integer | Distinct `Posting_ID` values in that run. |
 
 ### `allnow.csv` — current-run category counts
 
@@ -66,11 +71,11 @@ One row per (`District`, `Archive_Date`), counting **every** position type, not 
 |---|---|---|
 | `District` | text | |
 | `Archive_Date` | date | |
-| `n` | integer | All postings that district had that run, any position type. |
+| `n` | integer | Distinct `Posting_ID` values for all position types that district had that run. |
 
 ### `k12_salary_history.csv` — multi-year K-12 salary archive
 
-Ported from the Wyoming Education Jobs Dashboard's own equivalent file. MT DLI publishes no historical archive of its own (only the current edition's PDFs are ever published, confirmed live) — this is this project's own accumulating record, one snapshot appended per new `Salary_Year` DLI publishes (not one row per weekly run; `needs_k12_salary_archive_update()` in `salary_scrapers.R` guards against duplicate-year appends). **Not currently read by `app.R`** — it exists to grow into a real multi-year trend as more `Salary_Year`s accumulate, the same way `salarymap.csv`'s `Faculty_Avg_Salary_Y1Ago`/`Y2Ago` already work on the HE side via IPEDS's deeper history. Columns are MT's own DLI shape, not Wyoming's WSBA-shaped `Teacher_Base_Salary`/`Superintendent_Salary` — MT genuinely has neither of those (see `salarymap2.csv`'s section below).
+Ported from the Wyoming Education Jobs Dashboard's own equivalent file. MT DLI publishes no historical archive of its own (only the current edition's PDFs are ever published, confirmed live) — this is this project's own accumulating record, one row per district and `Salary_Year`. `archive_k12_salary_snapshot()` adds a genuinely new year and also backfills missing district/year pairs after a partial prior write; repeating a complete snapshot is a no-op. **Not currently read by `app.R`** — it exists to grow into a real multi-year trend as more `Salary_Year`s accumulate, the same way `salarymap.csv`'s `Faculty_Avg_Salary_Y1Ago`/`Y2Ago` already work on the HE side via IPEDS's deeper history. Columns are MT's own DLI shape, not Wyoming's WSBA-shaped `Teacher_Base_Salary`/`Superintendent_Salary` — MT genuinely has neither of those (see `salarymap2.csv`'s section below).
 
 | Column | Type | Notes |
 |---|---|---|
@@ -104,17 +109,36 @@ One current row per this project's **32 directly-scraped K-12 districts** (`k12_
 | `ACS_Year` | integer | Census ACS 5-Year | The ACS 5-Year vintage's end year — the real freshness signal for the four columns above. |
 | `Child_Poverty_Rate` | numeric | Census SAIPE | **District-level.** Montana's districts aren't uniformly "unified" the way Wyoming's 48 are — SAIPE reports a separate elementary-district rate and high-school-district rate for 28 of this project's 32 mapped districts (the other 4 are already-unified K-12 districts). A split district's `Child_Poverty_Rate` here is a **plain, unweighted average** of its elementary and secondary rates (`MT_SAIPE_DISTRICT_MAP` in `census_saipe_scraper.R`) — a documented simplification, not an enrollment-weighted or otherwise authoritative single figure. |
 | `SAIPE_Year` | integer | Census SAIPE | The real freshness signal for `Child_Poverty_Rate`. |
-| `Total_General_Fund_Expenditure` | numeric | OPI School Finance Data Files | A genuinely different data category from the salary/staffing columns above — the district's real total General Fund (day-to-day operating budget) spending for the fiscal year, not a per-teacher or per-pupil figure. Summed across 1–2 real per-district LE line items the same way `Teachers_Total_FTE` is (`MT_OPI_FINANCE_LEA_MAP` in `opi_finance_scraper.R`) — General Fund only (OPI's own FundCode `"01"`), deliberately excluding debt service, building reserve, and school food service funds so this figure means "operating budget," not "every dollar the district touched." Found 2026-08-07 via OPI's own published `.xlsx` financial data files (`opi.mt.gov/Leadership/Finance-Grants/School-Finance/OPI-Financial-Data-Files`) — real per-district data OPI publishes going back to FY2011, previously untapped by this project. |
+| `Total_General_Fund_Expenditure` | numeric | OPI School Finance Data Files | A genuinely different data category from the salary/staffing columns above — the district's real total General Fund (day-to-day operating budget) spending for the fiscal year, not a per-teacher or per-pupil figure. Summed across 1–2 real per-district LE line items the same way `Teachers_Total_FTE` is (`MT_OPI_FINANCE_LEA_MAP` in `opi_finance_scraper.R`) — General Fund only (OPI's own FundCode `"01"`), deliberately excluding debt service, building reserve, and school food service funds so this figure means "operating budget," not "every dollar the district touched." Shown in the District Summary with its fiscal year; it is not normalized into a misleading per-pupil/per-teacher metric. Found 2026-08-07 via OPI's own published `.xlsx` financial data files (`opi.mt.gov/Leadership/Finance-Grants/School-Finance/OPI-Financial-Data-Files`) — real per-district data OPI publishes going back to FY2011, previously untapped by this project. |
 | `Finance_FY` | text | OPI School Finance | The state fiscal year (e.g. `"2025"`) the expenditure figure covers — extracted from the workbook's own `StateFY` column, not hardcoded. |
 | `Finance_Source` | text | OPI School Finance | Literal string naming the source. |
 
 **No per-district superintendent salary or contract-days column exists in this file** — unlike Wyoming's `Superintendent_Salary`/`Superintendent_Contract_Days` (from WSBA), no public Montana source for a *per-district* figure was found (those numbers are public record but scattered across ~393 individual district board minutes/contracts with no statewide clearinghouse). A real *statewide aggregate* superintendent salary figure does exist, however — OPI's Statewide Longitudinal Data System publishes occasional research PDFs (not a recurring feed) with real numbers, e.g. mean superintendent compensation among advanced-degree holders ($104,678.69, N=22, FY2023) — found 2026-08-07 but not wired into any dataset here, since it's aggregate-only and a one-off publication rather than a per-district, re-fetchable source.
 
+### Posting identity
+
+The pipeline assigns one `Posting_ID` before any K-12 current count, vacancy
+numerator, weekly total, `allnow.csv`/`allsum.csv` aggregate, trend, or New
+This Week comparison is made. A direct structured source uses its stable
+per-posting URL when one is available (SchoolSpring, Tyler Portico, TedK12,
+and direct PDF links are current examples). A listing/board URL is **not**
+mistaken for an ID because one board can hold many posts.
+
+Some direct sites expose no stable per-posting URL; their fallback combines
+source, district, normalized title, location, and posted date. OPI exposes
+less: title, raw location/city, posted date, and one shared session-driven
+listing URL. Its fallback is explicitly marked in `Posting_Identity_Method`
+and uses title + raw location + posted date. Equal fallback rows receive a
+count-preserving occurrence suffix rather than being silently deduplicated.
+That lets the dashboard count observed rows but does not claim OPI provides a
+stable ID; indistinguishable OPI rows cannot be resolved without new source
+fields.
+
 ### OPI statewide feed — a note, not a dataset of its own
 
 Montana's analog of Wyoming's WSBA vacancies page is the MT OPI "Jobs for Teachers" feed (`apps.opi.mt.gov/mtjobsforteachers/`), folded directly into `combinedclean.csv`/`k12jobanalysis.csv`/`allsum.csv` above rather than kept as a separate file — Wyoming's WSBA data gets the same "combined in, not separate" treatment. To avoid duplicate rows without losing independent employers that share a city with a covered district, OPI rows are removed only when their normalized title and posted date match a direct-board row in the same registered city. Two real limitations worth knowing before trusting a District value from this source: (1) `District` for these rows is a raw City string, not a canonical legal district name (the feed exposes no district field), and (2) the feed is an ASP.NET WebForms page with no stable per-posting URL — `url` for these rows is the shared statewide listing page, not a deep link, so it can't be used to jump straight to one specific posting.
 
-OPI is a statewide source, not a verified census of Montana vacancies. This project has not found published OPI submission rules or independently compared the feed against every district and employer, so its completeness must not be inferred from the word "statewide." OPI-only rows stay in the Jobs Table, but they are intentionally excluded from registry-backed map, District Summary, staffing, salary, and vacancy-rate views until they can be tied to a verified canonical district.
+OPI is a statewide source, not a verified census of Montana vacancies. This project has not found published OPI submission rules or independently compared the feed against every district and employer, so its completeness must not be inferred from the word "statewide." OPI-only rows are labeled `"OPI Jobs for Teachers (statewide)"` in the Jobs Table and export, but they are intentionally excluded from registry-backed map, District Summary, staffing, salary, and vacancy-rate views until they can be tied to a verified canonical district.
 
 ---
 

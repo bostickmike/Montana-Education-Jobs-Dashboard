@@ -298,12 +298,14 @@ parse_tedk12_postings <- function(html_text, url) {
   # column" warnings on the filter below.
   result <- rows %>%
     purrr::map_df(~{
-      title <- .x %>% rvest::html_node("td:nth-child(1) a") %>% rvest::html_text(trim = TRUE)
+      title_link <- .x %>% rvest::html_node("td:nth-child(1) a")
+      title <- title_link %>% rvest::html_text(trim = TRUE)
       date_posted <- .x %>% rvest::html_node("td:nth-child(2)") %>% rvest::html_text(trim = TRUE)
       position <- .x %>% rvest::html_node("td:nth-child(3)") %>% rvest::html_text(trim = TRUE)
       location <- .x %>% rvest::html_node("td:nth-child(4)") %>% rvest::html_text(trim = TRUE)
+      detail_url <- xml2::url_absolute(rvest::html_attr(title_link, "href"), url)
       data.frame(title = title, date_posted = date_posted, position = position,
-                 location = location, url = url, stringsAsFactors = FALSE)
+                 location = location, url = detail_url, stringsAsFactors = FALSE)
     })
 
   result[!is.na(result$title) & nzchar(result$title) & result$title != "Job Title", , drop = FALSE]

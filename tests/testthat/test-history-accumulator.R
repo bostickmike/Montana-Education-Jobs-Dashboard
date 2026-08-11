@@ -130,26 +130,31 @@ test_that("incrementally appending the latest week reproduces a full rebuild thr
   # incremental path builds them -- directly from the latest raw archive
   # file, not from re-reading everything.
   raw_latest <- read.csv(latest$file, colClasses = c("Archive_Date" = "character"))
-  raw_latest <- raw_latest[, setdiff(names(raw_latest), c("X", "date_posted")), drop = FALSE]
+  raw_latest <- raw_latest[, setdiff(names(raw_latest), "X"), drop = FALSE]
   raw_latest$Archive_Date <- as.character(as.Date(raw_latest$Archive_Date))
 
   this_week_combinedclean <- raw_latest %>%
+    mutate(across(any_of(c("title", "position", "location", "url", "District", "Posting_Source")),
+                  normalize_posting_text)) %>%
+    add_k12_posting_identity() %>%
+    distinct(Posting_ID, Archive_Date, .keep_all = TRUE) %>%
     mutate(position = classify_k12_position(title),
            District = canonicalize_k12_district(District)) %>%
-    select(title, Archive_Date, position, location, url, District)
+    select(title, Archive_Date, position, location, url, District,
+           Posting_Source, Posting_Identity_Method, Posting_ID)
 
   this_week_k12jobs <- this_week_combinedclean %>%
     filter(position == "Teacher") %>%
     mutate(Category = classify_k12_subject(title),
            Broad_Category = classify_k12_broad_category(Category)) %>%
-    select(title, Archive_Date, position, location, url, District, Category, Broad_Category)
+    select(title, Archive_Date, position, location, url, District,
+           Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
 
   this_week_weekly_totals <- this_week_combinedclean %>%
-    count(District, Archive_Date, name = "n")
+    group_by(District, Archive_Date) %>%
+    summarize(n = n_distinct(Posting_ID), .groups = "drop")
 
-  this_week_k12sumdistrict <- this_week_k12jobs %>%
-    group_by(Broad_Category, Archive_Date, District) %>%
-    summarize(sum = n_distinct(paste(title, location)), .groups = "drop")
+  this_week_k12sumdistrict <- summarize_k12_posting_counts(this_week_k12jobs)
   this_week_k12sum <- this_week_k12sumdistrict %>%
     group_by(Broad_Category, Archive_Date) %>%
     summarize(sum = sum(sum), .groups = "drop") %>%

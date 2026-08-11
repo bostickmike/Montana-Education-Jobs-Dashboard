@@ -1,5 +1,6 @@
 # Disaster-recovery / verification tool: rebuilds the K-12 accumulated
-# datasets (k12jobanalysis.csv, allsum.csv, k12_district_weekly_totals.csv)
+# datasets (combinedclean.csv, k12jobanalysis.csv, allsum.csv, allnow.csv,
+# k12_district_weekly_totals.csv)
 # from scratch by reprocessing every raw snapshot in Archivek12_Data/, the
 # same way the weekly pipeline used to do on every single run before
 # history_accumulator.R's incremental-append path replaced that. Ported
@@ -16,7 +17,9 @@
 #      rebuild through that same week would produce.
 #
 # Run directly (Rscript scripts/rebuild_k12_history_from_archive.R) to
-# actually rebuild and overwrite the files on disk; source() it from
+# actually rebuild and overwrite the files on disk. It derives current
+# Posting_ID/provenance fields deterministically from each archived row (OPI
+# is recognized by its known shared listing URL); source() it from
 # elsewhere (as the tests do) to get rebuild_k12_history_from_archive()
 # without triggering that.
 
@@ -31,32 +34,37 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data") {
   combined_k12_data <- csv_files %>%
     lapply(function(file) read.csv(file, colClasses = c("Archive_Date" = "character"))) %>%
     bind_rows() %>%
-    select(-any_of("X"), -any_of("date_posted"))
+    select(-any_of("X"))
 
   combined_k12_data <- combined_k12_data %>%
     mutate(Archive_Date = case_when(
       grepl("/", Archive_Date) ~ as.Date(Archive_Date, format = "%m/%d/%Y"),
       grepl("-", Archive_Date) ~ as.Date(Archive_Date, format = "%Y-%m-%d"),
       TRUE ~ as.Date(NA)
-    ))
+    )) %>%
+    mutate(across(any_of(c("title", "position", "location", "url", "District", "Posting_Source")),
+                  normalize_posting_text)) %>%
+    add_k12_posting_identity() %>%
+    distinct(Posting_ID, Archive_Date, .keep_all = TRUE)
 
   combinedclean <- combined_k12_data %>%
     mutate(position = classify_k12_position(title),
            District = canonicalize_k12_district(District)) %>%
-    dplyr::select(title, Archive_Date, position, location, url, District)
+    dplyr::select(title, Archive_Date, date_posted, position, location, url, District,
+                  Posting_Source, Posting_Identity_Method, Posting_ID)
 
   k12jobs <- combinedclean %>%
     filter(position == "Teacher") %>%
     mutate(Category = classify_k12_subject(title),
            Broad_Category = classify_k12_broad_category(Category)) %>%
-    select(title, Archive_Date, position, location, url, District, Category, Broad_Category)
+    select(title, Archive_Date, position, location, url, District,
+           Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
 
   k12_district_weekly_totals <- combinedclean %>%
-    count(District, Archive_Date, name = "n")
+    group_by(District, Archive_Date) %>%
+    summarize(n = n_distinct(Posting_ID), .groups = "drop")
 
-  k12sumdistrict <- k12jobs %>%
-    group_by(Broad_Category, Archive_Date, District) %>%
-    summarize(sum = n_distinct(paste(title, location)), .groups = "drop")
+  k12sumdistrict <- summarize_k12_posting_counts(k12jobs)
 
   k12sum <- k12sumdistrict %>%
     group_by(Broad_Category, Archive_Date) %>%
@@ -65,12 +73,23 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data") {
     select(Broad_Category, Archive_Date, District, sum)
 
   allsum <- bind_rows(k12sum, k12sumdistrict)
+  latest_k12sumdistrict <- k12sumdistrict %>%
+    filter(Archive_Date == max(Archive_Date))
+  allnow <- bind_rows(
+    latest_k12sumdistrict %>%
+      group_by(Broad_Category) %>%
+      summarize(Sum = sum(sum), .groups = "drop") %>%
+      mutate(District = "Total"),
+    latest_k12sumdistrict %>%
+      transmute(Broad_Category, Sum = sum, District)
+  )
 
   list(
-    combinedclean = combinedclean,
+    combinedclean = combinedclean %>% filter(Archive_Date == max(Archive_Date)),
     k12jobs = k12jobs,
     k12_district_weekly_totals = k12_district_weekly_totals,
-    allsum = allsum
+    allsum = allsum,
+    allnow = allnow
   )
 }
 
@@ -82,12 +101,15 @@ if (sys.nframe() == 0) {
   source("k12_he_classification.R")
   result <- rebuild_k12_history_from_archive()
 
+  write.csv(result$combinedclean, file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)
   write.csv(result$k12jobs, file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), row.names = FALSE)
   write.csv(result$allsum, file.path("Mt_Ed_Jobs", "allsum.csv"), row.names = FALSE)
+  write.csv(result$allnow, file.path("Mt_Ed_Jobs", "allnow.csv"), row.names = FALSE)
   write.csv(result$k12_district_weekly_totals, file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), row.names = FALSE)
 
-  cat("Rebuilt k12jobanalysis.csv (", nrow(result$k12jobs), " rows), allsum.csv (",
-      nrow(result$allsum), " rows), k12_district_weekly_totals.csv (",
+  cat("Rebuilt combinedclean.csv (", nrow(result$combinedclean), " rows), k12jobanalysis.csv (",
+      nrow(result$k12jobs), " rows), allsum.csv/allnow.csv (",
+      nrow(result$allsum), "/", nrow(result$allnow), " rows), k12_district_weekly_totals.csv (",
       nrow(result$k12_district_weekly_totals), " rows) from ",
       length(list.files("Archivek12_Data", pattern = "\\.csv$")), " archive snapshots.\n", sep = "")
 }

@@ -9,8 +9,10 @@
 # k12_salary_history.csv is deliberately absent since nothing in app.R
 # reads it yet (same as Wyoming's own equivalent file).
 REQUIRED_SCHEMAS <- list(
-  "combinedclean.csv" = c("title", "date_posted", "position", "location", "url", "District"),
-  "k12jobanalysis.csv" = c("title", "Archive_Date", "location", "District"),
+  "combinedclean.csv" = c("title", "date_posted", "position", "location", "url", "District",
+                          "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
+  "k12jobanalysis.csv" = c("title", "Archive_Date", "location", "District",
+                            "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
   "allsum.csv" = c("Broad_Category", "Archive_Date", "District", "sum"),
   "allnow.csv" = c("Broad_Category", "Sum", "District"),
   "k12_district_weekly_totals.csv" = c("District", "Archive_Date", "n"),

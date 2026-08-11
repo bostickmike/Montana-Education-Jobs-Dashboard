@@ -43,7 +43,8 @@ applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
 # through per-row.
 applitrack_df <- bind_rows(applitrack_results) %>%
   left_join(select(applitrack_districts, District, Job_Link), by = "District") %>%
-  transmute(title, date_posted, position = NA_character_, location, url = Job_Link, District)
+  transmute(title, date_posted, position = NA_character_, location, url = Job_Link, District,
+            Posting_Source = "AppliTrack (direct district board)")
 
 # SchoolSpring / Tyler Portico -- same output shape (Title/Location/
 # Posted_Date/Link), position is always recomputed from title downstream so
@@ -64,10 +65,12 @@ schoolspring_df <- bind_rows(schoolspring_results)
 if (nrow(schoolspring_df) > 0) {
   schoolspring_df <- schoolspring_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District)
+              location = Location, url = Link, District,
+              Posting_Source = "SchoolSpring (direct district board)")
 } else {
   schoolspring_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                                 location = character(0), url = character(0), District = character(0))
+                                 location = character(0), url = character(0), District = character(0),
+                                 Posting_Source = character(0))
 }
 
 tylerportico_districts <- registry[registry$Platform == "TylerPortico", ]
@@ -85,10 +88,12 @@ tylerportico_df <- bind_rows(tylerportico_results)
 if (nrow(tylerportico_df) > 0) {
   tylerportico_df <- tylerportico_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District)
+              location = Location, url = Link, District,
+              Posting_Source = "Tyler Portico (direct district board)")
 } else {
   tylerportico_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                                 location = character(0), url = character(0), District = character(0))
+                                 location = character(0), url = character(0), District = character(0),
+                                 Posting_Source = character(0))
 }
 
 # TedK12 -- output columns (title/date_posted/position/location/url) already
@@ -107,7 +112,11 @@ tedk12_results <- lapply(seq_len(nrow(tedk12_districts)), function(i) {
 tedk12_df <- bind_rows(tedk12_results)
 if (nrow(tedk12_df) == 0) {
   tedk12_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                           location = character(0), url = character(0), District = character(0))
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+} else {
+  tedk12_df <- tedk12_df %>%
+    mutate(Posting_Source = "TedK12 (direct district board)")
 }
 
 # Livingston and Lodge Grass have no structured ATS -- heuristic scrapers
@@ -129,10 +138,12 @@ livingston_df <- bind_rows(livingston_results)
 if (nrow(livingston_df) > 0) {
   livingston_df <- livingston_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District)
+              location = Location, url = Link, District,
+              Posting_Source = "Livingston district site (direct board)")
 } else {
   livingston_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                               location = character(0), url = character(0), District = character(0))
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
 }
 
 lodgegrass_districts <- registry[registry$Platform == "LodgeGrassHeuristic", ]
@@ -150,10 +161,12 @@ lodgegrass_df <- bind_rows(lodgegrass_results)
 if (nrow(lodgegrass_df) > 0) {
   lodgegrass_df <- lodgegrass_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District)
+              location = Location, url = Link, District,
+              Posting_Source = "Lodge Grass district site (direct board)")
 } else {
   lodgegrass_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                               location = character(0), url = character(0), District = character(0))
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
 }
 
 # Wolf Point and Plentywood both run Apptegy, a CMS whose pages need a
@@ -174,10 +187,12 @@ apptegy_raw <- safe_scrape(
 if (nrow(apptegy_raw) > 0) {
   apptegy_df <- apptegy_raw %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District)
+              location = Location, url = Link, District,
+              Posting_Source = "Apptegy district site (direct board)")
 } else {
   apptegy_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                            location = character(0), url = character(0), District = character(0))
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
 }
 ```
 
@@ -209,10 +224,12 @@ if (nrow(opi_df) > 0) {
   # DATA_COOKBOOK.md once that's written.
   opi_df <- opi_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District = Location)
+              location = Location, url = Link, District = Location,
+              Posting_Source = "OPI Jobs for Teachers (statewide)")
 } else {
   opi_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                        location = character(0), url = character(0), District = character(0))
+                        location = character(0), url = character(0), District = character(0),
+                        Posting_Source = character(0))
 }
 ```
 
@@ -247,11 +264,12 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%
-  mutate(Archive_Date = Sys.Date())
-
-# fix_title_encoding() applied once here, at the point titles first enter
-# the pipeline -- see k12_he_classification.R's own header for why.
-combined <- combined %>% mutate(title = fix_title_encoding(title))
+  mutate(
+    across(c(title, position, location, url, District, Posting_Source), normalize_posting_text),
+    Archive_Date = Sys.Date()
+  ) %>%
+  add_k12_posting_identity() %>%
+  distinct(Posting_ID, .keep_all = TRUE)
 
 if (!dir.exists("Archivek12_Data")) dir.create("Archivek12_Data")
 file_name <- paste0("combined_", Sys.Date(), ".csv")
@@ -260,7 +278,8 @@ write.csv(combined, file = file.path("Archivek12_Data", file_name), row.names = 
 combinedclean <- combined %>%
   mutate(position = classify_k12_position(title),
          District = canonicalize_k12_district(District)) %>%
-  select(title, Archive_Date, date_posted, position, location, url, District)
+  select(title, Archive_Date, date_posted, position, location, url, District,
+         Posting_Source, Posting_Identity_Method, Posting_ID)
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)
@@ -271,23 +290,23 @@ this_week_k12jobs <- combinedclean %>%
   filter(position == "Teacher") %>%
   mutate(Category = classify_k12_subject(title),
          Broad_Category = classify_k12_broad_category(Category)) %>%
-  select(title, Archive_Date, position, location, url, District, Category, Broad_Category)
+  select(title, Archive_Date, position, location, url, District,
+         Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
 
 k12jobs <- append_weekly_rows(file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), this_week_k12jobs)
 write.csv(k12jobs, file = file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), row.names = FALSE)
 
 this_week_district_totals <- combinedclean %>%
-  count(District, Archive_Date, name = "n")
+  group_by(District, Archive_Date) %>%
+  summarize(n = n_distinct(Posting_ID), .groups = "drop")
 k12_district_weekly_totals <- append_weekly_rows(
   file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), this_week_district_totals)
 write.csv(k12_district_weekly_totals, file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), row.names = FALSE)
 
-# Dedup key is title+location, not title alone -- two different schools can
-# legitimately post the same generic title. See Wyoming's equivalent chunk
-# for the full reasoning (unchanged here).
-this_week_k12sumdistrict <- this_week_k12jobs %>%
-  group_by(Broad_Category, Archive_Date, District) %>%
-  summarize(sum = n_distinct(paste(title, location)), .groups = "drop")
+# Every current and historical K-12 count uses the posting identity contract:
+# stable per-posting URLs where a source provides one, otherwise the explicit
+# source/OPI fallback documented in DATA_COOKBOOK.md.
+this_week_k12sumdistrict <- summarize_k12_posting_counts(this_week_k12jobs)
 
 this_week_k12sum <- this_week_k12sumdistrict %>%
   group_by(Broad_Category, Archive_Date) %>%
@@ -367,8 +386,8 @@ if (nrow(teacher_salary) > 0) {
 
   # Starts building a multi-year K-12 salary trend -- MT DLI has no public
   # historical archive (only the current edition's PDFs are ever
-  # published, confirmed live), so this only accumulates real history
-  # going forward, one snapshot per new Salary_Year.
+  # published, confirmed live). Complete snapshots are idempotent while a
+  # partial prior district/year set is safely backfilled.
   archive_k12_salary_snapshot(salarymap2, file.path("Mt_Ed_Jobs", "k12_salary_history.csv"))
 } else {
   message("MT DLI teacher compensation fetch failed -- leaving salarymap2.csv's salary columns untouched this run.")

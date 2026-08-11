@@ -16,7 +16,7 @@ test_that("parse_tedk12_postings extracts real Hardin, MT job rows from a real b
   result <- parse_tedk12_postings(html, "https://hardinpublic.tedk12.com/hire/index.aspx")
 
   expect_equal(nrow(result), 6)
-  expect_true(all(result$url == "https://hardinpublic.tedk12.com/hire/index.aspx"))
+  expect_true(all(grepl("^https://hardinpublic\\.tedk12\\.com/hire/ViewJob\\.aspx\\?JobID=", result$url)))
   # The sortable-column header row ("Job Title"/"Posting Date"/etc., not a
   # real posting) must not survive into the result.
   expect_false("Job Title" %in% result$title)

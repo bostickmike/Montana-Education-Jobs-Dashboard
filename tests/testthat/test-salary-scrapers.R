@@ -184,3 +184,25 @@ test_that("archive_k12_salary_snapshot skips archiving when Salary_Year isn't a 
   expect_false(archive_k12_salary_snapshot(inconsistent, history_path))
   expect_false(file.exists(history_path))
 })
+
+test_that("archive_k12_salary_snapshot backfills a partial existing district/year set idempotently", {
+  history_path <- withr::local_tempfile(fileext = ".csv")
+  salarymap2 <- data.frame(
+    District = c("Billings Public Schools", "Missoula County Public Schools"),
+    Salary_Year = c("2022-23", "2022-23"),
+    Teacher_Count = c(852, 542),
+    Teacher_Salary_10th_Pctile = c(45400, 42000),
+    Teacher_Avg_Salary = c(66100, 62800),
+    Teacher_Salary_90th_Pctile = c(82600, 83000),
+    stringsAsFactors = FALSE
+  )
+  write.csv(salarymap2[1, ], history_path, row.names = FALSE)
+
+  expect_true(archive_k12_salary_snapshot(salarymap2, history_path))
+  archived <- read.csv(history_path, stringsAsFactors = FALSE)
+  expect_setequal(archived$District, salarymap2$District)
+  expect_equal(nrow(archived), 2)
+
+  expect_false(archive_k12_salary_snapshot(salarymap2, history_path))
+  expect_equal(nrow(read.csv(history_path, stringsAsFactors = FALSE)), 2)
+})

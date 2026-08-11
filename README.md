@@ -6,7 +6,7 @@ A live, weekly-updated dashboard of K-12 and higher education job openings from 
 
 - **Map** — every K-12 district and higher-ed institution with a current opening, plotted with two dimensions at once: circle size for number of openings, circle color for vacancy rate (openings as a share of teaching/faculty staff).
 - **Home** — headline KPIs (with week-over-week deltas), top-hiring tables with trend sparklines, "biggest mover" callouts, and leaderboards for highest vacancy rate.
-- **Jobs Tables** — every open posting, filterable and exportable (copy/CSV/print), per district or institution.
+- **Jobs Tables** — every open posting, filterable and exportable (copy/CSV/print), per district or institution; K-12 exports include source provenance.
 - **District Summary / Institution Summary** — one row per district or college with current openings, vacancy rate, and salary figures, fully exportable.
 - **Longitudinal Trends** — postings over time by subject/category, with a Simple or Detailed category toggle so the chart stays readable either way.
 - **Current Trends** — a compact table per category: current count, a trend sparkline, and change vs. a month/quarter/year ago.
@@ -34,9 +34,11 @@ MT DLI publishes only the current year's Teacher Compensation Report with no pub
 
 ### K-12 coverage and scope
 
-The K-12 Jobs Table combines 32 directly scraped district boards with OPI's statewide Jobs for Teachers feed. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
+The K-12 Jobs Table combines 32 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
 
-The Map and District Summary deliberately show only directly scraped districts: those records can be matched to verified district identities, coordinates, staffing, and salary data. OPI-only rows remain in the Jobs Table, but OPI exposes a raw location field rather than a canonical district identifier, so they cannot be reliably joined to district context or mapped.
+The Map and District Summary deliberately show only directly scraped districts: those records can be matched to verified district identities, coordinates, staffing, salary, and OPI General Fund expenditure data. OPI-only rows remain in the Jobs Table, but OPI exposes a raw location field rather than a canonical district identifier, so they cannot be reliably joined to district context or mapped.
+
+K-12 current counts, vacancy numerators, longitudinal totals, and New This Week use one posting-identity contract. Stable per-posting URLs/IDs are used when structured sources provide them; sites without one use an explicit fallback. OPI's fallback is necessarily title + raw location + posted date and retains equal observed rows rather than claiming OPI gives a stable identifier. See `DATA_COOKBOOK.md` for the exact method and limits.
 
 ## Automation
 
@@ -61,7 +63,7 @@ A GitHub Actions workflow runs weekly (Tuesdays — deliberately not Wyoming's F
 - `history_accumulator.R` — appends each week's newly classified rows onto the existing accumulated datasets (idempotent, schema-checked) instead of reprocessing the full raw archive every run.
 - `k12_district_registry.csv` / `he_institution_registry.csv` — the hand-maintained list of every directly-scraped district/institution, its platform, and its real feed/job-board URL.
 - `RESEARCH_NOTES.md` — the original WY→MT scoping research (district counts, salary-source gap, FIPS codes) that shaped every structural decision in this port.
-- `Archivek12_Data/`, `Archived_HE_Data/` — one dated raw snapshot per week, still written every run as the durable source of truth. `scripts/rebuild_*_history_from_archive.R` rebuild the accumulated datasets from these from scratch, for disaster recovery or to verify the incremental path hasn't drifted.
+- `Archivek12_Data/`, `Archived_HE_Data/` — one dated raw snapshot per week, still written every run as the durable source of truth. `scripts/rebuild_*_history_from_archive.R` rebuild the accumulated datasets from these from scratch, for disaster recovery or to verify the incremental path hasn't drifted. Run `Rscript scripts/rebuild_k12_history_from_archive.R` to deterministically migrate K-12 derived data to the current identity/provenance schema from committed archives.
 - `tests/testthat/` — the test suite, built almost entirely on real captured fixtures (real scraped HTML, real downloaded PDFs, real API responses) rather than synthetic data.
 - `.github/workflows/weekly-scrape.yml` — the automation described above.
 

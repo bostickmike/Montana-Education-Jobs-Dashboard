@@ -54,6 +54,22 @@ summarize_he_faculty_postings <- function(titles) {
   )
 }
 
+# Keep the deployed app aligned with the pipeline's posting-identity
+# comparison without requiring the app bundle to source files above it.
+find_k12_new_postings <- function(k12_history) {
+  dates <- sort(unique(as.Date(k12_history$Archive_Date)))
+  if (length(dates) < 2) return(k12_history[0, , drop = FALSE])
+
+  latest <- dates[length(dates)]
+  previous <- dates[length(dates) - 1]
+  k12_history %>%
+    filter(as.Date(Archive_Date) == latest) %>%
+    anti_join(
+      k12_history %>% filter(as.Date(Archive_Date) == previous) %>% select(Posting_ID),
+      by = "Posting_ID"
+    )
+}
+
 # Sources that keep evergreen pools active may retain an original posting
 # date for years. Make that distinction visible without discarding a still-
 # open opportunity or inventing a newer date the source does not provide.
@@ -74,14 +90,19 @@ format_posted_or_listed_date <- function(dates, stale_after_days = 180) {
 # Load K-12 data
 #--------------------------------------------------
 combineddata <- read.csv("combinedclean.csv", fileEncoding = "UTF-8") %>%
-  validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url"), "combinedclean.csv") %>%
-  select(District, title, position, location, date_posted, url) %>%
+  validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url",
+                            "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
+                          "combinedclean.csv") %>%
+  select(District, title, position, location, date_posted, url,
+         Posting_Source, Posting_Identity_Method, Posting_ID) %>%
+  distinct(Posting_ID, .keep_all = TRUE) %>%
   mutate(District = str_squish(as.character(District))) %>%
   mutate(date_posted = format_posted_or_listed_date(date_posted)) %>%
   arrange(District, title) %>%
   mutate(url = paste0('<a href="', url, '" target="_blank">', url, '</a>')) %>%
   rename(Title = title, Position = position, Location = location,
-         `Posted / listed` = date_posted, Link = url)
+         `Posted / listed` = date_posted, Link = url,
+         Source = Posting_Source, `Identity method` = Posting_Identity_Method)
 
 # salarymap2.csv covers only this project's directly-scraped districts
 # (k12_district_registry.csv), not Montana's full ~398-district universe --
@@ -95,9 +116,11 @@ mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
                              "Teacher_Salary_90th_Pctile", "Salary_Year", "Salary_Source",
                              "Teachers_Total_FTE", "Enrollment",
                              "Median_Household_Income", "Median_Gross_Rent", "Mining_Employment_Share",
-                             "Population_Change_Pct", "ACS_Year", "Child_Poverty_Rate", "SAIPE_Year"),
+                             "Population_Change_Pct", "ACS_Year", "Child_Poverty_Rate", "SAIPE_Year",
+                             "Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"),
                            "salarymap2.csv") %>%
-  rename(Name = District)
+  rename(Name = District) %>%
+  mutate(Finance_FY = as.character(Finance_FY))
 
 # Weekly ALL-category posting totals per district/institution -- powers the
 # sparkline trend next to each entity's raw count on the Top Hiring tables.
@@ -301,7 +324,7 @@ k12nowsum <- read.csv("allnow.csv", fileEncoding = "UTF-8") %>%
                                         "Special Education - Resource/Life Skills" = "SpEd - Resource/LS",
                                         "CTE - Trades, Ag & Technical" = "CTE - Trades/Ag",
                                         "CTE - Business & Family Sciences" = "CTE - Biz/Family"),
-         District = str_squish(iconv(District, from = "", to = "UTF-8"))) %>%
+         District = str_squish(as.character(District))) %>%
   filter(Broad_Category != "Other")
 
 #--------------------------------------------------
@@ -346,6 +369,23 @@ henowsum_he <- read.csv("allnow_he.csv") %>%
   filter(Category != "Uncategorized")
 
 last_refreshed_date <- format(max(k12sum$Archive_Date, hesum_he$Archive_Date, na.rm = TRUE), "%B %d, %Y")
+
+bounded_timeline_value <- function(dates, days = 365) {
+  latest <- max(dates)
+  c(max(min(dates), latest - days), latest)
+}
+
+timeline_history_note <- function(dates) {
+  span <- as.integer(max(dates) - min(dates))
+  if (span < 365) {
+    paste0("Only ", span, " days of archived history are currently available.")
+  } else {
+    ""
+  }
+}
+
+k12_timeline_value <- bounded_timeline_value(k12sum$Archive_Date)
+he_timeline_value <- bounded_timeline_value(hesum_he$Archive_Date, days = WINDOW_WEEKS * 7)
 
 #--------------------------------------------------
 # Category collapse maps -- keyed on classify_k12_broad_category()/
@@ -457,21 +497,11 @@ HE_JOB_TYPE_COLORS <- c(
 # archived run.
 #--------------------------------------------------
 k12_history <- read.csv("k12jobanalysis.csv", fileEncoding = "UTF-8") %>%
-  validate_and_pad_schema(c("title", "Archive_Date", "location", "District"), "k12jobanalysis.csv") %>%
+  validate_and_pad_schema(c("title", "Archive_Date", "location", "District", "Posting_ID"),
+                          "k12jobanalysis.csv") %>%
   mutate(Archive_Date = as.Date(Archive_Date))
 
-k12_new_this_week <- {
-  dates <- sort(unique(k12_history$Archive_Date))
-  if (length(dates) >= 2) {
-    latest <- dates[length(dates)]
-    previous <- dates[length(dates) - 1]
-    k12_history %>%
-      filter(Archive_Date == latest) %>%
-      anti_join(k12_history %>% filter(Archive_Date == previous), by = c("title", "location", "District"))
-  } else {
-    k12_history[0, ]
-  }
-}
+k12_new_this_week <- find_k12_new_postings(k12_history)
 
 he_history <- read.csv("facultydata.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("Title", "Location", "Institution", "Link", "Archive_Date", "Job_Type", "Category"), "facultydata.csv") %>%
@@ -522,7 +552,8 @@ IPEDS_SALARY_SOURCE_URL <- "https://educationdata.urban.org"
 
 k12_teacher_current_counts <- k12_history %>%
   filter(Archive_Date == max(Archive_Date)) %>%
-  count(District, name = "TeacherCurrentCount")
+  group_by(District) %>%
+  summarize(TeacherCurrentCount = n_distinct(Posting_ID), .groups = "drop")
 
 map_k12 <- mapdata2_k12 %>%
   left_join(k12_current_counts, by = c("Name" = "District")) %>%
@@ -553,7 +584,7 @@ map_k12 <- mapdata2_k12 %>%
          Vacancy_Rate, Vacancy_Numerator, Vacancy_Denominator, Salary_Source, County,
          Enrollment, Students_Per_Teacher, Enrollment_Change_Pct, Pell_Recipient_Share, Pell_Year,
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
-         Child_Poverty_Rate, SAIPE_Year)
+         Child_Poverty_Rate, SAIPE_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source)
 
 he_current_counts <- ccdata %>% count(Institution, name = "CurrentCount")
 he_sample_titles <- ccdata %>%
@@ -584,7 +615,9 @@ map_he <- mapdata2_he %>%
     Teacher_Avg_Salary = NA_real_, Teacher_Salary_90th_Pctile = NA_real_,
     Students_Per_Teacher = ifelse(!is.na(Faculty_Count) & Faculty_Count > 0,
                                    Enrollment / Faculty_Count, NA_real_),
-    Child_Poverty_Rate = NA_real_, SAIPE_Year = NA_integer_
+    Child_Poverty_Rate = NA_real_, SAIPE_Year = NA_integer_,
+    Total_General_Fund_Expenditure = NA_real_, Finance_FY = NA_character_,
+    Finance_Source = NA_character_
   ) %>%
   select(Name, Longitude, Latitude, Type, CurrentCount, WeeklyNew, SampleTitles,
          Link, Teacher_Count, Teacher_Salary_10th_Pctile, Teacher_Avg_Salary,
@@ -594,7 +627,7 @@ map_he <- mapdata2_he %>%
          Vacancy_Rate, Vacancy_Numerator, Vacancy_Denominator, Salary_Source, County,
          Enrollment, Students_Per_Teacher, Enrollment_Change_Pct, Pell_Recipient_Share, Pell_Year,
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
-         Child_Poverty_Rate, SAIPE_Year)
+         Child_Poverty_Rate, SAIPE_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source)
 
 combined_map_data <- bind_rows(map_k12, map_he)
 
@@ -738,6 +771,7 @@ ui <- dashboardPage(
 
       tabItem(
         tabName = "k12_table",
+        helpText("Source is included in this table and its exports. OPI Jobs for Teachers rows use OPI's raw employer/location label, not a canonical district identifier."),
         uiOutput("k12_filter_status"),
         DTOutput("k12_jobs")
       ),
@@ -787,13 +821,13 @@ ui <- dashboardPage(
           )
         ),
 
+        div(style = "color:#777; font-size:0.9em;", textOutput("k12_slider_label")),
         sliderInput(
           "k12_scroll",
           "Scroll timeline:",
           min = min(k12sum$Archive_Date),
           max = max(k12sum$Archive_Date),
-          value = c(max(k12sum$Archive_Date) - 365,
-                    max(k12sum$Archive_Date)),
+          value = k12_timeline_value,
           timeFormat = "%Y-%m-%d",
           width = "100%"
         ),
@@ -879,10 +913,7 @@ ui <- dashboardPage(
           "Scroll timeline:",
           min = min(hesum_he$Archive_Date),
           max = max(hesum_he$Archive_Date),
-          value = c(
-            max(hesum_he$Archive_Date) - 365,
-            max(hesum_he$Archive_Date)
-          ),
+          value = he_timeline_value,
           timeFormat = "%Y-%m-%d",
           width = "100%"
         ),
@@ -1063,7 +1094,9 @@ server <- function(input, output, session) {
   # -------- New This Week --------
   output$k12_new_table <- renderDT({
     datatable(
-      k12_new_this_week %>% select(title, District, location, Broad_Category, url),
+      k12_new_this_week %>%
+        select(title, District, location, Broad_Category, Posting_Source,
+               Posting_Identity_Method, url),
       options = list(scrollX = TRUE)
     )
   })
@@ -1103,6 +1136,8 @@ server <- function(input, output, session) {
     k12_rows <- combined_map_data %>% filter(Type == "K-12 District")
     year <- unique(na.omit(k12_rows$Salary_Year))
     salary_year_label <- if (length(year) > 0) year[1] else "current year"
+    finance_year <- unique(na.omit(k12_rows$Finance_FY))
+    finance_year_label <- if (length(finance_year) > 0) finance_year[1] else "current fiscal year"
 
     df <- k12_rows %>%
       arrange(desc(CurrentCount)) %>%
@@ -1119,6 +1154,10 @@ server <- function(input, output, session) {
           is.na(Teacher_Salary_10th_Pctile) | is.na(Teacher_Salary_90th_Pctile), NA_character_,
           paste0(scales::dollar(Teacher_Salary_10th_Pctile), " - ", scales::dollar(Teacher_Salary_90th_Pctile))
         ),
+        GeneralFundExpenditure = ifelse(
+          is.na(Total_General_Fund_Expenditure), NA_character_,
+          scales::dollar(Total_General_Fund_Expenditure)
+        ),
         `County Median Income` = ifelse(is.na(Median_Household_Income), NA_character_, scales::dollar(Median_Household_Income)),
         `County Median Rent` = ifelse(is.na(Median_Gross_Rent), NA_character_, paste0(scales::dollar(Median_Gross_Rent), "/mo")),
         `County Mining/Energy Jobs` = ifelse(is.na(Mining_Employment_Share), NA_character_, scales::percent(Mining_Employment_Share, accuracy = 0.1)),
@@ -1127,6 +1166,7 @@ server <- function(input, output, session) {
         `District Child Poverty Rate` = ifelse(is.na(Child_Poverty_Rate), NA_character_, scales::percent(Child_Poverty_Rate, accuracy = 0.1))
       )
     names(df)[names(df) == "Teacher Avg Salary"] <- paste0("Teacher Avg Salary (", salary_year_label, ")")
+      names(df)[names(df) == "GeneralFundExpenditure"] <- paste0("General Fund Expenditure (FY", finance_year_label, ")")
 
     datatable(df, filter = "top", extensions = "Buttons",
               options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 18))
@@ -1135,6 +1175,8 @@ server <- function(input, output, session) {
   output$k12_summary_footnote <- renderUI({
     year <- unique(na.omit(combined_map_data$Salary_Year[combined_map_data$Type == "K-12 District"]))
     source <- unique(na.omit(combined_map_data$Salary_Source[combined_map_data$Type == "K-12 District"]))
+    finance_fy <- unique(na.omit(combined_map_data$Finance_FY[combined_map_data$Type == "K-12 District"]))
+    finance_source <- unique(na.omit(combined_map_data$Finance_Source[combined_map_data$Type == "K-12 District"]))
     acs_year <- unique(na.omit(combined_map_data$ACS_Year[combined_map_data$Type == "K-12 District"]))
     saipe_year <- unique(na.omit(combined_map_data$SAIPE_Year[combined_map_data$Type == "K-12 District"]))
     req(length(year) > 0, length(source) > 0)
@@ -1144,6 +1186,12 @@ server <- function(input, output, session) {
         tags$a(href = DLI_SALARY_SOURCE_URL, target = "_blank", "lmi.mt.gov"),
         ". Average salary and 10th/90th percentile band -- not a contract base salary."
       ),
+      if (length(finance_fy) > 0 && length(finance_source) > 0) {
+        helpText(
+          "General Fund expenditure:", finance_source[1], paste0("(FY", finance_fy[1], ")."),
+          "This is total day-to-day operating spending, not per-pupil or per-teacher spending."
+        )
+      },
       if (length(acs_year) > 0) {
         helpText(
           "County context (income, rent, mining/energy employment share, population trend): US Census Bureau, American Community Survey 5-Year Estimates",
@@ -1354,6 +1402,20 @@ server <- function(input, output, session) {
     ggplotly(p, height = 500, tooltip = "text")
   })
 
+  output$k12_slider_label <- renderText({
+    req(input$k12_scroll)
+    paste(
+      c(
+        timeline_history_note(k12sum$Archive_Date),
+        paste0("Showing: ", input$k12_scroll[1], " to ", input$k12_scroll[2])
+      )[nzchar(c(
+        timeline_history_note(k12sum$Archive_Date),
+        paste0("Showing: ", input$k12_scroll[1], " to ", input$k12_scroll[2])
+      ))],
+      collapse = " "
+    )
+  })
+
   output$k12_current_trends_table <- renderTable({
     req(input$k12_detail_level_current)
     hist_src <- if (identical(input$k12_detail_level_current, "detail")) k12sum else k12sum_agg
@@ -1509,7 +1571,7 @@ server <- function(input, output, session) {
       "he_scroll",
       min = min(he_dates),
       max = max(he_dates),
-      value = c(max(he_dates) - WINDOW_WEEKS*7, max(he_dates)),
+      value = bounded_timeline_value(he_dates, days = WINDOW_WEEKS * 7),
       timeFormat = "%Y-%m-%d"
     )
 
@@ -1531,7 +1593,16 @@ server <- function(input, output, session) {
 
   output$he_slider_label <- renderText({
     req(input$he_scroll)
-    paste0("Showing: ", input$he_scroll[1], " to ", input$he_scroll[2])
+    paste(
+      c(
+        timeline_history_note(hesum_he$Archive_Date),
+        paste0("Showing: ", input$he_scroll[1], " to ", input$he_scroll[2])
+      )[nzchar(c(
+        timeline_history_note(hesum_he$Archive_Date),
+        paste0("Showing: ", input$he_scroll[1], " to ", input$he_scroll[2])
+      ))],
+      collapse = " "
+    )
   })
 
   output$he_longitudinal_plot <- renderPlotly({
