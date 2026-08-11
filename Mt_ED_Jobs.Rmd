@@ -187,11 +187,13 @@ library(dplyr)
 source("scrape_helpers.R")
 source("direct_api_scrapers.R")
 
-# Montana's analog of Wyoming's WSBA vacancies page. OPI's feed is genuinely
-# statewide, including direct-scraper cities. It stays intact here; exact
-# posting-level overlaps with direct boards are removed only after every
-# source's date fields have been standardized below. This avoids losing
-# independent employers that happen to share a city with a covered district.
+# Montana's analog of Wyoming's WSBA vacancies page. OPI is a statewide
+# supplementary source, including direct-scraper cities, but its publication
+# rules and completeness have not been independently established. It stays
+# intact here; exact posting-level overlaps with direct boards are removed
+# only after every source's date fields have been standardized below. This
+# avoids losing independent employers that happen to share a city with a
+# covered district.
 opi_raw <- safe_scrape(
   "OPI Jobs for Teachers (statewide)",
   scrape_fn = fetch_opi_statewide_postings,

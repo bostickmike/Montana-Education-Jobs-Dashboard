@@ -1,6 +1,6 @@
 # Montana Education Jobs Dashboard
 
-A live, weekly-updated dashboard of K-12 and higher education job openings across Montana, with salary, staffing, and Census context data layered in for every district and institution. A port of the [Wyoming Education Jobs Dashboard](https://github.com/bostickmike/Wyoming-Education-Jobs-Dashboard), adapted rather than copied wholesale — see `RESEARCH_NOTES.md` for the real structural differences between the two states (district counts, salary-source availability, FIPS codes) that shaped the port.
+A live, weekly-updated dashboard of K-12 and higher education job openings from covered Montana sources, with salary, staffing, and Census context data for directly scraped districts and institutions. A port of the [Wyoming Education Jobs Dashboard](https://github.com/bostickmike/Wyoming-Education-Jobs-Dashboard), adapted rather than copied wholesale — see `RESEARCH_NOTES.md` for the real structural differences between the two states (district counts, salary-source availability, FIPS codes) that shaped the port.
 
 ## What it does
 
@@ -18,7 +18,7 @@ K-12 covers 32 directly-scraped districts (not Montana's full ~398-district univ
 
 | Data | Source |
 |---|---|
-| K-12 job postings | Each district's own job board (see platform list above), plus OPI's statewide "Jobs for Teachers" feed for districts without their own structured board |
+| K-12 job postings | Each covered district's own job board, plus OPI's statewide "Jobs for Teachers" feed; direct-board duplicates are reconciled at the posting level |
 | Higher ed job postings | Each institution's own job board (see platform list above) |
 | K-12 teacher salary | Montana Dept. of Labor & Industry's annual "Teacher Compensation Report" (9 regional PDFs) — reports average salary and 10th/90th percentile bands, not a base-salary figure; no superintendent salary source exists publicly at all (a real, confirmed gap, unlike Wyoming's WSBA) |
 | K-12 teacher staffing (for vacancy rate) | NCES Common Core of Data (CCD), via the [Urban Institute Education Data Portal](https://educationdata.urban.org) |
@@ -31,6 +31,12 @@ K-12 covers 32 directly-scraped districts (not Montana's full ~398-district univ
 | District-level child poverty rate | US Census Bureau, [Small Area Income and Poverty Estimates (SAIPE)](https://www.census.gov/programs-surveys/saipe/data/datasets.html), via the same Census Data API |
 
 MT DLI publishes only the current year's Teacher Compensation Report with no public archive, so multi-year K-12 salary history is captured and grown by this project's own weekly pipeline going forward (`k12_salary_history.csv`), one snapshot per new report edition. IPEDS is queryable by year directly, so higher-ed salary already shows multiple years back.
+
+### K-12 coverage and scope
+
+The K-12 Jobs Table combines 32 directly scraped district boards with OPI's statewide Jobs for Teachers feed. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
+
+The Map and District Summary deliberately show only directly scraped districts: those records can be matched to verified district identities, coordinates, staffing, and salary data. OPI-only rows remain in the Jobs Table, but OPI exposes a raw location field rather than a canonical district identifier, so they cannot be reliably joined to district context or mapped.
 
 ## Automation
 

@@ -17,10 +17,10 @@ One row per open K-12 posting, all position types (not just teachers). Rebuilt f
 | `date_posted` | text | Original posted-date text, format varies by source platform. |
 | `position` | text | Coarse bucket from `classify_k12_position()` (Teacher, Support Services, Administration, etc. — see `k12_he_classification.R` for the full list). |
 | `location` | text | School/site name or district office, as scraped — format varies a lot by source platform. |
-| `url` | text | The district's job-board URL (one per district, not a per-posting deep link) for direct-scraped rows. For OPI-statewide-fallback rows, this is the shared statewide listing URL instead — see that source's own note below. |
-| `District` | text | Canonical district name for the directly-scraped districts (`canonicalize_k12_district()` applied). For every other Montana district (surfaced only via the OPI statewide feed), this is that posting's raw City value instead — **not a canonical legal district name**, since the OPI feed exposes no district field at all. See "OPI statewide fallback feed" below. |
+| `url` | text | The district's job-board URL (one per district, not a per-posting deep link) for direct-scraped rows. For OPI statewide-feed rows, this is the shared statewide listing URL instead — see that source's own note below. |
+| `District` | text | Canonical district name for directly-scraped districts (`canonicalize_k12_district()` applied). For OPI statewide-feed rows, this is the posting's raw City value instead — **not a canonical legal district name**, since the OPI feed exposes no district field at all. See "OPI statewide feed" below. |
 
-**Sources combined into this file**: AppliTrack, SchoolSpring, Tyler Portico, and TedK12 direct-district scrapes (`k12_district_registry.csv`'s directly-scraped districts), plus the complete OPI "Jobs for Teachers" statewide feed. An OPI row is removed only when its normalized title and posted date match a direct-board row in the same registered city; city-only filtering is deliberately not used, because it would hide independent employers that share a city with a covered district.
+**Sources combined into this file**: AppliTrack, SchoolSpring, Tyler Portico, and TedK12 direct-district scrapes (`k12_district_registry.csv`'s directly-scraped districts), plus OPI's "Jobs for Teachers" statewide feed. An OPI row is removed only when its normalized title and posted date match a direct-board row in the same registered city; city-only filtering is deliberately not used, because it would hide independent employers that share a city with a covered district.
 
 ### `k12jobanalysis.csv` — full history, Teacher postings only
 
@@ -110,9 +110,11 @@ One current row per this project's **32 directly-scraped K-12 districts** (`k12_
 
 **No per-district superintendent salary or contract-days column exists in this file** — unlike Wyoming's `Superintendent_Salary`/`Superintendent_Contract_Days` (from WSBA), no public Montana source for a *per-district* figure was found (those numbers are public record but scattered across ~393 individual district board minutes/contracts with no statewide clearinghouse). A real *statewide aggregate* superintendent salary figure does exist, however — OPI's Statewide Longitudinal Data System publishes occasional research PDFs (not a recurring feed) with real numbers, e.g. mean superintendent compensation among advanced-degree holders ($104,678.69, N=22, FY2023) — found 2026-08-07 but not wired into any dataset here, since it's aggregate-only and a one-off publication rather than a per-district, re-fetchable source.
 
-### OPI statewide fallback feed — a note, not a dataset of its own
+### OPI statewide feed — a note, not a dataset of its own
 
 Montana's analog of Wyoming's WSBA vacancies page is the MT OPI "Jobs for Teachers" feed (`apps.opi.mt.gov/mtjobsforteachers/`), folded directly into `combinedclean.csv`/`k12jobanalysis.csv`/`allsum.csv` above rather than kept as a separate file — Wyoming's WSBA data gets the same "combined in, not separate" treatment. To avoid duplicate rows without losing independent employers that share a city with a covered district, OPI rows are removed only when their normalized title and posted date match a direct-board row in the same registered city. Two real limitations worth knowing before trusting a District value from this source: (1) `District` for these rows is a raw City string, not a canonical legal district name (the feed exposes no district field), and (2) the feed is an ASP.NET WebForms page with no stable per-posting URL — `url` for these rows is the shared statewide listing page, not a deep link, so it can't be used to jump straight to one specific posting.
+
+OPI is a statewide source, not a verified census of Montana vacancies. This project has not found published OPI submission rules or independently compared the feed against every district and employer, so its completeness must not be inferred from the word "statewide." OPI-only rows stay in the Jobs Table, but they are intentionally excluded from registry-backed map, District Summary, staffing, salary, and vacancy-rate views until they can be tied to a verified canonical district.
 
 ---
 

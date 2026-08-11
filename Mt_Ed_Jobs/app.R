@@ -693,6 +693,21 @@ ui <- dashboardPage(
               withSpinner(plotlyOutput("he_vacancy_leaderboard", height = 320)),
               helpText("Institutions with at least", VACANCY_RATE_MIN_FTE, "full-time faculty."))
         ),
+        box(
+          title = "Montana K-12 coverage", width = 12, status = "warning", solidHeader = FALSE,
+          tags$p(
+            "The K-12 Jobs Table combines postings from ", n_distinct(map_k12$Name),
+            " directly scraped district boards with Montana OPI's statewide Jobs for Teachers feed."
+          ),
+          tags$p(
+            "OPI is a valuable statewide source, but its publication rules and coverage have not been independently verified as a complete census of Montana vacancies. ",
+            "A job absent from this dashboard is not evidence that no vacancy exists."
+          ),
+          tags$p(
+            "The Map and District Summary intentionally cover only directly scraped districts, where postings can be matched to verified district identities, coordinates, staffing, and salary data. ",
+            "OPI-only rows remain in the Jobs Table; their source location is an employer/location label, not necessarily a canonical district."
+          )
+        ),
         div(style = "color:#999; font-size:0.8em; padding: 0 5px 5px;",
             "K-12 vacancy rate is current teacher postings ÷ CCD teacher FTE; Higher Ed vacancy rate is current instructor/faculty postings ÷ IPEDS full-time instructional staff. ",
             "The two use different staffing sources and reporting years — compare rates within a type (district vs. district, institution vs. institution), not across K-12 and Higher Ed."),
@@ -714,7 +729,7 @@ ui <- dashboardPage(
             helpText(paste0(
               "Only this project's ", n_distinct(map_k12$Name), " directly-scraped K-12 districts and ",
               n_distinct(map_he$Name), " directly-scraped Higher Ed institutions are shown here (with current openings). ",
-              "Postings from every other Montana school district also appear in the K-12 Jobs Table, via the state's own OPI \"Jobs for Teachers\" statewide feed -- but that feed has no map coordinates for those districts, so they aren't plotted. ",
+              "The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies; OPI-only source locations are not canonical district identifiers and cannot be mapped reliably. ",
               "Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table. ",
               "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison."
             ))
