@@ -339,8 +339,8 @@
 "Science (Broadfield)","2026-08-07","Teacher","Plentywood, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plentywood, MT","Science Education","Science"
 "CTE â€“ Family and Consumer Sciences","2026-08-07","Teacher","Plentywood, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plentywood, MT","Technical Education","CTE - Trades, Ag & Technical"
 "Elementary Teachers and Long-Term Assignments (K-5) (2026-2027 School Year)","2026-08-11","Teacher","August 2026","https://www.applitrack.com/billings/onlineapp/default.aspx","Billings Public Schools","Elementary Education","Elementary"
-"JROTC Aerospace Science Instructor","2026-08-11","Teacher","August 2026","https://www.applitrack.com/billings/onlineapp/default.aspx","Billings Public Schools","Science Education","Science"
 "JROTC Senior Aerospace Science Instructor","2026-08-11","Teacher","August 2026","https://www.applitrack.com/billings/onlineapp/default.aspx","Billings Public Schools","Science Education","Science"
+"JROTC Aerospace Science Instructor","2026-08-11","Teacher","August 2026","https://www.applitrack.com/billings/onlineapp/default.aspx","Billings Public Schools","Science Education","Science"
 "Math Teacher LTA","2026-08-11","Teacher","Senior High School","https://www.applitrack.com/billings/onlineapp/default.aspx","Billings Public Schools","Mathematics Education","Math"
 "Math Teacher","2026-08-11","Teacher","Riverside Middle School","https://www.applitrack.com/billings/onlineapp/default.aspx","Billings Public Schools","Mathematics Education","Math"
 "Social Studies Teacher (LTA)","2026-08-11","Teacher","Riverside Middle School","https://www.applitrack.com/billings/onlineapp/default.aspx","Billings Public Schools","Social Studies Education","Secondary Social Studies"
@@ -397,6 +397,7 @@
 "Library Media Specialist","2026-08-11","Teacher",NA,"https://www.applitrack.com/sidney/onlineapp/default.aspx","Sidney Public Schools","Library Media","Library Media"
 "Art Teacher","2026-08-11","Teacher","Sidney Jr/Sr High School","https://www.applitrack.com/sidney/onlineapp/default.aspx","Sidney Public Schools","Art Teacher","Art"
 "Special Education Teacher Grades 7-12","2026-08-11","Teacher","Sidney Jr/Sr High School","https://www.applitrack.com/sidney/onlineapp/default.aspx","Sidney Public Schools","Special Education - General","Special Education - General"
+"Early Learning Program Teacher","2026-08-11","Teacher","Stevensville Elementary School","https://www.applitrack.com/stevensville/onlineapp/default.aspx","Stevensville Public Schools","Uncategorized","Other"
 "Foreign Language Teacher","2026-08-11","Teacher","Stevensville High School","https://www.applitrack.com/stevensville/onlineapp/default.aspx","Stevensville Public Schools","Language Education","Language"
 "Spanish Teacher","2026-08-11","Teacher","Stevensville High School","https://www.applitrack.com/stevensville/onlineapp/default.aspx","Stevensville Public Schools","Language Education","Language"
 "Middle School PE/Health Teacher 2026-2027 School Year","2026-08-11","Teacher","Stevensville Middle School","https://www.applitrack.com/stevensville/onlineapp/default.aspx","Stevensville Public Schools","Physical Education","Physical Education"
@@ -440,11 +441,8 @@
 "Guest Teacher","2026-08-11","Teacher","Whitefish, Montana","https://whitefishschools.schoolspring.com/jobs/4863703","Whitefish School District","Uncategorized","Other"
 "Teacher for the Visually Impaired","2026-08-11","Teacher","Laurel, Montana","https://laurel.schoolspring.com/jobs/5823118","Laurel Public Schools","Special Education - General","Special Education - General"
 "26-27 Special Education Teacher - ECS/Adult Transition/Homebound","2026-08-11","Teacher","Laurel, Montana","https://laurel.schoolspring.com/jobs/5767804","Laurel Public Schools","Special Education - General","Special Education - General"
-"KWH Teacher ~ Physical Education ~ 2026-2027","2026-08-11","Teacher","Ronan, Montana","https://ronan.schoolspring.com/jobs/5813122","Ronan Public Schools","Physical Education","Physical Education"
 "RMS Teacher ~ Salish and/or Kootenai Language ~ 2026-27","2026-08-11","Teacher","Ronan, Montana","https://ronan.schoolspring.com/jobs/5797647","Ronan Public Schools","Uncategorized","Other"
-"RHS Teacher ~ Science 2026-2027","2026-08-11","Teacher","Ronan, Montana","https://ronan.schoolspring.com/jobs/5713714","Ronan Public Schools","Science Education","Science"
 "RHS Teacher ~ Vo/Ag 2026-2027","2026-08-11","Teacher","Ronan, Montana","https://ronan.schoolspring.com/jobs/5689053","Ronan Public Schools","Uncategorized","Other"
-"KWH Elementary Teacher ~ 2026-2027","2026-08-11","Teacher","Ronan, Montana","https://ronan.schoolspring.com/jobs/5664866","Ronan Public Schools","Elementary Education","Elementary"
 "RMS Teacher ~ Special Education ~ 2026-2027","2026-08-11","Teacher","Ronan, Montana","https://ronan.schoolspring.com/jobs/5624560","Ronan Public Schools","Special Education - General","Special Education - General"
 "LIBRARY MEDIA SPECIALIST","2026-08-11","Teacher","Kalispell Public Schools","https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/7d0512cb-53c1-4e04-93a0-b45e010b9212","Kalispell Public Schools","Library Media","Library Media"
 "SE - TEACHER","2026-08-11","Teacher","Kalispell Public Schools","https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/e2035868-5fb1-4a82-b743-b46700ad6b43","Kalispell Public Schools","Uncategorized","Other"
@@ -464,57 +462,119 @@
 "JH English Teacher","2026-08-11","Teacher","Wolf Point","https://www.wolfpointschools.org/page/job-opportunities-1","Wolf Point Public Schools","English Language Arts Education","English Language Arts Secondary"
 "JH Science","2026-08-11","Teacher","Wolf Point","https://www.wolfpointschools.org/page/job-opportunities-1","Wolf Point Public Schools","Science Education","Science"
 "JH/HS Choir/Band Teacher","2026-08-11","Teacher","Wolf Point","https://www.wolfpointschools.org/page/job-opportunities-1","Wolf Point Public Schools","Music Education","Music"
+" English","2026-08-11","Teacher","Wolf Point","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Wolf Point","English Language Arts Education","English Language Arts Secondary"
 " Mathematics","2026-08-11","Teacher","Arlee","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Arlee","Mathematics Education","Math"
 " Mathematics","2026-08-11","Teacher","Libby","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Libby","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Billings","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Billings","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Billings","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Billings","Mathematics Education","Math"
 " Mathematics","2026-08-11","Teacher","Manhattan","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Manhattan","Mathematics Education","Math"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Miles City MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Miles City MT","Technical Education","CTE - Trades, Ag & Technical"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Rocky Boy","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Rocky Boy","Technical Education","CTE - Trades, Ag & Technical"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Jordan","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Jordan","Technical Education","CTE - Trades, Ag & Technical"
 " Mathematics","2026-08-11","Teacher","Box Elder","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Box Elder","Mathematics Education","Math"
+" English","2026-08-11","Teacher","Lockwood","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lockwood","English Language Arts Education","English Language Arts Secondary"
+" Mathematics","2026-08-11","Teacher","Lockwood","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lockwood","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Bozeman","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Bozeman","Mathematics Education","Math"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Poplar","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Poplar","Technical Education","CTE - Trades, Ag & Technical"
+" Mathematics","2026-08-11","Teacher","Billings","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Billings","Mathematics Education","Math"
+" Science (Broadfield)","2026-08-11","Teacher","BILLINGS","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","BILLINGS","Science Education","Science"
 " Library","2026-08-11","Teacher","Canyon Creek and Wolf Creek","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Canyon Creek and Wolf Creek","Library Media","Library Media"
+" Library","2026-08-11","Teacher","Kalispell","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Kalispell","Library Media","Library Media"
+" Science (Broadfield)","2026-08-11","Teacher","GREAT FALLS","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","GREAT FALLS","Science Education","Science"
+" Science (Broadfield)","2026-08-11","Teacher","Helena","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Helena","Science Education","Science"
+" English","2026-08-11","Teacher","Helena","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Helena","English Language Arts Education","English Language Arts Secondary"
+" Mathematics","2026-08-11","Teacher","Belgrade","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Belgrade","Mathematics Education","Math"
+" English","2026-08-11","Teacher","Belgrade","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Belgrade","English Language Arts Education","English Language Arts Secondary"
+" Mathematics","2026-08-11","Teacher","Belgrade","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Belgrade","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Columbia Falls","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Columbia Falls","Mathematics Education","Math"
+" Science (Broadfield)","2026-08-11","Teacher","Belgrade","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Belgrade","Science Education","Science"
+" Mathematics","2026-08-11","Teacher","East Helena","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","East Helena","Mathematics Education","Math"
 " Mathematics","2026-08-11","Teacher","Ashland","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Ashland","Mathematics Education","Math"
 " Library","2026-08-11","Teacher","BUSBY","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","BUSBY","Library Media","Library Media"
+" Library","2026-08-11","Teacher","Lockwood","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lockwood","Library Media","Library Media"
+" Library","2026-08-11","Teacher","Wolf Point","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Wolf Point","Library Media","Library Media"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Choteau","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Choteau","Technical Education","CTE - Trades, Ag & Technical"
+" Library","2026-08-11","Teacher","Billings-SD3","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Billings-SD3","Library Media","Library Media"
+" Mathematics","2026-08-11","Teacher","GREAT FALLS","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","GREAT FALLS","Mathematics Education","Math"
+" Earth Science","2026-08-11","Teacher","East Helena","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","East Helena","Science Education","Science"
+" Mathematics","2026-08-11","Teacher","Missoula","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Missoula","Mathematics Education","Math"
 " Library","2026-08-11","Teacher","Power","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Power","Library Media","Library Media"
+" Science (Broadfield)","2026-08-11","Teacher","Columbia Falls","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Columbia Falls","Science Education","Science"
+" Mathematics","2026-08-11","Teacher","Livingston","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Livingston","Mathematics Education","Math"
+" Science (Broadfield)","2026-08-11","Teacher","Wolf Point","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Wolf Point","Science Education","Science"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","FAIRVIEW","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","FAIRVIEW","Technical Education","CTE - Trades, Ag & Technical"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Hays","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Hays","Technical Education","CTE - Trades, Ag & Technical"
 " Computer Science","2026-08-11","Teacher","Forsyth","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Forsyth","Computer Science Education","CTE - Business & Family Sciences"
 " Mathematics","2026-08-11","Teacher","Lima","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lima","Mathematics Education","Math"
 " English","2026-08-11","Teacher","Lima","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lima","English Language Arts Education","English Language Arts Secondary"
+" Computer Science","2026-08-11","Teacher","Ronan","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Ronan","Computer Science Education","CTE - Business & Family Sciences"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Rudyard/Gildford","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Rudyard/Gildford","Technical Education","CTE - Trades, Ag & Technical"
+" Science (Broadfield)","2026-08-11","Teacher","Kalispell","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Kalispell","Science Education","Science"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Kalispell","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Kalispell","Technical Education","CTE - Trades, Ag & Technical"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Kalispell","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Kalispell","Technical Education","CTE - Trades, Ag & Technical"
+" Library","2026-08-11","Teacher","Kalispell","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Kalispell","Library Media","Library Media"
 " Library","2026-08-11","Teacher","841 Bear Canyon Road","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","841 Bear Canyon Road","Library Media","Library Media"
+" Mathematics","2026-08-11","Teacher","MISSOULA","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","MISSOULA","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Billings","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Billings","Mathematics Education","Math"
 " Mathematics","2026-08-11","Teacher","Cascade","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Cascade","Mathematics Education","Math"
 " Science (Broadfield)","2026-08-11","Teacher","Cascade","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Cascade","Science Education","Science"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Drummond","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Drummond","Technical Education","CTE - Trades, Ag & Technical"
 " Library","2026-08-11","Teacher","Drummond","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Drummond","Library Media","Library Media"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Drummond","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Drummond","Technical Education","CTE - Trades, Ag & Technical"
 " Library","2026-08-11","Teacher","Drummond","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Drummond","Library Media","Library Media"
+" Computer Science","2026-08-11","Teacher","Hardin","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Hardin","Computer Science Education","CTE - Business & Family Sciences"
 " Mathematics","2026-08-11","Teacher","Boulder","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Boulder","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Missoula","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Missoula","Mathematics Education","Math"
 " Mathematics","2026-08-11","Teacher","Highwood","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Highwood","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Billings","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Billings","Mathematics Education","Math"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Lame Deer","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lame Deer","Technical Education","CTE - Trades, Ag & Technical"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Lame Deer","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lame Deer","Technical Education","CTE - Trades, Ag & Technical"
 " Library","2026-08-11","Teacher","Broadview","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Broadview","Library Media","Library Media"
 " English","2026-08-11","Teacher","Box Elder","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Box Elder","English Language Arts Education","English Language Arts Secondary"
 " Mathematics","2026-08-11","Teacher","Chester Montana","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Chester Montana","Mathematics Education","Math"
+" Science (Broadfield)","2026-08-11","Teacher","Great Falls","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Great Falls","Science Education","Science"
 " Science (Broadfield)","2026-08-11","Teacher","Gallatin Gateway","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Gallatin Gateway","Science Education","Science"
 " Mathematics","2026-08-11","Teacher","Plevna, Montana","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plevna, Montana","Mathematics Education","Math"
 " Science (Broadfield)","2026-08-11","Teacher","Plevna, Montana","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plevna, Montana","Science Education","Science"
 " Mathematics","2026-08-11","Teacher","Sheridan, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Sheridan, MT","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Missoula","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Missoula","Mathematics Education","Math"
+" English","2026-08-11","Teacher","Missoula","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Missoula","English Language Arts Education","English Language Arts Secondary"
 " Library","2026-08-11","Teacher","Wilsall","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Wilsall","Library Media","Library Media"
+" Science (Broadfield)","2026-08-11","Teacher","Big Timber- Between Bozeman and Billings","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Big Timber- Between Bozeman and Billings","Science Education","Science"
+" Science (Broadfield)","2026-08-11","Teacher","Big Timber- Between Bozeman and Billings","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Big Timber- Between Bozeman and Billings","Science Education","Science"
 " Science (Broadfield)","2026-08-11","Teacher","Whitewater","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Whitewater","Science Education","Science"
+" Mathematics","2026-08-11","Teacher","Havre","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Havre","Mathematics Education","Math"
+" English","2026-08-11","Teacher","Havre","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Havre","English Language Arts Education","English Language Arts Secondary"
 " English","2026-08-11","Teacher","Geyser","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Geyser","English Language Arts Education","English Language Arts Secondary"
 " English","2026-08-11","Teacher","Browning, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Browning, MT","English Language Arts Education","English Language Arts Secondary"
 " Mathematics","2026-08-11","Teacher","Browning","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Browning","Mathematics Education","Math"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Absarokee","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Absarokee","Technical Education","CTE - Trades, Ag & Technical"
+" Mathematics","2026-08-11","Teacher","Lodge Grass, Montana","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lodge Grass, Montana","Mathematics Education","Math"
 " Library","2026-08-11","Teacher","Nashua","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Nashua","Library Media","Library Media"
+" Mathematics","2026-08-11","Teacher","Fairview","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Fairview","Mathematics Education","Math"
+" Mathematics","2026-08-11","Teacher","Lame Deer, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lame Deer, MT","Mathematics Education","Math"
+" Science (Broadfield)","2026-08-11","Teacher","Lame Deer, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Lame Deer, MT","Science Education","Science"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Broadus","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Broadus","Technical Education","CTE - Trades, Ag & Technical"
+" Science (Broadfield)","2026-08-11","Teacher","Billings - Billings Christian School","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Billings - Billings Christian School","Science Education","Science"
 " Science (Broadfield)","2026-08-11","Teacher","Shepherd","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Shepherd","Science Education","Science"
 " Science (Broadfield)","2026-08-11","Teacher","Westby","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Westby","Science Education","Science"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Wibaux","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Wibaux","Technical Education","CTE - Trades, Ag & Technical"
+" English","2026-08-11","Teacher","Hardin","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Hardin","English Language Arts Education","English Language Arts Secondary"
+" Science (Broadfield)","2026-08-11","Teacher","Ronan","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Ronan","Science Education","Science"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Gardiner","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Gardiner","Technical Education","CTE - Trades, Ag & Technical"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Hot Springs","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Hot Springs","Technical Education","CTE - Trades, Ag & Technical"
 " Library","2026-08-11","Teacher","Hot Springs","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Hot Springs","Library Media","Library Media"
 " English","2026-08-11","Teacher","Roy, Montana","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Roy, Montana","English Language Arts Education","English Language Arts Secondary"
+" English","2026-08-11","Teacher","Big Sandy","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Big Sandy","English Language Arts Education","English Language Arts Secondary"
+" Mathematics","2026-08-11","Teacher","Missoula","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Missoula","Mathematics Education","Math"
 " Library","2026-08-11","Teacher","Thompson Falls","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Thompson Falls","Library Media","Library Media"
+" Science (Broadfield)","2026-08-11","Teacher","Fairview","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Fairview","Science Education","Science"
 " Computer Science","2026-08-11","Teacher","Shepherd","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Shepherd","Computer Science Education","CTE - Business & Family Sciences"
 " English","2026-08-11","Teacher","Chinook","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Chinook","English Language Arts Education","English Language Arts Secondary"
 " Mathematics","2026-08-11","Teacher","Hysham","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Hysham","Mathematics Education","Math"
+" English","2026-08-11","Teacher","Plentywood, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plentywood, MT","English Language Arts Education","English Language Arts Secondary"
+" Mathematics","2026-08-11","Teacher","Plentywood, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plentywood, MT","Mathematics Education","Math"
+" English","2026-08-11","Teacher","Plentywood, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plentywood, MT","English Language Arts Education","English Language Arts Secondary"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Sheridan, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Sheridan, MT","Technical Education","CTE - Trades, Ag & Technical"
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Fromberg","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Fromberg","Technical Education","CTE - Trades, Ag & Technical"
 " English","2026-08-11","Teacher","Fromberg","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Fromberg","English Language Arts Education","English Language Arts Secondary"
@@ -532,3 +592,5 @@
 " CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Scobey","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Scobey","Technical Education","CTE - Trades, Ag & Technical"
 " Mathematics","2026-08-11","Teacher","Scobey","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Scobey","Mathematics Education","Math"
 " Mathematics","2026-08-11","Teacher","Scobey","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Scobey","Mathematics Education","Math"
+" Science (Broadfield)","2026-08-11","Teacher","Plentywood, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plentywood, MT","Science Education","Science"
+" CTE â€“ Family and Consumer Sciences","2026-08-11","Teacher","Plentywood, MT","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","Plentywood, MT","Technical Education","CTE - Trades, Ag & Technical"
