@@ -78,3 +78,64 @@ safe_scrape <- function(source_name, scrape_fn, expected_cols, log_path = "scrap
   log_scrape_result(source_name, status = "ok", n_rows = nrow(df), log_path = log_path)
   df
 }
+
+# OPI exposes only a posting title, city, and date. Keep its statewide rows
+# unless those fields identify the same posting on a directly scraped board;
+# matching on city alone would hide unrelated employers in shared cities.
+remove_opi_direct_duplicates <- function(opi_df, direct_df, registry) {
+  required_opi <- c("title", "date_posted", "location")
+  required_direct <- c("title", "date_posted", "District")
+  required_registry <- c("District", "City")
+
+  missing_opi <- setdiff(required_opi, names(opi_df))
+  missing_direct <- setdiff(required_direct, names(direct_df))
+  missing_registry <- setdiff(required_registry, names(registry))
+  if (length(missing_opi) > 0 || length(missing_direct) > 0 || length(missing_registry) > 0) {
+    stop(
+      "Cannot deduplicate OPI postings; missing columns: ",
+      paste(c(missing_opi, missing_direct, missing_registry), collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  normalize <- function(x) {
+    normalized <- tolower(trimws(as.character(x)))
+    normalized[is.na(x)] <- NA_character_
+    gsub("[^[:alnum:]]+", " ", normalized)
+  }
+  complete_key <- function(title, date) {
+    normalized_title <- normalize(title)
+    normalized_date <- trimws(as.character(date))
+    valid <- !is.na(normalized_title) & nzchar(normalized_title) &
+      !is.na(date) & nzchar(normalized_date)
+    key <- rep(NA_character_, length(title))
+    key[valid] <- paste(normalized_title[valid], normalized_date[valid], sep = "\r")
+    key
+  }
+
+  direct_keys <- complete_key(direct_df$title, direct_df$date_posted)
+  direct_keys <- paste(direct_df$District, direct_keys, sep = "\r")
+  direct_keys <- direct_keys[!is.na(direct_keys)]
+  if (length(direct_keys) == 0 || nrow(opi_df) == 0) return(opi_df)
+
+  city_forms <- normalize(registry$City)
+  opi_keys <- complete_key(opi_df$title, opi_df$date_posted)
+  opi_locations <- paste0(" ", normalize(opi_df$location), " ")
+  is_duplicate <- vapply(seq_len(nrow(opi_df)), function(i) {
+    if (is.na(opi_keys[i]) || is.na(opi_locations[i])) return(FALSE)
+
+    city_matches <- which(vapply(
+      city_forms,
+      function(city) !is.na(city) && grepl(paste0(" ", city, " "), opi_locations[i], fixed = TRUE),
+      logical(1)
+    ))
+    if (length(city_matches) == 0) return(FALSE)
+
+    # "East Helena" also contains "Helena"; only use the most-specific city.
+    city_matches <- city_matches[nchar(city_forms[city_matches]) == max(nchar(city_forms[city_matches]))]
+    candidate_keys <- paste(registry$District[city_matches], opi_keys[i], sep = "\r")
+    any(candidate_keys %in% direct_keys)
+  }, logical(1))
+
+  opi_df[!is_duplicate, , drop = FALSE]
+}

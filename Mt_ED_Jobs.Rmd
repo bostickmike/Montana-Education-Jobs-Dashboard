@@ -187,33 +187,18 @@ library(dplyr)
 source("scrape_helpers.R")
 source("direct_api_scrapers.R")
 
-# Montana's analog of Wyoming's WSBA vacancies page, but run differently:
-# WSBA in Wyoming only ever covers the small "misc" district list that has
-# no major platform. OPI's feed is genuinely statewide -- it includes the
-# SAME districts already scraped directly above (Kalispell, Billings, etc.),
-# so including every OPI row unfiltered would massively double-count those
-# districts' postings. Filtered here to just the districts NOT already
-# covered by a direct scraper (matched by whether OPI's own City field
-# contains a covered district's City, from k12_district_registry.csv --
-# case-insensitive, since OPI's City formatting is inconsistent, e.g. "Wolf
-# Point " vs "Wolf Point, Montana").
+# Montana's analog of Wyoming's WSBA vacancies page. OPI's feed is genuinely
+# statewide, including direct-scraper cities. It stays intact here; exact
+# posting-level overlaps with direct boards are removed only after every
+# source's date fields have been standardized below. This avoids losing
+# independent employers that happen to share a city with a covered district.
 opi_raw <- safe_scrape(
   "OPI Jobs for Teachers (statewide)",
   scrape_fn = fetch_opi_statewide_postings,
   expected_cols = c("Title", "Location", "Posted_Date", "Link")
 )
 
-covered_cities <- registry$City
-is_covered <- function(location) {
-  if (is.na(location)) return(FALSE)
-  any(sapply(covered_cities, function(city) grepl(city, location, ignore.case = TRUE)))
-}
-
 opi_df <- opi_raw
-if (nrow(opi_df) > 0) {
-  opi_df <- opi_df[!sapply(opi_df$Location, is_covered), , drop = FALSE]
-}
-
 if (nrow(opi_df) > 0) {
   # District is NOT a canonical legal district name here -- OPI's feed only
   # exposes a City column, so District is that raw City value passed
@@ -255,8 +240,11 @@ lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_po
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
-combined <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
-                       livingston_df, lodgegrass_df, apptegy_df, opi_df) %>%
+direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
+                       livingston_df, lodgegrass_df, apptegy_df)
+opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
+
+combined <- bind_rows(direct_df, opi_df) %>%
   mutate(Archive_Date = Sys.Date())
 
 # fix_title_encoding() applied once here, at the point titles first enter
