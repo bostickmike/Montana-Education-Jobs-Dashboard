@@ -592,8 +592,16 @@ he_sample_titles <- ccdata %>%
   summarize(SampleTitles = paste(head(Title, 3), collapse = "; "), .groups = "drop")
 he_weekly_new <- he_new_this_week %>% count(Institution, name = "WeeklyNew")
 
+# Scoped to full-time faculty only, matching Faculty_Count's own scope --
+# IPEDS's salaries-instructional-staff survey (the source of Faculty_Count)
+# only covers full-time instructional staff, so mixing Adjunct/Part-Time
+# postings into this numerator would overstate the rate by comparing "all
+# open faculty postings" against a full-time-only denominator. he_history
+# itself now includes both Job_Types (added for the FT/PT appointment
+# toggles elsewhere), so this consumer filters back down explicitly rather
+# than assuming the shared object's scope.
 he_faculty_current_counts <- he_history %>%
-  filter(Archive_Date == max(Archive_Date)) %>%
+  filter(Archive_Date == max(Archive_Date), Job_Type == "Instructor/Teacher/Faculty") %>%
   count(Institution, name = "FacultyCurrentCount")
 
 map_he <- mapdata2_he %>%
@@ -1265,7 +1273,21 @@ server <- function(input, output, session) {
                     ifelse(!is.na(Faculty_Avg_Salary_Professor),
                            paste0(" (Professor rank: ", scales::dollar(Faculty_Avg_Salary_Professor), ")"),
                            ""),
-                    " &middot; ", Salary_Year, "</div>"),
+                    " &middot; ", Salary_Year, "</div>",
+                    # IPEDS's "all combined" figure blends every reported
+                    # contract length -- full-time 9-12 month faculty
+                    # alongside lower-paid part-time/adjunct instructional
+                    # staff -- into one average. A small institution leaning
+                    # heavily on adjuncts can report a much lower blended
+                    # figure than its own full-time faculty actually earn
+                    # (confirmed real, not a scrape error: Blackfeet
+                    # Community College's $25,621 reflects a $54,317
+                    # full-time cohort blended with a larger, lower-paid
+                    # part-time one). No reliable full-time-only breakout is
+                    # available from this source (IPEDS's contract-length
+                    # codes aren't consistently documented enough to split
+                    # this safely), so this is a disclosure rather than a fix.
+                    "<div style='font-size:0.8em;color:#666;'>Blends full-time and part-time/adjunct instructional staff pay into one average.</div>"),
              ""),
       ifelse(!is.na(Salary_Source),
              paste0("<div style='font-size:0.85em;color:#666;'>Salary source: ", Salary_Source, "</div>"),
@@ -1510,7 +1532,10 @@ server <- function(input, output, session) {
     tagList(
       helpText(
         "Salary data:", source[1], paste0("(", year[1], " data)"), "—",
-        tags$a(href = IPEDS_SALARY_SOURCE_URL, target = "_blank", "educationdata.urban.org")
+        tags$a(href = IPEDS_SALARY_SOURCE_URL, target = "_blank", "educationdata.urban.org"),
+        ". Blends full-time and part-time/adjunct instructional staff pay into one average",
+        "— a small institution leaning heavily on adjuncts can report a much lower blended",
+        "figure than its own full-time faculty actually earn."
       ),
       if (length(acs_year) > 0) {
         helpText(
