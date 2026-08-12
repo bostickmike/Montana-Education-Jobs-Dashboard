@@ -3,13 +3,13 @@
 "Art",2026-08-07,"Total",2
 "Art",2026-08-11,"Total",2
 "CTE - Business & Family Sciences",2026-08-06,"Total",3
-"CTE - Business & Family Sciences",2026-08-07,"Total",3
-"CTE - Business & Family Sciences",2026-08-11,"Total",5
-"CTE - Trades, Ag & Technical",2026-08-06,"Total",26
-"CTE - Trades, Ag & Technical",2026-08-07,"Total",21
-"CTE - Trades, Ag & Technical",2026-08-11,"Total",29
-"Early Childhood",2026-08-07,"Total",2
-"Early Childhood",2026-08-11,"Total",2
+"CTE - Business & Family Sciences",2026-08-07,"Total",4
+"CTE - Business & Family Sciences",2026-08-11,"Total",6
+"CTE - Trades, Ag & Technical",2026-08-06,"Total",27
+"CTE - Trades, Ag & Technical",2026-08-07,"Total",23
+"CTE - Trades, Ag & Technical",2026-08-11,"Total",31
+"Early Childhood",2026-08-07,"Total",6
+"Early Childhood",2026-08-11,"Total",6
 "Elementary",2026-08-06,"Total",5
 "Elementary",2026-08-07,"Total",15
 "Elementary",2026-08-11,"Total",17
@@ -28,9 +28,9 @@
 "Music",2026-08-06,"Total",2
 "Music",2026-08-07,"Total",3
 "Music",2026-08-11,"Total",4
-"Other",2026-08-06,"Total",12
-"Other",2026-08-07,"Total",26
-"Other",2026-08-11,"Total",28
+"Other",2026-08-06,"Total",11
+"Other",2026-08-07,"Total",19
+"Other",2026-08-11,"Total",21
 "Physical Education",2026-08-06,"Total",1
 "Physical Education",2026-08-07,"Total",4
 "Physical Education",2026-08-11,"Total",3
@@ -56,14 +56,16 @@
 "CTE - Business & Family Sciences",2026-08-06,"Shepherd",1
 "CTE - Business & Family Sciences",2026-08-07,"Forsyth",1
 "CTE - Business & Family Sciences",2026-08-07,"Poplar Public Schools",1
+"CTE - Business & Family Sciences",2026-08-07,"Rocky Boy Public Schools",1
 "CTE - Business & Family Sciences",2026-08-07,"Shepherd",1
 "CTE - Business & Family Sciences",2026-08-11,"Forsyth",1
 "CTE - Business & Family Sciences",2026-08-11,"Hardin",1
 "CTE - Business & Family Sciences",2026-08-11,"Poplar Public Schools",1
+"CTE - Business & Family Sciences",2026-08-11,"Rocky Boy Public Schools",1
 "CTE - Business & Family Sciences",2026-08-11,"Ronan",1
 "CTE - Business & Family Sciences",2026-08-11,"Shepherd",1
 "CTE - Trades, Ag & Technical",2026-08-06,"Absarokee",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Billings Public Schools",1
+"CTE - Trades, Ag & Technical",2026-08-06,"Billings Public Schools",2
 "CTE - Trades, Ag & Technical",2026-08-06,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-06,"Choteau",1
 "CTE - Trades, Ag & Technical",2026-08-06,"Drummond",2
@@ -83,7 +85,7 @@
 "CTE - Trades, Ag & Technical",2026-08-06,"Sheridan, MT",1
 "CTE - Trades, Ag & Technical",2026-08-06,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Absarokee",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Billings Public Schools",1
+"CTE - Trades, Ag & Technical",2026-08-07,"Billings Public Schools",2
 "CTE - Trades, Ag & Technical",2026-08-07,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-07,"Choteau",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Drummond",2
@@ -94,11 +96,13 @@
 "CTE - Trades, Ag & Technical",2026-08-07,"Jordan",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Miles City MT",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Plentywood, MT",1
+"CTE - Trades, Ag & Technical",2026-08-07,"Ronan Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Rudyard/Gildford",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Scobey",4
 "CTE - Trades, Ag & Technical",2026-08-07,"Sheridan, MT",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Absarokee",1
+"CTE - Trades, Ag & Technical",2026-08-11,"Billings Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-11,"Choteau",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Drummond",2
@@ -115,15 +119,16 @@
 "CTE - Trades, Ag & Technical",2026-08-11,"Plentywood, MT",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Rocky Boy",1
+"CTE - Trades, Ag & Technical",2026-08-11,"Ronan Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Rudyard/Gildford",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Scobey",4
 "CTE - Trades, Ag & Technical",2026-08-11,"Sheridan, MT",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Wolf Point Public Schools",1
 "Early Childhood",2026-08-07,"Fairview Public Schools",1
-"Early Childhood",2026-08-07,"Rocky Boy Public Schools",1
+"Early Childhood",2026-08-07,"Rocky Boy Public Schools",5
 "Early Childhood",2026-08-11,"Fairview Public Schools",1
-"Early Childhood",2026-08-11,"Rocky Boy Public Schools",1
+"Early Childhood",2026-08-11,"Rocky Boy Public Schools",5
 "Elementary",2026-08-06,"Billings Public Schools",1
 "Elementary",2026-08-06,"Great Falls Public Schools",4
 "Elementary",2026-08-07,"Billings Public Schools",1
@@ -344,14 +349,12 @@
 "Music",2026-08-11,"Lame Deer Public Schools",1
 "Music",2026-08-11,"Missoula County Public Schools",1
 "Music",2026-08-11,"Wolf Point Public Schools",1
-"Other",2026-08-06,"Billings Public Schools",1
 "Other",2026-08-06,"East Helena Public Schools",2
 "Other",2026-08-06,"Great Falls Public Schools",3
 "Other",2026-08-06,"Havre Public Schools",1
 "Other",2026-08-06,"Helena Public Schools",1
 "Other",2026-08-06,"Kalispell Public Schools",3
 "Other",2026-08-06,"Whitefish School District",1
-"Other",2026-08-07,"Billings Public Schools",1
 "Other",2026-08-07,"East Helena Public Schools",2
 "Other",2026-08-07,"Fairview Public Schools",1
 "Other",2026-08-07,"Glendive Public Schools",1
@@ -360,10 +363,9 @@
 "Other",2026-08-07,"Helena Public Schools",1
 "Other",2026-08-07,"Kalispell Public Schools",3
 "Other",2026-08-07,"Lame Deer Public Schools",3
-"Other",2026-08-07,"Rocky Boy Public Schools",7
-"Other",2026-08-07,"Ronan Public Schools",2
+"Other",2026-08-07,"Rocky Boy Public Schools",2
+"Other",2026-08-07,"Ronan Public Schools",1
 "Other",2026-08-07,"Whitefish School District",1
-"Other",2026-08-11,"Billings Public Schools",1
 "Other",2026-08-11,"East Helena Public Schools",1
 "Other",2026-08-11,"Fairview Public Schools",1
 "Other",2026-08-11,"Glendive Public Schools",1
@@ -373,8 +375,8 @@
 "Other",2026-08-11,"Kalispell Public Schools",3
 "Other",2026-08-11,"Lame Deer Public Schools",3
 "Other",2026-08-11,"Missoula County Public Schools",2
-"Other",2026-08-11,"Rocky Boy Public Schools",7
-"Other",2026-08-11,"Ronan Public Schools",2
+"Other",2026-08-11,"Rocky Boy Public Schools",2
+"Other",2026-08-11,"Ronan Public Schools",1
 "Other",2026-08-11,"Stevensville Public Schools",1
 "Other",2026-08-11,"Whitefish School District",1
 "Physical Education",2026-08-06,"Kalispell Public Schools",1
