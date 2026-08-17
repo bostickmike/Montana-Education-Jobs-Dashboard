@@ -14,7 +14,7 @@ A live, weekly-updated dashboard of K-12 and higher education job openings from 
 
 ## Data sources
 
-K-12 covers 34 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV Attract, ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render — see Automation below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
+K-12 covers 42 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV Attract, ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render — see Automation below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
 
 | Data | Source |
 |---|---|
@@ -34,7 +34,7 @@ MT DLI publishes only the current year's Teacher Compensation Report with no pub
 
 ### K-12 coverage and scope
 
-The K-12 Jobs Table combines 34 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
+The K-12 Jobs Table combines 42 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
 
 The Map and District Summary deliberately show only directly scraped districts: those records can be matched to verified district identities, coordinates, staffing, salary, and OPI General Fund expenditure data. OPI-only rows remain in the Jobs Table, but OPI exposes a raw location field rather than a canonical district identifier, so they cannot be reliably joined to district context or mapped.
 
@@ -49,7 +49,7 @@ A GitHub Actions workflow runs weekly (Tuesdays — deliberately not Wyoming's F
 - Drift detection flags any source whose posting count falls far below its own historical baseline, with a live `chromote` render of the page as corroboration before anything is filed as a GitHub Issue.
 - Salary-source coverage checks watch each source against its own known-fixed (or, where a source has a real permanent gap like MT DLI's, known-partial) universe and flag if it starts returning noticeably less than expected.
 - The same coverage + value-plausibility checks run for the Census ACS/SAIPE sources.
-- Three K-12 districts and one HE institution (Wolf Point, Plentywood, Stone Child College) run on Apptegy, a CMS that ships no real content to a plain HTTP request — a real headless Chrome instance (installed via `browser-actions/setup-chrome`) renders these during the pipeline run itself, the same technique 4 of Wyoming's own districts already needed.
+- Eight K-12 districts and one HE institution (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, and Stone Child College) run on Apptegy, a CMS that ships no real content to a plain HTTP request — a real headless Chrome instance (installed via `browser-actions/setup-chrome`) renders these during the pipeline run itself, the same technique 4 of Wyoming's own districts already needed.
 
 ## Repository layout
 

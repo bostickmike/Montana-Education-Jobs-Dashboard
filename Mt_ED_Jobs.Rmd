@@ -169,18 +169,80 @@ if (nrow(lodgegrass_df) > 0) {
                                Posting_Source = character(0))
 }
 
-# Wolf Point and Plentywood both run Apptegy, a CMS whose pages need a
-# real browser to render (a plain httr2 request gets only a Fastly JS
-# bot-challenge shell) -- the same platform 4 of Wyoming's own districts
-# sit on, ported from Wy_ED_Jobs.Rmd's own chromote-in-CI pattern (see
+# Broadview has no structured ATS either -- same "Educational Networks" CMS
+# as Livingston/Lodge Grass but split across 4 real pages instead of 1 (see
+# misc_district_scrapers.R's own comment for the real page-by-page layout).
+# fetch_broadview_postings() takes no row/url argument (unlike
+# fetch_livingston_postings()/fetch_lodgegrass_postings()) since its 4 real
+# page URLs are hardcoded internally -- the registry's Job_Link is only the
+# hub page, not a fetchable single feed.
+broadview_districts <- registry[registry$Platform == "BroadviewHeuristic", ]
+broadview_results <- lapply(seq_len(nrow(broadview_districts)), function(i) {
+  row <- broadview_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_broadview_postings(),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+broadview_df <- bind_rows(broadview_results)
+if (nrow(broadview_df) > 0) {
+  broadview_df <- broadview_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Broadview district site (direct board)")
+} else {
+  broadview_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# Custer genuinely runs Finalsite (unlike every other district in the same
+# 2026-08-16 pass, which turned out to be Apptegy despite an initial
+# "Finalsite cluster" hypothesis) -- a plain httr2 fetch, no chromote
+# needed, same pattern as Livingston/Lodge Grass/Broadview above.
+custer_districts <- registry[registry$Platform == "CusterHeuristic", ]
+custer_results <- lapply(seq_len(nrow(custer_districts)), function(i) {
+  row <- custer_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_custer_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+custer_df <- bind_rows(custer_results)
+if (nrow(custer_df) > 0) {
+  custer_df <- custer_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Custer district site (direct board)")
+} else {
+  custer_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, and
+# Drummond all run Apptegy, a CMS whose pages need a real browser to render
+# (a plain httr2 request gets only a Fastly JS bot-challenge shell) -- the
+# same platform 4 of Wyoming's own districts sit on, ported from
+# Wy_ED_Jobs.Rmd's own chromote-in-CI pattern (see
 # .github/workflows/weekly-scrape.yml's "Install Chrome" step). Wrapped
-# in one safe_scrape() call (not one per district) since the two districts
+# in one safe_scrape() call (not one per district) since all 8 districts
 # share a single chromote session internally -- a mid-fetch failure for
-# one district still returns the other's real rows via
+# one district still returns the others' real rows via
 # fetch_apptegy_k12_postings()'s own per-district dplyr::bind_rows(), not
-# an all-or-nothing failure.
+# an all-or-nothing failure. (These 6 newer districts aren't registry-
+# filtered by Platform the way Livingston/Lodge Grass/Broadview/Custer are
+# above -- fetch_apptegy_k12_postings() hardcodes all 8 internally, same as
+# it always has for Wolf Point/Plentywood; their registry rows exist purely
+# for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy K-12 districts (Wolf Point, Plentywood)",
+  "Apptegy K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -256,11 +318,13 @@ tylerportico_df <- tylerportico_df %>% mutate(date_posted = standardize_date(dat
 tedk12_df <- tedk12_df %>% mutate(date_posted = standardize_date(date_posted))
 livingston_df <- livingston_df %>% mutate(date_posted = standardize_date(date_posted))
 lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_posted))
+broadview_df <- broadview_df %>% mutate(date_posted = standardize_date(date_posted))
+custer_df <- custer_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
-                       livingston_df, lodgegrass_df, apptegy_df)
+                       livingston_df, lodgegrass_df, broadview_df, custer_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%

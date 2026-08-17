@@ -111,18 +111,25 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
   # that neither appears as a row in ANY of MT DLI's 9 real regional PDFs
   # (not suppressed as "ND" within a listed row -- genuinely not listed at
   # all). Browning Public Schools and Libby Public Schools are a
-  # TEMPORARY fast-follow gap -- both joined the registry via the OPI-gap
+  # TEMPORARY fast-follow gap -- all joined the registry via the OPI-gap
   # platform-check pass, salary/staffing lookup not done yet, same
   # documented pattern as every prior district addition (Wolf Point/
-  # Plentywood closed the same way 2026-08-07). This test still catches
-  # the real regression that matters: a name in MT_DLI_DISTRICT_MAP that
-  # ISN'T a real registered district (a typo, a stale entry after a
-  # rename) would silently never get looked up anywhere.
+  # Plentywood closed the same way 2026-08-07; Broadview and the 6 Apptegy/
+  # Finalsite districts from the same deeper 2026-08-16 pass -- Conrad,
+  # Westby, Choteau, Gardiner, Malta, Drummond, Custer -- have not yet
+  # closed). This test still catches the real regression that matters: a
+  # name in MT_DLI_DISTRICT_MAP that ISN'T a real registered district (a
+  # typo, a stale entry after a rename) would silently never get looked up
+  # anywhere.
   registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
   expect_true(all(names(MT_DLI_DISTRICT_MAP) %in% registry$District))
   expect_setequal(setdiff(registry$District, names(MT_DLI_DISTRICT_MAP)),
                    c("Lame Deer Public Schools", "Lodge Grass Public Schools",
-                     "Browning Public Schools", "Libby Public Schools"))
+                     "Browning Public Schools", "Libby Public Schools",
+                     "Broadview School District", "Conrad Public Schools",
+                     "Westby School District 3", "Choteau School District",
+                     "Gardiner Public Schools", "Malta Public Schools",
+                     "Drummond Public Schools", "Custer Public Schools"))
 })
 
 # ---------------------------------------------------------------------------
