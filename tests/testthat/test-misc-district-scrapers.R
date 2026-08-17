@@ -199,6 +199,43 @@ test_that("fetch_custer_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 6)
 })
 
+# Real fixture captured 2026-08-16 from scobeyschools.com/employment.html
+# (a Weebly site, only reachable over plain http).
+
+test_that("parse_scobey_postings extracts all 13 real postings across 4 real category headers", {
+  html <- paste(readLines(test_path("fixtures", "scobey_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_scobey_postings(html, "url")
+
+  expect_equal(nrow(result), 13)
+  expect_equal(sum(result$Location == "TEACHING STAFF"), 7)
+  expect_equal(sum(result$Location == "SUPPORT TEACHING STAFF"), 2)
+  expect_equal(sum(result$Location == "BUS DRIVERS"), 2)
+  expect_equal(sum(result$Location == "COACHING STAFF"), 2)
+  expect_true("ELEMENTARY TEACHER" %in% result$Title)
+  # Regression: every real header/posting line in the raw page carries a
+  # leading zero-width space (U+200B) baked into the site's own content --
+  # must be stripped, not leak into Title/Location.
+  expect_false(any(grepl("​", c(result$Title, result$Location))))
+})
+
+test_that("parse_scobey_postings returns zero rows (not an error) when there's no TEACHING STAFF section", {
+  result <- parse_scobey_postings("<html><body><p>no openings</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_scobey_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "scobey_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_scobey_postings()
+
+  expect_equal(nrow(result), 13)
+})
+
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond

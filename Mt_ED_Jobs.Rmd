@@ -226,6 +226,32 @@ if (nrow(custer_df) > 0) {
                            Posting_Source = character(0))
 }
 
+# Scobey (a Weebly site, found 2026-08-16 -- the single highest-volume
+# OPI-only location left) also has no structured ATS -- a plain httr2
+# fetch, no chromote needed, same pattern as Custer above.
+scobey_districts <- registry[registry$Platform == "ScobeyHeuristic", ]
+scobey_results <- lapply(seq_len(nrow(scobey_districts)), function(i) {
+  row <- scobey_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_scobey_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+scobey_df <- bind_rows(scobey_results)
+if (nrow(scobey_df) > 0) {
+  scobey_df <- scobey_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Scobey district site (direct board)")
+} else {
+  scobey_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
 # Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, and
 # Drummond all run Apptegy, a CMS whose pages need a real browser to render
 # (a plain httr2 request gets only a Fastly JS bot-challenge shell) -- the
@@ -320,11 +346,12 @@ livingston_df <- livingston_df %>% mutate(date_posted = standardize_date(date_po
 lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_posted))
 broadview_df <- broadview_df %>% mutate(date_posted = standardize_date(date_posted))
 custer_df <- custer_df %>% mutate(date_posted = standardize_date(date_posted))
+scobey_df <- scobey_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
-                       livingston_df, lodgegrass_df, broadview_df, custer_df, apptegy_df)
+                       livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%

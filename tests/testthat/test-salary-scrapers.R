@@ -129,7 +129,8 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Broadview School District", "Conrad Public Schools",
                      "Westby School District 3", "Choteau School District",
                      "Gardiner Public Schools", "Malta Public Schools",
-                     "Drummond Public Schools", "Custer Public Schools"))
+                     "Drummond Public Schools", "Custer Public Schools",
+                     "Scobey Schools"))
 })
 
 # ---------------------------------------------------------------------------

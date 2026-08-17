@@ -300,6 +300,58 @@ parse_custer_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Custer", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Scobey Schools (scobeyschools.com) -- a Weebly site (found via a
+# 2026-08-16 follow-up on Scobey specifically, the single highest-volume
+# OPI-only location left after the two prior passes -- it was on the
+# original 23-town candidate list but never got a definitive answer
+# recorded). Real postings are bold/colored `*TITLE` lines grouped under
+# real (non-asterisk) category headers ("TEACHING STAFF", "SUPPORT TEACHING
+# STAFF", "BUS DRIVERS", "COACHING STAFF") -- confirmed live 2026-08-16, 13
+# real postings. Only https (not plain http) redirects to www and fails to
+# resolve for this domain -- confirmed live the site is only reachable over
+# plain http, an intentionally different req_url scheme from every other
+# scraper in this file, not an oversight. Every real header/posting line in
+# the raw page carries a leading zero-width space (U+200B) baked into the
+# site's own authored content -- stripped here, not a parsing artifact.
+fetch_scobey_postings <- function(url = "http://scobeyschools.com/employment.html") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_scobey_postings(resp_body_string(resp), url)
+}
+
+parse_scobey_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(gsub("​", "", lines))
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "TEACHING STAFF")
+  stop_idx <- which(grepl("^SCOBEY SCHOOLS IS IN NEED OF|^CURRENT JOB OPENINGS", lines))
+  if (length(start_idx) == 0 || length(stop_idx) == 0 || stop_idx[1] <= start_idx[1]) return(empty)
+  window <- lines[start_idx[1]:(stop_idx[1] - 1)]
+
+  rows <- list()
+  current_header <- NA_character_
+  for (line in window) {
+    if (grepl("^\\*", line)) {
+      title <- trimws(sub("^\\*", "", line))
+      if (nzchar(title) && !is.na(current_header)) {
+        rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
+                                                Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+      }
+    } else {
+      current_header <- line
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond
