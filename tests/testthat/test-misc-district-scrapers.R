@@ -384,6 +384,57 @@ test_that("parse_malta_postings extracts 11 real postings, skipping genuinely em
   expect_false(any(result$Location %in% c("Administrative", "Other Employment")))
 })
 
+# Real fixture captured 2026-08-16 (trimmed page-builder JSON payload) from
+# deerlodgeschools.org/page/employment.
+
+test_that("parse_deerlodge_postings extracts all 4 real postings from 2 different real page shapes", {
+  html <- paste(readLines(test_path("fixtures", "deerlodge_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_deerlodge_postings(html, "url")
+
+  expect_equal(nrow(result), 4)
+  expect_setequal(result$Title, c(
+    "HS Special Ed Aide", "Elementary PE Teacher with a period of Intervention",
+    "Special Education Teacher 5th/6th grades", "Bus Driver"
+  ))
+  # Regression: "Substitutes Wanted" is a standing recruiting card, not a
+  # specific posting -- must not appear as a Title.
+  expect_false("Substitutes Wanted" %in% result$Title)
+  # Regression: "Certified Teacher" is the card's generic heading, not the
+  # real title -- the real title sits inside the card's own body text.
+  expect_false("Certified Teacher" %in% result$Title)
+})
+
+test_that("parse_deerlodge_postings returns zero rows (not an error) when there's no embedded page data", {
+  result <- parse_deerlodge_postings("<html><body>no data here</body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+# Real fixture captured 2026-08-16 from townsend.k12.mt.us/page/employment.
+
+test_that("parse_townsend_postings extracts all 5 real postings, split into Internal/External", {
+  html <- paste(readLines(test_path("fixtures", "townsend_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  text <- rvest::html_text2(rvest::read_html(html))
+
+  result <- parse_townsend_postings(text, "url")
+
+  expect_equal(nrow(result), 5)
+  expect_equal(sum(result$Location == "Internal"), 1)
+  expect_equal(sum(result$Location == "External"), 4)
+  expect_true("HS Student Council" %in% result$Title)
+  # Regression: the full "ATHLETIC DIRECTOR" job-description document that
+  # follows is reference material for the "HS/MS Activities Director"
+  # posting already captured, not a second real posting.
+  expect_false(any(grepl("ATHLETIC DIRECTOR|REPORTS TO|FLSA", result$Title)))
+})
+
+test_that("parse_townsend_postings returns zero rows (not an error) when there's no Job Vacancies header", {
+  result <- parse_townsend_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 # Fake chromote session: a plain list standing in for a real
 # ChromoteSession$new() -- provides just the $Page$navigate/
 # $Page$loadEventFired/$Runtime$evaluate surface fetch_wolfpoint_postings()/
@@ -478,21 +529,42 @@ test_that("fetch_malta_postings drives a chromote session and parses its real re
   expect_equal(nrow(result), 11)
 })
 
+test_that("fetch_deerlodge_postings drives a chromote session, reads outerHTML, and parses the embedded page data", {
+  html <- paste(readLines(test_path("fixtures", "deerlodge_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  session <- fake_chromote_session(html)
+
+  result <- fetch_deerlodge_postings(session)
+
+  expect_equal(nrow(result), 4)
+})
+
+test_that("fetch_townsend_postings drives a chromote session and parses its real rendered text", {
+  html <- paste(readLines(test_path("fixtures", "townsend_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  text <- rvest::html_text2(rvest::read_html(html))
+  session <- fake_chromote_session(text)
+
+  result <- fetch_townsend_postings(session)
+
+  expect_equal(nrow(result), 5)
+})
+
 test_that("fetch_apptegy_k12_postings returns an empty frame (not an error) when no session factory is available", {
   result <- fetch_apptegy_k12_postings(chromote_session_factory = NULL)
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "District"))
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 8 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 10 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   gardiner_html <- paste(readLines(test_path("fixtures", "gardiner_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   drummond_html <- paste(readLines(test_path("fixtures", "drummond_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  deerlodge_html <- paste(readLines(test_path("fixtures", "deerlodge_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   westby_text <- rvest::html_text2(rvest::read_html(paste(readLines(test_path("fixtures", "westby_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")))
   choteau_text <- rvest::html_text2(rvest::read_html(paste(readLines(test_path("fixtures", "choteau_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")))
   malta_text <- rvest::html_text2(rvest::read_html(paste(readLines(test_path("fixtures", "malta_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")))
+  townsend_text <- rvest::html_text2(rvest::read_html(paste(readLines(test_path("fixtures", "townsend_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")))
 
   # Same fake session serves every district's fetch, real URL routing comes
   # from each fetch_*_postings()'s own default url= argument -- this fake
@@ -513,9 +585,11 @@ test_that("fetch_apptegy_k12_postings shares one session across all 8 districts 
           else if (grepl("conradschools", navigated_url)) conrad_html
           else if (grepl("gardiner", navigated_url)) gardiner_html
           else if (grepl("drummondschool", navigated_url)) drummond_html
+          else if (grepl("deerlodgeschools", navigated_url)) deerlodge_html
           else if (grepl("westbyschool", navigated_url)) westby_text
           else if (grepl("choteauschools", navigated_url)) choteau_text
           else if (grepl("maltaschools", navigated_url)) malta_text
+          else if (grepl("townsend", navigated_url)) townsend_text
           else ""
           list(result = list(value = value))
         }
@@ -526,7 +600,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 8 districts 
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory)
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -535,4 +609,6 @@ test_that("fetch_apptegy_k12_postings shares one session across all 8 districts 
   expect_equal(sum(result$District == "Gardiner Public Schools"), 5)
   expect_equal(sum(result$District == "Malta Public Schools"), 11)
   expect_equal(sum(result$District == "Drummond Public Schools"), 8)
+  expect_equal(sum(result$District == "Deer Lodge School District #1"), 4)
+  expect_equal(sum(result$District == "Townsend School District"), 5)
 })

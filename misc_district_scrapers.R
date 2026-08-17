@@ -354,22 +354,25 @@ parse_scobey_postings <- function(html_text, url) {
 
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
-# Choteau, Gardiner, Malta, Drummond
+# Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend
 # ---------------------------------------------------------------------------
 
 # Wolf Point/Plentywood (found 2026-08-07) sit on an older Apptegy template
 # where every real posting renders straight into visible page text --
-# document.body.innerText (below) sees it all. The 6 districts found
-# 2026-08-16 (Conrad, Westby, Choteau, Gardiner, Malta, Drummond) all sit on
-# a NEWER Apptegy "page-builder" template instead. Confirmed live: for 3 of
-# them (Westby, Choteau, Malta) real postings STILL render into visible
-# innerText fine, so they reuse that exact same technique below. But for the
-# other 3 (Conrad, Gardiner, Drummond), real posting content lives inside an
-# accordion panel, a two-column button layout, or similar page-builder
-# component whose content is authored into the page's underlying JSON data
-# but genuinely never renders into visible DOM text at page-load time (an
-# innerText read returns 0 real postings for these 3, confirmed live) --
-# these 3 instead decode the page's own embedded JSON payload directly (see
+# document.body.innerText (below) sees it all. The 8 districts found
+# 2026-08-16 (Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer
+# Lodge, Townsend) all sit on a NEWER Apptegy "page-builder" template
+# instead. Confirmed live: for 5 of them (Westby, Choteau, Malta, Deer
+# Lodge, Townsend) real postings STILL render into visible innerText fine,
+# so they reuse that exact same technique below (Deer Lodge is the one
+# exception that uses the JSON decode anyway -- see its own comment for
+# why). But for Conrad, Gardiner, and Drummond, real posting content lives
+# inside an accordion panel, a two-column button layout, or similar
+# page-builder component whose content is authored into the page's
+# underlying JSON data but genuinely never renders into visible DOM text at
+# page-load time (an innerText read returns 0 real postings for these 3,
+# confirmed live) -- these 3 instead decode the page's own embedded JSON
+# payload directly (see
 # decode_apptegy_pagebuilder_nodes() below) rather than reading rendered
 # text at all.
 #
@@ -702,6 +705,127 @@ parse_malta_postings <- function(rendered_text, url) {
   do.call(rbind, rows)
 }
 
+# Deer Lodge School District #1 (deerlodgeschools.org) -- found 2026-08-16
+# in a further follow-up pass past the original 23-town list, checking a
+# handful of additional higher-volume OPI-only candidates by hand. Real
+# postings live in 2 different real shapes on the same page, confirmed
+# live: a plain top text block with bare `<p><strong>Title</strong></p>`
+# lines (2 real postings, ending at the first application-link paragraph),
+# plus 3 separate CONTENT_NODE_CARD components further down whose own h2
+# heading is sometimes the real title itself ("Bus Driver"), sometimes a
+# generic recruiting label with the real title as the first real sentence
+# inside its own body text ("Certified Teacher" card body's own opening
+# line is "Special Education Teacher 5th/6th grades"), and one card
+# ("Substitutes Wanted") is genuinely NOT a specific posting at all -- a
+# standing "we always take substitute applications" ad, deliberately
+# excluded. 4 real current postings total. Uses
+# decode_apptegy_pagebuilder_nodes() like Conrad/Gardiner/Drummond, not the
+# innerText technique -- confirmed live this page's card content does
+# render into visible innerText fine here (unlike Conrad's accordions), but
+# the JSON gives a much more reliable per-card heading/body split than
+# text-scanning would.
+DEERLODGE_GENERIC_CARD_HEADINGS <- c("Substitutes Wanted")
+
+parse_deerlodge_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  nodes <- decode_apptegy_pagebuilder_nodes(html_text)
+  if (is.null(nodes)) return(empty)
+
+  rows <- list()
+
+  text_node <- find_apptegy_node(nodes, function(n) {
+    !is.null(n$type) && n$type == "CONTENT_NODE_TEXT" && !is.null(n$content$html) &&
+      grepl("Current open positions:", n$content$html, fixed = TRUE)
+  })
+  if (!is.null(text_node)) {
+    frag <- rvest::read_html(paste0("<div>", text_node$content$html, "</div>"))
+    ps <- rvest::html_elements(frag, "p")
+    for (p in ps) {
+      if (grepl("Current open positions:", rvest::html_text2(p), fixed = TRUE)) next
+      a_el <- rvest::html_element(p, "a")
+      if (!is.na(a_el)) break
+      title <- trimws(rvest::html_text2(p))
+      if (nzchar(title)) {
+        rows[[length(rows) + 1]] <- data.frame(Title = title, Location = "Deer Lodge",
+                                                Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+      }
+    }
+  }
+
+  cards <- find_all_apptegy_nodes(nodes, function(n) !is.null(n$type) && n$type == "CONTENT_NODE_CARD")
+  for (card in cards) {
+    heading <- trimws(gsub("<[^>]+>", "", card$content$heading$content$html))
+    if (heading %in% DEERLODGE_GENERIC_CARD_HEADINGS) next
+    if (heading == "Certified Teacher") {
+      body_lines <- apptegy_html_fragment_to_lines(card$content$text$content$html)
+      real_title <- body_lines[!grepl("^We are looking for|^Click on the link", body_lines)]
+      if (length(real_title) > 0) {
+        rows[[length(rows) + 1]] <- data.frame(Title = real_title[1], Location = "Deer Lodge",
+                                                Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+      }
+      next
+    }
+    if (nzchar(heading)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = heading, Location = "Deer Lodge",
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+# Townsend School District (townsend.k12.mt.us) -- found in the same
+# 2026-08-16 follow-up pass as Deer Lodge above. Real content renders into
+# visible innerText fine. Real postings sit under 2 real category headers
+# ("Internal Openings"/"External Openings"), each posting authored as
+# "TITLE - description prose" on one line -- confirmed live 2026-08-16, 1
+# Internal + 4 External = 5 real postings. Every real header/posting line
+# on this page carries a trailing non-breaking space (U+00A0) baked into
+# the site's own authored content -- stripped here, not a parsing artifact
+# (the same class of issue as Scobey's leading zero-width spaces above,
+# different character). Stops at "ATHLETIC DIRECTOR", a large centered
+# heading that starts a full job-description DOCUMENT for the "HS/MS
+# Activities Director" posting already captured above -- real reference
+# material, not a second posting.
+TOWNSEND_NBSP <- intToUtf8(160)
+
+parse_townsend_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- gsub(TOWNSEND_NBSP, " ", lines, fixed = TRUE)
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(grepl("^Townsend School Job Vacancies:", lines))
+  stop_idx <- which(lines == "ATHLETIC DIRECTOR")
+  if (length(start_idx) == 0 || length(stop_idx) == 0 || stop_idx[1] <= start_idx[1]) return(empty)
+  window <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+
+  rows <- list()
+  location <- NA_character_
+  for (line in window) {
+    if (line %in% c("Internal Openings", "External Openings")) {
+      location <- sub(" Openings$", "", line)
+      next
+    }
+    if (is.na(location)) next
+    title <- if (grepl(" - ", line, fixed = TRUE)) trimws(sub(" -.*$", "", line)) else line
+    if (nzchar(title)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = title, Location = location,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
 # Apptegy content pages are a client-side-rendered Nuxt app -- a plain
 # httr2 request gets a Fastly JS bot-challenge shell (3038 bytes, real
 # content never reaches a non-JS-executing client at all), confirmed live
@@ -902,7 +1026,23 @@ fetch_malta_postings <- function(chromote_session, url = "https://www.maltaschoo
   parse_malta_postings(text, url)
 }
 
-# Fetches all 8 Apptegy districts sharing one chromote session (created
+fetch_deerlodge_postings <- function(chromote_session, url = "https://www.deerlodgeschools.org/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  html <- chromote_session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+  parse_deerlodge_postings(html, url)
+}
+
+fetch_townsend_postings <- function(chromote_session, url = "https://www.townsend.k12.mt.us/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_townsend_postings(text, url)
+}
+
+# Fetches all 10 Apptegy districts sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
 # just scoped to only the districts that need it instead of being
@@ -944,5 +1084,11 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   drummond <- fetch_drummond_postings(session)
   if (nrow(drummond) > 0) drummond$District <- "Drummond Public Schools"
 
-  dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond)
+  deerlodge <- fetch_deerlodge_postings(session)
+  if (nrow(deerlodge) > 0) deerlodge$District <- "Deer Lodge School District #1"
+
+  townsend <- fetch_townsend_postings(session)
+  if (nrow(townsend) > 0) townsend$District <- "Townsend School District"
+
+  dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend)
 }

@@ -130,7 +130,8 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Westby School District 3", "Choteau School District",
                      "Gardiner Public Schools", "Malta Public Schools",
                      "Drummond Public Schools", "Custer Public Schools",
-                     "Scobey Schools"))
+                     "Scobey Schools", "Deer Lodge School District #1",
+                     "Townsend School District", "Three Forks Public Schools"))
 })
 
 # ---------------------------------------------------------------------------
