@@ -1,500 +1,703 @@
 "Broad_Category","Archive_Date","District","sum"
-"Art",2026-08-06,"Total",1
-"Art",2026-08-07,"Total",2
-"Art",2026-08-11,"Total",2
-"CTE - Business & Family Sciences",2026-08-06,"Total",3
-"CTE - Business & Family Sciences",2026-08-07,"Total",4
-"CTE - Business & Family Sciences",2026-08-11,"Total",6
-"CTE - Trades, Ag & Technical",2026-08-06,"Total",27
-"CTE - Trades, Ag & Technical",2026-08-07,"Total",23
-"CTE - Trades, Ag & Technical",2026-08-11,"Total",31
-"Early Childhood",2026-08-07,"Total",6
-"Early Childhood",2026-08-11,"Total",6
-"Elementary",2026-08-06,"Total",5
-"Elementary",2026-08-07,"Total",15
-"Elementary",2026-08-11,"Total",17
-"English Language Arts Secondary",2026-08-06,"Total",16
-"English Language Arts Secondary",2026-08-07,"Total",17
-"English Language Arts Secondary",2026-08-11,"Total",25
-"Language",2026-08-06,"Total",1
-"Language",2026-08-07,"Total",4
-"Language",2026-08-11,"Total",4
-"Library Media",2026-08-06,"Total",14
-"Library Media",2026-08-07,"Total",15
-"Library Media",2026-08-11,"Total",18
-"Math",2026-08-06,"Total",29
-"Math",2026-08-07,"Total",30
-"Math",2026-08-11,"Total",52
-"Music",2026-08-06,"Total",2
-"Music",2026-08-07,"Total",3
-"Music",2026-08-11,"Total",4
-"Other",2026-08-06,"Total",11
-"Other",2026-08-07,"Total",19
-"Other",2026-08-11,"Total",21
-"Physical Education",2026-08-06,"Total",1
-"Physical Education",2026-08-07,"Total",4
-"Physical Education",2026-08-11,"Total",3
-"Science",2026-08-06,"Total",19
-"Science",2026-08-07,"Total",18
-"Science",2026-08-11,"Total",33
-"Secondary Social Studies",2026-08-06,"Total",2
-"Secondary Social Studies",2026-08-07,"Total",4
-"Secondary Social Studies",2026-08-11,"Total",4
-"Special Education - General",2026-08-06,"Total",15
-"Special Education - General",2026-08-07,"Total",22
-"Special Education - General",2026-08-11,"Total",23
-"Special Education - Resource/Life Skills",2026-08-06,"Total",1
-"Special Education - Resource/Life Skills",2026-08-07,"Total",2
-"Special Education - Resource/Life Skills",2026-08-11,"Total",3
-"Art",2026-08-06,"Lockwood Schools",1
-"Art",2026-08-07,"Lockwood Schools",1
-"Art",2026-08-07,"Sidney Public Schools",1
-"Art",2026-08-11,"Lockwood Schools",1
-"Art",2026-08-11,"Sidney Public Schools",1
-"CTE - Business & Family Sciences",2026-08-06,"Forsyth",1
-"CTE - Business & Family Sciences",2026-08-06,"Ronan",1
-"CTE - Business & Family Sciences",2026-08-06,"Shepherd",1
-"CTE - Business & Family Sciences",2026-08-07,"Forsyth",1
-"CTE - Business & Family Sciences",2026-08-07,"Poplar Public Schools",1
-"CTE - Business & Family Sciences",2026-08-07,"Rocky Boy Public Schools",1
-"CTE - Business & Family Sciences",2026-08-07,"Shepherd",1
-"CTE - Business & Family Sciences",2026-08-11,"Forsyth",1
-"CTE - Business & Family Sciences",2026-08-11,"Hardin",1
-"CTE - Business & Family Sciences",2026-08-11,"Poplar Public Schools",1
-"CTE - Business & Family Sciences",2026-08-11,"Rocky Boy Public Schools",1
-"CTE - Business & Family Sciences",2026-08-11,"Ronan",1
-"CTE - Business & Family Sciences",2026-08-11,"Shepherd",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Absarokee",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Billings Public Schools",2
-"CTE - Trades, Ag & Technical",2026-08-06,"Broadus",2
-"CTE - Trades, Ag & Technical",2026-08-06,"Choteau",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Drummond",2
-"CTE - Trades, Ag & Technical",2026-08-06,"FAIRVIEW",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Fromberg",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Gardiner",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Hays",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Hot Springs",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Jordan",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Lame Deer",2
-"CTE - Trades, Ag & Technical",2026-08-06,"Miles City MT",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Plentywood, MT",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Poplar",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Rocky Boy",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Rudyard/Gildford",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Scobey",4
-"CTE - Trades, Ag & Technical",2026-08-06,"Sheridan, MT",1
-"CTE - Trades, Ag & Technical",2026-08-06,"Wibaux",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Absarokee",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Billings Public Schools",2
-"CTE - Trades, Ag & Technical",2026-08-07,"Broadus",2
-"CTE - Trades, Ag & Technical",2026-08-07,"Choteau",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Drummond",2
-"CTE - Trades, Ag & Technical",2026-08-07,"Fromberg",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Gardiner",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Hays",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Hot Springs",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Jordan",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Miles City MT",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Plentywood, MT",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Ronan Public Schools",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Rudyard/Gildford",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Scobey",4
-"CTE - Trades, Ag & Technical",2026-08-07,"Sheridan, MT",1
-"CTE - Trades, Ag & Technical",2026-08-07,"Wibaux",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Absarokee",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Billings Public Schools",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Broadus",2
-"CTE - Trades, Ag & Technical",2026-08-11,"Choteau",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Drummond",2
-"CTE - Trades, Ag & Technical",2026-08-11,"FAIRVIEW",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Fromberg",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Gardiner",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Hays",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Hot Springs",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Jordan",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Kalispell",2
-"CTE - Trades, Ag & Technical",2026-08-11,"Lame Deer",2
-"CTE - Trades, Ag & Technical",2026-08-11,"Miles City MT",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Missoula County Public Schools",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Plentywood, MT",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Poplar",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Rocky Boy",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Ronan Public Schools",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Rudyard/Gildford",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Scobey",4
-"CTE - Trades, Ag & Technical",2026-08-11,"Sheridan, MT",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Wibaux",1
-"CTE - Trades, Ag & Technical",2026-08-11,"Wolf Point Public Schools",1
-"Early Childhood",2026-08-07,"Fairview Public Schools",1
-"Early Childhood",2026-08-07,"Rocky Boy Public Schools",5
-"Early Childhood",2026-08-11,"Fairview Public Schools",1
-"Early Childhood",2026-08-11,"Rocky Boy Public Schools",5
-"Elementary",2026-08-06,"Billings Public Schools",1
-"Elementary",2026-08-06,"Great Falls Public Schools",4
-"Elementary",2026-08-07,"Billings Public Schools",1
-"Elementary",2026-08-07,"Colstrip Public Schools",3
-"Elementary",2026-08-07,"Great Falls Public Schools",4
-"Elementary",2026-08-07,"Lame Deer Public Schools",2
-"Elementary",2026-08-07,"Poplar Public Schools",2
-"Elementary",2026-08-07,"Rocky Boy Public Schools",2
-"Elementary",2026-08-07,"Ronan Public Schools",1
-"Elementary",2026-08-11,"Billings Public Schools",1
-"Elementary",2026-08-11,"Colstrip Public Schools",3
-"Elementary",2026-08-11,"Great Falls Public Schools",4
-"Elementary",2026-08-11,"Hardin Public Schools",1
-"Elementary",2026-08-11,"Lame Deer Public Schools",2
-"Elementary",2026-08-11,"Lodge Grass Public Schools",1
-"Elementary",2026-08-11,"Poplar Public Schools",2
-"Elementary",2026-08-11,"Rocky Boy Public Schools",2
-"Elementary",2026-08-11,"Wolf Point Public Schools",1
-"English Language Arts Secondary",2026-08-06,"Big Sandy",1
-"English Language Arts Secondary",2026-08-06,"Box Elder",1
-"English Language Arts Secondary",2026-08-06,"Browning, MT",1
-"English Language Arts Secondary",2026-08-06,"Chinook",1
-"English Language Arts Secondary",2026-08-06,"Fromberg",1
-"English Language Arts Secondary",2026-08-06,"Geyser",1
-"English Language Arts Secondary",2026-08-06,"Havre Public Schools",2
-"English Language Arts Secondary",2026-08-06,"Lima",1
-"English Language Arts Secondary",2026-08-06,"Lockwood Schools",1
-"English Language Arts Secondary",2026-08-06,"MELSTONE",2
-"English Language Arts Secondary",2026-08-06,"Plentywood, MT",2
-"English Language Arts Secondary",2026-08-06,"Roy, Montana",1
-"English Language Arts Secondary",2026-08-06,"Wolf Point",1
-"English Language Arts Secondary",2026-08-07,"Box Elder",1
-"English Language Arts Secondary",2026-08-07,"Browning, MT",1
-"English Language Arts Secondary",2026-08-07,"Chinook",1
-"English Language Arts Secondary",2026-08-07,"Colstrip Public Schools",1
-"English Language Arts Secondary",2026-08-07,"Fromberg",1
-"English Language Arts Secondary",2026-08-07,"Geyser",1
-"English Language Arts Secondary",2026-08-07,"Havre Public Schools",2
-"English Language Arts Secondary",2026-08-07,"Lame Deer Public Schools",1
-"English Language Arts Secondary",2026-08-07,"Lima",1
-"English Language Arts Secondary",2026-08-07,"Lockwood Schools",1
-"English Language Arts Secondary",2026-08-07,"MELSTONE",2
-"English Language Arts Secondary",2026-08-07,"Plentywood, MT",2
-"English Language Arts Secondary",2026-08-07,"Roy, Montana",1
-"English Language Arts Secondary",2026-08-07,"Wolf Point",1
-"English Language Arts Secondary",2026-08-11,"Belgrade",1
-"English Language Arts Secondary",2026-08-11,"Big Sandy",1
-"English Language Arts Secondary",2026-08-11,"Box Elder",1
-"English Language Arts Secondary",2026-08-11,"Browning, MT",1
-"English Language Arts Secondary",2026-08-11,"Chinook",1
-"English Language Arts Secondary",2026-08-11,"Colstrip Public Schools",1
-"English Language Arts Secondary",2026-08-11,"Fromberg",1
-"English Language Arts Secondary",2026-08-11,"Geyser",1
-"English Language Arts Secondary",2026-08-11,"Hardin",1
-"English Language Arts Secondary",2026-08-11,"Havre",1
-"English Language Arts Secondary",2026-08-11,"Havre Public Schools",2
-"English Language Arts Secondary",2026-08-11,"Helena",1
-"English Language Arts Secondary",2026-08-11,"Lame Deer Public Schools",1
-"English Language Arts Secondary",2026-08-11,"Lima",1
-"English Language Arts Secondary",2026-08-11,"Lockwood",1
-"English Language Arts Secondary",2026-08-11,"Lockwood Schools",1
-"English Language Arts Secondary",2026-08-11,"MELSTONE",2
-"English Language Arts Secondary",2026-08-11,"Missoula",1
-"English Language Arts Secondary",2026-08-11,"Plentywood, MT",2
-"English Language Arts Secondary",2026-08-11,"Roy, Montana",1
-"English Language Arts Secondary",2026-08-11,"Wolf Point",1
-"English Language Arts Secondary",2026-08-11,"Wolf Point Public Schools",1
-"Language",2026-08-06,"East Helena Public Schools",1
-"Language",2026-08-07,"Colstrip Public Schools",1
-"Language",2026-08-07,"East Helena Public Schools",1
-"Language",2026-08-07,"Stevensville Public Schools",2
-"Language",2026-08-11,"Colstrip Public Schools",1
-"Language",2026-08-11,"East Helena Public Schools",1
-"Language",2026-08-11,"Stevensville Public Schools",2
-"Library Media",2026-08-06,"841 Bear Canyon Road",1
-"Library Media",2026-08-06,"BUSBY",1
-"Library Media",2026-08-06,"Broadview",1
-"Library Media",2026-08-06,"Canyon Creek and Wolf Creek",1
-"Library Media",2026-08-06,"Drummond",2
-"Library Media",2026-08-06,"Helena Public Schools",1
-"Library Media",2026-08-06,"Hot Springs",1
-"Library Media",2026-08-06,"Kalispell Public Schools",1
-"Library Media",2026-08-06,"Nashua",1
-"Library Media",2026-08-06,"Power",1
-"Library Media",2026-08-06,"Thompson Falls",1
-"Library Media",2026-08-06,"Wilsall",1
-"Library Media",2026-08-06,"Wolf Point",1
-"Library Media",2026-08-07,"841 Bear Canyon Road",1
-"Library Media",2026-08-07,"BUSBY",1
-"Library Media",2026-08-07,"Broadview",1
-"Library Media",2026-08-07,"Canyon Creek and Wolf Creek",1
-"Library Media",2026-08-07,"Drummond",2
-"Library Media",2026-08-07,"Helena Public Schools",1
-"Library Media",2026-08-07,"Hot Springs",1
-"Library Media",2026-08-07,"Kalispell Public Schools",1
-"Library Media",2026-08-07,"Nashua",1
-"Library Media",2026-08-07,"Power",1
-"Library Media",2026-08-07,"Sidney Public Schools",1
-"Library Media",2026-08-07,"Thompson Falls",1
-"Library Media",2026-08-07,"Wilsall",1
-"Library Media",2026-08-07,"Wolf Point",1
-"Library Media",2026-08-11,"841 Bear Canyon Road",1
-"Library Media",2026-08-11,"BUSBY",1
-"Library Media",2026-08-11,"Billings-SD3",1
-"Library Media",2026-08-11,"Broadview",1
-"Library Media",2026-08-11,"Canyon Creek and Wolf Creek",1
-"Library Media",2026-08-11,"Drummond",2
-"Library Media",2026-08-11,"Hot Springs",1
-"Library Media",2026-08-11,"Kalispell",2
-"Library Media",2026-08-11,"Kalispell Public Schools",1
-"Library Media",2026-08-11,"Lockwood",1
-"Library Media",2026-08-11,"Nashua",1
-"Library Media",2026-08-11,"Power",1
-"Library Media",2026-08-11,"Sidney Public Schools",1
-"Library Media",2026-08-11,"Thompson Falls",1
-"Library Media",2026-08-11,"Wilsall",1
-"Library Media",2026-08-11,"Wolf Point",1
-"Math",2026-08-06,"Arlee",1
-"Math",2026-08-06,"Ashland",1
-"Math",2026-08-06,"Billings Public Schools",2
-"Math",2026-08-06,"Boulder",1
-"Math",2026-08-06,"Box Elder",1
-"Math",2026-08-06,"Browning",1
-"Math",2026-08-06,"Cascade",1
-"Math",2026-08-06,"Chester Montana",1
-"Math",2026-08-06,"East Helena Public Schools",2
-"Math",2026-08-06,"Fairview",1
-"Math",2026-08-06,"Great Falls Public Schools",1
-"Math",2026-08-06,"Havre Public Schools",1
-"Math",2026-08-06,"Highwood",1
-"Math",2026-08-06,"Hysham",1
-"Math",2026-08-06,"Lame Deer, MT",1
-"Math",2026-08-06,"Libby",1
-"Math",2026-08-06,"Lima",1
-"Math",2026-08-06,"Livingston",1
-"Math",2026-08-06,"Lockwood Schools",1
-"Math",2026-08-06,"Lodge Grass, Montana",1
-"Math",2026-08-06,"Manhattan",1
-"Math",2026-08-06,"Miles City, MT",1
-"Math",2026-08-06,"Plentywood, MT",1
-"Math",2026-08-06,"Plevna, Montana",1
-"Math",2026-08-06,"Scobey",2
-"Math",2026-08-06,"Sheridan, MT",1
-"Math",2026-08-07,"Arlee",1
-"Math",2026-08-07,"Ashland",1
-"Math",2026-08-07,"Big Sandy Public Schools",1
-"Math",2026-08-07,"Billings Public Schools",2
-"Math",2026-08-07,"Boulder",1
-"Math",2026-08-07,"Box Elder",1
-"Math",2026-08-07,"Browning",1
-"Math",2026-08-07,"Cascade",1
-"Math",2026-08-07,"Chester Montana",1
-"Math",2026-08-07,"Colstrip Public Schools",1
-"Math",2026-08-07,"East Helena Public Schools",2
-"Math",2026-08-07,"Great Falls Public Schools",1
-"Math",2026-08-07,"Havre Public Schools",1
-"Math",2026-08-07,"Highwood",1
-"Math",2026-08-07,"Hysham",1
-"Math",2026-08-07,"Lame Deer Public Schools",1
-"Math",2026-08-07,"Libby",1
-"Math",2026-08-07,"Lima",1
-"Math",2026-08-07,"Livingston",1
-"Math",2026-08-07,"Lockwood Schools",1
-"Math",2026-08-07,"Lodge Grass, Montana",1
-"Math",2026-08-07,"Manhattan",1
-"Math",2026-08-07,"Miles City, MT",1
-"Math",2026-08-07,"Plentywood, MT",1
-"Math",2026-08-07,"Plevna, Montana",1
-"Math",2026-08-07,"Scobey",2
-"Math",2026-08-07,"Sheridan, MT",1
-"Math",2026-08-11,"Arlee",1
-"Math",2026-08-11,"Ashland",1
-"Math",2026-08-11,"Belgrade",2
-"Math",2026-08-11,"Big Sandy Public Schools",1
-"Math",2026-08-11,"Billings",5
-"Math",2026-08-11,"Billings Public Schools",2
-"Math",2026-08-11,"Boulder",1
-"Math",2026-08-11,"Box Elder",1
-"Math",2026-08-11,"Bozeman",1
-"Math",2026-08-11,"Browning",1
-"Math",2026-08-11,"Cascade",1
-"Math",2026-08-11,"Chester Montana",1
-"Math",2026-08-11,"Colstrip Public Schools",1
-"Math",2026-08-11,"Columbia Falls",1
-"Math",2026-08-11,"East Helena",1
-"Math",2026-08-11,"East Helena Public Schools",2
-"Math",2026-08-11,"Fairview",1
-"Math",2026-08-11,"GREAT FALLS",1
-"Math",2026-08-11,"Great Falls Public Schools",1
-"Math",2026-08-11,"Havre",1
-"Math",2026-08-11,"Havre Public Schools",1
-"Math",2026-08-11,"Highwood",1
-"Math",2026-08-11,"Hysham",1
-"Math",2026-08-11,"Lame Deer Public Schools",1
-"Math",2026-08-11,"Lame Deer, MT",1
-"Math",2026-08-11,"Libby",1
-"Math",2026-08-11,"Lima",1
-"Math",2026-08-11,"Livingston",1
-"Math",2026-08-11,"Livingston Public Schools",1
-"Math",2026-08-11,"Lockwood",1
-"Math",2026-08-11,"Lockwood Schools",1
-"Math",2026-08-11,"Lodge Grass Public Schools",1
-"Math",2026-08-11,"Lodge Grass, Montana",1
-"Math",2026-08-11,"MISSOULA",1
-"Math",2026-08-11,"Manhattan",1
-"Math",2026-08-11,"Miles City, MT",1
-"Math",2026-08-11,"Missoula",4
-"Math",2026-08-11,"Plentywood, MT",1
-"Math",2026-08-11,"Plevna, Montana",1
-"Math",2026-08-11,"Scobey",2
-"Math",2026-08-11,"Sheridan, MT",1
-"Music",2026-08-06,"Great Falls Public Schools",1
-"Music",2026-08-06,"Missoula County Public Schools",1
-"Music",2026-08-07,"Great Falls Public Schools",1
-"Music",2026-08-07,"Lame Deer Public Schools",1
-"Music",2026-08-07,"Missoula County Public Schools",1
-"Music",2026-08-11,"Great Falls Public Schools",1
-"Music",2026-08-11,"Lame Deer Public Schools",1
-"Music",2026-08-11,"Missoula County Public Schools",1
-"Music",2026-08-11,"Wolf Point Public Schools",1
-"Other",2026-08-06,"East Helena Public Schools",2
-"Other",2026-08-06,"Great Falls Public Schools",3
-"Other",2026-08-06,"Havre Public Schools",1
-"Other",2026-08-06,"Helena Public Schools",1
-"Other",2026-08-06,"Kalispell Public Schools",3
-"Other",2026-08-06,"Whitefish School District",1
-"Other",2026-08-07,"East Helena Public Schools",2
-"Other",2026-08-07,"Fairview Public Schools",1
-"Other",2026-08-07,"Glendive Public Schools",1
-"Other",2026-08-07,"Great Falls Public Schools",3
-"Other",2026-08-07,"Havre Public Schools",1
-"Other",2026-08-07,"Helena Public Schools",1
-"Other",2026-08-07,"Kalispell Public Schools",3
-"Other",2026-08-07,"Lame Deer Public Schools",3
-"Other",2026-08-07,"Rocky Boy Public Schools",2
-"Other",2026-08-07,"Ronan Public Schools",1
-"Other",2026-08-07,"Whitefish School District",1
-"Other",2026-08-11,"East Helena Public Schools",1
-"Other",2026-08-11,"Fairview Public Schools",1
-"Other",2026-08-11,"Glendive Public Schools",1
-"Other",2026-08-11,"Great Falls Public Schools",3
-"Other",2026-08-11,"Havre Public Schools",1
-"Other",2026-08-11,"Helena Public Schools",1
-"Other",2026-08-11,"Kalispell Public Schools",3
-"Other",2026-08-11,"Lame Deer Public Schools",3
-"Other",2026-08-11,"Missoula County Public Schools",2
-"Other",2026-08-11,"Rocky Boy Public Schools",2
-"Other",2026-08-11,"Ronan Public Schools",1
-"Other",2026-08-11,"Stevensville Public Schools",1
-"Other",2026-08-11,"Whitefish School District",1
-"Physical Education",2026-08-06,"Kalispell Public Schools",1
-"Physical Education",2026-08-07,"Kalispell Public Schools",1
-"Physical Education",2026-08-07,"Lame Deer Public Schools",1
-"Physical Education",2026-08-07,"Ronan Public Schools",1
-"Physical Education",2026-08-07,"Stevensville Public Schools",1
-"Physical Education",2026-08-11,"Kalispell Public Schools",1
-"Physical Education",2026-08-11,"Lame Deer Public Schools",1
-"Physical Education",2026-08-11,"Stevensville Public Schools",1
-"Science",2026-08-06,"Billings Public Schools",1
-"Science",2026-08-06,"Cascade",1
-"Science",2026-08-06,"East Helena Public Schools",1
-"Science",2026-08-06,"Fairview",1
-"Science",2026-08-06,"Gallatin Gateway",1
-"Science",2026-08-06,"Great Falls Public Schools",2
-"Science",2026-08-06,"Harrison",2
-"Science",2026-08-06,"Lame Deer, MT",1
-"Science",2026-08-06,"Plentywood, MT",1
-"Science",2026-08-06,"Plevna, Montana",1
-"Science",2026-08-06,"Ronan",1
-"Science",2026-08-06,"Scobey",2
-"Science",2026-08-06,"Shepherd",1
-"Science",2026-08-06,"Westby",1
-"Science",2026-08-06,"Whitewater",1
-"Science",2026-08-06,"Wolf Point",1
-"Science",2026-08-07,"Billings Public Schools",1
-"Science",2026-08-07,"Cascade",1
-"Science",2026-08-07,"East Helena Public Schools",1
-"Science",2026-08-07,"Gallatin Gateway",1
-"Science",2026-08-07,"Great Falls Public Schools",2
-"Science",2026-08-07,"Harrison",2
-"Science",2026-08-07,"Lame Deer Public Schools",1
-"Science",2026-08-07,"Plentywood, MT",1
-"Science",2026-08-07,"Plevna, Montana",1
-"Science",2026-08-07,"Ronan Public Schools",1
-"Science",2026-08-07,"Scobey",2
-"Science",2026-08-07,"Shepherd",1
-"Science",2026-08-07,"Westby",1
-"Science",2026-08-07,"Whitewater",1
-"Science",2026-08-07,"Wolf Point",1
-"Science",2026-08-11,"BILLINGS",1
-"Science",2026-08-11,"Belgrade",1
-"Science",2026-08-11,"Big Timber- Between Bozeman and Billings",2
-"Science",2026-08-11,"Billings - Billings Christian School",1
-"Science",2026-08-11,"Billings Public Schools",2
-"Science",2026-08-11,"Cascade",1
-"Science",2026-08-11,"Columbia Falls",1
-"Science",2026-08-11,"East Helena",1
-"Science",2026-08-11,"East Helena Public Schools",1
-"Science",2026-08-11,"Fairview",1
-"Science",2026-08-11,"GREAT FALLS",1
-"Science",2026-08-11,"Gallatin Gateway",1
-"Science",2026-08-11,"Great Falls",1
-"Science",2026-08-11,"Great Falls Public Schools",1
-"Science",2026-08-11,"Harrison",2
-"Science",2026-08-11,"Helena",1
-"Science",2026-08-11,"Kalispell",1
-"Science",2026-08-11,"Lame Deer Public Schools",1
-"Science",2026-08-11,"Lame Deer, MT",1
-"Science",2026-08-11,"Plentywood, MT",1
-"Science",2026-08-11,"Plevna, Montana",1
-"Science",2026-08-11,"Ronan",1
-"Science",2026-08-11,"Scobey",2
-"Science",2026-08-11,"Shepherd",1
-"Science",2026-08-11,"Westby",1
-"Science",2026-08-11,"Whitewater",1
-"Science",2026-08-11,"Wolf Point",1
-"Science",2026-08-11,"Wolf Point Public Schools",2
-"Secondary Social Studies",2026-08-06,"Billings Public Schools",1
-"Secondary Social Studies",2026-08-06,"Kalispell Public Schools",1
-"Secondary Social Studies",2026-08-07,"Billings Public Schools",1
-"Secondary Social Studies",2026-08-07,"Kalispell Public Schools",1
-"Secondary Social Studies",2026-08-07,"Lame Deer Public Schools",1
-"Secondary Social Studies",2026-08-07,"Poplar Public Schools",1
-"Secondary Social Studies",2026-08-11,"Billings Public Schools",1
-"Secondary Social Studies",2026-08-11,"Kalispell Public Schools",1
-"Secondary Social Studies",2026-08-11,"Lame Deer Public Schools",1
-"Secondary Social Studies",2026-08-11,"Poplar Public Schools",1
-"Special Education - General",2026-08-06,"Billings Public Schools",2
-"Special Education - General",2026-08-06,"Great Falls Public Schools",5
-"Special Education - General",2026-08-06,"Hardin Public Schools",1
-"Special Education - General",2026-08-06,"Havre Public Schools",1
-"Special Education - General",2026-08-06,"Helena Public Schools",1
-"Special Education - General",2026-08-06,"Laurel Public Schools",2
-"Special Education - General",2026-08-06,"Lockwood Schools",1
-"Special Education - General",2026-08-06,"Whitefish School District",2
-"Special Education - General",2026-08-07,"Billings Public Schools",2
-"Special Education - General",2026-08-07,"Colstrip Public Schools",1
-"Special Education - General",2026-08-07,"Glendive Public Schools",2
-"Special Education - General",2026-08-07,"Great Falls Public Schools",5
-"Special Education - General",2026-08-07,"Hardin Public Schools",1
-"Special Education - General",2026-08-07,"Havre Public Schools",1
-"Special Education - General",2026-08-07,"Helena Public Schools",1
-"Special Education - General",2026-08-07,"Lame Deer Public Schools",1
-"Special Education - General",2026-08-07,"Laurel Public Schools",2
-"Special Education - General",2026-08-07,"Lockwood Schools",1
-"Special Education - General",2026-08-07,"Poplar Public Schools",1
-"Special Education - General",2026-08-07,"Ronan Public Schools",1
-"Special Education - General",2026-08-07,"Sidney Public Schools",1
-"Special Education - General",2026-08-07,"Whitefish School District",2
-"Special Education - General",2026-08-11,"Billings Public Schools",2
-"Special Education - General",2026-08-11,"Colstrip Public Schools",1
-"Special Education - General",2026-08-11,"Glendive Public Schools",2
-"Special Education - General",2026-08-11,"Great Falls Public Schools",5
-"Special Education - General",2026-08-11,"Hardin Public Schools",1
-"Special Education - General",2026-08-11,"Havre Public Schools",1
-"Special Education - General",2026-08-11,"Helena Public Schools",1
-"Special Education - General",2026-08-11,"Lame Deer Public Schools",1
-"Special Education - General",2026-08-11,"Laurel Public Schools",2
-"Special Education - General",2026-08-11,"Lockwood Schools",1
-"Special Education - General",2026-08-11,"Lodge Grass Public Schools",1
-"Special Education - General",2026-08-11,"Poplar Public Schools",1
-"Special Education - General",2026-08-11,"Ronan Public Schools",1
-"Special Education - General",2026-08-11,"Sidney Public Schools",1
-"Special Education - General",2026-08-11,"Whitefish School District",2
-"Special Education - Resource/Life Skills",2026-08-06,"Missoula County Public Schools",1
-"Special Education - Resource/Life Skills",2026-08-07,"Big Sandy Public Schools",1
-"Special Education - Resource/Life Skills",2026-08-07,"Missoula County Public Schools",1
-"Special Education - Resource/Life Skills",2026-08-11,"Big Sandy Public Schools",1
-"Special Education - Resource/Life Skills",2026-08-11,"Missoula County Public Schools",2
+"Art","2026-08-06","Total",1
+"Art","2026-08-07","Total",2
+"Art","2026-08-11","Total",2
+"CTE - Business & Family Sciences","2026-08-06","Total",3
+"CTE - Business & Family Sciences","2026-08-07","Total",4
+"CTE - Business & Family Sciences","2026-08-11","Total",6
+"CTE - Trades, Ag & Technical","2026-08-06","Total",27
+"CTE - Trades, Ag & Technical","2026-08-07","Total",23
+"CTE - Trades, Ag & Technical","2026-08-11","Total",31
+"Early Childhood","2026-08-07","Total",6
+"Early Childhood","2026-08-11","Total",6
+"Elementary","2026-08-06","Total",5
+"Elementary","2026-08-07","Total",15
+"Elementary","2026-08-11","Total",17
+"English Language Arts Secondary","2026-08-06","Total",16
+"English Language Arts Secondary","2026-08-07","Total",17
+"English Language Arts Secondary","2026-08-11","Total",25
+"Language","2026-08-06","Total",1
+"Language","2026-08-07","Total",4
+"Language","2026-08-11","Total",4
+"Library Media","2026-08-06","Total",14
+"Library Media","2026-08-07","Total",15
+"Library Media","2026-08-11","Total",18
+"Math","2026-08-06","Total",29
+"Math","2026-08-07","Total",30
+"Math","2026-08-11","Total",52
+"Music","2026-08-06","Total",2
+"Music","2026-08-07","Total",3
+"Music","2026-08-11","Total",4
+"Other","2026-08-06","Total",11
+"Other","2026-08-07","Total",19
+"Other","2026-08-11","Total",21
+"Physical Education","2026-08-06","Total",1
+"Physical Education","2026-08-07","Total",4
+"Physical Education","2026-08-11","Total",3
+"Science","2026-08-06","Total",19
+"Science","2026-08-07","Total",18
+"Science","2026-08-11","Total",33
+"Secondary Social Studies","2026-08-06","Total",2
+"Secondary Social Studies","2026-08-07","Total",4
+"Secondary Social Studies","2026-08-11","Total",4
+"Special Education - General","2026-08-06","Total",15
+"Special Education - General","2026-08-07","Total",22
+"Special Education - General","2026-08-11","Total",23
+"Special Education - Resource/Life Skills","2026-08-06","Total",1
+"Special Education - Resource/Life Skills","2026-08-07","Total",2
+"Special Education - Resource/Life Skills","2026-08-11","Total",3
+"Art","2026-08-06","Lockwood Schools",1
+"Art","2026-08-07","Lockwood Schools",1
+"Art","2026-08-07","Sidney Public Schools",1
+"Art","2026-08-11","Lockwood Schools",1
+"Art","2026-08-11","Sidney Public Schools",1
+"CTE - Business & Family Sciences","2026-08-06","Forsyth",1
+"CTE - Business & Family Sciences","2026-08-06","Ronan",1
+"CTE - Business & Family Sciences","2026-08-06","Shepherd",1
+"CTE - Business & Family Sciences","2026-08-07","Forsyth",1
+"CTE - Business & Family Sciences","2026-08-07","Poplar Public Schools",1
+"CTE - Business & Family Sciences","2026-08-07","Rocky Boy Public Schools",1
+"CTE - Business & Family Sciences","2026-08-07","Shepherd",1
+"CTE - Business & Family Sciences","2026-08-11","Forsyth",1
+"CTE - Business & Family Sciences","2026-08-11","Hardin",1
+"CTE - Business & Family Sciences","2026-08-11","Poplar Public Schools",1
+"CTE - Business & Family Sciences","2026-08-11","Rocky Boy Public Schools",1
+"CTE - Business & Family Sciences","2026-08-11","Ronan",1
+"CTE - Business & Family Sciences","2026-08-11","Shepherd",1
+"CTE - Trades, Ag & Technical","2026-08-06","Absarokee",1
+"CTE - Trades, Ag & Technical","2026-08-06","Billings Public Schools",2
+"CTE - Trades, Ag & Technical","2026-08-06","Broadus",2
+"CTE - Trades, Ag & Technical","2026-08-06","Choteau",1
+"CTE - Trades, Ag & Technical","2026-08-06","Drummond",2
+"CTE - Trades, Ag & Technical","2026-08-06","FAIRVIEW",1
+"CTE - Trades, Ag & Technical","2026-08-06","Fromberg",1
+"CTE - Trades, Ag & Technical","2026-08-06","Gardiner",1
+"CTE - Trades, Ag & Technical","2026-08-06","Hays",1
+"CTE - Trades, Ag & Technical","2026-08-06","Hot Springs",1
+"CTE - Trades, Ag & Technical","2026-08-06","Jordan",1
+"CTE - Trades, Ag & Technical","2026-08-06","Lame Deer",2
+"CTE - Trades, Ag & Technical","2026-08-06","Miles City MT",1
+"CTE - Trades, Ag & Technical","2026-08-06","Plentywood, MT",1
+"CTE - Trades, Ag & Technical","2026-08-06","Poplar",1
+"CTE - Trades, Ag & Technical","2026-08-06","Rocky Boy",1
+"CTE - Trades, Ag & Technical","2026-08-06","Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical","2026-08-06","Scobey",4
+"CTE - Trades, Ag & Technical","2026-08-06","Sheridan, MT",1
+"CTE - Trades, Ag & Technical","2026-08-06","Wibaux",1
+"CTE - Trades, Ag & Technical","2026-08-07","Absarokee",1
+"CTE - Trades, Ag & Technical","2026-08-07","Billings Public Schools",2
+"CTE - Trades, Ag & Technical","2026-08-07","Broadus",2
+"CTE - Trades, Ag & Technical","2026-08-07","Choteau",1
+"CTE - Trades, Ag & Technical","2026-08-07","Drummond",2
+"CTE - Trades, Ag & Technical","2026-08-07","Fromberg",1
+"CTE - Trades, Ag & Technical","2026-08-07","Gardiner",1
+"CTE - Trades, Ag & Technical","2026-08-07","Hays",1
+"CTE - Trades, Ag & Technical","2026-08-07","Hot Springs",1
+"CTE - Trades, Ag & Technical","2026-08-07","Jordan",1
+"CTE - Trades, Ag & Technical","2026-08-07","Miles City MT",1
+"CTE - Trades, Ag & Technical","2026-08-07","Plentywood, MT",1
+"CTE - Trades, Ag & Technical","2026-08-07","Ronan Public Schools",1
+"CTE - Trades, Ag & Technical","2026-08-07","Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical","2026-08-07","Scobey",4
+"CTE - Trades, Ag & Technical","2026-08-07","Sheridan, MT",1
+"CTE - Trades, Ag & Technical","2026-08-07","Wibaux",1
+"CTE - Trades, Ag & Technical","2026-08-11","Absarokee",1
+"CTE - Trades, Ag & Technical","2026-08-11","Billings Public Schools",1
+"CTE - Trades, Ag & Technical","2026-08-11","Broadus",2
+"CTE - Trades, Ag & Technical","2026-08-11","Choteau",1
+"CTE - Trades, Ag & Technical","2026-08-11","Drummond",2
+"CTE - Trades, Ag & Technical","2026-08-11","FAIRVIEW",1
+"CTE - Trades, Ag & Technical","2026-08-11","Fromberg",1
+"CTE - Trades, Ag & Technical","2026-08-11","Gardiner",1
+"CTE - Trades, Ag & Technical","2026-08-11","Hays",1
+"CTE - Trades, Ag & Technical","2026-08-11","Hot Springs",1
+"CTE - Trades, Ag & Technical","2026-08-11","Jordan",1
+"CTE - Trades, Ag & Technical","2026-08-11","Kalispell",2
+"CTE - Trades, Ag & Technical","2026-08-11","Lame Deer",2
+"CTE - Trades, Ag & Technical","2026-08-11","Miles City MT",1
+"CTE - Trades, Ag & Technical","2026-08-11","Missoula County Public Schools",1
+"CTE - Trades, Ag & Technical","2026-08-11","Plentywood, MT",1
+"CTE - Trades, Ag & Technical","2026-08-11","Poplar",1
+"CTE - Trades, Ag & Technical","2026-08-11","Rocky Boy",1
+"CTE - Trades, Ag & Technical","2026-08-11","Ronan Public Schools",1
+"CTE - Trades, Ag & Technical","2026-08-11","Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical","2026-08-11","Scobey",4
+"CTE - Trades, Ag & Technical","2026-08-11","Sheridan, MT",1
+"CTE - Trades, Ag & Technical","2026-08-11","Wibaux",1
+"CTE - Trades, Ag & Technical","2026-08-11","Wolf Point Public Schools",1
+"Early Childhood","2026-08-07","Fairview Public Schools",1
+"Early Childhood","2026-08-07","Rocky Boy Public Schools",5
+"Early Childhood","2026-08-11","Fairview Public Schools",1
+"Early Childhood","2026-08-11","Rocky Boy Public Schools",5
+"Elementary","2026-08-06","Billings Public Schools",1
+"Elementary","2026-08-06","Great Falls Public Schools",4
+"Elementary","2026-08-07","Billings Public Schools",1
+"Elementary","2026-08-07","Colstrip Public Schools",3
+"Elementary","2026-08-07","Great Falls Public Schools",4
+"Elementary","2026-08-07","Lame Deer Public Schools",2
+"Elementary","2026-08-07","Poplar Public Schools",2
+"Elementary","2026-08-07","Rocky Boy Public Schools",2
+"Elementary","2026-08-07","Ronan Public Schools",1
+"Elementary","2026-08-11","Billings Public Schools",1
+"Elementary","2026-08-11","Colstrip Public Schools",3
+"Elementary","2026-08-11","Great Falls Public Schools",4
+"Elementary","2026-08-11","Hardin Public Schools",1
+"Elementary","2026-08-11","Lame Deer Public Schools",2
+"Elementary","2026-08-11","Lodge Grass Public Schools",1
+"Elementary","2026-08-11","Poplar Public Schools",2
+"Elementary","2026-08-11","Rocky Boy Public Schools",2
+"Elementary","2026-08-11","Wolf Point Public Schools",1
+"English Language Arts Secondary","2026-08-06","Big Sandy",1
+"English Language Arts Secondary","2026-08-06","Box Elder",1
+"English Language Arts Secondary","2026-08-06","Browning, MT",1
+"English Language Arts Secondary","2026-08-06","Chinook",1
+"English Language Arts Secondary","2026-08-06","Fromberg",1
+"English Language Arts Secondary","2026-08-06","Geyser",1
+"English Language Arts Secondary","2026-08-06","Havre Public Schools",2
+"English Language Arts Secondary","2026-08-06","Lima",1
+"English Language Arts Secondary","2026-08-06","Lockwood Schools",1
+"English Language Arts Secondary","2026-08-06","MELSTONE",2
+"English Language Arts Secondary","2026-08-06","Plentywood, MT",2
+"English Language Arts Secondary","2026-08-06","Roy, Montana",1
+"English Language Arts Secondary","2026-08-06","Wolf Point",1
+"English Language Arts Secondary","2026-08-07","Box Elder",1
+"English Language Arts Secondary","2026-08-07","Browning, MT",1
+"English Language Arts Secondary","2026-08-07","Chinook",1
+"English Language Arts Secondary","2026-08-07","Colstrip Public Schools",1
+"English Language Arts Secondary","2026-08-07","Fromberg",1
+"English Language Arts Secondary","2026-08-07","Geyser",1
+"English Language Arts Secondary","2026-08-07","Havre Public Schools",2
+"English Language Arts Secondary","2026-08-07","Lame Deer Public Schools",1
+"English Language Arts Secondary","2026-08-07","Lima",1
+"English Language Arts Secondary","2026-08-07","Lockwood Schools",1
+"English Language Arts Secondary","2026-08-07","MELSTONE",2
+"English Language Arts Secondary","2026-08-07","Plentywood, MT",2
+"English Language Arts Secondary","2026-08-07","Roy, Montana",1
+"English Language Arts Secondary","2026-08-07","Wolf Point",1
+"English Language Arts Secondary","2026-08-11","Belgrade",1
+"English Language Arts Secondary","2026-08-11","Big Sandy",1
+"English Language Arts Secondary","2026-08-11","Box Elder",1
+"English Language Arts Secondary","2026-08-11","Browning, MT",1
+"English Language Arts Secondary","2026-08-11","Chinook",1
+"English Language Arts Secondary","2026-08-11","Colstrip Public Schools",1
+"English Language Arts Secondary","2026-08-11","Fromberg",1
+"English Language Arts Secondary","2026-08-11","Geyser",1
+"English Language Arts Secondary","2026-08-11","Hardin",1
+"English Language Arts Secondary","2026-08-11","Havre",1
+"English Language Arts Secondary","2026-08-11","Havre Public Schools",2
+"English Language Arts Secondary","2026-08-11","Helena",1
+"English Language Arts Secondary","2026-08-11","Lame Deer Public Schools",1
+"English Language Arts Secondary","2026-08-11","Lima",1
+"English Language Arts Secondary","2026-08-11","Lockwood",1
+"English Language Arts Secondary","2026-08-11","Lockwood Schools",1
+"English Language Arts Secondary","2026-08-11","MELSTONE",2
+"English Language Arts Secondary","2026-08-11","Missoula",1
+"English Language Arts Secondary","2026-08-11","Plentywood, MT",2
+"English Language Arts Secondary","2026-08-11","Roy, Montana",1
+"English Language Arts Secondary","2026-08-11","Wolf Point",1
+"English Language Arts Secondary","2026-08-11","Wolf Point Public Schools",1
+"Language","2026-08-06","East Helena Public Schools",1
+"Language","2026-08-07","Colstrip Public Schools",1
+"Language","2026-08-07","East Helena Public Schools",1
+"Language","2026-08-07","Stevensville Public Schools",2
+"Language","2026-08-11","Colstrip Public Schools",1
+"Language","2026-08-11","East Helena Public Schools",1
+"Language","2026-08-11","Stevensville Public Schools",2
+"Library Media","2026-08-06","841 Bear Canyon Road",1
+"Library Media","2026-08-06","BUSBY",1
+"Library Media","2026-08-06","Broadview",1
+"Library Media","2026-08-06","Canyon Creek and Wolf Creek",1
+"Library Media","2026-08-06","Drummond",2
+"Library Media","2026-08-06","Helena Public Schools",1
+"Library Media","2026-08-06","Hot Springs",1
+"Library Media","2026-08-06","Kalispell Public Schools",1
+"Library Media","2026-08-06","Nashua",1
+"Library Media","2026-08-06","Power",1
+"Library Media","2026-08-06","Thompson Falls",1
+"Library Media","2026-08-06","Wilsall",1
+"Library Media","2026-08-06","Wolf Point",1
+"Library Media","2026-08-07","841 Bear Canyon Road",1
+"Library Media","2026-08-07","BUSBY",1
+"Library Media","2026-08-07","Broadview",1
+"Library Media","2026-08-07","Canyon Creek and Wolf Creek",1
+"Library Media","2026-08-07","Drummond",2
+"Library Media","2026-08-07","Helena Public Schools",1
+"Library Media","2026-08-07","Hot Springs",1
+"Library Media","2026-08-07","Kalispell Public Schools",1
+"Library Media","2026-08-07","Nashua",1
+"Library Media","2026-08-07","Power",1
+"Library Media","2026-08-07","Sidney Public Schools",1
+"Library Media","2026-08-07","Thompson Falls",1
+"Library Media","2026-08-07","Wilsall",1
+"Library Media","2026-08-07","Wolf Point",1
+"Library Media","2026-08-11","841 Bear Canyon Road",1
+"Library Media","2026-08-11","BUSBY",1
+"Library Media","2026-08-11","Billings-SD3",1
+"Library Media","2026-08-11","Broadview",1
+"Library Media","2026-08-11","Canyon Creek and Wolf Creek",1
+"Library Media","2026-08-11","Drummond",2
+"Library Media","2026-08-11","Hot Springs",1
+"Library Media","2026-08-11","Kalispell",2
+"Library Media","2026-08-11","Kalispell Public Schools",1
+"Library Media","2026-08-11","Lockwood",1
+"Library Media","2026-08-11","Nashua",1
+"Library Media","2026-08-11","Power",1
+"Library Media","2026-08-11","Sidney Public Schools",1
+"Library Media","2026-08-11","Thompson Falls",1
+"Library Media","2026-08-11","Wilsall",1
+"Library Media","2026-08-11","Wolf Point",1
+"Math","2026-08-06","Arlee",1
+"Math","2026-08-06","Ashland",1
+"Math","2026-08-06","Billings Public Schools",2
+"Math","2026-08-06","Boulder",1
+"Math","2026-08-06","Box Elder",1
+"Math","2026-08-06","Browning",1
+"Math","2026-08-06","Cascade",1
+"Math","2026-08-06","Chester Montana",1
+"Math","2026-08-06","East Helena Public Schools",2
+"Math","2026-08-06","Fairview",1
+"Math","2026-08-06","Great Falls Public Schools",1
+"Math","2026-08-06","Havre Public Schools",1
+"Math","2026-08-06","Highwood",1
+"Math","2026-08-06","Hysham",1
+"Math","2026-08-06","Lame Deer, MT",1
+"Math","2026-08-06","Libby",1
+"Math","2026-08-06","Lima",1
+"Math","2026-08-06","Livingston",1
+"Math","2026-08-06","Lockwood Schools",1
+"Math","2026-08-06","Lodge Grass, Montana",1
+"Math","2026-08-06","Manhattan",1
+"Math","2026-08-06","Miles City, MT",1
+"Math","2026-08-06","Plentywood, MT",1
+"Math","2026-08-06","Plevna, Montana",1
+"Math","2026-08-06","Scobey",2
+"Math","2026-08-06","Sheridan, MT",1
+"Math","2026-08-07","Arlee",1
+"Math","2026-08-07","Ashland",1
+"Math","2026-08-07","Big Sandy Public Schools",1
+"Math","2026-08-07","Billings Public Schools",2
+"Math","2026-08-07","Boulder",1
+"Math","2026-08-07","Box Elder",1
+"Math","2026-08-07","Browning",1
+"Math","2026-08-07","Cascade",1
+"Math","2026-08-07","Chester Montana",1
+"Math","2026-08-07","Colstrip Public Schools",1
+"Math","2026-08-07","East Helena Public Schools",2
+"Math","2026-08-07","Great Falls Public Schools",1
+"Math","2026-08-07","Havre Public Schools",1
+"Math","2026-08-07","Highwood",1
+"Math","2026-08-07","Hysham",1
+"Math","2026-08-07","Lame Deer Public Schools",1
+"Math","2026-08-07","Libby",1
+"Math","2026-08-07","Lima",1
+"Math","2026-08-07","Livingston",1
+"Math","2026-08-07","Lockwood Schools",1
+"Math","2026-08-07","Lodge Grass, Montana",1
+"Math","2026-08-07","Manhattan",1
+"Math","2026-08-07","Miles City, MT",1
+"Math","2026-08-07","Plentywood, MT",1
+"Math","2026-08-07","Plevna, Montana",1
+"Math","2026-08-07","Scobey",2
+"Math","2026-08-07","Sheridan, MT",1
+"Math","2026-08-11","Arlee",1
+"Math","2026-08-11","Ashland",1
+"Math","2026-08-11","Belgrade",2
+"Math","2026-08-11","Big Sandy Public Schools",1
+"Math","2026-08-11","Billings",5
+"Math","2026-08-11","Billings Public Schools",2
+"Math","2026-08-11","Boulder",1
+"Math","2026-08-11","Box Elder",1
+"Math","2026-08-11","Bozeman",1
+"Math","2026-08-11","Browning",1
+"Math","2026-08-11","Cascade",1
+"Math","2026-08-11","Chester Montana",1
+"Math","2026-08-11","Colstrip Public Schools",1
+"Math","2026-08-11","Columbia Falls",1
+"Math","2026-08-11","East Helena",1
+"Math","2026-08-11","East Helena Public Schools",2
+"Math","2026-08-11","Fairview",1
+"Math","2026-08-11","GREAT FALLS",1
+"Math","2026-08-11","Great Falls Public Schools",1
+"Math","2026-08-11","Havre",1
+"Math","2026-08-11","Havre Public Schools",1
+"Math","2026-08-11","Highwood",1
+"Math","2026-08-11","Hysham",1
+"Math","2026-08-11","Lame Deer Public Schools",1
+"Math","2026-08-11","Lame Deer, MT",1
+"Math","2026-08-11","Libby",1
+"Math","2026-08-11","Lima",1
+"Math","2026-08-11","Livingston",1
+"Math","2026-08-11","Livingston Public Schools",1
+"Math","2026-08-11","Lockwood",1
+"Math","2026-08-11","Lockwood Schools",1
+"Math","2026-08-11","Lodge Grass Public Schools",1
+"Math","2026-08-11","Lodge Grass, Montana",1
+"Math","2026-08-11","MISSOULA",1
+"Math","2026-08-11","Manhattan",1
+"Math","2026-08-11","Miles City, MT",1
+"Math","2026-08-11","Missoula",4
+"Math","2026-08-11","Plentywood, MT",1
+"Math","2026-08-11","Plevna, Montana",1
+"Math","2026-08-11","Scobey",2
+"Math","2026-08-11","Sheridan, MT",1
+"Music","2026-08-06","Great Falls Public Schools",1
+"Music","2026-08-06","Missoula County Public Schools",1
+"Music","2026-08-07","Great Falls Public Schools",1
+"Music","2026-08-07","Lame Deer Public Schools",1
+"Music","2026-08-07","Missoula County Public Schools",1
+"Music","2026-08-11","Great Falls Public Schools",1
+"Music","2026-08-11","Lame Deer Public Schools",1
+"Music","2026-08-11","Missoula County Public Schools",1
+"Music","2026-08-11","Wolf Point Public Schools",1
+"Other","2026-08-06","East Helena Public Schools",2
+"Other","2026-08-06","Great Falls Public Schools",3
+"Other","2026-08-06","Havre Public Schools",1
+"Other","2026-08-06","Helena Public Schools",1
+"Other","2026-08-06","Kalispell Public Schools",3
+"Other","2026-08-06","Whitefish School District",1
+"Other","2026-08-07","East Helena Public Schools",2
+"Other","2026-08-07","Fairview Public Schools",1
+"Other","2026-08-07","Glendive Public Schools",1
+"Other","2026-08-07","Great Falls Public Schools",3
+"Other","2026-08-07","Havre Public Schools",1
+"Other","2026-08-07","Helena Public Schools",1
+"Other","2026-08-07","Kalispell Public Schools",3
+"Other","2026-08-07","Lame Deer Public Schools",3
+"Other","2026-08-07","Rocky Boy Public Schools",2
+"Other","2026-08-07","Ronan Public Schools",1
+"Other","2026-08-07","Whitefish School District",1
+"Other","2026-08-11","East Helena Public Schools",1
+"Other","2026-08-11","Fairview Public Schools",1
+"Other","2026-08-11","Glendive Public Schools",1
+"Other","2026-08-11","Great Falls Public Schools",3
+"Other","2026-08-11","Havre Public Schools",1
+"Other","2026-08-11","Helena Public Schools",1
+"Other","2026-08-11","Kalispell Public Schools",3
+"Other","2026-08-11","Lame Deer Public Schools",3
+"Other","2026-08-11","Missoula County Public Schools",2
+"Other","2026-08-11","Rocky Boy Public Schools",2
+"Other","2026-08-11","Ronan Public Schools",1
+"Other","2026-08-11","Stevensville Public Schools",1
+"Other","2026-08-11","Whitefish School District",1
+"Physical Education","2026-08-06","Kalispell Public Schools",1
+"Physical Education","2026-08-07","Kalispell Public Schools",1
+"Physical Education","2026-08-07","Lame Deer Public Schools",1
+"Physical Education","2026-08-07","Ronan Public Schools",1
+"Physical Education","2026-08-07","Stevensville Public Schools",1
+"Physical Education","2026-08-11","Kalispell Public Schools",1
+"Physical Education","2026-08-11","Lame Deer Public Schools",1
+"Physical Education","2026-08-11","Stevensville Public Schools",1
+"Science","2026-08-06","Billings Public Schools",1
+"Science","2026-08-06","Cascade",1
+"Science","2026-08-06","East Helena Public Schools",1
+"Science","2026-08-06","Fairview",1
+"Science","2026-08-06","Gallatin Gateway",1
+"Science","2026-08-06","Great Falls Public Schools",2
+"Science","2026-08-06","Harrison",2
+"Science","2026-08-06","Lame Deer, MT",1
+"Science","2026-08-06","Plentywood, MT",1
+"Science","2026-08-06","Plevna, Montana",1
+"Science","2026-08-06","Ronan",1
+"Science","2026-08-06","Scobey",2
+"Science","2026-08-06","Shepherd",1
+"Science","2026-08-06","Westby",1
+"Science","2026-08-06","Whitewater",1
+"Science","2026-08-06","Wolf Point",1
+"Science","2026-08-07","Billings Public Schools",1
+"Science","2026-08-07","Cascade",1
+"Science","2026-08-07","East Helena Public Schools",1
+"Science","2026-08-07","Gallatin Gateway",1
+"Science","2026-08-07","Great Falls Public Schools",2
+"Science","2026-08-07","Harrison",2
+"Science","2026-08-07","Lame Deer Public Schools",1
+"Science","2026-08-07","Plentywood, MT",1
+"Science","2026-08-07","Plevna, Montana",1
+"Science","2026-08-07","Ronan Public Schools",1
+"Science","2026-08-07","Scobey",2
+"Science","2026-08-07","Shepherd",1
+"Science","2026-08-07","Westby",1
+"Science","2026-08-07","Whitewater",1
+"Science","2026-08-07","Wolf Point",1
+"Science","2026-08-11","BILLINGS",1
+"Science","2026-08-11","Belgrade",1
+"Science","2026-08-11","Big Timber- Between Bozeman and Billings",2
+"Science","2026-08-11","Billings - Billings Christian School",1
+"Science","2026-08-11","Billings Public Schools",2
+"Science","2026-08-11","Cascade",1
+"Science","2026-08-11","Columbia Falls",1
+"Science","2026-08-11","East Helena",1
+"Science","2026-08-11","East Helena Public Schools",1
+"Science","2026-08-11","Fairview",1
+"Science","2026-08-11","GREAT FALLS",1
+"Science","2026-08-11","Gallatin Gateway",1
+"Science","2026-08-11","Great Falls",1
+"Science","2026-08-11","Great Falls Public Schools",1
+"Science","2026-08-11","Harrison",2
+"Science","2026-08-11","Helena",1
+"Science","2026-08-11","Kalispell",1
+"Science","2026-08-11","Lame Deer Public Schools",1
+"Science","2026-08-11","Lame Deer, MT",1
+"Science","2026-08-11","Plentywood, MT",1
+"Science","2026-08-11","Plevna, Montana",1
+"Science","2026-08-11","Ronan",1
+"Science","2026-08-11","Scobey",2
+"Science","2026-08-11","Shepherd",1
+"Science","2026-08-11","Westby",1
+"Science","2026-08-11","Whitewater",1
+"Science","2026-08-11","Wolf Point",1
+"Science","2026-08-11","Wolf Point Public Schools",2
+"Secondary Social Studies","2026-08-06","Billings Public Schools",1
+"Secondary Social Studies","2026-08-06","Kalispell Public Schools",1
+"Secondary Social Studies","2026-08-07","Billings Public Schools",1
+"Secondary Social Studies","2026-08-07","Kalispell Public Schools",1
+"Secondary Social Studies","2026-08-07","Lame Deer Public Schools",1
+"Secondary Social Studies","2026-08-07","Poplar Public Schools",1
+"Secondary Social Studies","2026-08-11","Billings Public Schools",1
+"Secondary Social Studies","2026-08-11","Kalispell Public Schools",1
+"Secondary Social Studies","2026-08-11","Lame Deer Public Schools",1
+"Secondary Social Studies","2026-08-11","Poplar Public Schools",1
+"Special Education - General","2026-08-06","Billings Public Schools",2
+"Special Education - General","2026-08-06","Great Falls Public Schools",5
+"Special Education - General","2026-08-06","Hardin Public Schools",1
+"Special Education - General","2026-08-06","Havre Public Schools",1
+"Special Education - General","2026-08-06","Helena Public Schools",1
+"Special Education - General","2026-08-06","Laurel Public Schools",2
+"Special Education - General","2026-08-06","Lockwood Schools",1
+"Special Education - General","2026-08-06","Whitefish School District",2
+"Special Education - General","2026-08-07","Billings Public Schools",2
+"Special Education - General","2026-08-07","Colstrip Public Schools",1
+"Special Education - General","2026-08-07","Glendive Public Schools",2
+"Special Education - General","2026-08-07","Great Falls Public Schools",5
+"Special Education - General","2026-08-07","Hardin Public Schools",1
+"Special Education - General","2026-08-07","Havre Public Schools",1
+"Special Education - General","2026-08-07","Helena Public Schools",1
+"Special Education - General","2026-08-07","Lame Deer Public Schools",1
+"Special Education - General","2026-08-07","Laurel Public Schools",2
+"Special Education - General","2026-08-07","Lockwood Schools",1
+"Special Education - General","2026-08-07","Poplar Public Schools",1
+"Special Education - General","2026-08-07","Ronan Public Schools",1
+"Special Education - General","2026-08-07","Sidney Public Schools",1
+"Special Education - General","2026-08-07","Whitefish School District",2
+"Special Education - General","2026-08-11","Billings Public Schools",2
+"Special Education - General","2026-08-11","Colstrip Public Schools",1
+"Special Education - General","2026-08-11","Glendive Public Schools",2
+"Special Education - General","2026-08-11","Great Falls Public Schools",5
+"Special Education - General","2026-08-11","Hardin Public Schools",1
+"Special Education - General","2026-08-11","Havre Public Schools",1
+"Special Education - General","2026-08-11","Helena Public Schools",1
+"Special Education - General","2026-08-11","Lame Deer Public Schools",1
+"Special Education - General","2026-08-11","Laurel Public Schools",2
+"Special Education - General","2026-08-11","Lockwood Schools",1
+"Special Education - General","2026-08-11","Lodge Grass Public Schools",1
+"Special Education - General","2026-08-11","Poplar Public Schools",1
+"Special Education - General","2026-08-11","Ronan Public Schools",1
+"Special Education - General","2026-08-11","Sidney Public Schools",1
+"Special Education - General","2026-08-11","Whitefish School District",2
+"Special Education - Resource/Life Skills","2026-08-06","Missoula County Public Schools",1
+"Special Education - Resource/Life Skills","2026-08-07","Big Sandy Public Schools",1
+"Special Education - Resource/Life Skills","2026-08-07","Missoula County Public Schools",1
+"Special Education - Resource/Life Skills","2026-08-11","Big Sandy Public Schools",1
+"Special Education - Resource/Life Skills","2026-08-11","Missoula County Public Schools",2
+"CTE - Business & Family Sciences","2026-08-18","Total",6
+"CTE - Trades, Ag & Technical","2026-08-18","Total",26
+"Early Childhood","2026-08-18","Total",5
+"Elementary","2026-08-18","Total",19
+"English Language Arts Secondary","2026-08-18","Total",24
+"Language","2026-08-18","Total",4
+"Library Media","2026-08-18","Total",14
+"Math","2026-08-18","Total",53
+"Music","2026-08-18","Total",3
+"Other","2026-08-18","Total",20
+"Physical Education","2026-08-18","Total",4
+"Science","2026-08-18","Total",33
+"Secondary Social Studies","2026-08-18","Total",4
+"Special Education - General","2026-08-18","Total",25
+"Special Education - Resource/Life Skills","2026-08-18","Total",2
+"CTE - Business & Family Sciences","2026-08-18","Forsyth",1
+"CTE - Business & Family Sciences","2026-08-18","Lockwood Schools",1
+"CTE - Business & Family Sciences","2026-08-18","Poplar Public Schools",1
+"CTE - Business & Family Sciences","2026-08-18","Rocky Boy Public Schools",1
+"CTE - Business & Family Sciences","2026-08-18","Ronan",1
+"CTE - Business & Family Sciences","2026-08-18","Shepherd",1
+"CTE - Trades, Ag & Technical","2026-08-18","Absarokee",1
+"CTE - Trades, Ag & Technical","2026-08-18","Billings Public Schools",1
+"CTE - Trades, Ag & Technical","2026-08-18","Broadus",2
+"CTE - Trades, Ag & Technical","2026-08-18","Drummond",2
+"CTE - Trades, Ag & Technical","2026-08-18","FAIRVIEW",1
+"CTE - Trades, Ag & Technical","2026-08-18","Fromberg",1
+"CTE - Trades, Ag & Technical","2026-08-18","Gardiner",1
+"CTE - Trades, Ag & Technical","2026-08-18","Hot Springs",1
+"CTE - Trades, Ag & Technical","2026-08-18","Kalispell",1
+"CTE - Trades, Ag & Technical","2026-08-18","Lame Deer",2
+"CTE - Trades, Ag & Technical","2026-08-18","Miles City MT",1
+"CTE - Trades, Ag & Technical","2026-08-18","Missoula County Public Schools",1
+"CTE - Trades, Ag & Technical","2026-08-18","Poplar",1
+"CTE - Trades, Ag & Technical","2026-08-18","Rocky Boy",1
+"CTE - Trades, Ag & Technical","2026-08-18","Ronan Public Schools",1
+"CTE - Trades, Ag & Technical","2026-08-18","Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical","2026-08-18","Scobey",4
+"CTE - Trades, Ag & Technical","2026-08-18","Sheridan, MT",1
+"CTE - Trades, Ag & Technical","2026-08-18","Wibaux",1
+"CTE - Trades, Ag & Technical","2026-08-18","Wolf Point Public Schools",1
+"Early Childhood","2026-08-18","Rocky Boy Public Schools",5
+"Elementary","2026-08-18","Billings Public Schools",1
+"Elementary","2026-08-18","Colstrip Public Schools",3
+"Elementary","2026-08-18","Great Falls Public Schools",4
+"Elementary","2026-08-18","Hardin Public Schools",1
+"Elementary","2026-08-18","Lame Deer Public Schools",2
+"Elementary","2026-08-18","Libby Public Schools",1
+"Elementary","2026-08-18","Lodge Grass Public Schools",1
+"Elementary","2026-08-18","Poplar Public Schools",2
+"Elementary","2026-08-18","Rocky Boy Public Schools",2
+"Elementary","2026-08-18","Ronan Public Schools",1
+"Elementary","2026-08-18","Wolf Point Public Schools",1
+"English Language Arts Secondary","2026-08-18","Belgrade",1
+"English Language Arts Secondary","2026-08-18","Big Sandy",1
+"English Language Arts Secondary","2026-08-18","Box Elder",1
+"English Language Arts Secondary","2026-08-18","Browning Public Schools",1
+"English Language Arts Secondary","2026-08-18","Browning, MT",1
+"English Language Arts Secondary","2026-08-18","Chinook",1
+"English Language Arts Secondary","2026-08-18","Colstrip Public Schools",1
+"English Language Arts Secondary","2026-08-18","Fromberg",1
+"English Language Arts Secondary","2026-08-18","Geyser",1
+"English Language Arts Secondary","2026-08-18","Havre",1
+"English Language Arts Secondary","2026-08-18","Havre Public Schools",2
+"English Language Arts Secondary","2026-08-18","Helena",1
+"English Language Arts Secondary","2026-08-18","Lame Deer Public Schools",1
+"English Language Arts Secondary","2026-08-18","Lima",1
+"English Language Arts Secondary","2026-08-18","Lockwood",1
+"English Language Arts Secondary","2026-08-18","MELSTONE",2
+"English Language Arts Secondary","2026-08-18","Missoula",1
+"English Language Arts Secondary","2026-08-18","Plentywood, MT",2
+"English Language Arts Secondary","2026-08-18","Roy, Montana",1
+"English Language Arts Secondary","2026-08-18","Wolf Point",1
+"English Language Arts Secondary","2026-08-18","Wolf Point Public Schools",1
+"Language","2026-08-18","Colstrip Public Schools",1
+"Language","2026-08-18","East Helena Public Schools",1
+"Language","2026-08-18","Stevensville Public Schools",2
+"Library Media","2026-08-18","841 Bear Canyon Road",1
+"Library Media","2026-08-18","BUSBY",1
+"Library Media","2026-08-18","Billings-SD3",1
+"Library Media","2026-08-18","Broadview",1
+"Library Media","2026-08-18","Drummond",2
+"Library Media","2026-08-18","Hot Springs",1
+"Library Media","2026-08-18","Lockwood",1
+"Library Media","2026-08-18","Nashua",1
+"Library Media","2026-08-18","Power",1
+"Library Media","2026-08-18","Sidney Public Schools",1
+"Library Media","2026-08-18","Thompson Falls",1
+"Library Media","2026-08-18","Wilsall",1
+"Library Media","2026-08-18","Wolf Point",1
+"Math","2026-08-18","Arlee",1
+"Math","2026-08-18","Ashland",1
+"Math","2026-08-18","Belgrade",2
+"Math","2026-08-18","Big Sandy Public Schools",1
+"Math","2026-08-18","Billings",4
+"Math","2026-08-18","Billings Public Schools",2
+"Math","2026-08-18","Boulder",1
+"Math","2026-08-18","Box Elder",1
+"Math","2026-08-18","Bozeman",1
+"Math","2026-08-18","Browning",1
+"Math","2026-08-18","Cascade",1
+"Math","2026-08-18","Chester Montana",1
+"Math","2026-08-18","Colstrip Public Schools",1
+"Math","2026-08-18","Columbia Falls",1
+"Math","2026-08-18","East Helena",1
+"Math","2026-08-18","East Helena Public Schools",2
+"Math","2026-08-18","Fairview",1
+"Math","2026-08-18","GREAT FALLS",1
+"Math","2026-08-18","Great Falls Public Schools",1
+"Math","2026-08-18","Havre",1
+"Math","2026-08-18","Havre Public Schools",1
+"Math","2026-08-18","Highwood",1
+"Math","2026-08-18","Hysham",1
+"Math","2026-08-18","Lame Deer Public Schools",1
+"Math","2026-08-18","Lame Deer, MT",1
+"Math","2026-08-18","Libby",1
+"Math","2026-08-18","Libby Public Schools",1
+"Math","2026-08-18","Lima",1
+"Math","2026-08-18","Livingston",1
+"Math","2026-08-18","Lockwood",1
+"Math","2026-08-18","Lockwood Schools",1
+"Math","2026-08-18","Lodge Grass Public Schools",1
+"Math","2026-08-18","Lodge Grass, Montana",1
+"Math","2026-08-18","MISSOULA",1
+"Math","2026-08-18","Manhattan",1
+"Math","2026-08-18","Miles City, MT",1
+"Math","2026-08-18","Missoula",4
+"Math","2026-08-18","Missoula County Public Schools",2
+"Math","2026-08-18","Plentywood, MT",1
+"Math","2026-08-18","Plevna, Montana",1
+"Math","2026-08-18","Scobey",2
+"Math","2026-08-18","Sheridan, MT",1
+"Music","2026-08-18","Great Falls Public Schools",1
+"Music","2026-08-18","Lame Deer Public Schools",1
+"Music","2026-08-18","Wolf Point Public Schools",1
+"Other","2026-08-18","Browning Public Schools",1
+"Other","2026-08-18","East Helena Public Schools",1
+"Other","2026-08-18","Glendive Public Schools",1
+"Other","2026-08-18","Great Falls Public Schools",3
+"Other","2026-08-18","Havre Public Schools",1
+"Other","2026-08-18","Helena Public Schools",1
+"Other","2026-08-18","Kalispell Public Schools",3
+"Other","2026-08-18","Lame Deer Public Schools",3
+"Other","2026-08-18","Libby Public Schools",1
+"Other","2026-08-18","Rocky Boy Public Schools",2
+"Other","2026-08-18","Ronan Public Schools",1
+"Other","2026-08-18","Stevensville Public Schools",1
+"Other","2026-08-18","Whitefish School District",1
+"Physical Education","2026-08-18","Browning Public Schools",1
+"Physical Education","2026-08-18","Kalispell Public Schools",1
+"Physical Education","2026-08-18","Lame Deer Public Schools",1
+"Physical Education","2026-08-18","Stevensville Public Schools",1
+"Science","2026-08-18","BILLINGS",1
+"Science","2026-08-18","Belgrade",1
+"Science","2026-08-18","Big Timber- Between Bozeman and Billings",2
+"Science","2026-08-18","Billings - Billings Christian School",1
+"Science","2026-08-18","Billings Public Schools",2
+"Science","2026-08-18","Browning Public Schools",1
+"Science","2026-08-18","Cascade",1
+"Science","2026-08-18","Columbia Falls",1
+"Science","2026-08-18","East Helena",1
+"Science","2026-08-18","East Helena Public Schools",1
+"Science","2026-08-18","Fairview",1
+"Science","2026-08-18","GREAT FALLS",1
+"Science","2026-08-18","Gallatin Gateway",1
+"Science","2026-08-18","Great Falls",1
+"Science","2026-08-18","Great Falls Public Schools",1
+"Science","2026-08-18","Harrison",2
+"Science","2026-08-18","Helena",1
+"Science","2026-08-18","Kalispell Public Schools",1
+"Science","2026-08-18","Lame Deer Public Schools",1
+"Science","2026-08-18","Lame Deer, MT",1
+"Science","2026-08-18","Plevna, Montana",1
+"Science","2026-08-18","Ronan",1
+"Science","2026-08-18","Scobey",2
+"Science","2026-08-18","Shepherd",1
+"Science","2026-08-18","Westby",1
+"Science","2026-08-18","Whitewater",1
+"Science","2026-08-18","Wolf Point",1
+"Science","2026-08-18","Wolf Point Public Schools",2
+"Secondary Social Studies","2026-08-18","Kalispell Public Schools",1
+"Secondary Social Studies","2026-08-18","Lame Deer Public Schools",1
+"Secondary Social Studies","2026-08-18","Libby Public Schools",1
+"Secondary Social Studies","2026-08-18","Poplar Public Schools",1
+"Special Education - General","2026-08-18","Billings Public Schools",2
+"Special Education - General","2026-08-18","Browning Public Schools",1
+"Special Education - General","2026-08-18","Colstrip Public Schools",1
+"Special Education - General","2026-08-18","Glendive Public Schools",2
+"Special Education - General","2026-08-18","Great Falls Public Schools",5
+"Special Education - General","2026-08-18","Hardin Public Schools",1
+"Special Education - General","2026-08-18","Havre Public Schools",1
+"Special Education - General","2026-08-18","Helena Public Schools",1
+"Special Education - General","2026-08-18","Lame Deer Public Schools",1
+"Special Education - General","2026-08-18","Laurel Public Schools",2
+"Special Education - General","2026-08-18","Libby Public Schools",1
+"Special Education - General","2026-08-18","Lockwood Schools",1
+"Special Education - General","2026-08-18","Lodge Grass Public Schools",1
+"Special Education - General","2026-08-18","Poplar Public Schools",1
+"Special Education - General","2026-08-18","Ronan Public Schools",1
+"Special Education - General","2026-08-18","Sidney Public Schools",1
+"Special Education - General","2026-08-18","Whitefish School District",2
+"Special Education - Resource/Life Skills","2026-08-18","Big Sandy Public Schools",1
+"Special Education - Resource/Life Skills","2026-08-18","Missoula County Public Schools",1
