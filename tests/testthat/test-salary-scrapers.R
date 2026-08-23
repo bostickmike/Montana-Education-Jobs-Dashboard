@@ -132,7 +132,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Drummond Public Schools", "Custer Public Schools",
                      "Scobey Schools", "Deer Lodge School District #1",
                      "Townsend School District", "Three Forks Public Schools",
-                     "Anaconda School District #10", "Philipsburg School District"))
+                     "Anaconda School District #10", "Philipsburg School District",
+                     "Corvallis School District #1", "Cascade Public Schools",
+                     "Hays-Lodge Pole School District", "Plevna School District #55",
+                     "Sunburst Schools", "Ramsay School District #3"))
 })
 
 # ---------------------------------------------------------------------------
