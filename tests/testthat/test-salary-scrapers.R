@@ -138,7 +138,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Sunburst Schools", "Ramsay School District #3",
                      "Roy School District 74", "Arrowhead Elementary School District #75",
                      "North Star Public Schools", "Belt Public Schools", "Big Sky School District 72",
-                     "Melstone Public Schools", "Shields Valley Public Schools", "Manhattan School District"))
+                     "Melstone Public Schools", "Shields Valley Public Schools", "Manhattan School District",
+                     "Roundup School District", "White Sulphur Springs Schools", "Shelby School District",
+                     "Geyser Public Schools", "Centerville Public Schools", "Thompson Falls Public Schools"))
 })
 
 # ---------------------------------------------------------------------------

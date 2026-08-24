@@ -886,13 +886,188 @@ test_that("fetch_melstone_postings drives a chromote session and parses its real
   expect_equal(nrow(result), 4)
 })
 
+# Real fixture: document.body.innerText captured via a live chromote
+# session 2026-08-23 from roundup.k12.mt.us's Employment page.
+
+test_that("parse_roundup_postings extracts all 13 real postings across 3 real bare category headers", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_roundup_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_roundup_postings(text, "url")
+
+  expect_equal(nrow(result), 13)
+  expect_equal(sum(result$Location == "Certified Positions"), 1)
+  expect_equal(sum(result$Location == "Extracurricular Positions"), 5)
+  expect_equal(sum(result$Location == "Classified Positions and Substitutes"), 7)
+  expect_false(any(grepl("Required Application Materials|Resume|Transcripts", result$Title)))
+})
+
+test_that("parse_roundup_postings returns zero rows (not an error) when there's no Open Positions header", {
+  result <- parse_roundup_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_roundup_postings drives a chromote session and parses its real rendered text", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_roundup_rendered.txt"), warn = FALSE), collapse = "\n")
+  session <- fake_chromote_session(text)
+
+  result <- fetch_roundup_postings(session)
+
+  expect_equal(nrow(result), 13)
+})
+
+# Real fixture captured 2026-08-23 from whitesulphur.k12.mt.us's Employment page.
+
+test_that("parse_wss_postings extracts the 5 real flat-list postings", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_wss_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_wss_postings(text, "url")
+
+  expect_equal(nrow(result), 5)
+  expect_true(all(c("Counselor", "Secretary", "Bus Driver", "Music") %in% result$Title))
+  expect_true(all(result$Location == "White Sulphur Springs"))
+})
+
+test_that("parse_wss_postings returns zero rows (not an error) when there's no Current Openings header", {
+  result <- parse_wss_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_wss_postings drives a chromote session and parses its real rendered text", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_wss_rendered.txt"), warn = FALSE), collapse = "\n")
+  session <- fake_chromote_session(text)
+
+  result <- fetch_wss_postings(session)
+
+  expect_equal(nrow(result), 5)
+})
+
+# Real fixture captured 2026-08-23 from shelbypublicschools.org (Montana --
+# not shelbypublicschools.net, a real, unrelated district in Michigan).
+
+test_that("parse_shelbymt_postings extracts all 6 real postings embedded in 2 prose sentences, with the page's shared date", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_shelbymt_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_shelbymt_postings(text, "url")
+
+  expect_equal(nrow(result), 6)
+  expect_true(all(c("PAYROLL SECRETARY", "PARAPROFESSIONALS", "CAFETERIA EMPLOYEE", "ASSISTANT TECHNOLOGY COORDINATOR",
+                     "JH Girls' Basketball Coaches", "JH Assistant Football Coach") %in% result$Title))
+  expect_true(all(result$Posted_Date == "2026-08-13"))
+})
+
+test_that("parse_shelbymt_postings returns zero rows (not an error) when there's no 'is looking for' sentence", {
+  result <- parse_shelbymt_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_shelbymt_postings drives a chromote session and parses its real rendered text", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_shelbymt_rendered.txt"), warn = FALSE), collapse = "\n")
+  session <- fake_chromote_session(text)
+
+  result <- fetch_shelbymt_postings(session)
+
+  expect_equal(nrow(result), 6)
+})
+
+# Real fixture captured 2026-08-23 from geyser.k12.mt.us's CyberSchool-
+# hosted Jobs page.
+
+test_that("parse_geyser_postings extracts all 5 real postings from the keycap-emoji numbered list", {
+  text <- paste(readLines(test_path("fixtures", "geyser_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_geyser_postings(text, "url")
+
+  expect_equal(nrow(result), 5)
+  expect_true(all(c("Industrial Arts/Agriculture Teacher", "Physical Education Teacher", "Boiler Operator",
+                     "Paraprofessional Aide / SPED Aide", "Head Cook") %in% result$Title))
+  expect_true(all(result$Location == "Geyser"))
+})
+
+test_that("parse_geyser_postings returns zero rows (not an error) when there's no keycap-numbered list", {
+  result <- parse_geyser_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_geyser_postings drives a chromote session and parses its real rendered text", {
+  text <- paste(readLines(test_path("fixtures", "geyser_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
+  session <- fake_chromote_session(text)
+
+  result <- fetch_geyser_postings(session)
+
+  expect_equal(nrow(result), 5)
+})
+
+# Real fixture captured 2026-08-23 from thompsonfalls.net/employment
+# (genuinely Finalsite).
+
+test_that("parse_thompsonfalls_postings extracts the 5 real postings listed before the Load More button", {
+  html <- paste(readLines(test_path("fixtures", "thompsonfalls_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_thompsonfalls_postings(html, "url")
+
+  expect_equal(nrow(result), 5)
+  expect_true(all(c("Para Professional", "Assistant High School Football Coach", "Food Service Worker",
+                     "Food Service Worker - Dishwasher", "Assistant High School Soccer Coach") %in% result$Title))
+  expect_true(all(result$Location == "Thompson Falls"))
+})
+
+test_that("parse_thompsonfalls_postings returns zero rows (not an error) when there's no Post RSS Feeds marker", {
+  result <- parse_thompsonfalls_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_thompsonfalls_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "thompsonfalls_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_thompsonfalls_postings()
+
+  expect_equal(nrow(result), 5)
+})
+
+# Real fixture captured 2026-08-23 from centerville.k12.mt.us's Job
+# Openings page (Centerville Public Schools, serving Sand Coulee).
+
+test_that("parse_centerville_postings extracts the 4 real flat-list postings", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_centerville_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_centerville_postings(text, "url")
+
+  expect_equal(nrow(result), 4)
+  expect_true(all(c("Shop/Vo-Ag Teacher", "Colony Aide", "Assistant HS Football Coach",
+                     "Assistant HS Girls Flag Football Coach") %in% result$Title))
+  expect_true(all(result$Location == "Sand Coulee"))
+})
+
+test_that("parse_centerville_postings returns zero rows (not an error) when there's no Employment Opportunities header", {
+  result <- parse_centerville_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_centerville_postings drives a chromote session and parses its real rendered text", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_centerville_rendered.txt"), warn = FALSE), collapse = "\n")
+  session <- fake_chromote_session(text)
+
+  result <- fetch_centerville_postings(session)
+
+  expect_equal(nrow(result), 4)
+})
+
 test_that("fetch_apptegy_k12_postings returns an empty frame (not an error) when no session factory is available", {
   result <- fetch_apptegy_k12_postings(chromote_session_factory = NULL)
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "District"))
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 16 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 21 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -909,6 +1084,11 @@ test_that("fetch_apptegy_k12_postings shares one session across all 16 districts
   belt_text <- paste(readLines(test_path("fixtures", "apptegy_belt_rendered.txt"), warn = FALSE), collapse = "\n")
   bigsky_text <- paste(readLines(test_path("fixtures", "apptegy_bigsky_rendered.txt"), warn = FALSE), collapse = "\n")
   melstone_text <- paste(readLines(test_path("fixtures", "apptegy_melstone_rendered.txt"), warn = FALSE), collapse = "\n")
+  roundup_text <- paste(readLines(test_path("fixtures", "apptegy_roundup_rendered.txt"), warn = FALSE), collapse = "\n")
+  wss_text <- paste(readLines(test_path("fixtures", "apptegy_wss_rendered.txt"), warn = FALSE), collapse = "\n")
+  shelbymt_text <- paste(readLines(test_path("fixtures", "apptegy_shelbymt_rendered.txt"), warn = FALSE), collapse = "\n")
+  geyser_text <- paste(readLines(test_path("fixtures", "geyser_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
+  centerville_text <- paste(readLines(test_path("fixtures", "apptegy_centerville_rendered.txt"), warn = FALSE), collapse = "\n")
 
   # Same fake session serves every district's fetch, real URL routing comes
   # from each fetch_*_postings()'s own default url= argument -- this fake
@@ -940,6 +1120,11 @@ test_that("fetch_apptegy_k12_postings shares one session across all 16 districts
           else if (grepl("beltschool", navigated_url)) belt_text
           else if (grepl("bssd72", navigated_url)) bigsky_text
           else if (grepl("melstone", navigated_url)) melstone_text
+          else if (grepl("roundup", navigated_url)) roundup_text
+          else if (grepl("whitesulphur", navigated_url)) wss_text
+          else if (grepl("shelbypublicschools", navigated_url)) shelbymt_text
+          else if (grepl("geyser", navigated_url)) geyser_text
+          else if (grepl("centerville", navigated_url)) centerville_text
           else ""
           list(result = list(value = value))
         }
@@ -950,7 +1135,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 16 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory)
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -967,4 +1152,9 @@ test_that("fetch_apptegy_k12_postings shares one session across all 16 districts
   expect_equal(sum(result$District == "Belt Public Schools"), 3)
   expect_equal(sum(result$District == "Big Sky School District 72"), 4)
   expect_equal(sum(result$District == "Melstone Public Schools"), 4)
+  expect_equal(sum(result$District == "Roundup School District"), 13)
+  expect_equal(sum(result$District == "White Sulphur Springs Schools"), 5)
+  expect_equal(sum(result$District == "Shelby School District"), 6)
+  expect_equal(sum(result$District == "Geyser Public Schools"), 5)
+  expect_equal(sum(result$District == "Centerville Public Schools"), 4)
 })

@@ -525,7 +525,12 @@ parse_northstar_postings <- function(html_text, url) {
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge
-# Pole, Plevna, Sunburst, Belt, Big Sky, Melstone
+# Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur
+# Springs, Shelby, Centerville -- plus Geyser, a genuinely different CMS
+# ("CyberSchool 2.0") that also needs a real browser to render, folded
+# into this same shared-session aggregator below since the fetch/parse
+# split (navigate, read innerText) is identical regardless of which CMS
+# is on the other end.
 # ---------------------------------------------------------------------------
 
 # Wolf Point/Plentywood (found 2026-08-07) sit on an older Apptegy template
@@ -1303,6 +1308,272 @@ fetch_melstone_postings <- function(chromote_session, url = "https://www.melston
   parse_melstone_postings(text, url)
 }
 
+# Roundup School District (roundup.k12.mt.us) -- found in a further
+# follow-up 2026-08-23 pass working down to the last few OPI-gap
+# candidates. Older innerText-rendering Apptegy template. Real postings
+# sit under 3 real bare (no colon) category headers ("Certified
+# Positions"/"Extracurricular Positions"/"Classified Positions and
+# Substitutes"), matched by literal known name like Big Sky's
+# BIGSKY_HEADERS above. Confirmed live 2026-08-23: 1 Certified + 5
+# Extracurricular + 7 Classified = 13 real postings, the single largest
+# haul of any district added this session. Starts after "Open Positions",
+# stops at "Required Application Materials", the real, stable boundary
+# before the application-requirements comparison table.
+ROUNDUP_HEADERS <- c("Certified Positions", "Extracurricular Positions", "Classified Positions and Substitutes")
+
+parse_roundup_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Open Positions")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Required Application Materials")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  rows <- list()
+  current_header <- NA_character_
+  for (line in lines) {
+    if (line %in% ROUNDUP_HEADERS) {
+      current_header <- line
+      next
+    }
+    if (!is.na(current_header)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+fetch_roundup_postings <- function(chromote_session, url = "https://www.roundup.k12.mt.us/page/roundup-public-schools-employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_roundup_postings(text, url)
+}
+
+# White Sulphur Springs Schools (whitesulphur.k12.mt.us) -- found in the
+# same follow-up pass. Older innerText-rendering Apptegy template. Real
+# postings are a genuinely flat, single-category list right after
+# "Current Openings" (no per-category headers, the same shape as Sunburst
+# above) -- confirmed live 2026-08-23, 5 real postings (Counselor,
+# Secretary, Bus Driver, a combined "JH/HS Coaching- VB, JH Boys
+# Basketball" line, Music). Stops at "Application Information", the real,
+# stable boundary before the boilerplate application-form list.
+parse_wss_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Current Openings")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Application Information")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+  lines <- lines[nzchar(lines)]
+  if (length(lines) == 0) return(empty)
+
+  data.frame(Title = lines, Location = "White Sulphur Springs", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_wss_postings <- function(chromote_session, url = "https://www.whitesulphur.k12.mt.us/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_wss_postings(text, url)
+}
+
+# Shelby School District (shelbypublicschools.org) -- found in the same
+# follow-up pass, after first ruling out shelbypublicschools.net (a real,
+# unrelated Shelby Public Schools in Shelby, MICHIGAN -- confirmed by its
+# own Michigan phone number/address/email domain on the very page that
+# claims to be "Employment Opportunities", the same same-named-district-
+# in-another-state trap this project has hit repeatedly). Older
+# innerText-rendering Apptegy template, but real postings are embedded in
+# 2 prose sentences sharing one real, repeatable template ("The Shelby
+# Public School District is looking for LIST.", LIST being a comma/"and"-
+# separated list, all-caps in one sentence and mixed-case in the other) --
+# confirmed live 2026-08-23, 4 + 2 = 6 real postings. The page's own dated
+# heading ("AUGUST 13, 2026, JOB OPPORTUNITIES") is a real, shared Posted_
+# Date for the whole batch, the same convention as Plentywood's dated
+# paragraph above.
+parse_shelbymt_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  target_lines <- lines[grepl("^The Shelby Public School District is looking for", lines)]
+  if (length(target_lines) == 0) return(empty)
+
+  date_line <- lines[grepl("^[A-Z]+ [0-9]+, [0-9]{4}, JOB OPPORTUNITIES$", lines)]
+  posted_date <- if (length(date_line) > 0) {
+    as.character(as.Date(sub(", JOB OPPORTUNITIES$", "", date_line[1]), format = "%B %d, %Y"))
+  } else {
+    NA_character_
+  }
+
+  rows <- lapply(target_lines, function(line) {
+    body <- sub("^The Shelby Public School District is looking for (.*)\\. If you.*$", "\\1", line)
+    body <- gsub(" and ", ", ", body)
+    items <- strsplit(body, ",\\s*")[[1]]
+    items <- trimws(items)
+    items <- sub("^(a|an)\\s+", "", items, ignore.case = TRUE)
+    items <- items[nzchar(items)]
+    if (length(items) == 0) return(NULL)
+    data.frame(Title = items, Location = "Shelby", Posted_Date = posted_date, Link = url, stringsAsFactors = FALSE)
+  })
+  rows <- rows[!vapply(rows, is.null, logical(1))]
+
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+fetch_shelbymt_postings <- function(chromote_session, url = "https://www.shelbypublicschools.org/page/job-opportunites") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_shelbymt_postings(text, url)
+}
+
+# Geyser Public Schools (geyser.k12.mt.us) -- found in the same follow-up
+# pass, after discovering the district's old geyserschools.com domain has
+# expired and been squatted by an unrelated gambling site (confirmed live
+# 2026-08-23 -- a real, if unusual, dead-end signature to recognize:
+# always check where a domain redirects, not just whether it resolves).
+# Runs a completely different CMS from every other district in this file
+# ("CyberSchool 2.0", the same underlying platform Bainville's own dead
+# bainville.cyberschool.com subdomain used) -- a heavy client-side AJAX
+# app (confirmed live: a plain httr2 fetch returns only unpopulated
+# module shells), so chromote is required. The real job-opportunities
+# page's URL isn't linked from anywhere obvious in the rendered nav --
+# found by searching the rendered page's own real `/District/...` links
+# for "jobs". Real postings are a genuine numbered list using keycap emoji
+# digits (U+0031-0039 + U+FE0F + U+20E3, e.g. "1\u{FE0F}\u{20E3}"), not
+# plain "1."/"2." markers -- confirmed live 2026-08-23, 5 real postings.
+GEYSER_KEYCAP_SUFFIX <- paste0(intToUtf8(0xFE0F), intToUtf8(0x20E3))
+
+parse_geyser_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  pattern <- paste0("^[0-9]", GEYSER_KEYCAP_SUFFIX)
+  idx <- which(grepl(pattern, lines))
+  if (length(idx) == 0) return(empty)
+
+  titles <- trimws(sub(paste0(pattern, "\\s*"), "", lines[idx]))
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Geyser", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_geyser_postings <- function(chromote_session, url = "https://www.geyser.k12.mt.us/District/jobs/297-Job-Opportunities-at-Geyser-School.html") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_geyser_postings(text, url)
+}
+
+# Thompson Falls Public Schools (thompsonfalls.net) -- found in the same
+# follow-up pass. Genuinely Finalsite (confirmed by the real "Powered by
+# Finalsite" footer), a plain httr2 fetch, no chromote needed. Real
+# postings are a clean list right after "Post RSS Feeds Subscribe to Post
+# Alerts" (a real, stable Finalsite widget label, not authored content)
+# -- confirmed live 2026-08-23, 5 real postings. A "Load More" button
+# suggests additional postings may exist beyond what a plain fetch's
+# initial HTML contains (unconfirmed either way -- this function only
+# captures what's present without JS pagination, the same limitation
+# every other plain-fetch scraper in this file already has). Stops at
+# that "Load More" label, the real, stable boundary before the page's
+# "Employment Information" boilerplate section.
+parse_thompsonfalls_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(grepl("^Post RSS Feeds", lines))
+  if (length(start_idx) == 0) return(empty)
+  stop_idx <- which(lines == "Load More")
+  if (length(stop_idx) == 0 || stop_idx[1] <= start_idx[1]) return(empty)
+
+  titles <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- sub(" \\(opens in new window/tab\\)$", "", titles)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Thompson Falls", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_thompsonfalls_postings <- function(url = "https://www.thompsonfalls.net/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_thompsonfalls_postings(resp_body_string(resp), url)
+}
+
+# Centerville Public Schools (centerville.k12.mt.us, serving Sand Coulee)
+# -- found in the same follow-up pass. Older innerText-rendering Apptegy
+# template. Real postings are a genuinely flat, single-category list
+# right after "Employment Opportunities at Centerville Public Schools"
+# (the same flat-list shape as Sunburst/White Sulphur Springs above) --
+# confirmed live 2026-08-23, 4 real postings. Stops at "Applications",
+# the real, stable boundary before the boilerplate application-form list.
+parse_centerville_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Employment Opportunities at Centerville Public Schools")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Applications")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+  if (length(lines) == 0) return(empty)
+
+  data.frame(Title = lines, Location = "Sand Coulee", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_centerville_postings <- function(chromote_session, url = "https://www.centerville.k12.mt.us/page/job-openings") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_centerville_postings(text, url)
+}
+
 # Shields Valley Public Schools (svalleyk12.org, serving both Clyde Park
 # and Wilsall -- the OPI feed's "CLYDE PARK" and "WILSALL" rows are the
 # same single district) -- found in the same follow-up pass. Genuinely
@@ -1590,7 +1861,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 16 Apptegy districts sharing one chromote session (created
+# Fetches all 21 districts (20 Apptegy + Geyser's CyberSchool) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
 # just scoped to only the districts that need it instead of being
@@ -1656,6 +1927,21 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   melstone <- fetch_melstone_postings(session)
   if (nrow(melstone) > 0) melstone$District <- "Melstone Public Schools"
 
+  roundup <- fetch_roundup_postings(session)
+  if (nrow(roundup) > 0) roundup$District <- "Roundup School District"
+
+  wss <- fetch_wss_postings(session)
+  if (nrow(wss) > 0) wss$District <- "White Sulphur Springs Schools"
+
+  shelbymt <- fetch_shelbymt_postings(session)
+  if (nrow(shelbymt) > 0) shelbymt$District <- "Shelby School District"
+
+  geyser <- fetch_geyser_postings(session)
+  if (nrow(geyser) > 0) geyser$District <- "Geyser Public Schools"
+
+  centerville <- fetch_centerville_postings(session)
+  if (nrow(centerville) > 0) centerville$District <- "Centerville Public Schools"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
-                    hayslodgepole, plevna, sunburst, belt, bigsky, melstone)
+                    hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville)
 }
