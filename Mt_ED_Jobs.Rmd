@@ -359,6 +359,33 @@ if (nrow(northstar_df) > 0) {
                               Posting_Source = character(0))
 }
 
+# Shields Valley (genuinely Finalsite, found 2026-08-23, serving both
+# Clyde Park and Wilsall) also has no structured ATS -- a plain httr2
+# fetch, no chromote needed, same pattern as Custer/Scobey/Ramsay/Roy/
+# Arrowhead/North Star above.
+shieldsvalley_districts <- registry[registry$Platform == "ShieldsValleyHeuristic", ]
+shieldsvalley_results <- lapply(seq_len(nrow(shieldsvalley_districts)), function(i) {
+  row <- shieldsvalley_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_shieldsvalley_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+shieldsvalley_df <- bind_rows(shieldsvalley_results)
+if (nrow(shieldsvalley_df) > 0) {
+  shieldsvalley_df <- shieldsvalley_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Shields Valley district site (direct board)")
+} else {
+  shieldsvalley_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                  location = character(0), url = character(0), District = character(0),
+                                  Posting_Source = character(0))
+}
+
 # Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta,
 # Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, and Sunburst all
 # run Apptegy, a CMS whose pages need a real browser to render
@@ -376,7 +403,7 @@ if (nrow(northstar_df) > 0) {
 # it always has for Wolf Point/Plentywood; their registry rows exist purely
 # for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst)",
+  "Apptegy K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -459,12 +486,13 @@ ramsay_df <- ramsay_df %>% mutate(date_posted = standardize_date(date_posted))
 roy_df <- roy_df %>% mutate(date_posted = standardize_date(date_posted))
 arrowhead_df <- arrowhead_df %>% mutate(date_posted = standardize_date(date_posted))
 northstar_df <- northstar_df %>% mutate(date_posted = standardize_date(date_posted))
+shieldsvalley_df <- shieldsvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
                        livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
-                       roy_df, arrowhead_df, northstar_df, apptegy_df)
+                       roy_df, arrowhead_df, northstar_df, shieldsvalley_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%

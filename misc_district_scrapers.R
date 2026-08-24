@@ -525,7 +525,7 @@ parse_northstar_postings <- function(html_text, url) {
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge
-# Pole, Plevna, Sunburst
+# Pole, Plevna, Sunburst, Belt, Big Sky, Melstone
 # ---------------------------------------------------------------------------
 
 # Wolf Point/Plentywood (found 2026-08-07) sit on an older Apptegy template
@@ -1162,6 +1162,218 @@ fetch_sunburst_postings <- function(chromote_session, url = "https://www.sunburs
   parse_sunburst_postings(text, url)
 }
 
+# Belt Public Schools (beltschool.com) -- found in a follow-up 2026-08-23
+# pass working further down the OPI-gap candidate list. Older
+# innerText-rendering Apptegy template. Real postings sit under 2 real
+# colon-suffixed headers ("Certified Openings:"/"Classified Openings:",
+# the same convention as Plevna above), but a real prose paragraph
+# ("Belt School also has classified openings for...") immediately follows
+# the last real title with no further header before it -- unlike Plevna,
+# where a benefits-copy STOP_LINE alone was enough, here the window is
+# truncated at that prose paragraph's own stable opening words before the
+# colon-header loop ever runs, since the paragraph would otherwise be
+# swept in as a 4th "Classified Openings" title. Confirmed live
+# 2026-08-23: 0 Certified (genuinely empty right now) + 3 Classified = 3
+# real postings.
+BELT_STOP_PATTERN <- "^Belt School also has classified openings"
+
+parse_belt_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Certified Openings:")
+  if (length(start_idx) == 0) return(empty)
+  stop_idx <- which(grepl(BELT_STOP_PATTERN, lines))
+  if (length(stop_idx) == 0 || stop_idx[1] <= start_idx[1]) return(empty)
+  window <- lines[start_idx[1]:(stop_idx[1] - 1)]
+
+  rows <- list()
+  current_header <- NA_character_
+  for (line in window) {
+    if (grepl(":$", line)) {
+      current_header <- sub(":$", "", line)
+      next
+    }
+    if (!is.na(current_header)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+fetch_belt_postings <- function(chromote_session, url = "https://www.beltschool.com/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_belt_postings(text, url)
+}
+
+# Big Sky School District 72 (bssd72.org) -- found in the same follow-up
+# pass. Older innerText-rendering Apptegy template. Real postings sit
+# under 2 real bare (no colon) category headers ("Teaching"/"District
+# Staff") -- matched by literal known name here (like Conrad's
+# CONRAD_PANEL_NAMES above), not a colon-suffix rule, since neither header
+# ends in ":". Confirmed live 2026-08-23: 2 Teaching + 2 District Staff =
+# 4 real postings. Starts after "Current Openings", stops at
+# "Applications", the real, stable boundary before the boilerplate
+# application-form list.
+BIGSKY_HEADERS <- c("Teaching", "District Staff")
+
+parse_bigsky_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Current Openings")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Applications")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  rows <- list()
+  current_header <- NA_character_
+  for (line in lines) {
+    if (line %in% BIGSKY_HEADERS) {
+      current_header <- line
+      next
+    }
+    if (!is.na(current_header)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+fetch_bigsky_postings <- function(chromote_session, url = "https://www.bssd72.org/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_bigsky_postings(text, url)
+}
+
+# Melstone Public Schools (melstonepublicschools.org) -- found in the same
+# follow-up pass. Older innerText-rendering Apptegy template, but its own
+# structure is a repeated field-label card ("Title:" / "Description:" /
+# "Benefits:" / "Application:") rather than a header+list -- a real,
+# reliable marker distinct from every other Apptegy district in this file:
+# every real posting's title is literally the plain-text line right after
+# a bare "Title:" line, confirmed live 2026-08-23 across all 4 real
+# postings (2 full-time: Head Cook, Head Maintenance/Custodian; 2
+# substitute-pool: Substitute Route Bus Drivers/Activity Drivers,
+# Substitute Teachers/Kitchen Staff/Custodian).
+parse_melstone_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  title_idx <- which(lines == "Title:")
+  if (length(title_idx) == 0) return(empty)
+  titles <- lines[title_idx + 1]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Melstone", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_melstone_postings <- function(chromote_session, url = "https://www.melstonepublicschools.org/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_melstone_postings(text, url)
+}
+
+# Shields Valley Public Schools (svalleyk12.org, serving both Clyde Park
+# and Wilsall -- the OPI feed's "CLYDE PARK" and "WILSALL" rows are the
+# same single district) -- found in the same follow-up pass. Genuinely
+# Finalsite (confirmed by the real "Powered by Finalsite" footer), a plain
+# httr2 fetch, no chromote needed. Real postings each sit inside their own
+# real `<p>` (or share a `<p>` with the preceding one via a real `<br>`,
+# e.g. the header "Park Special Education Co-op Openings" and its one
+# posting), each posting authored as a real `<a href="...google docs...">
+# TITLE</a>` link -- title text lives inside the anchor itself, not
+# guessed from surrounding prose. A posting already filled shows the same
+# `<a>` markup plus the real word "Filled" elsewhere in the same line
+# (confirmed live: 8 of 12 real posting lines are Filled right now) --
+# excluded by checking for that literal word in the line's full plain
+# text, the same "currently filled, not really open" judgment call Wolf
+# Point's EAE exclusion and Conrad's stale-posting exclusion already made
+# elsewhere in this file. Confirmed live 2026-08-23: 4 real currently-open
+# postings across 3 of the page's 4 real "<Category> Openings" headers
+# (K-12 Art under Certified Teacher; Maintenance/Grounds/Custodial
+# Technician and High Needs Para Educator under Classified Staff;
+# Occupational Therapist under Park Special Education Co-op -- Coaching/
+# Advisor's own single posting, Head HS Football Coach, is Filled).
+fetch_shieldsvalley_postings <- function(url = "https://svalleyk12.org/district/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_shieldsvalley_postings(resp_body_string(resp), url)
+}
+
+parse_shieldsvalley_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  containers <- rvest::html_elements(page, ".fsElementContent")
+  target <- NULL
+  for (container in containers) {
+    if (grepl("Certified Teacher Openings", rvest::html_text2(container), fixed = TRUE)) {
+      target <- container
+      break
+    }
+  }
+  if (is.null(target)) return(empty)
+
+  frag_html <- as.character(target)
+  x <- gsub("<p[^>]*>|</p>|<br\\s*/?>", "\n", frag_html)
+  lines <- strsplit(x, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  rows <- list()
+  current_header <- NA_character_
+  for (line in lines) {
+    plain <- trimws(gsub("<[^>]+>", "", line))
+    if (grepl(" Openings$", plain)) {
+      current_header <- sub(" Openings$", "", plain)
+      next
+    }
+    if (is.na(current_header)) next
+    a_match <- regmatches(line, regexpr("<a[^>]*>.*?</a>", line))
+    if (length(a_match) == 0) next
+    if (grepl("Filled", plain, fixed = TRUE)) next
+    title <- trimws(gsub("<[^>]+>", "", sub("^<a[^>]*>(.*)</a>$", "\\1", a_match)))
+    if (!nzchar(title)) next
+    rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
+                                            Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
 # Apptegy content pages are a client-side-rendered Nuxt app -- a plain
 # httr2 request gets a Fastly JS bot-challenge shell (3038 bytes, real
 # content never reaches a non-JS-executing client at all), confirmed live
@@ -1378,7 +1590,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 13 Apptegy districts sharing one chromote session (created
+# Fetches all 16 Apptegy districts sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
 # just scoped to only the districts that need it instead of being
@@ -1435,6 +1647,15 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   sunburst <- fetch_sunburst_postings(session)
   if (nrow(sunburst) > 0) sunburst$District <- "Sunburst Schools"
 
+  belt <- fetch_belt_postings(session)
+  if (nrow(belt) > 0) belt$District <- "Belt Public Schools"
+
+  bigsky <- fetch_bigsky_postings(session)
+  if (nrow(bigsky) > 0) bigsky$District <- "Big Sky School District 72"
+
+  melstone <- fetch_melstone_postings(session)
+  if (nrow(melstone) > 0) melstone$District <- "Melstone Public Schools"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
-                    hayslodgepole, plevna, sunburst)
+                    hayslodgepole, plevna, sunburst, belt, bigsky, melstone)
 }
