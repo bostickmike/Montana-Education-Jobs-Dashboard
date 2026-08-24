@@ -1574,6 +1574,243 @@ fetch_centerville_postings <- function(chromote_session, url = "https://www.cent
   parse_centerville_postings(text, url)
 }
 
+# Arlee Joint School District (arleeschools.org) -- found in a further
+# 2026-08-23 follow-up pass working down to the last remaining OPI-gap
+# candidates. Older innerText-rendering Apptegy template, but its real
+# postings sit in a genuine 3-column table ("Job Description" / "Application"
+# / "Closing Date") rather than a header+list -- innerText renders each
+# row as 3 consecutive lines (title, application type, closing date), so
+# every 3rd line starting right after the 3-line header is a real title.
+# Confirmed live 2026-08-23, 8 real postings.
+parse_arlee_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Job Description")
+  if (length(start_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 3):length(lines)]
+
+  stop_idx <- which(body == "Find Us")
+  if (length(stop_idx) > 0) body <- body[seq_len(stop_idx[1] - 1)]
+
+  n_rows <- length(body) %/% 3
+  if (n_rows == 0) return(empty)
+  titles <- body[seq(1, by = 3, length.out = n_rows)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Arlee", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_arlee_postings <- function(chromote_session, url = "https://www.arleeschools.org/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_arlee_postings(text, url)
+}
+
+# Chinook Public Schools (chinookschools.org) -- found in the same
+# follow-up pass. Older innerText-rendering Apptegy template. Real
+# postings sit under 3 real bare (no colon) category headers, matched by
+# literal known name like Big Sky/Roundup above. The first category
+# ("CURRENT TEACHING AND AIDE OPENINGS") is immediately followed by a
+# real "Application Details:" sub-marker and prose (pay range, experience
+# bands) before the next category header -- skipped via a `skipping` flag
+# set at that literal marker and cleared at the next real header, the
+# same 2-state pattern Wolf Point's CURRENTLY-FILLED-header exclusion
+# uses elsewhere in this file. Confirmed live 2026-08-23: 1 + 1 + 5 = 7
+# real postings. "Application Details:" and "Activity Drivers" both carry
+# a trailing non-breaking space (U+00A0) baked into the site's own
+# authored content -- stripped here, the same class of issue as
+# Townsend's TOWNSEND_NBSP above, different district. Stops at
+# "QUESTIONS?", the real, stable boundary before contact info.
+CHINOOK_HEADERS <- c("CURRENT TEACHING AND AIDE OPENINGS", "ADDITIONAL/EXTRA CURRICULAR OPENINGS", "CUSTODIAL, KITCHEN, AND OTHER OPENINGS")
+CHINOOK_NBSP <- intToUtf8(160)
+
+parse_chinook_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- gsub(CHINOOK_NBSP, "", lines, fixed = TRUE)
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  stop_all_idx <- which(lines == "QUESTIONS?")
+  if (length(stop_all_idx) > 0) lines <- lines[seq_len(stop_all_idx[1] - 1)]
+
+  rows <- list()
+  current_header <- NA_character_
+  skipping <- FALSE
+  for (line in lines) {
+    if (line %in% CHINOOK_HEADERS) {
+      current_header <- line
+      skipping <- FALSE
+      next
+    }
+    if (grepl("^Application Details:", line)) {
+      skipping <- TRUE
+      next
+    }
+    if (!is.na(current_header) && !skipping) {
+      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+fetch_chinook_postings <- function(chromote_session, url = "https://www.chinookschools.org/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_chinook_postings(text, url)
+}
+
+# Darby School District 9 (darby.k12.mt.us) -- found in the same
+# follow-up pass. Older innerText-rendering Apptegy template. Real
+# postings are a genuinely flat, single-category list right after "Open
+# Positions" (the same flat-list shape as Sunburst/White Sulphur Springs/
+# Centerville above) -- confirmed live 2026-08-23, 6 real postings. Stops
+# at "Applications", the real, stable boundary before the tabbed
+# application-form links.
+parse_darby_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Open Positions")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Applications")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+  if (length(lines) == 0) return(empty)
+
+  data.frame(Title = lines, Location = "Darby", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_darby_postings <- function(chromote_session, url = "https://www.darby.k12.mt.us/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_darby_postings(text, url)
+}
+
+# Dutton/Brady Public School District (dbps.k12.mt.us) -- found in the
+# same follow-up pass; its real employment page URL isn't a plain
+# `/page/...` link findable from the rendered nav, found instead by
+# decoding the site's own `window.clientWorkStateTemp` JSON menu tree for
+# a "Careers"/slug pair (the same technique used to find Harlowton's and
+# Melstone's real pages in an earlier session). Older innerText-rendering
+# Apptegy template. Real postings are 2 short title lines each
+# immediately followed by a real prose description paragraph -- reuses
+# Hays-Lodge Pole's title-shape heuristic (length cap, no trailing
+# "."/":" , no digit-dot list marker) since the same "title, then prose"
+# interleaving shows up here, minus the "$" rule (no dollar amounts on
+# this page). Confirmed live 2026-08-23, 2 real postings (Route and
+# Relief School Bus Drivers, Substitute Teachers). Starts after
+# "Employment Opportunities:", stops at "Find Us".
+looks_like_dutton_title <- function(line) {
+  if (nchar(line) > 55) return(FALSE)
+  if (grepl("[.:]$", line)) return(FALSE)
+  if (grepl("^[0-9]+\\.", line)) return(FALSE)
+  if (!grepl("[A-Za-z]", line)) return(FALSE)
+  TRUE
+}
+
+parse_dutton_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Employment Opportunities:")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Find Us")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[vapply(lines, looks_like_dutton_title, logical(1))]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Dutton", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_dutton_postings <- function(chromote_session, url = "https://dbps.k12.mt.us/page/careers") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_dutton_postings(text, url)
+}
+
+# Ekalaka Public Schools (ekalaka.net) -- found in the same follow-up
+# pass, a real Job Postings module (CSS classes prefixed `ss-`, assets
+# served from parentsquare.com -- a new platform for this project, not
+# used by any other district here), a plain httr2 fetch, no chromote
+# needed. Real postings are genuinely tagged, clean HTML: each is an
+# `<a class="ss-row ss-post-page-row">` wrapping a real
+# `<h2 class="ss-post-title">` and a real `<div class="ss-post-date">` --
+# confirmed live 2026-08-23, 7 real postings (an 8th "Certified and
+# Classified Applications" row is the standard-forms link, not a real
+# posting, excluded by exact title match).
+EKALAKA_BOILERPLATE_TITLES <- c("Certified and Classified Applications")
+
+fetch_ekalaka_postings <- function(url = "https://www.ekalaka.net/336413_2") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_ekalaka_postings(resp_body_string(resp), url)
+}
+
+parse_ekalaka_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  rows <- rvest::html_elements(page, "a.ss-post-page-row")
+  if (length(rows) == 0) return(empty)
+
+  titles <- vapply(rows, function(r) {
+    el <- rvest::html_element(r, "h2.ss-post-title")
+    if (is.na(el)) NA_character_ else trimws(rvest::html_text2(el))
+  }, character(1))
+  dates_raw <- vapply(rows, function(r) {
+    el <- rvest::html_element(r, "div.ss-post-date")
+    if (is.na(el)) NA_character_ else trimws(rvest::html_text2(el))
+  }, character(1))
+
+  keep <- !is.na(titles) & nzchar(titles) & !(titles %in% EKALAKA_BOILERPLATE_TITLES)
+  titles <- titles[keep]
+  dates_raw <- dates_raw[keep]
+  if (length(titles) == 0) return(empty)
+
+  posted_date <- suppressWarnings(as.character(as.Date(dates_raw, format = "%B %d, %Y")))
+
+  data.frame(Title = titles, Location = "Ekalaka", Posted_Date = posted_date, Link = url, stringsAsFactors = FALSE)
+}
+
 # Shields Valley Public Schools (svalleyk12.org, serving both Clyde Park
 # and Wilsall -- the OPI feed's "CLYDE PARK" and "WILSALL" rows are the
 # same single district) -- found in the same follow-up pass. Genuinely
@@ -1861,7 +2098,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 21 districts (20 Apptegy + Geyser's CyberSchool) sharing one chromote session (created
+# Fetches all 25 districts (24 Apptegy + Geyser's CyberSchool) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
 # just scoped to only the districts that need it instead of being
@@ -1942,6 +2179,19 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   centerville <- fetch_centerville_postings(session)
   if (nrow(centerville) > 0) centerville$District <- "Centerville Public Schools"
 
+  arlee <- fetch_arlee_postings(session)
+  if (nrow(arlee) > 0) arlee$District <- "Arlee Joint School District"
+
+  chinook <- fetch_chinook_postings(session)
+  if (nrow(chinook) > 0) chinook$District <- "Chinook Public Schools"
+
+  darby <- fetch_darby_postings(session)
+  if (nrow(darby) > 0) darby$District <- "Darby School District 9"
+
+  dutton <- fetch_dutton_postings(session)
+  if (nrow(dutton) > 0) dutton$District <- "Dutton/Brady Public School District"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
-                    hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville)
+                    hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
+                    arlee, chinook, darby, dutton)
 }

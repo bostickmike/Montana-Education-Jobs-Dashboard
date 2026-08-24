@@ -140,7 +140,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "North Star Public Schools", "Belt Public Schools", "Big Sky School District 72",
                      "Melstone Public Schools", "Shields Valley Public Schools", "Manhattan School District",
                      "Roundup School District", "White Sulphur Springs Schools", "Shelby School District",
-                     "Geyser Public Schools", "Centerville Public Schools", "Thompson Falls Public Schools"))
+                     "Geyser Public Schools", "Centerville Public Schools", "Thompson Falls Public Schools",
+                     "Arlee Joint School District", "Chinook Public Schools", "Darby School District 9",
+                     "Dutton/Brady Public School District", "Ekalaka Public Schools"))
 })
 
 # ---------------------------------------------------------------------------
