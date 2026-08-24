@@ -386,6 +386,142 @@ parse_ramsay_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Ramsay", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Roy School District 74 (roy.k12.mt.us) -- found in the same 2026-08-23
+# pass, a plain Joomla site (`sp-page-builder`), no chromote needed. Real
+# postings are two prose sentences sharing one real, repeatable template
+# ("Roy School District 74 is looking for a <TITLE>.") plus one separately
+# authored bold/underlined all-caps line ("BUS DRIVER NEEDED") -- confirmed
+# live 2026-08-23, 3 real postings (Head Cook, Full-time Paraprofessional,
+# Bus Driver).
+fetch_roy_postings <- function(url = "https://roy.k12.mt.us/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_roy_postings(resp_body_string(resp), url)
+}
+
+parse_roy_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+
+  looking_lines <- lines[grepl("is looking for an?\\s", lines)]
+  looking_titles <- trimws(sub(".*is looking for an?\\s+([^.]+)\\..*", "\\1", looking_lines))
+
+  bus_titles <- if (any(grepl("^BUS DRIVER NEEDED", lines))) "Bus Driver" else character(0)
+
+  titles <- c(looking_titles, bus_titles)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Roy", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Arrowhead Elementary School District #75 (arrowheadk8.com, serving Pray
+# and Emigrant) -- found in the same 2026-08-23 pass, a modern WordPress/
+# Divi site, no chromote needed. Real postings are each a genuine `<h2>`
+# heading inside their own Divi card, bounded by 2 real, stable page
+# headings that aren't postings themselves ("Join the Arrowhead Team" the
+# intro, "Equal Opportunity Employer" the boilerplate after) -- confirmed
+# live 2026-08-23, 3 real postings (Substitute Employment, Special
+# Education Paraprofessional, Certified Teachers). This site's WAF blocks
+# httr2's request with the same Mac/Chrome-120 UA every other plain-fetch
+# scraper in this file uses (a real HTTP 403, confirmed live) but allows a
+# Windows/Chrome-124 UA -- a real, confirmed site-specific requirement, not
+# an arbitrary swap.
+ARROWHEAD_START_HEADING <- "Join the Arrowhead Team"
+ARROWHEAD_STOP_HEADING <- "Equal Opportunity Employer"
+
+fetch_arrowhead_postings <- function(url = "https://arrowheadk8.com/careers/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_arrowhead_postings(resp_body_string(resp), url)
+}
+
+parse_arrowhead_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  headings <- trimws(rvest::html_text2(rvest::html_elements(page, "h2")))
+
+  start_idx <- which(headings == ARROWHEAD_START_HEADING)
+  stop_idx <- which(headings == ARROWHEAD_STOP_HEADING)
+  if (length(start_idx) == 0 || length(stop_idx) == 0 || stop_idx[1] <= start_idx[1] + 1) return(empty)
+
+  titles <- headings[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Pray", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# North Star Public Schools (sites.google.com/nsschools.org, serving both
+# Rudyard and Gildford -- the OPI feed's "RUDYARD" and "RUDYARD/GILDFORD"
+# rows are the same single district) -- found in the same 2026-08-23 pass.
+# A modern (published, publicly reachable) Google Sites page -- unlike
+# Wyola's own Google Site, which redirects to a Google sign-in wall and is
+# genuinely not publicly reachable, confirmed live -- real content renders
+# server-side into a plain httr2 fetch, no chromote needed, the same as
+# Big Timber's own Google Sites page (declined separately, see this
+# session's memory notes, for lacking a repeatable multi-posting
+# structure). Real postings sit under 2 real category headers ending in
+# ":" ("Substitutes:"/"Transportation:"), the same colon-suffix convention
+# as Plevna above; "Elementary Positions"/"MS/HS Positions" are 2 more
+# real category headers but with NO colon and no real title beneath them
+# (just a "Search North Star Elem - 1233"-style broken job-board-widget
+# placeholder line) -- both genuinely empty right now, not a parsing gap,
+# excluded for free since only colon-suffixed lines start title
+# collection here. Confirmed live 2026-08-23, 2 real postings (Substitute
+# Teachers, Bus Drivers). Stops at "Employment Application", the real,
+# stable boundary before the document-link section.
+NORTHSTAR_STOP_LINE <- "Employment Application"
+
+fetch_northstar_postings <- function(url = "https://sites.google.com/nsschools.org/home/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_northstar_postings(resp_body_string(resp), url)
+}
+
+parse_northstar_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "The North Star Public Schools has the following positions open:")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == NORTHSTAR_STOP_LINE)
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  rows <- list()
+  current_header <- NA_character_
+  for (line in lines) {
+    if (grepl(":$", line)) {
+      current_header <- sub(":$", "", line)
+      next
+    }
+    if (!is.na(current_header)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge

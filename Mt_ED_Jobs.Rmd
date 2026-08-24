@@ -278,6 +278,87 @@ if (nrow(ramsay_df) > 0) {
                            Posting_Source = character(0))
 }
 
+# Roy (a plain Joomla site, found 2026-08-23) also has no structured ATS --
+# a plain httr2 fetch, no chromote needed, same pattern as Custer/Scobey/
+# Ramsay above.
+roy_districts <- registry[registry$Platform == "RoyHeuristic", ]
+roy_results <- lapply(seq_len(nrow(roy_districts)), function(i) {
+  row <- roy_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_roy_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+roy_df <- bind_rows(roy_results)
+if (nrow(roy_df) > 0) {
+  roy_df <- roy_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Roy district site (direct board)")
+} else {
+  roy_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                        location = character(0), url = character(0), District = character(0),
+                        Posting_Source = character(0))
+}
+
+# Arrowhead (a modern WordPress/Divi site, found 2026-08-23) also has no
+# structured ATS -- a plain httr2 fetch, no chromote needed, same pattern
+# as Custer/Scobey/Ramsay/Roy above (its own fetch_arrowhead_postings()
+# uses a different, site-required User-Agent internally -- see that
+# function's own comment).
+arrowhead_districts <- registry[registry$Platform == "ArrowheadHeuristic", ]
+arrowhead_results <- lapply(seq_len(nrow(arrowhead_districts)), function(i) {
+  row <- arrowhead_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_arrowhead_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+arrowhead_df <- bind_rows(arrowhead_results)
+if (nrow(arrowhead_df) > 0) {
+  arrowhead_df <- arrowhead_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Arrowhead district site (direct board)")
+} else {
+  arrowhead_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# North Star (a publicly published Google Sites page, found 2026-08-23,
+# serving both Rudyard and Gildford) also has no structured ATS -- a plain
+# httr2 fetch, no chromote needed, same pattern as Custer/Scobey/Ramsay/
+# Roy/Arrowhead above.
+northstar_districts <- registry[registry$Platform == "NorthStarHeuristic", ]
+northstar_results <- lapply(seq_len(nrow(northstar_districts)), function(i) {
+  row <- northstar_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_northstar_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+northstar_df <- bind_rows(northstar_results)
+if (nrow(northstar_df) > 0) {
+  northstar_df <- northstar_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "North Star district site (direct board)")
+} else {
+  northstar_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
 # Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta,
 # Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, and Sunburst all
 # run Apptegy, a CMS whose pages need a real browser to render
@@ -375,11 +456,15 @@ broadview_df <- broadview_df %>% mutate(date_posted = standardize_date(date_post
 custer_df <- custer_df %>% mutate(date_posted = standardize_date(date_posted))
 scobey_df <- scobey_df %>% mutate(date_posted = standardize_date(date_posted))
 ramsay_df <- ramsay_df %>% mutate(date_posted = standardize_date(date_posted))
+roy_df <- roy_df %>% mutate(date_posted = standardize_date(date_posted))
+arrowhead_df <- arrowhead_df %>% mutate(date_posted = standardize_date(date_posted))
+northstar_df <- northstar_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
-                       livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df, apptegy_df)
+                       livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
+                       roy_df, arrowhead_df, northstar_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%

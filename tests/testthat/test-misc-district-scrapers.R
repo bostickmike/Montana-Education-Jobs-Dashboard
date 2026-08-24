@@ -530,6 +530,99 @@ test_that("fetch_ramsay_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 2)
 })
 
+# Real fixture captured 2026-08-23 from roy.k12.mt.us (a plain Joomla site).
+
+test_that("parse_roy_postings extracts all 3 real postings from 2 prose sentences and 1 bold line", {
+  html <- paste(readLines(test_path("fixtures", "roy_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_roy_postings(html, "url")
+
+  expect_equal(nrow(result), 3)
+  expect_equal(result$Title, c("Head Cook", "Full-time Paraprofessional", "Bus Driver"))
+  expect_true(all(result$Location == "Roy"))
+})
+
+test_that("parse_roy_postings returns zero rows (not an error) when there's no real posting text", {
+  result <- parse_roy_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_roy_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "roy_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_roy_postings()
+
+  expect_equal(nrow(result), 3)
+})
+
+# Real fixture captured 2026-08-23 from arrowheadk8.com/careers/ (a modern
+# WordPress/Divi site serving Pray and Emigrant).
+
+test_that("parse_arrowhead_postings extracts the 3 real h2-heading postings between the intro and boilerplate headings", {
+  html <- paste(readLines(test_path("fixtures", "arrowhead_careers.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_arrowhead_postings(html, "url")
+
+  expect_equal(nrow(result), 3)
+  expect_equal(result$Title, c("Substitute Employment", "Special Education Paraprofessional", "Certified Teachers"))
+  expect_true(all(result$Location == "Pray"))
+})
+
+test_that("parse_arrowhead_postings returns zero rows (not an error) when there's no Join the Arrowhead Team heading", {
+  result <- parse_arrowhead_postings("<html><body><h2>Nothing here.</h2></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_arrowhead_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "arrowhead_careers.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_arrowhead_postings()
+
+  expect_equal(nrow(result), 3)
+})
+
+# Real fixture captured 2026-08-23 from sites.google.com/nsschools.org's
+# Employment page (North Star Public Schools, serving both Rudyard and
+# Gildford).
+
+test_that("parse_northstar_postings extracts the 2 real postings under colon-headers, excluding the 2 genuinely-empty non-colon categories", {
+  html <- paste(readLines(test_path("fixtures", "northstar_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_northstar_postings(html, "url")
+
+  expect_equal(nrow(result), 2)
+  expect_equal(result$Title[result$Location == "Substitutes"], "Substitute Teachers")
+  expect_equal(result$Title[result$Location == "Transportation"], "Bus Drivers")
+  # Regression: "Elementary Positions"/"MS/HS Positions" have no colon and
+  # only a broken job-board-widget placeholder line beneath them.
+  expect_false(any(grepl("Search North Star", result$Title)))
+})
+
+test_that("parse_northstar_postings returns zero rows (not an error) when there's no positions-open header", {
+  result <- parse_northstar_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_northstar_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "northstar_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_northstar_postings()
+
+  expect_equal(nrow(result), 2)
+})
+
 # Fake chromote session: a plain list standing in for a real
 # ChromoteSession$new() -- provides just the $Page$navigate/
 # $Page$loadEventFired/$Runtime$evaluate surface fetch_wolfpoint_postings()/
