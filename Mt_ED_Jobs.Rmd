@@ -439,6 +439,33 @@ if (nrow(ekalaka_df) > 0) {
                             Posting_Source = character(0))
 }
 
+# Trego School District 53 (a publicly published Google Sites page, found
+# 2026-08-24) also has no structured ATS -- a plain httr2 fetch, no
+# chromote needed, same pattern as Custer/Scobey/Ramsay/Roy/Arrowhead/
+# North Star/Shields Valley/Thompson Falls/Ekalaka above.
+trego_districts <- registry[registry$Platform == "TregoHeuristic", ]
+trego_results <- lapply(seq_len(nrow(trego_districts)), function(i) {
+  row <- trego_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_trego_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+trego_df <- bind_rows(trego_results)
+if (nrow(trego_df) > 0) {
+  trego_df <- trego_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Trego district site (direct board)")
+} else {
+  trego_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
 # Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta,
 # Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, and Sunburst all
 # run Apptegy, a CMS whose pages need a real browser to render
@@ -456,7 +483,7 @@ if (nrow(ekalaka_df) > 0) {
 # it always has for Wolf Point/Plentywood; their registry rows exist purely
 # for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -542,12 +569,13 @@ northstar_df <- northstar_df %>% mutate(date_posted = standardize_date(date_post
 shieldsvalley_df <- shieldsvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 thompsonfalls_df <- thompsonfalls_df %>% mutate(date_posted = standardize_date(date_posted))
 ekalaka_df <- ekalaka_df %>% mutate(date_posted = standardize_date(date_posted))
+trego_df <- trego_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
                        livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
-                       roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, apptegy_df)
+                       roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%

@@ -522,6 +522,47 @@ parse_northstar_postings <- function(html_text, url) {
   do.call(rbind, rows)
 }
 
+# Trego School District 53 (sites.google.com, found 2026-08-24 while
+# re-checking the OPI-gap candidate list) -- another modern, publicly
+# reachable Google Sites page, same as North Star above: real content
+# renders server-side into a plain httr2 fetch, no chromote needed. Real
+# postings sit under one real flat-list header ("Jobs Available at Trego
+# School"), no colon-suffixed sub-categories like North Star -- confirmed
+# live 2026-08-24, 2 real postings (Snow Removal, K-1 Teacher). Stops at
+# "Report abuse", the same real Google Sites footer boundary North Star
+# uses.
+TREGO_STOP_LINE <- "Report abuse"
+
+fetch_trego_postings <- function(url = "https://www.tregoschool.org/about-us/our-staff/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_trego_postings(resp_body_string(resp), url)
+}
+
+parse_trego_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Jobs Available at Trego School")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == TREGO_STOP_LINE)
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[nzchar(lines)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Trego", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge
@@ -1764,6 +1805,123 @@ fetch_dutton_postings <- function(chromote_session, url = "https://dbps.k12.mt.u
   parse_dutton_postings(text, url)
 }
 
+# St. Ignatius School District (jobs.redroverk12.com/org/2261) -- found
+# 2026-08-24 while re-checking the OPI-gap candidate list ("SAINT
+# IGNATIUS" and "SAINT IGNATIUS- SALISH TEACHER" are the same district;
+# both collapse into this one registry row). Red Rover Hiring, a new
+# platform for this project -- a client-side-rendered Next.js app, no
+# API endpoint findable in the static HTML, needs a real browser like
+# Apptegy, folded into the same shared chromote session below for that
+# reason even though it isn't Apptegy itself (same precedent as Geyser's
+# CyberSchool 2.0). Confirmed live 2026-08-24: "Found 8 job openings",
+# but 2 are generic evergreen application-form placeholders ("Classified
+# Application", "Volunteer Application") rather than real openings --
+# the same class of noise Arlee's own "Classified Application"/
+# "Certified Application" exclusion handles, extended here with
+# "Volunteer Application". Each real posting is a repeating block of
+# [employment type, title, category, location, (salary, optional)]
+# followed by a literal "APPLY NOW" line and then a relative-date line
+# ("27 days ago") -- parsed by splitting on "APPLY NOW" as the reliable
+# per-posting boundary (the salary line's presence varies, so a fixed
+# stride doesn't work) and discarding the trailing date line, which
+# standardize_date() can't parse anyway (Mt_Ed_Jobs.Rmd only handles
+# absolute dates) so it isn't worth carrying through as free text.
+# "No location specified" is the page's own literal placeholder for a
+# real missing value, normalized to NA here rather than kept as prose.
+STIGNATIUS_PLACEHOLDER_TITLES <- c("Classified Application", "Certified Application", "Volunteer Application")
+
+parse_stignatius_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(grepl("^Found [0-9]+ job openings?$", lines))
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Powered By")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  rows <- list()
+  block <- character(0)
+  i <- 1
+  while (i <= length(lines)) {
+    line <- lines[i]
+    if (line == "APPLY NOW") {
+      if (length(block) >= 2) {
+        title <- block[2]
+        location <- if (length(block) >= 4) block[4] else NA_character_
+        if (!is.na(location) && location == "No location specified") location <- NA_character_
+        if (!(title %in% STIGNATIUS_PLACEHOLDER_TITLES)) {
+          rows[[length(rows) + 1]] <- data.frame(Title = title, Location = location,
+                                                   Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+        }
+      }
+      block <- character(0)
+      i <- i + 2
+      next
+    }
+    block <- c(block, line)
+    i <- i + 1
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+fetch_stignatius_postings <- function(chromote_session, url = "https://jobs.redroverk12.com/org/2261") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(5)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_stignatius_postings(text, url)
+}
+
+# Stanford Public Schools (stanfordmtschool.com) -- found 2026-08-24 while
+# re-checking the OPI-gap candidate list. Apptegy, same platform as most
+# of this section. Real postings are a flat, single-category list right
+# after "Job Openings" (the same flat-list shape as Darby above), except
+# the list starts with 2 evergreen application-form placeholders
+# ("Certified Application", "Classified Application") -- the same class
+# of noise Arlee's/St. Ignatius's own exclusion lists handle, filtered
+# here by exact title match. Confirmed live 2026-08-24, 6 real postings.
+# Stops at "Find Us", the real, stable boundary before contact info.
+STANFORD_PLACEHOLDER_TITLES <- c("Certified Application", "Classified Application")
+
+parse_stanford_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Job Openings")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Find Us")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[!(lines %in% STANFORD_PLACEHOLDER_TITLES)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Stanford", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_stanford_postings <- function(chromote_session, url = "https://www.stanfordmtschool.com/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_stanford_postings(text, url)
+}
+
 # Ekalaka Public Schools (ekalaka.net) -- found in the same follow-up
 # pass, a real Job Postings module (CSS classes prefixed `ss-`, assets
 # served from parentsquare.com -- a new platform for this project, not
@@ -2098,7 +2256,8 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 25 districts (24 Apptegy + Geyser's CyberSchool) sharing one chromote session (created
+# Fetches all 27 districts (25 Apptegy + Geyser's CyberSchool + St.
+# Ignatius's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
 # just scoped to only the districts that need it instead of being
@@ -2191,7 +2350,13 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   dutton <- fetch_dutton_postings(session)
   if (nrow(dutton) > 0) dutton$District <- "Dutton/Brady Public School District"
 
+  stignatius <- fetch_stignatius_postings(session)
+  if (nrow(stignatius) > 0) stignatius$District <- "St. Ignatius School District"
+
+  stanford <- fetch_stanford_postings(session)
+  if (nrow(stanford) > 0) stanford$District <- "Stanford Public Schools"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
                     hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
-                    arlee, chinook, darby, dutton)
+                    arlee, chinook, darby, dutton, stignatius, stanford)
 }
