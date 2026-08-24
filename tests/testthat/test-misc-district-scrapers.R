@@ -1266,6 +1266,36 @@ test_that("fetch_lolo_postings drives a chromote session and parses its real ren
   expect_equal(nrow(result), 4)
 })
 
+# Real fixture: document.body.innerText captured via a live chromote
+# session 2026-08-24 from froidschool.com's Open Positions/Applications
+# page.
+
+test_that("parse_froid_postings extracts the 3 real postings, excluding the stray bare-year artifact line", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_froid_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_froid_postings(text, "url")
+
+  expect_equal(nrow(result), 3)
+  expect_true(all(c("Counselor", "Substitute Teachers", "Substitute Bus Driver") %in% result$Title))
+  expect_true(all(result$Location == "Froid"))
+  expect_false(any(grepl("^[0-9]{4}-[0-9]{4}$", result$Title)))
+})
+
+test_that("parse_froid_postings returns zero rows (not an error) when there's no year-suffixed Open Positions header", {
+  result <- parse_froid_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_froid_postings drives a chromote session and parses its real rendered text", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_froid_rendered.txt"), warn = FALSE), collapse = "\n")
+  session <- fake_chromote_session(text)
+
+  result <- fetch_froid_postings(session)
+
+  expect_equal(nrow(result), 3)
+})
+
 # Real fixture captured 2026-08-23 from ekalaka.net's Job Postings page (a
 # real, tagged Job Postings module, CSS classes prefixed `ss-`).
 
@@ -1391,13 +1421,75 @@ test_that("fetch_hobson_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 3)
 })
 
+# Real fixture captured 2026-08-24 from terryschools.org's Employment
+# page (Squarespace, a new platform for this project).
+
+test_that("parse_terry_postings extracts all 14 real postings across the 2 asymmetric Certified/Classified sections", {
+  html <- paste(readLines(test_path("fixtures", "terry_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_terry_postings(html, "url")
+
+  expect_equal(nrow(result), 14)
+  expect_equal(sum(result$Location == "Certified"), 7)
+  expect_equal(sum(result$Location == "Classified"), 7)
+  expect_true(all(c("3 Elementary Teachers", "Title 1 Elementary Teacher") %in% result$Title[result$Location == "Certified"]))
+  expect_true(all(c("Special Education Paraprofessional", "Sub custodian") %in% result$Title[result$Location == "Classified"]))
+})
+
+test_that("parse_terry_postings returns zero rows (not an error) when there's no real section marker", {
+  result <- parse_terry_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_terry_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "terry_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_terry_postings()
+
+  expect_equal(nrow(result), 14)
+})
+
+# Real fixture captured 2026-08-24 from gallatingatewayschool.com's
+# Employment page (CatapultCMS, a new platform for this project).
+
+test_that("parse_gallatingateway_postings extracts the 3 real 'always hiring' postings", {
+  html <- paste(readLines(test_path("fixtures", "gallatingateway_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_gallatingateway_postings(html, "url")
+
+  expect_equal(nrow(result), 3)
+  expect_true(all(c("Substitute Teacher", "Athletic Director", "Business Manager") %in% result$Title))
+  expect_true(all(result$Location == "Gallatin Gateway"))
+})
+
+test_that("parse_gallatingateway_postings returns zero rows (not an error) when there's no real ON CALL header", {
+  result <- parse_gallatingateway_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_gallatingateway_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "gallatingateway_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_gallatingateway_postings()
+
+  expect_equal(nrow(result), 3)
+})
+
 test_that("fetch_apptegy_k12_postings returns an empty frame (not an error) when no session factory is available", {
   result <- fetch_apptegy_k12_postings(chromote_session_factory = NULL)
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "District"))
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 28 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 29 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -1426,6 +1518,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 28 districts
   stignatius_text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
   stanford_text <- paste(readLines(test_path("fixtures", "apptegy_stanford_rendered.txt"), warn = FALSE), collapse = "\n")
   lolo_text <- paste(readLines(test_path("fixtures", "apptegy_lolo_rendered.txt"), warn = FALSE), collapse = "\n")
+  froid_text <- paste(readLines(test_path("fixtures", "apptegy_froid_rendered.txt"), warn = FALSE), collapse = "\n")
 
   # Same fake session serves every district's fetch, real URL routing comes
   # from each fetch_*_postings()'s own default url= argument -- this fake
@@ -1469,6 +1562,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 28 districts
           else if (grepl("redroverk12", navigated_url)) stignatius_text
           else if (grepl("stanfordmtschool", navigated_url)) stanford_text
           else if (grepl("loloschools", navigated_url)) lolo_text
+          else if (grepl("froidschool", navigated_url)) froid_text
           else ""
           list(result = list(value = value))
         }
@@ -1479,7 +1573,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 28 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory)
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 6 + 4)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 6 + 4 + 3)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -1508,4 +1602,5 @@ test_that("fetch_apptegy_k12_postings shares one session across all 28 districts
   expect_equal(sum(result$District == "St. Ignatius School District"), 6)
   expect_equal(sum(result$District == "Stanford Public Schools"), 6)
   expect_equal(sum(result$District == "Lolo School District 7"), 4)
+  expect_equal(sum(result$District == "Froid Public Schools"), 3)
 })

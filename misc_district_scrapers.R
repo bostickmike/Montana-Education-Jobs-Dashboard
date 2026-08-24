@@ -649,6 +649,104 @@ parse_hobson_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Hobson", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Terry Public Schools (terryschools.org, found 2026-08-24) -- Squarespace,
+# a new platform for this project, plain httr2 fetch (server-rendered, no
+# chromote needed). Real postings sit in 2 separate sections (Certified,
+# Classified) whose DOM order is asymmetric: Certified's real titles
+# follow its "CERTIFIED Employment Application" link-label line, but
+# Classified's real titles follow its own intro-prose sentence instead
+# (its "CLASSIFIED Employment Application" link-label line comes AFTER
+# the titles on this page, not before) -- confirmed live 2026-08-24 by
+# reading the actual rendered line order rather than assuming both
+# sections share one template. 7 + 7 = 14 real postings. Each section
+# stops at its own real, stable boundary line (the next section's
+# header, or the closing "The following positions are currently
+# available..." sentence).
+TERRY_SECTIONS <- list(
+  list(start = "CERTIFIED Employment Application",
+       stop = "CLASSIFIED EMPLOYMENT INFORMATION",
+       location = "Certified"),
+  list(start = "We are taking applications on an ongoing basis for the following positions (use the Classified app below):",
+       stop = "The following positions are currently available (use the Classified app below):",
+       location = "Classified")
+)
+
+fetch_terry_postings <- function(url = "https://terryschools.org/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_terry_postings(resp_body_string(resp), url)
+}
+
+parse_terry_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  rows <- list()
+  for (sec in TERRY_SECTIONS) {
+    start_idx <- which(lines == sec$start)
+    if (length(start_idx) == 0) next
+    remaining <- lines[(start_idx[1] + 1):length(lines)]
+    stop_idx <- which(remaining == sec$stop)
+    if (length(stop_idx) > 0) remaining <- remaining[seq_len(stop_idx[1] - 1)]
+    remaining <- remaining[nzchar(remaining)]
+    if (length(remaining) > 0) {
+      rows[[length(rows) + 1]] <- data.frame(Title = remaining, Location = sec$location,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+# Gallatin Gateway School (gallatingatewayschool.com, found 2026-08-24)
+# -- "CatapultCMS", a new platform for this project, plain httr2 fetch.
+# Real postings sit under a literal quoted header ('GALLATIN GATEWAY
+# SCHOOL IS ALWAYS HIRING FOR THE FOLLOWING "ON CALL" POSITIONS:') --
+# these are framed as standing/evergreen recruiting needs rather than
+# time-bound vacancies, but are real, currently-open roles the district
+# is actively recruiting for (the same treatment this project already
+# gives "Substitute Teachers"-style standing categories elsewhere), not
+# boilerplate to exclude. Confirmed live 2026-08-24, 3 real postings
+# (Substitute Teacher, Athletic Director, Business Manager). Stops at
+# "EMPLOYMENT APPLICATION", the real, stable boundary before the
+# application-form links.
+fetch_gallatingateway_postings <- function(url = "https://www.gallatingatewayschool.com/Employment/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_gallatingateway_postings(resp_body_string(resp), url)
+}
+
+parse_gallatingateway_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == 'GALLATIN GATEWAY SCHOOL IS ALWAYS HIRING FOR THE FOLLOWING "ON CALL" POSITIONS:')
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "EMPLOYMENT APPLICATION")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[nzchar(lines)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Gallatin Gateway", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge
@@ -2064,6 +2162,54 @@ fetch_lolo_postings <- function(chromote_session, url = "https://www.loloschools
   parse_lolo_postings(text, url)
 }
 
+# Froid Public Schools (froidschool.com) -- found 2026-08-24 while
+# re-checking the OPI-gap candidate list. Apptegy. Real postings are a
+# flat list under a year-suffixed header ("2026-2027 Open Positions:"),
+# matched by regex since the year changes every fall -- confirmed live
+# 2026-08-24, 3 real postings (Counselor, Substitute Teachers,
+# Substitute Bus Driver). A stray bare-year line ("2026-2027") sits
+# right after the real titles, a content-authoring leftover fragment
+# rather than a 4th posting -- excluded by an explicit
+# year-range-only-line pattern rather than a fixed row count, so it
+# keeps working if the real title count changes. Stops at
+# "Applications:", the real, stable boundary before the application-form
+# links.
+FROID_NBSP <- intToUtf8(160)
+FROID_START_PATTERN <- "^[0-9]{4}-[0-9]{4} Open Positions:$"
+FROID_YEAR_LINE_PATTERN <- "^[0-9]{4}-[0-9]{4}$"
+
+parse_froid_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- gsub(FROID_NBSP, "", lines, fixed = TRUE)
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(grepl(FROID_START_PATTERN, lines))
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Applications:")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[!grepl(FROID_YEAR_LINE_PATTERN, lines)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Froid", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_froid_postings <- function(chromote_session, url = "https://www.froidschool.com/page/open-positionsapplications") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_froid_postings(text, url)
+}
+
 # Ekalaka Public Schools (ekalaka.net) -- found in the same follow-up
 # pass, a real Job Postings module (CSS classes prefixed `ss-`, assets
 # served from parentsquare.com -- a new platform for this project, not
@@ -2398,7 +2544,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 28 districts (26 Apptegy + Geyser's CyberSchool + St.
+# Fetches all 29 districts (27 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
@@ -2501,7 +2647,10 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   lolo <- fetch_lolo_postings(session)
   if (nrow(lolo) > 0) lolo$District <- "Lolo School District 7"
 
+  froid <- fetch_froid_postings(session)
+  if (nrow(froid) > 0) froid$District <- "Froid Public Schools"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
                     hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
-                    arlee, chinook, darby, dutton, stignatius, stanford, lolo)
+                    arlee, chinook, darby, dutton, stignatius, stanford, lolo, froid)
 }

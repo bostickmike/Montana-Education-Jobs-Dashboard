@@ -144,7 +144,8 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Arlee Joint School District", "Chinook Public Schools", "Darby School District 9",
                      "Dutton/Brady Public School District", "Ekalaka Public Schools",
                      "Trego School District 53", "St. Ignatius School District", "Stanford Public Schools",
-                     "Lolo School District 7", "Reed Point School District", "Hobson Public School"))
+                     "Lolo School District 7", "Reed Point School District", "Hobson Public School",
+                     "Froid Public Schools", "Terry Public Schools", "Gallatin Gateway School"))
 })
 
 # ---------------------------------------------------------------------------
