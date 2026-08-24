@@ -563,6 +563,92 @@ parse_trego_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Trego", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Reed Point School District (reedpoint.k12.mt.us, found 2026-08-24) --
+# another publicly published Google Sites page, same platform as North
+# Star/Trego above. Real postings sit under a flat "Job Openings-" header
+# (a trailing dash instead of North Star's colon or Trego's no-marker
+# convention) -- confirmed live 2026-08-24, 2 real postings (Kitchen
+# Substitute, Substitute Teachers). Stops at the first line matching
+# "Applications are available..." rather than a fixed stop line, since
+# the real ADA-notice boilerplate/"Report abuse" footer that follows
+# isn't a single distinctive string on this page.
+REEDPOINT_STOP_PATTERN <- "^Applications are available"
+
+fetch_reedpoint_postings <- function(url = "https://www.reedpoint.k12.mt.us/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_reedpoint_postings(resp_body_string(resp), url)
+}
+
+parse_reedpoint_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Job Openings-")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(grepl(REEDPOINT_STOP_PATTERN, lines))
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[nzchar(lines)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Reed Point", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Hobson Public School (hobson.k12.mt.us, found 2026-08-24) -- Finalsite,
+# same platform as Thompson Falls, but a different page shape: real
+# postings sit in prose under a year-suffixed header ("Current Openings
+# at Hobson Public School for the 2026-2027 school year:") rather than
+# Thompson Falls's RSS-feed-style "Post RSS Feeds"/"Load More" boundary
+# -- matched by a regex tolerant of the school-year string changing
+# rather than a literal line, since this page's own content will
+# presumably get re-authored with a new year string every fall.
+# Confirmed live 2026-08-24, 3 real postings (Vo-Ag Teacher, Physical
+# Education, Elementary Education). Stops at the line beginning "Listing
+# of all Current Teacher Openings", the real, stable boundary before the
+# OPI-referral/CBA/application-form document links.
+HOBSON_START_PATTERN <- "^Current Openings at Hobson Public School for the .+ school year:$"
+HOBSON_STOP_PATTERN <- "^Listing of all Current Teacher Openings"
+
+fetch_hobson_postings <- function(url = "https://www.hobson.k12.mt.us/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_hobson_postings(resp_body_string(resp), url)
+}
+
+parse_hobson_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(grepl(HOBSON_START_PATTERN, lines))
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(grepl(HOBSON_STOP_PATTERN, lines))
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[nzchar(lines)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Hobson", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # ---------------------------------------------------------------------------
 # Apptegy (chromote-driven) -- Wolf Point, Plentywood, Conrad, Westby,
 # Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge
@@ -1922,6 +2008,62 @@ fetch_stanford_postings <- function(chromote_session, url = "https://www.stanfor
   parse_stanford_postings(text, url)
 }
 
+# Lolo School District 7 (loloschools.org) -- found 2026-08-24 while
+# re-checking the OPI-gap candidate list. Apptegy, but an older
+# prose-paragraph template unlike Darby/Stanford's flat title-per-line
+# list: each real posting is one paragraph of "Title: description
+# sentence(s)." or "Title. description sentence(s)." (2 of the 4 use a
+# period instead of a colon after the title) under "CURRENT OPENING/S:".
+# The title is extracted as everything before whichever of the first ":"
+# or first ". " (period-then-space, so "(.33)" doesn't false-trigger)
+# comes first in the line -- confirmed live 2026-08-24 this correctly
+# handles both punctuation styles across all 4 real postings. Trailing
+# non-breeaking spaces (U+00A0) show up mid-sentence on this page too,
+# the same class of issue as Chinook/Townsend, normalized to a plain
+# space here rather than stripped, since (unlike those pages) they can
+# fall inside a real title. Stops at "SUBSTITUTE TEACHERS/AIDES/
+# CUSTODIAL/SCHOOL NURSE", the real, stable boundary before the
+# districtwide substitute-rate blurb.
+LOLO_NBSP <- intToUtf8(160)
+
+parse_lolo_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- gsub(LOLO_NBSP, " ", lines, fixed = TRUE)
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "CURRENT OPENING/S:")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "SUBSTITUTE TEACHERS/AIDES/CUSTODIAL/SCHOOL NURSE")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+  if (length(lines) == 0) return(empty)
+
+  titles <- vapply(lines, function(line) {
+    colon_pos <- regexpr(":", line, fixed = TRUE)
+    period_pos <- regexpr(". ", line, fixed = TRUE)
+    candidates <- c(colon_pos, period_pos)
+    candidates <- candidates[candidates > 0]
+    if (length(candidates) == 0) return(trimws(line))
+    trimws(substr(line, 1, min(candidates) - 1))
+  }, character(1), USE.NAMES = FALSE)
+
+  data.frame(Title = titles, Location = "Lolo", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_lolo_postings <- function(chromote_session, url = "https://www.loloschools.org/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_lolo_postings(text, url)
+}
+
 # Ekalaka Public Schools (ekalaka.net) -- found in the same follow-up
 # pass, a real Job Postings module (CSS classes prefixed `ss-`, assets
 # served from parentsquare.com -- a new platform for this project, not
@@ -2256,7 +2398,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 27 districts (25 Apptegy + Geyser's CyberSchool + St.
+# Fetches all 28 districts (26 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
@@ -2356,7 +2498,10 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   stanford <- fetch_stanford_postings(session)
   if (nrow(stanford) > 0) stanford$District <- "Stanford Public Schools"
 
+  lolo <- fetch_lolo_postings(session)
+  if (nrow(lolo) > 0) lolo$District <- "Lolo School District 7"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
                     hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
-                    arlee, chinook, darby, dutton, stignatius, stanford)
+                    arlee, chinook, darby, dutton, stignatius, stanford, lolo)
 }

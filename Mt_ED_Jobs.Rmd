@@ -466,6 +466,59 @@ if (nrow(trego_df) > 0) {
                           Posting_Source = character(0))
 }
 
+# Reed Point School District (a publicly published Google Sites page,
+# found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
+# no chromote needed, same pattern as Custer/Scobey/Ramsay/Roy/Arrowhead/
+# North Star/Shields Valley/Thompson Falls/Ekalaka/Trego above.
+reedpoint_districts <- registry[registry$Platform == "ReedPointHeuristic", ]
+reedpoint_results <- lapply(seq_len(nrow(reedpoint_districts)), function(i) {
+  row <- reedpoint_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_reedpoint_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+reedpoint_df <- bind_rows(reedpoint_results)
+if (nrow(reedpoint_df) > 0) {
+  reedpoint_df <- reedpoint_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Reed Point district site (direct board)")
+} else {
+  reedpoint_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# Hobson Public School (Finalsite, found 2026-08-24) also has no
+# structured ATS in this project's own platform list -- a plain httr2
+# fetch, no chromote needed, same pattern as Thompson Falls above.
+hobson_districts <- registry[registry$Platform == "HobsonHeuristic", ]
+hobson_results <- lapply(seq_len(nrow(hobson_districts)), function(i) {
+  row <- hobson_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_hobson_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+hobson_df <- bind_rows(hobson_results)
+if (nrow(hobson_df) > 0) {
+  hobson_df <- hobson_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Hobson district site (direct board)")
+} else {
+  hobson_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
 # Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta,
 # Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, and Sunburst all
 # run Apptegy, a CMS whose pages need a real browser to render
@@ -483,7 +536,7 @@ if (nrow(trego_df) > 0) {
 # it always has for Wolf Point/Plentywood; their registry rows exist purely
 # for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -570,12 +623,15 @@ shieldsvalley_df <- shieldsvalley_df %>% mutate(date_posted = standardize_date(d
 thompsonfalls_df <- thompsonfalls_df %>% mutate(date_posted = standardize_date(date_posted))
 ekalaka_df <- ekalaka_df %>% mutate(date_posted = standardize_date(date_posted))
 trego_df <- trego_df %>% mutate(date_posted = standardize_date(date_posted))
+reedpoint_df <- reedpoint_df %>% mutate(date_posted = standardize_date(date_posted))
+hobson_df <- hobson_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
                        livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
-                       roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df, apptegy_df)
+                       roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
+                       reedpoint_df, hobson_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%
