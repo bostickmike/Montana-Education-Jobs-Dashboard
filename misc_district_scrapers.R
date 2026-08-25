@@ -2591,6 +2591,88 @@ fetch_froid_postings <- function(chromote_session, url = "https://www.froidschoo
   parse_froid_postings(text, url)
 }
 
+# Huntley Project School District (huntley.k12.mt.us, Worden, found
+# 2026-08-24) -- Apptegy. Real postings are a flat list right after
+# "Open Positions" (the same flat-list shape as Darby above), but with a
+# real prose paragraph in between the header and the first title on this
+# page -- excluded by a plain length cap rather than a literal-line
+# match, since the paragraph's exact wording is marketing copy likely to
+# get re-authored. Confirmed live 2026-08-24, 5 real postings. Stops at
+# "Find Us", the real, stable boundary before contact info.
+parse_huntley_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Open Positions")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Find Us")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[nchar(lines) <= 150]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Huntley Project", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_huntley_postings <- function(chromote_session, url = "https://www.huntley.k12.mt.us/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_huntley_postings(text, url)
+}
+
+# Park City Schools (parkcityschools.org, found 2026-08-24) -- Apptegy,
+# but its real employment page URL isn't a plain nav link (found instead
+# by decoding the site's own `window.clientWorkStateTemp` JSON menu tree
+# for a nested "School Information > Employment information > Employment"
+# slug, the same technique used for Dutton/Brady/Harlowton/Melstone in
+# earlier sessions). Real postings render as a genuine 3-column
+# (Job Title/Job Type/Job Description) table -- reuses Arlee's own
+# repeating-triples technique unchanged. Confirmed live 2026-08-24, 2
+# real postings (Substitute Teachers, Various Substitutes). Stops at
+# "Find Us", the real, stable boundary before contact info.
+parse_parkcity_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "EMPLOYMENT OPPORTUNITIES")
+  if (length(start_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 4):length(lines)]
+
+  stop_idx <- which(body == "Find Us")
+  if (length(stop_idx) > 0) body <- body[seq_len(stop_idx[1] - 1)]
+
+  n_rows <- length(body) %/% 3
+  if (n_rows == 0) return(empty)
+  titles <- body[seq(1, by = 3, length.out = n_rows)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Park City", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_parkcity_postings <- function(chromote_session, url = "https://www.parkcityschools.org/page/employment-information") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_parkcity_postings(text, url)
+}
+
 # Ekalaka Public Schools (ekalaka.net) -- found in the same follow-up
 # pass, a real Job Postings module (CSS classes prefixed `ss-`, assets
 # served from parentsquare.com -- a new platform for this project, not
@@ -2925,7 +3007,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 29 districts (27 Apptegy + Geyser's CyberSchool + St.
+# Fetches all 31 districts (29 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
@@ -3031,7 +3113,13 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   froid <- fetch_froid_postings(session)
   if (nrow(froid) > 0) froid$District <- "Froid Public Schools"
 
+  huntley <- fetch_huntley_postings(session)
+  if (nrow(huntley) > 0) huntley$District <- "Huntley Project School District"
+
+  parkcity <- fetch_parkcity_postings(session)
+  if (nrow(parkcity) > 0) parkcity$District <- "Park City Schools"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
                     hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
-                    arlee, chinook, darby, dutton, stignatius, stanford, lolo, froid)
+                    arlee, chinook, darby, dutton, stignatius, stanford, lolo, froid, huntley, parkcity)
 }

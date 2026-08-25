@@ -777,7 +777,7 @@ if (nrow(gallatingateway_df) > 0) {
 # it always has for Wolf Point/Plentywood; their registry rows exist purely
 # for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )

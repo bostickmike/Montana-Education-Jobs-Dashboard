@@ -148,7 +148,7 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Froid Public Schools", "Terry Public Schools", "Gallatin Gateway School",
                      "Turner Public Schools", "Swan River School District #4", "Bigfork School District 38",
                      "Lincoln School District #38", "Shepherd School District #37", "Hysham Public Schools",
-                     "Independent School"))
+                     "Independent School", "Huntley Project School District", "Park City Schools"))
 })
 
 # ---------------------------------------------------------------------------
