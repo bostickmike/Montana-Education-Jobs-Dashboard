@@ -154,7 +154,8 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Baker Public Schools", "Cut Bank School District #15",
                      "Bridger School District 2", "Red Lodge School District 1", "Joliet Public School District 86",
                      "Ennis Schools", "Columbus Public Schools",
-                     "Hinsdale Public Schools", "St Regis School District", "Valier School District #18"))
+                     "Hinsdale Public Schools", "St Regis School District", "Valier School District #18",
+                     "Roberts Public School", "Winnett Public Schools", "Florence-Carlton School District 15-6"))
 })
 
 # ---------------------------------------------------------------------------

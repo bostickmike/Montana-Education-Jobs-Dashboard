@@ -572,6 +572,58 @@ if (nrow(valier_df) > 0) {
                            Posting_Source = character(0))
 }
 
+# Roberts Public School (a Joomla-based CMS, found 2026-08-24) also has
+# no structured ATS -- a plain httr2 fetch, no chromote needed, same
+# pattern as the other heuristic districts above.
+roberts_districts <- registry[registry$Platform == "RobertsHeuristic", ]
+roberts_results <- lapply(seq_len(nrow(roberts_districts)), function(i) {
+  row <- roberts_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_roberts_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+roberts_df <- bind_rows(roberts_results)
+if (nrow(roberts_df) > 0) {
+  roberts_df <- roberts_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Roberts district site (direct board)")
+} else {
+  roberts_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
+# Winnett Public Schools (Squarespace, found 2026-08-24) also has no
+# structured ATS in this project's own platform list -- a plain httr2
+# fetch, no chromote needed, same pattern as Terry above.
+winnett_districts <- registry[registry$Platform == "WinnettHeuristic", ]
+winnett_results <- lapply(seq_len(nrow(winnett_districts)), function(i) {
+  row <- winnett_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_winnett_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+winnett_df <- bind_rows(winnett_results)
+if (nrow(winnett_df) > 0) {
+  winnett_df <- winnett_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Winnett district site (direct board)")
+} else {
+  winnett_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -883,7 +935,7 @@ if (nrow(gallatingateway_df) > 0) {
 # it always has for Wolf Point/Plentywood; their registry rows exist purely
 # for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -985,6 +1037,8 @@ baker_df <- baker_df %>% mutate(date_posted = standardize_date(date_posted))
 cutbank_df <- cutbank_df %>% mutate(date_posted = standardize_date(date_posted))
 hinsdale_df <- hinsdale_df %>% mutate(date_posted = standardize_date(date_posted))
 valier_df <- valier_df %>% mutate(date_posted = standardize_date(date_posted))
+roberts_df <- roberts_df %>% mutate(date_posted = standardize_date(date_posted))
+winnett_df <- winnett_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -992,7 +1046,8 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
                        roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
                        lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
-                       swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df, gallatingateway_df, apptegy_df)
+                       roberts_df, winnett_df, swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
+                       gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%

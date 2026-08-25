@@ -799,6 +799,181 @@ parse_valier_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Valier", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Roberts Public School (robertsrockets.org, found 2026-08-24) -- a
+# Joomla-based CMS ("uikit"/"el-item" theme classes), plain httr2 fetch.
+# Real postings render as a genuine HTML table (`table.uk-table`), each
+# with its own `.el-title` element -- but that same CSS class is reused
+# elsewhere on the page for unrelated application-form cards, so the
+# selector is scoped to `table.uk-table tbody tr .el-title` specifically
+# rather than matched loosely. Confirmed live 2026-08-24, 3 real
+# postings (Full Time Custodian, Substitute Teachers Needed, Classroom
+# Aide).
+fetch_roberts_postings <- function(url = "https://www.robertsrockets.org/index.php/district-information/district-employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_roberts_postings(resp_body_string(resp), url)
+}
+
+parse_roberts_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  titles <- rvest::html_text2(rvest::html_elements(page, "table.uk-table tbody tr .el-title"))
+  titles <- trimws(titles)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Roberts", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Florence-Carlton School District 15-6 (florencecarlton.org, found
+# 2026-08-24) -- Apptegy, but its real employment page URL isn't a plain
+# nav link (found instead by following the page's own "CLICK HERE TO
+# VIEW AVAILABLE POSITIONS" link). A genuinely rich page: 3 "OPEN X
+# Positions" categories (Administrator/Certified/Classified) each with a
+# real title-then-full-job-description block, a separate "OPEN Coaching
+# Positions" category with 3 more such blocks, and a flat "Substitutes"
+# list at the end -- too heterogeneous for one marker-based rule, so
+# this uses a title-shape heuristic instead: real titles are short
+# (<=90 chars), ALL-CAPS-or-title-case-with-no-lowercase-only-words
+# lines that don't end in ":" and aren't the "PLEASE COMPLETE..."
+# submission-instructions sentence (also ALL-CAPS, but always much
+# longer and always ending differently) -- confirmed against every real
+# posting on this page live 2026-08-24. One posting spans 2 lines
+# ("SEEKING TWO (2) EVENING SHIFT SCHOOL CUSTODIANS" / "AND ONE (1) MID
+# SHIFT SCHOOL CUSTODIAN"), merged into one title by detecting the
+# "AND "-continuation line. The flat "Substitutes" list at the end is
+# Title Case, not ALL-CAPS, so it's extracted separately as a normal
+# flat list. Confirmed live 2026-08-24, 9 real postings (1 Certified +
+# 1 Classified [2 openings] + 3 Coaching + 4 Substitute categories).
+# Trailing non-breaking spaces (U+00A0) are pervasive in this page's own
+# authored content, the same class of issue as Chinook/Lolo/St Regis,
+# stripped explicitly.
+FLORENCECARLTON_NBSP <- intToUtf8(160)
+
+looks_like_florencecarlton_title <- function(line) {
+  if (nchar(line) > 90) return(FALSE)
+  if (grepl(":$", line)) return(FALSE)
+  if (grepl("^PLEASE COMPLETE", line)) return(FALSE)
+  if (!grepl("^[A-Z0-9][A-Z0-9 ().,'&/-]*$", line)) return(FALSE)
+  if (!grepl("[A-Z]{2,}", line)) return(FALSE)
+  TRUE
+}
+
+parse_florencecarlton_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- gsub(FLORENCECARLTON_NBSP, " ", lines, fixed = TRUE)
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "District Open Positions/Equal Employment, Equal Education")
+  stop_idx <- which(lines == "Equal Employment, Equal Education")
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+
+  caps_titles <- body[vapply(body, looks_like_florencecarlton_title, logical(1))]
+  merged <- character(0)
+  for (t in caps_titles) {
+    if (grepl("^AND ", t) && length(merged) > 0) {
+      merged[length(merged)] <- paste(merged[length(merged)], t)
+    } else {
+      merged <- c(merged, t)
+    }
+  }
+
+  sub_idx <- which(body == "Substitutes")
+  sub_titles <- character(0)
+  if (length(sub_idx) > 0) {
+    remaining <- body[(sub_idx[1] + 1):length(body)]
+    stop2 <- which(grepl("^If interested please submit", remaining))
+    if (length(stop2) > 0) remaining <- remaining[seq_len(stop2[1] - 1)]
+    remaining <- remaining[!grepl("^We need substitutes", remaining)]
+    sub_titles <- remaining[nzchar(remaining)]
+  }
+
+  titles <- c(merged, sub_titles)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Florence-Carlton", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_florencecarlton_postings <- function(chromote_session, url = "https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_florencecarlton_postings(text, url)
+}
+
+# Winnett Public Schools (winnettschool.org, found 2026-08-24) --
+# Squarespace, same platform as Terry above, plain httr2 fetch. 3 real
+# category headers (Certified/Classified/Coaching Positions Open:),
+# each a flat list of 0+ titles before its own boilerplate "[X] Staff
+# Application" link line -- one title ("Activity Bus Driver - Bus
+# driver needed to transport...") combines title and description on one
+# line via " - ", split the same way as Lolo/St Regis/Winnett's own
+# other combined-line cases. A stray bare-year artifact line ("2026-2027
+# School Year") under Certified is the same kind of content-authoring
+# leftover as Froid's, excluded by pattern. Squarespace's own inline
+# `<style>` block text leaks into html_text2() as literal "#block-..."
+# lines on this page (not seen on Terry's own page), filtered out
+# explicitly. Confirmed live 2026-08-24, 4 real postings; Certified is
+# genuinely empty right now. Stops at "Teacher Application
+# Requirements:", the real, stable boundary before generic application
+# instructions.
+WINNETT_CATEGORIES <- c("Certified Positions Open:", "Classified Positions Open:", "Coaching Positions Open:")
+WINNETT_BOILERPLATE_PATTERN <- "Application( Form)?$"
+WINNETT_YEAR_PATTERN <- "^[0-9]{4}-[0-9]{4} School Year$"
+
+fetch_winnett_postings <- function(url = "https://www.winnettschool.org/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_winnett_postings(resp_body_string(resp), url)
+}
+
+parse_winnett_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == WINNETT_CATEGORIES[1])
+  stop_idx <- which(lines == "Teacher Application Requirements:")
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  body <- lines[start_idx[1]:(stop_idx[1] - 1)]
+
+  body <- body[!(body %in% WINNETT_CATEGORIES)]
+  body <- body[!grepl(WINNETT_BOILERPLATE_PATTERN, body)]
+  body <- body[!grepl(WINNETT_YEAR_PATTERN, body)]
+  body <- body[!grepl("^#block-", body)]
+
+  titles <- vapply(body, function(line) {
+    if (grepl(" - ", line, fixed = TRUE)) {
+      trimws(strsplit(line, " - ", fixed = TRUE)[[1]][1])
+    } else {
+      line
+    }
+  }, character(1), USE.NAMES = FALSE)
+
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Winnett", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # Lincoln School District #38 (sites.google.com, found 2026-08-24) --
 # another publicly published Google Sites page, same platform as North
 # Star/Trego/Reed Point above, but with only 1 genuine real posting
@@ -3434,7 +3609,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 36 districts (34 Apptegy + Geyser's CyberSchool + St.
+# Fetches all 37 districts (35 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
@@ -3561,8 +3736,11 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   stregis <- fetch_stregis_postings(session)
   if (nrow(stregis) > 0) stregis$District <- "St Regis School District"
 
+  florencecarlton <- fetch_florencecarlton_postings(session)
+  if (nrow(florencecarlton) > 0) florencecarlton$District <- "Florence-Carlton School District 15-6"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
                     hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
                     arlee, chinook, darby, dutton, stignatius, stanford, lolo, froid, huntley, parkcity, alberton, dillon,
-                    ennis, columbus, stregis)
+                    ennis, columbus, stregis, florencecarlton)
 }
