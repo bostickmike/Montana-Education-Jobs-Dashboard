@@ -1360,6 +1360,75 @@ test_that("fetch_trego_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 2)
 })
 
+# Real fixture captured 2026-08-24 from swanriverschool.org's Human
+# Resources page (WordPress, Bigfork, category headers marked in the raw
+# HTML rather than separated by real newlines in the rendered text).
+
+test_that("parse_swanriver_postings extracts the 5 real postings across 3 non-empty categories, excluding the 3 empty ones", {
+  html <- paste(readLines(test_path("fixtures", "swanriver_human-resources.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_swanriver_postings(html, "url")
+
+  expect_equal(nrow(result), 5)
+  expect_equal(sum(result$Location == "Substitute Positions"), 3)
+  expect_equal(sum(result$Location == "Aide Positions"), 1)
+  expect_equal(sum(result$Location == "Classified Positions"), 1)
+  expect_true(all(c("Teachers", "Paraeducators", "Hot lunch helpers") %in% result$Title[result$Location == "Substitute Positions"]))
+  expect_true("Paraprofessional (Full Time)" %in% result$Title)
+  expect_true("Custodian (Full Time)" %in% result$Title)
+  expect_false(any(result$Location %in% c("Certified Positions", "Coaching Positions", "Administrative Positions")))
+})
+
+test_that("parse_swanriver_postings returns zero rows (not an error) when there's no Certified Positions header", {
+  result <- parse_swanriver_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_swanriver_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "swanriver_human-resources.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_swanriver_postings()
+
+  expect_equal(nrow(result), 5)
+})
+
+# Real fixture captured 2026-08-24 from bigforkschools.org's Employment
+# page (WordPress; a real candidate left unresolved in an earlier
+# session, closed out here).
+
+test_that("parse_bigfork_postings extracts all 10 real postings via the 'BIGFORK SCHOOL DISTRICT NO. 38' marker line", {
+  html <- paste(readLines(test_path("fixtures", "bigfork_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_bigfork_postings(html, "url")
+
+  expect_equal(nrow(result), 10)
+  expect_true(all(c("Food Service Associate 6 hours/day", "Full Time Instructional Paraprofessional",
+                     "Substitute Bus Driver", "2026-2027 High School Boys Assistant Soccer Coach") %in% result$Title))
+  expect_true(all(result$Location == "Bigfork"))
+  expect_false(any(grepl("^EEO:", result$Title)))
+})
+
+test_that("parse_bigfork_postings returns zero rows (not an error) when there's no BIGFORK SCHOOL DISTRICT marker line", {
+  result <- parse_bigfork_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_bigfork_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "bigfork_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_bigfork_postings()
+
+  expect_equal(nrow(result), 10)
+})
+
 # Real fixture captured 2026-08-24 from reedpoint.k12.mt.us's Employment
 # page (a publicly published Google Sites page, same platform as North
 # Star/Trego above).
@@ -1417,6 +1486,38 @@ test_that("fetch_hobson_postings fetches and parses a live-shaped response", {
   )
 
   result <- fetch_hobson_postings()
+
+  expect_equal(nrow(result), 3)
+})
+
+# Real fixture captured 2026-08-24 from turner.k12.mt.us's Employment
+# page (WordPress, same platform as Ramsay above).
+
+test_that("parse_turner_postings extracts the 3 real postings, skipping the empty Administrative/Coaching panels and their boilerplate links", {
+  html <- paste(readLines(test_path("fixtures", "turner_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_turner_postings(html, "url")
+
+  expect_equal(nrow(result), 3)
+  expect_equal(sum(result$Location == "Certified Positions"), 2)
+  expect_equal(sum(result$Location == "Classified Positions"), 1)
+  expect_true(all(c("Vo-Ag Teacher – Part-time", "Business Teacher – Part-time") %in% result$Title[result$Location == "Certified Positions"]))
+  expect_false(any(result$Title %in% TURNER_BOILERPLATE))
+})
+
+test_that("parse_turner_postings returns zero rows (not an error) when there's no Current Open Positions header", {
+  result <- parse_turner_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_turner_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "turner_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_turner_postings()
 
   expect_equal(nrow(result), 3)
 })

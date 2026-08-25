@@ -466,6 +466,60 @@ if (nrow(trego_df) > 0) {
                           Posting_Source = character(0))
 }
 
+# Swan River School District #4 (WordPress, found 2026-08-24) also has
+# no structured ATS in this project's own platform list -- a plain httr2
+# fetch, no chromote needed, same pattern as the other heuristic
+# districts above.
+swanriver_districts <- registry[registry$Platform == "SwanRiverHeuristic", ]
+swanriver_results <- lapply(seq_len(nrow(swanriver_districts)), function(i) {
+  row <- swanriver_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_swanriver_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+swanriver_df <- bind_rows(swanriver_results)
+if (nrow(swanriver_df) > 0) {
+  swanriver_df <- swanriver_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Swan River district site (direct board)")
+} else {
+  swanriver_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# Bigfork School District 38 (WordPress, found 2026-08-24) also has no
+# structured ATS in this project's own platform list -- a plain httr2
+# fetch, no chromote needed, same pattern as the other heuristic
+# districts above.
+bigfork_districts <- registry[registry$Platform == "BigforkHeuristic", ]
+bigfork_results <- lapply(seq_len(nrow(bigfork_districts)), function(i) {
+  row <- bigfork_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_bigfork_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+bigfork_df <- bind_rows(bigfork_results)
+if (nrow(bigfork_df) > 0) {
+  bigfork_df <- bigfork_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Bigfork district site (direct board)")
+} else {
+  bigfork_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # Reed Point School District (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as Custer/Scobey/Ramsay/Roy/Arrowhead/
@@ -515,6 +569,32 @@ if (nrow(hobson_df) > 0) {
               Posting_Source = "Hobson district site (direct board)")
 } else {
   hobson_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Turner Public Schools (WordPress, found 2026-08-24) also has no
+# structured ATS in this project's own platform list -- a plain httr2
+# fetch, no chromote needed, same pattern as Ramsay above.
+turner_districts <- registry[registry$Platform == "TurnerHeuristic", ]
+turner_results <- lapply(seq_len(nrow(turner_districts)), function(i) {
+  row <- turner_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_turner_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+turner_df <- bind_rows(turner_results)
+if (nrow(turner_df) > 0) {
+  turner_df <- turner_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Turner district site (direct board)")
+} else {
+  turner_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                            location = character(0), url = character(0), District = character(0),
                            Posting_Source = character(0))
 }
@@ -679,15 +759,18 @@ ekalaka_df <- ekalaka_df %>% mutate(date_posted = standardize_date(date_posted))
 trego_df <- trego_df %>% mutate(date_posted = standardize_date(date_posted))
 reedpoint_df <- reedpoint_df %>% mutate(date_posted = standardize_date(date_posted))
 hobson_df <- hobson_df %>% mutate(date_posted = standardize_date(date_posted))
+turner_df <- turner_df %>% mutate(date_posted = standardize_date(date_posted))
 terry_df <- terry_df %>% mutate(date_posted = standardize_date(date_posted))
 gallatingateway_df <- gallatingateway_df %>% mutate(date_posted = standardize_date(date_posted))
+swanriver_df <- swanriver_df %>% mutate(date_posted = standardize_date(date_posted))
+bigfork_df <- bigfork_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
                        livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
                        roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
-                       reedpoint_df, hobson_df, terry_df, gallatingateway_df, apptegy_df)
+                       swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df, gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%

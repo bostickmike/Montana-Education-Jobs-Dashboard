@@ -563,6 +563,116 @@ parse_trego_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Trego", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Swan River School District #4 (swanriverschool.org, Bigfork, found
+# 2026-08-24) -- WordPress, plain httr2 fetch, but a genuinely different
+# shape than Ramsay/Turner/Terry above: 6 real category headers marked
+# `<strong><u>Label</u>...</strong>` in the raw HTML (colon placed
+# inconsistently either inside or outside the </u> tag depending on
+# category, so matched loosely and stripped after capture), each
+# followed by either plain prose, a real "No positions open at this
+# time." empty state, or (Substitute Positions only) a real `<li>` list
+# -- html_text2() collapses this whole block into a couple of very long
+# unbroken lines with no newlines between category label and body, so
+# this is parsed by regex-splitting the RAW HTML on the header markup
+# itself (not the post-html_text2 plain text like every other heuristic
+# in this file), then stripping tags from each resulting body segment
+# separately. Confirmed live 2026-08-24, 5 real postings across 3
+# non-empty categories (Substitute/Aide/Classified); Certified/Coaching/
+# Administrative are genuinely empty right now, not a parsing gap.
+SWANRIVER_EMPTY_TEXT <- "No positions open at this time."
+SWANRIVER_STOP <- "Swan River School is an Equal Opportunity Employer"
+SWANRIVER_HEADER_PATTERN <- "<strong><u>\\s*([^<]*?)\\s*</u>:?\\s*</strong>:?"
+
+fetch_swanriver_postings <- function(url = "https://www.swanriverschool.org/human-resources/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_swanriver_postings(resp_body_string(resp), url)
+}
+
+parse_swanriver_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  start_pos <- regexpr("<strong><u>\\s*Certified Positions", html_text, perl = TRUE)
+  if (start_pos < 0) return(empty)
+  stop_pos <- regexpr(SWANRIVER_STOP, html_text, fixed = TRUE)
+  if (stop_pos < 0) return(empty)
+  segment <- substr(html_text, start_pos, stop_pos - 1)
+
+  matches <- gregexpr(SWANRIVER_HEADER_PATTERN, segment, perl = TRUE)[[1]]
+  if (matches[1] < 0) return(empty)
+  match_lens <- attr(matches, "match.length")
+  labels <- regmatches(segment, gregexpr(SWANRIVER_HEADER_PATTERN, segment, perl = TRUE))[[1]]
+  labels <- sub(SWANRIVER_HEADER_PATTERN, "\\1", labels, perl = TRUE)
+  labels <- sub(":$", "", trimws(labels))
+
+  rows <- list()
+  for (i in seq_along(matches)) {
+    body_start <- matches[i] + match_lens[i]
+    body_end <- if (i < length(matches)) matches[i + 1] - 1 else nchar(segment)
+    body_html <- substr(segment, body_start, body_end)
+    body_page <- rvest::read_html(paste0("<div>", body_html, "</div>"))
+    body_lines <- strsplit(trimws(rvest::html_text2(body_page)), "\n")[[1]]
+    body_lines <- trimws(body_lines)
+    body_lines <- body_lines[nzchar(body_lines)]
+    body_lines <- body_lines[body_lines != SWANRIVER_EMPTY_TEXT]
+    body_lines <- body_lines[!grepl("^\\(click here", body_lines)]
+    body_lines <- body_lines[!grepl("^\\(All positions available", body_lines)]
+    if (length(body_lines) > 0) {
+      rows[[length(rows) + 1]] <- data.frame(Title = body_lines, Location = labels[i],
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+# Bigfork School District 38 (bigforkschools.org, found 2026-08-24) --
+# WordPress, plain httr2 fetch. A real, previously-unresolved candidate
+# from an earlier session ("real current postings confirmed, no known-
+# platform signature matched on a plain fetch") -- resolved this session
+# by re-checking live: every real posting's title line is immediately
+# followed by the literal line "BIGFORK SCHOOL DISTRICT NO. 38" (each
+# posting is its own full vacancy-notice block), a reliable structural
+# marker that holds across every category on the page (Certified,
+# Classified, Extracurricular) without needing per-category parsing.
+# Confirmed live 2026-08-24, 10 real postings. Stops at the line
+# beginning "EEO:", the real, stable boundary before the generic
+# application-instructions section.
+BIGFORK_MARKER <- "BIGFORK SCHOOL DISTRICT NO. 38"
+
+fetch_bigfork_postings <- function(url = "https://bigforkschools.org/about/employment/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_bigfork_postings(resp_body_string(resp), url)
+}
+
+parse_bigfork_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  stop_idx <- which(grepl("^EEO:", lines))
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  marker_idx <- which(lines == BIGFORK_MARKER)
+  marker_idx <- marker_idx[marker_idx > 1]
+  if (length(marker_idx) == 0) return(empty)
+
+  titles <- unique(lines[marker_idx - 1])
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Bigfork", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # Reed Point School District (reedpoint.k12.mt.us, found 2026-08-24) --
 # another publicly published Google Sites page, same platform as North
 # Star/Trego above. Real postings sit under a flat "Job Openings-" header
@@ -647,6 +757,77 @@ parse_hobson_postings <- function(html_text, url) {
   if (length(titles) == 0) return(empty)
 
   data.frame(Title = titles, Location = "Hobson", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Turner Public Schools (turner.k12.mt.us, found 2026-08-24) -- WordPress,
+# same platform as Ramsay above, plain httr2 fetch. The Employment page is
+# a 4-tab accordion (Administrative/Certified/Classified/Coaching
+# Positions) -- each category name appears twice in the rendered text
+# (once in a summary nav list, once as each panel's own heading), so real
+# panel content is only reachable by skipping past that first nav-list
+# occurrence to the SECOND time a category name appears. Each panel also
+# always carries the same boilerplate application-form/handbook link
+# labels regardless of whether it has real openings -- excluded by exact
+# match rather than assumed absent, since (like Administrative and
+# Coaching here) an empty panel still renders its boilerplate links.
+# Confirmed live 2026-08-24, 3 real postings (2 Certified, 1 Classified);
+# Administrative and Coaching panels are genuinely empty right now, not a
+# parsing gap. Stops at "For more information about our current
+# positions...", the real, stable boundary before contact info.
+TURNER_CATEGORIES <- c("Administrative Positions", "Certified Positions", "Classified Positions", "Coaching Positions")
+TURNER_BOILERPLATE <- c("Teacher’s/Staff Handbook", "Certified Application PDF", "Classified Application PDF",
+                         "Coaching Application", "Turner Public Schools CBA", "SUBSTITUTES ARE NEEDED FOR ALL POSITIONS!")
+
+fetch_turner_postings <- function(url = "https://turner.k12.mt.us/employment/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_turner_postings(resp_body_string(resp), url)
+}
+
+parse_turner_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Current Open Positions")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  seen_once <- character(0)
+  panel_start <- NA_integer_
+  for (i in seq_along(lines)) {
+    if (lines[i] %in% TURNER_CATEGORIES) {
+      if (lines[i] %in% seen_once) { panel_start <- i; break }
+      seen_once <- c(seen_once, lines[i])
+    }
+  }
+  if (is.na(panel_start)) return(empty)
+  lines <- lines[panel_start:length(lines)]
+
+  stop_idx <- which(grepl("^For more information about our current positions", lines))
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  rows <- list()
+  current_category <- NA_character_
+  for (line in lines) {
+    if (line %in% TURNER_CATEGORIES) {
+      current_category <- line
+      next
+    }
+    if (line %in% TURNER_BOILERPLATE) next
+    if (!is.na(current_category)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_category,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
 }
 
 # Terry Public Schools (terryschools.org, found 2026-08-24) -- Squarespace,
