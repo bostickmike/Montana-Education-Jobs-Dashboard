@@ -977,6 +977,328 @@ fetch_westyellowstone_postings <- function(chromote_session, url = "https://wolv
   parse_westyellowstone_postings(text, url)
 }
 
+# Bonner School District #14 (bonner.k12.mt.us, found 2026-08-25) --
+# Apptegy. One flat list of real titles under "CURRENT OPENINGS", stops
+# at "Application Forms" (generic evergreen application-form links, not
+# real postings). Confirmed live 2026-08-25, 1 real posting ("Substitute
+# Teachers, always hiring!"). Basin School District and Bynum School are
+# both same-named-elsewhere traps (Idaho City, ID and Midland, TX
+# respectively) -- their real Montana counterparts have no independent
+# web presence found, declined.
+parse_bonner_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "CURRENT OPENINGS")
+  stop_idx <- which(lines == "Application Forms")
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  titles <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Bonner", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_bonner_postings <- function(chromote_session, url = "https://www.bonner.k12.mt.us/o/bonner-school-district-14/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_bonner_postings(text, url)
+}
+
+# Deer Park School (deerpark.k12.mt.us, found 2026-08-25) -- Apptegy.
+# 2 fixed category headers ("CERTIFIED STAFF OPENINGS"/"CLASSIFIED STAFF
+# OPENINGS"), each followed by either the literal empty-marker "*No
+# current openings*" or real content, stopping at the "Find Us" footer.
+# The one boilerplate "Certified Application" link-label line and the
+# "Please submit..." instruction sentences are filtered explicitly.
+# Confirmed live 2026-08-25: Certified is empty, Classified has 1 real
+# posting ("Substitute Teacher Application (Pay DOE)" -- the district's
+# own phrasing folds the role and its pay note into one title line, kept
+# as-is rather than stripped, since there's no separate plain "Substitute
+# Teacher" line to prefer).
+DEERPARK_SECTIONS <- c("CERTIFIED STAFF OPENINGS", "CLASSIFIED STAFF OPENINGS")
+
+parse_deerpark_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == DEERPARK_SECTIONS[1])
+  stop_idx <- which(lines == "Find Us")
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+
+  body <- body[!(body %in% DEERPARK_SECTIONS)]
+  body <- body[body != "*No current openings*"]
+  body <- body[!grepl("^Please submit", body)]
+  body <- body[body != "Certified Application"]
+
+  titles <- body[nzchar(body)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Deer Park", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_deerpark_postings <- function(chromote_session, url = "https://www.deerpark.k12.mt.us/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_deerpark_postings(text, url)
+}
+
+# Evergreen School District #50 (evergreensd50.com, found 2026-08-25) --
+# Apptegy. One flat list of 5 real titles under "CLASSIFIED:", stops at
+# the "All application materials must be submitted..." closing
+# sentence -- no "CERTIFIED:" section currently shown at all (not even
+# an empty one). Confirmed live 2026-08-25, 5 real postings.
+parse_evergreen_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "CLASSIFIED:")
+  stop_idx <- which(grepl("^All application materials must be submitted", lines))
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  titles <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Evergreen", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_evergreen_postings <- function(chromote_session, url = "https://www.evergreensd50.com/page/employment-opportunities") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_evergreen_postings(text, url)
+}
+
+# Dixon School District #9 (dixonschool.org, a publicly published Google
+# Sites page, found 2026-08-25) -- plain httr2 fetch. 3 real postings,
+# 2 different marker-line-immediately-after-title shapes on the same
+# page: the 1 real detailed job posting is followed by "Posting: ...",
+# while the 2 standing recruitment titles ("Certified Substitute
+# Teacher", "Substitute Teachers") are each followed by a "Please
+# complete the ... Application and send it to ..." sentence -- both
+# patterns matched with a single combined regex, same
+# marker-immediately-after-title spirit as Ennis's "Reports to:"
+# technique above. Confirmed live 2026-08-25, 3 real postings.
+fetch_dixon_postings <- function(url = "https://www.dixonschool.org/about-dixon-school/employment-opportunities") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_dixon_postings(resp_body_string(resp), url)
+}
+
+parse_dixon_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Current Open Positions")
+  stop_idx <- which(lines == "Equal Opportunity Employer")
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+
+  marker_idx <- which(grepl("^Posting:", body) | grepl("^Please complete the .* Application and send it to", body))
+  marker_idx <- marker_idx[marker_idx > 1]
+  titles <- unique(body[marker_idx - 1])
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Dixon", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Elysian School District #23 (a publicly published Google Sites page,
+# found 2026-08-25) -- plain httr2 fetch. The page's "District
+# Employment" section explicitly defers all non-substitute openings to
+# OPI's own site ("For a complete list of our current openings please
+# visit OPI's website"), same shape as the prior-session Dodson decline
+# -- but unlike Dodson, this page also has its own standing "Guest
+# Teachers (substitutes)" recruitment section, matching this project's
+# established "bare category name = real posting" convention for
+# standing substitute-recruiting sections (Winnett/Florence-Carlton/
+# Creston). Confirmed live 2026-08-25: exactly 1 real posting.
+fetch_elysian_postings <- function(url = "https://sites.google.com/a/elysianschool.org/ely23/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_elysian_postings(resp_body_string(resp), url)
+}
+
+parse_elysian_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  if (!("Guest Teachers (substitutes)" %in% lines)) return(empty)
+
+  data.frame(Title = "Guest Teachers (substitutes)", Location = "Elysian", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Fair-Mont-Egan Schools (fmemontana.net, a publicly published Google
+# Sites page, found 2026-08-25) -- plain httr2 fetch. Same 3-fixed-
+# category shape as Deer Park/Creston (Administrative/Certified/
+# Classified, each either "No positions are currently available" or
+# real content), but here a category can hold more than one real
+# posting, so this walks all 3 category positions and takes each
+# category's own content window rather than just checking the single
+# next line. Each real title's own "[X] Job Description/Application
+# Directions" and "[Category] Application" boilerplate lines are
+# filtered out. Confirmed live 2026-08-25: Administrative and Certified
+# are both empty, Classified has 2 real postings.
+FAIRMONTEGAN_CATEGORIES <- c("Administrative", "Certified", "Classified")
+
+fetch_fairmontegan_postings <- function(url = "https://www.fmemontana.net/human-resources/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_fairmontegan_postings(resp_body_string(resp), url)
+}
+
+parse_fairmontegan_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  stop_idx <- which(lines == "Non-Discrimination Policy")
+  if (length(stop_idx) == 0) return(empty)
+  cat_idx <- which(lines[seq_len(stop_idx[1] - 1)] %in% FAIRMONTEGAN_CATEGORIES)
+  cat_idx <- utils::tail(cat_idx, length(FAIRMONTEGAN_CATEGORIES))
+  if (length(cat_idx) < length(FAIRMONTEGAN_CATEGORIES)) return(empty)
+
+  bounds <- c(cat_idx, stop_idx[1])
+  titles <- character(0)
+  for (i in seq_along(cat_idx)) {
+    seg <- lines[(bounds[i] + 1):(bounds[i + 1] - 1)]
+    seg <- seg[seg != "No positions are currently available"]
+    seg <- seg[!grepl("Job Description/Application Directions$", seg)]
+    seg <- seg[!grepl("^(Administrative|Certified|Classified) Application$", seg)]
+    seg <- seg[nzchar(seg)]
+    titles <- c(titles, seg)
+  }
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Fair-Mont-Egan", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Creston School District (crestonschool.com, found 2026-08-25) -- real
+# postings live in a publicly-viewable Google Doc linked from the site's
+# "Current Opportunties" [sic] nav item, not on the HTML page itself
+# (same "Google Doc as the real content" shape as Victor above, but this
+# one is actually publicly viewable, not sign-in-walled). Fetched via its
+# plain-text export endpoint, no HTML parsing needed. 4 fixed categories
+# (Administrative/Certified/Classified/Guest Teacher (aka Substitute)),
+# each either says "No positions are currently available" or has real
+# content -- only a category with real content beneath it counts as a
+# posting, using its own category name as the title (matching this
+# project's established "bare category name = real posting" convention
+# for standing substitute-recruiting sections, e.g. Winnett/Florence-
+# Carlton). Confirmed live 2026-08-25: only "Guest Teacher (aka
+# Substitute)" has real content right now.
+CRESTON_CATEGORIES <- c("Administrative", "Certified", "Classified", "Guest Teacher (aka Substitute)")
+
+fetch_creston_postings <- function(url = "https://docs.google.com/document/d/1BxeYApkcuS092nu5a1iRHAeg35jcUxjVPWnTCXEsThU/export?format=txt") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_creston_postings(resp_body_string(resp), url)
+}
+
+parse_creston_postings <- function(doc_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(doc_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  stop_idx <- which(lines == "Non-Discrimination Policy")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  cat_idx <- which(lines %in% CRESTON_CATEGORIES)
+  titles <- character(0)
+  for (idx in cat_idx) {
+    next_line <- if (idx < length(lines)) lines[idx + 1] else NA
+    if (!is.na(next_line) && next_line != "No positions are currently available") {
+      titles <- c(titles, lines[idx])
+    }
+  }
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Creston", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Clinton School District #32 (clintoncougars.com, found 2026-08-25) --
+# an unbranded CMS, plain httr2 fetch. The page repeats boilerplate
+# "Application Instructions" blocks under both "Certified Positions" and
+# "Classified Positions" headers, making a clean header-to-header window
+# unreliable -- instead, each of the 2 real postings is identified by the
+# stable marker line immediately following it: "Clinton School is
+# looking for ..." (same "marker-line-immediately-after-title" technique
+# as Bigfork/Hysham above, just phrased as a sentence opener here rather
+# than a fixed label). Confirmed live 2026-08-25, 2 real postings
+# ("Substitute Teachers", "Para Position for 26-27").
+fetch_clinton_postings <- function(url = "https://clintoncougars.com/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_clinton_postings(resp_body_string(resp), url)
+}
+
+parse_clinton_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  idx <- which(grepl("^Clinton School is looking for", lines))
+  idx <- idx[idx > 1]
+  titles <- unique(lines[idx - 1])
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Clinton", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # Augusta Public School (augustaschool.org, found 2026-08-24) -- a Wix
 # site, a platform new to this project, but plain httr2/curl fetches it
 # fine (server-rendered, no JS gate). 3 real posting sections ("Special
@@ -3829,7 +4151,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 38 districts (36 Apptegy + Geyser's CyberSchool + St.
+# Fetches all 41 districts (39 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
@@ -3962,10 +4284,19 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   westyellowstone <- fetch_westyellowstone_postings(session)
   if (nrow(westyellowstone) > 0) westyellowstone$District <- "West Yellowstone School District"
 
+  bonner <- fetch_bonner_postings(session)
+  if (nrow(bonner) > 0) bonner$District <- "Bonner School District #14"
+
+  deerpark <- fetch_deerpark_postings(session)
+  if (nrow(deerpark) > 0) deerpark$District <- "Deer Park School District"
+
+  evergreen <- fetch_evergreen_postings(session)
+  if (nrow(evergreen) > 0) evergreen$District <- "Evergreen School District #50"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
                     hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
                     arlee, chinook, darby, dutton, stignatius, stanford, lolo, froid, huntley, parkcity, alberton, dillon,
-                    ennis, columbus, stregis, florencecarlton, westyellowstone)
+                    ennis, columbus, stregis, florencecarlton, westyellowstone, bonner, deerpark, evergreen)
 }
 
 # Miles City -- Custer County District 1 (SCHOOLinSITES CMS, found

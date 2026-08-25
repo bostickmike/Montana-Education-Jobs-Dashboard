@@ -158,7 +158,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Roberts Public School", "Winnett Public Schools", "Florence-Carlton School District 15-6",
                      "Miles City Unified School District 1", "West Yellowstone School District",
                      "Augusta School District #45", "Brockton School District",
-                     "Culbertson School District 17-C", "Cottonwood School District #57"))
+                     "Culbertson School District 17-C", "Cottonwood School District #57",
+                     "Bonner School District #14", "Creston School District", "Clinton School District #32",
+                     "Deer Park School District", "Dixon School District #9", "Elysian School District #23",
+                     "Evergreen School District #50", "Fair-Mont-Egan Schools"))
 })
 
 # ---------------------------------------------------------------------------
