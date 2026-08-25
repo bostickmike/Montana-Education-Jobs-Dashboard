@@ -146,7 +146,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Trego School District 53", "St. Ignatius School District", "Stanford Public Schools",
                      "Lolo School District 7", "Reed Point School District", "Hobson Public School",
                      "Froid Public Schools", "Terry Public Schools", "Gallatin Gateway School",
-                     "Turner Public Schools", "Swan River School District #4", "Bigfork School District 38"))
+                     "Turner Public Schools", "Swan River School District #4", "Bigfork School District 38",
+                     "Lincoln School District #38", "Shepherd School District #37", "Hysham Public Schools",
+                     "Independent School"))
 })
 
 # ---------------------------------------------------------------------------

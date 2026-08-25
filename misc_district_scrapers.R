@@ -563,6 +563,206 @@ parse_trego_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Trego", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Lincoln School District #38 (sites.google.com, found 2026-08-24) --
+# another publicly published Google Sites page, same platform as North
+# Star/Trego/Reed Point above, but with only 1 genuine real posting
+# right now ("Para Professional Job Opening") rather than a repeatable
+# category-header list -- confirmed live 2026-08-24 there's no other
+# structural marker to generalize from yet, so this parses a single
+# fixed window between the real "CLICK HERE FOR APPLICATION" link-label
+# line and the real closing prose sentence, same spirit as North Star's
+# single-category case but with only one line inside the window instead
+# of several.
+LINCOLN_STOP_LINE <- "Please inquire at 406-362-4201 for current employment opportunities."
+
+fetch_lincoln_postings <- function(url = "https://sites.google.com/a/lincoln.k12.mt.us/webpage2/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_lincoln_postings(resp_body_string(resp), url)
+}
+
+parse_lincoln_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "CLICK HERE FOR APPLICATION")
+  if (length(start_idx) == 0) return(empty)
+  stop_idx <- which(lines == LINCOLN_STOP_LINE)
+  if (length(stop_idx) == 0 || stop_idx[1] <= start_idx[1] + 1) return(empty)
+
+  titles <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Lincoln", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Independent School (independent.k12.mt.us, north of Billings, found
+# 2026-08-24) -- a real public county school district, despite the name
+# reading like a private school ("INDEPENDENT SCHOOL - BILLINGS" in the
+# OPI feed) -- confirmed live via its own real address, phone, and
+# superintendent contact. Another publicly published Google Sites page,
+# same platform as North Star/Trego/Reed Point/Lincoln above, but with a
+# genuinely different real shape: 3 real postings are each an ALL-CAPS
+# short title line immediately followed by a long prose paragraph, no
+# colon/dash suffix convention -- matched by an all-caps-short-line
+# heuristic instead, since there's no other real structural marker to
+# anchor on. Confirmed live 2026-08-24, 3 real postings (Special
+# Education Teacher, School Counselor, Substitutes Wanted). Starts after
+# "JOB OPENINGS", stops at the real "Report abusePage details" Google
+# Sites footer boundary.
+looks_like_independent_title <- function(line) {
+  if (nchar(line) > 60) return(FALSE)
+  if (!grepl("^[A-Z0-9 &'/.-]+$", line)) return(FALSE)
+  if (!grepl("[A-Z]", line)) return(FALSE)
+  TRUE
+}
+
+fetch_independent_postings <- function(url = "https://www.independent.k12.mt.us/job-openings") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_independent_postings(resp_body_string(resp), url)
+}
+
+parse_independent_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "JOB OPENINGS")
+  if (length(start_idx) == 0) return(empty)
+  lines <- lines[(start_idx[1] + 1):length(lines)]
+
+  stop_idx <- which(lines == "Report abusePage details")
+  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
+
+  titles <- lines[vapply(lines, looks_like_independent_title, logical(1))]
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Independent", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Shepherd School District #37 (shepherd.k12.mt.us, found 2026-08-24) --
+# Finalsite, same platform as Thompson Falls/Hobson above, but a genuine
+# multi-category flat-list template unlike either of those: 4 real
+# category headers (Administrator/Certified Teaching/Classified/
+# Coaching Positions), each followed directly by 0+ short title lines
+# with no per-category boilerplate to filter -- reuses the Hays-Lodge
+# Pole/Dutton title-shape heuristic (length cap, no trailing "."/":")
+# to separate real titles from the longer prose sentences (application
+# instructions, substitute-role blurbs) interleaved between categories.
+# Confirmed live 2026-08-24, 18 real postings (0 Administrator, 5
+# Certified, 4 Classified, 9 Coaching -- "Assistant High School
+# Wrestling Coach" is a real, genuinely duplicated title, kept as 2 rows
+# the same way Wolf Point's own duplicates are). Stops at the line
+# beginning "Shepherd School District #37 does not discriminate", the
+# real, stable boundary before contact info.
+SHEPHERD_CATEGORIES <- c("Administrator Positions:", "Certified Teaching Positions:", "Classified Positions:", "Coaching Positions:")
+
+looks_like_shepherd_title <- function(line) {
+  if (nchar(line) > 55) return(FALSE)
+  if (grepl("[.:]$", line)) return(FALSE)
+  if (!grepl("[A-Za-z]", line)) return(FALSE)
+  TRUE
+}
+
+fetch_shepherd_postings <- function(url = "https://www.shepherd.k12.mt.us/dist-office/jobs/overview") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_shepherd_postings(resp_body_string(resp), url)
+}
+
+parse_shepherd_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == SHEPHERD_CATEGORIES[1])
+  if (length(start_idx) == 0) return(empty)
+  stop_idx <- which(grepl("^Shepherd School District #37 does not discriminate", lines))
+  if (length(stop_idx) == 0) return(empty)
+  lines <- lines[start_idx[1]:(stop_idx[1] - 1)]
+
+  rows <- list()
+  current_category <- NA_character_
+  for (line in lines) {
+    if (line %in% SHEPHERD_CATEGORIES) {
+      current_category <- sub(":$", "", line)
+      next
+    }
+    if (!is.na(current_category) && looks_like_shepherd_title(line)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_category,
+                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    }
+  }
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
+# Hysham Public Schools (hyshamschools.com, found 2026-08-24) -- an
+# unbranded CMS (no recognized platform signature), plain httr2 fetch.
+# Real postings are each immediately followed by the literal line
+# "Lightbox Page" (a CMS widget-name artifact left in the rendered
+# text), the same "marker-line-after-title" shape as Bigfork's own
+# "BIGFORK SCHOOL DISTRICT NO. 38" line above, just from a different
+# CMS. Confirmed live 2026-08-24, 2 real postings (Head of Maintenance,
+# Vo-Ag Teacher). Starts after the real intro sentence, stops at the
+# real "To apply, fill out..." application-instructions line.
+HYSHAM_MARKER <- "Lightbox Page"
+
+fetch_hysham_postings <- function(url = "https://www.hyshamschools.com/jobs") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_hysham_postings(resp_body_string(resp), url)
+}
+
+parse_hysham_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "See below for current openings, click on each for more information.")
+  if (length(start_idx) == 0) return(empty)
+  stop_idx <- which(grepl("^To apply, fill out", lines))
+  if (length(stop_idx) == 0) return(empty)
+  lines <- lines[start_idx[1]:(stop_idx[1] - 1)]
+
+  marker_idx <- which(lines == HYSHAM_MARKER)
+  marker_idx <- marker_idx[marker_idx > 1]
+  if (length(marker_idx) == 0) return(empty)
+
+  titles <- unique(lines[marker_idx - 1])
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Hysham", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # Swan River School District #4 (swanriverschool.org, Bigfork, found
 # 2026-08-24) -- WordPress, plain httr2 fetch, but a genuinely different
 # shape than Ramsay/Turner/Terry above: 6 real category headers marked

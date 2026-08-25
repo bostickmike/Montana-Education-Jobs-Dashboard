@@ -1360,6 +1360,132 @@ test_that("fetch_trego_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 2)
 })
 
+# Real fixture captured 2026-08-24 from sites.google.com/a/lincoln.k12.mt.us's
+# Employment page (Google Sites, old "sites.google.com/a/domain/..."
+# format, publicly reachable unlike Wyola's own sign-in-walled site).
+
+test_that("parse_lincoln_postings extracts the 1 real posting between the application link and the closing sentence", {
+  html <- paste(readLines(test_path("fixtures", "lincoln_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_lincoln_postings(html, "url")
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Para Professional Job Opening")
+  expect_equal(result$Location, "Lincoln")
+})
+
+test_that("parse_lincoln_postings returns zero rows (not an error) when there's no CLICK HERE FOR APPLICATION line", {
+  result <- parse_lincoln_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_lincoln_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "lincoln_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_lincoln_postings()
+
+  expect_equal(nrow(result), 1)
+})
+
+# Real fixture captured 2026-08-24 from independent.k12.mt.us's Job
+# Openings page (a real public county district, not private, despite
+# the "INDEPENDENT SCHOOL - BILLINGS" OPI-feed label; Google Sites).
+
+test_that("parse_independent_postings extracts the 3 real ALL-CAPS-title postings", {
+  html <- paste(readLines(test_path("fixtures", "independent_job-openings.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_independent_postings(html, "url")
+
+  expect_equal(nrow(result), 3)
+  expect_true(all(c("SPECIAL EDUCATION TEACHER", "SCHOOL COUNSELOR",
+                     "SUBSTITUTES WANTED - POSITIONS AVAILABLE") %in% result$Title))
+  expect_true(all(result$Location == "Independent"))
+})
+
+test_that("parse_independent_postings returns zero rows (not an error) when there's no JOB OPENINGS header", {
+  result <- parse_independent_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_independent_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "independent_job-openings.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_independent_postings()
+
+  expect_equal(nrow(result), 3)
+})
+
+# Real fixture captured 2026-08-24 from shepherd.k12.mt.us's Jobs page
+# (Finalsite, same platform as Thompson Falls/Hobson above).
+
+test_that("parse_shepherd_postings extracts all 18 real postings across 3 non-empty categories, including a genuine duplicate title", {
+  html <- paste(readLines(test_path("fixtures", "shepherd_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_shepherd_postings(html, "url")
+
+  expect_equal(nrow(result), 18)
+  expect_equal(sum(result$Location == "Certified Teaching Positions"), 5)
+  expect_equal(sum(result$Location == "Classified Positions"), 4)
+  expect_equal(sum(result$Location == "Coaching Positions"), 9)
+  expect_equal(sum(result$Title == "Assistant High School Wrestling Coach"), 2)
+  expect_false(any(result$Location == "Administrator Positions"))
+})
+
+test_that("parse_shepherd_postings returns zero rows (not an error) when there's no Administrator Positions: header", {
+  result <- parse_shepherd_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_shepherd_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "shepherd_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_shepherd_postings()
+
+  expect_equal(nrow(result), 18)
+})
+
+# Real fixture captured 2026-08-24 from hyshamschools.com's Jobs page
+# (an unbranded CMS, "Lightbox Page" marker-line technique).
+
+test_that("parse_hysham_postings extracts the 2 real postings via the 'Lightbox Page' marker line", {
+  html <- paste(readLines(test_path("fixtures", "hysham_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_hysham_postings(html, "url")
+
+  expect_equal(nrow(result), 2)
+  expect_true(all(c("Head of Maintenance", "Vo-Ag Teacher") %in% result$Title))
+  expect_true(all(result$Location == "Hysham"))
+})
+
+test_that("parse_hysham_postings returns zero rows (not an error) when there's no real intro sentence", {
+  result <- parse_hysham_postings("<html><body><p>Nothing here.</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_hysham_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "hysham_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_hysham_postings()
+
+  expect_equal(nrow(result), 2)
+})
+
 # Real fixture captured 2026-08-24 from swanriverschool.org's Human
 # Resources page (WordPress, Bigfork, category headers marked in the raw
 # HTML rather than separated by real newlines in the rendered text).

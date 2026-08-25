@@ -466,6 +466,113 @@ if (nrow(trego_df) > 0) {
                           Posting_Source = character(0))
 }
 
+# Lincoln School District #38 (a publicly published Google Sites page,
+# found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
+# no chromote needed, same pattern as the other heuristic districts
+# above.
+lincoln_districts <- registry[registry$Platform == "LincolnHeuristic", ]
+lincoln_results <- lapply(seq_len(nrow(lincoln_districts)), function(i) {
+  row <- lincoln_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_lincoln_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+lincoln_df <- bind_rows(lincoln_results)
+if (nrow(lincoln_df) > 0) {
+  lincoln_df <- lincoln_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Lincoln district site (direct board)")
+} else {
+  lincoln_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
+# Independent School (a publicly published Google Sites page, found
+# 2026-08-24) also has no structured ATS -- a plain httr2 fetch, no
+# chromote needed, same pattern as the other heuristic districts above.
+independent_districts <- registry[registry$Platform == "IndependentHeuristic", ]
+independent_results <- lapply(seq_len(nrow(independent_districts)), function(i) {
+  row <- independent_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_independent_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+independent_df <- bind_rows(independent_results)
+if (nrow(independent_df) > 0) {
+  independent_df <- independent_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Independent district site (direct board)")
+} else {
+  independent_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                location = character(0), url = character(0), District = character(0),
+                                Posting_Source = character(0))
+}
+
+# Shepherd School District #37 (Finalsite, found 2026-08-24) also has no
+# structured ATS in this project's own platform list -- a plain httr2
+# fetch, no chromote needed, same pattern as Thompson Falls/Hobson
+# above.
+shepherd_districts <- registry[registry$Platform == "ShepherdHeuristic", ]
+shepherd_results <- lapply(seq_len(nrow(shepherd_districts)), function(i) {
+  row <- shepherd_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_shepherd_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+shepherd_df <- bind_rows(shepherd_results)
+if (nrow(shepherd_df) > 0) {
+  shepherd_df <- shepherd_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Shepherd district site (direct board)")
+} else {
+  shepherd_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                             location = character(0), url = character(0), District = character(0),
+                             Posting_Source = character(0))
+}
+
+# Hysham Public Schools (unbranded CMS, found 2026-08-24) also has no
+# structured ATS in this project's own platform list -- a plain httr2
+# fetch, no chromote needed, same pattern as the other heuristic
+# districts above.
+hysham_districts <- registry[registry$Platform == "HyshamHeuristic", ]
+hysham_results <- lapply(seq_len(nrow(hysham_districts)), function(i) {
+  row <- hysham_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_hysham_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+hysham_df <- bind_rows(hysham_results)
+if (nrow(hysham_df) > 0) {
+  hysham_df <- hysham_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Hysham district site (direct board)")
+} else {
+  hysham_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
 # Swan River School District #4 (WordPress, found 2026-08-24) also has
 # no structured ATS in this project's own platform list -- a plain httr2
 # fetch, no chromote needed, same pattern as the other heuristic
@@ -764,13 +871,18 @@ terry_df <- terry_df %>% mutate(date_posted = standardize_date(date_posted))
 gallatingateway_df <- gallatingateway_df %>% mutate(date_posted = standardize_date(date_posted))
 swanriver_df <- swanriver_df %>% mutate(date_posted = standardize_date(date_posted))
 bigfork_df <- bigfork_df %>% mutate(date_posted = standardize_date(date_posted))
+lincoln_df <- lincoln_df %>% mutate(date_posted = standardize_date(date_posted))
+independent_df <- independent_df %>% mutate(date_posted = standardize_date(date_posted))
+shepherd_df <- shepherd_df %>% mutate(date_posted = standardize_date(date_posted))
+hysham_df <- hysham_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
                        livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
                        roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
-                       swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df, gallatingateway_df, apptegy_df)
+                       lincoln_df, independent_df, shepherd_df, hysham_df, swanriver_df, bigfork_df, reedpoint_df,
+                       hobson_df, turner_df, terry_df, gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 
 combined <- bind_rows(direct_df, opi_df) %>%
