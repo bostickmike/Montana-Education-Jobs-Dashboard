@@ -890,6 +890,112 @@ if (nrow(fairmontegan_df) > 0) {
                                  Posting_Source = character(0))
 }
 
+# Lustre District 23 (a publicly published Google Sites page, found
+# 2026-08-25) also has no structured ATS -- a plain httr2 fetch, no
+# chromote needed, same pattern as the other heuristic districts above.
+lustre_districts <- registry[registry$Platform == "LustreHeuristic", ]
+lustre_results <- lapply(seq_len(nrow(lustre_districts)), function(i) {
+  row <- lustre_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_lustre_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+lustre_df <- bind_rows(lustre_results)
+if (nrow(lustre_df) > 0) {
+  lustre_df <- lustre_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Lustre district site (direct board)")
+} else {
+  lustre_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Miami Elementary School District #31 (a Hutterite colony school,
+# found 2026-08-25) also has no structured ATS -- a plain httr2 fetch,
+# no chromote needed, same pattern as the other heuristic districts
+# above.
+miami_districts <- registry[registry$Platform == "MiamiHeuristic", ]
+miami_results <- lapply(seq_len(nrow(miami_districts)), function(i) {
+  row <- miami_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_miami_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+miami_df <- bind_rows(miami_results)
+if (nrow(miami_df) > 0) {
+  miami_df <- miami_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Miami district site (direct board)")
+} else {
+  miami_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
+# Zurich Elementary School District #17 (a Wix site, found 2026-08-25)
+# also has no structured ATS -- a plain httr2 fetch, no chromote needed,
+# same pattern as the other heuristic districts above.
+zurich_districts <- registry[registry$Platform == "ZurichHeuristic", ]
+zurich_results <- lapply(seq_len(nrow(zurich_districts)), function(i) {
+  row <- zurich_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_zurich_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+zurich_df <- bind_rows(zurich_results)
+if (nrow(zurich_df) > 0) {
+  zurich_df <- zurich_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Zurich district site (direct board)")
+} else {
+  zurich_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Dayton Elementary School / Upper West Shore School District #33
+# (found 2026-08-25) also has no structured ATS -- a plain httr2 fetch,
+# no chromote needed, same pattern as the other heuristic districts
+# above.
+dayton_districts <- registry[registry$Platform == "DaytonHeuristic", ]
+dayton_results <- lapply(seq_len(nrow(dayton_districts)), function(i) {
+  row <- dayton_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_dayton_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+dayton_df <- bind_rows(dayton_results)
+if (nrow(dayton_df) > 0) {
+  dayton_df <- dayton_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Dayton district site (direct board)")
+} else {
+  dayton_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -1201,7 +1307,7 @@ if (nrow(gallatingateway_df) > 0) {
 # it always has for Wolf Point/Plentywood; their registry rows exist purely
 # for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -1315,6 +1421,10 @@ clinton_df <- clinton_df %>% mutate(date_posted = standardize_date(date_posted))
 dixon_df <- dixon_df %>% mutate(date_posted = standardize_date(date_posted))
 elysian_df <- elysian_df %>% mutate(date_posted = standardize_date(date_posted))
 fairmontegan_df <- fairmontegan_df %>% mutate(date_posted = standardize_date(date_posted))
+lustre_df <- lustre_df %>% mutate(date_posted = standardize_date(date_posted))
+miami_df <- miami_df %>% mutate(date_posted = standardize_date(date_posted))
+zurich_df <- zurich_df %>% mutate(date_posted = standardize_date(date_posted))
+dayton_df <- dayton_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -1323,7 +1433,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
                        lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
                        roberts_df, winnett_df, milescity_df, augusta_df, brockton_df, culbertson_df, cottonwood57_df,
-                       creston_df, clinton_df, dixon_df, elysian_df, fairmontegan_df,
+                       creston_df, clinton_df, dixon_df, elysian_df, fairmontegan_df, lustre_df, miami_df, zurich_df, dayton_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)

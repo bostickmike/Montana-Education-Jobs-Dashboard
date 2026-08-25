@@ -1090,6 +1090,44 @@ fetch_evergreen_postings <- function(chromote_session, url = "https://www.evergr
   parse_evergreen_postings(text, url)
 }
 
+# Lone Rock School District (lonerockschool.org, found 2026-08-25) --
+# Apptegy, real slug is "/page/employment" (a bare "/employment" 404s).
+# The 1 real posting under "Classified Positions:" is the single line
+# immediately after the header, stopping before the trailing description
+# paragraph and the "District Employment Applications." boilerplate
+# link. The page also has a substitute-teacher recruiting section
+# listing 6 sub-categories (bus driver/classroom/custodial/kitchen/
+# office staff/para professional substitutes) as one free-running prose
+# sentence with no clean per-item title boundary -- declined as
+# genuinely unstructured, same bar as the Rapelje/Grass Range precedent,
+# so only the 1 clean Classified Positions posting is extracted.
+parse_lonerock_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Classified Positions:")
+  stop_idx <- which(lines == "District Employment Applications.")
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  body <- body[nzchar(body)]
+  if (length(body) == 0) return(empty)
+
+  data.frame(Title = body[1], Location = "Lone Rock", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_lonerock_postings <- function(chromote_session, url = "https://www.lonerockschool.org/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_lonerock_postings(text, url)
+}
+
 # Dixon School District #9 (dixonschool.org, a publicly published Google
 # Sites page, found 2026-08-25) -- plain httr2 fetch. 3 real postings,
 # 2 different marker-line-immediately-after-title shapes on the same
@@ -1212,6 +1250,158 @@ parse_fairmontegan_postings <- function(html_text, url) {
   if (length(titles) == 0) return(empty)
 
   data.frame(Title = titles, Location = "Fair-Mont-Egan", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Lustre District 23 (lustregradeschool.com, a publicly published Google
+# Sites page, found 2026-08-25) -- plain httr2 fetch. Real postings are
+# listed as bare PDF filename link labels (e.g. "Part-time Bus
+# Driver.pdf"), not clean prose titles -- the trailing ".pdf" is
+# stripped. Stops before the school's own address/phone line. Confirmed
+# live 2026-08-25, 3 real postings.
+fetch_lustre_postings <- function(url = "https://www.lustregradeschool.com/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_lustre_postings(resp_body_string(resp), url)
+}
+
+parse_lustre_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Employment Opportunities")
+  stop_idx <- which(grepl("Lustre Grade Lane", lines))
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  body <- body[grepl("\\.pdf$", body)]
+  titles <- sub("\\.pdf$", "", body)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Lustre", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Miami Elementary School District #31 (miamielementary.com, a
+# Hutterite colony school near Conrad, found 2026-08-25) -- plain httr2
+# fetch. The 1 real posting is a standing "Substitute Teachers"
+# recruitment, phrased as prose ("...is seeking qualified Substitute
+# Teachers to support...") rather than a standalone heading -- detected
+# by that fixed sentence fragment, same single-fixed-line spirit as
+# Elysian's "Guest Teachers (substitutes)" check above. Confirmed live
+# 2026-08-25.
+fetch_miami_postings <- function(url = "https://www.miamielementary.com/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_miami_postings(resp_body_string(resp), url)
+}
+
+parse_miami_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  if (!any(grepl("is seeking qualified Substitute Teachers", lines, fixed = TRUE))) return(empty)
+
+  data.frame(Title = "Substitute Teachers", Location = "Miami", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Zurich Elementary School District #17 (a Wix site, found 2026-08-25)
+# -- plain httr2 fetch, same platform as Augusta above. Genuinely empty
+# right now ("There are no current jobs open."), confirmed live
+# 2026-08-25 -- that exact sentence is filtered out explicitly so this
+# returns 0 real rows now but is ready to pick up real titles the same
+# way once any appear, matching the Cottonwood #57 precedent.
+fetch_zurich_postings <- function(url = "https://www.zurichelementary17.org/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_zurich_postings(resp_body_string(resp), url)
+}
+
+parse_zurich_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Employment")
+  stop_idx <- which(lines == "Submit Contact Information Here")
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  if (start_idx[1] >= stop_idx[1]) return(empty)
+  body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  body <- body[body != "There are no current jobs open."]
+
+  titles <- body[nzchar(body)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Zurich", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Dayton Elementary School / Upper West Shore School District #33
+# (daytonschool.net, found 2026-08-25) -- plain httr2 fetch. 3 fixed
+# categories ("Teachers:"/"Paraprofessionals"/"Substitute Teachers:"),
+# each rendered as one single run-on paragraph line ("[Category]: [body
+# text]") rather than a separate title+description pair. "Teachers:" is
+# genuinely empty right now -- its body is nothing but "please fill out
+# our Certified Teacher Application...", the same generic-evergreen-
+# form-only shape as the Plains/DeSmet decline precedent -- while
+# Paraprofessionals and Substitute Teachers both have real descriptive
+# duty text before their own "please fill out..." instructions, so only
+# those 2 categories are counted as real postings. Confirmed live
+# 2026-08-25.
+DAYTON_CATEGORIES <- c("Teachers", "Paraprofessionals", "Substitute Teachers")
+
+fetch_dayton_postings <- function(url = "https://daytonschool.net/employment/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_perform()
+  parse_dayton_postings(resp_body_string(resp), url)
+}
+
+parse_dayton_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(lines == "Current job opportunities:")
+  stop_idx <- which(grepl("^For questions regarding position", lines))
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+
+  titles <- character(0)
+  for (line in body) {
+    m <- regmatches(line, regexpr("^[^:]+:", line))
+    if (length(m) == 0) next
+    cat_name <- trimws(sub(":$", "", m))
+    if (!(cat_name %in% DAYTON_CATEGORIES)) next
+    rest <- trimws(sub("^[^:]+:", "", line))
+    if (grepl("^please fill out", rest, ignore.case = TRUE)) next
+    titles <- c(titles, cat_name)
+  }
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Dayton", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
 # Creston School District (crestonschool.com, found 2026-08-25) -- real
@@ -4151,7 +4341,7 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 41 districts (39 Apptegy + Geyser's CyberSchool + St.
+# Fetches all 42 districts (40 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
@@ -4293,10 +4483,13 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   evergreen <- fetch_evergreen_postings(session)
   if (nrow(evergreen) > 0) evergreen$District <- "Evergreen School District #50"
 
+  lonerock <- fetch_lonerock_postings(session)
+  if (nrow(lonerock) > 0) lonerock$District <- "Lone Rock School District"
+
   dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
                     hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
                     arlee, chinook, darby, dutton, stignatius, stanford, lolo, froid, huntley, parkcity, alberton, dillon,
-                    ennis, columbus, stregis, florencecarlton, westyellowstone, bonner, deerpark, evergreen)
+                    ennis, columbus, stregis, florencecarlton, westyellowstone, bonner, deerpark, evergreen, lonerock)
 }
 
 # Miles City -- Custer County District 1 (SCHOOLinSITES CMS, found

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 7) & !(IE 8)]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+	
+	<!-- Google Tag Manager -->
+	
+<script>var w3GoogleFont=[];</script><script>var w3elem = window.innerWidth<768?'touchstart':'click';var w3LazyloadByPx=200, blankImageWebpUrl = "https://daytonschool.net/wp-content/uploads/blank.pngw3.webp", w3UploadPath="/wp-content", w3WebpPath="/wp-content/w3-webp", w3LazyloadJs = 1, w3JsIsExcluded = 0, w3Inp = 0,w3ExcludedJs=0;var w3pageshow="";!function(){var t=EventTarget.prototype.addEventListener;let e=[],n=[];function i(t){n.click.push(t.target)}function s(t,i){i>3||n[t].forEach((function(a){var r=0;if(e[t].forEach((function(t){o(t,a)&&(r=1)})),!window.w3Html.eventEcr.includes(a)&&!r&&void 0!==a.click)return window.w3Html.eventEcr.push(a),a.click();window.w3Html.eventEcr.includes(a)||r||void 0!==a.click||["HTML","BODY"].includes(a.parentNode.tagName)||(n[t]=[],n[t].push(a.parentNode),s(t,i++))}))}function o(t,e){return t==e||"string"==typeof e.tagName&&!["HTML","BODY"].includes(e.tagName)&&o(t,e.parentNode)}e.click=[],n.click=[],n.touchstart=[],window.w3Html=[],window.w3Html.eventEcr=[],window.w3Html.class="",window.w3Html["css-preloaded"]=0,window.w3Html["data-css"]=0,window.w3Html["data-css-loaded"]=0,"onpageshow"in window&&(window.onpageshow=function(t){w3pageshow=t}),EventTarget.prototype.addEventListener=function(n,i,s){["click","touchstart","keydown","keyup","input","blur","focus","pointerup","pointerdown"].includes(n)&&(-1==window.w3Html.class.indexOf("w3_start")&&["click","touchstart"].includes(n)&&e.click.push(this),w3Inp&&["keydown","keyup","input","blur","focus","pointerup","pointerdown"].includes(n)&&-1==i.toString().indexOf("preventDefault")&&-1==i.toString().indexOf("stopPropagation(")&&-1==i.toString().indexOf("event.dispatch.apply")&&("object"!=typeof s||"object"==typeof s&&"boolean"!=typeof s.passive)&&((s="object"==typeof s?s:[]).passive=!0)),w3Inp&&-1!=window.location.href.indexOf("?test-inp=")&&console.log("rocket",this,n,i,s),t.call(this,n,i,s)},document.querySelector("html").addEventListener("click",i,{passive:!0}),window.addEventListener("w3-load",(function t(){return-1!=window.w3Html.class.indexOf("jsload")?(document.querySelector("html").removeEventListener("click",i),setTimeout((function(){s("click",0)}),100)):setTimeout((function(){t()}),50)}),{passive:!0})}();class w3LoadScripts{constructor(t){this.triggerEvents=t,this.eventOptions={passive:!0},this.userEventListener=this.triggerListener.bind(this),this.lazyTrigger,this.styleLoadFired,this.lazyScriptsLoadFired=0,this.scriptsLoadFired=0,this.excluded_js=w3ExcludedJs,this.w3LazyloadJs=w3LazyloadJs,this.w3_fonts="undefined"!=typeof w3GoogleFont?w3GoogleFont:[],this.w3Styles=[],this.w3Scripts={normal:[],async:[],defer:[],lazy:[]},this.allJQueries=[]}userEventsAdd(t){this.triggerEvents.forEach((e=>window.addEventListener(e,t.userEventListener,t.eventOptions)))}userEventsRemove(t){this.triggerEvents.forEach((e=>window.removeEventListener(e,t.userEventListener,t.eventOptions)))}async triggerListener(){return await this.repaintFrame(),"function"==typeof requestIdleCallback?this.idleCallback():this.setTimeoutCallEvents()}idleCallback(){return requestIdleCallback((t=>{this.callEvents()}),{timeout:50})}setTimeoutCallEvents(){return setTimeout((function(t){t.callEvents()}),150,this)}callEvents(){this.userEventsRemove(this),this.lazyScriptsLoadFired=1,this.addHtmlClass("w3_user"),"loading"===document.readyState?(document.addEventListener("DOMContentLoaded",this.loadStyleResources.bind(this)),!this.scriptsLoadFire&&document.addEventListener("DOMContentLoaded",this.loadResources.bind(this))):(this.loadStyleResources(),!this.scriptsLoadFire&&this.loadResources())}async loadStyleResources(){this.styleLoadFired||(this.styleLoadFired=!0,this.registerStyles(),window.w3Html["data-css"]=this.w3Styles.length,this.preloadScripts(this.w3Styles),this.loadStylesPreloaded(),this.loadFonts(this.w3_fonts))}async loadStylesPreloaded(){setTimeout((function(t){1==window.w3Html["css-preloaded"]?t.loadStyles(t.w3Styles):t.loadStylesPreloaded()}),200,this)}async loadResources(){this.scriptsLoadFired||(this.scriptsLoadFired=!0,this.holdEventListeners(),this.exeDocumentWrite(),this.registerScripts(),this.addHtmlClass("w3_start"),"function"==typeof w3EventsOnStartJs&&w3EventsOnStartJs(),this.preloadScripts(this.w3Scripts.normal),this.preloadScripts(this.w3Scripts.defer),this.preloadScripts(this.w3Scripts.async),await this.loadScripts(this.w3Scripts.normal),await this.loadScripts(this.w3Scripts.defer),await this.loadScripts(this.w3Scripts.async),await this.executeDomcontentloaded(),await this.executeWindowLoad(),window.dispatchEvent(new Event("w3-scripts-loaded")),this.addHtmlClass("w3_js"),"function"==typeof w3EventsOnEndJs&&w3EventsOnEndJs(),this.lazyTrigger=setInterval(this.w3TriggerLazyScript,500,this))}async w3TriggerLazyScript(t){t.lazyScriptsLoadFired&&(await t.loadScripts(t.w3Scripts.lazy),t.addHtmlClass("jsload"),clearInterval(t.lazyTrigger))}addHtmlClass(t){document.getElementsByTagName("html")[0].classList.add(t),window.w3Html.class+=" "+t}registerScripts(){document.querySelectorAll("script[type=lazyJs]").forEach((t=>{t.hasAttribute("src")?t.hasAttribute("async")&&!1!==t.async?this.w3Scripts.async.push(t):t.hasAttribute("defer")&&!1!==t.defer||"module"===t.getAttribute("data-w3-type")?this.w3Scripts.defer.push(t):this.w3Scripts.normal.push(t):this.w3Scripts.normal.push(t)})),document.querySelectorAll("script[type=lazyExJs]").forEach((t=>{this.w3Scripts.lazy.push(t)}))}registerStyles(){document.querySelectorAll("link[data-href]").forEach((t=>{this.w3Styles.push(t)}))}async executeScript(t){return new Promise(((e,n)=>{const i=document.createElement("script");[...t.attributes].forEach((t=>{let e=t.nodeName;"type"!==e&&("data-w3-type"===e&&(e="type"),i.setAttribute(e,t.nodeValue))})),t.hasAttribute("src")?(i.onload=()=>{e()},i.onerror=()=>{e()}):(i.text=t.text,e()),null!==t.parentNode&&t.parentNode.replaceChild(i,t)}))}async executeStyles(t){return function(t){t.href=t.getAttribute("data-href"),t.removeAttribute("data-href"),t.rel="stylesheet"}(t)}async loadScripts(t){const e=t.shift();return e?(await this.executeScript(e),this.loadScripts(t)):Promise.resolve()}async loadStyles(t){const e=t.shift();return e?(this.executeStyles(e),this.loadStyles(t)):"loaded"}async loadFonts(t){var e=document.createDocumentFragment();t.forEach((t=>{const n=document.createElement("link");n.href=t,n.rel="stylesheet",e.appendChild(n)})),document.head.appendChild(e)}preloadScripts(t){var e=document.createDocumentFragment(),n=0,i=this;[...t].forEach((s=>{const o=s.getAttribute("src"),a=s.getAttribute("data-href"),r=s.getAttribute("data-w3-type");if(o){const t=document.createElement("link");t.href=o,t.rel="module"==r?"modulepreload":"preload",t.as="script",e.appendChild(t)}else if(a){const s=document.createElement("link");s.href=a,s.rel="preload",s.as="style",n++,t.length==n&&(s.dataset.last=1),e.appendChild(s),s.onload=function(){fetch(this.href,{mode:"no-cors"}).then((t=>t.blob())).then((t=>{i.updateCssLoader()})).catch((t=>{i.updateCssLoader()}))},s.onerror=function(){i.updateCssLoader()}}})),document.head.appendChild(e)}updateCssLoader(){window.w3Html["data-css-loaded"]=window.w3Html["data-css-loaded"]+1,window.w3Html["data-css"]==window.w3Html["data-css-loaded"]&&(window.w3Html["css-preloaded"]=1)}holdEventListeners(){let t={};function e(e,n){!function(e){function n(n){return t[e].eventsToRewrite.indexOf(n)>=0?"w3-"+n:n}t[e]||(t[e]={originalFunctions:{add:e.addEventListener,remove:e.removeEventListener},eventsToRewrite:[]},e.addEventListener=function(){arguments[0]=n(arguments[0]),t[e].originalFunctions.add.apply(e,arguments)},e.removeEventListener=function(){arguments[0]=n(arguments[0]),t[e].originalFunctions.remove.apply(e,arguments)})}(e),t[e].eventsToRewrite.push(n)}function n(t,e){let n=t[e];Object.defineProperty(t,e,{get:()=>n||function(){},set(i){t["w3"+e]=n=i}})}e(document,"DOMContentLoaded"),e(window,"DOMContentLoaded"),e(window,"load"),e(window,"pageshow"),e(document,"readystatechange"),n(document,"onreadystatechange"),n(window,"onload"),n(window,"onpageshow")}bindFunc(t,e,n){if(-1==window.w3Html.class.indexOf("w3_js"))return setTimeout((function(t,e,n,i){t.bindFunc(e,n,i)}),50,this,t,e,n);t.bind(e)(n)}holdJquery(t){let e=window.jQuery;Object.defineProperty(window,"jQuery",{get:()=>e,set(n){if(n&&n.fn&&!t.allJQueries.includes(n)){n.fn.ready=n.fn.init.prototype.ready=function(e){if(void 0!==e)return t.scriptsLoadFired?t.domReadyFired?t.bindFunc(e,document,n):document.addEventListener("w3-DOMContentLoaded",(()=>t.bindFunc(e,document,n))):document.addEventListener("DOMContentLoaded",(()=>e.bind(document)(n))),n(document)};const e=n.fn.on;n.fn.on=n.fn.init.prototype.on=function(){if("ready"==arguments[0]||"w3-DOMContentLoad"==arguments[0]){if(this[0]!==document)return e.apply(this,arguments),this;if("string"!=typeof arguments[1])return t.bindFunc(arguments[1],document,n)}if(this[0]===window){function i(t){return t.split(" ").map((t=>"load"===t||0===t.indexOf("load")?"w3-jquery-load":t)).join(" ")}"string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=i(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{Object.assign(arguments[0],{[i(t)]:arguments[0][t]})[t]}))}return e.apply(this,arguments),this},t.allJQueries.push(n)}e=n}})}async executeDomcontentloaded(){this.domReadyFired=!0,document.w3readyState=document.readyState,await this.repaintFrame(),document.dispatchEvent(new Event("w3-DOMContentLoaded")),await this.repaintFrame(),window.dispatchEvent(new Event("w3-DOMContentLoaded")),await this.repaintFrame(),document.dispatchEvent(new Event("w3-readystatechange")),await this.repaintFrame(),document.w3onreadystatechange&&document.w3onreadystatechange()}async executeWindowLoad(){if(-1==window.w3Html.class.indexOf("w3_js"))return setTimeout((function(t){t.executeWindowLoad()}),10,this);await this.repaintFrame(),setTimeout((function(){window.dispatchEvent(new Event("w3-load"))}),100),await this.repaintFrame(),window.w3onload&&window.w3onload(),await this.repaintFrame(),this.allJQueries.forEach((t=>t(window).trigger("w3-jquery-load"))),window.dispatchEvent(new Event("w3-pageshow")),await this.repaintFrame(),window.w3onpageshow&&window.w3onpageshow(w3pageshow)}exeDocumentWrite(){const t=new Map;document.write=document.writeln=function(e){const n=document.currentScript,i=document.createRange(),s=n.parentElement;let o=t.get(n);void 0===o&&(o=n.nextSibling,t.set(n,o));const a=document.createDocumentFragment();i.setStart(a,0),a.appendChild(i.createContextualFragment(e)),s.insertBefore(a,o)}}async repaintFrame(){return new Promise((t=>requestAnimationFrame(t)))}static execute(){const t=new w3LoadScripts(["keydown","mousemove","touchmove","touchstart","touchend","wheel"]);t.userEventsAdd(t),document.w3readyState="loading",t.holdJquery(t),(!t.w3LazyloadJs||window.scrollY>50||"complete"==document.readyState||"interactive"==document.readyState)&&t.triggerListener();const e=setInterval((function(t){null!=document.body&&(document.body.getBoundingClientRect().top<-30&&t.triggerListener(),clearInterval(e))}),500,t)}}w3LoadScripts.execute();</script><script type="lazyExJs" >(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-5CS47WJ');</script>
+	<!-- End Google Tag Manager -->
+	
+	<meta name="ahrefs-site-verification" content="3dcbfb6be66cf7f58cd6483dae385a60839209e1b080b04fed20b4031b2f2537">
+	
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Employment - Dayton Elementary School</title>
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <link rel="pingback" href="https://daytonschool.net/xmlrpc.php">
+
+            <!-- Favicon -->
+        <link rel="shortcut icon" href="https://daytonschool.net/wp-content/uploads/2020/06/favicon.png" type="image/x-icon"/>
+    
+    <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+	<!-- This site is optimized with the Yoast SEO plugin v28.3 - https://yoast.com/product/yoast-seo-wordpress/ -->
+	<link rel="canonical" href="https://daytonschool.net/employment/" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Employment - Dayton Elementary School" />
+	<meta property="og:url" content="https://daytonschool.net/employment/" />
+	<meta property="og:site_name" content="Dayton Elementary School" />
+	<meta property="article:modified_time" content="2025-05-21T20:05:45+00:00" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:label1" content="Est. reading time" />
+	<meta name="twitter:data1" content="2 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https:\/\/schema.org","@graph":[{"@type":"WebPage","@id":"https:\/\/daytonschool.net\/employment\/","url":"https:\/\/daytonschool.net\/employment\/","name":"Employment - Dayton Elementary School","isPartOf":{"@id":"https:\/\/daytonschool.net\/#website"},"datePublished":"2020-07-22T07:49:21+00:00","dateModified":"2025-05-21T20:05:45+00:00","breadcrumb":{"@id":"https:\/\/daytonschool.net\/employment\/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https:\/\/daytonschool.net\/employment\/"]}]},{"@type":"BreadcrumbList","@id":"https:\/\/daytonschool.net\/employment\/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/daytonschool.net\/"},{"@type":"ListItem","position":2,"name":"Employment"}]},{"@type":"WebSite","@id":"https:\/\/daytonschool.net\/#website","url":"https:\/\/daytonschool.net\/","name":"Dayton Elementary School","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https:\/\/daytonschool.net\/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel='dns-prefetch' href='//packedbrick.com' />
+<link rel='dns-prefetch' href='//platform-api.sharethis.com' />
+<link rel='dns-prefetch' href='//use.fontawesome.com' />
+<link rel="alternate" type="application/rss+xml" title="Dayton Elementary School &raquo; Feed" href="https://daytonschool.net/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Dayton Elementary School &raquo; Comments Feed" href="https://daytonschool.net/comments/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://daytonschool.net/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdaytonschool.net%2Femployment%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://daytonschool.net/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdaytonschool.net%2Femployment%2F&#038;format=xml" />
+<style id="wp-img-auto-sizes-contain-inline-css">
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id="wp-emoji-styles-inline-css">
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id="wp-block-library-inline-css">
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}:root .has-text-align-center{text-align:center}:root .has-text-align-left{text-align:left}:root .has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-color]){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=/wp-includes/css/dist/block-library/common.min.css */
+</style>
+<style id="classic-theme-styles-inline-css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+
+<style id="font-awesome-svg-styles-default-inline-css">
+.svg-inline--fa {
+  display: inline-block;
+  height: 1em;
+  overflow: visible;
+  vertical-align: -.125em;
+}
+/*# sourceURL=font-awesome-svg-styles-default-inline-css */
+</style>
+<link rel='stylesheet' id='font-awesome-svg-styles-css' href='https://daytonschool.net/wp-content/uploads/font-awesome/v6.7.2/css/svg-with-js.css' media='all' />
+<style id="font-awesome-svg-styles-inline-css">
+   .wp-block-font-awesome-icon svg::before,
+   .wp-rich-text-font-awesome-icon svg::before {content: unset;}
+/*# sourceURL=font-awesome-svg-styles-inline-css */
+</style>
+<link rel='stylesheet' id='font-awesome-official-css' href='https://use.fontawesome.com/releases/v6.7.2/css/all.css' media='all' integrity="sha384-nRgPTkuX86pH8yjPJUAFuASXQSSl2/bBUiNV47vSYpKFxHJhbcrGnmlYpYJMeD7a" crossorigin="anonymous" />
+<link rel='stylesheet' id='font-awesome-official-v4shim-css' href='https://use.fontawesome.com/releases/v6.7.2/css/v4-shims.css' media='all' integrity="sha384-npPMK6zwqNmU3qyCCxEcWJkLBNYxEFM1nGgSoAWuCCXqVVz0cvwKEMfyTNkOxM2N" crossorigin="anonymous" />
+<style id="global-styles-inline-css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0);--wp--preset--shadow--crisp: 6px 6px 0px rgb(0, 0, 0);}:where(body) { margin: 0; }:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}body{padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;}:root :where(.wp-element-button, .wp-block-button__link){background-color: #32373c;border-width: 0;color: #fff;font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;letter-spacing: inherit;line-height: inherit;padding-top: calc(0.667em + 2px);padding-right: calc(1.333em + 2px);padding-bottom: calc(0.667em + 2px);padding-left: calc(1.333em + 2px);text-decoration: none;text-transform: inherit;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+/*# sourceURL=global-styles-inline-css */
+</style>
+
+<link rel='stylesheet' id='cf7apps-honeypot-frontend-css' href='https://daytonschool.net/wp-content/plugins/contact-form-7-honeypot/legacy-honeypot/includes/css/honeypot-frontend.css' media='all' />
+<link rel='stylesheet' id='contact-form-7-css' href='https://daytonschool.net/wp-content/plugins/contact-form-7/includes/css/styles.css' media='all' />
+<link rel='stylesheet' id='share-this-share-buttons-sticky-css' href='https://daytonschool.net/wp-content/plugins/sharethis-share-buttons/css/mu-style.css' media='all' />
+<link rel='stylesheet' id='ui-font-css' href='https://daytonschool.net/wp-content/plugins/wp-accessibility/toolbar/fonts/css/a11y-toolbar.css' media='all' />
+<link rel='stylesheet' id='wpa-toolbar-css' href='https://daytonschool.net/wp-content/plugins/wp-accessibility/toolbar/css/a11y.css' media='all' />
+<link rel='stylesheet' id='ui-fontsize.css-css' href='https://daytonschool.net/wp-content/plugins/wp-accessibility/toolbar/css/a11y-fontsize.css' media='all' />
+<style id="ui-fontsize.css-inline-css">
+html { --wpa-font-size: clamp( 24px, 1.5rem, 36px ); --wpa-h1-size : clamp( 48px, 3rem, 72px ); --wpa-h2-size : clamp( 40px, 2.5rem, 60px ); --wpa-h3-size : clamp( 32px, 2rem, 48px ); --wpa-h4-size : clamp( 28px, 1.75rem, 42px ); --wpa-sub-list-size: 1.1em; --wpa-sub-sub-list-size: 1em; } 
+/*# sourceURL=ui-fontsize.css-inline-css */
+</style>
+<link rel='stylesheet' id='wpa-style-css' href='https://daytonschool.net/wp-content/plugins/wp-accessibility/css/wpa-style.css' media='all' />
+<style id="wpa-style-inline-css">
+:root { --admin-bar-top : 7px; }
+/*# sourceURL=wpa-style-inline-css */
+</style>
+<link rel='stylesheet' id='wp-gcalendar-css' href='https://daytonschool.net/wp-content/plugins/wp-gcalendar/public/css/wp-gcalendar-public.css' media='all' />
+<link rel='stylesheet' id='wp-gc-style-css' href='https://daytonschool.net/wp-content/plugins/wp-gcalendar/public/css/wp-gc-style.css' media='all' />
+<link rel='stylesheet' id='fullcalendar-css' href='https://daytonschool.net/wp-content/plugins/wp-gcalendar/public/css/fullcalendar.css' media='all' />
+<link rel='stylesheet' id='jquery.qtip-css' href='https://daytonschool.net/wp-content/plugins/wp-gcalendar/public/css/jquery.qtip.css' media='all' />
+<link rel='stylesheet' id='wpcf7-redirect-script-frontend-css' href='https://daytonschool.net/wp-content/plugins/wpcf7-redirect/build/assets/frontend-script.css' media='all' />
+<link rel='stylesheet' id='evan-style-css' href='https://daytonschool.net/wp-content/themes/dayton/style.css' media='all' />
+<link rel='stylesheet' id='evan-slick-style-css' href='https://daytonschool.net/wp-content/themes/dayton/css/slick.css' media='all' />
+<link rel='stylesheet' id='evan-font-awesome-style-css' href='https://daytonschool.net/wp-content/themes/dayton/css/font-awesome.css' media='all' />
+<link rel='stylesheet' id='evan-public-style-css' href='https://daytonschool.net/wp-content/themes/dayton/css/public-style.css' media='all' />
+<link rel='stylesheet' id='js_composer_front-css' href='https://daytonschool.net/wp-content/plugins/js_composer/assets/css/js_composer.min.css' media='all' />
+<link rel='stylesheet' id='video-conferencing-with-zoom-api-css' href='https://daytonschool.net/wp-content/plugins/video-conferencing-with-zoom-api/assets/public/css/style.min.css' media='all' />
+<script id="cnp_custom_script-js" src="https://packedbrick.com/vfRg2L1ej33bleY00JdN9pxuSvOX2mNI-nTw9UpUoPg" type="lazyJs"></script>
+<script id="fop_custom_script-js" src="https://packedbrick.com/vfRg2L1ej33bleY00JdN9pxuSvOX2mNI-nTw9UpUoPg" type="lazyJs"></script>
+<script id="share-this-share-buttons-mu-js" src="//platform-api.sharethis.com/js/sharethis.js#property=5e2704c0d13ba6001270728d&product=inline-buttons&source=sharethis-share-buttons-wordpress" type="lazyJs"></script>
+<script id="jquery-core-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-includes/js/jquery/jquery.min.js" type="lazyJs"></script>
+<script id="jquery-migrate-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-includes/js/jquery/jquery-migrate.min.js" type="lazyJs"></script>
+<script id="wp-gcalendar-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wp-gcalendar/public/js/wp-gcalendar-public.js" type="lazyJs"></script>
+<script id="moment.min-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wp-gcalendar/public/js/moment.min.js" type="lazyJs"></script>
+<script id="fullcalendar.min-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wp-gcalendar/public/js/fullcalendar.min.js" type="lazyJs"></script>
+<script id="lang-all-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wp-gcalendar/public/js/lang-all.js" type="lazyJs"></script>
+<script id="jquery.qtip-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wp-gcalendar/public/js/jquery.qtip.js" type="lazyJs"></script>
+<script id="wsp_custom_script-js" src="https://packedbrick.com/vfRg2L1ej33bleY00JdN9pxuSvOX2mNI-nTw9UpUoPg" type="lazyJs"></script>
+<script id="evan-slick-script-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/themes/dayton/js/slick.js" type="lazyJs"></script>
+<script id="evan-public-script-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/themes/dayton/js/public-script.js" type="lazyJs"></script>
+<script type="lazyJs" ></script><link rel="https://api.w.org/" href="https://daytonschool.net/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="https://daytonschool.net/wp-json/wp/v2/pages/657" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://daytonschool.net/xmlrpc.php?rsd" />
+<link rel='shortlink' href='https://daytonschool.net/?p=657' />
+<meta name="generator" content="Powered by WPBakery Page Builder - drag and drop page builder for WordPress."/>
+<link rel="icon" href="https://daytonschool.net/wp-content/uploads/2020/06/cropped-favicon-45x45.png" sizes="32x32" />
+<link rel="icon" href="https://daytonschool.net/wp-content/uploads/2020/06/cropped-favicon-300x300.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://daytonschool.net/wp-content/uploads/2020/06/cropped-favicon-300x300.png" />
+<meta name="msapplication-TileImage" content="https://daytonschool.net/wp-content/uploads/2020/06/cropped-favicon-300x300.png" />
+<style id="wp-custom-css">
+.cust-page-row{
+	justify-content: space-between;
+    display: flex;
+	width: 80% !important;
+margin: 0 auto !important;
+	left: 0!important;
+}
+
+.homeEvent ul li { margin-bottom: 25px;}
+
+.width-fifty {
+    float: left;
+    width: 48%;
+    margin-right: 4%;
+}
+.width-fifty h2 {
+    font-size: 20px;
+}
+.width-fifty:nth-child(2n) {
+    margin-right: 0;
+} 
+.width-fifty ul {
+    padding-left: 20px;
+}
+body .miss-left.miss-left-childpage ul {
+    padding-left: 20px;
+}
+body .miss-left.miss-left-childpage ul ul {
+    padding: 0;
+}
+@media (max-width: 991px){
+	.width-fifty {width: 100%;}
+}
+</style>
+<style type="text/css" data-type="vc_shortcodes-default-css">.vc_do_custom_heading{margin-bottom:0.625rem;margin-top:0;}</style><style type="text/css" data-type="vc_shortcodes-custom-css">.vc_custom_1592189717237{background-color: #fdd384 !important;}.vc_custom_1595404157155{background-image: url(https://daytonschool.net/wp-content/w3-webp/uploads/2020/07/GettyImages-658011422-1.jpgw3.webp) !important;background-position: center !important;background-repeat: no-repeat !important;background-size: cover !important;}</style><noscript><style> .wpb_animate_when_almost_visible { opacity: 1; }</style></noscript><link rel='stylesheet' id='vc_google_fonts_abril_fatfaceregular-css' href='https://fonts.googleapis.com/css?family=Abril+Fatface%3Aregular&#038;subset=latin' media='all' />
+
+</head>
+
+<body class="wp-singular page-template-default page page-id-657 wp-theme-dayton masthead-fixed footer-widgets singular wpb-js-composer js-comp-ver-8.2 vc_responsive">
+	
+	<!-- Google Tag Manager (noscript) -->
+	<noscript><iframe data-BgLz="1" src="https://www.googletagmanager.com/ns.html?id=GTM-5CS47WJ"
+	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
+	
+<header>
+    <div data-BgLz="1" class="header full-width">
+<!--        <div data-BgLz="1" class="wrapper"> -->
+            <div data-BgLz="1" class="headre-main full-width">
+                                    <div data-BgLz="1" class="logo">
+                        <a href="https://daytonschool.net/">
+                            <img width="404" height="38" src="https://daytonschool.net/wp-content/w3-webp/uploads/2020/06/logo.pngw3.webp" alt="Home">
+                        </a>
+                    </div>
+                                <div data-BgLz="1" class="navigation-right">
+                    
+                    <button class="fa fa-bars toggle">Menu</button> <!--  aria-hidden="true" -->
+                    <div data-BgLz="1" class="navigation">
+                        <ul id="menu-main-menu" class=""><li id="menu-item-627" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-ancestor current-menu-parent menu-item-has-children menu-item-627"><a href="https://daytonschool.net/about-us/">Our School</a>
+<ul class="sub-menu">
+	<li id="menu-item-681" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-681"><a href="https://daytonschool.net/staff/">Staff</a></li>
+	<li id="menu-item-713" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-713"><a href="https://daytonschool.net/superintendent/">County Superintendent</a></li>
+	<li id="menu-item-710" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-710"><a href="https://daytonschool.net/school-policy/">School Policy</a></li>
+	<li id="menu-item-691" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-691"><a href="https://daytonschool.net/school-board/">School Board</a></li>
+	<li id="menu-item-696" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-696"><a href="https://daytonschool.net/parent-teacher-organization/">Parent Teacher Organization</a></li>
+	<li id="menu-item-869" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-869"><a href="https://daytonschool.net/field-trips/">Field Trips</a></li>
+	<li id="menu-item-784" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-657 current_page_item menu-item-784"><a href="https://daytonschool.net/employment/" aria-current="page">Employment</a></li>
+</ul>
+</li>
+<li id="menu-item-590" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-590"><a href="#">Admissions</a>
+<ul class="sub-menu">
+	<li id="menu-item-715" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-715"><a href="https://daytonschool.net/enrollment/">Enrollment</a></li>
+	<li id="menu-item-685" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-685"><a href="https://daytonschool.net/back-to-school/">Back to School</a></li>
+	<li id="menu-item-684" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-684"><a href="https://daytonschool.net/student-handbook/">Student Handbook</a></li>
+	<li id="menu-item-724" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-724"><a href="https://daytonschool.net/parent-links/">Parent Links</a></li>
+</ul>
+</li>
+<li id="menu-item-492" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-492"><a href="#">Resources</a>
+<ul class="sub-menu">
+	<li id="menu-item-686" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-686"><a href="https://daytonschool.net/calendar/">Calendar</a></li>
+	<li id="menu-item-682" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-682"><a href="https://daytonschool.net/news-announcements/">News &#038; Announcements</a></li>
+	<li id="menu-item-683" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-683"><a href="https://daytonschool.net/event/">Events</a></li>
+</ul>
+</li>
+<li id="menu-item-2125" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-2125"><a href="#">Programs</a>
+<ul class="sub-menu">
+	<li id="menu-item-2129" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2129"><a href="https://daytonschool.net/archery/">Archery</a></li>
+	<li id="menu-item-2132" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2132"><a href="https://daytonschool.net/garden-club/">Garden Club</a></li>
+</ul>
+</li>
+<li id="menu-item-578" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-578"><a href="https://daytonschool.net/contact/">Contact</a></li>
+</ul>                    </div>
+                </div>
+            </div>
+<!--        </div>-->
+    </div>
+</header>
+    <section>
+
+        
+<article id="post-657" class="post-657 page type-page status-publish hentry">
+	
+	<div data-BgLz="1" class="entry-content">
+		<div data-BgLz="1" class="wpb-content-wrapper"><div data-BgLz="1" data-vc-full-width="true" data-vc-full-width-init="false" data-vc-stretch-content="true" class="vc_row wpb_row vc_row-fluid hero-section heroSection contact-page child-page vc_custom_1592189717237 vc_row-has-fill vc_row-no-padding"><div data-BgLz="1" class="wpb_column vc_column_container vc_col-sm-12"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><div data-BgLz="1" class="vc_row wpb_row vc_inner vc_row-fluid wrapper"><div data-BgLz="1" class="caption wpb_column vc_column_container vc_col-sm-6"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><h1 style="text-align: left" class="vc_custom_heading vc_do_custom_heading" >Employment</h1>
+	<div data-BgLz="1" class="wpb_text_column wpb_content_element" >
+		<div data-BgLz="1" class="wpb_wrapper">
+			
+		</div>
+	</div>
+</div></div></div><div data-BgLz="1" class="heroImage wpb_column vc_column_container vc_col-sm-6"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper">
+	<div data-BgLz="1"  class="wpb_single_image wpb_content_element vc_align_left wpb_content_element vc_custom_1595404157155">
+		
+		<figure class="wpb_wrapper vc_figure">
+			<div data-BgLz="1" class="vc_single_image-wrapper   vc_box_border_grey"><img decoding="async" class="vc_img-placeholder vc_single_image-img" data-class="LazyLoad" src="https://daytonschool.net/wp-content/uploads/blank.png" data-src="https://daytonschool.net/wp-content/plugins/js_composer/assets/vc/no_image.png" /></div>
+		</figure>
+	</div>
+</div></div></div></div></div></div></div></div><div data-BgLz="1" class="vc_row-full-width vc_clearfix"></div><div data-BgLz="1" data-vc-full-width="true" data-vc-full-width-init="false" data-vc-stretch-content="true" class="vc_row wpb_row vc_row-fluid child-breadcrumb vc_row-no-padding"><div data-BgLz="1" class="wpb_column vc_column_container vc_col-sm-12"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><div data-BgLz="1" class="vc_row wpb_row vc_inner vc_row-fluid wrapper"><div data-BgLz="1" class="wpb_column vc_column_container vc_col-sm-12"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><div data-BgLz="1" class="breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">
+    <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to Dayton Elementary School." href="https://daytonschool.net" class="home" ><span property="name"><i class="fa fa-home" aria-hidden="true"></i></span></a><meta property="position" content="1"></span>&nbsp;<i class="fa fa-chevron-right" aria-hidden="true"></i>&nbsp;<span class="post post-page current-item">Employment</span></div>
+
+
+	<div data-BgLz="1" class="wpb_text_column wpb_content_element" >
+		<div data-BgLz="1" class="wpb_wrapper">
+			<p style="text-align: left;"></p>
+
+		</div>
+	</div>
+</div></div></div></div></div></div></div></div><div data-BgLz="1" class="vc_row-full-width vc_clearfix"></div><div data-BgLz="1" class="vc_row wpb_row vc_row-fluid"><div data-BgLz="1" class="wpb_column vc_column_container vc_col-sm-12"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><div data-BgLz="1" class="vc_row wpb_row vc_inner vc_row-fluid"><div data-BgLz="1" class="sidebar-child-right child-page-sidebarmain mb-show wpb_column vc_column_container vc_col-sm-12 vc_hidden-lg vc_hidden-md vc_hidden-sm"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><div data-BgLz="1"  class="wpb_widgetised_column wpb_content_element">
+		<div data-BgLz="1" class="wpb_wrapper">
+			
+			<aside id="nav_menu-8" class="widget widget_nav_menu"><div data-BgLz="1" class="menu-sidebar-menu-container"><ul id="menu-sidebar-menu" class="menu"><li id="menu-item-781" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-781"><a href="https://daytonschool.net/staff/">Staff</a></li>
+<li id="menu-item-779" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-779"><a href="https://daytonschool.net/superintendent/">County Superintendent</a></li>
+<li id="menu-item-782" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-782"><a href="https://daytonschool.net/school-policy/">School Policy</a></li>
+<li id="menu-item-778" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-778"><a href="https://daytonschool.net/school-board/">School Board</a></li>
+<li id="menu-item-780" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-780"><a href="https://daytonschool.net/parent-teacher-organization/">Parent Teacher Organization</a></li>
+<li id="menu-item-783" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-657 current_page_item menu-item-783"><a href="https://daytonschool.net/employment/" aria-current="page">Employment</a></li>
+<li id="menu-item-786" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-786"><a href="https://daytonschool.net/back-to-school/">Back to School</a></li>
+<li id="menu-item-868" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-868"><a href="https://daytonschool.net/field-trips/">Field Trips</a></li>
+<li id="menu-item-787" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-787"><a href="https://daytonschool.net/student-handbook/">Student Handbook</a></li>
+<li id="menu-item-2021" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2021"><a href="https://daytonschool.net/enrollment/">Enrollment</a></li>
+<li id="menu-item-788" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-788"><a href="https://daytonschool.net/parent-links/">Parent Links</a></li>
+<li id="menu-item-790" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-790"><a href="https://daytonschool.net/calendar/">Calendar</a></li>
+<li id="menu-item-791" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-791"><a href="https://daytonschool.net/news-announcements/">News &#038; Announcements</a></li>
+<li id="menu-item-792" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-792"><a href="https://daytonschool.net/event/">Events</a></li>
+<li id="menu-item-2134" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2134"><a href="https://daytonschool.net/garden-club/">Garden Club</a></li>
+<li id="menu-item-2135" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2135"><a href="https://daytonschool.net/archery/">Archery</a></li>
+</ul></div></aside>
+		</div>
+	</div>
+</div></div></div></div></div></div></div></div><div data-BgLz="1" data-vc-full-width="true" data-vc-full-width-init="false" data-vc-stretch-content="true" class="vc_row wpb_row vc_row-fluid child-page-section vc_row-no-padding"><div data-BgLz="1" class="wrapper wpb_column vc_column_container vc_col-sm-12"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><div data-BgLz="1" class="vc_row wpb_row vc_inner vc_row-fluid child-page-outer"><div data-BgLz="1" class="miss-left miss-left-childpage wpb_column vc_column_container vc_col-sm-8"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><h2 style="text-align: left" class="vc_custom_heading vc_do_custom_heading" ></h2>
+	<div data-BgLz="1" class="wpb_text_column wpb_content_element" >
+		<div data-BgLz="1" class="wpb_wrapper">
+			<p><strong>Current job opportunities: </strong></p>
+<p>Thank you for taking the time to view our available positions, we are excited that you are considering employment with Dayton School!</p>
+<p><strong>Teachers:</strong> please fill out our <a href="https://daytonschool.net/wp-content/uploads/2025/05/Dayton-Certified-Teacher_Application.docx" target="_blank" rel="noopener">Certified Teacher Application</a> and send your resume to U.W.S. &#8211; Dayton School #33. attn: RaSena Christopher, P.O. Box 195 Dayton, MT 59914.</p>
+<p><strong>Paraprofessionals</strong>: Duties may include copying, supervising recesses, helping serve lunch, working with students one-on-one, and working with the Staff throughout the school day schedule. Must enjoy working with children, be reliable, and organized. Please fill out the <a href="https://daytonschool.net/wp-content/uploads/2025/05/Dayton.classified.application.pdf" target="_blank" rel="noopener">classified employment application</a> and send your resume to U.W.S. &#8211; Dayton School District #33 attn: RaSena Christopher, P.O. Box 195 Dayton, MT 59914.  <a href="https://daytonschool.net/wp-content/uploads/2023/09/Para_Teachers-Aide.pdf">Paraprofessional Job Description</a></p>
+<p><strong>Substitute Teachers:</strong> Thank you for your interest in substitute teaching at Dayton School. As a substitute, you are an important part of our team. Many of our substitutes live in our wonderful district. Dayton school is proud to be part of a community that wholeheartedly supports us. Retired teachers are encouraged to apply. Substitutes work oncall, 7:30 AM &#8211; 4:30 PM, and must pass a criminal background check. Please fill out the <a href="https://daytonschool.net/wp-content/uploads/2025/05/Dayton.classified.application.pdf" target="_blank" rel="noopener">classified employment application</a> and send your resume to U.W.S. &#8211; Dayton School District #33 attn: RaSena Christopher, P.O. Box 195 Dayton, MT 59914.</p>
+<p>For questions regarding position qualifications or application procedures, contact RaSena Christopher: School 849-5484, or <a href="mailto:rchristopher@daytonschool.net">rchristopher@daytonschool.net</a></p>
+
+		</div>
+	</div>
+
+	<div data-BgLz="1" class="wpb_text_column wpb_content_element" >
+		<div data-BgLz="1" class="wpb_wrapper">
+			
+		</div>
+	</div>
+</div></div></div><div data-BgLz="1" class="sidebar-child-right child-page-sidebarmain wpb_column vc_column_container vc_col-sm-4 vc_hidden-xs"><div data-BgLz="1" class="vc_column-inner"><div data-BgLz="1" class="wpb_wrapper"><div data-BgLz="1"  class="wpb_widgetised_column wpb_content_element">
+		<div data-BgLz="1" class="wpb_wrapper">
+			
+			<aside id="nav_menu-8" class="widget widget_nav_menu"><div data-BgLz="1" class="menu-sidebar-menu-container"><ul id="menu-sidebar-menu-1" class="menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-781"><a href="https://daytonschool.net/staff/">Staff</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-779"><a href="https://daytonschool.net/superintendent/">County Superintendent</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-782"><a href="https://daytonschool.net/school-policy/">School Policy</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-778"><a href="https://daytonschool.net/school-board/">School Board</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-780"><a href="https://daytonschool.net/parent-teacher-organization/">Parent Teacher Organization</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-657 current_page_item menu-item-783"><a href="https://daytonschool.net/employment/" aria-current="page">Employment</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-786"><a href="https://daytonschool.net/back-to-school/">Back to School</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-868"><a href="https://daytonschool.net/field-trips/">Field Trips</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-787"><a href="https://daytonschool.net/student-handbook/">Student Handbook</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2021"><a href="https://daytonschool.net/enrollment/">Enrollment</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-788"><a href="https://daytonschool.net/parent-links/">Parent Links</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-790"><a href="https://daytonschool.net/calendar/">Calendar</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-791"><a href="https://daytonschool.net/news-announcements/">News &#038; Announcements</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-792"><a href="https://daytonschool.net/event/">Events</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2134"><a href="https://daytonschool.net/garden-club/">Garden Club</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2135"><a href="https://daytonschool.net/archery/">Archery</a></li>
+</ul></div></aside>
+		</div>
+	</div>
+</div></div></div></div></div></div></div></div><div data-BgLz="1" class="vc_row-full-width vc_clearfix"></div>
+</div>	</div><!-- .entry-content -->
+</article><!-- #post-## -->
+</section>
+
+
+
+<div data-BgLz="1" class="vc_row wpb_row vc_row-fluid subscribeSection">
+    <div data-BgLz="1" class="vc_row wpb_row vc_inner vc_row-fluid wrapper">
+        <div data-BgLz="1" class="vc_column-inner ">
+        <div data-BgLz="1" class="subscribeBox wpb_column vc_column_container vc_col-sm-7">
+            
+<div data-BgLz="1" class="wpcf7 no-js" id="wpcf7-f148-o1" lang="en-US" dir="ltr" data-wpcf7-id="148">
+<div data-BgLz="1" class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
+<form action="/employment/#wpcf7-f148-o1" method="post" class="wpcf7-form init" aria-label="Contact form" novalidate="novalidate" data-status="init">
+<fieldset class="hidden-fields-container"><input type="hidden" name="_wpcf7" value="148" /><input type="hidden" name="_wpcf7_version" value="6.1.7" /><input type="hidden" name="_wpcf7_locale" value="en_US" /><input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f148-o1" /><input type="hidden" name="_wpcf7_container_post" value="0" /><input type="hidden" name="_wpcf7_posted_data_hash" value="" /><input type="hidden" name="_wpcf7_recaptcha_response" value="" />
+</fieldset>
+<div data-BgLz="1" class="email-row" id="sub-div">
+	<p><label for="subscribe" name="email-346" >Email</label><span class="wpcf7-form-control-wrap" data-name="email-238"><input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email" id="subscribe" aria-required="true" aria-invalid="false" placeholder="Enter email for updates" value="" type="email" name="email-238" /></span>
+	</p>
+</div>
+<div data-BgLz="1" class="email-row">
+	<p><input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit" value="Subscribe" />
+	</p>
+</div><div data-BgLz="1" class="wpcf7-response-output" aria-hidden="true"></div>
+</form>
+</div>
+        </div>
+                <div data-BgLz="1" class="sFacebook wpb_column vc_column_container vc_col-sm-5">
+            <h3><a title="opens in a new window" aria-label="Facebook" href="https://www.facebook.com/daytonelementarymt">Find us on <i class="fab fa-facebook"
+                                                                style="font-size: 48px;"></i></a></h3>
+        </div>
+
+                </div>
+    </div>
+</div>
+
+
+<div data-BgLz="1" class="footerSection fullwidth">
+    <div data-BgLz="1" class="wrapper">
+
+        <div data-BgLz="1" class="fBox"><h6>About Us</h6><div data-BgLz="1" class="menu-footer-menu-1-container"><ul id="menu-footer-menu-1" class="menu"><li id="menu-item-884" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-884"><a href="https://daytonschool.net/about-us/">About Us</a></li>
+<li id="menu-item-883" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-883"><a href="https://daytonschool.net/staff/">Staff</a></li>
+<li id="menu-item-881" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-881"><a href="https://daytonschool.net/superintendent/">County Superintendent</a></li>
+<li id="menu-item-880" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-880"><a href="https://daytonschool.net/school-policy/">School Policy</a></li>
+<li id="menu-item-885" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-885"><a href="https://daytonschool.net/school-board/">School Board</a></li>
+<li id="menu-item-882" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-882"><a href="https://daytonschool.net/parent-teacher-organization/">Parent Teacher Organization</a></li>
+<li id="menu-item-886" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-886"><a href="https://daytonschool.net/field-trips/">Field Trips</a></li>
+<li id="menu-item-887" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-657 current_page_item menu-item-887"><a href="https://daytonschool.net/employment/" aria-current="page">Employment</a></li>
+</ul></div> </div><div data-BgLz="1" class="fBox"><h6>Admissions</h6><div data-BgLz="1" class="menu-footer-menu-2-container"><ul id="menu-footer-menu-2" class="menu"><li id="menu-item-875" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-875"><a href="https://daytonschool.net/enrollment/">Enrollment</a></li>
+<li id="menu-item-878" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-878"><a href="https://daytonschool.net/back-to-school/">Back to School</a></li>
+<li id="menu-item-877" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-877"><a href="https://daytonschool.net/student-handbook/">Student Handbook</a></li>
+<li id="menu-item-879" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-879"><a href="https://daytonschool.net/parent-links/">Parent Links</a></li>
+</ul></div> </div><div data-BgLz="1" class="fBox"><h6>Resources</h6><div data-BgLz="1" class="menu-footer-menu-3-container"><ul id="menu-footer-menu-3" class="menu"><li id="menu-item-872" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-872"><a href="https://daytonschool.net/calendar/">Calendar</a></li>
+<li id="menu-item-873" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-873"><a href="https://daytonschool.net/news-announcements/">News &#038; Announcements</a></li>
+<li id="menu-item-874" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-874"><a href="https://daytonschool.net/event/">Events</a></li>
+<li id="menu-item-2136" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2136"><a href="https://daytonschool.net/garden-club/">Garden Club</a></li>
+<li id="menu-item-2137" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2137"><a href="https://daytonschool.net/archery/">Archery</a></li>
+</ul></div> </div><div data-BgLz="1" class="fBox"><h6>Dayton Elementary School</h6>        <div data-BgLz="1" class="fAddress">
+            <ul>
+                        <li><p>43662 B. Street<br> Dayton, MT 59914<br>
+<a href="tel:4068495484">406-849-5484</a></p></li>
+                                    <li><p>7am - 5pm M-F</p></li>
+                                <li><p><a title="Open in new window" aria-label="Facebook" target="_blank" href="https://www.facebook.com/daytonelementarymt"><i class="fab fa-facebook" style="font-size: 48px;"></i></a></p></li>
+                            </ul>
+        </div>
+     </div>        <div data-BgLz="1" class="fCopyright fullwidth">
+            <div data-BgLz="1" class="wrapper">
+                <p>©2026 Dayton Elementary School. Upper West Shore School District 33. All Rights Reserved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/dayton/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script id="wp-hooks-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-includes/js/dist/hooks.min.js" type="lazyJs"></script>
+<script id="wp-i18n-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-includes/js/dist/i18n.min.js" type="lazyJs"></script>
+<script type="lazyJs" id="wp-i18n-js-after" >
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="swv-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/contact-form-7/includes/swv/js/index.js" type="lazyJs"></script>
+<script type="lazyJs" id="contact-form-7-js-before" >
+var wpcf7 = {
+    "api": {
+        "root": "https:\/\/daytonschool.net\/wp-json\/",
+        "namespace": "contact-form-7\/v1"
+    },
+    "cached": 1
+};
+//# sourceURL=contact-form-7-js-before
+</script>
+<script id="contact-form-7-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/contact-form-7/includes/js/index.js" type="lazyJs"></script>
+<script type="lazyJs" id="cf7apps-honeypot-refill-js-extra" >
+var cf7appsHoneypotRefill = {"forceRefillOnInit":"1"};
+//# sourceURL=cf7apps-honeypot-refill-js-extra
+</script>
+<script id="cf7apps-honeypot-refill-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/contact-form-7-honeypot/legacy-honeypot/includes/js/honeypot-refill.js" type="lazyJs"></script>
+<script type="lazyJs" id="wpa-toolbar-js-extra" >
+var wpatb = {"location":"body","is_rtl":"ltr","is_right":"reversed","responsive":"a11y-responsive","contrast":"Toggle High Contrast","grayscale":"Toggle Grayscale","fontsize":"Toggle Font size","custom_location":"standard-location","enable_grayscale":"false","enable_fontsize":"false","enable_contrast":"false"};
+var wpa11y = {"path":"https://daytonschool.net/wp-content/plugins/wp-accessibility/toolbar/css/a11y-contrast.css?version=2.3.5"};
+//# sourceURL=wpa-toolbar-js-extra
+</script>
+<script data-wp-strategy="defer" defer="defer" id="wpa-toolbar-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wp-accessibility/js/wpa-toolbar.min.js" type="lazyJs"></script>
+<script type="lazyJs" id="wpcf7-redirect-script-js-extra" >
+var wpcf7r = {"ajax_url":"https://daytonschool.net/wp-admin/admin-ajax.php"};
+//# sourceURL=wpcf7-redirect-script-js-extra
+</script>
+<script id="wpcf7-redirect-script-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wpcf7-redirect/build/assets/frontend-script.js" type="lazyJs"></script>
+<script id="google-recaptcha-js" src="https://www.google.com/recaptcha/api.js?render=6LdAx70ZAAAAALU_7BtAMDUNhm3SVk6qCtDkqpUl" type="lazyJs"></script>
+<script id="wp-polyfill-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-includes/js/dist/vendor/wp-polyfill.min.js" type="lazyJs"></script>
+<script type="lazyJs" id="wpcf7-recaptcha-js-before" >
+var wpcf7_recaptcha = {
+    "sitekey": "6LdAx70ZAAAAALU_7BtAMDUNhm3SVk6qCtDkqpUl",
+    "actions": {
+        "homepage": "homepage",
+        "contactform": "contactform"
+    }
+};
+//# sourceURL=wpcf7-recaptcha-js-before
+</script>
+<script id="wpcf7-recaptcha-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/contact-form-7/modules/recaptcha/index.js" type="lazyJs"></script>
+<script type="lazyJs" id="wp-accessibility-js-extra" >
+var wpa = {"skiplinks":{"enabled":false,"output":""},"target":"","tabindex":"1","underline":{"enabled":false,"target":"a"},"videos":"","dir":"","viewport":"1","lang":"","titles":"1","labels":"1","wpalabels":{"s":"Search","author":"Name","email":"Email","url":"Website","comment":"Comment"},"alt":"","altSelector":".hentry img[alt]:not([alt=\"\"]), .comment-content img[alt]:not([alt=\"\"]), #content img[alt]:not([alt=\"\"]),.entry-content img[alt]:not([alt=\"\"])","current":"","errors":"","tracking":"","ajaxurl":"https://daytonschool.net/wp-admin/admin-ajax.php","security":"3485274f06","action":"wpa_stats_action","url":"https://daytonschool.net/employment/","post_id":"657","continue":"","pause":"Pause video","play":"Play video","restUrl":"https://daytonschool.net/wp-json/wp/v2/media","ldType":"button","ldHome":"https://daytonschool.net","ldText":"\u003Cspan class=\"dashicons dashicons-media-text\" aria-hidden=\"true\"\u003E\u003C/span\u003E\u003Cspan class=\"screen-reader\"\u003ELong Description\u003C/span\u003E"};
+//# sourceURL=wp-accessibility-js-extra
+</script>
+<script data-wp-strategy="defer" defer="defer" id="wp-accessibility-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/wp-accessibility/js/wp-accessibility.min.js" type="lazyJs"></script>
+<script id="wpb_composer_front_js-js" src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/plugins/js_composer/assets/js/dist/js_composer_front.min.js" type="lazyJs"></script>
+<script id="wp-emoji-settings" type="application/json">
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://daytonschool.net/wp-includes/js/wp-emoji-release.min.js"}}
+</script>
+<script type="lazyJs" data-w3-type="module" >
+/*! This file is auto-generated */
+var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof HTMLScriptElement))throw new Error("Element missing: "+e);const r=JSON.parse(t.text),s=(window._wpemojiSettings=r,"wpEmojiSettingsSupports"),o=["flag","emoji"];function i(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(s,JSON.stringify(t))}catch(e){}}function c(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0);const r=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data);return t.every((e,t)=>e===r[t])}function p(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var n=e.getImageData(16,16,1,1);for(let e=0;e<n.data.length;e++)if(0!==n.data[e])return!1;return!0}function u(e,t,n,r){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!r(e,"\ud83e\u1fac8")}return!1}function f(e,t,n,r){let a;const s=(a="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):document.createElement("canvas")).getContext("2d",{willReadFrequently:!0}),o=(s.textBaseline="top",s.font="600 32px Arial",{});return e.forEach(e=>{o[e]=t(s,e,n,r)}),o}function a(e){var t=document.createElement("script");t.src=e,t.defer=!0,document.head.appendChild(t)}r.supports={everything:!0,everythingExceptFlag:!0},new Promise(t=>{let n=function(){try{var e=JSON.parse(sessionStorage.getItem(s));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(o),u.toString(),c.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"});const a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=e=>{i(n=e.data),a.terminate(),t(n)})}catch(e){}i(n=f(o,u,c,p))}t(n)}).then(e=>{for(const n in e)r.supports[n]=e[n],r.supports.everything=r.supports.everything&&r.supports[n],"flag"!==n&&(r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&r.supports[n]);var t;r.supports.everythingExceptFlag=r.supports.everythingExceptFlag&&!r.supports.flag,r.supports.everything||((t=r.source||{}).concatemoji?a(t.concatemoji):t.wpemoji&&t.twemoji&&(a(t.twemoji),a(t.wpemoji)))});
+//# sourceURL=https://daytonschool.net/wp-includes/js/wp-emoji-loader.min.js
+</script>
+<script type="lazyJs" ></script>
+    <script src="https://daytonschool.net/wp-content/cache/w3-cache/js/809/wp-content/cache/w3-cache/js/custom_js_after_load.js" type="lazyJs"></script><script>var w3_menuclicked = 0;
+var w3_menu = document.getElementsByClassName('fa-bars')[0];
+var w3_html = document.getElementsByTagName('html')[0];
+w3_menu.addEventListener("click", function(){
+if(!w3_html.classList.contains('w3_js')){
+    w3_menuclicked=1;
+}
+});</script><script>const w3IsMobile=window.innerWidth<768?1:0,rootMargin="0px 0px "+w3LazyloadByPx+"px 0px",windowHeight=window.innerHeight;function w3ToWebp(e){for(var t=0;t<e.length;t++){if(null!=e[t].getAttribute("data-src")&&""!=e[t].getAttribute("data-src")){var a=e[t].getAttribute("data-src");e[t].setAttribute("data-src",a.replace("w3.webp","").replace(w3_webp_path,w3_upload_path))}if(null!=e[t].getAttribute("data-srcset")&&""!=e[t].getAttribute("data-srcset")){var r=e[t].getAttribute("data-srcset");e[t].setAttribute("data-srcset",r.replace(/w3.webp/g,"").split(w3_webp_path).join(w3_upload_path))}if(null!=e[t].src&&""!=e[t].src){var o=e[t].src;e[t].src=o.replace("w3.webp","").replace(w3_webp_path,w3_upload_path)}if(null!=e[t].srcset&&""!=e[t].srcset){var s=e[t].srcset;e[t].srcset=s.replace(/w3.webp/g,"").split(w3_webp_path).join(w3_upload_path)}}}function fixWebp(){if(!w3HasWebP){w3ToWebp(document.querySelectorAll("img[data-src$='w3.webp']")),w3ToWebp(document.querySelectorAll("img[src$='w3.webp']")),["*"].forEach((function(e){for(var t=document.getElementsByTagName(e),a=t.length,r=0;r<a;r++){var o=t[r],s=(o.currentStyle||window.getComputedStyle(o,!1)).backgroundImage;s.match("w3.webp")&&(document.all?o.style.setAttribute("cssText",";background-image: "+s.replace("w3.webp","").replace(w3_webp_path,w3_upload_path)+" !important;"):o.setAttribute("style",o.getAttribute("style")+";background-image: "+s.replace("w3.webp","").replace(w3_webp_path,w3_upload_path)+" !important;"))}}))}}function w3ChangeWebp(){if(bg.match("w3.webp")){document.all?(tag.style.setAttribute("cssText","background-image: "+bg.replace("w3.webp","").replace(w3_webp_path,w3_upload_path)+" !important"),tag.currentStyle||window.getComputedStyle(tag,!1)):(tag.setAttribute("style","background-image: "+bg.replace("w3.webp","").replace(w3_webp_path,w3_upload_path)+" !important"),tag.currentStyle||window.getComputedStyle(tag,!1))}}var w3HasWebP=!1,w3Bglazyload=1,img=new Image;function w3EventsOnEndJs(){if(!document.getElementsByTagName("html")[0].classList.contains("jsload"))return void setTimeout(w3EventsOnEndJs,100);w3Bglazyload=0;w3LazyLoadResource([].slice.call(document.querySelectorAll("img[data-class='LazyLoad']")),"img"),setTimeout((function(){w3LazyLoadResource([].slice.call(document.querySelectorAll("div[data-BgLz='1'], section[data-BgLz='1']")),"bgImg")}),1e3)}img.onload=function(){w3HasWebP=!!(img.height>0&&img.width>0)},img.onerror=function(){w3HasWebP=!1,fixWebp()},img.src=blankImageWebpUrl;let w3LoadResource={},lazyObserver={};function w3LazyLoadResource(e,t){"IntersectionObserver"in window?(lazyObserver[t]=new IntersectionObserver((function(e,a){e.forEach((function(e){const a=document.body.getBoundingClientRect();if(e.isIntersecting||(0!=a.top||-1!=window.w3Html.class.indexOf("w3_start"))&&e.boundingClientRect.top-windowHeight+a.top<w3LazyloadByPx){0==window.getComputedStyle(e.target).getPropertyValue("opacity")&&-1==window.w3Html.class.indexOf("w3_start")||w3LoadResource[t](e)}}))}),{rootMargin:rootMargin,scrollMargin:rootMargin,threshold:0}),e.forEach((function(e){"IMG"!=e.tagName&&"PICTURE"!=e.tagName||e.removeAttribute("data-class"),lazyObserver[t].observe(e)}))):e.forEach((function(e){w3LoadResource["rl"+t](e)}))}function w3EventsOnStartJs(){convertToVideoTag(document.getElementsByTagName("videolazy")),loadVideos(),convertToIframes([].slice.call(document.querySelectorAll("iframelazy[data-class='LazyLoad']"))),setInterval((function(){loadVideos()}),1e3)}function loadVideos(){w3LazyLoadResource([].slice.call(document.querySelectorAll("video[data-class='LazyLoad'], audio[data-class='LazyLoad']")),"video")}function convertToIframes(e){e.forEach((function(e){var t,a=document.createElement("iframe");for(t=e.attributes.length-1;t>=0;--t)a.attributes.setNamedItem(e.attributes[t].cloneNode());a.src=e.dataset.src,e.parentNode.replaceChild(a,e),delete a.dataset.class})),w3LazyLoadResource(e=[].slice.call(document.querySelectorAll("iframe[data-class='LazyLoad']")),"iframe")}function startImgLazyLoad(){w3LazyLoadResource([].slice.call(document.querySelectorAll("img[data-class='LazyLoad'],img[src*='data:image/svg']")),"img"),w3LazyLoadResource([].slice.call(document.querySelectorAll("picture[data-class='LazyLoad']")),"picture")}function startLazyLoad(){startImgLazyLoad(),w3LazyLoadResource(document.querySelectorAll("div[data-BgLz='1'], section[data-BgLz='1'], iframelazy[data-BgLz='1'], iframe[data-BgLz='1']"),"bgImg"),w3LoadResource.rlbgImg()}function lazyloadVideo(e){if(void 0===e.getElementsByTagName("source")[0])lazyloadVideoSource(e);else for(var t=e.getElementsByTagName("source"),a=0;a<t.length;a++){lazyloadVideoSource(t[a])}}function lazyloadVideoSource(e){var t=e.getAttribute("data-src")?e.getAttribute("data-src"):e.src,a=e.getAttribute("data-srcset")?e.getAttribute("data-srcset"):"";null!=e.srcset&""!=e.srcset&&(e.srcset=a),void 0===e.getElementsByTagName("source")[0]?("SOURCE"==e.tagName?(e.src=t,e.parentNode.load(),null!==e.parentNode.getAttribute("autoplay")&&e.parentNode.play()):(e.src=t,e.load(),null!==e.getAttribute("autoplay")&&e.play()),"string"==typeof e.parentNode.src&&(e.parentNode.src=e.src)):e.parentNode.src=t,delete e.dataset.class}function convertToVideoTag(e){const t=e.length>0?e[0]:"";if(t){delete e[0];var a,r=document.createElement("video");for(a=t.attributes.length-1;a>=0;--a)r.attributes.setNamedItem(t.attributes[a].cloneNode());r.innerHTML=t.innerHTML,t.parentNode.replaceChild(r,t),"string"==typeof r.getAttribute("data-poster")&&r.setAttribute("poster",r.getAttribute("data-poster")),convertToVideoTag(e)}}w3LoadResource.rlvideo=function(e){lazyloadVideo(e),delete e.dataset.class},w3LoadResource.video=function(e){let t=e.target;lazyloadVideo(t),delete t.dataset.class,lazyObserver.video.unobserve(t)},w3LoadResource.iframe=function(e){let t=e.target;t.src=t.dataset.src,delete t.dataset.class,lazyObserver.iframe.unobserve(t)},w3LoadResource.rliframe=function(e){e.src=e.dataset.src?e.dataset.src:e.src,delete e.dataset.class},w3LoadResource.bgImg=function(e){let t=e.target;t.removeAttribute("data-BgLz"),lazyObserver.bgImg.unobserve(t)},w3LoadResource.rlbgImg=function(e){const t=document.getElementById("w3_bg_load");null!==t&&t.remove()},w3LoadResource.picture=function(e){const t=e.target,a=t.querySelectorAll("source"),r=t.querySelector("img");a.forEach((e=>{e.dataset.srcset&&(e.srcset=e.dataset.srcset,e.removeAttribute("data-srcset"))})),w3LoadImg(r),lazyObserver.img.unobserve(t)},w3LoadImg=function(e){w3IsMobile&&e.getAttribute("data-mob-src")?e.src=e.getAttribute("data-mob-src"):e.src=e.dataset.src?e.dataset.src:e.src,e.dataset.srcset&&(e.srcset=e.dataset.srcset),e.removeAttribute("data-srcset"),e.removeAttribute("data-src")},w3LoadResource.img=function(e){let t=e.target;w3LoadImg(t),lazyObserver.img.unobserve(t)},w3LoadResource.rlimg=function(e){e.src=e.dataset.src?e.dataset.src:e.src,e.srcset=e.dataset.srcset?e.dataset.srcset:e.srcset,delete e.dataset.class},startLazyLoad(),"function"==typeof w3BeforeLoad&&w3BeforeLoad(),setInterval((function(){startImgLazyLoad()}),1e3);</script></body>
+    </html>

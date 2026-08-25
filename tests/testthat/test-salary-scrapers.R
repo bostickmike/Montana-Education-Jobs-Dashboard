@@ -161,7 +161,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Culbertson School District 17-C", "Cottonwood School District #57",
                      "Bonner School District #14", "Creston School District", "Clinton School District #32",
                      "Deer Park School District", "Dixon School District #9", "Elysian School District #23",
-                     "Evergreen School District #50", "Fair-Mont-Egan Schools"))
+                     "Evergreen School District #50", "Fair-Mont-Egan Schools",
+                     "Lone Rock School District", "Lustre District 23",
+                     "Miami Elementary School District #31", "Target Range School District",
+                     "Zurich Elementary School District #17", "Upper West Shore School District #33"))
 })
 
 # ---------------------------------------------------------------------------
