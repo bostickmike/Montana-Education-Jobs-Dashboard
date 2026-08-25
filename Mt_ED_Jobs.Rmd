@@ -624,6 +624,138 @@ if (nrow(winnett_df) > 0) {
                             Posting_Source = character(0))
 }
 
+# Miles City / Custer County District 1 (SCHOOLinSITES CMS, found
+# 2026-08-24) publishes jobs on a live Google Sheet instead of any HTML
+# page -- a plain httr2 fetch of the sheet's CSV export endpoint, no
+# chromote needed.
+milescity_districts <- registry[registry$Platform == "MilesCityHeuristic", ]
+milescity_results <- lapply(seq_len(nrow(milescity_districts)), function(i) {
+  row <- milescity_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_milescity_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+milescity_df <- bind_rows(milescity_results)
+if (nrow(milescity_df) > 0) {
+  milescity_df <- milescity_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Miles City district site (Google Sheets job board)")
+} else {
+  milescity_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# Augusta Public School (a Wix site, found 2026-08-24) also has no
+# structured ATS -- a plain httr2 fetch, no chromote needed, same
+# pattern as the other heuristic districts above.
+augusta_districts <- registry[registry$Platform == "AugustaHeuristic", ]
+augusta_results <- lapply(seq_len(nrow(augusta_districts)), function(i) {
+  row <- augusta_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_augusta_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+augusta_df <- bind_rows(augusta_results)
+if (nrow(augusta_df) > 0) {
+  augusta_df <- augusta_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Augusta district site (direct board)")
+} else {
+  augusta_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
+# Brockton School District (SCHOOLinSITES CMS, found 2026-08-24) also
+# has no structured ATS -- a plain httr2 fetch, no chromote needed, same
+# pattern as the other heuristic districts above.
+brockton_districts <- registry[registry$Platform == "BrocktonHeuristic", ]
+brockton_results <- lapply(seq_len(nrow(brockton_districts)), function(i) {
+  row <- brockton_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_brockton_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+brockton_df <- bind_rows(brockton_results)
+if (nrow(brockton_df) > 0) {
+  brockton_df <- brockton_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Brockton district site (direct board)")
+} else {
+  brockton_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                             location = character(0), url = character(0), District = character(0),
+                             Posting_Source = character(0))
+}
+
+# Culbertson School District 17-C (Finalsite, found 2026-08-24) also
+# has no structured ATS -- a plain httr2 fetch, no chromote needed, same
+# pattern as the other heuristic districts above.
+culbertson_districts <- registry[registry$Platform == "CulbertsonHeuristic", ]
+culbertson_results <- lapply(seq_len(nrow(culbertson_districts)), function(i) {
+  row <- culbertson_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_culbertson_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+culbertson_df <- bind_rows(culbertson_results)
+if (nrow(culbertson_df) > 0) {
+  culbertson_df <- culbertson_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Culbertson district site (direct board)")
+} else {
+  culbertson_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
+}
+
+# Cottonwood School District #57 (a publicly published Google Sites
+# page, found 2026-08-24) also has no structured ATS -- a plain httr2
+# fetch, no chromote needed, same pattern as the other heuristic
+# districts above.
+cottonwood57_districts <- registry[registry$Platform == "Cottonwood57Heuristic", ]
+cottonwood57_results <- lapply(seq_len(nrow(cottonwood57_districts)), function(i) {
+  row <- cottonwood57_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_cottonwood57_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+cottonwood57_df <- bind_rows(cottonwood57_results)
+if (nrow(cottonwood57_df) > 0) {
+  cottonwood57_df <- cottonwood57_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Cottonwood district site (direct board)")
+} else {
+  cottonwood57_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                 location = character(0), url = character(0), District = character(0),
+                                 Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -935,7 +1067,7 @@ if (nrow(gallatingateway_df) > 0) {
 # it always has for Wolf Point/Plentywood; their registry rows exist purely
 # for the Map/District Summary's own District/City/County/Lat/Long join.)
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -1039,6 +1171,11 @@ hinsdale_df <- hinsdale_df %>% mutate(date_posted = standardize_date(date_posted
 valier_df <- valier_df %>% mutate(date_posted = standardize_date(date_posted))
 roberts_df <- roberts_df %>% mutate(date_posted = standardize_date(date_posted))
 winnett_df <- winnett_df %>% mutate(date_posted = standardize_date(date_posted))
+milescity_df <- milescity_df %>% mutate(date_posted = standardize_date(date_posted))
+augusta_df <- augusta_df %>% mutate(date_posted = standardize_date(date_posted))
+brockton_df <- brockton_df %>% mutate(date_posted = standardize_date(date_posted))
+culbertson_df <- culbertson_df %>% mutate(date_posted = standardize_date(date_posted))
+cottonwood57_df <- cottonwood57_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -1046,7 +1183,8 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
                        roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
                        lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
-                       roberts_df, winnett_df, swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
+                       roberts_df, winnett_df, milescity_df, augusta_df, brockton_df, culbertson_df, cottonwood57_df,
+                       swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
 

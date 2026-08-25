@@ -155,7 +155,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Bridger School District 2", "Red Lodge School District 1", "Joliet Public School District 86",
                      "Ennis Schools", "Columbus Public Schools",
                      "Hinsdale Public Schools", "St Regis School District", "Valier School District #18",
-                     "Roberts Public School", "Winnett Public Schools", "Florence-Carlton School District 15-6"))
+                     "Roberts Public School", "Winnett Public Schools", "Florence-Carlton School District 15-6",
+                     "Miles City Unified School District 1", "West Yellowstone School District",
+                     "Augusta School District #45", "Brockton School District",
+                     "Culbertson School District 17-C", "Cottonwood School District #57"))
 })
 
 # ---------------------------------------------------------------------------
