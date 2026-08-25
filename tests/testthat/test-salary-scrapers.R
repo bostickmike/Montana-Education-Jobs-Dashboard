@@ -148,7 +148,13 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Froid Public Schools", "Terry Public Schools", "Gallatin Gateway School",
                      "Turner Public Schools", "Swan River School District #4", "Bigfork School District 38",
                      "Lincoln School District #38", "Shepherd School District #37", "Hysham Public Schools",
-                     "Independent School", "Huntley Project School District", "Park City Schools"))
+                     "Independent School", "Huntley Project School District", "Park City Schools",
+                     "Fort Benton School District 1", "Glasgow School District 1-A",
+                     "Alberton School District", "Dillon School District 10",
+                     "Baker Public Schools", "Cut Bank School District #15",
+                     "Bridger School District 2", "Red Lodge School District 1", "Joliet Public School District 86",
+                     "Ennis Schools", "Columbus Public Schools",
+                     "Hinsdale Public Schools", "St Regis School District", "Valier School District #18"))
 })
 
 # ---------------------------------------------------------------------------

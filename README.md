@@ -14,7 +14,7 @@ A live, weekly-updated dashboard of K-12 and higher education job openings from 
 
 ## Data sources
 
-K-12 covers 91 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV Attract, ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render — see Automation below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
+K-12 covers 105 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV Attract, ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render — see Automation below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
 
 | Data | Source |
 |---|---|
@@ -34,7 +34,7 @@ MT DLI publishes only the current year's Teacher Compensation Report with no pub
 
 ### K-12 coverage and scope
 
-The K-12 Jobs Table combines 91 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
+The K-12 Jobs Table combines 105 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
 
 The Map and District Summary deliberately show only directly scraped districts: those records can be matched to verified district identities, coordinates, staffing, salary, and OPI General Fund expenditure data. OPI-only rows remain in the Jobs Table, but OPI exposes a raw location field rather than a canonical district identifier, so they cannot be reliably joined to district context or mapped.
 
