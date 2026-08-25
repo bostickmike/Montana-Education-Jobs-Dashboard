@@ -90,14 +90,26 @@ add_k12_posting_identity <- function(df) {
     )
   }
 
-  source <- if ("Posting_Source" %in% names(df)) {
-    normalize_posting_text(df$Posting_Source)
+  # A row-level fallback, not a column-level one: some archived weeks
+  # predate Posting_Source existing at all (see history_accumulator bug
+  # writeup), and bind_rows()-ing those alongside newer weeks that do have
+  # the column fills the older rows' value with NA rather than dropping
+  # the column -- so "column present" is not the same as "every row has a
+  # real value". Checking na/blank per row (instead of gating the whole
+  # URL-based guess on whether the column exists anywhere in df) means an
+  # old, column-less row and a new row with a genuinely blank
+  # Posting_Source get identical, correct treatment: guess OPI from its
+  # known URL, otherwise default to "Direct district board".
+  url_based_source <- ifelse(is_opi_statewide_posting(df$url),
+                              "OPI Jobs for Teachers (statewide)",
+                              "Direct district board")
+  if ("Posting_Source" %in% names(df)) {
+    source <- normalize_posting_text(df$Posting_Source)
+    missing_source <- is.na(source) | !nzchar(source)
+    source[missing_source] <- url_based_source[missing_source]
   } else {
-    ifelse(is_opi_statewide_posting(df$url),
-           "OPI Jobs for Teachers (statewide)",
-           "Direct district board")
+    source <- url_based_source
   }
-  source[is.na(source) | !nzchar(source)] <- "Direct district board"
 
   title <- normalize_posting_identity_component(df$title)
   location <- normalize_posting_identity_component(df$location)
