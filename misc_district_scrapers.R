@@ -4351,7 +4351,9 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
 # Mt_ED_Jobs.Rmd's own use of it -- stays testable without a real browser
 # available; passing NULL returns an empty result for every district (via
 # safe_scrape's own error handling) rather than crashing.
-fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
+fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
+                                       log_path = "scrape_log.csv",
+                                       scrapers = NULL) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
                        District = character(0), stringsAsFactors = FALSE)
@@ -4360,136 +4362,62 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL) {
   session <- chromote_session_factory()
   on.exit(tryCatch(session$close(), error = function(e) NULL), add = TRUE)
 
-  wolfpoint <- fetch_wolfpoint_postings(session)
-  if (nrow(wolfpoint) > 0) wolfpoint$District <- "Wolf Point Public Schools"
+  default_scrapers <- list(
+    "Wolf Point Public Schools" = fetch_wolfpoint_postings,
+    "Plentywood Public Schools" = fetch_plentywood_postings,
+    "Conrad Public Schools" = fetch_conrad_postings,
+    "Westby School District 3" = fetch_westby_postings,
+    "Choteau School District" = fetch_choteau_postings,
+    "Gardiner Public Schools" = fetch_gardiner_postings,
+    "Malta Public Schools" = fetch_malta_postings,
+    "Drummond Public Schools" = fetch_drummond_postings,
+    "Deer Lodge School District #1" = fetch_deerlodge_postings,
+    "Townsend School District" = fetch_townsend_postings,
+    "Hays-Lodge Pole School District" = fetch_hayslodgepole_postings,
+    "Plevna School District #55" = fetch_plevna_postings,
+    "Sunburst Schools" = fetch_sunburst_postings,
+    "Belt Public Schools" = fetch_belt_postings,
+    "Big Sky School District 72" = fetch_bigsky_postings,
+    "Melstone Public Schools" = fetch_melstone_postings,
+    "Roundup School District" = fetch_roundup_postings,
+    "White Sulphur Springs Schools" = fetch_wss_postings,
+    "Shelby School District" = fetch_shelbymt_postings,
+    "Geyser Public Schools" = fetch_geyser_postings,
+    "Centerville Public Schools" = fetch_centerville_postings,
+    "Arlee Joint School District" = fetch_arlee_postings,
+    "Chinook Public Schools" = fetch_chinook_postings,
+    "Darby School District 9" = fetch_darby_postings,
+    "Dutton/Brady Public School District" = fetch_dutton_postings,
+    "St. Ignatius School District" = fetch_stignatius_postings,
+    "Stanford Public Schools" = fetch_stanford_postings,
+    "Lolo School District 7" = fetch_lolo_postings,
+    "Froid Public Schools" = fetch_froid_postings,
+    "Huntley Project School District" = fetch_huntley_postings,
+    "Park City Schools" = fetch_parkcity_postings,
+    "Alberton School District" = fetch_alberton_postings,
+    "Dillon School District 10" = fetch_dillon_postings,
+    "Ennis Schools" = fetch_ennis_postings,
+    "Columbus Public Schools" = fetch_columbus_postings,
+    "St Regis School District" = fetch_stregis_postings,
+    "Florence-Carlton School District 15-6" = fetch_florencecarlton_postings,
+    "West Yellowstone School District" = fetch_westyellowstone_postings,
+    "Bonner School District #14" = fetch_bonner_postings,
+    "Deer Park School District" = fetch_deerpark_postings,
+    "Evergreen School District #50" = fetch_evergreen_postings,
+    "Lone Rock School District" = fetch_lonerock_postings
+  )
+  if (is.null(scrapers)) scrapers <- default_scrapers
 
-  plentywood <- fetch_plentywood_postings(session)
-  if (nrow(plentywood) > 0) plentywood$District <- "Plentywood Public Schools"
-
-  conrad <- fetch_conrad_postings(session)
-  if (nrow(conrad) > 0) conrad$District <- "Conrad Public Schools"
-
-  westby <- fetch_westby_postings(session)
-  if (nrow(westby) > 0) westby$District <- "Westby School District 3"
-
-  choteau <- fetch_choteau_postings(session)
-  if (nrow(choteau) > 0) choteau$District <- "Choteau School District"
-
-  gardiner <- fetch_gardiner_postings(session)
-  if (nrow(gardiner) > 0) gardiner$District <- "Gardiner Public Schools"
-
-  malta <- fetch_malta_postings(session)
-  if (nrow(malta) > 0) malta$District <- "Malta Public Schools"
-
-  drummond <- fetch_drummond_postings(session)
-  if (nrow(drummond) > 0) drummond$District <- "Drummond Public Schools"
-
-  deerlodge <- fetch_deerlodge_postings(session)
-  if (nrow(deerlodge) > 0) deerlodge$District <- "Deer Lodge School District #1"
-
-  townsend <- fetch_townsend_postings(session)
-  if (nrow(townsend) > 0) townsend$District <- "Townsend School District"
-
-  hayslodgepole <- fetch_hayslodgepole_postings(session)
-  if (nrow(hayslodgepole) > 0) hayslodgepole$District <- "Hays-Lodge Pole School District"
-
-  plevna <- fetch_plevna_postings(session)
-  if (nrow(plevna) > 0) plevna$District <- "Plevna School District #55"
-
-  sunburst <- fetch_sunburst_postings(session)
-  if (nrow(sunburst) > 0) sunburst$District <- "Sunburst Schools"
-
-  belt <- fetch_belt_postings(session)
-  if (nrow(belt) > 0) belt$District <- "Belt Public Schools"
-
-  bigsky <- fetch_bigsky_postings(session)
-  if (nrow(bigsky) > 0) bigsky$District <- "Big Sky School District 72"
-
-  melstone <- fetch_melstone_postings(session)
-  if (nrow(melstone) > 0) melstone$District <- "Melstone Public Schools"
-
-  roundup <- fetch_roundup_postings(session)
-  if (nrow(roundup) > 0) roundup$District <- "Roundup School District"
-
-  wss <- fetch_wss_postings(session)
-  if (nrow(wss) > 0) wss$District <- "White Sulphur Springs Schools"
-
-  shelbymt <- fetch_shelbymt_postings(session)
-  if (nrow(shelbymt) > 0) shelbymt$District <- "Shelby School District"
-
-  geyser <- fetch_geyser_postings(session)
-  if (nrow(geyser) > 0) geyser$District <- "Geyser Public Schools"
-
-  centerville <- fetch_centerville_postings(session)
-  if (nrow(centerville) > 0) centerville$District <- "Centerville Public Schools"
-
-  arlee <- fetch_arlee_postings(session)
-  if (nrow(arlee) > 0) arlee$District <- "Arlee Joint School District"
-
-  chinook <- fetch_chinook_postings(session)
-  if (nrow(chinook) > 0) chinook$District <- "Chinook Public Schools"
-
-  darby <- fetch_darby_postings(session)
-  if (nrow(darby) > 0) darby$District <- "Darby School District 9"
-
-  dutton <- fetch_dutton_postings(session)
-  if (nrow(dutton) > 0) dutton$District <- "Dutton/Brady Public School District"
-
-  stignatius <- fetch_stignatius_postings(session)
-  if (nrow(stignatius) > 0) stignatius$District <- "St. Ignatius School District"
-
-  stanford <- fetch_stanford_postings(session)
-  if (nrow(stanford) > 0) stanford$District <- "Stanford Public Schools"
-
-  lolo <- fetch_lolo_postings(session)
-  if (nrow(lolo) > 0) lolo$District <- "Lolo School District 7"
-
-  froid <- fetch_froid_postings(session)
-  if (nrow(froid) > 0) froid$District <- "Froid Public Schools"
-
-  huntley <- fetch_huntley_postings(session)
-  if (nrow(huntley) > 0) huntley$District <- "Huntley Project School District"
-
-  parkcity <- fetch_parkcity_postings(session)
-  if (nrow(parkcity) > 0) parkcity$District <- "Park City Schools"
-
-  alberton <- fetch_alberton_postings(session)
-  if (nrow(alberton) > 0) alberton$District <- "Alberton School District"
-
-  dillon <- fetch_dillon_postings(session)
-  if (nrow(dillon) > 0) dillon$District <- "Dillon School District 10"
-
-  ennis <- fetch_ennis_postings(session)
-  if (nrow(ennis) > 0) ennis$District <- "Ennis Schools"
-
-  columbus <- fetch_columbus_postings(session)
-  if (nrow(columbus) > 0) columbus$District <- "Columbus Public Schools"
-
-  stregis <- fetch_stregis_postings(session)
-  if (nrow(stregis) > 0) stregis$District <- "St Regis School District"
-
-  florencecarlton <- fetch_florencecarlton_postings(session)
-  if (nrow(florencecarlton) > 0) florencecarlton$District <- "Florence-Carlton School District 15-6"
-
-  westyellowstone <- fetch_westyellowstone_postings(session)
-  if (nrow(westyellowstone) > 0) westyellowstone$District <- "West Yellowstone School District"
-
-  bonner <- fetch_bonner_postings(session)
-  if (nrow(bonner) > 0) bonner$District <- "Bonner School District #14"
-
-  deerpark <- fetch_deerpark_postings(session)
-  if (nrow(deerpark) > 0) deerpark$District <- "Deer Park School District"
-
-  evergreen <- fetch_evergreen_postings(session)
-  if (nrow(evergreen) > 0) evergreen$District <- "Evergreen School District #50"
-
-  lonerock <- fetch_lonerock_postings(session)
-  if (nrow(lonerock) > 0) lonerock$District <- "Lone Rock School District"
-
-  dplyr::bind_rows(wolfpoint, plentywood, conrad, westby, choteau, gardiner, malta, drummond, deerlodge, townsend,
-                    hayslodgepole, plevna, sunburst, belt, bigsky, melstone, roundup, wss, shelbymt, geyser, centerville,
-                    arlee, chinook, darby, dutton, stignatius, stanford, lolo, froid, huntley, parkcity, alberton, dillon,
-                    ennis, columbus, stregis, florencecarlton, westyellowstone, bonner, deerpark, evergreen, lonerock)
+  dplyr::bind_rows(lapply(names(scrapers), function(district) {
+    df <- safe_scrape(
+      paste0("Apptegy/chromote: ", district),
+      scrape_fn = function() scrapers[[district]](session),
+      expected_cols = c("Title", "Location", "Posted_Date", "Link"),
+      log_path = log_path
+    )
+    df$District <- rep(district, nrow(df))
+    df
+  }))
 }
 
 # Miles City -- Custer County District 1 (SCHOOLinSITES CMS, found

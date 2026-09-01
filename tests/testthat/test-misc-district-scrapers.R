@@ -2173,12 +2173,33 @@ test_that("fetch_gallatingateway_postings fetches and parses a live-shaped respo
 })
 
 test_that("fetch_apptegy_k12_postings returns an empty frame (not an error) when no session factory is available", {
-  result <- fetch_apptegy_k12_postings(chromote_session_factory = NULL)
+  result <- fetch_apptegy_k12_postings(chromote_session_factory = NULL, log_path = tempfile())
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "District"))
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 37 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings keeps healthy districts when one fetch fails", {
+  session_factory <- function() list(
+    close = function() invisible(NULL)
+  )
+  scrapers <- list(
+    "Broken district" = function(session) stop("Page structure changed"),
+    "Healthy district" = function(session) data.frame(
+      Title = "Healthy posting", Location = "Healthy", Posted_Date = NA_character_,
+      Link = "url", stringsAsFactors = FALSE
+    )
+  )
+
+  result <- fetch_apptegy_k12_postings(
+    session_factory, log_path = tempfile(), scrapers = scrapers
+  )
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$District, "Healthy district")
+  expect_equal(result$Title, "Healthy posting")
+})
+
+test_that("fetch_apptegy_k12_postings shares one session across all 42 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2286,7 +2307,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 37 districts
     )
   }
 
-  result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory)
+  result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
   expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)

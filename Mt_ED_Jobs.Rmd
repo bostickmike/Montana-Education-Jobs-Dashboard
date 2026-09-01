@@ -1290,22 +1290,12 @@ if (nrow(gallatingateway_df) > 0) {
                                     Posting_Source = character(0))
 }
 
-# Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta,
-# Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, and Sunburst all
-# run Apptegy, a CMS whose pages need a real browser to render
-# (a plain httr2 request gets only a Fastly JS bot-challenge shell) -- the
-# same platform 4 of Wyoming's own districts sit on, ported from
-# Wy_ED_Jobs.Rmd's own chromote-in-CI pattern (see
-# .github/workflows/weekly-scrape.yml's "Install Chrome" step). Wrapped
-# in one safe_scrape() call (not one per district) since all 8 districts
-# share a single chromote session internally -- a mid-fetch failure for
-# one district still returns the others' real rows via
-# fetch_apptegy_k12_postings()'s own per-district dplyr::bind_rows(), not
-# an all-or-nothing failure. (These 6 newer districts aren't registry-
-# filtered by Platform the way Livingston/Lodge Grass/Broadview/Custer are
-# above -- fetch_apptegy_k12_postings() hardcodes all 8 internally, same as
-# it always has for Wolf Point/Plentywood; their registry rows exist purely
-# for the Map/District Summary's own District/City/County/Lat/Long join.)
+# The browser-backed districts use a shared Chromote session because their
+# Apptegy/CyberSchool pages require JavaScript to render (a plain httr2
+# request receives a bot-challenge shell). Each district is independently
+# wrapped by fetch_apptegy_k12_postings(), so a changed page is logged without
+# discarding healthy districts' results. The outer safe_scrape() protects the
+# pipeline if the shared session itself cannot start.
 apptegy_raw <- safe_scrape(
   "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
