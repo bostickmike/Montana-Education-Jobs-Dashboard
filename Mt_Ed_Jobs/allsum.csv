@@ -926,14 +926,14 @@
 "CTE - Business & Family Sciences","2026-09-01","Total",8
 "CTE - Trades, Ag & Technical","2026-09-01","Total",24
 "Early Childhood","2026-09-01","Total",2
-"Elementary","2026-09-01","Total",29
+"Elementary","2026-09-01","Total",28
 "English Language Arts Secondary","2026-09-01","Total",23
 "Language","2026-09-01","Total",4
 "Library Media","2026-09-01","Total",13
-"Math","2026-09-01","Total",55
+"Math","2026-09-01","Total",54
 "Music","2026-09-01","Total",4
-"Other","2026-09-01","Total",29
-"Physical Education","2026-09-01","Total",5
+"Other","2026-09-01","Total",30
+"Physical Education","2026-09-01","Total",4
 "Science","2026-09-01","Total",32
 "Secondary Social Studies","2026-09-01","Total",4
 "Special Education - General","2026-09-01","Total",31
@@ -986,7 +986,6 @@
 "Elementary","2026-09-01","Roundup School District",1
 "Elementary","2026-09-01","Scobey Schools",1
 "Elementary","2026-09-01","Shepherd School District #37",1
-"Elementary","2026-09-01","Stanford Public Schools",1
 "Elementary","2026-09-01","Terry Public Schools",2
 "Elementary","2026-09-01","Wolf Point Public Schools",1
 "English Language Arts Secondary","2026-09-01","Belgrade",1
@@ -1031,7 +1030,7 @@
 "Math","2026-09-01","Belgrade",2
 "Math","2026-09-01","Big Sandy Public Schools",1
 "Math","2026-09-01","Billings",3
-"Math","2026-09-01","Billings Public Schools",2
+"Math","2026-09-01","Billings Public Schools",1
 "Math","2026-09-01","Boulder",1
 "Math","2026-09-01","Box Elder",1
 "Math","2026-09-01","Bozeman",1
@@ -1076,6 +1075,7 @@
 "Music","2026-09-01","Huntley Project School District",1
 "Music","2026-09-01","Lame Deer Public Schools",1
 "Music","2026-09-01","Scobey Schools",1
+"Other","2026-09-01","Arrowhead Elementary School District #75",1
 "Other","2026-09-01","Big Sky School District 72",1
 "Other","2026-09-01","Browning Public Schools",1
 "Other","2026-09-01","Corvallis School District #1",4
@@ -1096,7 +1096,6 @@
 "Other","2026-09-01","Three Forks Public Schools",1
 "Other","2026-09-01","Townsend School District",1
 "Other","2026-09-01","Whitefish School District",1
-"Physical Education","2026-09-01","Billings Public Schools",1
 "Physical Education","2026-09-01","Browning Public Schools",1
 "Physical Education","2026-09-01","Kalispell Public Schools",1
 "Physical Education","2026-09-01","Lame Deer Public Schools",1
