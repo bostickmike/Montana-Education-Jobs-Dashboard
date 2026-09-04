@@ -77,7 +77,7 @@ OPI_FINANCE_GENERAL_FUND_CODE <- "01"
 OPI_FINANCE_CURRENT_YEAR_URL <- "https://opifiles.mt.gov/Portals/182/Page%20Files/School%20Finance/07.OPI%20Financial%20Data%20Files/School%20Budget%20and%20Expenditure%20Data/School%20Expenditures/School%20Expenditures/OPIEXP25.xlsx"
 
 fetch_opi_finance_workbook <- function(url = OPI_FINANCE_CURRENT_YEAR_URL) {
-  resp <- request(url) %>% req_perform()
+  resp <- request(url) %>% perform_with_retry()
   tmp <- tempfile(fileext = ".xlsx")
   writeBin(resp_body_raw(resp), tmp)
   # header row 1 is a single merged title cell across all columns -- the

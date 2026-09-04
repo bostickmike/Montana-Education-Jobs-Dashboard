@@ -17,6 +17,24 @@
 # to scrape_log.csv so failures and selector drift are visible without
 # having to notice a downstream count looks off.
 
+# Every fetch_*() function across this project's scraper files ends its
+# httr2 pipe with this instead of a bare req_perform() -- a single 429/503
+# against a shared multi-tenant host (AppliTrack, SchoolSpring, ...) or a
+# transient blip against any other live source would otherwise drop that
+# whole source for the week (confirmed real: Rocky Mountain College lost
+# entirely to a bare 429 on the 2026-09-01 run). httr2's req_retry() retries
+# 429/503 and honors a Retry-After header by default; a persistent failure
+# (a genuinely broken or migrated tenant, a 404, a real 500) still surfaces
+# as an error after the retries, exactly as before -- safe_scrape() logs it
+# same as always. Takes and returns the same shapes as req_perform(), so it
+# drops into any existing `request(...) %>% ... %>% req_perform()` pipe as a
+# straight substitution for the last step.
+perform_with_retry <- function(req, max_tries = 3) {
+  req %>%
+    httr2::req_retry(max_tries = max_tries, backoff = function(i) 2^i) %>%
+    httr2::req_perform()
+}
+
 # Build a zero-row data frame with the given column names, so a failed or
 # empty scrape can still be bind_rows()'d/rbind()'d with everything else
 # without special-casing a NULL result at every call site.

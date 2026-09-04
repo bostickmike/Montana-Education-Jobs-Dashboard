@@ -43,7 +43,7 @@ MILES_CC_NON_TITLE_LABELS <- c(
 fetch_miles_cc_postings <- function(url = "https://www.milescc.edu/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_miles_cc_postings(resp_body_string(resp), url)
 }
 
@@ -96,7 +96,7 @@ DAWSON_CC_OPENINGS_HEADING_PATTERN <- "Openings"
 fetch_dawson_cc_postings <- function(url = "https://www.dawson.edu/employment-opportunities.html") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_dawson_cc_postings(resp_body_string(resp), url)
 }
 
@@ -144,7 +144,7 @@ parse_dawson_cc_postings <- function(html_text, url) {
 fetch_skc_postings <- function(url = "https://www.skc.edu/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_skc_postings(resp_body_string(resp), url)
 }
 
@@ -178,7 +178,7 @@ LBHC_BASE_URL <- "http://lbhc.edu"
 fetch_lbhc_postings <- function(url = "http://lbhc.edu/Job_opportunities") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_lbhc_postings(resp_body_string(resp))
 }
 
@@ -217,7 +217,7 @@ parse_lbhc_postings <- function(html_text) {
 fetch_fpcc_postings <- function(url = "https://www.fpcc.edu/about-fpcc/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_fpcc_postings(resp_body_string(resp))
 }
 
@@ -306,7 +306,7 @@ parse_stonechild_postings <- function(rendered_text, url) {
 fetch_carroll_college_postings <- function(url = "https://www.carroll.edu/faculty-staff-positions") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_carroll_college_postings(resp_body_string(resp), url)
 }
 
@@ -344,11 +344,7 @@ parse_carroll_college_postings <- function(html_text, url) {
 fetch_rocky_mountain_college_postings <- function(url = "https://rocky.edu/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    # rocky.edu returned a bare HTTP 429 on the 2026-09-01 run and the whole
-    # institution dropped out of that week's data. httr2 retries 429 (and
-    # honors Retry-After) by default.
-    req_retry(max_tries = 3, backoff = function(i) 2^i) %>%
-    req_perform()
+    perform_with_retry()
   parse_rocky_mountain_college_postings(resp_body_string(resp))
 }
 
@@ -403,7 +399,7 @@ parse_rocky_mountain_college_postings <- function(html_text) {
 fetch_ancollege_postings <- function(url = "https://www.ancollege.edu/careers") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_ancollege_postings(resp_body_string(resp))
 }
 
@@ -463,7 +459,7 @@ CDKC_NON_JOB_TITLE_PATTERN <- "trustee"
 fetch_cdkc_postings <- function(url = "https://www.cdkc.edu/faculty-staff/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_cdkc_postings(resp_body_string(resp))
 }
 

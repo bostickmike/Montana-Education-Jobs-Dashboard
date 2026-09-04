@@ -55,7 +55,7 @@ fetch_acs_mt_counties <- function(endpoint_template, get_vars, year, api_key) {
       `in` = paste0("state:", MT_STATE_FIPS),
       key = api_key
     ) %>%
-    req_perform()
+    perform_with_retry()
   parse_acs_json(resp_body_string(resp))
 }
 

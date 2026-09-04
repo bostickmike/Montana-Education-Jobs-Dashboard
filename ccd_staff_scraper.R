@@ -77,7 +77,7 @@ fetch_ccd_paginated <- function(url) {
   # jsonlite, which turns nulls into NA correctly.
   pages <- list()
   while (!is.null(url)) {
-    resp <- request(url) %>% req_perform() %>% resp_body_json(simplifyVector = TRUE)
+    resp <- request(url) %>% perform_with_retry() %>% resp_body_json(simplifyVector = TRUE)
     pages[[length(pages) + 1]] <- resp$results
     url <- resp[["next"]]
   }

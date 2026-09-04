@@ -50,12 +50,7 @@ suppressMessages({
 fetch_applitrack_postings <- function(tenant_path) {
   resp <- request(paste0("https://www.applitrack.com/", tenant_path, "/onlineapp/jobpostings/Output.asp")) %>%
     req_url_query(all = "1") %>%
-    # AppliTrack is one shared multi-tenant host; a single 429/503 while the
-    # registry walks 26 tenants back-to-back would otherwise drop that whole
-    # district for the week. (A persistent 500 -- a genuinely broken/migrated
-    # tenant -- still surfaces as an error after the retries, as it should.)
-    req_retry(max_tries = 3, backoff = function(i) 2^i) %>%
-    req_perform()
+    perform_with_retry()
   # Applitrack serves Windows-1252 bytes with no charset in Content-Type, so
   # httr2 guesses UTF-8. Any posting containing a curly quote/en-dash/etc.
   # then fails to decode -- resp_body_string() returns NA rather than
@@ -154,7 +149,7 @@ parse_applitrack_output <- function(js_text) {
 # feed; that fallback path is kept here for any Montana entry that turns out
 # to lack an <author>, rather than assumed to never fire.
 fetch_peopleadmin_atom <- function(feed_url, location_fallback = NA_character_) {
-  resp <- request(feed_url) %>% req_perform()
+  resp <- request(feed_url) %>% perform_with_retry()
   parse_peopleadmin_atom(resp_body_string(resp), location_fallback)
 }
 
@@ -211,7 +206,7 @@ fetch_schoolspring_postings <- function(domain_name, page_size = 50) {
         gradelevel = "", jobtype = "", organization = "",
         page = page, size = page_size, sortDateAscending = "false"
       ) %>%
-      req_perform()
+      perform_with_retry()
 
     page_df <- parse_schoolspring_json(resp_body_string(resp), domain_name)
     if (nrow(page_df) == 0) break
@@ -281,7 +276,7 @@ parse_schoolspring_json <- function(json_text, domain_name) {
 fetch_tedk12_postings <- function(url) {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_tedk12_postings(resp_body_string(resp), url)
 }
 
@@ -335,7 +330,7 @@ parse_tedk12_postings <- function(html_text, url) {
 # "kalispellpublicschoolsmt".
 fetch_tylerportico_postings <- function(tenant_subdomain, institution_name) {
   base_url <- paste0("https://", tenant_subdomain, ".tylerportico.com/tess/citizen")
-  resp <- request(paste0(base_url, "/api/Positions")) %>% req_perform()
+  resp <- request(paste0(base_url, "/api/Positions")) %>% perform_with_retry()
   parse_tylerportico_positions(resp_body_string(resp), institution_name, base_url)
 }
 
@@ -441,7 +436,7 @@ extract_aspnet_postback_fields <- function(html_text) {
 fetch_opi_statewide_postings <- function(
     url = "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx",
     page_size = 50, max_pages = 60) {
-  resp <- request(url) %>% req_perform()
+  resp <- request(url) %>% perform_with_retry()
   html <- resp_body_string(resp)
 
   all_pages <- list(parse_opi_job_page(html, url))
@@ -451,7 +446,7 @@ fetch_opi_statewide_postings <- function(
     fields[["__EVENTTARGET"]] <- "ctl00$ContentPlaceHolder1$grdJobListing"
     fields[["__EVENTARGUMENT"]] <- paste0("Page$", page_num)
 
-    resp <- do.call(req_body_form, c(list(request(url)), fields)) %>% req_perform()
+    resp <- do.call(req_body_form, c(list(request(url)), fields)) %>% perform_with_retry()
     html <- resp_body_string(resp)
     all_pages[[length(all_pages) + 1]] <- parse_opi_job_page(html, url)
     page_num <- page_num + 1
@@ -506,7 +501,7 @@ parse_opi_job_page <- function(html_text, url) {
 # so no API reverse-engineering was needed here.
 fetch_jazzhr_postings <- function(subdomain, institution_name) {
   base_url <- paste0("https://", subdomain, ".applytojob.com/apply")
-  resp <- request(base_url) %>% req_perform()
+  resp <- request(base_url) %>% perform_with_retry()
   parse_jazzhr_postings(resp_body_string(resp), institution_name)
 }
 
@@ -589,7 +584,7 @@ extract_paycom_jwt <- function(html_text) {
 
 fetch_paycom_postings <- function(portal_key, institution_name, page_size = 100) {
   career_page_url <- paste0("https://www.paycomonline.net/v4/ats/web.php/portal/", portal_key, "/career-page")
-  career_resp <- request(career_page_url) %>% req_perform()
+  career_resp <- request(career_page_url) %>% perform_with_retry()
   token <- extract_paycom_jwt(resp_body_string(career_resp))
 
   search_url <- "https://portal-applicant-tracking.us-cent.paycomonline.net/api/ats/job-posting-previews/search"
@@ -606,7 +601,7 @@ fetch_paycom_postings <- function(portal_key, institution_name, page_size = 100)
     resp <- request(search_url) %>%
       req_headers(Authorization = paste("Bearer", token), Locale = "en-US", `Translation-Highlights` = "false") %>%
       req_body_json(list(skip = skip, take = page_size, filtersForQuery = filters)) %>%
-      req_perform()
+      perform_with_retry()
     page_df <- parse_paycom_postings(resp_body_string(resp), portal_key)
     if (nrow(page_df) == 0) break
 
@@ -664,7 +659,7 @@ parse_paycom_postings <- function(json_text, portal_key) {
 fetch_isolvedhire_postings <- function(subdomain, domain_id, institution_name) {
   api_url <- paste0("https://", subdomain, ".isolvedhire.com/core/jobs/", domain_id,
                      "?getParams=%7B%7D")
-  resp <- request(api_url) %>% req_perform()
+  resp <- request(api_url) %>% perform_with_retry()
   parse_isolvedhire_postings(resp_body_string(resp), institution_name)
 }
 
@@ -750,7 +745,7 @@ fetch_neogov_postings <- function(subdomain, institution_name, page_size = 50) {
         page = page, pageSize = page_size, contains = ""
       ) %>%
       req_headers(`X-Requested-With` = "XMLHttpRequest") %>%
-      req_perform()
+      perform_with_retry()
 
     page_df <- parse_neogov_postings(resp_body_string(resp), institution_name)
     if (nrow(page_df) == 0) break
@@ -817,7 +812,7 @@ parse_neogov_postings <- function(html_text, institution_name) {
 fetch_adp_workforcenow_postings <- function(cid, cc_id, institution_name, top = 100) {
   resp <- request("https://workforcenow.adp.com/mascsr/default/careercenter/public/events/staffing/v1/job-requisitions") %>%
     req_url_query(cid = cid, ccId = cc_id, lang = "en_US", locale = "en_US", `$top` = top) %>%
-    req_perform()
+    perform_with_retry()
   parse_adp_workforcenow_postings(resp_body_string(resp), cid, cc_id)
 }
 

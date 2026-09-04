@@ -119,7 +119,7 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
 fetch_ipeds_paginated <- function(url) {
   rows <- list()
   while (!is.null(url)) {
-    resp <- request(url) %>% req_perform() %>% resp_body_json()
+    resp <- request(url) %>% perform_with_retry() %>% resp_body_json()
     rows <- c(rows, resp$results)
     url <- resp[["next"]]
   }

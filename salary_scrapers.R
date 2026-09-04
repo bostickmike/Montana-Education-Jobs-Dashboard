@@ -107,7 +107,7 @@ MT_DLI_DISTRICT_MAP <- list(
 
 fetch_dli_region_pdf_text <- function(region) {
   url <- paste0(DLI_TEACHER_COMP_BASE_URL, "/", DLI_REGION_FILENAMES[[region]])
-  resp <- request(url) %>% req_perform()
+  resp <- request(url) %>% perform_with_retry()
   tmp <- tempfile(fileext = ".pdf")
   writeBin(resp_body_raw(resp), tmp)
   # Page 2 is always the per-district salary table -- confirmed on all 9

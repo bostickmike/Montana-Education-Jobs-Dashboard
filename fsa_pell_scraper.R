@@ -28,7 +28,7 @@ FSA_PELL_GRANT_TYPE <- 4L
 fetch_ipeds_directory_paginated <- function(url) {
   pages <- list()
   while (!is.null(url)) {
-    resp <- request(url) %>% req_perform() %>% resp_body_json(simplifyVector = TRUE)
+    resp <- request(url) %>% perform_with_retry() %>% resp_body_json(simplifyVector = TRUE)
     pages[[length(pages) + 1]] <- resp$results
     url <- resp[["next"]]
   }

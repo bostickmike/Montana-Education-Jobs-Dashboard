@@ -102,7 +102,7 @@ fetch_saipe_geography <- function(geocat, year, api_key) {
       time = year,
       key = api_key
     ) %>%
-    req_perform()
+    perform_with_retry()
   parse_saipe_json(resp_body_string(resp))
 }
 
