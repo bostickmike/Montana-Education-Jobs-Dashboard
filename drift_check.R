@@ -28,6 +28,36 @@ BASELINE_VALID_FROM <- as.Date("2026-08-06")
 # Tier 1: per-source historical drift detection
 # --------------------------------------------------------------------------
 
+# OPI's "Jobs for Teachers" statewide feed publishes a raw free-text
+# location per posting (e.g. "SCOBEY", "Miles City, MT", "Yaak, Montana"),
+# never a canonical district identity -- see CLAUDE.md's "The Map/District
+# Summary intentionally show a narrower slice" note. Tier-1 drift detection
+# groups by the District column, so without this every distinct OPI location
+# string looks like its own directly-scraped source: ordinary week-to-week
+# posting churn in the statewide feed then produces dozens of bogus "dropped
+# to zero" flags (23 of them on 2026-09-01 alone) that bury the real
+# registry-backed signals. Collapse every OPI-sourced row to the single feed
+# it actually is before counting, so OPI is drift-checked as one source
+# (which still catches a real collapse of the whole feed).
+OPI_STATEWIDE_SOURCE <- "OPI Jobs for Teachers (statewide)"
+OPI_STATEWIDE_URL <- "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx"
+
+# Return `df`'s per-row source names with every statewide-feed row relabelled
+# to a single bucket. Falls back to the raw name column when `source_col`
+# isn't present; callers working with archive snapshots that predate the
+# Posting_Source column should skip those snapshots rather than rely on this
+# fallback (see check_drift.R's read_k12_archive()), since their raw OPI
+# location strings can't be collapsed and would land in the baseline.
+collapse_statewide_feed_names <- function(df, name_col = "District",
+                                          source_col = "Posting_Source",
+                                          feed_label = OPI_STATEWIDE_SOURCE) {
+  names_out <- as.character(df[[name_col]])
+  if (!source_col %in% names(df)) return(names_out)
+  is_feed <- !is.na(df[[source_col]]) & df[[source_col]] == feed_label
+  names_out[is_feed] <- feed_label
+  names_out
+}
+
 build_historical_counts <- function(archive_snapshots, name_col) {
   # archive_snapshots: named list of data.frames, names are "YYYY-MM-DD"
   # dates, each data.frame has a `name_col` column of source names (one row
@@ -147,7 +177,11 @@ build_source_url_lookup <- function(
 
   c(
     setNames(k12$Job_Link, k12$District),
-    setNames(he$Job_Link, he$Institution)
+    setNames(he$Job_Link, he$Institution),
+    # So the collapsed statewide-feed bucket (see collapse_statewide_feed_names())
+    # can still be corroborated against its real public page rather than
+    # landing in the "no URL on file" bucket.
+    setNames(OPI_STATEWIDE_URL, OPI_STATEWIDE_SOURCE)
   )
 }
 

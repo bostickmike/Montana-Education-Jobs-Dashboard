@@ -7,7 +7,14 @@ source("drift_check.R")
 
 read_k12_archive <- function(path) {
   df <- read.csv(path, stringsAsFactors = FALSE)
-  df$District
+  # Snapshots written before Posting_Source was added (pre-2026-08-18) can't
+  # be collapsed -- there's no column saying which rows came from the OPI
+  # statewide feed -- so every raw OPI location string in them would enter
+  # the baseline as its own source and get flagged the moment that exact
+  # string stops appearing. Drop those weeks from the K-12 baseline entirely
+  # rather than let them reintroduce the noise this collapse exists to remove.
+  if (!"Posting_Source" %in% names(df)) return(character(0))
+  collapse_statewide_feed_names(df)
 }
 
 read_he_archive <- function(path) {
@@ -36,7 +43,9 @@ he_snapshots <- load_snapshots("Archived_HE_Data", "^hedata_.*\\.xlsx$", date_re
 k12_baseline <- build_historical_counts(k12_snapshots, "name")
 he_baseline <- build_historical_counts(he_snapshots, "name")
 
-current_k12 <- as.data.frame(table(read.csv("Mt_Ed_Jobs/combinedclean.csv", stringsAsFactors = FALSE)$District))
+current_k12 <- as.data.frame(table(collapse_statewide_feed_names(
+  read.csv("Mt_Ed_Jobs/combinedclean.csv", stringsAsFactors = FALSE)
+)))
 names(current_k12) <- c("name", "count")
 current_he <- as.data.frame(table(readxl::read_xlsx("Mt_Ed_Jobs/hedata.xlsx")$Institution))
 names(current_he) <- c("name", "count")

@@ -28,6 +28,52 @@ test_that("build_historical_counts returns an empty frame when no snapshots are 
   expect_equal(nrow(baseline), 0)
 })
 
+test_that("collapse_statewide_feed_names buckets every OPI row and leaves direct rows alone", {
+  df <- data.frame(
+    District = c("SCOBEY", "Miles City, MT", "Billings Public Schools", "Yaak, Montana"),
+    Posting_Source = c(OPI_STATEWIDE_SOURCE, OPI_STATEWIDE_SOURCE,
+                       "AppliTrack (direct district board)", OPI_STATEWIDE_SOURCE),
+    stringsAsFactors = FALSE
+  )
+
+  names_out <- collapse_statewide_feed_names(df)
+
+  expect_equal(names_out, c(OPI_STATEWIDE_SOURCE, OPI_STATEWIDE_SOURCE,
+                            "Billings Public Schools", OPI_STATEWIDE_SOURCE))
+})
+
+test_that("collapse_statewide_feed_names falls back to the raw name column with no Posting_Source", {
+  df <- data.frame(District = c("SCOBEY", "Billings Public Schools"), stringsAsFactors = FALSE)
+  expect_equal(collapse_statewide_feed_names(df), c("SCOBEY", "Billings Public Schools"))
+})
+
+test_that("collapsing the statewide feed keeps a per-location OPI drop from being flagged", {
+  # Two weeks of OPI history where the specific locations churn completely,
+  # but the feed's total volume is steady -- the pre-collapse behavior would
+  # flag every vanished location string; the collapsed behavior flags nothing.
+  raw_snapshots <- list(
+    "2026-08-13" = data.frame(
+      District = c("SCOBEY", "SCOBEY", "RICHEY", "Billings Public Schools"),
+      Posting_Source = c(OPI_STATEWIDE_SOURCE, OPI_STATEWIDE_SOURCE,
+                         OPI_STATEWIDE_SOURCE, "AppliTrack (direct district board)"),
+      stringsAsFactors = FALSE
+    ),
+    "2026-08-20" = data.frame(
+      District = c("JOLIET", "HALL", "POWER", "Billings Public Schools"),
+      Posting_Source = c(OPI_STATEWIDE_SOURCE, OPI_STATEWIDE_SOURCE,
+                         OPI_STATEWIDE_SOURCE, "AppliTrack (direct district board)"),
+      stringsAsFactors = FALSE
+    )
+  )
+  collapsed <- lapply(raw_snapshots, function(df) data.frame(name = collapse_statewide_feed_names(df)))
+  baseline <- build_historical_counts(collapsed, "name")
+  current <- data.frame(name = c(OPI_STATEWIDE_SOURCE, "Billings Public Schools"), count = c(3, 1))
+
+  flagged <- flag_drift(current, baseline)
+
+  expect_equal(nrow(flagged), 0)
+})
+
 test_that("flag_drift flags a real drop and leaves a stable source alone", {
   baseline <- data.frame(
     name = c("BigDistrict", "StableDistrict"),
