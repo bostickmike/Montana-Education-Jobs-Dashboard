@@ -50,6 +50,11 @@ suppressMessages({
 fetch_applitrack_postings <- function(tenant_path) {
   resp <- request(paste0("https://www.applitrack.com/", tenant_path, "/onlineapp/jobpostings/Output.asp")) %>%
     req_url_query(all = "1") %>%
+    # AppliTrack is one shared multi-tenant host; a single 429/503 while the
+    # registry walks 26 tenants back-to-back would otherwise drop that whole
+    # district for the week. (A persistent 500 -- a genuinely broken/migrated
+    # tenant -- still surfaces as an error after the retries, as it should.)
+    req_retry(max_tries = 3, backoff = function(i) 2^i) %>%
     req_perform()
   # Applitrack serves Windows-1252 bytes with no charset in Content-Type, so
   # httr2 guesses UTF-8. Any posting containing a curly quote/en-dash/etc.
