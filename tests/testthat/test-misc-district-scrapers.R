@@ -1175,14 +1175,17 @@ test_that("fetch_dutton_postings drives a chromote session and parses its real r
   expect_equal(nrow(result), 2)
 })
 
-# Real fixture: document.body.innerText captured via a live chromote
-# session 2026-08-24 from jobs.redroverk12.com/org/2261 (St. Ignatius
-# School District's Red Rover Hiring board).
+# Real fixtures: document.body.innerText captured via a live chromote
+# session -- stignatius_jobs_rendered.txt from jobs.redroverk12.com/org/2261
+# (St. Ignatius, 2026-08-24, a board that shows a relative "posted" stamp),
+# redrover_hamilton_rendered.txt from jobs.redroverk12.com/org/2362
+# (Hamilton, 2026-09-03, a board that shows no stamp -- captured after
+# Hamilton migrated off AppliTrack).
 
-test_that("parse_stignatius_postings extracts the 6 real postings, excluding the 2 evergreen application-form placeholders", {
+test_that("parse_redrover_postings extracts the 6 real postings, excluding the 2 evergreen application-form placeholders", {
   text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
 
-  result <- parse_stignatius_postings(text, "url")
+  result <- parse_redrover_postings(text, "url")
 
   expect_equal(nrow(result), 6)
   expect_true(all(c("Paraprofessional - Elem, Middle & High Positions Available!", "Title I", "Salish Teacher",
@@ -1192,19 +1195,34 @@ test_that("parse_stignatius_postings extracts the 6 real postings, excluding the
   expect_false(any(result$Title %in% c("Classified Application", "Certified Application", "Volunteer Application")))
 })
 
-test_that("parse_stignatius_postings returns zero rows (not an error) when there's no 'Found N job openings' header", {
-  result <- parse_stignatius_postings("Just some regular page text with no postings.", "url")
+test_that("parse_redrover_postings returns zero rows (not an error) when there's no 'Found N job openings' header", {
+  result <- parse_redrover_postings("Just some regular page text with no postings.", "url")
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("fetch_stignatius_postings drives a chromote session and parses its real rendered text", {
+test_that("fetch_redrover_postings drives a chromote session and parses its real rendered text", {
   text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
   session <- fake_chromote_session(text)
 
-  result <- fetch_stignatius_postings(session)
+  result <- fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2261")
 
   expect_equal(nrow(result), 6)
+})
+
+test_that("parse_redrover_postings handles a board with no relative-date stamp after APPLY NOW (Hamilton)", {
+  text <- paste(readLines(test_path("fixtures", "redrover_hamilton_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_redrover_postings(text, "url", default_location = "Hamilton")
+
+  # All 13 openings are real (no evergreen "* Application" placeholders on
+  # this board) -- the no-stamp layout must not drop or shift any of them.
+  expect_equal(nrow(result), 13)
+  expect_true(all(c("Daly Racers Coach", "Substitute Custodian", "Special Education Paraprofessional",
+                     "Substitute Teacher 2026-27", "Custodian") %in% result$Title))
+  expect_equal(result$Location[result$Title == "Daly Racers Coach"], "Daly Elementary")
+  # "No location specified" rows fall back to the district's own city.
+  expect_equal(result$Location[result$Title == "Substitute Custodian"], "Hamilton")
 })
 
 # Real fixture: document.body.innerText captured via a live chromote
@@ -2199,7 +2217,7 @@ test_that("fetch_apptegy_k12_postings keeps healthy districts when one fetch fai
   expect_equal(result$Title, "Healthy posting")
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 42 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 43 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2226,6 +2244,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 42 districts
   darby_text <- paste(readLines(test_path("fixtures", "apptegy_darby_rendered.txt"), warn = FALSE), collapse = "\n")
   dutton_text <- paste(readLines(test_path("fixtures", "apptegy_dutton_rendered.txt"), warn = FALSE), collapse = "\n")
   stignatius_text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
+  hamilton_redrover_text <- paste(readLines(test_path("fixtures", "redrover_hamilton_rendered.txt"), warn = FALSE), collapse = "\n")
   stanford_text <- paste(readLines(test_path("fixtures", "apptegy_stanford_rendered.txt"), warn = FALSE), collapse = "\n")
   lolo_text <- paste(readLines(test_path("fixtures", "apptegy_lolo_rendered.txt"), warn = FALSE), collapse = "\n")
   froid_text <- paste(readLines(test_path("fixtures", "apptegy_froid_rendered.txt"), warn = FALSE), collapse = "\n")
@@ -2282,7 +2301,8 @@ test_that("fetch_apptegy_k12_postings shares one session across all 42 districts
           else if (grepl("chinookschools", navigated_url)) chinook_text
           else if (grepl("darby", navigated_url)) darby_text
           else if (grepl("dbps", navigated_url)) dutton_text
-          else if (grepl("redroverk12", navigated_url)) stignatius_text
+          else if (grepl("redroverk12.*org/2261", navigated_url)) stignatius_text
+          else if (grepl("redroverk12.*org/2362", navigated_url)) hamilton_redrover_text
           else if (grepl("stanfordmtschool", navigated_url)) stanford_text
           else if (grepl("loloschools", navigated_url)) lolo_text
           else if (grepl("froidschool", navigated_url)) froid_text
@@ -2309,7 +2329,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 42 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -2336,6 +2356,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 42 districts
   expect_equal(sum(result$District == "Darby School District 9"), 6)
   expect_equal(sum(result$District == "Dutton/Brady Public School District"), 2)
   expect_equal(sum(result$District == "St. Ignatius School District"), 6)
+  expect_equal(sum(result$District == "Hamilton School District 3"), 13)
   expect_equal(sum(result$District == "Stanford Public Schools"), 6)
   expect_equal(sum(result$District == "Lolo School District 7"), 4)
   expect_equal(sum(result$District == "Froid Public Schools"), 3)

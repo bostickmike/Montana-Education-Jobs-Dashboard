@@ -274,7 +274,12 @@ parse_broadview_page <- function(html_text, location, style, url) {
 # fine here, no chromote needed: real postings are a clean `<ul><li>` list
 # immediately following a `<p><strong>Job Openings:</strong></p>` marker,
 # confirmed live 2026-08-16, 6 real postings.
-fetch_custer_postings <- function(url = "https://custerschools.org/employment") {
+#
+# Use the www. host explicitly: the apex custerschools.org has no A record
+# (only www. does), so a plain request to the bare domain intermittently
+# fails DNS resolution ("Could not resolve host: custerschools.org") and
+# the whole district drops out of that week's data (confirmed 2026-09-01).
+fetch_custer_postings <- function(url = "https://www.custerschools.org/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
     req_perform()
@@ -3513,32 +3518,38 @@ fetch_dutton_postings <- function(chromote_session, url = "https://dbps.k12.mt.u
   parse_dutton_postings(text, url)
 }
 
-# St. Ignatius School District (jobs.redroverk12.com/org/2261) -- found
-# 2026-08-24 while re-checking the OPI-gap candidate list ("SAINT
-# IGNATIUS" and "SAINT IGNATIUS- SALISH TEACHER" are the same district;
-# both collapse into this one registry row). Red Rover Hiring, a new
-# platform for this project -- a client-side-rendered Next.js app, no
-# API endpoint findable in the static HTML, needs a real browser like
-# Apptegy, folded into the same shared chromote session below for that
+# Red Rover Hiring (jobs.redroverk12.com/org/<id>) -- first found 2026-08-24
+# for St. Ignatius School District (org/2261, while re-checking the OPI-gap
+# candidate list -- "SAINT IGNATIUS" and "SAINT IGNATIUS- SALISH TEACHER"
+# are the same district, both collapsing into one registry row); Hamilton
+# School District 3 (org/2362) joined 2026-09 after its AppliTrack tenant
+# started returning a persistent HTTP 500. A client-side-rendered Next.js
+# app, no API endpoint findable in the static HTML, needs a real browser
+# like Apptegy, folded into the same shared chromote session below for that
 # reason even though it isn't Apptegy itself (same precedent as Geyser's
-# CyberSchool 2.0). Confirmed live 2026-08-24: "Found 8 job openings",
-# but 2 are generic evergreen application-form placeholders ("Classified
-# Application", "Volunteer Application") rather than real openings --
-# the same class of noise Arlee's own "Classified Application"/
-# "Certified Application" exclusion handles, extended here with
-# "Volunteer Application". Each real posting is a repeating block of
-# [employment type, title, category, location, (salary, optional)]
-# followed by a literal "APPLY NOW" line and then a relative-date line
-# ("27 days ago") -- parsed by splitting on "APPLY NOW" as the reliable
-# per-posting boundary (the salary line's presence varies, so a fixed
-# stride doesn't work) and discarding the trailing date line, which
-# standardize_date() can't parse anyway (Mt_Ed_Jobs.Rmd only handles
-# absolute dates) so it isn't worth carrying through as free text.
-# "No location specified" is the page's own literal placeholder for a
-# real missing value, normalized to NA here rather than kept as prose.
-STIGNATIUS_PLACEHOLDER_TITLES <- c("Classified Application", "Certified Application", "Volunteer Application")
+# CyberSchool 2.0). Some boards carry generic evergreen application-form
+# placeholders ("Classified Application", "Volunteer Application") rather
+# than real openings -- the same class of noise Arlee's own "Classified
+# Application"/"Certified Application" exclusion handles. Each real posting
+# is a repeating block of [employment type, title, category, location,
+# (salary, optional), ("Internal applicants only", optional)] followed by a
+# literal "APPLY NOW" line -- parsed by splitting on "APPLY NOW" as the
+# reliable per-posting boundary (the salary line's presence varies, so a
+# fixed stride doesn't work). Some boards then show a relative-date stamp
+# ("27 days ago"), others go straight to the next block; the stamp is
+# skipped only when the following line actually matches one (consuming a
+# fixed number of lines would eat the next posting on the no-stamp boards).
+# The date isn't carried through -- standardize_date() only handles
+# absolute dates anyway. "No location specified" is the board's own literal
+# placeholder for a real missing value; rows carrying it fall back to
+# `default_location` (the district's city) rather than keeping the prose.
+REDROVER_PLACEHOLDER_TITLES <- c("Classified Application", "Certified Application", "Volunteer Application")
 
-parse_stignatius_postings <- function(rendered_text, url) {
+# Parser for any Red Rover Hiring board's rendered innerText -- title is
+# always block[2] and location always block[4] of each "... APPLY NOW"
+# block. See the section comment above for the block shape and the
+# per-board "posted"-stamp difference this handles.
+parse_redrover_postings <- function(rendered_text, url, default_location = NA_character_) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
                        stringsAsFactors = FALSE)
@@ -3563,14 +3574,18 @@ parse_stignatius_postings <- function(rendered_text, url) {
       if (length(block) >= 2) {
         title <- block[2]
         location <- if (length(block) >= 4) block[4] else NA_character_
-        if (!is.na(location) && location == "No location specified") location <- NA_character_
-        if (!(title %in% STIGNATIUS_PLACEHOLDER_TITLES)) {
+        if (!is.na(location) && location == "No location specified") location <- default_location
+        if (!(title %in% REDROVER_PLACEHOLDER_TITLES)) {
           rows[[length(rows) + 1]] <- data.frame(Title = title, Location = location,
                                                    Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
         }
       }
       block <- character(0)
-      i <- i + 2
+      i <- i + 1  # consume "APPLY NOW"
+      if (i <= length(lines) &&
+          grepl("\\bago$|^(just posted|today|yesterday)$", lines[i], ignore.case = TRUE)) {
+        i <- i + 1  # ... and the relative "posted" stamp, when this board shows one
+      }
       next
     }
     block <- c(block, line)
@@ -3580,12 +3595,12 @@ parse_stignatius_postings <- function(rendered_text, url) {
   do.call(rbind, rows)
 }
 
-fetch_stignatius_postings <- function(chromote_session, url = "https://jobs.redroverk12.com/org/2261") {
+fetch_redrover_postings <- function(chromote_session, url, default_location = NA_character_) {
   chromote_session$Page$navigate(url)
   chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
   Sys.sleep(5)
   text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
-  parse_stignatius_postings(text, url)
+  parse_redrover_postings(text, url, default_location = default_location)
 }
 
 # Stanford Public Schools (stanfordmtschool.com) -- found 2026-08-24 while
@@ -4341,8 +4356,8 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
-# Fetches all 42 districts (40 Apptegy + Geyser's CyberSchool + St.
-# Ignatius's Red Rover Hiring) sharing one chromote session (created
+# Fetches all 43 districts (40 Apptegy + Geyser's CyberSchool + St.
+# Ignatius's and Hamilton's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
 # just scoped to only the districts that need it instead of being
@@ -4388,7 +4403,13 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
     "Chinook Public Schools" = fetch_chinook_postings,
     "Darby School District 9" = fetch_darby_postings,
     "Dutton/Brady Public School District" = fetch_dutton_postings,
-    "St. Ignatius School District" = fetch_stignatius_postings,
+    "St. Ignatius School District" = function(session) {
+      fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2261")
+    },
+    "Hamilton School District 3" = function(session) {
+      fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2362",
+                              default_location = "Hamilton")
+    },
     "Stanford Public Schools" = fetch_stanford_postings,
     "Lolo School District 7" = fetch_lolo_postings,
     "Froid Public Schools" = fetch_froid_postings,
