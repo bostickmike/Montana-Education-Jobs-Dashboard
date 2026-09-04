@@ -2931,3 +2931,31 @@ test_that("fetch_dayton_postings fetches and parses a live-shaped response", {
 
   expect_equal(nrow(result), 2)
 })
+
+test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
+  registry <- withr::local_tempfile(fileext = ".csv")
+  write.csv(data.frame(
+    District = c("AppliTrack District", "SchoolSpring District", "TedK12 District",
+                 "TylerPortico District", "Apptegy District", "RedRover District", "Heuristic District"),
+    Platform = c("AppliTrack", "SchoolSpring", "TedK12", "TylerPortico", "Apptegy", "RedRoverK12", "SomeHeuristic"),
+    stringsAsFactors = FALSE
+  ), registry, row.names = FALSE)
+
+  tiers <- k12_district_coverage_tiers(registry)
+
+  expect_setequal(tiers$District, c("Apptegy District", "RedRover District", "Heuristic District"))
+  expect_true(all(tiers$Data_Coverage == "Partial"))
+  # The 4 real-ATS-platform districts are absent -- callers coalesce a
+  # missing match to "Full", the same convention Wyoming's own version uses.
+  expect_false(any(c("AppliTrack District", "SchoolSpring District",
+                      "TedK12 District", "TylerPortico District") %in% tiers$District))
+})
+
+test_that("k12_district_coverage_tiers against the real registry only ever returns real registered districts", {
+  tiers <- k12_district_coverage_tiers(here::here("k12_district_registry.csv"))
+  registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+
+  expect_true(all(tiers$District %in% registry$District))
+  expect_true(nrow(tiers) > 0)
+  expect_true(nrow(tiers) < nrow(registry))
+})

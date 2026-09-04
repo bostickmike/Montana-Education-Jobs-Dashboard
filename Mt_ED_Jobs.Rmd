@@ -1568,6 +1568,20 @@ if (nrow(teacher_fte) > 0) {
 }
 
 write.csv(salarymap2, salarymap2_path, row.names = FALSE)
+
+# District-level data-completeness classification (misc_district_scrapers.R)
+# -- refreshed unconditionally every run, not gated on the salary/staffing
+# fetches above, since it's a static structural fact about which platform
+# each district is scraped from (its registry Platform column), not
+# something that can itself fail to fetch. Every district not returned by
+# k12_district_coverage_tiers() is scraped from a genuine structured
+# platform, hence the coalesce to "Full".
+source("misc_district_scrapers.R")
+salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
+  select(-any_of("Data_Coverage")) %>%
+  left_join(k12_district_coverage_tiers(), by = "District") %>%
+  mutate(Data_Coverage = coalesce(Data_Coverage, "Full"))
+write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 ```
 
 ### K-12 county-level context (income, rent, mining/energy employment share, population trend) and district-level child poverty rate, from the Census Bureau

@@ -14,13 +14,18 @@
 #     merged-entity/Vacancy_Rate_Shared case at all (see app.R's comment
 #     above combined_map_data: "no merged-entity vacancy-rate case (each
 #     Montana HE institution has its own independent IPEDS unitid)").
-#   - Data_Coverage "Partial" tier tests -- Montana's combined_map_data has
-#     no Data_Coverage column whatsoever (see the same comment: "there's no
-#     Data_Coverage 'Partial' tier here"); grepping app.R for "Data_Coverage"
-#     turns up only that comment, not a real column.
 #   - Superintendent-salary tests -- Montana has no superintendent salary
 #     source; its K-12 salary shape is DLI's Teacher_Avg_Salary plus a
 #     10th/90th percentile band, not WSBA's base-salary-plus-prior-year pair.
+#
+# Data_Coverage WAS added 2026-09-04 (k12_district_coverage_tiers() in
+# misc_district_scrapers.R) -- see the test below. Montana's shape differs
+# from Wyoming's on purpose: Wyoming hardcodes Data_Coverage = "Full" for
+# every HE row (every HE institution there is on a genuine structured
+# platform), but Montana has real heuristic HE scrapers too
+# (misc_college_scrapers.R), so hardcoding "Full" for HE here would
+# misrepresent about 10 of 23 institutions -- HE rows carry Data_Coverage =
+# NA instead (no HE tier designed yet), not "Full".
 
 skip_if_not_installed("shiny")
 
@@ -234,6 +239,30 @@ test_that("compute_vacancy_rate_domain falls back to a placeholder range instead
 
   expect_equal(env$compute_vacancy_rate_domain(c(NA_real_, NA_real_, NA_real_)), c(0, 1))
   expect_equal(env$compute_vacancy_rate_domain(c(0.05, NA_real_, 0.20)), c(0.05, 0.20))
+})
+
+test_that("Data_Coverage is carried through to combined_map_data, Full for real-platform K-12 districts, NA for HE", {
+  # Regression for the disclosure feature added 2026-09-04: which platform a
+  # district is scraped from used to live only in a registry column and code
+  # comments, invisible to anyone using the dashboard. Montana's own shape
+  # (see the header comment at the top of this file): K-12 rows are always
+  # "Full" or "Partial", never NA; HE rows are always NA (no tier designed
+  # for HE yet) -- the inverse of Wyoming's hardcoded HE "Full".
+  env <- load_app()
+  expect_true("Data_Coverage" %in% names(env$combined_map_data))
+
+  k12 <- env$combined_map_data[env$combined_map_data$Type == "K-12 District", ]
+  skip_if(nrow(k12) == 0, "no K-12 rows in committed data -- skipping")
+  expect_false(any(is.na(k12$Data_Coverage)))
+  expect_true(all(k12$Data_Coverage %in% c("Full", "Partial")))
+
+  he <- env$combined_map_data[env$combined_map_data$Type == "Higher Ed Institution", ]
+  skip_if(nrow(he) == 0, "no HE rows in committed data -- skipping")
+  expect_true(all(is.na(he$Data_Coverage)))
+
+  k12_partial <- k12[k12$Data_Coverage == "Partial", ]
+  skip_if(nrow(k12_partial) == 0, "no partial-coverage K-12 rows in committed data -- skipping")
+  expect_true(nrow(k12_partial) > 0)
 })
 
 test_that("clean committed data produces no schema-guard issues", {

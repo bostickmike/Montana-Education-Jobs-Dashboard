@@ -117,7 +117,8 @@ mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
                              "Teachers_Total_FTE", "Enrollment",
                              "Median_Household_Income", "Median_Gross_Rent", "Mining_Employment_Share",
                              "Population_Change_Pct", "ACS_Year", "Child_Poverty_Rate", "SAIPE_Year",
-                             "Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"),
+                             "Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source",
+                             "Data_Coverage"),
                            "salarymap2.csv") %>%
   rename(Name = District) %>%
   mutate(Finance_FY = as.character(Finance_FY))
@@ -584,7 +585,8 @@ map_k12 <- mapdata2_k12 %>%
          Vacancy_Rate, Vacancy_Numerator, Vacancy_Denominator, Salary_Source, County,
          Enrollment, Students_Per_Teacher, Enrollment_Change_Pct, Pell_Recipient_Share, Pell_Year,
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
-         Child_Poverty_Rate, SAIPE_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source)
+         Child_Poverty_Rate, SAIPE_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source,
+         Data_Coverage)
 
 he_current_counts <- ccdata %>% count(Institution, name = "CurrentCount")
 he_sample_titles <- ccdata %>%
@@ -625,7 +627,18 @@ map_he <- mapdata2_he %>%
                                    Enrollment / Faculty_Count, NA_real_),
     Child_Poverty_Rate = NA_real_, SAIPE_Year = NA_integer_,
     Total_General_Fund_Expenditure = NA_real_, Finance_FY = NA_character_,
-    Finance_Source = NA_character_
+    Finance_Source = NA_character_,
+    # Unlike Wyoming (where every HE institution is on a genuine structured
+    # platform, so it hardcodes Data_Coverage = "Full" for HE), Montana has
+    # real heuristic HE scrapers too (misc_college_scrapers.R -- Miles CC,
+    # Dawson CC, Carroll, Rocky Mountain, SKC, LBHC, FPCC, Aaniiih Nakoda
+    # College, Chief Dull Knife, plus Stone Child via Apptegy) -- hardcoding
+    # "Full" here would misrepresent about 10 of 23 institutions.
+    # Left NA rather than guessing a tier for HE that hasn't actually been
+    # designed yet; the map-popup badge below only renders for a real
+    # non-NA, non-"Full" value, so an NA institution just shows no badge
+    # (same as "nothing to say" everywhere else in this app), not a bug.
+    Data_Coverage = NA_character_
   ) %>%
   select(Name, Longitude, Latitude, Type, CurrentCount, WeeklyNew, SampleTitles,
          Link, Teacher_Count, Teacher_Salary_10th_Pctile, Teacher_Avg_Salary,
@@ -772,7 +785,8 @@ ui <- dashboardPage(
               n_distinct(map_he$Name), " directly-scraped Higher Ed institutions are shown here (with current openings). ",
               "The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies; OPI-only source locations are not canonical district identifiers and cannot be mapped reliably. ",
               "Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table. ",
-              "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison."
+              "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison. ",
+              "A red \"Partial\" badge means that district's postings come from a heuristic scrape of the district's own site rather than a real structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-scraped district's count."
             ))
         )
       ),
@@ -1153,6 +1167,12 @@ server <- function(input, output, session) {
         District = Name,
         County,
         `Current Openings` = CurrentCount,
+        # Real, sortable/filterable column -- not just a map badge or a
+        # buried code comment -- so "why does this district look quiet" is
+        # answerable directly from the exportable table, not just the map.
+        # "Full" is the overwhelming majority (every district on a real ATS
+        # platform); see the Map tab's helpText for what "Partial" means.
+        `Posting Data` = Data_Coverage,
         `New This Week` = WeeklyNew,
         `Teacher Vacancy Rate` = ifelse(is.na(Vacancy_Rate), NA_character_, scales::percent(Vacancy_Rate, accuracy = 0.1)),
         Enrollment,
@@ -1240,6 +1260,21 @@ server <- function(input, output, session) {
 
     popups <- with(df, paste0(
       "<div><strong>", Name, "</strong><br/>", Type, "</div>",
+      # Visible badge, not just a code comment -- Data_Coverage is "Full" for
+      # every district on a real structured job-board platform this project
+      # scrapes via a documented API (AppliTrack/SchoolSpring/TedK12/Tyler
+      # Portico); "Partial" comes from k12_district_coverage_tiers() in
+      # misc_district_scrapers.R for every other directly-scraped district
+      # (a heuristic single-page scrape of the district's own site instead).
+      # HE institutions carry Data_Coverage = NA (no tier designed for HE
+      # yet) -- guarded explicitly so an NA never reaches this ifelse as a
+      # bare comparison (NA != "Full" is NA, not FALSE, which would inject a
+      # literal "NA" badge onto every HE marker rather than showing nothing).
+      ifelse(!is.na(Data_Coverage) & Data_Coverage != "Full",
+             paste0("<div style='margin:2px 0;'><span style='background:#fdecea;color:#a92f1e;",
+                    "font-size:0.78em;font-weight:bold;padding:1px 6px;border-radius:8px;'>",
+                    Data_Coverage, "</span></div>"),
+             ""),
       "<div>Current openings: <strong>", CurrentCount, "</strong></div>",
       "<div>New this week: ", WeeklyNew, "</div>",
       ifelse(!is.na(Vacancy_Rate),

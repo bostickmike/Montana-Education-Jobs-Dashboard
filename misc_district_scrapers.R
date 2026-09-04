@@ -4484,3 +4484,37 @@ parse_milescity_postings <- function(csv_text, url) {
   data.frame(Title = trimws(df$Position), Location = trimws(df$Location.Building),
              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
+
+# District-level data-completeness classification -- ported from Wyoming's
+# own misc_district_coverage_tiers(), adapted to this project's different
+# registry shape. Wyoming keeps directly-scraped districts split across two
+# registries (a main one for real ATS platforms, a separate
+# misc_district_registry for heuristic ones) and cross-checks its heuristic
+# tier against WSBA's statewide feed specifically, so it has two distinct
+# "Partial" sub-tiers ("WSBA + own page" vs "WSBA only"). Montana has one
+# unified k12_district_registry.csv (every directly-scraped district, real
+# platform or heuristic, in the same file, differentiated only by its
+# Platform column -- see CLAUDE.md's "Scrapers are split by reliability, not
+# by K-12/HE"), and OPI-direct dedup already applies uniformly to every
+# registered district's rows, not just a heuristic subset -- so there's no
+# Wyoming-style two-sub-tier split here, just one "Partial" tier for every
+# district whose Platform isn't one of the four real ATS platforms this
+# project scrapes via a documented API (direct_api_scrapers.R). Every other
+# Platform value (Apptegy, RedRoverK12, and every single-district
+# `*Heuristic` platform) is scraped via this file -- misc_district_scrapers.R's
+# own header comment already calls this whole file "a real but
+# acknowledged-less-reliable source" relative to direct_api_scrapers.R's
+# real platform APIs, so this function just makes that existing,
+# already-true distinction visible on the dashboard instead of leaving it
+# sitting only in code comments.
+MT_DIRECT_API_PLATFORMS <- c("AppliTrack", "SchoolSpring", "TedK12", "TylerPortico")
+
+# registry_csv is a parameter (not a hardcoded read) so this stays testable
+# against a synthetic registry without touching the real committed file.
+# Every district not returned here is implicitly "Full" -- callers coalesce
+# a missing match to that, the same convention Wyoming's own version uses.
+k12_district_coverage_tiers <- function(registry_csv = "k12_district_registry.csv") {
+  registry <- read.csv(registry_csv, stringsAsFactors = FALSE)
+  partial <- registry[!(registry$Platform %in% MT_DIRECT_API_PLATFORMS), ]
+  data.frame(District = partial$District, Data_Coverage = "Partial", stringsAsFactors = FALSE)
+}
