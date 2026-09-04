@@ -73,6 +73,24 @@ jobs:
         run: |
           Rscript -e 'rmarkdown::render("Mt_ED_Jobs.Rmd")'
 
+      # scrape_log.csv (per-source ok/empty/error + row count, written by
+      # safe_scrape() -- see scrape_helpers.R) is .gitignore'd on purpose,
+      # since committing it would mean a diff on every single run whether or
+      # not the actual data changed. Without this it's still thrown away the
+      # moment the job's workspace is torn down, so "which sources errored 3
+      # weeks running" was only ever answerable from a local run. `if:
+      # always()` uploads it even when a later step (sanity check, schema
+      # check) fails the job -- that's exactly the run you'd want the log
+      # from. 90-day retention is plenty for the weekly cadence.
+      - name: Upload this run's scrape_log.csv
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrape-log-${{ github.run_id }}
+          path: scrape_log.csv
+          retention-days: 90
+          if-no-files-found: warn
+
       - name: Sanity-check the new data before committing anything
         run: Rscript .github/scripts/sanity_check.R
 
