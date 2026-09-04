@@ -6,6 +6,72 @@
 # pattern matching with no Montana-specific behavior to verify against real
 # fixtures.
 
+test_that("attach_scrape_log_errors attaches the latest error message for a matching source", {
+  flagged <- data.frame(name = c("Butte School District 1", "Stable District"),
+                        mean_count = c(10, 5), n_weeks = c(3, 3), count = c(0, 4),
+                        stringsAsFactors = FALSE)
+  scrape_log <- data.frame(
+    timestamp = c("2026-09-01 10:00:00", "2026-09-01 10:05:00"),
+    source = c("Butte School District 1", "Stable District"),
+    status = c("error", "ok"),
+    n_rows = c(0, 4),
+    error_message = c("HTTP 500 Internal Server Error.", NA_character_),
+    stringsAsFactors = FALSE
+  )
+
+  result <- attach_scrape_log_errors(flagged, scrape_log)
+
+  expect_equal(result$scrape_error[result$name == "Butte School District 1"], "HTTP 500 Internal Server Error.")
+  expect_true(is.na(result$scrape_error[result$name == "Stable District"]))
+})
+
+test_that("attach_scrape_log_errors matches by substring for prefixed scrape_log source names (Apptegy)", {
+  flagged <- data.frame(name = "Wolf Point Public Schools", mean_count = 19, n_weeks = 3, count = 0,
+                        stringsAsFactors = FALSE)
+  scrape_log <- data.frame(
+    timestamp = "2026-09-01 10:00:00",
+    source = "Apptegy/chromote: Wolf Point Public Schools",
+    status = "error", n_rows = 0, error_message = "Page structure changed",
+    stringsAsFactors = FALSE
+  )
+
+  result <- attach_scrape_log_errors(flagged, scrape_log)
+
+  expect_equal(result$scrape_error, "Page structure changed")
+})
+
+test_that("attach_scrape_log_errors keeps only the most recent attempt when a source logged twice", {
+  flagged <- data.frame(name = "Rocky Mountain College", mean_count = 4.7, n_weeks = 3, count = 0,
+                        stringsAsFactors = FALSE)
+  scrape_log <- data.frame(
+    timestamp = c("2026-09-01 09:00:00", "2026-09-01 09:05:00"),
+    source = c("Rocky Mountain College", "Rocky Mountain College"),
+    status = c("error", "ok"),
+    n_rows = c(0, 12),
+    error_message = c("HTTP 429 Too Many Requests.", NA_character_),
+    stringsAsFactors = FALSE
+  )
+
+  result <- attach_scrape_log_errors(flagged, scrape_log)
+
+  # The later attempt succeeded -- no error should be attached.
+  expect_true(is.na(result$scrape_error))
+})
+
+test_that("attach_scrape_log_errors leaves scrape_error NA when there's no scrape_log or no flagged rows", {
+  flagged <- data.frame(name = "Some District", mean_count = 5, n_weeks = 3, count = 0, stringsAsFactors = FALSE)
+  empty_log <- data.frame(timestamp = character(0), source = character(0), status = character(0),
+                          n_rows = integer(0), error_message = character(0))
+
+  result <- attach_scrape_log_errors(flagged, empty_log)
+  expect_true(is.na(result$scrape_error))
+
+  empty_flagged <- data.frame(name = character(0), mean_count = numeric(0), n_weeks = integer(0), count = numeric(0))
+  result2 <- attach_scrape_log_errors(empty_flagged, empty_log)
+  expect_equal(nrow(result2), 0)
+  expect_true("scrape_error" %in% names(result2))
+})
+
 test_that("build_historical_counts excludes pre-pipeline snapshots and computes correct means", {
   snapshots <- list(
     "2026-08-06" = data.frame(District = c("A", "A", "A", "B")),

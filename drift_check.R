@@ -58,6 +58,39 @@ collapse_statewide_feed_names <- function(df, name_col = "District",
   names_out
 }
 
+# A source dropping to (near) zero is ambiguous on count alone: a genuinely
+# quiet week looks identical to a scraper that started erroring. But
+# safe_scrape() (scrape_helpers.R) already logs which one happened, to
+# scrape_log.csv, in the very same pipeline run that produced this week's
+# drift-flagged counts -- so check there first, before spending a live
+# chromote render on a guess. A source whose most recent logged attempt
+# this run was a real "error" (not "empty") is a much stronger and cheaper
+# signal: the registered URL itself is broken (a dead ATS tenant, a DNS
+# failure, a migrated platform -- see 2026-09's Butte/Belgrade/Hamilton
+# AppliTrack migrations), not just "no visible postings right now".
+# scrape_log's `source` strings aren't always an exact match for a flagged
+# `name` (e.g. Apptegy districts log as "Apptegy/chromote: <District>"), so
+# match by substring containment rather than requiring equality.
+attach_scrape_log_errors <- function(flagged, scrape_log) {
+  flagged$scrape_error <- rep(NA_character_, nrow(flagged))
+  if (nrow(flagged) == 0 || nrow(scrape_log) == 0) return(flagged)
+
+  # Keep only each source's single most recent logged attempt -- a source
+  # that errored earlier in the run but succeeded on a later retry/re-run
+  # must NOT be reported as currently broken, so status is checked on the
+  # latest attempt, not on "was there ever an error this run".
+  latest <- scrape_log[order(scrape_log$timestamp), ]
+  latest <- latest[!duplicated(latest$source, fromLast = TRUE), ]
+  errors <- latest[!is.na(latest$status) & latest$status == "error", ]
+  if (nrow(errors) == 0) return(flagged)
+
+  for (i in seq_len(nrow(flagged))) {
+    hits <- which(vapply(errors$source, function(s) grepl(flagged$name[i], s, fixed = TRUE), logical(1)))
+    if (length(hits) > 0) flagged$scrape_error[i] <- errors$error_message[hits[1]]
+  }
+  flagged
+}
+
 build_historical_counts <- function(archive_snapshots, name_col) {
   # archive_snapshots: named list of data.frames, names are "YYYY-MM-DD"
   # dates, each data.frame has a `name_col` column of source names (one row
