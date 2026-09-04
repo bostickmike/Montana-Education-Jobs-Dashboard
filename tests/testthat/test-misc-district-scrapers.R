@@ -2217,6 +2217,19 @@ test_that("fetch_apptegy_k12_postings keeps healthy districts when one fetch fai
   expect_equal(result$Title, "Healthy posting")
 })
 
+test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy/RedRoverK12 rows in both directions", {
+  # This is the actual bug class the 2026-09 AppliTrack migrations exposed
+  # in miniature (a registry row whose scraper doesn't run, or vice versa)
+  # -- catching it here means a forgotten sync surfaces as an immediate,
+  # specific test failure instead of a district silently scraping nothing
+  # (or a scraped district with no registry row to join against on the
+  # Map/District Summary) for however many weeks until someone notices.
+  registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  registry_districts <- registry$District[registry$Platform %in% c("Apptegy", "RedRoverK12")]
+
+  expect_setequal(names(APPTEGY_DISTRICT_SCRAPERS), registry_districts)
+})
+
 test_that("fetch_apptegy_k12_postings shares one session across all 43 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")

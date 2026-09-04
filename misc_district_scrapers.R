@@ -75,7 +75,7 @@ LIVINGSTON_NON_JOB_TITLE_PATTERN <- "Application|W-4|\\bI-9\\b|Agreement|\\bCBA\
 fetch_livingston_postings <- function(url = "https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_livingston_postings(resp_body_string(resp), url)
 }
 
@@ -148,7 +148,7 @@ fetch_lodgegrass_postings <- function(base_url = "https://www.lgschools.org/apps
     tab_url <- if (is.na(tab$pREC_ID)) base_url else paste0(base_url, "&termREC_ID=&pREC_ID=", tab$pREC_ID)
     resp <- request(tab_url) %>%
       req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-      req_perform()
+      perform_with_retry()
     parse_lodgegrass_postings(resp_body_string(resp), tab$location, tab_url)
   })
   dplyr::bind_rows(all_tabs)
@@ -222,7 +222,7 @@ fetch_broadview_postings <- function() {
                   pg$uREC_ID, "&type=d&pREC_ID=", pg$pREC_ID)
     resp <- request(url) %>%
       req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-      req_perform()
+      perform_with_retry()
     parse_broadview_page(resp_body_string(resp), pg$location, pg$style, url)
   })
   dplyr::bind_rows(all_pages)
@@ -282,7 +282,7 @@ parse_broadview_page <- function(html_text, location, style, url) {
 fetch_custer_postings <- function(url = "https://www.custerschools.org/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_custer_postings(resp_body_string(resp), url)
 }
 
@@ -321,7 +321,7 @@ parse_custer_postings <- function(html_text, url) {
 fetch_scobey_postings <- function(url = "http://scobeyschools.com/employment.html") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_scobey_postings(resp_body_string(resp), url)
 }
 
@@ -368,7 +368,7 @@ parse_scobey_postings <- function(html_text, url) {
 fetch_ramsay_postings <- function(url = "https://ramsayschool.com/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_ramsay_postings(resp_body_string(resp), url)
 }
 
@@ -401,7 +401,7 @@ parse_ramsay_postings <- function(html_text, url) {
 fetch_roy_postings <- function(url = "https://roy.k12.mt.us/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_roy_postings(resp_body_string(resp), url)
 }
 
@@ -443,7 +443,7 @@ ARROWHEAD_STOP_HEADING <- "Equal Opportunity Employer"
 fetch_arrowhead_postings <- function(url = "https://arrowheadk8.com/careers/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_arrowhead_postings(resp_body_string(resp), url)
 }
 
@@ -490,7 +490,7 @@ NORTHSTAR_STOP_LINE <- "Employment Application"
 fetch_northstar_postings <- function(url = "https://sites.google.com/nsschools.org/home/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_northstar_postings(resp_body_string(resp), url)
 }
 
@@ -541,7 +541,7 @@ TREGO_STOP_LINE <- "Report abuse"
 fetch_trego_postings <- function(url = "https://www.tregoschool.org/about-us/our-staff/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_trego_postings(resp_body_string(resp), url)
 }
 
@@ -583,7 +583,7 @@ parse_trego_postings <- function(html_text, url) {
 fetch_baker_postings <- function(url = "https://www.baker.k12.mt.us/quick-links/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_baker_postings(resp_body_string(resp), url)
 }
 
@@ -626,7 +626,7 @@ CUTBANK_START_PATTERN <- "^Open Positions \\(as of .+\\)$"
 fetch_cutbank_postings <- function(url = "https://sites.google.com/view/cutbankjobs/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_cutbank_postings(resp_body_string(resp), url)
 }
 
@@ -674,7 +674,7 @@ HINSDALE_START_PATTERN <- "^The Hinsdale School District is currently looking fo
 fetch_hinsdale_postings <- function(url = "https://hinsdale.k12.mt.us/District/1557-Untitled.html") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_hinsdale_postings(resp_body_string(resp), url)
 }
 
@@ -778,7 +778,7 @@ VALIER_MARKER_PATTERN <- "^Valier Schools is currently seeking applicants for"
 fetch_valier_postings <- function(url = "https://www.valier.k12.mt.us/about-us/Employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_valier_postings(resp_body_string(resp), url)
 }
 
@@ -816,7 +816,7 @@ parse_valier_postings <- function(html_text, url) {
 fetch_roberts_postings <- function(url = "https://www.robertsrockets.org/index.php/district-information/district-employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_roberts_postings(resp_body_string(resp), url)
 }
 
@@ -1146,7 +1146,7 @@ fetch_lonerock_postings <- function(chromote_session, url = "https://www.loneroc
 fetch_dixon_postings <- function(url = "https://www.dixonschool.org/about-dixon-school/employment-opportunities") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_dixon_postings(resp_body_string(resp), url)
 }
 
@@ -1187,7 +1187,7 @@ parse_dixon_postings <- function(html_text, url) {
 fetch_elysian_postings <- function(url = "https://sites.google.com/a/elysianschool.org/ely23/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_elysian_postings(resp_body_string(resp), url)
 }
 
@@ -1222,7 +1222,7 @@ FAIRMONTEGAN_CATEGORIES <- c("Administrative", "Certified", "Classified")
 fetch_fairmontegan_postings <- function(url = "https://www.fmemontana.net/human-resources/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_fairmontegan_postings(resp_body_string(resp), url)
 }
 
@@ -1266,7 +1266,7 @@ parse_fairmontegan_postings <- function(html_text, url) {
 fetch_lustre_postings <- function(url = "https://www.lustregradeschool.com/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_lustre_postings(resp_body_string(resp), url)
 }
 
@@ -1303,7 +1303,7 @@ parse_lustre_postings <- function(html_text, url) {
 fetch_miami_postings <- function(url = "https://www.miamielementary.com/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_miami_postings(resp_body_string(resp), url)
 }
 
@@ -1331,7 +1331,7 @@ parse_miami_postings <- function(html_text, url) {
 fetch_zurich_postings <- function(url = "https://www.zurichelementary17.org/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_zurich_postings(resp_body_string(resp), url)
 }
 
@@ -1375,7 +1375,7 @@ DAYTON_CATEGORIES <- c("Teachers", "Paraprofessionals", "Substitute Teachers")
 fetch_dayton_postings <- function(url = "https://daytonschool.net/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_dayton_postings(resp_body_string(resp), url)
 }
 
@@ -1428,7 +1428,7 @@ CRESTON_CATEGORIES <- c("Administrative", "Certified", "Classified", "Guest Teac
 fetch_creston_postings <- function(url = "https://docs.google.com/document/d/1BxeYApkcuS092nu5a1iRHAeg35jcUxjVPWnTCXEsThU/export?format=txt") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_creston_postings(resp_body_string(resp), url)
 }
 
@@ -1471,7 +1471,7 @@ parse_creston_postings <- function(doc_text, url) {
 fetch_clinton_postings <- function(url = "https://clintoncougars.com/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_clinton_postings(resp_body_string(resp), url)
 }
 
@@ -1512,7 +1512,7 @@ AUGUSTA_CSS_LEAK_PATTERN <- "^#comp-"
 fetch_augusta_postings <- function(url = "https://www.augustaschool.org/job-openings") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_augusta_postings(resp_body_string(resp), url)
 }
 
@@ -1558,7 +1558,7 @@ parse_augusta_postings <- function(html_text, url) {
 fetch_brockton_postings <- function(url = "https://mtbrocktonps.schoolinsites.com/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_brockton_postings(resp_body_string(resp), url)
 }
 
@@ -1599,7 +1599,7 @@ CULBERTSON_HEADER_PATTERN <- "^Employment Opportunities:"
 fetch_culbertson_postings <- function(url = "https://www.culbertsonschool.com/about-us/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_culbertson_postings(resp_body_string(resp), url)
 }
 
@@ -1642,7 +1642,7 @@ parse_culbertson_postings <- function(html_text, url) {
 fetch_cottonwood57_postings <- function(url = "https://www.cottonwood57.org/job-openings") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_cottonwood57_postings(resp_body_string(resp), url)
 }
 
@@ -1673,7 +1673,7 @@ parse_cottonwood57_postings <- function(html_text, url) {
 fetch_winnett_postings <- function(url = "https://www.winnettschool.org/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_winnett_postings(resp_body_string(resp), url)
 }
 
@@ -1726,7 +1726,7 @@ LINCOLN_STOP_LINE <- "Please inquire at 406-362-4201 for current employment oppo
 fetch_lincoln_postings <- function(url = "https://sites.google.com/a/lincoln.k12.mt.us/webpage2/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_lincoln_postings(resp_body_string(resp), url)
 }
 
@@ -1776,7 +1776,7 @@ looks_like_independent_title <- function(line) {
 fetch_independent_postings <- function(url = "https://www.independent.k12.mt.us/job-openings") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_independent_postings(resp_body_string(resp), url)
 }
 
@@ -1831,7 +1831,7 @@ looks_like_shepherd_title <- function(line) {
 fetch_shepherd_postings <- function(url = "https://www.shepherd.k12.mt.us/dist-office/jobs/overview") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_shepherd_postings(resp_body_string(resp), url)
 }
 
@@ -1881,7 +1881,7 @@ HYSHAM_MARKER <- "Lightbox Page"
 fetch_hysham_postings <- function(url = "https://www.hyshamschools.com/jobs") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_hysham_postings(resp_body_string(resp), url)
 }
 
@@ -1934,7 +1934,7 @@ SWANRIVER_HEADER_PATTERN <- "<strong><u>\\s*([^<]*?)\\s*</u>:?\\s*</strong>:?"
 fetch_swanriver_postings <- function(url = "https://www.swanriverschool.org/human-resources/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_swanriver_postings(resp_body_string(resp), url)
 }
 
@@ -1994,7 +1994,7 @@ BIGFORK_MARKER <- "BIGFORK SCHOOL DISTRICT NO. 38"
 fetch_bigfork_postings <- function(url = "https://bigforkschools.org/about/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_bigfork_postings(resp_body_string(resp), url)
 }
 
@@ -2035,7 +2035,7 @@ REEDPOINT_STOP_PATTERN <- "^Applications are available"
 fetch_reedpoint_postings <- function(url = "https://www.reedpoint.k12.mt.us/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_reedpoint_postings(resp_body_string(resp), url)
 }
 
@@ -2080,7 +2080,7 @@ HOBSON_STOP_PATTERN <- "^Listing of all Current Teacher Openings"
 fetch_hobson_postings <- function(url = "https://www.hobson.k12.mt.us/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_hobson_postings(resp_body_string(resp), url)
 }
 
@@ -2129,7 +2129,7 @@ TURNER_BOILERPLATE <- c("Teacher’s/Staff Handbook", "Certified Application PDF
 fetch_turner_postings <- function(url = "https://turner.k12.mt.us/employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_turner_postings(resp_body_string(resp), url)
 }
 
@@ -2203,7 +2203,7 @@ TERRY_SECTIONS <- list(
 fetch_terry_postings <- function(url = "https://terryschools.org/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_terry_postings(resp_body_string(resp), url)
 }
 
@@ -2249,7 +2249,7 @@ parse_terry_postings <- function(html_text, url) {
 fetch_gallatingateway_postings <- function(url = "https://www.gallatingatewayschool.com/Employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_gallatingateway_postings(resp_body_string(resp), url)
 }
 
@@ -3289,7 +3289,7 @@ parse_thompsonfalls_postings <- function(html_text, url) {
 fetch_thompsonfalls_postings <- function(url = "https://www.thompsonfalls.net/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_thompsonfalls_postings(resp_body_string(resp), url)
 }
 
@@ -4037,7 +4037,7 @@ EKALAKA_BOILERPLATE_TITLES <- c("Certified and Classified Applications")
 fetch_ekalaka_postings <- function(url = "https://www.ekalaka.net/336413_2") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_ekalaka_postings(resp_body_string(resp), url)
 }
 
@@ -4093,7 +4093,7 @@ parse_ekalaka_postings <- function(html_text, url) {
 fetch_shieldsvalley_postings <- function(url = "https://svalleyk12.org/district/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_shieldsvalley_postings(resp_body_string(resp), url)
 }
 
@@ -4366,6 +4366,69 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
 # Mt_ED_Jobs.Rmd's own use of it -- stays testable without a real browser
 # available; passing NULL returns an empty result for every district (via
 # safe_scrape's own error handling) rather than crashing.
+# The full set of districts fetch_apptegy_k12_postings() scrapes by default,
+# keyed by the exact registry District name each one's row uses -- pulled
+# out to a top-level constant (rather than a literal inside the function)
+# specifically so test-misc-district-scrapers.R's own cross-check test can
+# assert names(APPTEGY_DISTRICT_SCRAPERS) exactly matches
+# k12_district_registry.csv's Apptegy/RedRoverK12 rows, in both directions.
+# That test exists because this list and the registry are NOT the same
+# data (one's a District -> fetch-function map, the other's the Map/District
+# Summary join target) and nothing else keeps them in sync -- a registry row
+# added here without a matching entry (or vice versa) previously would have
+# silently scraped nothing for that district, or scraped a district with no
+# registry row to join against, for weeks before anyone noticed.
+APPTEGY_DISTRICT_SCRAPERS <- list(
+  "Wolf Point Public Schools" = fetch_wolfpoint_postings,
+  "Plentywood Public Schools" = fetch_plentywood_postings,
+  "Conrad Public Schools" = fetch_conrad_postings,
+  "Westby School District 3" = fetch_westby_postings,
+  "Choteau School District" = fetch_choteau_postings,
+  "Gardiner Public Schools" = fetch_gardiner_postings,
+  "Malta Public Schools" = fetch_malta_postings,
+  "Drummond Public Schools" = fetch_drummond_postings,
+  "Deer Lodge School District #1" = fetch_deerlodge_postings,
+  "Townsend School District" = fetch_townsend_postings,
+  "Hays-Lodge Pole School District" = fetch_hayslodgepole_postings,
+  "Plevna School District #55" = fetch_plevna_postings,
+  "Sunburst Schools" = fetch_sunburst_postings,
+  "Belt Public Schools" = fetch_belt_postings,
+  "Big Sky School District 72" = fetch_bigsky_postings,
+  "Melstone Public Schools" = fetch_melstone_postings,
+  "Roundup School District" = fetch_roundup_postings,
+  "White Sulphur Springs Schools" = fetch_wss_postings,
+  "Shelby School District" = fetch_shelbymt_postings,
+  "Geyser Public Schools" = fetch_geyser_postings,
+  "Centerville Public Schools" = fetch_centerville_postings,
+  "Arlee Joint School District" = fetch_arlee_postings,
+  "Chinook Public Schools" = fetch_chinook_postings,
+  "Darby School District 9" = fetch_darby_postings,
+  "Dutton/Brady Public School District" = fetch_dutton_postings,
+  "St. Ignatius School District" = function(session) {
+    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2261")
+  },
+  "Hamilton School District 3" = function(session) {
+    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2362",
+                            default_location = "Hamilton")
+  },
+  "Stanford Public Schools" = fetch_stanford_postings,
+  "Lolo School District 7" = fetch_lolo_postings,
+  "Froid Public Schools" = fetch_froid_postings,
+  "Huntley Project School District" = fetch_huntley_postings,
+  "Park City Schools" = fetch_parkcity_postings,
+  "Alberton School District" = fetch_alberton_postings,
+  "Dillon School District 10" = fetch_dillon_postings,
+  "Ennis Schools" = fetch_ennis_postings,
+  "Columbus Public Schools" = fetch_columbus_postings,
+  "St Regis School District" = fetch_stregis_postings,
+  "Florence-Carlton School District 15-6" = fetch_florencecarlton_postings,
+  "West Yellowstone School District" = fetch_westyellowstone_postings,
+  "Bonner School District #14" = fetch_bonner_postings,
+  "Deer Park School District" = fetch_deerpark_postings,
+  "Evergreen School District #50" = fetch_evergreen_postings,
+  "Lone Rock School District" = fetch_lonerock_postings
+)
+
 fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
                                        log_path = "scrape_log.csv",
                                        scrapers = NULL) {
@@ -4377,57 +4440,7 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
   session <- chromote_session_factory()
   on.exit(tryCatch(session$close(), error = function(e) NULL), add = TRUE)
 
-  default_scrapers <- list(
-    "Wolf Point Public Schools" = fetch_wolfpoint_postings,
-    "Plentywood Public Schools" = fetch_plentywood_postings,
-    "Conrad Public Schools" = fetch_conrad_postings,
-    "Westby School District 3" = fetch_westby_postings,
-    "Choteau School District" = fetch_choteau_postings,
-    "Gardiner Public Schools" = fetch_gardiner_postings,
-    "Malta Public Schools" = fetch_malta_postings,
-    "Drummond Public Schools" = fetch_drummond_postings,
-    "Deer Lodge School District #1" = fetch_deerlodge_postings,
-    "Townsend School District" = fetch_townsend_postings,
-    "Hays-Lodge Pole School District" = fetch_hayslodgepole_postings,
-    "Plevna School District #55" = fetch_plevna_postings,
-    "Sunburst Schools" = fetch_sunburst_postings,
-    "Belt Public Schools" = fetch_belt_postings,
-    "Big Sky School District 72" = fetch_bigsky_postings,
-    "Melstone Public Schools" = fetch_melstone_postings,
-    "Roundup School District" = fetch_roundup_postings,
-    "White Sulphur Springs Schools" = fetch_wss_postings,
-    "Shelby School District" = fetch_shelbymt_postings,
-    "Geyser Public Schools" = fetch_geyser_postings,
-    "Centerville Public Schools" = fetch_centerville_postings,
-    "Arlee Joint School District" = fetch_arlee_postings,
-    "Chinook Public Schools" = fetch_chinook_postings,
-    "Darby School District 9" = fetch_darby_postings,
-    "Dutton/Brady Public School District" = fetch_dutton_postings,
-    "St. Ignatius School District" = function(session) {
-      fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2261")
-    },
-    "Hamilton School District 3" = function(session) {
-      fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2362",
-                              default_location = "Hamilton")
-    },
-    "Stanford Public Schools" = fetch_stanford_postings,
-    "Lolo School District 7" = fetch_lolo_postings,
-    "Froid Public Schools" = fetch_froid_postings,
-    "Huntley Project School District" = fetch_huntley_postings,
-    "Park City Schools" = fetch_parkcity_postings,
-    "Alberton School District" = fetch_alberton_postings,
-    "Dillon School District 10" = fetch_dillon_postings,
-    "Ennis Schools" = fetch_ennis_postings,
-    "Columbus Public Schools" = fetch_columbus_postings,
-    "St Regis School District" = fetch_stregis_postings,
-    "Florence-Carlton School District 15-6" = fetch_florencecarlton_postings,
-    "West Yellowstone School District" = fetch_westyellowstone_postings,
-    "Bonner School District #14" = fetch_bonner_postings,
-    "Deer Park School District" = fetch_deerpark_postings,
-    "Evergreen School District #50" = fetch_evergreen_postings,
-    "Lone Rock School District" = fetch_lonerock_postings
-  )
-  if (is.null(scrapers)) scrapers <- default_scrapers
+  if (is.null(scrapers)) scrapers <- APPTEGY_DISTRICT_SCRAPERS
 
   dplyr::bind_rows(lapply(names(scrapers), function(district) {
     df <- safe_scrape(
@@ -4452,7 +4465,7 @@ fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
 fetch_milescity_postings <- function(url = "https://docs.google.com/spreadsheets/d/1Ct4NASCs-jCEllcMREDsXNdgx8zaKYCosoyo6fHGtKY/export?format=csv&gid=0") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    req_perform()
+    perform_with_retry()
   parse_milescity_postings(resp_body_string(resp), url)
 }
 
