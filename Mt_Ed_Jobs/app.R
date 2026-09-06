@@ -1258,6 +1258,14 @@ server <- function(input, output, session) {
   observe({
     df <- map_filtered()
 
+    # Clear unconditionally so unchecking every map-type box empties the map,
+    # then bail before with(df, paste0(...)) runs on a 0-row frame (harmless
+    # today -- addCircleMarkers iterates off lng/lat length so a mismatched
+    # length-1 popup vector is never read -- but an explicit guard so a
+    # reader doesn't have to re-derive that; matches the he_scroll observer).
+    proxy <- leafletProxy("combined_map", data = df) %>% clearMarkers()
+    if (nrow(df) == 0) return()
+
     popups <- with(df, paste0(
       "<div><strong>", Name, "</strong><br/>", Type, "</div>",
       # Visible badge, not just a code comment -- Data_Coverage is "Full" for
@@ -1348,8 +1356,7 @@ server <- function(input, output, session) {
       "</div>"
     ))
 
-    leafletProxy("combined_map", data = df) %>%
-      clearMarkers() %>%
+    proxy %>%
       addCircleMarkers(
         lng = ~Longitude, lat = ~Latitude,
         radius = ~map_marker_radius(CurrentCount),
