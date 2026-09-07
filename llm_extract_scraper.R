@@ -87,20 +87,36 @@ LLM_EXTRACT_SYSTEM_PROMPT <- paste(
   "  'Position' that are not literally in the title text.",
   "- If a section says it has no openings ('None at this time', 'no current",
   "  openings', 'no vacancies'), return nothing for that section.",
+  "- A page may ALSO carry a reference list of job descriptions -- roles the",
+  "  district hires for in general, downloadable JDs, 'positions include...' --",
+  "  that is SEPARATE from its actual current openings. Extract ONLY the",
+  "  positions the page presents as currently open / accepting applications",
+  "  now (usually a short list, often naming a specific school year). Do NOT",
+  "  return items that are only there as a standing job-description library.",
   "- location: the specific building or school if the page names one for the",
   "  posting; otherwise the district name.",
   "- posted_date: the date the page shows for that posting, in YYYY-MM-DD",
   "  form, if and only if a date is clearly shown; otherwise an empty string.",
   "- If the page has no open postings, or you are not confident an item is a",
   "  real current job posting, return an empty list. Never guess.",
+  "",
+  "Reply with ONLY a JSON object of this exact shape, nothing else:",
+  '  {\"postings\": [{\"title\": \"...\", \"location\": \"...\", \"posted_date\": \"...\"}]}',
+  "Use an empty array for postings if there are none. posted_date is \"\" when",
+  "no date is shown.",
   sep = "\n"
 )
 
-# OpenAI-style response_format payload forcing a {postings: [...]} object.
-# No "strict" key -- Gemini's OpenAI-compat endpoint honours the schema but
-# not OpenAI's strict-mode flag, and parse_llm_extracted_postings() is
-# defensive about missing/extra fields regardless.
-LLM_EXTRACT_RESPONSE_FORMAT <- list(
+# response_format: plain json_object mode -- the lowest-common-denominator
+# that every OpenAI-compatible provider accepts (Gemini's compat layer 400s
+# on a nested json_schema with additionalProperties). The exact shape is
+# pinned by the system prompt above, and parse_llm_extracted_postings() is
+# fully defensive about missing/extra/mistyped fields regardless.
+LLM_EXTRACT_RESPONSE_FORMAT <- list(type = "json_object")
+
+# Kept for reference / for a provider that does support strict json_schema
+# (set LLM_EXTRACT_ENDPOINT at it and swap this in):
+LLM_EXTRACT_RESPONSE_SCHEMA <- list(
   type = "json_schema",
   json_schema = list(
     name = "job_postings",
@@ -147,8 +163,10 @@ llm_extract_render_text <- function(chromote_session, url, settle_seconds = 4) {
 # Returns a list of {title, location, posted_date} lists, or NULL when the
 # token is missing / the page text is blank / the response can't be parsed.
 # A real HTTP error (401 bad token, 400 bad request, a persistent 5xx after
-# retries) is allowed to throw -- safe_scrape() upstream turns that into an
-# "error" row in scrape_log.csv, exactly like any other scraper.
+# retries) is allowed to throw, WITH the provider's response body in the
+# message -- safe_scrape() upstream turns that into an "error" row in
+# scrape_log.csv, and "HTTP 400: <what the API actually said>" is a lot more
+# useful there than a bare "HTTP 400 Bad Request".
 llm_extract_call <- function(page_text,
                              model = llm_extract_model(),
                              endpoint = llm_extract_endpoint(),
@@ -171,6 +189,10 @@ llm_extract_call <- function(page_text,
                 Accept = "application/json") |>
     req_body_json(body) |>
     req_retry(max_tries = max_tries, backoff = function(i) 2^i) |>
+    req_error(body = function(resp) {
+      msg <- tryCatch(resp_body_string(resp), error = function(e) "")
+      if (nzchar(msg)) substr(gsub("[[:space:]]+", " ", msg), 1L, 500L) else NULL
+    }) |>
     req_perform()
 
   content <- tryCatch(
@@ -222,7 +244,8 @@ llm_extract_looks_boilerplate <- function(titles) {
 # Link). Any failure mode -> a 0-row frame; never a fabricated row.
 parse_llm_extracted_postings <- function(page_text, llm_postings, url,
                                          location_fallback = NA_character_,
-                                         max_plausible = LLM_EXTRACT_MAX_PLAUSIBLE) {
+                                         max_plausible = LLM_EXTRACT_MAX_PLAUSIBLE,
+                                         stale_after_days = 550L) {
   if (is.null(llm_postings) || length(llm_postings) == 0) return(llm_extract_empty())
 
   field <- function(p, k) {
@@ -252,6 +275,17 @@ parse_llm_extracted_postings <- function(page_text, llm_postings, url,
   if (nrow(df) == 0) return(llm_extract_empty())
 
   df$Posted_Date[is.na(df$Posted_Date) | !nzchar(df$Posted_Date)] <- NA_character_
+
+  # Stale-date filter: a posting the page still shows with a posted date more
+  # than ~18 months old is page rot the district never cleaned up, not a
+  # current opening (confirmed on Power SD -- "Date Posted: March 20, 2023"
+  # entries sitting under a real 2026 hiring blurb). Only drops rows that
+  # carry a parseable old date; undated rows are kept.
+  parsed_date <- suppressWarnings(as.Date(df$Posted_Date))
+  stale <- !is.na(parsed_date) & parsed_date < (Sys.Date() - stale_after_days)
+  df <- df[!stale, , drop = FALSE]
+  if (nrow(df) == 0) return(llm_extract_empty())
+
   blank_loc <- is.na(df$Location) | !nzchar(df$Location)
   df$Location[blank_loc] <- location_fallback
 

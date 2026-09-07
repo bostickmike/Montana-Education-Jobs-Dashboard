@@ -101,6 +101,17 @@ test_that("empty / NULL model output yields a 0-row frame, never a fabricated ro
   expect_equal(nrow(parse_llm_extracted_postings(PAGE, blank, URL)), 0)
 })
 
+test_that("a posting with a parseable old posted_date is dropped as page rot", {
+  postings <- list(
+    list(title = "Assistant Cook", location = "Ennis Schools", posted_date = "2023-03-20"),
+    list(title = "Custodian", location = "Ennis Schools", posted_date = ""),          # undated -> kept
+    list(title = "High School Wrestling Head Coach", location = "Ennis Schools",
+         posted_date = format(Sys.Date() - 30))                                       # recent -> kept
+  )
+  res <- parse_llm_extracted_postings(PAGE, postings, URL, stale_after_days = 550L)
+  expect_setequal(res$Title, c("Custodian", "High School Wrestling Head Coach"))
+})
+
 test_that("posted_date normalises '' to NA and a real date passes through", {
   postings <- list(
     list(title = "Assistant Cook", location = "Ennis Schools", posted_date = ""),

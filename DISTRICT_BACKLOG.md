@@ -37,12 +37,17 @@ Already in `llm_extract_targets.csv` as of this PR:
 
 | District | County | Page | Note | Status |
 |---|---|---|---|---|
-| Rapelje School District #32 | Stillwater | `rapelje.k12.mt.us/job-listings` | prose under category headings | in pilot |
-| Grass Range Public Schools | Fergus | `grps.k12.mt.us/staff/open-positions` | prose names openings; a standing-JD list below is a decoy | in pilot |
-| Cayuse Prairie School District #10 | Flathead | `cayuseprairie.com/page/employment` | Apptegy (bot-gated); `<strong>` used for general emphasis | in pilot |
-| Judith Gap Schools | Wheatland | `judithgap.k12.mt.us/employment/job-openings` | couldn't preview; pilot confirms whether there's real content | in pilot |
-| Power School District | Teton | `power.k12.mt.us/District/Portal/Employment` | was stale (Dec 2024); "Now Hiring" news item resurfaced — re-testing | in pilot |
-| Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | **main page only** — postings historically spread across ~6 Finalsite subpages; add subpage rows (same District name) if shadow output misses content | in pilot (partial) |
+First live extraction 2026-09-07 (Gemini). All titles verified against the
+live pages -- nothing fabricated.
+
+| District | County | Page | Live-run result 2026-09-07 |
+|---|---|---|---|
+| Rapelje School District #32 | Stillwater | `rapelje.k12.mt.us/job-listings` | ✅ 3/3 (Bus Drivers, Preschool Teacher, Cook's Helper) |
+| Grass Range Public Schools | Fergus | `grps.k12.mt.us/staff/open-positions` | ✅ 3/3 after the "standing-JD list ≠ current openings" prompt rule |
+| Cayuse Prairie School District #10 | Flathead | `cayuseprairie.com/page/employment` | ✅ 1/1 (SpEd Paraprofessional -- the page really does only have one) |
+| Judith Gap Schools | Wheatland | `judithgap.k12.mt.us/District/Portal/Employment` | ✅ 2 (Custodian/Maint/Boiler Operator, School Cook) -- **URL corrected** from `/employment/job-openings`, which was a shell |
+| Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | ✅ 4 on the main page (School Nurse, paras, Sub Teacher, Custodial Subs). Add subpage rows if content is missed. |
+| ~~Power School District~~ | Teton | `power.k12.mt.us/District/Portal/Employment` | ❌ **removed** -- page rot: three "Date Posted: March 20, 2023" entries under one undated 2026 blurb. Stale-date filter drops the old ones; the one real item isn't cleanly titled. Recheck if the district cleans up the page. |
 
 To verify and likely add:
 
