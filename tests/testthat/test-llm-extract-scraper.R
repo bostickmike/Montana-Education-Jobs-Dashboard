@@ -129,7 +129,21 @@ test_that("llm_extract_title_on_page matches a leading chunk, not the whole stri
 
 test_that("llm_extract_call returns NULL (no throw) when the token is missing", {
   expect_null(llm_extract_call("some page text", token = ""))
-  expect_null(llm_extract_call("", token = "ghp_fake"))
+  expect_null(llm_extract_call("", token = "fake-key"))
+})
+
+test_that("provider config is env-overridable, defaults to Gemini", {
+  withr::with_envvar(c(LLM_EXTRACT_ENDPOINT = "", LLM_EXTRACT_MODEL = "",
+                       LLM_EXTRACT_KEY_ENV = ""), {
+    expect_match(llm_extract_endpoint(), "generativelanguage\\.googleapis\\.com")
+    expect_equal(llm_extract_model(), "gemini-3.1-flash-lite")
+    expect_equal(llm_extract_key_env(), "GEMINI_API_KEY")
+  })
+  withr::with_envvar(c(LLM_EXTRACT_KEY_ENV = "OPENAI_API_KEY",
+                       OPENAI_API_KEY = "sk-test"), {
+    expect_equal(llm_extract_key_env(), "OPENAI_API_KEY")
+    expect_equal(llm_extract_token(), "sk-test")
+  })
 })
 
 
@@ -157,12 +171,12 @@ test_that("fetch_all_llm_extracted_postings is a no-op without a chromote factor
                         County = "Fergus", Notes = "", stringsAsFactors = FALSE)
 
   # no factory
-  r1 <- fetch_all_llm_extracted_postings(NULL, targets = targets, token = "ghp_fake")
+  r1 <- fetch_all_llm_extracted_postings(NULL, targets = targets, token = "fake-key")
   expect_equal(nrow(r1), 0); expect_equal(names(r1), cols)
 
   # no targets
   r2 <- fetch_all_llm_extracted_postings(function() stop("should not be called"),
-                                         targets = data.frame(), token = "ghp_fake")
+                                         targets = data.frame(), token = "fake-key")
   expect_equal(nrow(r2), 0)
 
   # no token -> skipped, logged as skipped_no_key, session never created

@@ -13,10 +13,6 @@ on:
 permissions:
   contents: write
   issues: write
-  # GitHub Models access for llm_extract_scraper.R's SHADOW pilot -- lets the
-  # built-in GITHUB_TOKEN call the inference API, so no separate API-key
-  # secret is needed. Harmless when the pilot target list is empty.
-  models: read
 
 jobs:
   scrape:
@@ -74,10 +70,10 @@ jobs:
         env:
           CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
-          # For llm_extract_scraper.R's SHADOW pilot. The built-in token
-          # (with the models:read permission above) is enough -- no secret
-          # to configure. A no-op while llm_extract_targets.csv is empty.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # For llm_extract_scraper.R's SHADOW pilot -- Google Gemini free
+          # tier (aistudio.google.com/apikey). A no-op if this secret is
+          # unset (logs "skipped_no_key") or llm_extract_targets.csv is empty.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           Rscript -e 'rmarkdown::render("Mt_ED_Jobs.Rmd")'
 
