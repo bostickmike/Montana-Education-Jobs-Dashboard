@@ -304,6 +304,29 @@ fetch_llm_extracted_postings <- function(chromote_session, url,
   parse_llm_extracted_postings(page_text, postings, url, location_fallback)
 }
 
+# --- 4b. drift-check corroboration ---------------------------------------
+# corroborate_drift.R already renders a flagged source's live page and has
+# its innerText in hand. Given that text, what job titles does the model
+# read off it? Lets an "inconclusive" text-signal verdict become "the
+# scraper returned ~0 but these postings are on the page." Returns
+# character(0) with no key / blank page / any failure -- never throws,
+# never fabricates (same guardrails as the shadow pilot).
+llm_titles_from_page_text <- function(page_text,
+                                      url = "drift-corroboration",
+                                      max_titles = 40L) {
+  if (!nzchar(llm_extract_token()) ||
+      length(page_text) != 1 || is.na(page_text) || !nzchar(trimws(page_text))) {
+    return(character(0))
+  }
+  postings <- tryCatch(
+    llm_extract_call(substr(as.character(page_text), 1L, LLM_EXTRACT_MAX_CHARS)),
+    error = function(e) NULL
+  )
+  df <- parse_llm_extracted_postings(page_text, postings, url,
+                                     max_plausible = max_titles)
+  df$Title
+}
+
 # --- 5. all shadow-pilot districts, one shared chromote session ----------
 # Mirrors fetch_apptegy_k12_postings(): one browser session, safe_scrape()
 # per district so one bad page doesn't lose the rest, returns the 5-column

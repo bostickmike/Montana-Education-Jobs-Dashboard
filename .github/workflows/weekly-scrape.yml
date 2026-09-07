@@ -126,6 +126,9 @@ jobs:
         continue-on-error: true
         env:
           CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
+          # lets corroborate_drift.R also ask an LLM what postings the
+          # flagged page shows (no-op if unset) -- see drift_check.R
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           if [ -f /tmp/drift_flagged.csv ] && [ "$(tail -n +2 /tmp/drift_flagged.csv | wc -l)" -gt 0 ]; then
             Rscript .github/scripts/corroborate_drift.R
