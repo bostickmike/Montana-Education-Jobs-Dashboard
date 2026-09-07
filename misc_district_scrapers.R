@@ -3256,13 +3256,13 @@ fetch_geyser_postings <- function(chromote_session, url = "https://www.geyser.k1
 # Finalsite" footer), a plain httr2 fetch, no chromote needed. Real
 # postings are a clean list right after "Post RSS Feeds Subscribe to Post
 # Alerts" (a real, stable Finalsite widget label, not authored content)
-# -- confirmed live 2026-08-23, 5 real postings. A "Load More" button
-# suggests additional postings may exist beyond what a plain fetch's
-# initial HTML contains (unconfirmed either way -- this function only
-# captures what's present without JS pagination, the same limitation
-# every other plain-fetch scraper in this file already has). Stops at
-# that "Load More" label, the real, stable boundary before the page's
-# "Employment Information" boilerplate section.
+# -- confirmed live 2026-08-23 (5 postings, with a "Load More" button) and
+# again 2026-09-07 (3 postings, no "Load More" -- the button only appears
+# when there are enough postings to paginate). The stop boundary is
+# whichever comes first of "Load More" or the "Employment Information"
+# section header that always follows the openings list -- the earlier
+# version keyed only on "Load More" and silently returned 0 once the
+# button went away (drift-check issue #1, 2026-09-07).
 parse_thompsonfalls_postings <- function(html_text, url) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
@@ -3275,10 +3275,12 @@ parse_thompsonfalls_postings <- function(html_text, url) {
 
   start_idx <- which(grepl("^Post RSS Feeds", lines))
   if (length(start_idx) == 0) return(empty)
-  stop_idx <- which(lines == "Load More")
-  if (length(stop_idx) == 0 || stop_idx[1] <= start_idx[1]) return(empty)
+  stop_candidates <- which(lines %in% c("Load More", "Employment Information"))
+  stop_candidates <- stop_candidates[stop_candidates > start_idx[1]]
+  if (length(stop_candidates) == 0) return(empty)
+  stop_idx <- min(stop_candidates)
 
-  titles <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- lines[(start_idx[1] + 1):(stop_idx - 1)]
   titles <- sub(" \\(opens in new window/tab\\)$", "", titles)
   titles <- titles[nzchar(titles)]
   if (length(titles) == 0) return(empty)

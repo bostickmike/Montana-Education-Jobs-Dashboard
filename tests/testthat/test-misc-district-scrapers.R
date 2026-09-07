@@ -1021,6 +1021,24 @@ test_that("parse_thompsonfalls_postings returns zero rows (not an error) when th
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+# Real fixture re-captured 2026-09-07 (drift-check issue #1): only 3
+# postings now, and the "Load More" button is gone -- the boundary is the
+# "Employment Information" section header. The 2026-08 version keyed only on
+# "Load More" and silently returned 0.
+test_that("parse_thompsonfalls_postings stops at 'Employment Information' when there's no 'Load More'", {
+  html <- paste(readLines(test_path("fixtures", "thompsonfalls_employment_2026-09.html"),
+                          warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  result <- parse_thompsonfalls_postings(html, "url")
+
+  expect_equal(nrow(result), 3)
+  expect_setequal(result$Title,
+                  c("Food Service Worker", "Assistant High School Soccer Coach",
+                    "Concession Coordinator"))
+  # the boilerplate section that follows must NOT leak in
+  expect_false(any(c("Employment Information", "APPLICATIONS", "CONTRACTS",
+                     "JOB DESCRIPTIONS", "SALARY SCHEDULE") %in% result$Title))
+})
+
 test_that("fetch_thompsonfalls_postings fetches and parses a live-shaped response", {
   fixture <- paste(readLines(test_path("fixtures", "thompsonfalls_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   httr2::local_mocked_responses(
