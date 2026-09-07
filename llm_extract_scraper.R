@@ -87,6 +87,12 @@ LLM_EXTRACT_SYSTEM_PROMPT <- paste(
   "  'Position' that are not literally in the title text.",
   "- If a section says it has no openings ('None at this time', 'no current",
   "  openings', 'no vacancies'), return nothing for that section.",
+  "- A page may ALSO carry a reference list of job descriptions -- roles the",
+  "  district hires for in general, downloadable JDs, 'positions include...' --",
+  "  that is SEPARATE from its actual current openings. Extract ONLY the",
+  "  positions the page presents as currently open / accepting applications",
+  "  now (usually a short list, often naming a specific school year). Do NOT",
+  "  return items that are only there as a standing job-description library.",
   "- location: the specific building or school if the page names one for the",
   "  posting; otherwise the district name.",
   "- posted_date: the date the page shows for that posting, in YYYY-MM-DD",
@@ -238,7 +244,8 @@ llm_extract_looks_boilerplate <- function(titles) {
 # Link). Any failure mode -> a 0-row frame; never a fabricated row.
 parse_llm_extracted_postings <- function(page_text, llm_postings, url,
                                          location_fallback = NA_character_,
-                                         max_plausible = LLM_EXTRACT_MAX_PLAUSIBLE) {
+                                         max_plausible = LLM_EXTRACT_MAX_PLAUSIBLE,
+                                         stale_after_days = 550L) {
   if (is.null(llm_postings) || length(llm_postings) == 0) return(llm_extract_empty())
 
   field <- function(p, k) {
@@ -268,6 +275,17 @@ parse_llm_extracted_postings <- function(page_text, llm_postings, url,
   if (nrow(df) == 0) return(llm_extract_empty())
 
   df$Posted_Date[is.na(df$Posted_Date) | !nzchar(df$Posted_Date)] <- NA_character_
+
+  # Stale-date filter: a posting the page still shows with a posted date more
+  # than ~18 months old is page rot the district never cleaned up, not a
+  # current opening (confirmed on Power SD -- "Date Posted: March 20, 2023"
+  # entries sitting under a real 2026 hiring blurb). Only drops rows that
+  # carry a parseable old date; undated rows are kept.
+  parsed_date <- suppressWarnings(as.Date(df$Posted_Date))
+  stale <- !is.na(parsed_date) & parsed_date < (Sys.Date() - stale_after_days)
+  df <- df[!stale, , drop = FALSE]
+  if (nrow(df) == 0) return(llm_extract_empty())
+
   blank_loc <- is.na(df$Location) | !nzchar(df$Location)
   df$Location[blank_loc] <- location_fallback
 
