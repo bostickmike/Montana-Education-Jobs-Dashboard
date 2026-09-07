@@ -18,18 +18,21 @@
 #   1. chromote renders the page -- the same headless-Chrome path the
 #      Apptegy scrapers already use -- and we take document.body.innerText
 #      (the visible text a human would see, no HTML/JS/CSS).
-#   2. One HTTPS call to GitHub Models (OpenAI-compatible chat/completions,
-#      auth'd with GITHUB_TOKEN, covered by a GitHub Copilot subscription)
-#      with a strict JSON schema. The model only ever sees already-extracted
-#      plain text -- it cannot browse, click, or fetch anything.
+#   2. One HTTPS call to the Google Gemini API via its OpenAI-compatible
+#      chat/completions endpoint, auth'd with GEMINI_API_KEY (free tier from
+#      aistudio.google.com/apikey), with a JSON schema. The model only ever
+#      sees already-extracted plain text -- it cannot browse, click, or
+#      fetch anything.
+#      (GitHub Models was the original plan; it was retired 2026-07-30.)
 #   3. Deterministic guardrails (parse_llm_extracted_postings) -- the model's
 #      titles must literally appear on the page, the count must be plausible,
 #      and known boilerplate ("Certified Job Application", "W-4 Form") is
 #      dropped. This is the part the test suite covers.
 #
-# The one swappable piece is llm_extract_call(): replace it with
-# ellmer::chat_github(), or point it at a different provider, without
-# touching the render step, the guardrails, or the pipeline wiring.
+# The one swappable piece is llm_extract_call(): repoint LLM_EXTRACT_ENDPOINT
+# / LLM_EXTRACT_MODEL and the token env var at any OpenAI-compatible provider
+# (or drop in ellmer::chat_*()) without touching the render step, the
+# guardrails, or the pipeline wiring.
 
 suppressMessages({
   library(httr2)
@@ -39,23 +42,29 @@ suppressMessages({
 # --- configuration (env-overridable so the endpoint/model can be corrected
 #     without a code change while the pilot is still in shadow mode) --------
 
-# GitHub Models' current inference endpoint. The older Azure-hosted form
-# (https://models.inference.ai.azure.com/chat/completions, model "gpt-4o-mini"
-# without the "openai/" prefix) also works -- set LLM_EXTRACT_ENDPOINT /
-# LLM_EXTRACT_MODEL if GitHub changes it.
+# Google Gemini's OpenAI-compatible endpoint. Any other OpenAI-compatible
+# provider works too -- set LLM_EXTRACT_ENDPOINT / LLM_EXTRACT_MODEL and the
+# matching key in LLM_EXTRACT_KEY_ENV.
 llm_extract_endpoint <- function() {
   v <- Sys.getenv("LLM_EXTRACT_ENDPOINT")
-  if (nzchar(v)) v else "https://models.github.ai/inference/chat/completions"
+  if (nzchar(v)) v else "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 }
 llm_extract_model <- function() {
   v <- Sys.getenv("LLM_EXTRACT_MODEL")
-  if (nzchar(v)) v else "openai/gpt-4o-mini"
+  if (nzchar(v)) v else "gemini-3.1-flash-lite"
 }
+# Which env var holds the API key. Override (e.g. to "OPENAI_API_KEY") when
+# repointing LLM_EXTRACT_ENDPOINT at another provider.
+llm_extract_key_env <- function() {
+  v <- Sys.getenv("LLM_EXTRACT_KEY_ENV")
+  if (nzchar(v)) v else "GEMINI_API_KEY"
+}
+llm_extract_token <- function() Sys.getenv(llm_extract_key_env())
 
-# GitHub Models has a tighter input cap than the first-party APIs; ~12k
-# chars of visible text is well under it and covers every real district
-# employment page seen so far.
-LLM_EXTRACT_MAX_CHARS <- 12000L
+# Cap the visible text sent to the model. Gemini's context is huge so this
+# is really a latency/noise guard, not a hard limit -- 20k chars covers even
+# a district page with several full job descriptions.
+LLM_EXTRACT_MAX_CHARS <- 20000L
 
 # A tiny rural district reporting more than this many simultaneous openings
 # almost certainly means the model scraped a navigation menu or looped --
@@ -88,11 +97,13 @@ LLM_EXTRACT_SYSTEM_PROMPT <- paste(
 )
 
 # OpenAI-style response_format payload forcing a {postings: [...]} object.
+# No "strict" key -- Gemini's OpenAI-compat endpoint honours the schema but
+# not OpenAI's strict-mode flag, and parse_llm_extracted_postings() is
+# defensive about missing/extra fields regardless.
 LLM_EXTRACT_RESPONSE_FORMAT <- list(
   type = "json_schema",
   json_schema = list(
     name = "job_postings",
-    strict = TRUE,
     schema = list(
       type = "object",
       additionalProperties = FALSE,
@@ -141,7 +152,7 @@ llm_extract_render_text <- function(chromote_session, url, settle_seconds = 4) {
 llm_extract_call <- function(page_text,
                              model = llm_extract_model(),
                              endpoint = llm_extract_endpoint(),
-                             token = Sys.getenv("GITHUB_TOKEN"),
+                             token = llm_extract_token(),
                              max_tries = 3) {
   if (!nzchar(token) || !nzchar(trimws(page_text))) return(NULL)
 
@@ -283,7 +294,7 @@ read_llm_extract_targets <- function(path = LLM_EXTRACT_TARGETS_PATH) {
 fetch_all_llm_extracted_postings <- function(chromote_session_factory = NULL,
                                              targets = read_llm_extract_targets(),
                                              model = llm_extract_model(),
-                                             token = Sys.getenv("GITHUB_TOKEN"),
+                                             token = llm_extract_token(),
                                              log_path = "scrape_log.csv") {
   empty5 <- cbind(llm_extract_empty(), District = character(0))
 
@@ -292,7 +303,8 @@ fetch_all_llm_extracted_postings <- function(chromote_session_factory = NULL,
   if (!nzchar(token)) {
     log_scrape_result("LLMExtract shadow pilot (all districts)",
                       status = "skipped_no_key", n_rows = 0L,
-                      error_message = "GITHUB_TOKEN not set", log_path = log_path)
+                      error_message = paste0(llm_extract_key_env(), " not set"),
+                      log_path = log_path)
     return(empty5)
   }
 
