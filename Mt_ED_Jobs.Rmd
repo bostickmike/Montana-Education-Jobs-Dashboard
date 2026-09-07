@@ -1350,6 +1350,50 @@ if (nrow(opi_df) > 0) {
 }
 ```
 
+### LLM-extraction SHADOW pilot (quarantined -- not in the dashboard)
+```{r k12 llm-extract shadow pilot, message=FALSE, warning=FALSE, echo=TRUE}
+library(dplyr)
+library(chromote)
+source("scrape_helpers.R")
+source("history_accumulator.R")
+source("llm_extract_scraper.R")
+
+# SHADOW PILOT -- see LLM_EXTRACT.md. Districts listed in
+# llm_extract_targets.csv have their free-text-prose employment pages read
+# by an LLM (GitHub Models, GITHUB_TOKEN) and the result written to
+# Mt_Ed_Jobs/llm_extract_shadow.csv ONLY. Nothing in this chunk feeds
+# combinedclean.csv, hedata.xlsx, the map, the weekly totals, or any file
+# app.R reads -- so it cannot affect the live dashboard or the sanity/
+# schema/drift checks. A complete no-op when the target list is empty or
+# GITHUB_TOKEN is unset. The per-district outcomes are still written to
+# scrape_log.csv (source "LLMExtract: <district>") for weekly review.
+llm_shadow_raw <- safe_scrape(
+  "LLMExtract shadow pilot (session)",
+  scrape_fn = function() fetch_all_llm_extracted_postings(
+    chromote_session_factory = function() ChromoteSession$new()
+  ),
+  expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
+)
+
+if (nrow(llm_shadow_raw) > 0) {
+  # tryCatch so a problem accumulating the SHADOW file can never halt the
+  # real pipeline -- this whole block is off to the side.
+  tryCatch({
+    llm_shadow_week <- llm_shadow_raw %>%
+      transmute(
+        title = Title, location = Location, date_posted = Posted_Date,
+        url = Link, District,
+        Posting_Source = "LLM-extracted district prose page (SHADOW -- not in dashboard)",
+        Archive_Date = as.character(Sys.Date())
+      )
+    if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
+    llm_shadow <- append_weekly_rows(
+      file.path("Mt_Ed_Jobs", "llm_extract_shadow.csv"), llm_shadow_week)
+    write.csv(llm_shadow, file.path("Mt_Ed_Jobs", "llm_extract_shadow.csv"), row.names = FALSE)
+  }, error = function(e) message("LLM shadow accumulation skipped: ", conditionMessage(e)))
+}
+```
+
 ### Combine all K-12 data, classify, archive, and accumulate history
 ```{r combine k12 data, echo=TRUE, warning=FALSE, message=FALSE}
 library(stringr)

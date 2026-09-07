@@ -13,6 +13,10 @@ on:
 permissions:
   contents: write
   issues: write
+  # GitHub Models access for llm_extract_scraper.R's SHADOW pilot -- lets the
+  # built-in GITHUB_TOKEN call the inference API, so no separate API-key
+  # secret is needed. Harmless when the pilot target list is empty.
+  models: read
 
 jobs:
   scrape:
@@ -70,6 +74,10 @@ jobs:
         env:
           CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          # For llm_extract_scraper.R's SHADOW pilot. The built-in token
+          # (with the models:read permission above) is enough -- no secret
+          # to configure. A no-op while llm_extract_targets.csv is empty.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           Rscript -e 'rmarkdown::render("Mt_ED_Jobs.Rmd")'
 
@@ -217,6 +225,10 @@ jobs:
             Mt_Ed_Jobs/manifest.json \
             Archived_HE_Data/*.xlsx \
             Archivek12_Data/*.csv
+          # SHADOW-pilot review artifact -- only exists once the pilot has
+          # produced at least one posting; staged separately so its absence
+          # doesn't fail the git add above.
+          [ -f Mt_Ed_Jobs/llm_extract_shadow.csv ] && git add Mt_Ed_Jobs/llm_extract_shadow.csv || true
           if git diff --cached --quiet; then
             echo "No data changes this run -- nothing to commit."
           else

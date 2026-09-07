@@ -1,0 +1,7 @@
+District,Job_Link,County,Notes
+Rapelje School District #32,https://rapelje.k12.mt.us/job-listings,Stillwater,"Free-flowing prose under category headings; no list/table/marker. ~65 students. Verified 2026-09-06."
+Grass Range Public Schools,https://grps.k12.mt.us/staff/open-positions,Fergus,"Prose sentence names the real openings; a bulleted standing-JD list below is NOT current vacancies -- watch for over-extraction. Verified 2026-09-06."
+Cayuse Prairie School District #10,https://www.cayuseprairie.com/page/employment,Flathead,"Apptegy (bot-gated -- chromote passes it). Noisy <strong> markup used for general emphasis, not just titles. Verified via search 2026-09-06; page not previewable without a real browser."
+Judith Gap Schools,https://www.judithgap.k12.mt.us/employment/job-openings,Wheatland,"JS-rendered; couldn't preview. Current non-admin openings unconfirmed -- pilot will log empty if there are none. Verified district identity 2026-09-06."
+Power School District,https://www.power.k12.mt.us/District/Portal/Employment,Teton,"CyberSchool/Finalsite. Was declined 2026-09 as stale prose (Dec 2024); a 'Now Hiring' news item resurfaced 2026-09-06 so re-testing via the pilot."
+Hellgate Elementary School District,https://www.hellgate.k12.mt.us/our-district/employment,Missoula,"Real substantial district. Postings historically spread across ~6 Finalsite category subpages -- only the main employment page is targeted here; add subpage rows (same District name) if the shadow output misses content."
