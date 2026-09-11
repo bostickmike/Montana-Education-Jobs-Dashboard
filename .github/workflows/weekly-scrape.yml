@@ -31,7 +31,8 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev libpoppler-cpp-dev
+          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev libpoppler-cpp-dev \
+            libudunits2-dev libgdal-dev libgeos-dev libproj-dev
 
       - name: Install R packages
         run: |
@@ -49,7 +50,12 @@ jobs:
             # entirely) -- a real incident already hit once in the sibling
             # Wyoming project, avoided here from the start.
             "shiny", "shinydashboard", "shinyWidgets", "DT", "data.table",
-            "leaflet", "plotly", "scales", "shinycssloaders"
+            "leaflet", "plotly", "scales", "shinycssloaders",
+            # sf isn't used directly by app.R, but leaflet >= 2.2.x Imports
+            # it as a hard dependency, so writeManifest() can't snapshot
+            # without it installed either -- hit the sibling Wyoming
+            # project's run on 2026-09-11, fixed here before it recurred.
+            "sf"
           ))'
 
       - name: Install Chrome (for the Apptegy K-12/HE scrapers and corroborate_drift.R's live corroboration check)
