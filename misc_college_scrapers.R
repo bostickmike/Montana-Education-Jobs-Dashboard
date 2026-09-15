@@ -340,11 +340,16 @@ parse_carroll_college_postings <- function(html_text, url) {
 # department (Admissions, Aviation, Athletics, etc.) rather than a city,
 # same "Location repurposed as department for a single-campus
 # institution" convention as JazzHR/PeopleAdmin multi-department schools
-# (see DATA_COOKBOOK.md).
+# (see DATA_COOKBOOK.md). rocky.edu's host-level rate limiting has 429'd
+# this scraper twice (2026-09-01, 2026-09-15 drift issue #1) even though
+# it's a single GET -- default perform_with_retry()'s 3 tries (~14s of
+# backoff) isn't enough to outlast whatever window it's enforcing, so this
+# one gets more tries; perform_with_retry() already honors a Retry-After
+# header over the fixed backoff when the response sends one.
 fetch_rocky_mountain_college_postings <- function(url = "https://rocky.edu/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
+    perform_with_retry(max_tries = 6)
   parse_rocky_mountain_college_postings(resp_body_string(resp))
 }
 
