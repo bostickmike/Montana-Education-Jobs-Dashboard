@@ -335,3 +335,122 @@ test_that("llm_titles_from_page_text returns character(0) with no key or a blank
     expect_identical(llm_titles_from_page_text("   "), character(0))
   })
 })
+
+# ---- Tier 3: per-source auto-fix issues -----------------------------------
+
+test_that("every scraper function SCRAPER_CALL_SPECS names really exists", {
+  fns <- vapply(SCRAPER_CALL_SPECS, `[[`, character(1), "fn")
+  expect_true(all(vapply(fns, exists, logical(1), mode = "function")),
+              info = paste("missing:", paste(fns[!vapply(fns, exists, logical(1), mode = "function")], collapse = ", ")))
+})
+
+test_that("every real registered K-12 heuristic platform resolves to a real scraper function", {
+  k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  heur <- k12[grepl("Heuristic$", k12$Platform), ]
+  for (i in seq_len(nrow(heur))) {
+    call <- resolve_scraper_call(heur[i, ])
+    expect_false(is.null(call), info = heur$Platform[i])
+    expect_true(exists(call$fn, mode = "function"), info = paste(heur$Platform[i], "->", call$fn))
+  }
+})
+
+test_that("resolve_scraper_call passes the same registry columns Mt_ED_Jobs.Rmd does", {
+  hinsdale <- data.frame(District = "Hinsdale Public Schools", Platform = "HinsdaleHeuristic",
+                         Slug = "", Job_Link = "https://hinsdale.example/jobs", stringsAsFactors = FALSE)
+  expect_equal(resolve_scraper_call(hinsdale),
+               list(fn = "fetch_hinsdale_postings", args = list("https://hinsdale.example/jobs"), session = FALSE))
+
+  tyler <- data.frame(District = "Some District", Platform = "TylerPortico", Slug = "abc",
+                      Job_Link = "x", stringsAsFactors = FALSE)
+  expect_equal(resolve_scraper_call(tyler)$args, list("abc", "Some District"))
+
+  broadview <- data.frame(District = "Broadview", Platform = "BroadviewHeuristic", Slug = "",
+                          Job_Link = "x", stringsAsFactors = FALSE)
+  expect_equal(resolve_scraper_call(broadview)$args, list())
+})
+
+test_that("resolve_scraper_call routes every registered Apptegy/RedRover district through APPTEGY_DISTRICT_SCRAPERS", {
+  k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  chrome <- k12[k12$Platform %in% c("Apptegy", "RedRoverK12"), ]
+  for (i in seq_len(nrow(chrome))) {
+    call <- resolve_scraper_call(chrome[i, ])
+    expect_true(call$session)
+    expect_true(chrome$District[i] %in% names(APPTEGY_DISTRICT_SCRAPERS), info = chrome$District[i])
+  }
+})
+
+test_that("every real registered HE platform except the known gaps resolves to a real scraper function", {
+  he <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
+  for (i in seq_len(nrow(he))) {
+    call <- resolve_scraper_call(he[i, ])
+    if (he$Platform[i] %in% c("SharesBoard", "AdpWorkforceNow", "IsolvedHire")) {
+      expect_null(call, info = he$Platform[i])
+    } else {
+      expect_false(is.null(call), info = he$Platform[i])
+      expect_true(exists(call$fn, mode = "function"), info = paste(he$Platform[i], "->", call$fn))
+    }
+  }
+})
+
+test_that("run_scraper_call hands a chromote-backed scraper a session and the Apptegy map its district", {
+  fake_session <- structure(list(close = function() NULL), class = "fake")
+  stub_map <- list("Test District" = function(session) {
+    data.frame(Title = if (identical(session, fake_session)) "got session" else "no session")
+  })
+  call <- list(fn = APPTEGY_DISPATCH_FN, args = list("Test District"), session = TRUE)
+  expect_equal(run_scraper_call(call, function() fake_session, apptegy_map = stub_map)$Title, "got session")
+})
+
+test_that("resolve_scraper_call returns NULL for platforms with no single-source live check", {
+  shares <- data.frame(Institution = "MSU", Platform = "SharesBoard", Feed_URL = "x", stringsAsFactors = FALSE)
+  expect_null(resolve_scraper_call(shares))
+})
+
+test_that("build_autofix_issue_body round-trips its source marker and lists the LLM titles", {
+  row <- data.frame(name = "Hinsdale Public Schools", type = "K-12", mean_count = 3, count = 0,
+                    url = "https://hinsdale.k12.mt.us/District/1557-Untitled.html",
+                    llm_titles = "Route Bus Drivers | Daycare Manager", stringsAsFactors = FALSE)
+  reg <- data.frame(District = "Hinsdale Public Schools", Platform = "HinsdaleHeuristic", Slug = "",
+                    Job_Link = row$url, stringsAsFactors = FALSE)
+  body <- paste(build_autofix_issue_body(row, reg, "https://run"), collapse = "\n")
+
+  expect_equal(parse_autofix_marker(body), "Hinsdale Public Schools")
+  expect_match(body, "- Route Bus Drivers", fixed = TRUE)
+  expect_match(body, "- Daycare Manager", fixed = TRUE)
+  expect_match(body, "`fetch_hinsdale_postings()`", fixed = TRUE)
+  expect_match(body, "https://run", fixed = TRUE)
+})
+
+test_that("build_autofix_issue_body tolerates no LLM titles and no registry row", {
+  row <- data.frame(name = "Mystery", type = "K-12", mean_count = 2, count = 0, url = NA_character_,
+                    llm_titles = NA_character_, stringsAsFactors = FALSE)
+  body <- paste(build_autofix_issue_body(row), collapse = "\n")
+  expect_equal(parse_autofix_marker(body), "Mystery")
+  expect_no_match(body, "An LLM read")
+})
+
+test_that("parse_autofix_marker returns NA for bodies without a marker", {
+  expect_true(is.na(parse_autofix_marker("just a normal issue")))
+  expect_true(is.na(parse_autofix_marker(NA_character_)))
+  expect_true(is.na(parse_autofix_marker(character(0))))
+})
+
+test_that("parse_autofix_expected_titles recovers the titles build_autofix_issue_body wrote", {
+  row <- data.frame(name = "X", type = "K-12", mean_count = 3, count = 0, url = "u",
+                    llm_titles = "Route Bus Drivers | Daycare Manager", stringsAsFactors = FALSE)
+  body <- paste(build_autofix_issue_body(row), collapse = "\n")
+  expect_equal(parse_autofix_expected_titles(body), c("Route Bus Drivers", "Daycare Manager"))
+  expect_equal(parse_autofix_expected_titles("no titles here"), character(0))
+})
+
+test_that("summarize_live_check fails on an error or zero rows and passes otherwise", {
+  expect_false(summarize_live_check("X", simpleError("HTTP 520."))$pass)
+  expect_false(summarize_live_check("X", data.frame(Title = character(0)))$pass)
+
+  ok <- summarize_live_check("X", data.frame(Title = c("Route Bus Drivers", "Cook")),
+                             expected_titles = c("route bus drivers", "Daycare Manager"))
+  expect_true(ok$pass)
+  md <- paste(ok$markdown, collapse = "\n")
+  expect_match(md, "Matched 1 of 2", fixed = TRUE)
+  expect_match(md, "- Daycare Manager", fixed = TRUE)
+})

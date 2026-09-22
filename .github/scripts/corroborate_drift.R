@@ -44,13 +44,14 @@ b <- ChromoteSession$new()
 results <- data.frame(name = character(0), type = character(0), mean_count = numeric(0),
                        count = numeric(0), url = character(0), verdict = character(0),
                        error_message = character(0), llm_note = character(0),
-                       stringsAsFactors = FALSE)
+                       llm_titles = character(0), stringsAsFactors = FALSE)
 
 for (i in seq_len(nrow(flagged))) {
   row <- flagged[i, ]
   url <- unname(url_lookup[row$name])
   if (is.na(url)) url <- NULL
   llm_note <- NA_character_
+  llm_titles <- character(0)
 
   if (!is.na(row$scrape_error)) {
     verdict <- "confirmed_broken"
@@ -81,11 +82,16 @@ for (i in seq_len(nrow(flagged))) {
     name = row$name, type = row$type, mean_count = row$mean_count,
     count = row$count, url = if (is.null(url)) NA_character_ else url,
     verdict = verdict, error_message = row$scrape_error, llm_note = llm_note,
-    stringsAsFactors = FALSE
+    llm_titles = paste(llm_titles, collapse = " | "), stringsAsFactors = FALSE
   ))
 }
 
 b$close()
+
+# Machine-readable copy for file_autofix_issues.R (per-source Copilot
+# auto-fix issues) -- written unconditionally, since that step also needs
+# to see which sources are no longer broken in order to close their issues.
+write.csv(results, "/tmp/drift_results.csv", row.names = FALSE)
 
 actionable <- results[results$verdict %in% c("confirmed_broken", "likely_broken", "inconclusive", "no_url_available"), ]
 

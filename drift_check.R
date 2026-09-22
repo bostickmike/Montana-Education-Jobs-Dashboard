@@ -286,3 +286,194 @@ combine_verdict_with_llm <- function(verdict, llm_titles) {
 
   list(verdict = verdict, note = NA_character_)
 }
+
+# --------------------------------------------------------------------------
+# Tier 3: per-source auto-fix issues (Copilot coding agent hand-off)
+# --------------------------------------------------------------------------
+#
+# The rolling "Scraper drift check" issue stays the human-facing summary.
+# On top of it, each "likely_broken" source -- the live page demonstrably
+# has postings the scraper missed (Thompson Falls 2026-09-07, Hinsdale
+# 2026-09-22: page markup changed, parser didn't) -- gets its own issue
+# that .github/scripts/file_autofix_issues.R can assign to the Copilot
+# coding agent. confirmed_broken (HTTP 429/520 etc.) and genuinely-empty
+# verdicts are deliberately NOT eligible: those are site-side, and a code
+# change "fixing" them is exactly the wrong move.
+#
+# The issue body carries an HTML-comment marker naming the source, so
+# .github/scripts/live_check_autofix.R can find which scraper a PR claims
+# to fix (via the PR's linked issue) and re-run just that scraper live.
+
+AUTOFIX_LABEL <- "scraper-autofix"
+AUTOFIX_ELIGIBLE_VERDICTS <- "likely_broken"
+AUTOFIX_MARKER_RE <- "<!--\\s*autofix-source:\\s*(.+?)\\s*-->"
+
+autofix_issue_title <- function(name) paste0("Scraper auto-fix: ", name)
+
+parse_autofix_marker <- function(body) {
+  if (length(body) == 0 || is.na(body)) return(NA_character_)
+  m <- regmatches(body, regexec(AUTOFIX_MARKER_RE, body, perl = TRUE))[[1]]
+  if (length(m) < 2) NA_character_ else m[2]
+}
+
+# Explicit platform -> scraper spec. `fn` is the fetch_* function; `args`
+# names the registry columns passed positionally (the same call shape
+# Mt_ED_Jobs.Rmd uses); `session` means the scraper's first argument is a
+# chromote session. Every K-12 "<Name>Heuristic" platform not listed here
+# follows fetch_<lowercase name>_postings(Job_Link), and every K-12
+# Apptegy/RedRoverK12 district is dispatched through
+# misc_district_scrapers.R's own APPTEGY_DISTRICT_SCRAPERS map -- see
+# resolve_scraper_call(). HE heuristics don't follow one convention, so
+# they're listed. Platforms absent from all three (SharesBoard, split-feed
+# ADP/isolved) have no single-source live check; resolve_scraper_call()
+# returns NULL and the PR says so. test-drift-check.R asserts every fn
+# named here really exists.
+SCRAPER_CALL_SPECS <- list(
+  AppliTrack   = list(fn = "fetch_applitrack_postings",   args = "Slug"),
+  SchoolSpring = list(fn = "fetch_schoolspring_postings", args = "Slug"),
+  TylerPortico = list(fn = "fetch_tylerportico_postings", args = c("Slug", "District")),
+  TedK12       = list(fn = "fetch_tedk12_postings",       args = "Slug"),
+  BroadviewHeuristic = list(fn = "fetch_broadview_postings", args = character(0)),
+  PeopleAdmin  = list(fn = "fetch_peopleadmin_atom",      args = c("Feed_URL", "Institution")),
+  JazzHR       = list(fn = "fetch_jazzhr_postings",       args = c("Feed_URL", "Institution")),
+  Paycom       = list(fn = "fetch_paycom_postings",       args = c("Feed_URL", "Institution")),
+  Neogov       = list(fn = "fetch_neogov_postings",       args = c("Feed_URL", "Institution")),
+  MilesCCHeuristic   = list(fn = "fetch_miles_cc_postings",   args = "Feed_URL"),
+  DawsonCCHeuristic  = list(fn = "fetch_dawson_cc_postings",  args = "Feed_URL"),
+  CarrollCollegeHeuristic = list(fn = "fetch_carroll_college_postings", args = "Feed_URL"),
+  RockyMountainCollegeHeuristic = list(fn = "fetch_rocky_mountain_college_postings", args = "Feed_URL"),
+  SKCHeuristic       = list(fn = "fetch_skc_postings",        args = "Feed_URL"),
+  LBHCHeuristic      = list(fn = "fetch_lbhc_postings",       args = "Feed_URL"),
+  FPCCHeuristic      = list(fn = "fetch_fpcc_postings",       args = "Feed_URL"),
+  AnCollegeHeuristic = list(fn = "fetch_ancollege_postings",  args = "Feed_URL"),
+  CDKCHeuristic      = list(fn = "fetch_cdkc_postings",       args = "Feed_URL")
+)
+APPTEGY_DISPATCH_FN <- "APPTEGY_DISTRICT_SCRAPERS"
+
+# registry_row: one row of k12_district_registry.csv or
+# he_institution_registry.csv. Returns list(fn, args, session) with args as
+# a list of actual values, or NULL when the platform has no single-source
+# live check. Pure lookup -- run it with run_scraper_call().
+resolve_scraper_call <- function(registry_row) {
+  platform <- registry_row$Platform
+  is_k12 <- "District" %in% names(registry_row)
+  spec <- SCRAPER_CALL_SPECS[[platform]]
+  if (is.null(spec) && is_k12 && platform %in% c("Apptegy", "RedRoverK12")) {
+    spec <- list(fn = APPTEGY_DISPATCH_FN, args = "District", session = TRUE)
+  }
+  if (is.null(spec) && !is_k12 && platform == "Apptegy") {
+    spec <- list(fn = "fetch_stonechild_postings", args = "Feed_URL", session = TRUE)
+  }
+  if (is.null(spec) && is_k12 && grepl("Heuristic$", platform)) {
+    spec <- list(fn = paste0("fetch_", tolower(sub("Heuristic$", "", platform)), "_postings"),
+                 args = "Job_Link")
+  }
+  if (is.null(spec)) return(NULL)
+  list(fn = spec$fn, args = lapply(spec$args, function(col) registry_row[[col]]),
+       session = isTRUE(spec$session))
+}
+
+# Human-readable pointer to the code a resolved call runs.
+describe_scraper_call <- function(call) {
+  if (identical(call$fn, APPTEGY_DISPATCH_FN)) {
+    sprintf("the `%s[[\"%s\"]]` entry in misc_district_scrapers.R", APPTEGY_DISPATCH_FN, call$args[[1]])
+  } else {
+    sprintf("`%s()`", call$fn)
+  }
+}
+
+# Executes a resolve_scraper_call() result against the live source.
+# session_factory is only called for chromote-backed scrapers; apptegy_map
+# is a parameter only so tests can swap in a stub.
+run_scraper_call <- function(call, session_factory = NULL,
+                             apptegy_map = get0(APPTEGY_DISPATCH_FN)) {
+  if (!call$session) return(do.call(get(call$fn, mode = "function"), call$args))
+  session <- session_factory()
+  on.exit(tryCatch(session$close(), error = function(e) NULL), add = TRUE)
+  if (identical(call$fn, APPTEGY_DISPATCH_FN)) {
+    apptegy_map[[call$args[[1]]]](session)
+  } else {
+    do.call(get(call$fn, mode = "function"), c(list(session), call$args))
+  }
+}
+
+# row: one likely_broken row of corroborate_drift.R's results (name, type,
+# mean_count, count, url, llm_titles). registry_row: that source's registry
+# row, or NULL. Returns the markdown body of the per-source auto-fix issue
+# -- written as the task prompt the Copilot coding agent will work from.
+build_autofix_issue_body <- function(row, registry_row = NULL, run_url = NULL) {
+  titles <- if (is.na(row$llm_titles) || !nzchar(row$llm_titles)) character(0)
+            else strsplit(row$llm_titles, " | ", fixed = TRUE)[[1]]
+  call <- if (is.null(registry_row)) NULL else resolve_scraper_call(registry_row)
+
+  c(
+    sprintf("<!-- autofix-source: %s -->", row$name),
+    "",
+    sprintf("The weekly drift check found that **%s** (%s) averaged %.1f postings/week but the scraper returned **%d** this run, while the live page still lists real postings. The page markup most likely changed and the parser no longer matches it.",
+            row$name, row$type, row$mean_count, as.integer(row$count)),
+    "",
+    sprintf("- **Live page:** %s", if (is.na(row$url)) "(none on file)" else row$url),
+    if (!is.null(registry_row)) sprintf("- **Registry platform:** `%s`", registry_row$Platform),
+    if (!is.null(call)) sprintf("- **Scraper entry point:** %s (and the `parse_*` function it calls, if any)", describe_scraper_call(call)),
+    if (!is.null(run_url)) sprintf("- **Drift-check run:** %s", run_url),
+    "",
+    if (length(titles) > 0) c(
+      "An LLM read these postings off the live page (a hint, not ground truth -- verify against the page itself):",
+      "",
+      paste0("- ", titles),
+      ""
+    ),
+    "### Task",
+    "",
+    "1. Fetch the live page and save it as a **new, dated real fixture** in `tests/testthat/fixtures/` (keep the existing fixture -- the old layout must keep parsing).",
+    "2. Fix the parser so it extracts the real postings from the new fixture. Keep the change minimal and in the existing style.",
+    "3. Add a regression test against the new fixture asserting the exact titles found.",
+    "4. Run `testthat::test_dir(\"tests/testthat\")` and make sure everything passes.",
+    "",
+    "Do **not** edit the registries, accumulated CSVs under `Mt_Ed_Jobs/`, or archives. If the source has moved to a different platform or URL, or the page genuinely has no postings, don't force a parser change -- say so in the PR description and stop.",
+    "",
+    sprintf("The PR must reference this issue (`Fixes #<n>`) so the live check can find the source. Label: `%s`.", AUTOFIX_LABEL)
+  )
+}
+
+# The LLM-read titles build_autofix_issue_body() listed -- the live check's
+# (hint-quality) expectation for what the fixed scraper should now return.
+parse_autofix_expected_titles <- function(body) {
+  lines <- strsplit(body, "\n", fixed = TRUE)[[1]]
+  start <- grep("^An LLM read these postings", lines)
+  end <- grep("^### Task", lines)
+  if (length(start) == 0 || length(end) == 0 || end[1] <= start[1]) return(character(0))
+  block <- lines[(start[1] + 1):(end[1] - 1)]
+  sub("^- ", "", block[startsWith(block, "- ")])
+}
+
+# result: the scraper's data.frame, or a condition object if it errored.
+# Returns list(pass, markdown). Fails only on the unambiguous cases -- an
+# error or zero rows (the exact symptom the issue was filed for). Fewer
+# rows than the LLM read, or titles it didn't match, are reported for the
+# human reviewer but don't fail: the LLM list is a hint, not ground truth.
+summarize_live_check <- function(source_name, result, expected_titles = character(0)) {
+  header <- sprintf("### Live scraper check: %s", source_name)
+  if (inherits(result, "condition")) {
+    return(list(pass = FALSE, markdown = c(header, "", sprintf(":x: The scraper **errored** against the live site: `%s`", conditionMessage(result)))))
+  }
+  titles <- if ("Title" %in% names(result)) as.character(result$Title) else character(0)
+  if (length(titles) == 0) {
+    return(list(pass = FALSE, markdown = c(header, "", ":x: The scraper still returns **0 postings** from the live site.")))
+  }
+
+  norm <- function(x) tolower(trimws(x))
+  matched <- vapply(expected_titles, function(t) any(grepl(norm(t), norm(titles), fixed = TRUE) |
+                                                     vapply(norm(titles), grepl, logical(1), x = norm(t), fixed = TRUE)),
+                    logical(1))
+  out <- c(header, "",
+           sprintf(":white_check_mark: The scraper returned **%d posting(s)** from the live site:", length(titles)),
+           "", paste0("- ", utils::head(titles, 25)),
+           if (length(titles) > 25) sprintf("- ... and %d more", length(titles) - 25), "")
+  if (length(expected_titles) > 0) {
+    out <- c(out, sprintf("Matched %d of %d title(s) the drift check's LLM read off the page.", sum(matched), length(expected_titles)))
+    if (any(!matched)) out <- c(out, "", "Not matched (check by hand -- the LLM list is a hint, not ground truth):", "",
+                                paste0("- ", expected_titles[!matched]))
+  }
+  list(pass = TRUE, markdown = out)
+}
