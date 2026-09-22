@@ -1748,6 +1748,18 @@ test_that("parse_hinsdale_postings extracts all 3 real numbered postings, stripp
   expect_true(all(result$Location == "Hinsdale"))
 })
 
+# Real fixture captured 2026-09-22 after the list shrank to one posting
+# and the district dropped the hand-typed "1. " marker -- the old
+# numbered-lines-only parser returned 0 here (drift-check flag, Issue #1).
+test_that("parse_hinsdale_postings extracts a single unnumbered posting and skips the pay footnote", {
+  html <- paste(readLines(test_path("fixtures", "hinsdale_untitled_2026-09-22.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_hinsdale_postings(html, "url")
+
+  expect_equal(result$Title, "Route Bus Drivers")
+  expect_true(all(result$Location == "Hinsdale"))
+})
+
 test_that("parse_hinsdale_postings returns zero rows (not an error) when there's no real intro sentence", {
   result <- parse_hinsdale_postings("<html><body><p>Nothing here.</p></body></html>", "url")
   expect_equal(nrow(result), 0)

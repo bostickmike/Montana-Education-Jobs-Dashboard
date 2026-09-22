@@ -695,8 +695,14 @@ parse_hinsdale_postings <- function(html_text, url) {
   stop_idx <- which(lines == "Please contact:")
   if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
 
-  numbered <- lines[grepl("^[0-9]+\\.", lines)]
-  titles <- sub("^[0-9]+\\.\\s*", "", numbered)
+  # The "N. " marker is hand-typed text, not an <ol>, and the district
+  # dropped it once the list shrank to a single posting (2026-09-22:
+  # just "Route Bus Drivers", unnumbered) -- so every line in the block
+  # is a candidate, with the marker stripped if present. The "*Pay is
+  # dependent on experience..." footnote is the only non-posting line
+  # between the intro and "Please contact:".
+  titles <- lines[!startsWith(lines, "*")]
+  titles <- sub("^[0-9]+\\.\\s*", "", titles)
   titles <- sub("\\.(docx|pdf|doc)$", "", titles, ignore.case = TRUE)
   titles <- titles[nzchar(titles)]
   if (length(titles) == 0) return(empty)
