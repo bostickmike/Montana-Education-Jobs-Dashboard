@@ -544,7 +544,7 @@
         "Repository": "RSPM",
         "Date/Publication": "2016-07-27 03:17:48",
         "Encoding": "UTF-8",
-        "Built": "R 4.6.0; ; 2026-08-12 20:22:53 UTC; unix"
+        "Built": "R 4.6.0; ; 2026-09-26 06:35:53 UTC; unix"
       }
     },
     "class": {
@@ -969,7 +969,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "RSPM",
         "Date/Publication": "2026-02-11 06:10:52 UTC",
-        "Built": "R 4.6.0; ; 2026-08-12 20:23:17 UTC; unix"
+        "Built": "R 4.6.0; ; 2026-09-26 06:35:55 UTC; unix"
       }
     },
     "e1071": {
@@ -2793,7 +2793,7 @@
       "description": {
         "Package": "s2",
         "Title": "Spherical Geometry Operators Using the S2 Geometry Library",
-        "Version": "1.1.12",
+        "Version": "1.1.13",
         "Authors@R": "c(\n     person(given = \"Dewey\",\n           family = \"Dunnington\",\n           role = c(\"aut\"),\n           email = \"dewey@fishandwhistle.net\",\n           comment = c(ORCID = \"0000-0002-9415-4582\")),\n     person(given = \"Edzer\",\n             family = \"Pebesma\",\n             role = c(\"aut\", \"cre\"),\n             email = \"edzer.pebesma@uni-muenster.de\",\n             comment = c(ORCID = \"0000-0001-8049-7069\")),\n    person(\"Ege\", \"Rubak\", email=\"rubak@math.aau.dk\", role = c(\"aut\")),\n    person(\"Jeroen\", \"Ooms\", , \"jeroen.ooms@stat.ucla.edu\", role = \"ctb\", comment = \"configure script\"),\n    person(family = \"Google, Inc.\", role = \"cph\", comment = \"Original s2geometry.io source code\")\n  )",
         "Description": "Provides R bindings for Google's s2 library for geometric calculations on\n    the sphere. High-performance constructors and exporters provide high compatibility\n    with existing spatial packages, transformers construct new geometries from existing\n    geometries, predicates provide a means to select geometries based on spatial\n    relationships, and accessors extract information about geometries.",
         "License": "Apache License (== 2.0)",
@@ -2809,12 +2809,12 @@
         "Config/testthat/edition": "3",
         "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-09-03 07:29:53 UTC; edzer",
+        "Packaged": "2026-09-28 07:24:41 UTC; edzer",
         "Author": "Dewey Dunnington [aut] (ORCID: <https://orcid.org/0000-0002-9415-4582>),\n  Edzer Pebesma [aut, cre] (ORCID:\n    <https://orcid.org/0000-0001-8049-7069>),\n  Ege Rubak [aut],\n  Jeroen Ooms [ctb] (configure script),\n  Google, Inc. [cph] (Original s2geometry.io source code)",
         "Maintainer": "Edzer Pebesma <edzer.pebesma@uni-muenster.de>",
         "Repository": "RSPM",
-        "Date/Publication": "2026-09-03 09:30:02 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-09-04 04:24:34 UTC; unix"
+        "Date/Publication": "2026-09-28 08:30:02 UTC",
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-09-29 04:21:58 UTC; unix"
       }
     },
     "sass": {
@@ -2883,12 +2883,11 @@
         "Package": "selectr",
         "Type": "Package",
         "Title": "Translate CSS Selectors to XPath Expressions",
-        "Version": "0.7-0",
+        "Version": "0.8-0",
         "Authors@R": "c(person(\"Simon\", \"Potter\",\n                    role = c(\"aut\", \"trl\", \"cre\"),\n                    email = \"simon@sjp.co.nz\"),\n             person(\"Simon\", \"Sapin\", role = \"aut\"),\n             person(\"Ian\", \"Bicking\", role = \"aut\"))",
         "License": "BSD_3_clause + file LICENCE",
         "Encoding": "UTF-8",
         "Depends": "R (>= 3.6)",
-        "Imports": "R6",
         "Suggests": "testthat (>= 3.0.0), XML, xml2",
         "Config/testthat/edition": "3",
         "URL": "https://sjp.co.nz/projects/selectr/",
@@ -2896,12 +2895,12 @@
         "Language": "en-GB",
         "Description": "Translates a CSS selector into an equivalent XPath\n  expression. This allows us to use CSS selectors when working with\n  the 'XML' and 'xml2' packages, which can only evaluate XPath\n  expressions. Also provided are convenience functions for querying\n  XML and HTML documents with CSS selectors. This package was\n  originally a port of the Python package 'cssselect'\n  (<https://cssselect.readthedocs.io/>).",
         "NeedsCompilation": "no",
-        "Packaged": "2026-09-17 00:45:57 UTC; vscode",
+        "Packaged": "2026-09-27 06:18:23 UTC; vscode",
         "Author": "Simon Potter [aut, trl, cre],\n  Simon Sapin [aut],\n  Ian Bicking [aut]",
         "Maintainer": "Simon Potter <simon@sjp.co.nz>",
         "Repository": "RSPM",
-        "Date/Publication": "2026-09-17 07:50:02 UTC",
-        "Built": "R 4.6.0; ; 2026-09-18 04:05:03 UTC; unix"
+        "Date/Publication": "2026-09-27 06:50:02 UTC",
+        "Built": "R 4.6.0; ; 2026-09-28 04:40:54 UTC; unix"
       }
     },
     "sf": {
@@ -3660,7 +3659,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "RSPM",
         "Date/Publication": "2026-03-31 05:10:02 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-08-12 20:23:03 UTC; unix"
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-09-26 06:36:05 UTC; unix"
       }
     },
     "withr": {
@@ -3836,46 +3835,46 @@
   },
   "files": {
     "allnow_he.csv": {
-      "checksum": "95020011da776b7536ebed51288bc114"
+      "checksum": "ec6d80e69cd19f525ee61c4a44c15fd7"
     },
     "allnow.csv": {
-      "checksum": "e9fc7971724d784a750891fd2f32413b"
+      "checksum": "b89e5731ed5b5539add492ddd4975793"
     },
     "allsum_he.csv": {
-      "checksum": "4d994fa373c0d98f2ad38f3063850d03"
+      "checksum": "6d5cd4dbe1943481ef0f4151428ca608"
     },
     "allsum.csv": {
-      "checksum": "d1d0306c8a2f18056732b36292334232"
+      "checksum": "ea3ad8199281e3e5eae23e521bf81a30"
     },
     "app.R": {
       "checksum": "e69c54201246d341d10bc57b76a2d3a4"
     },
     "combinedclean.csv": {
-      "checksum": "9188d93e922f4738714f963b4fc74a62"
+      "checksum": "0ce38af0ddfe037b6a151a67847a890f"
     },
     "facultydata.csv": {
-      "checksum": "6e0ae60c31c1cb305a15fbcbc420ccf8"
+      "checksum": "ce7a3424954565cef7ce04eab59b07f4"
     },
     "he_institution_weekly_totals.csv": {
-      "checksum": "2f2271ed6552099fa696adc7d01fbbac"
+      "checksum": "741ecf0ca6bc0314e465449df52f31a0"
     },
     "hedata.xlsx": {
-      "checksum": "e459be0329f693cc228b52674d500394"
+      "checksum": "e43688ff27ab9b95a53899220dc90354"
     },
     "k12_district_weekly_totals.csv": {
-      "checksum": "0e78623f66f0e0f7692f2e06c313b8ce"
+      "checksum": "9dae10a3056cee1779414111dcd89477"
     },
     "k12_salary_history.csv": {
       "checksum": "aaa3008b4f5d93a490b15ef07eb30b4f"
     },
     "k12jobanalysis.csv": {
-      "checksum": "ac05c2b9e32281a28aea020c56773fe0"
+      "checksum": "e9ca8eb3afc5a385d6a2baa3ee537da4"
     },
     "llm_extract_shadow.csv": {
-      "checksum": "b7afcbbb6f4ce28a141e87b986059bfa"
+      "checksum": "2dd8a41747cf7b791414ac25665af52c"
     },
     "salarymap.csv": {
-      "checksum": "5eddcb08e9547f728ff5bd9b89d935ac"
+      "checksum": "a4c7a76f91440c4bcf5c696634a789c0"
     },
     "salarymap2.csv": {
       "checksum": "ae4a85289308806ed792913f94bc8cca"
