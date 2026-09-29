@@ -818,11 +818,12 @@ parse_valier_postings <- function(html_text, url) {
 # selector is scoped to `table.uk-table tbody tr .el-title` specifically
 # rather than matched loosely. Confirmed live 2026-08-24, 3 real
 # postings (Full Time Custodian, Substitute Teachers Needed, Classroom
-# Aide).
+# Aide). Its Cloudflare front intermittently answers 502/520 to CI
+# runners, so it retries those too, with a longer budget (~1 min).
 fetch_roberts_postings <- function(url = "https://www.robertsrockets.org/index.php/district-information/district-employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
+    perform_with_retry(max_tries = 6, is_transient = is_transient_gateway_error)
   parse_roberts_postings(resp_body_string(resp), url)
 }
 

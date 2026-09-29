@@ -29,10 +29,24 @@
 # same as always. Takes and returns the same shapes as req_perform(), so it
 # drops into any existing `request(...) %>% ... %>% req_perform()` pipe as a
 # straight substitution for the last step.
-perform_with_retry <- function(req, max_tries = 3) {
+#
+# is_transient overrides which responses count as retryable (NULL keeps
+# httr2's 429/503 default) -- see is_transient_gateway_error() below.
+perform_with_retry <- function(req, max_tries = 3, is_transient = NULL) {
   req %>%
-    httr2::req_retry(max_tries = max_tries, backoff = function(i) 2^i) %>%
+    httr2::req_retry(max_tries = max_tries, backoff = function(i) 2^i,
+                     is_transient = is_transient) %>%
     httr2::req_perform()
+}
+
+# httr2's default retries only 429/503, so a 502/504 or a Cloudflare
+# 520-524 (origin unreachable/timed out) fails on the very first try. For a
+# small district site behind Cloudflare those are intermittent, not "the
+# page is gone": Roberts Public School lost two straight weeks to a single
+# 520 (2026-09-22) and 502 (2026-09-29) while the page itself was up with
+# the same 3 postings.
+is_transient_gateway_error <- function(resp) {
+  httr2::resp_status(resp) %in% c(429, 502, 503, 504, 520:524)
 }
 
 # Build a zero-row data frame with the given column names, so a failed or
