@@ -2,7 +2,8 @@
 # assigned to the Copilot coding agent so it can open a fix PR. See the
 # "Tier 3" block in drift_check.R for which verdicts are eligible and why.
 #
-# Reads /tmp/drift_results.csv (written by corroborate_drift.R). No file ->
+# Reads /tmp/drift_results.csv (written by corroborate_drift.R, including
+# the page text it rendered in CI -- see gather_autofix_evidence()). No file ->
 # nothing was flagged this run, which is also the signal that every open
 # auto-fix issue's source has recovered.
 #
@@ -86,8 +87,13 @@ for (i in seq_len(nrow(eligible))) {
     next
   }
 
+  reg_row <- registry_row_for(row$name)
+  call <- if (is.null(reg_row)) NULL else resolve_scraper_call(reg_row)
+  page_text <- if ("page_text" %in% names(row)) row$page_text else NA_character_
+  evidence <- tryCatch(gather_autofix_evidence(call, page_text),
+                       error = function(e) { cat("  Couldn't gather evidence:", conditionMessage(e), "\n"); NULL })
   body_file <- tempfile(fileext = ".md")
-  writeLines(build_autofix_issue_body(row, registry_row_for(row$name), run_url), body_file)
+  writeLines(build_autofix_issue_body(row, reg_row, run_url, evidence), body_file, useBytes = TRUE)
   made <- gh(c("issue", "create", "--title", autofix_issue_title(row$name),
                "--label", AUTOFIX_LABEL, "--body-file", body_file))
   if (!made$ok) { cat("Failed to create issue for", row$name, ":", made$out, "\n"); next }

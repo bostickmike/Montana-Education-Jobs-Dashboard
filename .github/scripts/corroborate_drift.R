@@ -44,7 +44,8 @@ b <- ChromoteSession$new()
 results <- data.frame(name = character(0), type = character(0), mean_count = numeric(0),
                        count = numeric(0), url = character(0), verdict = character(0),
                        error_message = character(0), llm_note = character(0),
-                       llm_titles = character(0), stringsAsFactors = FALSE)
+                       llm_titles = character(0), page_text = character(0),
+                       stringsAsFactors = FALSE)
 
 for (i in seq_len(nrow(flagged))) {
   row <- flagged[i, ]
@@ -52,6 +53,7 @@ for (i in seq_len(nrow(flagged))) {
   if (is.na(url)) url <- NULL
   llm_note <- NA_character_
   llm_titles <- character(0)
+  text <- NA_character_
 
   if (!is.na(row$scrape_error)) {
     verdict <- "confirmed_broken"
@@ -82,7 +84,11 @@ for (i in seq_len(nrow(flagged))) {
     name = row$name, type = row$type, mean_count = row$mean_count,
     count = row$count, url = if (is.null(url)) NA_character_ else url,
     verdict = verdict, error_message = row$scrape_error, llm_note = llm_note,
-    llm_titles = paste(llm_titles, collapse = " | "), stringsAsFactors = FALSE
+    llm_titles = paste(llm_titles, collapse = " | "),
+    # Kept for the auto-fix issue: the agent's firewalled sandbox can't be
+    # trusted to render the page the same way (issue #7).
+    page_text = if (length(text) == 1) text else NA_character_,
+    stringsAsFactors = FALSE
   ))
 }
 

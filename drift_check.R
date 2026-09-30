@@ -397,14 +397,145 @@ run_scraper_call <- function(call, session_factory = NULL,
   }
 }
 
+# ---- Evidence for the agent ------------------------------------------------
+# The drift check renders each flagged page in CI, outside the agent's
+# firewall. The agent's own render can't be trusted: on issue #7 its
+# firewall blocked Apptegy's CDNs, the page came up empty, and it rewrote
+# the fetch instead of fixing a renamed stop line. So the issue carries the
+# text CI captured, the source's existing fixtures, and a diff between the
+# newest text fixture and that capture. These helpers read the scraper and
+# test files as text, since file_autofix_issues.R doesn't source the
+# scrapers.
+
+AUTOFIX_PAGE_TEXT_MAX_CHARS <- 20000
+AUTOFIX_DIFF_MAX_LINES <- 200
+SCRAPER_FILES <- c("direct_api_scrapers.R", "misc_district_scrapers.R", "misc_college_scrapers.R")
+
+# The fetch_* function a resolved call ends up in. Apptegy districts are
+# looked up in the APPTEGY_DISTRICT_SCRAPERS map's source lines.
+scraper_fetch_fn <- function(call, scraper_lines) {
+  if (is.null(call)) return(NA_character_)
+  if (!identical(call$fn, APPTEGY_DISPATCH_FN)) return(call$fn)
+  hit <- grep(sprintf('"%s" = fetch_', call$args[[1]]), scraper_lines, fixed = TRUE, value = TRUE)
+  if (length(hit) == 0) NA_character_ else sub('.*= (fetch_[A-Za-z0-9_]+).*', "\\1", hit[1])
+}
+
+# Whether fetch_fn's parser consumes document.body.innerText -- the form the
+# drift check captured, so the capture can be the new fixture verbatim.
+scraper_reads_inner_text <- function(fetch_fn, scraper_lines) {
+  if (is.na(fetch_fn)) return(FALSE)
+  start <- grep(sprintf("^%s <- function", fetch_fn), scraper_lines)
+  if (length(start) == 0) return(FALSE)
+  later <- grep("^[A-Za-z_.][A-Za-z0-9_.]* <- ", scraper_lines)
+  end <- c(later[later > start[1]], length(scraper_lines) + 1)[1] - 1
+  any(grepl("document.body.innerText", scraper_lines[start[1]:end], fixed = TRUE))
+}
+
+# Fixture files used by the tests of fetch_fn or its parse_* twin, newest
+# first: dated names by date, then undated ones in file order.
+# test_files: named list of test-file lines (name = file name).
+source_fixtures <- function(fetch_fn, test_files) {
+  if (is.na(fetch_fn)) return(character(0))
+  fns <- c(fetch_fn, sub("^fetch_", "parse_", fetch_fn))
+  found <- character(0)
+  for (lines in test_files) {
+    starts <- grep("^\\s*test_that\\(", lines)
+    ends <- c(starts[-1] - 1, length(lines))
+    for (i in seq_along(starts)) {
+      if (!any(vapply(fns, grepl, logical(1), x = lines[starts[i]], fixed = TRUE))) next
+      block <- lines[starts[i]:ends[i]]
+      refs <- unlist(regmatches(block, gregexpr('test_path\\("fixtures", "[^"]+"\\)', block)))
+      found <- c(found, sub('.*"([^"]+)"\\)$', "\\1", refs))
+    }
+  }
+  found <- unique(found)
+  dates <- ifelse(grepl("[0-9]{4}-[0-9]{2}-[0-9]{2}", found),
+                  sub(".*([0-9]{4}-[0-9]{2}-[0-9]{2}).*", "\\1", found), "")
+  found[order(dates, seq_along(found), decreasing = c(TRUE, FALSE), method = "radix")]
+}
+
+# Unified diff of two texts after trimming lines and dropping blanks
+# (innerText and html_text2() disagree on blank lines, which is noise).
+# Uses the system `diff`; returns character(0) when identical or absent.
+text_diff <- function(old_text, new_text, old_label = "old", new_label = "new") {
+  norm <- function(x) { x <- trimws(unlist(strsplit(x, "\n", fixed = TRUE))); x[nzchar(x)] }
+  if (!nzchar(Sys.which("diff"))) return(character(0))
+  f_old <- tempfile(); f_new <- tempfile()
+  on.exit(unlink(c(f_old, f_new)))
+  writeLines(norm(old_text), f_old, useBytes = TRUE)
+  writeLines(norm(new_text), f_new, useBytes = TRUE)
+  out <- suppressWarnings(system2("diff", c("-u", "--label", shQuote(old_label), "--label", shQuote(new_label),
+                                            shQuote(f_old), shQuote(f_new)), stdout = TRUE, stderr = FALSE))
+  as.character(out)
+}
+
+# Everything build_autofix_issue_body() shows the agent beyond the drift
+# numbers. repo_root is a parameter only so tests can point it elsewhere.
+gather_autofix_evidence <- function(call, page_text, repo_root = ".") {
+  scraper_lines <- unlist(lapply(file.path(repo_root, SCRAPER_FILES), readLines, warn = FALSE))
+  test_paths <- list.files(file.path(repo_root, "tests", "testthat"), pattern = "^test-.*[.]R$", full.names = TRUE)
+  test_files <- stats::setNames(lapply(test_paths, readLines, warn = FALSE), basename(test_paths))
+
+  fetch_fn <- scraper_fetch_fn(call, scraper_lines)
+  fixtures <- source_fixtures(fetch_fn, test_files)
+  inner_text <- scraper_reads_inner_text(fetch_fn, scraper_lines)
+  has_text <- length(page_text) == 1 && !is.na(page_text) && nzchar(trimws(page_text))
+
+  diff_against <- if (inner_text && has_text) utils::head(fixtures[grepl("[.]txt$", fixtures)], 1) else character(0)
+  diff <- if (length(diff_against) == 1) {
+    old <- paste(readLines(file.path(repo_root, "tests", "testthat", "fixtures", diff_against),
+                           warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+    text_diff(old, page_text, diff_against, "page text captured in CI")
+  } else character(0)
+
+  list(fetch_fn = fetch_fn, fixtures = fixtures, inner_text = inner_text,
+       page_text = if (has_text) page_text else NA_character_,
+       diff_against = if (length(diff_against) == 1) diff_against else NA_character_,
+       diff = diff)
+}
+
+# The "What CI saw" section of the issue body, from gather_autofix_evidence().
+autofix_evidence_markdown <- function(evidence, captured_on) {
+  if (is.null(evidence)) return(character(0))
+  out <- c("### What CI saw", "")
+  if (length(evidence$fixtures) > 0) {
+    out <- c(out, sprintf("Existing fixtures for `%s()` in `tests/testthat/fixtures/`, newest first: %s",
+                          evidence$fetch_fn, paste0("`", evidence$fixtures, "`", collapse = ", ")), "")
+  }
+  if (length(evidence$diff) > 0) {
+    d <- evidence$diff
+    cut <- length(d) > AUTOFIX_DIFF_MAX_LINES
+    out <- c(out,
+             sprintf("<details><summary>Diff: newest text fixture (<code>%s</code>) &rarr; page text captured in CI</summary>", evidence$diff_against),
+             "", "````diff", utils::head(d, AUTOFIX_DIFF_MAX_LINES),
+             if (cut) sprintf("... diff truncated (%d more lines)", length(d) - AUTOFIX_DIFF_MAX_LINES),
+             "````", "", "</details>", "")
+  }
+  if (!is.na(evidence$page_text)) {
+    txt <- evidence$page_text
+    cut <- nchar(txt) > AUTOFIX_PAGE_TEXT_MAX_CHARS
+    if (cut) txt <- substr(txt, 1, AUTOFIX_PAGE_TEXT_MAX_CHARS)
+    out <- c(out,
+             sprintf("<details><summary>Full page text captured in CI (<code>document.body.innerText</code>, %s)</summary>", captured_on),
+             "", "````text", txt, if (cut) "... page text truncated", "````", "", "</details>", "")
+  }
+  if (length(out) == 2) character(0) else out
+}
+
 # row: one likely_broken row of corroborate_drift.R's results (name, type,
 # mean_count, count, url, llm_titles). registry_row: that source's registry
-# row, or NULL. Returns the markdown body of the per-source auto-fix issue
-# -- written as the task prompt the Copilot coding agent will work from.
-build_autofix_issue_body <- function(row, registry_row = NULL, run_url = NULL) {
+# row, or NULL. evidence: gather_autofix_evidence()'s result, or NULL.
+# Returns the markdown body of the per-source auto-fix issue -- written as
+# the task prompt the Copilot coding agent will work from.
+build_autofix_issue_body <- function(row, registry_row = NULL, run_url = NULL,
+                                     evidence = NULL, captured_on = as.character(Sys.Date())) {
   titles <- if (is.na(row$llm_titles) || !nzchar(row$llm_titles)) character(0)
             else strsplit(row$llm_titles, " | ", fixed = TRUE)[[1]]
   call <- if (is.null(registry_row)) NULL else resolve_scraper_call(registry_row)
+  # The CI capture is the new fixture verbatim only when the parser reads
+  # innerText; otherwise it's context and the agent captures raw HTML.
+  use_capture <- !is.null(evidence) && isTRUE(evidence$inner_text) && !is.na(evidence$page_text)
+  repro <- sprintf("`Rscript scripts/repro_scraper.R \"%s\"`", row$name)
 
   c(
     sprintf("<!-- autofix-source: %s -->", row$name),
@@ -415,6 +546,7 @@ build_autofix_issue_body <- function(row, registry_row = NULL, run_url = NULL) {
     sprintf("- **Live page:** %s", if (is.na(row$url)) "(none on file)" else row$url),
     if (!is.null(registry_row)) sprintf("- **Registry platform:** `%s`", registry_row$Platform),
     if (!is.null(call)) sprintf("- **Scraper entry point:** %s (and the `parse_*` function it calls, if any)", describe_scraper_call(call)),
+    if (!is.null(call)) sprintf("- **Reproduce:** %s runs this scraper against its fixtures and the live site", repro),
     if (!is.null(run_url)) sprintf("- **Drift-check run:** %s", run_url),
     "",
     if (length(titles) > 0) c(
@@ -429,10 +561,19 @@ build_autofix_issue_body <- function(row, registry_row = NULL, run_url = NULL) {
       "The drift check rendered this page in CI with chromote (`document.body.innerText`), so it renders normally outside your sandbox. If your render shows no postings, check the firewall's blocked hosts before changing how the scraper fetches the page -- see `.github/copilot-instructions.md`.",
       ""
     ),
+    autofix_evidence_markdown(evidence, captured_on),
     "### Task",
     "",
-    "1. Fetch the live page and save it as a **new, dated real fixture** in `tests/testthat/fixtures/` (keep the existing fixture -- the old layout must keep parsing).",
-    "2. Fix the parser so it extracts the real postings from the new fixture. Keep the change minimal and in the existing style.",
+    if (use_capture) {
+      sprintf("1. Save the **Full page text captured in CI** above, verbatim, as a **new, dated fixture** in `tests/testthat/fixtures/` (e.g. `<source>_rendered_%s.txt`). It is real captured data -- the exact text this scraper parses -- so prefer it over your own render. Keep the existing fixtures; the old layout must keep parsing.", captured_on)
+    } else {
+      "1. Fetch the live page and save it as a **new, dated real fixture** in `tests/testthat/fixtures/` (keep the existing fixture -- the old layout must keep parsing)."
+    },
+    if (length(evidence$diff) > 0) {
+      "2. Start from the diff above: it shows what changed since the newest fixture. Fix the parser so it extracts the real postings from the new fixture. Keep the change minimal and in the existing style."
+    } else {
+      "2. Fix the parser so it extracts the real postings from the new fixture. Keep the change minimal and in the existing style."
+    },
     "3. Add a regression test against the new fixture asserting the exact titles found.",
     "4. Run `testthat::test_dir(\"tests/testthat\")` and make sure everything passes.",
     "",
@@ -447,8 +588,11 @@ build_autofix_issue_body <- function(row, registry_row = NULL, run_url = NULL) {
 parse_autofix_expected_titles <- function(body) {
   lines <- strsplit(body, "\n", fixed = TRUE)[[1]]
   start <- grep("^An LLM read these postings", lines)
-  end <- grep("^### Task", lines)
-  if (length(start) == 0 || length(end) == 0 || end[1] <= start[1]) return(character(0))
+  # First heading after the list -- "### What CI saw" (whose diff and page
+  # text can hold "- " lines) or "### Task".
+  end <- grep("^### ", lines)
+  end <- end[end > start[1]]
+  if (length(start) == 0 || length(end) == 0) return(character(0))
   block <- lines[(start[1] + 1):(end[1] - 1)]
   sub("^- ", "", block[startsWith(block, "- ")])
 }

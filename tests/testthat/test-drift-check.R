@@ -470,3 +470,115 @@ test_that("summarize_live_check fails on an error or zero rows and passes otherw
   expect_match(md, "Matched 1 of 2", fixed = TRUE)
   expect_match(md, "- Daycare Manager", fixed = TRUE)
 })
+
+# ---- auto-fix evidence (the CI capture handed to the agent) ----------------
+# Issue #7: the agent's sandbox rendered Lone Rock's Apptegy page empty and
+# it misdiagnosed the break. The real cause -- a renamed stop line plus one
+# new posting -- is plain in a diff of the old fixture against the text the
+# drift check rendered in CI. drift_autofix_lonerock_innertext_2026-09-30.txt
+# is that text, captured live with scripts/repro_scraper.R.
+
+lonerock_capture <- function() {
+  paste(readLines(test_path("fixtures", "drift_autofix_lonerock_innertext_2026-09-30.txt"),
+                  warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+}
+scraper_source_lines <- function() {
+  unlist(lapply(here::here(SCRAPER_FILES), readLines, warn = FALSE))
+}
+lonerock_row <- function() {
+  data.frame(name = "Lone Rock School District", type = "K-12", mean_count = 1, count = 0,
+             url = "https://www.lonerockschool.org/page/employment",
+             llm_titles = "Special Education Paraprofessional | Bus Driver and Maintenance Director",
+             stringsAsFactors = FALSE)
+}
+lonerock_registry <- function() {
+  data.frame(District = "Lone Rock School District", Platform = "Apptegy", Slug = "",
+             Job_Link = "https://www.lonerockschool.org/page/employment", stringsAsFactors = FALSE)
+}
+
+test_that("scraper_fetch_fn follows the Apptegy map to the real fetch_* function", {
+  lines <- scraper_source_lines()
+  expect_equal(scraper_fetch_fn(resolve_scraper_call(lonerock_registry()), lines), "fetch_lonerock_postings")
+  expect_equal(scraper_fetch_fn(list(fn = "fetch_applitrack_postings", args = list("x"), session = FALSE), lines),
+               "fetch_applitrack_postings")
+  expect_true(is.na(scraper_fetch_fn(NULL, lines)))
+  expect_true(is.na(scraper_fetch_fn(list(fn = APPTEGY_DISPATCH_FN, args = list("No Such District"), session = TRUE), lines)))
+})
+
+test_that("scraper_reads_inner_text tells innerText chromote scrapers from HTTP ones", {
+  lines <- scraper_source_lines()
+  expect_true(scraper_reads_inner_text("fetch_lonerock_postings", lines))
+  expect_false(scraper_reads_inner_text("fetch_applitrack_postings", lines))
+  expect_false(scraper_reads_inner_text(NA_character_, lines))
+})
+
+test_that("source_fixtures finds a scraper's fixtures from its tests, dated newest first", {
+  test_paths <- list.files(test_path(), pattern = "^test-.*[.]R$", full.names = TRUE)
+  test_files <- setNames(lapply(test_paths, readLines, warn = FALSE), basename(test_paths))
+  fx <- source_fixtures("fetch_lonerock_postings", test_files)
+  expect_equal(fx[1], "apptegy_lonerock_content_2026-09-30.txt")
+  expect_true("apptegy_lonerock_rendered.txt" %in% fx)
+  expect_equal(source_fixtures(NA_character_, test_files), character(0))
+})
+
+test_that("text_diff of the pre-fix Lone Rock fixture vs the CI capture shows the real break", {
+  skip_if(!nzchar(Sys.which("diff")), "no system diff")
+  old <- paste(readLines(test_path("fixtures", "apptegy_lonerock_rendered.txt"), warn = FALSE), collapse = "\n")
+  d <- text_diff(old, lonerock_capture(), "old.txt", "ci")
+  expect_true("-District Employment Applications." %in% d)
+  expect_true("+Classified Employee Application" %in% d)
+  expect_true("+Bus Driver and Maintenance Director" %in% d)
+  expect_lt(length(d), 40)
+  expect_equal(text_diff("a\n\nb ", "a\nb"), character(0))
+})
+
+test_that("an innerText scraper's issue hands the agent the CI capture as its fixture", {
+  call <- resolve_scraper_call(lonerock_registry())
+  ev <- gather_autofix_evidence(call, lonerock_capture(), repo_root = here::here())
+  expect_true(ev$inner_text)
+  expect_equal(ev$diff_against, "apptegy_lonerock_content_2026-09-30.txt")
+
+  body <- paste(build_autofix_issue_body(lonerock_row(), lonerock_registry(), evidence = ev,
+                                         captured_on = "2026-09-30"), collapse = "\n")
+  expect_match(body, "### What CI saw", fixed = TRUE)
+  expect_match(body, "Full page text captured in CI", fixed = TRUE)
+  expect_match(body, "Classified Employee Application", fixed = TRUE)
+  expect_match(body, "1. Save the **Full page text captured in CI**", fixed = TRUE)
+  expect_match(body, "scripts/repro_scraper.R \"Lone Rock School District\"", fixed = TRUE)
+  expect_equal(parse_autofix_marker(body), "Lone Rock School District")
+})
+
+test_that("diff and page-text lines never leak into the live check's expected titles", {
+  ev <- list(fetch_fn = "fetch_x_postings", fixtures = "x.txt", inner_text = TRUE,
+             page_text = "- Not A Title\nreal text", diff_against = "x.txt",
+             diff = c("--- x.txt", "+++ ci", "- Also Not A Title", "+new"))
+  body <- paste(build_autofix_issue_body(lonerock_row(), lonerock_registry(), evidence = ev), collapse = "\n")
+  expect_equal(parse_autofix_expected_titles(body),
+               c("Special Education Paraprofessional", "Bus Driver and Maintenance Director"))
+})
+
+test_that("an HTTP scraper's issue keeps the capture as context and asks for a raw fixture", {
+  row <- data.frame(name = "Hinsdale Public Schools", type = "K-12", mean_count = 3, count = 0,
+                    url = "https://hinsdale.k12.mt.us/District/1557-Untitled.html",
+                    llm_titles = NA_character_, stringsAsFactors = FALSE)
+  reg <- data.frame(District = row$name, Platform = "HinsdaleHeuristic", Slug = "",
+                    Job_Link = row$url, stringsAsFactors = FALSE)
+  ev <- gather_autofix_evidence(resolve_scraper_call(reg), "Route Bus Drivers\nDaycare Manager",
+                                repo_root = here::here())
+  expect_false(ev$inner_text)
+  expect_equal(ev$diff, character(0))
+  expect_true(length(ev$fixtures) > 0)
+  body <- paste(build_autofix_issue_body(row, reg, evidence = ev), collapse = "\n")
+  expect_match(body, "1. Fetch the live page", fixed = TRUE)
+  expect_no_match(body, "Diff: newest text fixture", fixed = TRUE)
+})
+
+test_that("a long capture is truncated to fit an issue body", {
+  ev <- list(fetch_fn = "fetch_x_postings", fixtures = character(0), inner_text = TRUE,
+             page_text = strrep("x", AUTOFIX_PAGE_TEXT_MAX_CHARS * 3), diff_against = NA_character_,
+             diff = paste0("+", seq_len(AUTOFIX_DIFF_MAX_LINES * 2)))
+  md <- autofix_evidence_markdown(ev, "2026-09-30")
+  expect_lt(sum(nchar(md)), 60000)  # GitHub caps issue bodies at 65,536 chars
+  expect_true(any(grepl("page text truncated", md, fixed = TRUE)))
+  expect_true(any(grepl("diff truncated", md, fixed = TRUE)))
+})
