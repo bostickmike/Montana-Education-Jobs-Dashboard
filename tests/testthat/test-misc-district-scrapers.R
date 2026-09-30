@@ -2825,6 +2825,24 @@ test_that("parse_lonerock_postings extracts the 1 real Classified posting, ignor
   expect_true(all(result$Location == "Lone Rock"))
 })
 
+test_that("parse_lonerock_postings extracts the current Apptegy job titles", {
+  html <- paste(readLines(test_path("fixtures", "lonerock_employment_2026-09-30.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_lonerock_postings(html, "url")
+
+  expect_equal(result$Title, c(
+    "Special Education Paraprofessional",
+    "Bus Driver and Maintenance Director",
+    "bus driver substitutes",
+    "classroom teacher substitutes",
+    "custodial substitutes",
+    "kitchen substitutes",
+    "office staff substitutes",
+    "para professionals substitutes"
+  ))
+  expect_true(all(result$Location == "Lone Rock"))
+})
+
 test_that("parse_lonerock_postings returns zero rows (not an error) when there's no real start marker", {
   result <- parse_lonerock_postings("Just some regular page text with no postings.", "url")
   expect_equal(nrow(result), 0)
@@ -2832,12 +2850,12 @@ test_that("parse_lonerock_postings returns zero rows (not an error) when there's
 })
 
 test_that("fetch_lonerock_postings drives a chromote session and parses its real rendered text", {
-  text <- paste(readLines(test_path("fixtures", "apptegy_lonerock_rendered.txt"), warn = FALSE), collapse = "\n")
-  session <- fake_chromote_session(text)
+  html <- paste(readLines(test_path("fixtures", "lonerock_employment_2026-09-30.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  session <- fake_chromote_session(html)
 
   result <- fetch_lonerock_postings(session)
 
-  expect_equal(nrow(result), 1)
+  expect_equal(nrow(result), 8)
 })
 
 # Real fixture captured 2026-08-25 from lustregradeschool.com's

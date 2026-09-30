@@ -1104,19 +1104,50 @@ fetch_evergreen_postings <- function(chromote_session, url = "https://www.evergr
 
 # Lone Rock School District (lonerockschool.org, found 2026-08-25) --
 # Apptegy, real slug is "/page/employment" (a bare "/employment" 404s).
-# The 1 real posting under "Classified Positions:" is the single line
-# immediately after the header, stopping before the trailing description
-# paragraph and the "District Employment Applications." boilerplate
-# link. The page also has a substitute-teacher recruiting section
-# listing 6 sub-categories (bus driver/classroom/custodial/kitchen/
-# office staff/para professional substitutes) as one free-running prose
-# sentence with no clean per-item title boundary -- declined as
-# genuinely unstructured, same bar as the Rapelje/Grass Range precedent,
-# so only the 1 clean Classified Positions posting is extracted.
+# On 2026-09-30, the page content moved into Apptegy's embedded client state
+# instead of the rendered body text. Its two classified positions and six
+# separately listed substitute openings are extracted from that content;
+# the previous body-text layout remains supported.
 parse_lonerock_postings <- function(rendered_text, url) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
                        stringsAsFactors = FALSE)
+
+  embedded_content <- FALSE
+  if (grepl("<html[[:space:]>]", rendered_text, ignore.case = TRUE)) {
+    page <- xml2::read_html(rendered_text)
+    state_script <- xml2::xml_find_first(page, "//script[contains(., 'clientWorkStateTemp')]")
+    if (!inherits(state_script, "xml_missing")) {
+      script <- xml2::xml_text(state_script)
+      parse_start <- regexpr("JSON.parse\\(", script, perl = TRUE)
+      state_arg <- substring(script, parse_start + attr(parse_start, "match.length"))
+      state_end <- regexpr('(?<!\\\\)"\\);', state_arg, perl = TRUE)
+      state <- if (state_end[1] > 0) {
+        state_json <- paste0(substr(state_arg, 1, state_end - 1), '"')
+        tryCatch(
+          jsonlite::fromJSON(jsonlite::fromJSON(state_json), simplifyVector = FALSE),
+          error = function(e) NULL
+        )
+      } else {
+        NULL
+      }
+      find_content_html <- function(node) {
+        if (!is.list(node)) return(character(0))
+        html <- if (is.list(node$content) && is.character(node$content$html)) {
+          node$content$html
+        } else {
+          character(0)
+        }
+        c(html, unlist(lapply(node, find_content_html), use.names = FALSE))
+      }
+      content_html <- find_content_html(state$page$content$structure)
+      content_html <- content_html[grepl("Classified Positions:", content_html, fixed = TRUE)]
+      if (length(content_html) > 0) {
+        rendered_text <- rvest::html_text2(rvest::read_html(content_html[1]))
+        embedded_content <- TRUE
+      }
+    }
+  }
 
   lines <- strsplit(rendered_text, "\n")[[1]]
   lines <- trimws(lines)
@@ -1124,20 +1155,31 @@ parse_lonerock_postings <- function(rendered_text, url) {
 
   start_idx <- which(lines == "Classified Positions:")
   stop_idx <- which(lines == "District Employment Applications.")
+  if (embedded_content) stop_idx <- which(grepl("^If selected,", lines))
   if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
   body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
   body <- body[nzchar(body)]
   if (length(body) == 0) return(empty)
 
-  data.frame(Title = body[1], Location = "Lone Rock", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+  titles <- if (embedded_content) body else body[1]
+  if (embedded_content) {
+    substitute_start <- which(grepl("^We are always looking for substitute teachers!", lines))
+    substitute_stop <- which(grepl("^If interested,", lines))
+    if (length(substitute_start) > 0 && length(substitute_stop) > 0) {
+      substitutes <- lines[(substitute_start[1] + 1):(substitute_stop[1] - 1)]
+      titles <- c(titles, sub("\\s*\\(.*$", "", substitutes))
+    }
+  }
+
+  data.frame(Title = titles, Location = "Lone Rock", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
 fetch_lonerock_postings <- function(chromote_session, url = "https://www.lonerockschool.org/page/employment") {
   chromote_session$Page$navigate(url)
   chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
   Sys.sleep(4)
-  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
-  parse_lonerock_postings(text, url)
+  html <- chromote_session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+  parse_lonerock_postings(html, url)
 }
 
 # Dixon School District #9 (dixonschool.org, a publicly published Google
