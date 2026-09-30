@@ -39,6 +39,24 @@ test_that("every URL hardcoded in a scraper file is on the Copilot allowlist", {
                info = "add these to .github/copilot-allowlist.txt AND the repo's Copilot firewall settings")
 })
 
+# Hosts a chromote-rendered platform's pages load assets from. They never
+# appear in a registry URL or a scraper file, so the tests above can't see
+# them -- but blocking them leaves the agent a page with no postings. The
+# Apptegy pair came from the firewall's blocked-host report on the first
+# auto-fix session (issue #7).
+RENDER_ASSET_HOSTS <- list(Apptegy = c("apptegy.net", "5il.co"))
+
+test_that("every chromote platform's render-time asset hosts are on the Copilot allowlist", {
+  k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  he <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
+  platforms <- intersect(names(RENDER_ASSET_HOSTS), c(k12$Platform, he$Platform))
+  hosts <- unlist(RENDER_ASSET_HOSTS[platforms], use.names = FALSE)
+  allow <- read_allowlist()
+  missing <- hosts[!vapply(hosts, covered_by, logical(1), allowlist = allow)]
+  expect_equal(missing, character(0),
+               info = "add these to .github/copilot-allowlist.txt AND the repo's Copilot firewall settings")
+})
+
 test_that("covered_by matches subdomains but not look-alike suffixes", {
   expect_true(covered_by("bridger.schoolspring.com", "schoolspring.com"))
   expect_true(covered_by("schoolspring.com", "schoolspring.com"))

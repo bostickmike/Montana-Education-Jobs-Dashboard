@@ -116,3 +116,10 @@ winnettschool.org
 wolfpointschools.org
 wolverine.life
 zurichelementary17.org
+
+# Render-time asset hosts: not job-board URLs, but chromote needs them for
+# the page to hydrate. Without Apptegy's CDNs the agent's headless Chrome
+# gets an empty shell, so innerText shows no postings (issue #7 / PR #8,
+# 2026-09-30). test-copilot-allowlist.R checks these per platform.
+5il.co
+apptegy.net

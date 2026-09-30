@@ -421,6 +421,12 @@ build_autofix_issue_body <- function(row, registry_row = NULL, run_url = NULL) {
       "An LLM read these postings off the live page (a hint, not ground truth -- verify against the page itself):",
       "",
       paste0("- ", titles),
+      "",
+      "The list covers the whole page, so it can include things this source's parser deliberately leaves out (e.g. a standing substitute-recruiting list). Restore what the parser used to find; see the comment above its `parse_*` function.",
+      ""
+    ),
+    if (isTRUE(call$session)) c(
+      "The drift check rendered this page in CI with chromote (`document.body.innerText`), so it renders normally outside your sandbox. If your render shows no postings, check the firewall's blocked hosts before changing how the scraper fetches the page -- see `.github/copilot-instructions.md`.",
       ""
     ),
     "### Task",

@@ -419,6 +419,22 @@ test_that("build_autofix_issue_body round-trips its source marker and lists the 
   expect_match(body, "- Daycare Manager", fixed = TRUE)
   expect_match(body, "`fetch_hinsdale_postings()`", fixed = TRUE)
   expect_match(body, "https://run", fixed = TRUE)
+  expect_match(body, "deliberately leaves out", fixed = TRUE)
+  # Hinsdale is a plain HTTP scraper -- no sandbox-render hint.
+  expect_no_match(body, "rendered this page in CI", fixed = TRUE)
+})
+
+test_that("build_autofix_issue_body warns chromote-scraper fixes that the page renders fine in CI", {
+  # Issue #7: the agent's firewall blocked Apptegy's CDNs, it saw no postings
+  # in its own render, and rewrote the fetch to parse embedded JSON instead.
+  row <- data.frame(name = "Lone Rock School District", type = "K-12", mean_count = 1, count = 0,
+                    url = "https://www.lonerockschool.org/page/employment",
+                    llm_titles = "Special Education Paraprofessional", stringsAsFactors = FALSE)
+  reg <- data.frame(District = row$name, Platform = "Apptegy", Slug = "", Job_Link = row$url,
+                    stringsAsFactors = FALSE)
+  body <- paste(build_autofix_issue_body(row, reg), collapse = "\n")
+  expect_match(body, "rendered this page in CI", fixed = TRUE)
+  expect_equal(parse_autofix_expected_titles(body), "Special Education Paraprofessional")
 })
 
 test_that("build_autofix_issue_body tolerates no LLM titles and no registry row", {
