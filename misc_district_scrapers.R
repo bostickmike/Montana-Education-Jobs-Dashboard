@@ -1112,7 +1112,14 @@ fetch_evergreen_postings <- function(chromote_session, url = "https://www.evergr
 # office staff/para professional substitutes) as one free-running prose
 # sentence with no clean per-item title boundary -- declined as
 # genuinely unstructured, same bar as the Rapelje/Grass Range precedent,
-# so only the 1 clean Classified Positions posting is extracted.
+# so only the Classified Positions postings are extracted.
+#
+# 2026-09-22 break: the district renamed the "District Employment
+# Applications." link to "Classified Employee Application" and added a
+# second posting, so the old single stop line vanished and the parser
+# returned 0 for two weeks. The list now ends at whichever comes first of
+# the "If selected, ..." paragraph (present in both layouts) or either
+# application-link line, and every line in between is a posting.
 parse_lonerock_postings <- function(rendered_text, url) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
@@ -1123,13 +1130,14 @@ parse_lonerock_postings <- function(rendered_text, url) {
   lines <- lines[nzchar(lines)]
 
   start_idx <- which(lines == "Classified Positions:")
-  stop_idx <- which(lines == "District Employment Applications.")
-  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+  if (length(start_idx) == 0) return(empty)
+  is_stop <- grepl("^If selected,", lines) |
+    lines %in% c("District Employment Applications.", "Classified Employee Application")
+  stop_idx <- which(is_stop & seq_along(lines) > start_idx[1])
+  if (length(stop_idx) == 0 || stop_idx[1] == start_idx[1] + 1) return(empty)
   body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
-  body <- body[nzchar(body)]
-  if (length(body) == 0) return(empty)
 
-  data.frame(Title = body[1], Location = "Lone Rock", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+  data.frame(Title = body, Location = "Lone Rock", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
 fetch_lonerock_postings <- function(chromote_session, url = "https://www.lonerockschool.org/page/employment") {

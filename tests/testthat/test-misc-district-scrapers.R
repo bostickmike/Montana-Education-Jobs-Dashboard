@@ -2825,6 +2825,21 @@ test_that("parse_lonerock_postings extracts the 1 real Classified posting, ignor
   expect_true(all(result$Location == "Lone Rock"))
 })
 
+# Real content, 2026-09-30 layout: the employment block from the page as
+# captured for PR #8, converted to text with rvest::html_text2() (no live
+# chromote render was available in that session). The page renamed the
+# old stop line ("District Employment Applications." -> "Classified
+# Employee Application") and added a second posting -- the scraper returned
+# 0 from 2026-09-22 (issue #7).
+test_that("parse_lonerock_postings extracts both Classified postings from the 2026-09-30 layout, still ignoring the substitute list", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_lonerock_content_2026-09-30.txt"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_lonerock_postings(text, "url")
+
+  expect_equal(result$Title, c("Special Education Paraprofessional", "Bus Driver and Maintenance Director"))
+  expect_true(all(result$Location == "Lone Rock"))
+})
+
 test_that("parse_lonerock_postings returns zero rows (not an error) when there's no real start marker", {
   result <- parse_lonerock_postings("Just some regular page text with no postings.", "url")
   expect_equal(nrow(result), 0)
