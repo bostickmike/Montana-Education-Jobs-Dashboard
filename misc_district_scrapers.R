@@ -3294,6 +3294,9 @@ parse_thompsonfalls_postings <- function(html_text, url) {
   stop_candidates <- stop_candidates[stop_candidates > start_idx[1]]
   if (length(stop_candidates) == 0) return(empty)
   stop_idx <- min(stop_candidates)
+  # Markers back to back = no postings. Without this, (start + 1):(stop - 1)
+  # counts backwards and returns the two marker lines as fake postings.
+  if (stop_idx <= start_idx[1] + 1) return(empty)
 
   titles <- lines[(start_idx[1] + 1):(stop_idx - 1)]
   titles <- sub(" \\(opens in new window/tab\\)$", "", titles)

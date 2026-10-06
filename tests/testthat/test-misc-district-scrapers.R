@@ -1025,6 +1025,15 @@ test_that("parse_thompsonfalls_postings returns zero rows (not an error) when th
 # postings now, and the "Load More" button is gone -- the boundary is the
 # "Employment Information" section header. The 2026-08 version keyed only on
 # "Load More" and silently returned 0.
+test_that("parse_thompsonfalls_postings returns zero rows when the page has no postings between its markers", {
+  # Regression (found by the reviewer regression run, 2026-10-06): with the
+  # two markers back to back, (start + 1):(stop - 1) counted backwards and
+  # returned the marker lines themselves as 2 fake postings.
+  html <- "<html><body><p>Post RSS Feeds for Jobs</p><p>Employment Information</p></body></html>"
+  result <- parse_thompsonfalls_postings(html, "url")
+  expect_equal(nrow(result), 0)
+})
+
 test_that("parse_thompsonfalls_postings stops at 'Employment Information' when there's no 'Load More'", {
   html <- paste(readLines(test_path("fixtures", "thompsonfalls_employment_2026-09.html"),
                           warn = FALSE, encoding = "UTF-8"), collapse = "\n")
