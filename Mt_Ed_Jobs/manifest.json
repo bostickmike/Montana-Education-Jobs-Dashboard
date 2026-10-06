@@ -969,7 +969,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "RSPM",
         "Date/Publication": "2026-02-11 06:10:52 UTC",
-        "Built": "R 4.6.0; ; 2026-09-26 06:35:55 UTC; unix"
+        "Built": "R 4.6.0; ; 2026-10-02 08:11:50 UTC; unix"
       }
     },
     "e1071": {
@@ -2061,7 +2061,7 @@
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
         "Repository": "RSPM",
         "Date/Publication": "2023-03-22 13:00:07 UTC",
-        "Built": "R 4.6.0; ; 2026-08-12 20:24:17 UTC; unix"
+        "Built": "R 4.6.0; ; 2026-10-02 08:07:59 UTC; unix"
       }
     },
     "openssl": {
@@ -2551,7 +2551,7 @@
         "Maintainer": "Jennifer Bryan <jenny@posit.co>",
         "Repository": "RSPM",
         "Date/Publication": "2026-02-19 18:10:02 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-08-12 20:24:23 UTC; unix"
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-10-02 08:08:54 UTC; unix"
       }
     },
     "readxl": {
@@ -3835,43 +3835,43 @@
   },
   "files": {
     "allnow_he.csv": {
-      "checksum": "ec6d80e69cd19f525ee61c4a44c15fd7"
+      "checksum": "ac363c8b510107e70841649873f3236e"
     },
     "allnow.csv": {
-      "checksum": "b89e5731ed5b5539add492ddd4975793"
+      "checksum": "0e0cac248aedbb6c33a4ffbdca161486"
     },
     "allsum_he.csv": {
-      "checksum": "6d5cd4dbe1943481ef0f4151428ca608"
+      "checksum": "6b65059deaeca101c3faa744ee7eeb91"
     },
     "allsum.csv": {
-      "checksum": "ea3ad8199281e3e5eae23e521bf81a30"
+      "checksum": "b04ab4138e9619fd97abfc71ccffd26b"
     },
     "app.R": {
       "checksum": "e69c54201246d341d10bc57b76a2d3a4"
     },
     "combinedclean.csv": {
-      "checksum": "0ce38af0ddfe037b6a151a67847a890f"
+      "checksum": "50e8a66eae3e0ce60b5f752321ae7f4f"
     },
     "facultydata.csv": {
-      "checksum": "ce7a3424954565cef7ce04eab59b07f4"
+      "checksum": "39269a545b27cbd554d133ed5aeaa130"
     },
     "he_institution_weekly_totals.csv": {
-      "checksum": "741ecf0ca6bc0314e465449df52f31a0"
+      "checksum": "8065b128497e42c29dd7f18f31412bb1"
     },
     "hedata.xlsx": {
-      "checksum": "e43688ff27ab9b95a53899220dc90354"
+      "checksum": "54f3d4e1c682cdd772a4a21e1cb2b399"
     },
     "k12_district_weekly_totals.csv": {
-      "checksum": "9dae10a3056cee1779414111dcd89477"
+      "checksum": "9e6c861ea5a1b6c4c649b928efd236e0"
     },
     "k12_salary_history.csv": {
       "checksum": "aaa3008b4f5d93a490b15ef07eb30b4f"
     },
     "k12jobanalysis.csv": {
-      "checksum": "e9ca8eb3afc5a385d6a2baa3ee537da4"
+      "checksum": "41ca32181a5328de4aff2ca402abff3e"
     },
     "llm_extract_shadow.csv": {
-      "checksum": "2dd8a41747cf7b791414ac25665af52c"
+      "checksum": "c23ffdb0798b575a76916a49f19a3a9e"
     },
     "salarymap.csv": {
       "checksum": "a4c7a76f91440c4bcf5c696634a789c0"
