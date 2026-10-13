@@ -3074,7 +3074,7 @@
       "Repository": "https://packagemanager.posit.co/cran/latest",
       "description": {
         "Package": "sp",
-        "Version": "2.2-3",
+        "Version": "2.2-4",
         "Title": "Classes and Methods for Spatial Data",
         "Authors@R": "c(person(\"Edzer\", \"Pebesma\", role = c(\"aut\", \"cre\"),\n\t\t\t\temail = \"edzer.pebesma@uni-muenster.de\"),\n\t\t\tperson(\"Roger\", \"Bivand\", role = \"aut\",\n            \temail = \"Roger.Bivand@nhh.no\"),\n\t\t\tperson(\"Barry\", \"Rowlingson\", role = \"ctb\"),\n\t\t\tperson(\"Virgilio\", \"Gomez-Rubio\", role = \"ctb\"),\n\t\t\tperson(\"Robert\", \"Hijmans\", role = \"ctb\"),\n\t\t\tperson(\"Michael\", \"Sumner\", role = \"ctb\"),\n\t\t\tperson(\"Don\", \"MacQueen\", role = \"ctb\"),\n\t\t\tperson(\"Jim\", \"Lemon\", role = \"ctb\"),\n                        person(\"Finn\", \"Lindgren\", role = \"ctb\"),\n\t\t\tperson(\"Josh\", \"O'Brien\", role = \"ctb\"),\n\t\t\tperson(\"Joseph\", \"O'Rourke\", role = \"ctb\"),\n            person(\"Patrick\", \"Hausmann\", role = \"ctb\"),\n            person(\"Sebastian\", \"Meyer\", role = \"ctb\"))",
         "Depends": "R (>= 3.5.0), methods",
@@ -3087,13 +3087,13 @@
         "Collate": "bpy.colors.R AAA.R Class-CRS.R CRS-methods.R Class-Spatial.R\nSpatial-methods.R projected.R Class-SpatialPoints.R\nSpatialPoints-methods.R Class-SpatialPointsDataFrame.R\nSpatialPointsDataFrame-methods.R Class-SpatialMultiPoints.R\nSpatialMultiPoints-methods.R\nClass-SpatialMultiPointsDataFrame.R\nSpatialMultiPointsDataFrame-methods.R Class-GridTopology.R\nClass-SpatialGrid.R Class-SpatialGridDataFrame.R\nClass-SpatialLines.R SpatialLines-methods.R\nClass-SpatialLinesDataFrame.R SpatialLinesDataFrame-methods.R\nClass-SpatialPolygons.R Class-SpatialPolygonsDataFrame.R\nSpatialPolygons-methods.R SpatialPolygonsDataFrame-methods.R\nGridTopology-methods.R SpatialGrid-methods.R\nSpatialGridDataFrame-methods.R SpatialPolygons-internals.R\npoint.in.polygon.R SpatialPolygons-displayMethods.R zerodist.R\nimage.R stack.R bubble.R mapasp.R select.spatial.R gridded.R\nasciigrid.R spplot.R over.R spsample.R recenter.R dms.R\ngridlines.R spdists.R rbind.R flipSGDF.R chfids.R loadmeuse.R\ncompassRose.R surfaceArea.R spOptions.R subset.R disaggregate.R\nsp_spat1.R merge.R aggregate.R elide.R sp2Mondrian.R",
         "VignetteBuilder": "knitr",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-07-15 13:18:11 UTC; edzer",
+        "Packaged": "2026-10-11 14:25:55 UTC; edzer",
         "Author": "Edzer Pebesma [aut, cre],\n  Roger Bivand [aut],\n  Barry Rowlingson [ctb],\n  Virgilio Gomez-Rubio [ctb],\n  Robert Hijmans [ctb],\n  Michael Sumner [ctb],\n  Don MacQueen [ctb],\n  Jim Lemon [ctb],\n  Finn Lindgren [ctb],\n  Josh O'Brien [ctb],\n  Joseph O'Rourke [ctb],\n  Patrick Hausmann [ctb],\n  Sebastian Meyer [ctb]",
         "Maintainer": "Edzer Pebesma <edzer.pebesma@uni-muenster.de>",
         "Repository": "RSPM",
-        "Date/Publication": "2026-07-19 16:10:02 UTC",
+        "Date/Publication": "2026-10-11 22:30:09 UTC",
         "Encoding": "UTF-8",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-08-12 20:21:49 UTC; unix"
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-10-12 04:29:29 UTC; unix"
       }
     },
     "stringi": {
@@ -3835,49 +3835,49 @@
   },
   "files": {
     "allnow_he.csv": {
-      "checksum": "ac363c8b510107e70841649873f3236e"
+      "checksum": "131b4a19eca6616741cdc87595d481a0"
     },
     "allnow.csv": {
-      "checksum": "0e0cac248aedbb6c33a4ffbdca161486"
+      "checksum": "cd68650b86976313aff1ca63f6cc4930"
     },
     "allsum_he.csv": {
-      "checksum": "6b65059deaeca101c3faa744ee7eeb91"
+      "checksum": "6ccecf34ea9941eda9bc7b8f5f240c61"
     },
     "allsum.csv": {
-      "checksum": "b04ab4138e9619fd97abfc71ccffd26b"
+      "checksum": "e3b5e65f12f19a6f52513edd3623952e"
     },
     "app.R": {
       "checksum": "e69c54201246d341d10bc57b76a2d3a4"
     },
     "combinedclean.csv": {
-      "checksum": "50e8a66eae3e0ce60b5f752321ae7f4f"
+      "checksum": "77d7386d83d3f4995e1774dc63e160b1"
     },
     "facultydata.csv": {
-      "checksum": "39269a545b27cbd554d133ed5aeaa130"
+      "checksum": "f71fc6a06e1f105ff3588199f1be475d"
     },
     "he_institution_weekly_totals.csv": {
-      "checksum": "8065b128497e42c29dd7f18f31412bb1"
+      "checksum": "afdf00e62c4a3353ad62346f1e97c1f6"
     },
     "hedata.xlsx": {
-      "checksum": "54f3d4e1c682cdd772a4a21e1cb2b399"
+      "checksum": "ae5dd69b46aeafeb43e40694594cd525"
     },
     "k12_district_weekly_totals.csv": {
-      "checksum": "9e6c861ea5a1b6c4c649b928efd236e0"
+      "checksum": "1c45211a7d0f8af86de48985e3c9a7fa"
     },
     "k12_salary_history.csv": {
       "checksum": "aaa3008b4f5d93a490b15ef07eb30b4f"
     },
     "k12jobanalysis.csv": {
-      "checksum": "41ca32181a5328de4aff2ca402abff3e"
+      "checksum": "7b7c3ba06d4b2941c757ac8ad777e7c8"
     },
     "llm_extract_shadow.csv": {
-      "checksum": "c23ffdb0798b575a76916a49f19a3a9e"
+      "checksum": "786d4aa50c5f0001827a216433a7893c"
     },
     "salarymap.csv": {
       "checksum": "a4c7a76f91440c4bcf5c696634a789c0"
     },
     "salarymap2.csv": {
-      "checksum": "ae4a85289308806ed792913f94bc8cca"
+      "checksum": "7aefbaf8c8a75f258970cc90a63bb434"
     }
   },
   "users": null
