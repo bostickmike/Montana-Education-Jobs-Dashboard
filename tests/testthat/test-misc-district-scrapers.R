@@ -2269,7 +2269,7 @@ test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy/RedR
   expect_setequal(names(APPTEGY_DISTRICT_SCRAPERS), registry_districts)
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 43 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 44 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2313,6 +2313,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 43 districts
   deerpark_text <- paste(readLines(test_path("fixtures", "apptegy_deerpark_rendered.txt"), warn = FALSE), collapse = "\n")
   evergreen_text <- paste(readLines(test_path("fixtures", "apptegy_evergreen_rendered.txt"), warn = FALSE), collapse = "\n")
   lonerock_text <- paste(readLines(test_path("fixtures", "apptegy_lonerock_rendered.txt"), warn = FALSE), collapse = "\n")
+  bigtimber_text <- paste(readLines(test_path("fixtures", "apptegy_bigtimber_rendered_2026-10-20.txt"), warn = FALSE), collapse = "\n")
 
   # Same fake session serves every district's fetch, real URL routing comes
   # from each fetch_*_postings()'s own default url= argument -- this fake
@@ -2371,6 +2372,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 43 districts
           else if (grepl("deerpark", navigated_url)) deerpark_text
           else if (grepl("evergreensd50", navigated_url)) evergreen_text
           else if (grepl("lonerockschool", navigated_url)) lonerock_text
+          else if (grepl("sgchs", navigated_url)) bigtimber_text
           else ""
           list(result = list(value = value))
         }
@@ -2381,7 +2383,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 43 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -2425,6 +2427,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 43 districts
   expect_equal(sum(result$District == "Deer Park School District"), 1)
   expect_equal(sum(result$District == "Evergreen School District #50"), 5)
   expect_equal(sum(result$District == "Lone Rock School District"), 1)
+  expect_equal(sum(result$District == "Sweet Grass County High School"), 5)
 })
 
 # Real fixture captured 2026-08-24 from Miles City's Google Sheets CSV
@@ -2862,6 +2865,43 @@ test_that("fetch_lonerock_postings drives a chromote session and parses its real
   result <- fetch_lonerock_postings(session)
 
   expect_equal(nrow(result), 1)
+})
+
+# Real fixture: document.body.innerText captured via a live chromote
+# session 2026-10-20 from sgchs.com's Employment page (Apptegy).
+
+test_that("parse_bigtimber_postings extracts 5 open positions across coaching, bus driving, and teaching", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_bigtimber_rendered_2026-10-20.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_bigtimber_postings(text, "https://www.sgchs.com/page/employment")
+
+  expect_equal(nrow(result), 5)
+  expect_equal(result$Title, c(
+    "Assistant Boys Basketball Coach",
+    "ROUTE BUS DRIVERS",
+    "SUBSTITUTE BUS DRIVER",
+    "TRANSPORTATION MAINTENANCE SUPERVISOR",
+    "SUBSTITUTE TEACHERS"
+  ))
+  expect_true(all(result$Location == "Big Timber"))
+  expect_true(all(result$Link == "https://www.sgchs.com/page/employment"))
+  # Application instructions and footer must not leak as titles
+  expect_false(any(grepl("Please submit|Superintendent|Gregg Wasson|Find Us", result$Title)))
+})
+
+test_that("parse_bigtimber_postings returns zero rows (not an error) when there are no open positions headers", {
+  result <- parse_bigtimber_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_bigtimber_postings drives a chromote session and parses its rendered text", {
+  text <- paste(readLines(test_path("fixtures", "apptegy_bigtimber_rendered_2026-10-20.txt"), warn = FALSE), collapse = "\n")
+  session <- fake_chromote_session(text)
+
+  result <- fetch_bigtimber_postings(session)
+
+  expect_equal(nrow(result), 5)
 })
 
 # Real fixture captured 2026-08-25 from lustregradeschool.com's

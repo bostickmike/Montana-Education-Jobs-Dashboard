@@ -64,21 +64,23 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 
 | District | County | Page | What's there now | Status |
 |---|---|---|---|---|
-| Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; no named titles | TODO |
+| Sweet Grass County High School | Sweet Grass | `sgchs.com/page/employment` | Apptegy; 5 positions under Open Coaching/Bus Driving/Teaching headers | ✅ **Adopted** (2026-10-20) |
+| Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |
 | Olney-Bissell School | Flathead | `olneybissellschool.com/o/obs/page/employment` | Apptegy; generic "Certified Application" link only | TODO |
-| East Glacier Park Grade School | Glacier | `eastglacierschool.com/employment` | "Certified/Classified Staff Application" links only | TODO |
+| East Glacier Park Grade School | Glacier | `eastglacierschool.com/employment` | "Certified/Classified Staff Application" links only; rechecked 2026-10-20 | TODO |
 | Kila School District #20 | Flathead | "Open Positions" page | generic application-packet links only | TODO |
 | DeSmet School District #20 | Missoula | employment page | generic Certified/Classified application-form links | TODO |
 | Gildford Colony School | Hill | employment page | "New Hire Packet" download links only | TODO |
 | Fairfield (Greenfield #75) | Teton | Apptegy "Employment Applications" page + `greenfieldschool.wixsite.com` | generic forms only / Wix with no Jobs nav | TODO |
 | Savage School District #7 | Richland | Apptegy | 3 bare category labels, no title text | TODO |
 | Dodson School District | Phillips | Apptegy | single sentence deferring to OPI | TODO |
-| Monforton School District #27 | Gallatin | district site | Certified → OPI listing; Classified → embedded Indeed widget | TODO |
+| Monforton School District #27 | Gallatin | district site | Certified → OPI listing; Classified → embedded Indeed widget; rechecked 2026-10-20 | TODO |
 | Anderson School District #41 | Gallatin | district site | "Come Work With Us" recruiting copy, no titles | TODO |
 | Marion School District #54 | Flathead | real MT Marion is a Google Sites page (`marionschools.org` = Jasper TN) | boilerplate application PDFs + one generic substitute sentence | TODO |
-| Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath | TODO |
+| Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath; rechecked 2026-10-20 | TODO |
 | Melville School District #16 | Sweet Grass | Apptegy | real header, empty beneath | TODO |
-| Superior School District #3 | Mineral | Apptegy | "Current Open Positions" heading with nothing under it + Wufoo form | TODO |
+| Superior School District #3 | Mineral | Apptegy | "Current Open Positions" heading with nothing under it + Wufoo form; rechecked 2026-10-20 | TODO |
+| Absarokee School District | Stillwater | `absarokee.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs page; checked 2026-10-20 | TODO |
 | Simms / Sun River Valley #24 | Cascade | "Educational Networks" CMS | job page currently empty | TODO |
 | Divide School District #4 | Silver Bow | `divideschool.org` | Squarespace "under construction" | TODO |
 | McCormick School District #22 | Petroleum | district site | site under active rebuild, no employment nav | TODO |

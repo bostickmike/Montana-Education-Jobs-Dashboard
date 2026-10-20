@@ -1148,6 +1148,60 @@ fetch_lonerock_postings <- function(chromote_session, url = "https://www.loneroc
   parse_lonerock_postings(text, url)
 }
 
+# Sweet Grass County High School / Big Timber (sgchs.com, found 2026-10-20) --
+# Apptegy. Category headings match "^Open .* Positions$" (e.g. "Open Coaching
+# Positions", "Open Bus Driving Positions", "Open Teaching Positions"), with
+# real titles listed beneath each section, terminating at the "Find Us" /
+# "Quick Links" footer. Application instructions above the open positions
+# are excluded. Confirmed live 2026-10-20, 5 real postings (Assistant Boys
+# Basketball Coach, ROUTE BUS DRIVERS, SUBSTITUTE BUS DRIVER, TRANSPORTATION
+# MAINTENANCE SUPERVISOR, SUBSTITUTE TEACHERS).
+parse_bigtimber_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(grepl("^Open .* Positions$", lines, ignore.case = TRUE))
+  if (length(start_idx) == 0) return(empty)
+
+  first_start <- start_idx[1]
+  stop_idx <- which(lines %in% c("Find Us", "Quick Links"))
+  last_end <- if (length(stop_idx) > 0 && any(stop_idx > first_start)) {
+    min(stop_idx[stop_idx > first_start]) - 1
+  } else {
+    length(lines)
+  }
+
+  if (last_end < first_start) return(empty)
+
+  body <- lines[first_start:last_end]
+  titles <- body[!grepl("^Open .* Positions$", body, ignore.case = TRUE)]
+  titles <- titles[!grepl("^(none|no open|no current)", titles, ignore.case = TRUE)]
+  titles <- titles[nzchar(titles)]
+
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Big Timber",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+fetch_bigtimber_postings <- function(chromote_session, url = "https://www.sgchs.com/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_bigtimber_postings(text, url)
+}
+
 # Dixon School District #9 (dixonschool.org, a publicly published Google
 # Sites page, found 2026-08-25) -- plain httr2 fetch. 3 real postings,
 # 2 different marker-line-immediately-after-title shapes on the same
@@ -4451,7 +4505,8 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
   "Bonner School District #14" = fetch_bonner_postings,
   "Deer Park School District" = fetch_deerpark_postings,
   "Evergreen School District #50" = fetch_evergreen_postings,
-  "Lone Rock School District" = fetch_lonerock_postings
+  "Lone Rock School District" = fetch_lonerock_postings,
+  "Sweet Grass County High School" = fetch_bigtimber_postings
 )
 
 fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
