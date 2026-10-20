@@ -110,6 +110,22 @@ test_that("parse_ipeds_salary_trend_year extracts just the headline overall figu
   expect_equal(round(msu$Faculty_Avg_Salary), 99427)
 })
 
+test_that("fetch_ipeds_paginated handles JSON null fields across paginated pages without error", {
+  page1 <- "{\"count\": 2, \"next\": \"https://api.example.com/page2\", \"results\": [{\"unitid\": 180160, \"year\": 2022, \"average_salary\": 65000, \"number_applied\": null}]}"
+  page2 <- "{\"count\": 2, \"next\": null, \"results\": [{\"unitid\": 180161, \"year\": 2022, \"average_salary\": 72000, \"number_applied\": 150}]}"
+
+  httr2::local_mocked_responses(list(
+    httr2::response(200, headers = list("Content-Type" = "application/json"), body = charToRaw(page1)),
+    httr2::response(200, headers = list("Content-Type" = "application/json"), body = charToRaw(page2))
+  ))
+
+  result <- fetch_ipeds_paginated("https://api.example.com/page1")
+  expect_equal(nrow(result), 2)
+  expect_equal(result$unitid, c(180160, 180161))
+  expect_true(is.na(result$number_applied[1]))
+  expect_equal(result$number_applied[2], 150)
+})
+
 test_that("MT_IPEDS_UNITID_MAP covers every registered institution except Missoula College's real permanent gap", {
   # Missoula College is the one deliberate exception: confirmed live it
   # has no independent unitid in the Urban Institute's IPEDS directory
