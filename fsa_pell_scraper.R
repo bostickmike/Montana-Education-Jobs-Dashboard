@@ -26,14 +26,7 @@ FSA_PELL_GRANT_TYPE <- 4L
 # variant hands the conversion off to jsonlite via simplifyVector = TRUE,
 # which turns nulls into NA correctly.
 fetch_ipeds_directory_paginated <- function(url) {
-  pages <- list()
-  while (!is.null(url)) {
-    resp <- request(url) %>% perform_with_retry() %>% resp_body_json(simplifyVector = TRUE)
-    pages[[length(pages) + 1]] <- resp$results
-    url <- resp[["next"]]
-  }
-  if (length(pages) == 0) return(data.frame())
-  dplyr::bind_rows(pages)
+  fetch_json_paginated(url)
 }
 
 clean_fsa_value <- function(x) ifelse(is.na(x) | x < 0, NA_real_, x)

@@ -71,18 +71,7 @@ suppressMessages({
 CCD_DISTRICT_DIRECTORY_ENDPOINT <- "https://educationdata.urban.org/api/v1/school-districts/ccd/directory"
 
 fetch_ccd_paginated <- function(url) {
-  # CCD directory records have real JSON nulls mixed in with populated
-  # fields (a district with no CBSA/CSA assignment, etc.), which breaks a
-  # per-record as.data.frame(). simplifyVector = TRUE hands that off to
-  # jsonlite, which turns nulls into NA correctly.
-  pages <- list()
-  while (!is.null(url)) {
-    resp <- request(url) %>% perform_with_retry() %>% resp_body_json(simplifyVector = TRUE)
-    pages[[length(pages) + 1]] <- resp$results
-    url <- resp[["next"]]
-  }
-  if (length(pages) == 0) return(data.frame())
-  dplyr::bind_rows(pages)
+  fetch_json_paginated(url)
 }
 
 fetch_ccd_mt_directory_for_year <- function(year) {

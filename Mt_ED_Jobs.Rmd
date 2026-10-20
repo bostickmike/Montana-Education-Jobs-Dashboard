@@ -2102,7 +2102,11 @@ if (nrow(he_salary) > 0) {
   # one edition published so far -- see salary_scrapers.R). Pivoted to
   # generic "N years ago" column names, not literal year numbers, so the
   # schema stays stable as the calendar year rolls over.
-  salary_trend <- fetch_ipeds_he_salary_trend(n_years = 3)
+  salary_trend <- safe_scrape(
+    "IPEDS instructional staff salary 3-year trend (MT)",
+    scrape_fn = function() fetch_ipeds_he_salary_trend(n_years = 3),
+    expected_cols = c("Name", "Year", "Faculty_Avg_Salary")
+  )
   if (nrow(salary_trend) > 0) {
     latest_year <- max(salary_trend$Year)
     salary_trend_wide <- salary_trend %>%

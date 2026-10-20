@@ -121,16 +121,7 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
 # as.data.frame(). simplifyVector = TRUE hands conversion off to jsonlite,
 # turning nulls into NAs across rows consistently.
 fetch_ipeds_paginated <- function(url) {
-  pages <- list()
-  while (!is.null(url)) {
-    resp <- request(url) %>% perform_with_retry() %>% resp_body_json(simplifyVector = TRUE)
-    if (length(resp$results) > 0) {
-      pages[[length(pages) + 1]] <- as.data.frame(resp$results)
-    }
-    url <- resp[["next"]]
-  }
-  if (length(pages) == 0) return(data.frame())
-  bind_rows(pages)
+  fetch_json_paginated(url)
 }
 
 fetch_ipeds_mt_salaries_for_year <- function(year) {
