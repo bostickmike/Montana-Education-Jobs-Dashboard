@@ -3898,7 +3898,12 @@ parse_alberton_postings <- function(rendered_text, url) {
   data.frame(Title = titles, Location = "Alberton", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
-fetch_alberton_postings <- function(chromote_session, url = "https://www.alberton.k12.mt.us/page/employment-opportunities") {
+fetch_alberton_postings <- function(chromote_session, url = "https://www.asdmt.org/page/employment-opportunities") {
+  # District migrated domain from alberton.k12.mt.us to asdmt.org; the legacy
+  # domain redirects via HTTP and can hang headless Chrome navigations.
+  if (grepl("alberton\\.k12\\.mt\\.us", url)) {
+    url <- sub("https?://(www\\.)?alberton\\.k12\\.mt\\.us", "https://www.asdmt.org", url)
+  }
   chromote_session$Page$navigate(url)
   chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
   Sys.sleep(4)

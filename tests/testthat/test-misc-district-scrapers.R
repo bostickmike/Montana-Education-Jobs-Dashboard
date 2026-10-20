@@ -2360,7 +2360,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 43 districts
           else if (grepl("froidschool", navigated_url)) froid_text
           else if (grepl("huntley", navigated_url)) huntley_text
           else if (grepl("parkcityschools", navigated_url)) parkcity_text
-          else if (grepl("alberton", navigated_url)) alberton_text
+          else if (grepl("alberton|asdmt", navigated_url)) alberton_text
           else if (grepl("dillonschools", navigated_url)) dillon_text
           else if (grepl("ennisschools", navigated_url)) ennis_text
           else if (grepl("columbuscougars", navigated_url)) columbus_text
