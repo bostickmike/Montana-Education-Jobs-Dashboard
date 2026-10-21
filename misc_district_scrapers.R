@@ -1478,6 +1478,100 @@ parse_dayton_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Dayton", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Belfry Public Schools (belfrybats.org, found 2026-10-20) -- Carbon County
+# district with structured HTML table (table.uk-table) under Employment Information,
+# same CMS architecture as Roberts Public School. Table columns: Position, Description,
+# and direct JotForm apply links. Confirmed live 2026-10-20: 2 real active postings
+# (Substitute Teachers, School Bus Drivers).
+fetch_belfry_postings <- function(url = "https://www.belfrybats.org/index.php/our-school/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_belfry_postings(resp_body_string(resp), url)
+}
+
+parse_belfry_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  rows <- rvest::html_elements(page, "table.uk-table tbody tr")
+  if (length(rows) == 0) return(empty)
+
+  titles <- rvest::html_text(rvest::html_element(rows, ".el-title"), trim = TRUE)
+  links <- rvest::html_attr(rvest::html_element(rows, "a.el-link"), "href")
+  links[is.na(links) | links == ""] <- url
+
+  valid <- nzchar(titles) & !is.na(titles)
+  if (!any(valid)) return(empty)
+
+  data.frame(
+    Title = titles[valid],
+    Location = "Belfry",
+    Posted_Date = NA_character_,
+    Link = links[valid],
+    stringsAsFactors = FALSE
+  )
+}
+
+# Nashua Public Schools (nashua.k12.mt.us, found 2026-10-20) -- Valley County
+# district on CyberSchool CMS (same family as Hinsdale). Real open positions are
+# listed under category headers (Classified Positions, Certified Positions,
+# Extracurricular Positions, Substitute Positions) within .listItem_bodyContent.
+# Confirmed live 2026-10-20: 7 real active postings (Part-Time Custodian,
+# K-12 Librarian, Music, Special Education, Concessions, Substitute Teacher,
+# Substitute Bus Driver/Activity Bus Driver).
+fetch_nashua_postings <- function(url = "https://www.nashua.k12.mt.us/District/Jobs/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_nashua_postings(resp_body_string(resp), url)
+}
+
+parse_nashua_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+
+  page <- rvest::read_html(html_text)
+  container <- rvest::html_element(page, ".listItem_bodyContent")
+  if (is.null(container)) return(empty)
+
+  nodes <- rvest::html_elements(container, "p, li")
+  raw_texts <- rvest::html_text(nodes, trim = TRUE)
+  raw_texts <- raw_texts[nzchar(raw_texts)]
+  if (length(raw_texts) == 0) return(empty)
+
+  ignore_patterns <- c(
+    "Employment Opportunities",
+    "If you have questions",
+    "To apply, please submit",
+    "Coaches and volunteers are required",
+    "course$",
+    "Clinic",
+    "certification$",
+    "Positions:",
+    "^[[:space:]]*$"
+  )
+
+  is_ignored <- sapply(raw_texts, function(t) {
+    any(sapply(ignore_patterns, function(p) grepl(p, t, ignore.case = TRUE)))
+  })
+
+  titles <- raw_texts[!is_ignored]
+  titles <- unique(titles)
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Nashua",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # Creston School District (crestonschool.com, found 2026-08-25) -- real
 # postings live in a publicly-viewable Google Doc linked from the site's
 # "Current Opportunties" [sic] nav item, not on the HTML page itself

@@ -3026,6 +3026,74 @@ test_that("fetch_dayton_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 2)
 })
 
+test_that("parse_belfry_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "belfry_employment_2026-10-20.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.belfrybats.org/index.php/our-school/employment"
+
+  result <- parse_belfry_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c("Substitute Teachers", "School Bus Drivers"))
+  expect_true(all(result$Location == "Belfry"))
+  expect_true(all(grepl("jotform\\.com", result$Link)))
+})
+
+test_that("parse_belfry_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_belfry_postings("<html><body><p>No table</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_belfry_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "belfry_employment_2026-10-20.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_belfry_postings()
+
+  expect_equal(nrow(result), 2)
+})
+
+test_that("parse_nashua_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "nashua_jobs_2026-10-20.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.nashua.k12.mt.us/District/Jobs/"
+
+  result <- parse_nashua_postings(fixture, url)
+
+  expect_equal(nrow(result), 7)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c(
+    "Part-Time Custodian",
+    "K-12 Librarian (full or part-time)",
+    "Music (full or part-time)",
+    "Special Education",
+    "Concessions",
+    "Substitute Teacher",
+    "Substitute Bus Driver/Activity Bus Driver"
+  ))
+  expect_true(all(result$Location == "Nashua"))
+  expect_true(all(result$Link == url))
+})
+
+test_that("parse_nashua_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_nashua_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_nashua_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "nashua_jobs_2026-10-20.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_nashua_postings()
+
+  expect_equal(nrow(result), 7)
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

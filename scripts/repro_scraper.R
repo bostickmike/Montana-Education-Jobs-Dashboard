@@ -77,7 +77,8 @@ result <- tryCatch(run_scraper_call(call, session_factory = function() ChromoteS
 if (inherits(result, "condition")) {
   cat("ERRORED:", conditionMessage(result), "\n")
 } else {
-  titles <- if ("Title" %in% names(result)) as.character(result$Title) else character(0)
+  title_col <- grep("^title$", names(result), ignore.case = TRUE, value = TRUE)
+  titles <- if (length(title_col)) as.character(result[[title_col]]) else character(0)
   cat(length(titles), "posting(s):\n")
   if (length(titles)) cat(paste0("  - ", titles), sep = "\n")
 }

@@ -65,6 +65,11 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | District | County | Page | What's there now | Status |
 |---|---|---|---|---|
 | Sweet Grass County High School | Sweet Grass | `sgchs.com/page/employment` | Apptegy; 5 positions under Open Coaching/Bus Driving/Teaching headers | ✅ **Adopted** (2026-10-20) |
+| Harlem Public Schools | Blaine | `applitrack.com/harlemhs/onlineapp/` | Frontline / AppliTrack (`harlemhs`); 8 active postings | ✅ **Adopted** (2026-10-20) |
+| Belfry Public Schools | Carbon | `belfrybats.org/index.php/our-school/employment` | Table (`table.uk-table`); 2 active postings | ✅ **Adopted** (2026-10-20) |
+| Nashua Public Schools | Valley | `nashua.k12.mt.us/District/Jobs/` | Category headers (CyberSchool CMS); 7 active postings | ✅ **Adopted** (2026-10-20) |
+| Seeley Lake Elementary #34 | Missoula | `sleonline.org` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
+| Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
 | Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |
 | Olney-Bissell School | Flathead | `olneybissellschool.com/o/obs/page/employment` | Apptegy; generic "Certified Application" link only | TODO |
 | East Glacier Park Grade School | Glacier | `eastglacierschool.com/employment` | "Certified/Classified Staff Application" links only; rechecked 2026-10-20 | TODO |

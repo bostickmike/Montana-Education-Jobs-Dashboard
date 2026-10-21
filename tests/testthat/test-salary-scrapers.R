@@ -165,7 +165,8 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Lone Rock School District", "Lustre District 23",
                      "Miami Elementary School District #31", "Target Range School District",
                      "Zurich Elementary School District #17", "Upper West Shore School District #33",
-                     "Sweet Grass County High School"))
+                     "Sweet Grass County High School", "Harlem Public Schools",
+                     "Belfry Public Schools", "Nashua Public Schools"))
 })
 
 # ---------------------------------------------------------------------------

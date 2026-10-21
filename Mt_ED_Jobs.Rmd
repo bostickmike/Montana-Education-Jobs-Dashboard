@@ -996,6 +996,58 @@ if (nrow(dayton_df) > 0) {
                            Posting_Source = character(0))
 }
 
+# Belfry Public Schools (found 2026-10-20) -- a plain httr2 fetch,
+# no chromote needed, same pattern as the other heuristic districts
+# above.
+belfry_districts <- registry[registry$Platform == "BelfryHeuristic", ]
+belfry_results <- lapply(seq_len(nrow(belfry_districts)), function(i) {
+  row <- belfry_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_belfry_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+belfry_df <- bind_rows(belfry_results)
+if (nrow(belfry_df) > 0) {
+  belfry_df <- belfry_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Belfry district site (direct board)")
+} else {
+  belfry_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Nashua Public Schools (found 2026-10-20) -- a plain httr2 fetch,
+# no chromote needed, same pattern as the other heuristic districts
+# above.
+nashua_districts <- registry[registry$Platform == "NashuaHeuristic", ]
+nashua_results <- lapply(seq_len(nrow(nashua_districts)), function(i) {
+  row <- nashua_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_nashua_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+nashua_df <- bind_rows(nashua_results)
+if (nrow(nashua_df) > 0) {
+  nashua_df <- nashua_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Nashua district site (direct board)")
+} else {
+  nashua_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -1459,6 +1511,8 @@ lustre_df <- lustre_df %>% mutate(date_posted = standardize_date(date_posted))
 miami_df <- miami_df %>% mutate(date_posted = standardize_date(date_posted))
 zurich_df <- zurich_df %>% mutate(date_posted = standardize_date(date_posted))
 dayton_df <- dayton_df %>% mutate(date_posted = standardize_date(date_posted))
+belfry_df <- belfry_df %>% mutate(date_posted = standardize_date(date_posted))
+nashua_df <- nashua_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -1468,6 +1522,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
                        roberts_df, winnett_df, milescity_df, augusta_df, brockton_df, culbertson_df, cottonwood57_df,
                        creston_df, clinton_df, dixon_df, elysian_df, fairmontegan_df, lustre_df, miami_df, zurich_df, dayton_df,
+                       belfry_df, nashua_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
