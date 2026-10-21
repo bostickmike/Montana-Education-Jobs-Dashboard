@@ -178,7 +178,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Sheridan Public Schools", "Lockwood School District",
                      "Frazer Public Schools", "Lambert Public Schools", "Richey Public Schools",
                      "Judith Gap Schools", "Whitewater Public Schools",
-                     "Victor School District", "Superior School District"))
+                     "Victor School District", "Superior School District",
+                     "Ashland Public School", "Rapelje School District",
+                     "Cayuse Prairie School District #10"))
 })
 
 # ---------------------------------------------------------------------------

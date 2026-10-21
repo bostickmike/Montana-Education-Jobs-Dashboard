@@ -1573,6 +1573,81 @@ if (nrow(superior_df) > 0) {
                             Posting_Source = character(0))
 }
 
+# Ashland Public School (published Google Sites page, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+ashland_districts <- registry[registry$Platform == "AshlandHeuristic", ]
+ashland_results <- lapply(seq_len(nrow(ashland_districts)), function(i) {
+  row <- ashland_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_ashland_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+ashland_df <- bind_rows(ashland_results)
+if (nrow(ashland_df) > 0) {
+  ashland_df <- ashland_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Ashland district site (direct board)")
+} else {
+  ashland_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Rapelje School District (ParentSquare CMS, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+rapelje_districts <- registry[registry$Platform == "RapeljeHeuristic", ]
+rapelje_results <- lapply(seq_len(nrow(rapelje_districts)), function(i) {
+  row <- rapelje_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_rapelje_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+rapelje_df <- bind_rows(rapelje_results)
+if (nrow(rapelje_df) > 0) {
+  rapelje_df <- rapelje_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Rapelje district site (direct board)")
+} else {
+  rapelje_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Cayuse Prairie School District #10 (Apptegy CMS / custom notice, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+cayuseprairie_districts <- registry[registry$Platform == "CayusePrairieHeuristic", ]
+cayuseprairie_results <- lapply(seq_len(nrow(cayuseprairie_districts)), function(i) {
+  row <- cayuseprairie_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_cayuseprairie_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+cayuseprairie_df <- bind_rows(cayuseprairie_results)
+if (nrow(cayuseprairie_df) > 0) {
+  cayuseprairie_df <- cayuseprairie_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Cayuse Prairie district site (direct board)")
+} else {
+  cayuseprairie_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                 location = character(0), url = character(0), District = character(0),
+                                 Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2059,6 +2134,9 @@ judithgap_df <- judithgap_df %>% mutate(date_posted = standardize_date(date_post
 whitewater_df <- whitewater_df %>% mutate(date_posted = standardize_date(date_posted))
 victor_df <- victor_df %>% mutate(date_posted = standardize_date(date_posted))
 superior_df <- superior_df %>% mutate(date_posted = standardize_date(date_posted))
+ashland_df <- ashland_df %>% mutate(date_posted = standardize_date(date_posted))
+rapelje_df <- rapelje_df %>% mutate(date_posted = standardize_date(date_posted))
+cayuseprairie_df <- cayuseprairie_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -2074,6 +2152,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        boulder_df, jeffersonhigh_df, sheridan_df, lockwood_df,
                        frazer_df, lambert_df, richey_df,
                        judithgap_df, whitewater_df, victor_df, superior_df,
+                       ashland_df, rapelje_df, cayuseprairie_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

@@ -5602,6 +5602,136 @@ parse_superior_postings <- function(html_text, url = "https://www.ssd3.us/page/e
   )
 }
 
+# ---------------------------------------------------------------------------
+# Ashland Public School (Published Google Sites Page)
+# ---------------------------------------------------------------------------
+fetch_ashland_postings <- function(url = "https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_ashland_postings(resp_body_string(resp), url = url)
+}
+
+parse_ashland_postings <- function(html_text, url = "https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  nodes <- rvest::html_elements(doc, "p.zfr3Q")
+  texts <- trimws(rvest::html_text(nodes))
+  start_idx <- grep("LOOKING FOR", texts, ignore.case = TRUE)
+  end_idx <- grep("SCHOOL YEAR", texts, ignore.case = TRUE)
+  if (length(start_idx) == 0 || length(end_idx) == 0 || end_idx[1] <= start_idx[1]) {
+    return(empty)
+  }
+
+  roles <- texts[(start_idx[1] + 1):(end_idx[1] - 1)]
+  roles <- trimws(gsub("[\u00a0\r\n\t ]+", " ", roles))
+  roles <- roles[nzchar(roles)]
+  roles <- gsub("Elementary Teacer", "Elementary Teacher", roles)
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Ashland",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Rapelje School District (ParentSquare CMS)
+# ---------------------------------------------------------------------------
+fetch_rapelje_postings <- function(url = "https://www.rapelje.k12.mt.us/job-listings") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_rapelje_postings(resp_body_string(resp), url = url)
+}
+
+parse_rapelje_postings <- function(html_text, url = "https://www.rapelje.k12.mt.us/job-listings") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  spans <- rvest::html_elements(doc, "span[style*='18px']")
+  if (length(spans) == 0) return(empty)
+
+  roles <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(spans)))
+  roles <- roles[nzchar(roles)]
+  roles <- roles[!grepl("apply|contact|opportunity|equal", roles, ignore.case = TRUE)]
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Rapelje",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Cayuse Prairie School District #10 (Apptegy CMS / Custom Notice)
+# ---------------------------------------------------------------------------
+fetch_cayuseprairie_postings <- function(url = "https://www.cayuseprairie.com/page/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_cayuseprairie_postings(resp_body_string(resp), url = url)
+}
+
+parse_cayuseprairie_postings <- function(html_text, url = "https://www.cayuseprairie.com/page/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  p_nodes <- rvest::html_elements(doc, "p")
+  if (length(p_nodes) == 0) return(empty)
+
+  roles <- character(0)
+  for (p in p_nodes) {
+    text <- trimws(rvest::html_text(p))
+    if (grepl("^[0-9]+[)][[:space:]]*Cayuse Prairie School is (looking for|seeking)", text, ignore.case = TRUE)) {
+      highlight <- rvest::html_elements(p, "span[style*='background-color'] strong, span strong")
+      if (length(highlight) > 0) {
+        role <- trimws(rvest::html_text(highlight[1]))
+      } else {
+        role <- sub("^[0-9]+[)][[:space:]]*Cayuse Prairie School is (?:looking for|seeking)[[:space:]]+(?:a[[:space:]]+)?", "", text, ignore.case = TRUE)
+        role <- sub("[.].*$", "", role)
+      }
+      role <- trimws(gsub("[\u00a0\r\n\t ]+", " ", role))
+      if (nzchar(role)) roles <- c(roles, role)
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Kalispell",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

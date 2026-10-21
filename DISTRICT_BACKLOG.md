@@ -42,9 +42,9 @@ live pages -- nothing fabricated.
 
 | District | County | Page | Live-run result 2026-09-07 |
 |---|---|---|---|
-| Rapelje School District #32 | Stillwater | `rapelje.k12.mt.us/job-listings` | ✅ 3/3 (Bus Drivers, Preschool Teacher, Cook's Helper) |
+| Rapelje School District #32 | Stillwater | `rapelje.k12.mt.us/job-listings` | ✅ **Adopted** (2026-10-21, Batch 10) -- ParentSquare CMS; 3 active positions (Bus Drivers, Preschool Teacher, Cooks Helper) |
 | Grass Range Public Schools | Fergus | `grps.k12.mt.us/staff/open-positions` | ✅ 3/3 after the "standing-JD list ≠ current openings" prompt rule |
-| Cayuse Prairie School District #10 | Flathead | `cayuseprairie.com/page/employment` | ✅ 1/1 (SpEd Paraprofessional -- the page really does only have one) |
+| Cayuse Prairie School District #10 | Flathead | `cayuseprairie.com/page/employment` | ✅ **Adopted** (2026-10-21, Batch 10) -- Apptegy custom notice; 2 active positions (Special Education Paraprofessional, 7th & 8th Grade Science Teacher) |
 | Judith Gap Schools | Wheatland | `judithgap.k12.mt.us/District/Portal/Employment` | ✅ **Adopted** (2026-10-21, Batch 9) -- CyberSchool CMS jobs widget; 2 active positions (Custodian/Maint/Boiler Operator, School Cook) |
 | Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | ✅ 4 on the main page (School Nurse, paras, Sub Teacher, Custodial Subs). Add subpage rows if content is missed. |
 | ~~Power School District~~ | Teton | `power.k12.mt.us/District/Portal/Employment` | ❌ **removed** -- page rot: three "Date Posted: March 20, 2023" entries under one undated 2026 blurb. Stale-date filter drops the old ones; the one real item isn't cleanly titled. Recheck if the district cleans up the page. |
@@ -89,21 +89,21 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Montana City ESD 27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS; current jobs list empty; checked 2026-10-21 | RECHECK |
 | Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; generic personnel application links only; checked 2026-10-21 | RECHECK |
 | Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Finalsite CMS (#fsEl_3056); 3 active positions (substitutes, bus drivers, custodians) | ✅ **Adopted** (2026-10-21, Batch 9) |
-| Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
+| Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/o/geraldine-ps/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
 | Denton Public Schools | Fergus | `denton.k12.mt.us/employment` | CyberSchool; 0 active postings listed; checked 2026-10-21 | TODO |
 | Vaughn Elementary | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool; standing substitute notice only; checked 2026-10-21 | TODO |
 | Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
-| Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site; real page found via menu drawer; currently has a single combined PDF vacancy notice | RECHECK |
+| Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site; real page found via menu drawer; single consolidated PDF vacancy notice (`_Current-Open-Positions-7_13_26.pdf`); checked 2026-10-21 | RECHECK |
 | Clancy School District | Jefferson | `clancyschool.org/page/employment` | CyberSchool CMS page is empty shell with empty placeholders; checked 2026-10-21 | TODO |
 | Seeley Lake Elementary #34 | Missoula | `sleonline.org` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
-| Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
+| Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site; links to generic blank application PDFs only (`5il.co/1dfyi`); checked 2026-10-21 | TODO |
 | Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |
 | Olney-Bissell School | Flathead | `olneybissellschool.com/o/obs/page/employment` | Apptegy; generic "Certified Application" link only | TODO |
 | East Glacier Park Grade School | Glacier | `eastglacierschool.com/employment` | "Certified/Classified Staff Application" links only; rechecked 2026-10-20 | TODO |
 | Kila School District #20 | Flathead | "Open Positions" page | generic application-packet links only | TODO |
 | DeSmet School District #20 | Missoula | employment page | generic Certified/Classified application-form links | TODO |
 | Gildford Colony School | Hill | employment page | "New Hire Packet" download links only | TODO |
-| Fairfield (Greenfield #75) | Teton | Apptegy "Employment Applications" page + `greenfieldschool.wixsite.com` | generic forms only / Wix with no Jobs nav | TODO |
+| Fairfield (Greenfield #75) | Teton | `fairfield.k12.mt.us` | Apptegy "Employment Applications" page links only to generic blank PDFs (`5il.co/11rg` / `Classified_Staff_Application.pdf`); checked 2026-10-21 | TODO |
 | Savage School District #7 | Richland | Apptegy | 3 bare category labels, no title text | TODO |
 | Dodson School District | Phillips | Apptegy | single sentence deferring to OPI | TODO |
 | Monforton School District #27 | Gallatin | district site | Certified → OPI listing; Classified → embedded Indeed widget; rechecked 2026-10-20 | TODO |
@@ -112,6 +112,8 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath; rechecked 2026-10-20 | TODO |
 | Melville School District #16 | Sweet Grass | Apptegy | real header, empty beneath | TODO |
 | Superior School District #3 | Mineral | `ssd3.us/page/employment` | Apptegy page links Google Doc job board (`1ujnHba2a-gWdThpUB-T43LoCZoR_ViXzxZKTEuq67_g`); 3 active positions (bus drivers, substitutes, paraprofessionals) | ✅ **Adopted** (2026-10-21, Batch 9) |
+| Ashland Public School | Rosebud | `sites.google.com/ashlandpublicschool.com/aps-district-site/employment` | Published Google Sites; 7 active positions (Clerk, Specialists, Elementary Teacher, Para, SpEd Para, Counselor, Subs) | ✅ **Adopted** (2026-10-21, Batch 10) |
+| Rosebud School District | Rosebud | `sites.google.com/site/rosebudhs12` | Google Sites; employment page redirects out to OPI statewide portal; checked 2026-10-21 | TODO |
 | Absarokee School District | Stillwater | `absarokee.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs page; checked 2026-10-20 | TODO |
 | Simms / Sun River Valley #24 | Cascade | "Educational Networks" CMS | job page currently empty | TODO |
 | Divide School District #4 | Silver Bow | `divideschool.org` | Squarespace "under construction" | TODO |
@@ -130,6 +132,7 @@ real one (verify address/phone), then re-triage.
 | Avon | Powell | `avon*` resolves to Avon-by-the-Sea, NJ; real MT school is `avon.k12.mt.us` | TODO |
 | Bynum | Teton | `bynumschool.org` → Midland, TX; real MT school is `bynum.k12.mt.us` | TODO |
 | Luther School | Carbon | `lutherlions.org` → Luther, OK; real MT site is `lutherschool.org/index.php/documents` (Joomla); 2 active postings | ✅ **Adopted** (2026-10-21) |
+| Pryor Public Schools | Big Horn | `pryorschools.org` → Pryor, OK; real MT site is `pryorwarriors.org` (Arrow Creek Elem / Plenty Coups HS), links to OPI statewide portal; checked 2026-10-21 | TODO |
 | Pine Grove | Rosebud | `pgasd.com` → Pennsylvania | TODO |
 | Hawks Home | Powder River | `r-mschool.org` → Republic-Michigamme, MI | TODO |
 | Basin (Boulder area) | Jefferson | Real MT Basin School reopened April 2026; registered domain is `basin.k12.mt.us`; DNS pending / site under construction; `basinschools.net` = Idaho City, ID | RECHECK |
