@@ -176,12 +176,26 @@ To save LLM tokens, the script can classify whether a text block is a genuine jo
 | **Belfry** | Carbon | Joomla (`belfrybats.org/index.php/our-school/employment`) | ✅ **Adopted (Batch 2)** | Plain HTTP. Table parser (`table.uk-table`). 2 live postings. |
 | **Harlem** | Blaine | AppliTrack (`applitrack.com/harlemhs/onlineapp/`) | ✅ **Adopted (Batch 2)** | Plain HTTP Frontline scraper. 8 live postings. |
 | **Sweet Grass County HS** | Sweet Grass | Apptegy (`sgchs.com/page/employment`) | ✅ **Adopted (Batch 1)** | Chromote headless DOM. 5 live postings. |
+| **Highwood Public Schools** | Chouteau | CyberSchool (`highwood.k12.mt.us/District/Jobs/`) | ✅ **Adopted (Batch 6)** | Plain HTTP. Titles sit in `.listItem_holder`. 4 live postings. |
+| **Smith Valley #8** | Flathead | Google Sites (`smithvalleyschool.org/employment-opportunities`) | ✅ **Adopted (Batch 6)** | Plain HTTP. Titles under "Positions Available:" `h2`. 2 live postings. |
+| **Moore Public Schools** | Fergus | Weebly (`mooreschoolmt.com/employment.html`) | ✅ **Adopted (Batch 6)** | Plain HTTP. Active posting with PDF advertisement link. 1 live posting. |
+| **Cardwell Elementary** | Jefferson | Google Sites (`sites.google.com/cardwellschool.org/cougars/join-cardwell`) | ✅ **Adopted (Batch 6)** | Plain HTTP. Title under "Open Positions for the [year] school year:". 1 live posting. |
+| **Boulder Elementary #7** | Jefferson | SchoolCMS (`bgs.k12.mt.us/employment`) | ✅ **Adopted (Batch 7)** | Plain HTTP. HTML widget under "Vacancy Announcements". 2 live postings. |
+| **Jefferson High School #1** | Jefferson | eSchoolView (`jhs.k12.mt.us/EmploymentOpportunities.aspx`) | ✅ **Adopted (Batch 7)** | Plain HTTP. Structured job list under "For [year] School Year". 6 live postings. |
+| **Sheridan Public Schools** | Madison | Google Sites (`sheridan.k12.mt.us/district/employment`) | ✅ **Adopted (Batch 7)** | Plain HTTP. Winter/spring coaching and substitute positions. 4 live postings. |
+| **Lockwood School District** | Yellowstone | Edlio (`lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d`) | ✅ **Adopted (Batch 7)** | Plain HTTP. 8 live postings under "Lockwood Schools Open Positions" and "Athletic Coaching". |
+| **Brockton School District** | Roosevelt | Plain HTML (`brockton.k12.mt.us/employment`) | ⚠️ **Drifted / Fix Planned** | Migrated from SchoolInSites to district site; format changed to `Position: ... Duties: ...`, causing 0 rows. |
+| **Canyon Creek School** | Yellowstone | Edlio (`canyoncreekschool.org/apps/pages/index.jsp?uREC_ID=532741&type=d`) | Backlog (Group 2) | Two generic printable application PDFs only; recheck later. |
+| **Pioneer School** | Yellowstone | SchoolCMS (`pioneerschool.us/41034_2`) | Backlog (Group 2) | Single standing substitute call only. |
+| **Montana City ESD 27** | Jefferson | CyberSchool (`mtcityschool.net/District/Jobs/`) | Backlog (Group 2) | Current jobs list is empty. |
+| **Circle Public Schools** | McCone | Weebly (`circleschools.org/employment-opportunities.html`) | Backlog (Group 2) | Generic application forms only. |
+| **Whitewater School District** | Phillips | Plain HTML (`whitewater.k12.mt.us/employment`) | Backlog (Group 2) | Stated "currently fully staffed for 2025-2026". |
+| **Plains K-12 #1** | Sanders | District site (`plainsschools.net/employment/`) | Backlog (Group 6) | Postings sit inside an embedded Google Drive folder (`1PLQRtQHAjWSZxlyn3kcWtEp1N7crZh-m`). |
 | **Chester-Joplin-Inverness (CJI)** | Liberty | Apptegy (`cji.k12.mt.us/page/employmentcji`) | Backlog | Has a single combined PDF vacancy notice; monitor for discrete job titles. |
 | **Frenchtown** | Missoula | Apptegy (`ftsd.org/page/our-district1`) | Backlog (Multi-page) | Major Class A district; positions spread across subpages; target for multi-page crawler. |
 | **Medicine Lake #10** | Sheridan | Apptegy (`medicinelake.k12.mt.us`) | Backlog | Real site confirmed via Apptegy; has staff directory but no active job board. |
 | **Basin School** | Jefferson | `basin.k12.mt.us` | Recheck | Reopened April 2026; official domain registered in State DNS, website under construction. |
 | **Hellgate Elementary** | Missoula | Multi-page (`hellgate.k12.mt.us/our-district/employment`) | In Progress | Main page live in pilot; subpages need multi-page batch scraper. |
-| **Plains K-12 #1** | Sanders | District site | Backlog | 4 evergreen application PDFs only; defers specific openings to OPI. |
 | **East Glacier Park** | Glacier | District site (`eastglacierschool.com/employment`) | Backlog | Generic staff application forms only. |
 | **Clancy** | Jefferson | CyberSchool (`clancyschool.org/page/employment`) | Backlog | Empty CMS shell; no active vacancies. |
 | **Harlowton** | Wheatland | Apptegy (`harlowton.k12.mt.us/page/employment`) | Backlog | Apptegy salary schedules posted, 0 active vacancies listed under Certified. |
