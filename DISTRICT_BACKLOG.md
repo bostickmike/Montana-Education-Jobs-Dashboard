@@ -45,7 +45,7 @@ live pages -- nothing fabricated.
 | Rapelje School District #32 | Stillwater | `rapelje.k12.mt.us/job-listings` | ✅ 3/3 (Bus Drivers, Preschool Teacher, Cook's Helper) |
 | Grass Range Public Schools | Fergus | `grps.k12.mt.us/staff/open-positions` | ✅ 3/3 after the "standing-JD list ≠ current openings" prompt rule |
 | Cayuse Prairie School District #10 | Flathead | `cayuseprairie.com/page/employment` | ✅ 1/1 (SpEd Paraprofessional -- the page really does only have one) |
-| Judith Gap Schools | Wheatland | `judithgap.k12.mt.us/District/Portal/Employment` | ✅ 2 (Custodian/Maint/Boiler Operator, School Cook) -- **URL corrected** from `/employment/job-openings`, which was a shell |
+| Judith Gap Schools | Wheatland | `judithgap.k12.mt.us/District/Portal/Employment` | ✅ **Adopted** (2026-10-21, Batch 9) -- CyberSchool CMS jobs widget; 2 active positions (Custodian/Maint/Boiler Operator, School Cook) |
 | Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | ✅ 4 on the main page (School Nurse, paras, Sub Teacher, Custodial Subs). Add subpage rows if content is missed. |
 | ~~Power School District~~ | Teton | `power.k12.mt.us/District/Portal/Employment` | ❌ **removed** -- page rot: three "Date Posted: March 20, 2023" entries under one undated 2026 blurb. Stale-date filter drops the old ones; the one real item isn't cleanly titled. Recheck if the district cleans up the page. |
 
@@ -88,7 +88,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; single standing substitute notice only; checked 2026-10-21 | RECHECK |
 | Montana City ESD 27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS; current jobs list empty; checked 2026-10-21 | RECHECK |
 | Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; generic personnel application links only; checked 2026-10-21 | RECHECK |
-| Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Plain HTML; "currently fully staffed for 2025-2026"; checked 2026-10-21 | RECHECK |
+| Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Finalsite CMS (#fsEl_3056); 3 active positions (substitutes, bus drivers, custodians) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
 | Denton Public Schools | Fergus | `denton.k12.mt.us/employment` | CyberSchool; 0 active postings listed; checked 2026-10-21 | TODO |
 | Vaughn Elementary | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool; standing substitute notice only; checked 2026-10-21 | TODO |
@@ -111,7 +111,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Marion School District #54 | Flathead | real MT Marion is a Google Sites page (`marionschools.org` = Jasper TN) | boilerplate application PDFs + one generic substitute sentence | TODO |
 | Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath; rechecked 2026-10-20 | TODO |
 | Melville School District #16 | Sweet Grass | Apptegy | real header, empty beneath | TODO |
-| Superior School District #3 | Mineral | Apptegy | "Current Open Positions" heading with nothing under it + Wufoo form; rechecked 2026-10-20 | TODO |
+| Superior School District #3 | Mineral | `ssd3.us/page/employment` | Apptegy page links Google Doc job board (`1ujnHba2a-gWdThpUB-T43LoCZoR_ViXzxZKTEuq67_g`); 3 active positions (bus drivers, substitutes, paraprofessionals) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Absarokee School District | Stillwater | `absarokee.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs page; checked 2026-10-20 | TODO |
 | Simms / Sun River Valley #24 | Cascade | "Educational Networks" CMS | job page currently empty | TODO |
 | Divide School District #4 | Silver Bow | `divideschool.org` | Squarespace "under construction" | TODO |
@@ -169,7 +169,7 @@ covers their teacher postings.
 
 | District | County | Issue | Status |
 |---|---|---|---|
-| Victor School District #7 | Ravalli | Apptegy behind the Client Challenge gate; real postings in a sign-in-walled Google Doc | BLOCKED |
+| Victor School District #7 | Ravalli | Apptegy page links Google Doc job board (`1hPjGJCP2_6t4nOMl9xx7oZlK061x5KWd`); 4 active positions (SpEd teacher, paraprofessional, track coach, substitute) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Eureka (Lincoln County #13) | Lincoln | "Job Openings" link → unstructured Google Drive folder | BLOCKED |
 | Troy School District #1 | Lincoln | "Vacancy Announcements" link → unstructured Google Drive folder | BLOCKED |
 | Plains School District #1 | Sanders | `plainsschools.net/employment/` embeds an unstructured Google Drive folder (`1PLQRtQHAjWSZxlyn3kcWtEp1N7crZh-m`) | BLOCKED |

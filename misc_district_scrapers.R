@@ -5363,6 +5363,245 @@ parse_richey_postings <- function(html_text, url = "https://www.richey.k12.mt.us
   )
 }
 
+# ---------------------------------------------------------------------------
+# Judith Gap Schools (CyberSchool CMS AJAX Jobs Widget)
+# ---------------------------------------------------------------------------
+fetch_judithgap_postings <- function(url = "https://www.judithgap.k12.mt.us/District/Portal/Employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  body <- resp_body_string(resp)
+  ppid_m <- regmatches(body, regexpr("grab_jobsdata\\((\\d+)", body))
+  ppid <- if (length(ppid_m) > 0) sub("grab_jobsdata\\(", "", ppid_m) else "384"
+
+  ajax_url <- paste0(
+    "https://www.judithgap.k12.mt.us/ajax/responsive/Jobs/jobs_content.cfm?ppid=",
+    ppid,
+    "&alias=District&scid=1&ad=0&gcdid=0&homepage=false&cross=false"
+  )
+  ajax_resp <- request(ajax_url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_judithgap_postings(resp_body_string(ajax_resp), url = url)
+}
+
+parse_judithgap_postings <- function(html_text, url = "https://www.judithgap.k12.mt.us/District/Portal/Employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+  panels <- rvest::html_elements(doc, ".panel-default")
+  if (length(panels) == 0) return(empty)
+
+  rows <- list()
+  for (p in panels) {
+    p_text <- rvest::html_text2(p)
+    date_m <- regmatches(p_text, regexpr("Date Posted\\s*:\\s*([A-Za-z]+\\s+\\d+\\s*,\\s*\\d{4})", p_text))
+    posted_date <- if (length(date_m) > 0) {
+      sub("Date Posted\\s*:\\s*", "", date_m)
+    } else {
+      NA_character_
+    }
+
+    lines <- strsplit(p_text, "\n")[[1]]
+    lines <- trimws(lines)
+    lines <- lines[nzchar(lines)]
+
+    for (line in lines) {
+      if (grepl("Custodian|Cook Position|Teacher|Driver|Aide|Secretary|Principal|Superintendent", line, ignore.case = TRUE) &&
+          !grepl("School District|Qualifications|Duties|Responsibilities|accepting applications|seeking applications|Details|Dates", line, ignore.case = TRUE)) {
+        clean_title <- gsub("^Judith Gap School\\s*[-–]\\s*", "", line)
+        clean_title <- gsub("\\s+Position$", "", clean_title)
+        rows[[length(rows) + 1]] <- data.frame(
+          Title = clean_title,
+          Location = "Judith Gap",
+          Posted_Date = posted_date,
+          Link = url,
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+
+  if (length(rows) == 0) return(empty)
+  res <- dplyr::bind_rows(rows)
+  unique(res)
+}
+
+# ---------------------------------------------------------------------------
+# Whitewater Public Schools (Finalsite CMS)
+# ---------------------------------------------------------------------------
+fetch_whitewater_postings <- function(url = "https://whitewater.k12.mt.us/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_whitewater_postings(resp_body_string(resp), url = url)
+}
+
+parse_whitewater_postings <- function(html_text, url = "https://whitewater.k12.mt.us/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+  sections <- rvest::html_elements(doc, ".fsPageContent .fsContent")
+  if (length(sections) == 0) return(empty)
+
+  rows <- list()
+  for (sec in sections) {
+    header_el <- rvest::html_element(sec, "header .fsElementTitle, h2.fsElementTitle")
+    if (length(header_el) == 0 || is.na(header_el)) next
+    header_text <- trimws(rvest::html_text(header_el))
+    if (!nzchar(header_text) || grepl("POSITION OPENINGS", header_text, ignore.case = TRUE)) next
+
+    parts <- strsplit(header_text, ",|\\bor\\b")[[1]]
+    for (part in trimws(parts)) {
+      if (nzchar(part) && grepl("teacher|driver|custodian|coach|aide|substitute", part, ignore.case = TRUE)) {
+        rows[[length(rows) + 1]] <- data.frame(
+          Title = part,
+          Location = "Whitewater",
+          Posted_Date = NA_character_,
+          Link = url,
+          stringsAsFactors = FALSE
+        )
+      }
+    }
+  }
+
+  if (length(rows) == 0) return(empty)
+  dplyr::bind_rows(rows)
+}
+
+# ---------------------------------------------------------------------------
+# Google Doc Preview Text Extractor (Shared Helper for Victor & Superior)
+# ---------------------------------------------------------------------------
+extract_google_doc_preview_text <- function(html_text) {
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return("")
+  matches <- gregexpr("\"s\":\"([^\"]+)\"", html_text)
+  strings <- regmatches(html_text, matches)[[1]]
+  if (length(strings) == 0) return("")
+
+  text_parts <- vapply(strings, function(s) {
+    txt <- sub("^\"s\":\"", "", sub("\"$", "", s))
+    txt <- gsub("\\\\n", "\n", txt)
+    txt <- gsub("\\\\u0027", "\x27", txt)
+    txt <- gsub("\\\\u0010|\\\\u0011|\\\\u0012|\\\\u001c", "", txt)
+    txt
+  }, character(1))
+  paste(text_parts, collapse = "\n")
+}
+
+# ---------------------------------------------------------------------------
+# Victor School District (Google Doc Preview Job Board)
+# ---------------------------------------------------------------------------
+fetch_victor_postings <- function(preview_url = "https://docs.google.com/document/d/1hPjGJCP2_6t4nOMl9xx7oZlK061x5KWd/preview") {
+  resp <- request(preview_url) %>%
+    perform_with_retry()
+  parse_victor_postings(resp_body_string(resp), url = "https://www.victor.k12.mt.us/page/employment")
+}
+
+parse_victor_postings <- function(html_text, url = "https://www.victor.k12.mt.us/page/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  text <- extract_google_doc_preview_text(html_text)
+  if (!nzchar(text)) return(empty)
+
+  date_m <- regmatches(text, regexpr("updated\\s+(\\d{1,2}/\\d{1,2}/\\d{4})", text, ignore.case = TRUE))
+  posted_date <- if (length(date_m) > 0) {
+    sub("updated\\s+", "", date_m, ignore.case = TRUE)
+  } else {
+    NA_character_
+  }
+
+  lines <- strsplit(text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  roles <- character(0)
+  for (i in seq_along(lines)) {
+    line <- lines[i]
+    if (grepl("Openings:", line, ignore.case = TRUE) || grepl("Athletics/Coaching", line, ignore.case = TRUE)) {
+      is_sub <- grepl("Substitute", line, ignore.case = TRUE)
+      if (is_sub) {
+        roles <- c(roles, "Substitute")
+        next
+      }
+      j <- i + 1
+      while (j <= length(lines) && !grepl("Openings:|Athletics/Coaching|equal opportunity", lines[j], ignore.case = TRUE)) {
+        subline <- lines[j]
+        if (!grepl("download|None at this time|Substitutes for the following", subline, ignore.case = TRUE) &&
+            nzchar(subline)) {
+          clean <- gsub("^\\d+\\s+", "", subline)
+          clean <- gsub("\\s+positions?$", "", clean, ignore.case = TRUE)
+          if (grepl("teacher|paraprofessional|coach|custodian", clean, ignore.case = TRUE)) {
+            roles <- c(roles, clean)
+          }
+        }
+        j <- j + 1
+      }
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+  data.frame(
+    Title = roles,
+    Location = "Victor",
+    Posted_Date = posted_date,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Superior School District (Google Doc Preview Job Board)
+# ---------------------------------------------------------------------------
+fetch_superior_postings <- function(preview_url = "https://docs.google.com/document/d/1ujnHba2a-gWdThpUB-T43LoCZoR_ViXzxZKTEuq67_g/preview") {
+  resp <- request(preview_url) %>%
+    perform_with_retry()
+  parse_superior_postings(resp_body_string(resp), url = "https://www.ssd3.us/page/employment")
+}
+
+parse_superior_postings <- function(html_text, url = "https://www.ssd3.us/page/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  text <- extract_google_doc_preview_text(html_text)
+  if (!nzchar(text)) return(empty)
+
+  lines <- strsplit(text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  roles <- character(0)
+  for (line in lines) {
+    m <- regmatches(line, regexpr("^[^–—-]*[–—-]", line))
+    if (length(m) > 0) {
+      prefix <- trimws(sub("[–—-]$", "", m))
+      if (grepl("driver|teacher|paraprofessional|custodian|cook|coach|aide|substitute", prefix, ignore.case = TRUE) &&
+          !grepl("District|Equal|Anyone|Online", prefix, ignore.case = TRUE)) {
+        roles <- c(roles, prefix)
+      }
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+  data.frame(
+    Title = roles,
+    Location = "Superior",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

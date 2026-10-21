@@ -1473,6 +1473,106 @@ if (nrow(richey_df) > 0) {
                           Posting_Source = character(0))
 }
 
+# Judith Gap Schools (found 2026-10-21 via OPI Directory) -- CyberSchool CMS,
+# plain httr2 fetch, no chromote needed.
+judithgap_districts <- registry[registry$Platform == "JudithGapHeuristic", ]
+judithgap_results <- lapply(seq_len(nrow(judithgap_districts)), function(i) {
+  row <- judithgap_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_judithgap_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+judithgap_df <- bind_rows(judithgap_results)
+if (nrow(judithgap_df) > 0) {
+  judithgap_df <- judithgap_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Judith Gap district site (direct board)")
+} else {
+  judithgap_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                             location = character(0), url = character(0), District = character(0),
+                             Posting_Source = character(0))
+}
+
+# Whitewater Public Schools (found 2026-10-21 via OPI Directory) -- Finalsite CMS,
+# plain httr2 fetch, no chromote needed.
+whitewater_districts <- registry[registry$Platform == "WhitewaterHeuristic", ]
+whitewater_results <- lapply(seq_len(nrow(whitewater_districts)), function(i) {
+  row <- whitewater_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_whitewater_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+whitewater_df <- bind_rows(whitewater_results)
+if (nrow(whitewater_df) > 0) {
+  whitewater_df <- whitewater_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Whitewater district site (direct board)")
+} else {
+  whitewater_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# Victor School District (found 2026-10-21 via OPI Directory) -- Google Doc preview,
+# plain httr2 fetch, no chromote needed.
+victor_districts <- registry[registry$Platform == "VictorHeuristic", ]
+victor_results <- lapply(seq_len(nrow(victor_districts)), function(i) {
+  row <- victor_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_victor_postings(),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+victor_df <- bind_rows(victor_results)
+if (nrow(victor_df) > 0) {
+  victor_df <- victor_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Victor district site (direct board)")
+} else {
+  victor_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
+# Superior School District (found 2026-10-21 via OPI Directory) -- Google Doc preview,
+# plain httr2 fetch, no chromote needed.
+superior_districts <- registry[registry$Platform == "SuperiorHeuristic", ]
+superior_results <- lapply(seq_len(nrow(superior_districts)), function(i) {
+  row <- superior_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_superior_postings(),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+superior_df <- bind_rows(superior_results)
+if (nrow(superior_df) > 0) {
+  superior_df <- superior_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Superior district site (direct board)")
+} else {
+  superior_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -1955,6 +2055,10 @@ lockwood_df <- lockwood_df %>% mutate(date_posted = standardize_date(date_posted
 frazer_df <- frazer_df %>% mutate(date_posted = standardize_date(date_posted))
 lambert_df <- lambert_df %>% mutate(date_posted = standardize_date(date_posted))
 richey_df <- richey_df %>% mutate(date_posted = standardize_date(date_posted))
+judithgap_df <- judithgap_df %>% mutate(date_posted = standardize_date(date_posted))
+whitewater_df <- whitewater_df %>% mutate(date_posted = standardize_date(date_posted))
+victor_df <- victor_df %>% mutate(date_posted = standardize_date(date_posted))
+superior_df <- superior_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -1969,6 +2073,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        highwood_df, smithvalley_df, moore_df, cardwell_df,
                        boulder_df, jeffersonhigh_df, sheridan_df, lockwood_df,
                        frazer_df, lambert_df, richey_df,
+                       judithgap_df, whitewater_df, victor_df, superior_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(
