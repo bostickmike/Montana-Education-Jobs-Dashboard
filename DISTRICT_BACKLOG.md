@@ -55,6 +55,9 @@ To verify and likely add:
 |---|---|---|---|---|
 | Condon / Swan Valley Elementary #3 | Missoula | `swanvalleyelementary.org` (NOT `swanvalleyschools.com` = Saginaw MI) | Weebly CMS; titles sit in `#wsite-content h2`; 1 active posting | ✅ **Adopted** (2026-10-21) |
 | West Valley School District #1 | Flathead | `westvalleyschool.submittable.com/submit` | Submittable portal; titles sit in `.header-3.word-wrap a`; 1 active posting | ✅ **Adopted** (2026-10-21) |
+| Frazer Public Schools | Valley | `frazer.k12.mt.us/District/Jobs/` | CyberSchool CMS; 26 active postings in `.listItem_bodyContent li` | ✅ **Adopted** (2026-10-21) |
+| Lambert School District | Richland | `lambertschool.net/career-opportunities/employment-opportunities` | Finalsite CMS; 1 active posting in `#fsPageContent .fsContent ul li` | ✅ **Adopted** (2026-10-21) |
+| Richey Public Schools | Dawson | `richey.k12.mt.us/currentopenings` | CyberSchool CMS; 1 active posting in `#maincontent .cs-html-widget strong` | ✅ **Adopted** (2026-10-21) |
 
 ---
 

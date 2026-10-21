@@ -3572,6 +3572,100 @@ test_that("fetch_lockwood_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 8)
 })
 
+test_that("parse_frazer_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "frazer_cyberschool_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.frazer.k12.mt.us/District/Jobs/"
+
+  result <- parse_frazer_postings(fixture, url)
+
+  expect_equal(nrow(result), 26)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_true("Elementary Teacher" %in% result$Title)
+  expect_true("K - 12 Physical Education Teacher" %in% result$Title)
+  expect_true("Business Manager/Clerk" %in% result$Title)
+  expect_equal(unique(result$Location), "Frazer")
+  expect_equal(unique(result$Link), url)
+})
+
+test_that("parse_frazer_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_frazer_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_frazer_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "frazer_cyberschool_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_frazer_postings()
+
+  expect_equal(nrow(result), 26)
+})
+
+test_that("parse_lambert_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "lambert_finalsite_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.lambertschool.net/career-opportunities/employment-opportunities"
+
+  result <- parse_lambert_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Music K-12")
+  expect_equal(result$Location, "Lambert")
+  expect_equal(result$Link, url)
+})
+
+test_that("parse_lambert_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_lambert_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_lambert_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "lambert_finalsite_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_lambert_postings()
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Music K-12")
+})
+
+test_that("parse_richey_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "richey_cscms_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.richey.k12.mt.us/currentopenings"
+
+  result <- parse_richey_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "2026-27 Assistant Cook / Custodian")
+  expect_equal(result$Location, "Richey")
+  expect_equal(result$Link, url)
+})
+
+test_that("parse_richey_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_richey_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_richey_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "richey_cscms_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_richey_postings()
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "2026-27 Assistant Cook / Custodian")
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

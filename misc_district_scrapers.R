@@ -5245,6 +5245,124 @@ parse_lockwood_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Lockwood", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Frazer Public Schools (Valley County) -- CyberSchool CMS,
+# plain httr2 fetch, no chromote needed. 26 active positions listed
+# directly in .listItem_bodyContent li.
+fetch_frazer_postings <- function(url = "https://www.frazer.k12.mt.us/District/Jobs/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_frazer_postings(resp_body_string(resp), url)
+}
+
+parse_frazer_postings <- function(html_text, url = "https://www.frazer.k12.mt.us/District/Jobs/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  page <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(page)) return(empty)
+  container <- rvest::html_elements(page, ".listItem_bodyContent")
+  if (length(container) == 0) return(empty)
+
+  lis <- rvest::html_elements(container, "li")
+  if (length(lis) == 0) lis <- rvest::html_elements(container, "p")
+  raw_titles <- rvest::html_text(lis, trim = TRUE)
+  raw_titles <- raw_titles[nzchar(raw_titles)]
+
+  exclude_patterns <- "^Applications?|Click Here|Download|None|Equal Opportunity|Back to"
+  titles <- raw_titles[!grepl(exclude_patterns, raw_titles, ignore.case = TRUE)]
+  titles <- titles[nchar(titles) < 90]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Frazer",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# Lambert School District (Richland County) -- Finalsite CMS,
+# plain httr2 fetch, no chromote needed. Active positions listed
+# in #fsPageContent .fsContent ul li.
+fetch_lambert_postings <- function(url = "https://www.lambertschool.net/career-opportunities/employment-opportunities") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_lambert_postings(resp_body_string(resp), url)
+}
+
+parse_lambert_postings <- function(html_text, url = "https://www.lambertschool.net/career-opportunities/employment-opportunities") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  page <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(page)) return(empty)
+  lis <- rvest::html_elements(page, "#fsPageContent .fsContent ul li, main .fsContent ul li")
+  if (length(lis) == 0) return(empty)
+
+  raw_titles <- rvest::html_text(lis, trim = TRUE)
+  raw_titles <- raw_titles[nzchar(raw_titles)]
+
+  clean_titles <- character(0)
+  for (t in raw_titles) {
+    cleaned <- trimws(gsub("(?i)click here.*|,\\s*for job description.*", "", t))
+    if (nzchar(cleaned) && nchar(cleaned) < 90 &&
+        !grepl("^Applications?|Master Agreement|Alumni|None|Equal Opportunity", cleaned, ignore.case = TRUE)) {
+      clean_titles <- c(clean_titles, cleaned)
+    }
+  }
+  if (length(clean_titles) == 0) return(empty)
+
+  data.frame(
+    Title = clean_titles,
+    Location = "Lambert",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# Richey Public Schools (Dawson County) -- CyberSchool CMS,
+# plain httr2 fetch, no chromote needed. Active positions listed
+# in #maincontent .cs-html-widget strong / headings.
+fetch_richey_postings <- function(url = "https://www.richey.k12.mt.us/currentopenings") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_richey_postings(resp_body_string(resp), url)
+}
+
+parse_richey_postings <- function(html_text, url = "https://www.richey.k12.mt.us/currentopenings") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  page <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(page)) return(empty)
+  elems <- rvest::html_elements(page, "#maincontent .cs-html-widget strong, #maincontent .cs-html-widget h1, #maincontent .cs-html-widget h2, #maincontent .cs-html-widget h3, #maincontent .cs-html-widget h4")
+  if (length(elems) == 0) return(empty)
+
+  raw_titles <- rvest::html_text(elems, trim = TRUE)
+  raw_titles <- gsub("\u00a0", " ", raw_titles)
+  raw_titles <- trimws(raw_titles)
+  raw_titles <- raw_titles[nzchar(raw_titles)]
+
+  exclude_patterns <- "^Current Job Posting$|^Current Job Openings?$|^Login$|^Career Opportunities$|^We are committed|^Posted On$"
+  titles <- raw_titles[!grepl(exclude_patterns, raw_titles, ignore.case = TRUE)]
+  titles <- titles[nchar(titles) < 90]
+  titles <- unique(titles)
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Richey",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two
