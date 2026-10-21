@@ -3807,6 +3807,86 @@ test_that("parse_cayuseprairie_postings returns zero rows on empty or non-matchi
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_bigtimbergs_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "bigtimbergs_googlesites_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment"
+
+  result <- parse_bigtimbergs_postings(fixture, url)
+
+  expect_equal(nrow(result), 3)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("SPED Teacher", "Substitute Teachers", "SPED Case Manager"))
+  expect_equal(unique(result$Location), "Big Timber")
+  expect_equal(unique(result$Link), url)
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_bigtimbergs_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_bigtimbergs_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_eldergrove_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "eldergrove_finalsite_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.eldergrove.k12.mt.us/about-eg/employment/available-positions"
+
+  result <- parse_eldergrove_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Paraprofessionals")
+  expect_equal(unique(result$Location), "Billings")
+  expect_equal(unique(result$Link), url)
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_eldergrove_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_eldergrove_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_monforton_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "monforton_wordpress_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://monfortonschool.org/contact-us/job-openings/"
+
+  result <- parse_monforton_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("Business Manager", "District Clerk"))
+  expect_equal(unique(result$Location), "Bozeman")
+  expect_equal(unique(result$Link), url)
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_monforton_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_monforton_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_grassrange_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "grassrange_custom_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://grps.k12.mt.us/staff/open-positions"
+
+  result <- parse_grassrange_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("CDL Bus/Activity Driver", "Substitutes in all areas"))
+  expect_equal(unique(result$Location), "Grass Range")
+  expect_equal(unique(result$Link), url)
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_grassrange_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_grassrange_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

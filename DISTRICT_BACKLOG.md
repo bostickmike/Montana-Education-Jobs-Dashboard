@@ -43,7 +43,9 @@ live pages -- nothing fabricated.
 | District | County | Page | Live-run result 2026-09-07 |
 |---|---|---|---|
 | Rapelje School District #32 | Stillwater | `rapelje.k12.mt.us/job-listings` | ✅ **Adopted** (2026-10-21, Batch 10) -- ParentSquare CMS; 3 active positions (Bus Drivers, Preschool Teacher, Cooks Helper) |
-| Grass Range Public Schools | Fergus | `grps.k12.mt.us/staff/open-positions` | ✅ 3/3 after the "standing-JD list ≠ current openings" prompt rule |
+| Grass Range Public Schools | Fergus | `grps.k12.mt.us/staff/open-positions` | ✅ **Adopted** (2026-10-21, Batch 11) -- custom CMS; 2 active positions (CDL Bus/Activity Driver, Substitutes in all areas) |
+| Big Timber Grade School | Sweet Grass | `sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment` | ✅ **Adopted** (2026-10-21, Batch 11) -- Google Sites; 3 active positions (SPED Teacher, Substitute Teachers, SPED Case Manager) |
+| Elder Grove School District | Yellowstone | `eldergrove.k12.mt.us/about-eg/employment/available-positions` | ✅ **Adopted** (2026-10-21, Batch 11) -- Finalsite CMS; 1 active position (Paraprofessionals) |
 | Cayuse Prairie School District #10 | Flathead | `cayuseprairie.com/page/employment` | ✅ **Adopted** (2026-10-21, Batch 10) -- Apptegy custom notice; 2 active positions (Special Education Paraprofessional, 7th & 8th Grade Science Teacher) |
 | Judith Gap Schools | Wheatland | `judithgap.k12.mt.us/District/Portal/Employment` | ✅ **Adopted** (2026-10-21, Batch 9) -- CyberSchool CMS jobs widget; 2 active positions (Custodian/Maint/Boiler Operator, School Cook) |
 | Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | ✅ 4 on the main page (School Nurse, paras, Sub Teacher, Custodial Subs). Add subpage rows if content is missed. |
@@ -106,7 +108,11 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Fairfield (Greenfield #75) | Teton | `fairfield.k12.mt.us` | Apptegy "Employment Applications" page links only to generic blank PDFs (`5il.co/11rg` / `Classified_Staff_Application.pdf`); checked 2026-10-21 | TODO |
 | Savage School District #7 | Richland | Apptegy | 3 bare category labels, no title text | TODO |
 | Dodson School District | Phillips | Apptegy | single sentence deferring to OPI | TODO |
-| Monforton School District #27 | Gallatin | district site | Certified → OPI listing; Classified → embedded Indeed widget; rechecked 2026-10-20 | TODO |
+| Monforton School District #27 | Gallatin | `monfortonschool.org/contact-us/job-openings/` | WordPress site with dedicated job buttons; 2 active positions (Business Manager, District Clerk) | ✅ **Adopted** (2026-10-21, Batch 11) |
+| Jordan Public Schools | Garfield | `jordanpublicschools.org/employment` | generic Certified/Classified application forms only; checked 2026-10-21 | TODO |
+| Vida Elementary School | McCone | `vidaschool.k12.mt.us` | resources page has only generic application PDFs; checked 2026-10-21 | TODO |
+| Frenchtown School District | Missoula | `ftsd.org` | Apptegy site with no dedicated employment board; links to generic application link `5il.co/14q4o`; checked 2026-10-21 | TODO |
+| Lima Public Schools | Beaverhead | `lima.k12.mt.us` | Apptegy site with generic application PDF `5il.co/kopg` only; checked 2026-10-21 | TODO |
 | Anderson School District #41 | Gallatin | district site | "Come Work With Us" recruiting copy, no titles | TODO |
 | Marion School District #54 | Flathead | real MT Marion is a Google Sites page (`marionschools.org` = Jasper TN) | boilerplate application PDFs + one generic substitute sentence | TODO |
 | Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath; rechecked 2026-10-20 | TODO |

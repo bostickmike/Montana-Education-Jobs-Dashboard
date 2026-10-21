@@ -180,7 +180,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Judith Gap Schools", "Whitewater Public Schools",
                      "Victor School District", "Superior School District",
                      "Ashland Public School", "Rapelje School District",
-                     "Cayuse Prairie School District #10"))
+                     "Cayuse Prairie School District #10",
+                     "Big Timber Grade School", "Elder Grove School District",
+                     "Monforton School District #27", "Grass Range Public Schools"))
 })
 
 # ---------------------------------------------------------------------------

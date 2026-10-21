@@ -5732,6 +5732,179 @@ parse_cayuseprairie_postings <- function(html_text, url = "https://www.cayusepra
   )
 }
 
+# ---------------------------------------------------------------------------
+# Big Timber Grade School (Published Google Sites Page)
+# ---------------------------------------------------------------------------
+fetch_bigtimbergs_postings <- function(url = "https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_bigtimbergs_postings(resp_body_string(resp), url = url)
+}
+
+parse_bigtimbergs_postings <- function(html_text, url = "https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  roles <- character(0)
+  p_nodes <- rvest::html_elements(doc, "p.zfr3Q, div.NsaAfc p")
+  for (p in p_nodes) {
+    txt <- trimws(rvest::html_text(p))
+    if (grepl("accepting (?:applications|applicants) for (?:a )?", txt, ignore.case = TRUE)) {
+      role <- sub(".*accepting (?:applications|applicants) for (?:a )?", "", txt, ignore.case = TRUE)
+      role <- sub("[.].*$", "", role)
+      role <- trimws(gsub("[\u00a0\r\n\t ]+", " ", role))
+      if (nzchar(role)) roles <- c(roles, role)
+    }
+  }
+
+  btn_nodes <- rvest::html_elements(doc, "a[aria-label*='Opening']")
+  for (btn in btn_nodes) {
+    lbl <- rvest::html_attr(btn, "aria-label")
+    lbl <- sub("[[:space:]]+Opening$", "", trimws(lbl), ignore.case = TRUE)
+    lbl <- trimws(gsub("[\u00a0\r\n\t ]+", " ", lbl))
+    if (nzchar(lbl)) roles <- c(roles, lbl)
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Big Timber",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Elder Grove School District (Finalsite Posts CMS)
+# ---------------------------------------------------------------------------
+fetch_eldergrove_postings <- function(url = "https://www.eldergrove.k12.mt.us/about-eg/employment/available-positions") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_eldergrove_postings(resp_body_string(resp), url = url)
+}
+
+parse_eldergrove_postings <- function(html_text, url = "https://www.eldergrove.k12.mt.us/about-eg/employment/available-positions") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  titles <- rvest::html_elements(doc, ".fsListItems article .fsTitle a, .fsTitle a.fsPostLink")
+  if (length(titles) == 0) return(empty)
+
+  roles <- unique(trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(titles))))
+  roles <- roles[nzchar(roles)]
+  roles <- roles[!grepl("^(?:Certified|Classified) Positions?$", roles, ignore.case = TRUE)]
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Billings",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Monforton School District #27 (WordPress Page)
+# ---------------------------------------------------------------------------
+fetch_monforton_postings <- function(url = "https://monfortonschool.org/contact-us/job-openings/") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_monforton_postings(resp_body_string(resp), url = url)
+}
+
+parse_monforton_postings <- function(html_text, url = "https://monfortonschool.org/contact-us/job-openings/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  btn_spans <- rvest::html_elements(doc, "a.w-btn span.w-btn-label, .w-btn-wrapper a.w-btn")
+  if (length(btn_spans) == 0) return(empty)
+
+  texts <- unique(trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(btn_spans))))
+  texts <- texts[nzchar(texts)]
+  roles <- texts[!grepl("VIEW MORE|Translate|Menu", texts, ignore.case = TRUE)]
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Bozeman",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Grass Range Public Schools (Joomla CMS / Article Notice)
+# ---------------------------------------------------------------------------
+fetch_grassrange_postings <- function(url = "https://grps.k12.mt.us/staff/open-positions") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_grassrange_postings(resp_body_string(resp), url = url)
+}
+
+parse_grassrange_postings <- function(html_text, url = "https://grps.k12.mt.us/staff/open-positions") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  p_nodes <- rvest::html_elements(doc, "div[itemprop='articleBody'] p")
+  roles <- character(0)
+  for (p in p_nodes) {
+    txt <- trimws(rvest::html_text(p))
+    if (grepl("school year:", txt, ignore.case = TRUE)) {
+      after_txt <- sub(".*school year:[[:space:]]*", "", txt, ignore.case = TRUE)
+      after_txt <- sub("[.][[:space:]]*$", "", after_txt)
+      after_txt <- gsub("[\u00a0\r\n\t ]+", " ", after_txt)
+      parts <- strsplit(after_txt, "[[:space:]]+and[[:space:]]+|[;,]")[[1]]
+      for (part in trimws(parts)) {
+        part <- sub("[.]+$", "", trimws(part))
+        if (grepl("^[a-z]", part)) {
+          part <- paste0(toupper(substr(part, 1, 1)), substr(part, 2, nchar(part)))
+        }
+        if (nzchar(part)) roles <- c(roles, part)
+      }
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Grass Range",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two
