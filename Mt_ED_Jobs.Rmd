@@ -1198,6 +1198,106 @@ if (nrow(swanvalley_df) > 0) {
                               Posting_Source = character(0))
 }
 
+# Highwood Public Schools (found 2026-10-21 via OPI Directory) -- CyberSchool CMS,
+# plain httr2 fetch, no chromote needed.
+highwood_districts <- registry[registry$Platform == "HighwoodHeuristic", ]
+highwood_results <- lapply(seq_len(nrow(highwood_districts)), function(i) {
+  row <- highwood_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_highwood_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+highwood_df <- bind_rows(highwood_results)
+if (nrow(highwood_df) > 0) {
+  highwood_df <- highwood_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Highwood district site (direct board)")
+} else {
+  highwood_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
+# Smith Valley School District #8 (found 2026-10-21 via OPI Directory) -- Published Google Sites,
+# plain httr2 fetch, no chromote needed.
+smithvalley_districts <- registry[registry$Platform == "SmithValleyHeuristic", ]
+smithvalley_results <- lapply(seq_len(nrow(smithvalley_districts)), function(i) {
+  row <- smithvalley_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_smithvalley_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+smithvalley_df <- bind_rows(smithvalley_results)
+if (nrow(smithvalley_df) > 0) {
+  smithvalley_df <- smithvalley_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Smith Valley district site (direct board)")
+} else {
+  smithvalley_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
+}
+
+# Moore Public Schools (found 2026-10-21 via OPI Directory) -- Weebly CMS,
+# plain httr2 fetch, no chromote needed.
+moore_districts <- registry[registry$Platform == "MooreHeuristic", ]
+moore_results <- lapply(seq_len(nrow(moore_districts)), function(i) {
+  row <- moore_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_moore_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+moore_df <- bind_rows(moore_results)
+if (nrow(moore_df) > 0) {
+  moore_df <- moore_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Moore district site (direct board)")
+} else {
+  moore_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                         location = character(0), url = character(0), District = character(0),
+                         Posting_Source = character(0))
+}
+
+# Cardwell Elementary School (found 2026-10-21 via OPI Directory) -- Published Google Sites,
+# plain httr2 fetch, no chromote needed.
+cardwell_districts <- registry[registry$Platform == "CardwellHeuristic", ]
+cardwell_results <- lapply(seq_len(nrow(cardwell_districts)), function(i) {
+  row <- cardwell_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_cardwell_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+cardwell_df <- bind_rows(cardwell_results)
+if (nrow(cardwell_df) > 0) {
+  cardwell_df <- cardwell_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Cardwell district site (direct board)")
+} else {
+  cardwell_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -1669,6 +1769,10 @@ wibaux_df <- wibaux_df %>% mutate(date_posted = standardize_date(date_posted))
 westvalley_df <- westvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 luther_df <- luther_df %>% mutate(date_posted = standardize_date(date_posted))
 swanvalley_df <- swanvalley_df %>% mutate(date_posted = standardize_date(date_posted))
+highwood_df <- highwood_df %>% mutate(date_posted = standardize_date(date_posted))
+smithvalley_df <- smithvalley_df %>% mutate(date_posted = standardize_date(date_posted))
+moore_df <- moore_df %>% mutate(date_posted = standardize_date(date_posted))
+cardwell_df <- cardwell_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -1680,6 +1784,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        creston_df, clinton_df, dixon_df, elysian_df, fairmontegan_df, lustre_df, miami_df, zurich_df, dayton_df,
                        belfry_df, nashua_df, whitehall_df, broadus_df, wibaux_df,
                        westvalley_df, luther_df, swanvalley_df,
+                       highwood_df, smithvalley_df, moore_df, cardwell_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)

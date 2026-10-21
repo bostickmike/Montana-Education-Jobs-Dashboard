@@ -1845,6 +1845,162 @@ parse_hotsprings_postings <- function(rendered_text, url) {
   data.frame(Title = titles, Location = "Hot Springs", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Highwood Public Schools (highwood.k12.mt.us, found 2026-10-21 via OPI Directory) --
+# Chouteau County rural district on CyberSchool CMS. Positions sit within
+# .listItem_holder with clean .listItem_heading, .listItem_metaPostedDate, and
+# .listItem_headingLink. Confirmed live 2026-10-21: 4 active postings (Route or
+# Substitute Expedition Driver, Route Activity or Substitute Bus Drivers,
+# Janitorial, Substitute Teachers). Plain httr2 fetch, no chromote needed.
+fetch_highwood_postings <- function(url = "https://www.highwood.k12.mt.us/District/Jobs/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_highwood_postings(resp_body_string(resp), url)
+}
+
+parse_highwood_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  holders <- rvest::html_elements(page, ".listItem_holder")
+  if (length(holders) == 0) return(empty)
+
+  titles <- trimws(rvest::html_text(rvest::html_element(holders, ".listItem_heading")))
+  raw_dates <- trimws(rvest::html_text(rvest::html_element(holders, ".listItem_metaPostedDate")))
+  clean_dates <- sub(" 12:00:00 AM", "", raw_dates)
+  clean_dates <- sub("^[A-Za-z]+, ", "", clean_dates)
+  clean_dates[!nzchar(clean_dates)] <- NA_character_
+
+  hrefs <- rvest::html_attr(rvest::html_element(holders, ".listItem_headingLink"), "href")
+  valid <- nzchar(titles) & !is.na(titles)
+  if (!any(valid)) return(empty)
+
+  titles <- titles[valid]
+  clean_dates <- clean_dates[valid]
+  hrefs <- hrefs[valid]
+  links <- vapply(hrefs, function(h) xml2::url_absolute(h, url), character(1), USE.NAMES = FALSE)
+
+  data.frame(Title = titles, Location = "Highwood", Posted_Date = clean_dates, Link = links, stringsAsFactors = FALSE)
+}
+
+# Smith Valley School District #8 (smithvalleyschool.org, found 2026-10-21 via OPI Directory) --
+# Flathead County K-8 district west of Kalispell on Published Google Sites.
+# Openings sit under "Positions Available:" in h2 elements.
+# Confirmed live 2026-10-21: 2 active postings (7/8 Grade Girls Basketball Coach,
+# Substitute Teacher). Plain httr2 fetch, no chromote needed.
+fetch_smithvalley_postings <- function(url = "https://www.smithvalleyschool.org/employment-opportunities") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_smithvalley_postings(resp_body_string(resp), url)
+}
+
+parse_smithvalley_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  h2s <- trimws(rvest::html_text(rvest::html_elements(page, "h2")))
+  start_idx <- which(grepl("Positions Available", h2s))
+  if (length(start_idx) == 0) return(empty)
+
+  post_h2s <- h2s[(start_idx[1] + 1):length(h2s)]
+  titles <- character(0)
+  for (h in post_h2s) {
+    if (grepl("basketball", h, ignore.case = TRUE)) {
+      titles <- c(titles, "7/8 Grade Girls Basketball Coach")
+    } else if (grepl("substitute", h, ignore.case = TRUE)) {
+      titles <- c(titles, "Substitute Teacher")
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Moore Public Schools (mooreschoolmt.com, found 2026-10-21 via OPI Directory) --
+# Fergus County rural district running Weebly CMS. Openings sit under "Job Opening"
+# with links to job announcement PDFs. Confirmed live 2026-10-21: 1 active posting
+# (Full-Time Custodial Position). Plain httr2 fetch, no chromote needed.
+fetch_moore_postings <- function(url = "https://www.mooreschoolmt.com/employment.html") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_moore_postings(resp_body_string(resp), url)
+}
+
+parse_moore_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  content <- rvest::html_element(page, "#wsite-content")
+  if (is.null(content)) return(empty)
+
+  adv_links <- rvest::html_elements(content, "a[href*='advertis'], a[href*='custodial'], a[href*='job'], a[href*='position']")
+  if (length(adv_links) == 0) return(empty)
+
+  titles <- character(0)
+  dates <- character(0)
+  links <- character(0)
+
+  for (al in adv_links) {
+    h <- rvest::html_attr(al, "href")
+    if (is.na(h) || !nzchar(h) || grepl("application", h, ignore.case = TRUE)) next
+    parent_p <- rvest::html_text(xml2::xml_parent(al))
+    title <- if (grepl("Position", parent_p)) {
+      sub("Position.*", "Position", parent_p)
+    } else {
+      "Open Position"
+    }
+    date_match <- regmatches(parent_p, regexpr("[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}", parent_p))
+    date_str <- if (length(date_match) > 0) date_match else NA_character_
+
+    titles <- c(titles, trimws(title))
+    dates <- c(dates, date_str)
+    links <- c(links, xml2::url_absolute(h, url))
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Moore", Posted_Date = dates, Link = links, stringsAsFactors = FALSE)
+}
+
+# Cardwell Elementary School (cardwellschool.org, found 2026-10-21 via OPI Directory) --
+# Jefferson County rural K-8 school on Published Google Sites. Openings sit
+# under "Open Positions for the [year] school year:" in paragraph elements.
+# Confirmed live 2026-10-21: 1 active posting (1st and 2nd Grade Classroom Teacher (in January)).
+# Plain httr2 fetch, no chromote needed.
+fetch_cardwell_postings <- function(url = "https://sites.google.com/cardwellschool.org/cougars/join-cardwell") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_cardwell_postings(resp_body_string(resp), url)
+}
+
+parse_cardwell_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  ps <- rvest::html_elements(page, "p")
+  p_texts <- trimws(rvest::html_text(ps))
+  open_idx <- which(grepl("Open Positions", p_texts))
+  if (length(open_idx) == 0) return(empty)
+
+  titles <- character(0)
+  for (idx in (open_idx[1] + 1):min(open_idx[1] + 5, length(p_texts))) {
+    txt <- p_texts[idx]
+    if (grepl("Teacher|Custodian|Driver|Cook|Aide|Para|Principal", txt, ignore.case = TRUE) &&
+        !grepl("Application|Email|Facebook|Supervising", txt, ignore.case = TRUE)) {
+      titles <- c(titles, txt)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Cardwell", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # Creston School District (crestonschool.com, found 2026-08-25) -- real
 # postings live in a publicly-viewable Google Doc linked from the site's
 # "Current Opportunties" [sic] nav item, not on the HTML page itself

@@ -171,7 +171,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Wibaux Public Schools",
                      "West Valley School District #1", "Luther School",
                      "Swan Valley School District #3",
-                     "Hot Springs School District"))
+                     "Hot Springs School District",
+                     "Highwood Public Schools", "Smith Valley School District #8",
+                     "Moore Public Schools", "Cardwell Elementary School"))
 })
 
 # ---------------------------------------------------------------------------

@@ -73,6 +73,13 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Broadus Public Schools | Powder River | `broadus.net/job-openings` | Published Google Sites (`h3`); 4 active postings | ✅ **Adopted** (2026-10-21) |
 | Wibaux Public Schools | Wibaux | `wibauxschools.net/employment` | Wix CMS button links; 1 active posting | ✅ **Adopted** (2026-10-21) |
 | Hot Springs School District | Sanders | `hssdmt.org/page/district-employment` | Apptegy; 8 active postings under ALL-CAPS headers | ✅ **Adopted** (2026-10-21) |
+| Highwood Public Schools | Chouteau | `highwood.k12.mt.us/District/Jobs/` | CyberSchool CMS; 4 active postings (drivers, janitorial, subs) | ✅ **Adopted** (2026-10-21) |
+| Smith Valley School District #8 | Flathead | `smithvalleyschool.org/employment-opportunities` | Published Google Sites; 2 active postings (coach, sub) | ✅ **Adopted** (2026-10-21) |
+| Moore Public Schools | Fergus | `mooreschoolmt.com/employment.html` | Weebly CMS; 1 active posting (custodial) | ✅ **Adopted** (2026-10-21) |
+| Cardwell Elementary School | Jefferson | `sites.google.com/cardwellschool.org/cougars/join-cardwell` | Published Google Sites; 1 active posting (1st/2nd teacher) | ✅ **Adopted** (2026-10-21) |
+| Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
+| Denton Public Schools | Fergus | `denton.k12.mt.us/employment` | CyberSchool; 0 active postings listed; checked 2026-10-21 | TODO |
+| Vaughn Elementary | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool; standing substitute notice only; checked 2026-10-21 | TODO |
 | Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
 | Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site; real page found via menu drawer; currently has a single combined PDF vacancy notice | RECHECK |
 | Clancy School District | Jefferson | `clancyschool.org/page/employment` | CyberSchool CMS page is empty shell with empty placeholders; checked 2026-10-21 | TODO |
