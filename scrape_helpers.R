@@ -146,10 +146,129 @@ safe_scrape <- function(source_name, scrape_fn, expected_cols, log_path = "scrap
   df
 }
 
+# Generate a discrepancy report comparing statewide OPI postings against
+# directly scraped district job boards. Flags unmatched postings for covered
+# districts (stale postings as potential ghosts, recent postings as ATS drift
+# or unlisted direct vacancies) while ignoring independent employers and
+# uncovered districts.
+generate_opi_discrepancy_report <- function(opi_df, direct_df, registry) {
+  empty <- data.frame(
+    District = character(0),
+    Source = character(0),
+    Title = character(0),
+    Date_Posted = character(0),
+    Location = character(0),
+    URL = character(0),
+    Discrepancy_Type = character(0),
+    Detected_Date = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (nrow(opi_df) == 0) return(empty)
+
+  required_opi <- c("title", "date_posted", "location")
+  required_direct <- c("title", "date_posted", "District")
+  required_registry <- c("District", "City")
+
+  missing_opi <- setdiff(required_opi, names(opi_df))
+  missing_direct <- setdiff(required_direct, names(direct_df))
+  missing_registry <- setdiff(required_registry, names(registry))
+  if (length(missing_opi) > 0 || length(missing_direct) > 0 || length(missing_registry) > 0) {
+    stop(
+      "Cannot generate discrepancy report; missing columns: ",
+      paste(c(missing_opi, missing_direct, missing_registry), collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  normalize <- function(x) {
+    normalized <- tolower(trimws(as.character(x)))
+    normalized[is.na(x)] <- NA_character_
+    gsub("[^[:alnum:]]+", " ", normalized)
+  }
+  complete_key <- function(title, date) {
+    normalized_title <- normalize(title)
+    normalized_date <- trimws(as.character(date))
+    valid <- !is.na(normalized_title) & nzchar(normalized_title) &
+      !is.na(date) & nzchar(normalized_date)
+    key <- rep(NA_character_, length(title))
+    key[valid] <- paste(normalized_title[valid], normalized_date[valid], sep = "\r")
+    key
+  }
+
+  direct_keys <- complete_key(direct_df$title, direct_df$date_posted)
+  direct_keys <- paste(direct_df$District, direct_keys, sep = "\r")
+  direct_keys <- direct_keys[!is.na(direct_keys)]
+
+  city_forms <- normalize(registry$City)
+  opi_keys <- complete_key(opi_df$title, opi_df$date_posted)
+  opi_locations <- paste0(" ", normalize(opi_df$location), " ")
+  direct_districts <- unique(direct_df$District)
+
+  parse_discrepancy_date <- function(dp) {
+    if (inherits(dp, "Date")) return(dp)
+    if (is.na(dp) || !nzchar(trimws(as.character(dp)))) return(as.Date(NA))
+    d <- tryCatch(as.Date(as.character(dp)), error = function(e) NA)
+    if (!is.na(d)) return(d)
+    tryCatch(as.Date(as.character(dp), format = "%m/%d/%Y"), error = function(e) NA)
+  }
+
+  discrepancy_rows <- list()
+  for (i in seq_len(nrow(opi_df))) {
+    loc <- opi_locations[i]
+    if (is.na(loc) || !nzchar(trimws(loc))) next
+
+    city_matches <- which(vapply(
+      city_forms,
+      function(city) !is.na(city) && nzchar(city) && grepl(paste0(" ", city, " "), loc, fixed = TRUE),
+      logical(1)
+    ))
+    if (length(city_matches) == 0) next
+
+    # "East Helena" also contains "Helena"; only use the most-specific city.
+    city_matches <- city_matches[nchar(city_forms[city_matches]) == max(nchar(city_forms[city_matches]))]
+    matched_districts <- registry$District[city_matches]
+
+    active_districts <- intersect(matched_districts, direct_districts)
+    if (length(active_districts) == 0) next
+
+    candidate_keys <- paste(active_districts, opi_keys[i], sep = "\r")
+    if (length(direct_keys) > 0 && any(candidate_keys %in% direct_keys)) {
+      next
+    }
+
+    dp <- opi_df$date_posted[i]
+    parsed_date <- parse_discrepancy_date(dp)
+    discrepancy_type <- if (is.na(parsed_date)) {
+      "Unmatched on direct scraper (no date)"
+    } else if (parsed_date < (Sys.Date() - 60)) {
+      paste0("Potential ghost posting on OPI (stale date: ", dp, ")")
+    } else {
+      "Unmatched on direct scraper (investigate ATS drift or unlisted posting)"
+    }
+
+    u <- if ("url" %in% names(opi_df)) opi_df$url[i] else NA_character_
+
+    discrepancy_rows[[length(discrepancy_rows) + 1]] <- data.frame(
+      District = paste(active_districts, collapse = "; "),
+      Source = "OPI",
+      Title = as.character(opi_df$title[i]),
+      Date_Posted = as.character(dp),
+      Location = as.character(opi_df$location[i]),
+      URL = as.character(u),
+      Discrepancy_Type = discrepancy_type,
+      Detected_Date = as.character(Sys.Date()),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  if (length(discrepancy_rows) == 0) return(empty)
+  dplyr::bind_rows(discrepancy_rows)
+}
+
 # OPI exposes only a posting title, city, and date. Keep its statewide rows
 # unless those fields identify the same posting on a directly scraped board;
 # matching on city alone would hide unrelated employers in shared cities.
-remove_opi_direct_duplicates <- function(opi_df, direct_df, registry) {
+remove_opi_direct_duplicates <- function(opi_df, direct_df, registry, report_path = NULL) {
   required_opi <- c("title", "date_posted", "location")
   required_direct <- c("title", "date_posted", "District")
   required_registry <- c("District", "City")
@@ -163,6 +282,11 @@ remove_opi_direct_duplicates <- function(opi_df, direct_df, registry) {
       paste(c(missing_opi, missing_direct, missing_registry), collapse = ", "),
       call. = FALSE
     )
+  }
+
+  if (!is.null(report_path)) {
+    rep <- generate_opi_discrepancy_report(opi_df, direct_df, registry)
+    write.csv(rep, report_path, row.names = FALSE)
   }
 
   normalize <- function(x) {

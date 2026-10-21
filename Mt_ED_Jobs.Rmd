@@ -1971,7 +1971,12 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        frazer_df, lambert_df, richey_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
-opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
+opi_df <- remove_opi_direct_duplicates(
+  opi_df,
+  direct_df,
+  registry,
+  report_path = "mt_discrepancy_report.csv"
+)
 
 combined <- bind_rows(direct_df, opi_df) %>%
   mutate(
