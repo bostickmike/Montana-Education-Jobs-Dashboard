@@ -53,7 +53,8 @@ To verify and likely add:
 
 | District | County | Page | Issue | Status |
 |---|---|---|---|---|
-| Condon / Swan Valley Elementary #3 | Missoula | `swanvalleyelementary.org` (NOT `swanvalleyschools.com` = Saginaw MI) | one real posting, free-flowing prose, no title/heading/list marker | TODO |
+| Condon / Swan Valley Elementary #3 | Missoula | `swanvalleyelementary.org` (NOT `swanvalleyschools.com` = Saginaw MI) | Weebly CMS; titles sit in `#wsite-content h2`; 1 active posting | ✅ **Adopted** (2026-10-21) |
+| West Valley School District #1 | Flathead | `westvalleyschool.submittable.com/submit` | Submittable portal; titles sit in `.header-3.word-wrap a`; 1 active posting | ✅ **Adopted** (2026-10-21) |
 
 ---
 
@@ -71,8 +72,9 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Whitehall Public Schools | Jefferson | `whitehallschools.org/apps/jobs/` | Edlio CMS (`.list-item`); 4 active postings | ✅ **Adopted** (2026-10-21) |
 | Broadus Public Schools | Powder River | `broadus.net/job-openings` | Published Google Sites (`h3`); 4 active postings | ✅ **Adopted** (2026-10-21) |
 | Wibaux Public Schools | Wibaux | `wibauxschools.net/employment` | Wix CMS button links; 1 active posting | ✅ **Adopted** (2026-10-21) |
+| Hot Springs School District | Sanders | `hssdmt.org/page/district-employment` | Apptegy; 8 active postings under ALL-CAPS headers | ✅ **Adopted** (2026-10-21) |
 | Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
-| Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employment` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-21 | TODO |
+| Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site; real page found via menu drawer; currently has a single combined PDF vacancy notice | RECHECK |
 | Clancy School District | Jefferson | `clancyschool.org/page/employment` | CyberSchool CMS page is empty shell with empty placeholders; checked 2026-10-21 | TODO |
 | Seeley Lake Elementary #34 | Missoula | `sleonline.org` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
 | Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
@@ -106,14 +108,14 @@ real one (verify address/phone), then re-triage.
 
 | District | County | Trap / status | Status |
 |---|---|---|---|
-| Avon | Powell | `avon*` resolves to Avon-by-the-Sea, NJ | TODO |
-| Bynum | Teton | `bynumschool.org` → Midland, TX | TODO |
-| Luther | Carbon | `lutherlions.org` → Luther, OK | TODO |
+| Avon | Powell | `avon*` resolves to Avon-by-the-Sea, NJ; real MT school is `avon.k12.mt.us` | TODO |
+| Bynum | Teton | `bynumschool.org` → Midland, TX; real MT school is `bynum.k12.mt.us` | TODO |
+| Luther School | Carbon | `lutherlions.org` → Luther, OK; real MT site is `lutherschool.org/index.php/documents` (Joomla); 2 active postings | ✅ **Adopted** (2026-10-21) |
 | Pine Grove | Rosebud | `pgasd.com` → Pennsylvania | TODO |
 | Hawks Home | Powder River | `r-mschool.org` → Republic-Michigamme, MI | TODO |
-| Basin (Boulder area) | Jefferson | real MT Basin School **reopened April 2026** — recheck for a new site; `basinschools.net` = Idaho City, ID | RECHECK |
-| Medicine Lake School District #10 | Sheridan | searched, no MT-specific site found — needs a targeted search | TODO |
-| Park City (MT) | Stillwater | searched, no MT-specific site found — needs a targeted search | TODO |
+| Basin (Boulder area) | Jefferson | Real MT Basin School reopened April 2026; registered domain is `basin.k12.mt.us`; DNS pending / site under construction; `basinschools.net` = Idaho City, ID | RECHECK |
+| Medicine Lake School District #10 | Sheridan | Real site is Apptegy (`medicinelake.k12.mt.us`); staff directory active, no open job board posted | RECHECK |
+| Park City Schools | Stillwater | Real site is Apptegy (`parkcityschools.org`); 2 active postings | ✅ **Adopted** (earlier batch) |
 
 ---
 

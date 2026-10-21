@@ -168,7 +168,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Sweet Grass County High School", "Harlem Public Schools",
                      "Belfry Public Schools", "Nashua Public Schools",
                      "Whitehall Public Schools", "Broadus Public Schools",
-                     "Wibaux Public Schools"))
+                     "Wibaux Public Schools",
+                     "West Valley School District #1", "Luther School",
+                     "Swan Valley School District #3",
+                     "Hot Springs School District"))
 })
 
 # ---------------------------------------------------------------------------

@@ -2269,7 +2269,7 @@ test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy/RedR
   expect_setequal(names(APPTEGY_DISTRICT_SCRAPERS), registry_districts)
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 44 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 45 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2314,6 +2314,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 44 districts
   evergreen_text <- paste(readLines(test_path("fixtures", "apptegy_evergreen_rendered.txt"), warn = FALSE), collapse = "\n")
   lonerock_text <- paste(readLines(test_path("fixtures", "apptegy_lonerock_rendered.txt"), warn = FALSE), collapse = "\n")
   bigtimber_text <- paste(readLines(test_path("fixtures", "apptegy_bigtimber_rendered_2026-10-20.txt"), warn = FALSE), collapse = "\n")
+  hotsprings_text <- paste(readLines(test_path("fixtures", "apptegy_hotsprings_rendered_2026-10-21.txt"), warn = FALSE), collapse = "\n")
 
   # Same fake session serves every district's fetch, real URL routing comes
   # from each fetch_*_postings()'s own default url= argument -- this fake
@@ -2373,6 +2374,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 44 districts
           else if (grepl("evergreensd50", navigated_url)) evergreen_text
           else if (grepl("lonerockschool", navigated_url)) lonerock_text
           else if (grepl("sgchs", navigated_url)) bigtimber_text
+          else if (grepl("hssdmt", navigated_url)) hotsprings_text
           else ""
           list(result = list(value = value))
         }
@@ -2383,7 +2385,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 44 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -2428,6 +2430,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 44 districts
   expect_equal(sum(result$District == "Evergreen School District #50"), 5)
   expect_equal(sum(result$District == "Lone Rock School District"), 1)
   expect_equal(sum(result$District == "Sweet Grass County High School"), 5)
+  expect_equal(sum(result$District == "Hot Springs School District"), 8)
 })
 
 # Real fixture captured 2026-08-24 from Miles City's Google Sheets CSV
@@ -3197,6 +3200,124 @@ test_that("fetch_wibaux_postings fetches and parses a live-shaped response", {
   result <- fetch_wibaux_postings()
 
   expect_equal(nrow(result), 1)
+})
+
+test_that("parse_westvalley_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "westvalley_submittable_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://westvalleyschool.submittable.com/submit"
+
+  result <- parse_westvalley_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Paraprofessional Position")
+  expect_equal(result$Location, "Kalispell")
+  expect_true(grepl("paraprofessional-position$", result$Link))
+})
+
+test_that("parse_westvalley_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_westvalley_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_westvalley_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "westvalley_submittable_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_westvalley_postings()
+
+  expect_equal(nrow(result), 1)
+})
+
+test_that("parse_luther_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "luther_documents_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.lutherschool.org/index.php/documents"
+
+  result <- parse_luther_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c("Bus Driver", "Cook"))
+  expect_equal(result$Location, c("Luther", "Luther"))
+  expect_true(all(grepl("\\.pdf$", result$Link)))
+})
+
+test_that("parse_luther_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_luther_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_luther_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "luther_documents_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_luther_postings()
+
+  expect_equal(nrow(result), 2)
+})
+
+test_that("parse_swanvalley_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "swanvalley_careers_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.swanvalleyelementary.org/careers.html"
+
+  result <- parse_swanvalley_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Instructional paraprofessional, or a candidate interested in a part-time teaching/part-time paraprofessional role")
+  expect_equal(result$Location, "Condon")
+  expect_equal(result$Link, url)
+})
+
+test_that("parse_swanvalley_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_swanvalley_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_swanvalley_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "swanvalley_careers_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_swanvalley_postings()
+
+  expect_equal(nrow(result), 1)
+})
+
+test_that("parse_hotsprings_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "apptegy_hotsprings_rendered_2026-10-21.txt"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.hssdmt.org/page/district-employment"
+
+  result <- parse_hotsprings_postings(fixture, url)
+
+  expect_equal(nrow(result), 8)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c(
+    "Counselor (K-12)",
+    "Head of Maintenance",
+    "Custodian",
+    "Paraprofessional",
+    "Jr. High Girls Basketball Coach",
+    "High School Head Girls Basketball Coach",
+    "High School Assistant Girls Basketball Coach",
+    "High School Assistant Boys Basketball Coach"
+  ))
+  expect_true(all(result$Location == "Hot Springs"))
+  expect_true(all(result$Link == url))
+})
+
+test_that("parse_hotsprings_postings returns zero rows on empty or non-matching text", {
+  result <- parse_hotsprings_postings("Just some regular page text with no postings.", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {

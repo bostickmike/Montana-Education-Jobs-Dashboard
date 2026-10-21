@@ -1682,6 +1682,169 @@ parse_wibaux_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Wibaux", Posted_Date = NA_character_, Link = urls, stringsAsFactors = FALSE)
 }
 
+# West Valley School District #1 (westvalleyschool.submittable.com, found 2026-10-21) --
+# Flathead County K-8 district (>800 students) outside Kalispell using Submittable
+# for vacancy submissions. Confirmed live 2026-10-21: 1 active posting
+# (Paraprofessional Position). Plain httr2 fetch, no chromote needed.
+fetch_westvalley_postings <- function(url = "https://westvalleyschool.submittable.com/submit") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_westvalley_postings(resp_body_string(resp), url)
+}
+
+parse_westvalley_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  nodes <- rvest::html_elements(page, ".header-3.word-wrap a, .title-column a")
+  if (length(nodes) == 0) return(empty)
+
+  titles <- trimws(rvest::html_text(nodes))
+  hrefs <- rvest::html_attr(nodes, "href")
+  valid <- nzchar(titles) & !is.na(hrefs) & nzchar(hrefs)
+  if (!any(valid)) return(empty)
+
+  titles <- titles[valid]
+  hrefs <- hrefs[valid]
+
+  links <- vapply(hrefs, function(h) {
+    raw <- sub("^/login[?]returnUrl=", "", h)
+    dec <- utils::URLdecode(raw)
+    xml2::url_absolute(dec, url)
+  }, character(1), USE.NAMES = FALSE)
+
+  data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
+}
+
+# Luther School (lutherschool.org, found 2026-10-21) -- Carbon County rural school
+# running Joomla CMS (same framework as Belfry). Live vacancy notices are posted
+# under /index.php/documents with dedicated vacancy announcement PDFs.
+# Confirmed live 2026-10-21: 2 active postings (Bus Driver, Cook). Plain httr2 fetch.
+fetch_luther_postings <- function(url = "https://www.lutherschool.org/index.php/documents") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_luther_postings(resp_body_string(resp), url)
+}
+
+parse_luther_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  items <- rvest::html_elements(page, "a.el-item")
+  if (length(items) == 0) return(empty)
+
+  titles <- character(0)
+  links <- character(0)
+
+  for (item in items) {
+    meta <- rvest::html_element(item, ".el-meta")
+    meta_text <- if (!is.null(meta)) rvest::html_text(meta) else ""
+    if (grepl("currently looking for|looking for a|school year", meta_text, ignore.case = TRUE)) {
+      title_el <- rvest::html_element(item, ".el-title, h3")
+      t <- if (!is.null(title_el)) trimws(rvest::html_text(title_el)) else trimws(rvest::html_text(item))
+      h <- rvest::html_attr(item, "href")
+      if (is.na(h) || !nzchar(h)) next
+      full_h <- xml2::url_absolute(h, url)
+      titles <- c(titles, t)
+      links <- c(links, full_h)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Luther", Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
+}
+
+# Swan Valley School District #3 (swanvalleyelementary.org, found 2026-10-21) --
+# Missoula County rural school in Condon running Weebly CMS (same as Scobey).
+# Positions are published under /careers.html with h2.wsite-content-title.
+# Confirmed live 2026-10-21: 1 active posting (Instructional paraprofessional,
+# or a candidate interested in a part-time teaching/part-time paraprofessional role).
+# Plain httr2 fetch, no chromote needed.
+fetch_swanvalley_postings <- function(url = "https://www.swanvalleyelementary.org/careers.html") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_swanvalley_postings(resp_body_string(resp), url)
+}
+
+parse_swanvalley_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  content <- rvest::html_element(page, "#wsite-content")
+  if (is.null(content)) return(empty)
+
+  h2s <- rvest::html_elements(content, "h2.wsite-content-title, .wsite-content-title")
+  if (length(h2s) == 0) return(empty)
+
+  titles <- trimws(rvest::html_text(h2s))
+  titles <- titles[nzchar(titles)]
+  titles <- titles[!grepl("^(Careers|Employment|Application)", titles, ignore.case = TRUE)]
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Condon", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Hot Springs School District (hssdmt.org, found 2026-10-21) -- Sanders County
+# district running Apptegy. Real postings sit under ALL-CAPS section headers
+# (CERTIFIED JOB OPENINGS, CLASSIFIED JOBS OPENINGS, EXTRA CURRICULAR JOB OPENINGS).
+# Confirmed live 2026-10-21: 8 real active postings. Handled via the shared
+# chromote session in fetch_apptegy_k12_postings().
+fetch_hotsprings_postings <- function(chromote_session, url = "https://www.hssdmt.org/page/district-employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_hotsprings_postings(text, url)
+}
+
+HOTSPRINGS_SECTION_HEADERS <- c(
+  "ADMINISTRATIVE JOB OPENINGS",
+  "CERTIFIED JOB OPENINGS",
+  "CLASSIFIED JOBS OPENINGS",
+  "EXTRA CURRICULAR JOB OPENINGS"
+)
+HOTSPRINGS_STOP_LINES <- c("All Deadlines:", "Find Us", "Hot Springs School District")
+
+parse_hotsprings_postings <- function(rendered_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  if (is.null(rendered_text) || !nzchar(rendered_text)) return(empty)
+
+  lines <- strsplit(rendered_text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  in_jobs <- FALSE
+  titles <- character(0)
+
+  for (line in lines) {
+    if (line %in% HOTSPRINGS_SECTION_HEADERS) {
+      in_jobs <- TRUE
+      next
+    }
+    if (in_jobs && (line %in% HOTSPRINGS_STOP_LINES || grepl("^All Deadlines:", line))) {
+      in_jobs <- FALSE
+      break
+    }
+    if (in_jobs) {
+      # exclude contact names / phone numbers
+      if (!grepl("^(Contact|Mike Cutler|Superintendent|Sam Hoff|Jim Lawson|[(]406[)])", line)) {
+        titles <- c(titles, line)
+      }
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Hot Springs", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # Creston School District (crestonschool.com, found 2026-08-25) -- real
 # postings live in a publicly-viewable Google Doc linked from the site's
 # "Current Opportunties" [sic] nav item, not on the HTML page itself
@@ -4710,7 +4873,8 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
   "Deer Park School District" = fetch_deerpark_postings,
   "Evergreen School District #50" = fetch_evergreen_postings,
   "Lone Rock School District" = fetch_lonerock_postings,
-  "Sweet Grass County High School" = fetch_bigtimber_postings
+  "Sweet Grass County High School" = fetch_bigtimber_postings,
+  "Hot Springs School District" = fetch_hotsprings_postings
 )
 
 fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,

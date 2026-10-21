@@ -1123,6 +1123,81 @@ if (nrow(wibaux_df) > 0) {
                           Posting_Source = character(0))
 }
 
+# West Valley School District #1 (found 2026-10-21) -- Submittable portal,
+# plain httr2 fetch, no chromote needed.
+westvalley_districts <- registry[registry$Platform == "WestValleyHeuristic", ]
+westvalley_results <- lapply(seq_len(nrow(westvalley_districts)), function(i) {
+  row <- westvalley_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_westvalley_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+westvalley_df <- bind_rows(westvalley_results)
+if (nrow(westvalley_df) > 0) {
+  westvalley_df <- westvalley_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "West Valley district site (direct board)")
+} else {
+  westvalley_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# Luther School (found 2026-10-21) -- Joomla documents page,
+# plain httr2 fetch, no chromote needed.
+luther_districts <- registry[registry$Platform == "LutherHeuristic", ]
+luther_results <- lapply(seq_len(nrow(luther_districts)), function(i) {
+  row <- luther_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_luther_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+luther_df <- bind_rows(luther_results)
+if (nrow(luther_df) > 0) {
+  luther_df <- luther_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Luther district site (direct board)")
+} else {
+  luther_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
+# Swan Valley School District #3 (found 2026-10-21) -- Weebly careers page,
+# plain httr2 fetch, no chromote needed.
+swanvalley_districts <- registry[registry$Platform == "SwanValleyHeuristic", ]
+swanvalley_results <- lapply(seq_len(nrow(swanvalley_districts)), function(i) {
+  row <- swanvalley_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_swanvalley_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+swanvalley_df <- bind_rows(swanvalley_results)
+if (nrow(swanvalley_df) > 0) {
+  swanvalley_df <- swanvalley_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Swan Valley district site (direct board)")
+} else {
+  swanvalley_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -1424,7 +1499,7 @@ if (nrow(gallatingateway_df) > 0) {
 # discarding healthy districts' results. The outer safe_scrape() protects the
 # pipeline if the shared session itself cannot start.
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Hamilton, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock, Sweet Grass County High School)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Hamilton, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock, Sweet Grass County High School, Hot Springs School District)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -1591,6 +1666,9 @@ nashua_df <- nashua_df %>% mutate(date_posted = standardize_date(date_posted))
 whitehall_df <- whitehall_df %>% mutate(date_posted = standardize_date(date_posted))
 broadus_df <- broadus_df %>% mutate(date_posted = standardize_date(date_posted))
 wibaux_df <- wibaux_df %>% mutate(date_posted = standardize_date(date_posted))
+westvalley_df <- westvalley_df %>% mutate(date_posted = standardize_date(date_posted))
+luther_df <- luther_df %>% mutate(date_posted = standardize_date(date_posted))
+swanvalley_df <- swanvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -1601,6 +1679,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        roberts_df, winnett_df, milescity_df, augusta_df, brockton_df, culbertson_df, cottonwood57_df,
                        creston_df, clinton_df, dixon_df, elysian_df, fairmontegan_df, lustre_df, miami_df, zurich_df, dayton_df,
                        belfry_df, nashua_df, whitehall_df, broadus_df, wibaux_df,
+                       westvalley_df, luther_df, swanvalley_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)
