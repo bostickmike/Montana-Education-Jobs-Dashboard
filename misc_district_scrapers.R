@@ -5089,6 +5089,162 @@ parse_milescity_postings <- function(csv_text, url) {
              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Boulder Elementary School District #7 (bgs.k12.mt.us, found 2026-10-21
+# via OPI Directory) -- Jefferson County rural elementary school.
+# Vacancies sit under "Vacancy Announcements" in a .cs-html-widget div.
+# Confirmed live 2026-10-21: 2 active postings (After School Program Teachers/Subs,
+# Girls Basketball Coach). Plain httr2 fetch, no chromote needed.
+fetch_boulder_postings <- function(url = "https://www.bgs.k12.mt.us/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_boulder_postings(resp_body_string(resp), url)
+}
+
+parse_boulder_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  widgets <- rvest::html_elements(page, ".cs-html-widget")
+  vac_widget <- NULL
+  for (w in widgets) {
+    if (grepl("Vacancy Announcements", rvest::html_text(w))) {
+      vac_widget <- w
+      break
+    }
+  }
+  if (is.null(vac_widget)) return(empty)
+
+  txt <- rvest::html_text2(vac_widget)
+  lines <- trimws(strsplit(txt, "\n")[[1]])
+  lines <- lines[nzchar(lines)]
+
+  titles <- character(0)
+  in_coaching <- FALSE
+  for (l in lines) {
+    if (grepl("hiring .* for the After School Program", l, ignore.case = TRUE)) {
+      titles <- c(titles, "After School Program Teachers/Subs")
+    } else if (grepl("Coaching Positions:", l, ignore.case = TRUE)) {
+      in_coaching <- TRUE
+    } else if (grepl("Qualifications:|Stipend:|Closing Date:|To apply:", l, ignore.case = TRUE)) {
+      in_coaching <- FALSE
+    } else if (in_coaching && nzchar(l) && nchar(l) < 60) {
+      titles <- c(titles, l)
+    }
+  }
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Boulder", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Jefferson High School District #1 (jhs.k12.mt.us, found 2026-10-21
+# via OPI Directory) -- Jefferson County high school in Boulder on eSchoolView CMS.
+# Confirmed live 2026-10-21: 6 active postings (Teachers, Substitute Teachers,
+# Paraprofessional Teacher Aides, Head and Assistant Cheer, Assistant Football,
+# Assistant Volleyball). Plain httr2 fetch, no chromote needed.
+fetch_jeffersonhigh_postings <- function(url = "https://www.jhs.k12.mt.us/EmploymentOpportunities.aspx") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_jeffersonhigh_postings(resp_body_string(resp), url)
+}
+
+parse_jeffersonhigh_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  text <- rvest::html_text2(page)
+  lines <- trimws(strsplit(text, "\n")[[1]])
+  lines <- lines[nzchar(lines)]
+  start_idx <- which(grepl("For .* School Year|Open Positions", lines))
+  stop_idx <- which(grepl("Questions[?]|Employment Information", lines))
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+
+  block <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- character(0)
+  for (l in block) {
+    if (grepl("\\.doc|\\.pdf|Informational Page|Open Coaching Positions", l, ignore.case = TRUE)) next
+    clean_l <- sub("^[* \t]+", "", l)
+    if (nzchar(clean_l)) titles <- c(titles, clean_l)
+  }
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Boulder", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Sheridan Public Schools (sheridan.k12.mt.us, found 2026-10-21
+# via OPI Directory) -- Madison County K-12 district on Published Google Sites.
+# Confirmed live 2026-10-21: 4 active postings (Varsity Boys' Basketball-Head and
+# Assistant Coach, Varsity Girls' Basketball-Assistant Coach, Substitute Teachers,
+# Substitute Bus Drivers). Plain httr2 fetch, no chromote needed.
+fetch_sheridan_postings <- function(url = "https://www.sheridan.k12.mt.us/district/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_sheridan_postings(resp_body_string(resp), url)
+}
+
+parse_sheridan_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  text <- rvest::html_text2(page)
+  lines <- trimws(strsplit(text, "\n")[[1]])
+  lines <- lines[nzchar(lines)]
+  start_idx <- which(grepl("accepting applications for the following positions", lines))
+  stop_idx <- which(grepl("SHERIDAN SCHOOL DISTRICT OPERATES ON A FOUR-DAY|Certified Application", lines))
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+
+  block <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  titles <- character(0)
+  for (l in block) {
+    if (grepl("Applications for the following|winter/spring coaching positions", l, ignore.case = TRUE)) next
+    clean_l <- sub(" \\(.*", "", l)
+    clean_l <- trimws(clean_l)
+    if (nzchar(clean_l)) titles <- c(titles, clean_l)
+  }
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Sheridan", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Lockwood School District (lockwoodschool.org, found 2026-10-21
+# via OPI Directory) -- Yellowstone County K-12 district on Edlio CMS.
+# Confirmed live 2026-10-21: 8 active postings (Special Education Teacher,
+# High School Paraprofessional, High School Business Teacher, Speech Language
+# Pathologist, Softball Coach, Basketball Coach, Substitute Teachers, Crosswalk Guard).
+# Plain httr2 fetch, no chromote needed.
+fetch_lockwood_postings <- function(url = "https://www.lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_lockwood_postings(resp_body_string(resp), url)
+}
+
+parse_lockwood_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  text <- rvest::html_text2(page)
+  lines <- trimws(strsplit(text, "\n")[[1]])
+  lines <- lines[nzchar(lines)]
+  start_idx <- which(grepl("Lockwood Schools Open Positions", lines))
+  stop_idx <- which(grepl("Questions[?]|Fingerprinting & Background Checks", lines))
+  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
+
+  block <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
+  exclude_patterns <- "Lockwood Schools Open Positions|Athletic Coaching|Rolling Job Openings|Application|Applications & Info|Maintenance and Custodial$|Transportation$|Crosswalk Guards & Transportation Aides$|Food Service$|Chartwells"
+
+  titles <- character(0)
+  for (l in block) {
+    if (grepl(exclude_patterns, l, ignore.case = TRUE)) next
+    if (nzchar(l) && nchar(l) < 90) titles <- c(titles, l)
+  }
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Lockwood", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

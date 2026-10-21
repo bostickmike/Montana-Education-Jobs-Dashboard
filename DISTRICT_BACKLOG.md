@@ -77,6 +77,15 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Smith Valley School District #8 | Flathead | `smithvalleyschool.org/employment-opportunities` | Published Google Sites; 2 active postings (coach, sub) | ✅ **Adopted** (2026-10-21) |
 | Moore Public Schools | Fergus | `mooreschoolmt.com/employment.html` | Weebly CMS; 1 active posting (custodial) | ✅ **Adopted** (2026-10-21) |
 | Cardwell Elementary School | Jefferson | `sites.google.com/cardwellschool.org/cougars/join-cardwell` | Published Google Sites; 1 active posting (1st/2nd teacher) | ✅ **Adopted** (2026-10-21) |
+| Boulder Elementary School District #7 | Jefferson | `bgs.k12.mt.us/employment` | SchoolCMS / html widget; 2 active postings (coach, after school) | ✅ **Adopted** (2026-10-21) |
+| Jefferson High School District #1 | Jefferson | `jhs.k12.mt.us/EmploymentOpportunities.aspx` | eSchoolView CMS; 6 active postings (cheer, football, volleyball, teachers, paras) | ✅ **Adopted** (2026-10-21) |
+| Sheridan Public Schools | Madison | `sheridan.k12.mt.us/district/employment` | Google Sites; 4 active postings (coaches, subs, drivers) | ✅ **Adopted** (2026-10-21) |
+| Lockwood School District | Yellowstone | `lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d` | Edlio CMS; 8 active postings (teachers, paras, coaches, subs, crosswalk) | ✅ **Adopted** (2026-10-21) |
+| Canyon Creek School | Yellowstone | `canyoncreekschool.org/apps/pages/index.jsp?uREC_ID=532741&type=d` | Edlio CMS; 2 generic printable application PDFs only; checked 2026-10-21 | RECHECK |
+| Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; single standing substitute notice only; checked 2026-10-21 | RECHECK |
+| Montana City ESD 27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS; current jobs list empty; checked 2026-10-21 | RECHECK |
+| Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; generic personnel application links only; checked 2026-10-21 | RECHECK |
+| Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Plain HTML; "currently fully staffed for 2025-2026"; checked 2026-10-21 | RECHECK |
 | Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
 | Denton Public Schools | Fergus | `denton.k12.mt.us/employment` | CyberSchool; 0 active postings listed; checked 2026-10-21 | TODO |
 | Vaughn Elementary | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool; standing substitute notice only; checked 2026-10-21 | TODO |
@@ -160,6 +169,7 @@ covers their teacher postings.
 | Victor School District #7 | Ravalli | Apptegy behind the Client Challenge gate; real postings in a sign-in-walled Google Doc | BLOCKED |
 | Eureka (Lincoln County #13) | Lincoln | "Job Openings" link → unstructured Google Drive folder | BLOCKED |
 | Troy School District #1 | Lincoln | "Vacancy Announcements" link → unstructured Google Drive folder | BLOCKED |
+| Plains School District #1 | Sanders | `plainsschools.net/employment/` embeds an unstructured Google Drive folder (`1PLQRtQHAjWSZxlyn3kcWtEp1N7crZh-m`) | BLOCKED |
 
 ---
 

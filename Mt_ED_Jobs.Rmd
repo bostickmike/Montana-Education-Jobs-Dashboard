@@ -1298,6 +1298,106 @@ if (nrow(cardwell_df) > 0) {
                             Posting_Source = character(0))
 }
 
+# Boulder Elementary School District #7 (found 2026-10-21 via OPI Directory) --
+# plain httr2 fetch, no chromote needed.
+boulder_districts <- registry[registry$Platform == "BoulderHeuristic", ]
+boulder_results <- lapply(seq_len(nrow(boulder_districts)), function(i) {
+  row <- boulder_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_boulder_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+boulder_df <- bind_rows(boulder_results)
+if (nrow(boulder_df) > 0) {
+  boulder_df <- boulder_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Boulder district site (direct board)")
+} else {
+  boulder_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Jefferson High School District #1 (found 2026-10-21 via OPI Directory) -- eSchoolView CMS,
+# plain httr2 fetch, no chromote needed.
+jeffersonhigh_districts <- registry[registry$Platform == "JeffersonHighHeuristic", ]
+jeffersonhigh_results <- lapply(seq_len(nrow(jeffersonhigh_districts)), function(i) {
+  row <- jeffersonhigh_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_jeffersonhigh_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+jeffersonhigh_df <- bind_rows(jeffersonhigh_results)
+if (nrow(jeffersonhigh_df) > 0) {
+  jeffersonhigh_df <- jeffersonhigh_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Jefferson High district site (direct board)")
+} else {
+  jeffersonhigh_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                 location = character(0), url = character(0), District = character(0),
+                                 Posting_Source = character(0))
+}
+
+# Sheridan Public Schools (found 2026-10-21 via OPI Directory) -- Published Google Sites,
+# plain httr2 fetch, no chromote needed.
+sheridan_districts <- registry[registry$Platform == "SheridanHeuristic", ]
+sheridan_results <- lapply(seq_len(nrow(sheridan_districts)), function(i) {
+  row <- sheridan_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_sheridan_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+sheridan_df <- bind_rows(sheridan_results)
+if (nrow(sheridan_df) > 0) {
+  sheridan_df <- sheridan_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Sheridan district site (direct board)")
+} else {
+  sheridan_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
+# Lockwood School District (found 2026-10-21 via OPI Directory) -- Edlio CMS,
+# plain httr2 fetch, no chromote needed.
+lockwood_districts <- registry[registry$Platform == "LockwoodHeuristic", ]
+lockwood_results <- lapply(seq_len(nrow(lockwood_districts)), function(i) {
+  row <- lockwood_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_lockwood_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+lockwood_df <- bind_rows(lockwood_results)
+if (nrow(lockwood_df) > 0) {
+  lockwood_df <- lockwood_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Lockwood district site (direct board)")
+} else {
+  lockwood_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -1773,6 +1873,10 @@ highwood_df <- highwood_df %>% mutate(date_posted = standardize_date(date_posted
 smithvalley_df <- smithvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 moore_df <- moore_df %>% mutate(date_posted = standardize_date(date_posted))
 cardwell_df <- cardwell_df %>% mutate(date_posted = standardize_date(date_posted))
+boulder_df <- boulder_df %>% mutate(date_posted = standardize_date(date_posted))
+jeffersonhigh_df <- jeffersonhigh_df %>% mutate(date_posted = standardize_date(date_posted))
+sheridan_df <- sheridan_df %>% mutate(date_posted = standardize_date(date_posted))
+lockwood_df <- lockwood_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -1785,6 +1889,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        belfry_df, nashua_df, whitehall_df, broadus_df, wibaux_df,
                        westvalley_df, luther_df, swanvalley_df,
                        highwood_df, smithvalley_df, moore_df, cardwell_df,
+                       boulder_df, jeffersonhigh_df, sheridan_df, lockwood_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(opi_df, direct_df, registry)

@@ -173,7 +173,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Swan Valley School District #3",
                      "Hot Springs School District",
                      "Highwood Public Schools", "Smith Valley School District #8",
-                     "Moore Public Schools", "Cardwell Elementary School"))
+                     "Moore Public Schools", "Cardwell Elementary School",
+                     "Boulder Elementary", "Jefferson High School",
+                     "Sheridan Public Schools", "Lockwood School District"))
 })
 
 # ---------------------------------------------------------------------------
