@@ -1572,6 +1572,116 @@ parse_nashua_postings <- function(html_text, url) {
   )
 }
 
+# Whitehall Public Schools (whitehallschools.org, found 2026-10-21) --
+# Jefferson County district on Edlio CMS (/apps/jobs/), with stable
+# per-posting show_job.jsp?REC_ID=... links. Confirmed live 2026-10-21:
+# 4 real active postings (Extracurricular Position ( Advisor or Coach),
+# Paraprofessional / Teacher's Aide, School Custodian, Substitute Teacher).
+fetch_whitehall_postings <- function(url = "https://www.whitehallschools.org/apps/jobs/") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_whitehall_postings(resp_body_string(resp), url)
+}
+
+parse_whitehall_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  items <- rvest::html_elements(page, ".list-item")
+  if (length(items) == 0) return(empty)
+
+  titles <- character(0)
+  links <- character(0)
+  locs <- character(0)
+
+  for (item in items) {
+    link_node <- rvest::html_element(item, "a.emphasize-title, a[href*=\"show_job.jsp\"]")
+    if (is.null(link_node)) next
+    t <- trimws(rvest::html_text(link_node))
+    h <- rvest::html_attr(link_node, "href")
+    full_link <- xml2::url_absolute(h, url)
+
+    loc_node <- rvest::html_element(item, "div")
+    loc <- if (!is.null(loc_node) && !is.na(rvest::html_text(loc_node))) {
+      trimws(sub("^[[:space:]]*Location:[[:space:]]*", "", trimws(rvest::html_text(loc_node))))
+    } else "Whitehall"
+    if (!nzchar(loc)) loc <- "Whitehall"
+
+    titles <- c(titles, t)
+    links <- c(links, full_link)
+    locs <- c(locs, loc)
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = locs, Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
+}
+
+# Broadus Public Schools (broadus.net, found 2026-10-21) -- Powder River County
+# district on a published Google Sites page. Confirmed live 2026-10-21:
+# 4 real active postings under h3 headings (Activity Bus Drivers, JH/HS SPED Teacher,
+# Assistant Cook, Substitute Teachers).
+fetch_broadus_postings <- function(url = "https://www.broadus.net/job-openings") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_broadus_postings(resp_body_string(resp), url)
+}
+
+parse_broadus_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  h3s <- rvest::html_elements(page, "h3")
+  titles <- trimws(rvest::html_text(h3s))
+  titles <- titles[nzchar(titles)]
+
+  titles <- titles[!grepl("Application$", titles, ignore.case = TRUE)]
+  titles <- sub("[[:space:]]+-[[:space:]]+[$][0-9]+/day$", "", titles)
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Broadus", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+}
+
+# Wibaux Public Schools (wibauxschools.net, found 2026-10-21) -- Wibaux County
+# district on Wix CMS. Vacancy announcements are posted as button links under
+# Job Opportunities. Confirmed live 2026-10-21: 1 real active posting
+# (Special Education Teacher).
+fetch_wibaux_postings <- function(url = "https://www.wibauxschools.net/employment") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_wibaux_postings(resp_body_string(resp), url)
+}
+
+parse_wibaux_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  buttons <- rvest::html_elements(page, ".wixui-button, [data-semantic-classname=\"button\"]")
+  if (length(buttons) == 0) return(empty)
+
+  titles <- character(0)
+  urls <- character(0)
+  for (b in buttons) {
+    link <- rvest::html_element(b, "a")
+    if (is.null(link)) next
+    href <- rvest::html_attr(link, "href")
+    if (is.na(href) || !nzchar(href)) next
+    label_node <- rvest::html_element(b, ".wixui-button__label")
+    label <- if (!is.null(label_node)) trimws(rvest::html_text(label_node)) else rvest::html_attr(link, "aria-label")
+    if (is.na(label) || !nzchar(label) || grepl("^(Button|Application)", label, ignore.case = TRUE)) next
+    titles <- c(titles, label)
+    urls <- c(urls, xml2::url_absolute(href, url))
+  }
+
+  if (length(titles) == 0) return(empty)
+  data.frame(Title = titles, Location = "Wibaux", Posted_Date = NA_character_, Link = urls, stringsAsFactors = FALSE)
+}
+
 # Creston School District (crestonschool.com, found 2026-08-25) -- real
 # postings live in a publicly-viewable Google Doc linked from the site's
 # "Current Opportunties" [sic] nav item, not on the HTML page itself

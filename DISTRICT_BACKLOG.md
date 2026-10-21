@@ -67,7 +67,13 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Sweet Grass County High School | Sweet Grass | `sgchs.com/page/employment` | Apptegy; 5 positions under Open Coaching/Bus Driving/Teaching headers | ✅ **Adopted** (2026-10-20) |
 | Harlem Public Schools | Blaine | `applitrack.com/harlemhs/onlineapp/` | Frontline / AppliTrack (`harlemhs`); 8 active postings | ✅ **Adopted** (2026-10-20) |
 | Belfry Public Schools | Carbon | `belfrybats.org/index.php/our-school/employment` | Table (`table.uk-table`); 2 active postings | ✅ **Adopted** (2026-10-20) |
-| Nashua Public Schools | Valley | `nashua.k12.mt.us/District/Jobs/` | Category headers (CyberSchool CMS); 7 active postings | ✅ **Adopted** (2026-10-20) |
+| Nashua Public Schools | Valley | `nashua.k12.mt.us/District/Jobs/` | Category headers (CyberSchool CMS); 7 active postings | ✅ **Adopted** (2026-10-21) |
+| Whitehall Public Schools | Jefferson | `whitehallschools.org/apps/jobs/` | Edlio CMS (`.list-item`); 4 active postings | ✅ **Adopted** (2026-10-21) |
+| Broadus Public Schools | Powder River | `broadus.net/job-openings` | Published Google Sites (`h3`); 4 active postings | ✅ **Adopted** (2026-10-21) |
+| Wibaux Public Schools | Wibaux | `wibauxschools.net/employment` | Wix CMS button links; 1 active posting | ✅ **Adopted** (2026-10-21) |
+| Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
+| Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employment` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-21 | TODO |
+| Clancy School District | Jefferson | `clancyschool.org/page/employment` | CyberSchool CMS page is empty shell with empty placeholders; checked 2026-10-21 | TODO |
 | Seeley Lake Elementary #34 | Missoula | `sleonline.org` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
 | Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs nav; checked 2026-10-20 | TODO |
 | Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |

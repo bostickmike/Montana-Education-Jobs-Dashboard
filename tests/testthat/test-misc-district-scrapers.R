@@ -3094,6 +3094,111 @@ test_that("fetch_nashua_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 7)
 })
 
+test_that("parse_whitehall_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "whitehall_jobs_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.whitehallschools.org/apps/jobs/"
+
+  result <- parse_whitehall_postings(fixture, url)
+
+  expect_equal(nrow(result), 4)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c(
+    "Extracurricular Position ( Advisor or Coach)",
+    "Paraprofessional / Teacher's Aide",
+    "School Custodian",
+    "Substitute Teacher"
+  ))
+  expect_equal(result$Location, c(
+    "Whitehall",
+    "Whitehall Elementary",
+    "Whitehall School District",
+    "Whitehall Elementary, Whitehall Middle and High Schools"
+  ))
+  expect_true(all(grepl("^https://www\\.whitehallschools\\.org/apps/jobs/show_job\\.jsp\\?REC_ID=", result$Link)))
+})
+
+test_that("parse_whitehall_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_whitehall_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_whitehall_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "whitehall_jobs_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_whitehall_postings()
+
+  expect_equal(nrow(result), 4)
+})
+
+test_that("parse_broadus_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "broadus_openings_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.broadus.net/job-openings"
+
+  result <- parse_broadus_postings(fixture, url)
+
+  expect_equal(nrow(result), 4)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c(
+    "Activity Bus Drivers",
+    "JH/HS SPED Teacher",
+    "Assistant Cook",
+    "Substitute Teachers"
+  ))
+  expect_true(all(result$Location == "Broadus"))
+  expect_true(all(result$Link == url))
+})
+
+test_that("parse_broadus_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_broadus_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_broadus_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "broadus_openings_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_broadus_postings()
+
+  expect_equal(nrow(result), 4)
+})
+
+test_that("parse_wibaux_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "wibaux_employment_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.wibauxschools.net/employment"
+
+  result <- parse_wibaux_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Special Education Teacher")
+  expect_equal(result$Location, "Wibaux")
+  expect_true(grepl("\\.pdf$", result$Link))
+})
+
+test_that("parse_wibaux_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_wibaux_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("fetch_wibaux_postings fetches and parses a live-shaped response", {
+  fixture <- paste(readLines(test_path("fixtures", "wibaux_employment_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+
+  result <- fetch_wibaux_postings()
+
+  expect_equal(nrow(result), 1)
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(
