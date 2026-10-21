@@ -24,10 +24,12 @@ Provide a scripted CLI / slash-command tool (`Rscript scripts/district_scraper.R
 
 District searches often fail or return false positives due to identical town/school names across the United States. Through systematic testing across Montana's backlog, the following query patterns have proven most reliable:
 
-### Proven Search Query Formulas
-| Goal | Search Formula | Why It Works |
+### Proven Search Query & Directory Lookup Formulas
+| Goal | Method / Formula | Why It Works |
 |---|---|---|
-| **District Website** | `"<District Name> School" "Montana" OR "<County> County"` | Anchors to Montana and eliminates out-of-state duplicates. |
+| **OPI Jobs for Teachers Details** | `apps.opi.mt.gov/MTJobsForTeachers/frmJobDetailsPublic.aspx` | Every posting detail page explicitly publishes a `Web Site:` field (e.g. `colstrippublicschools.org`), plus verified `District:`, `School:`, and contact phone/address. |
+| **OPI Statewide Directory** | `apps.opi.mt.gov/SchoolDirectory/frmdirectorydistrictpdf.aspx` | Live 325-page daily PDF from OPI containing all districts across 56 counties with `Trustee Website:` and superintendent email domains (`@<district>.k12.mt.us`). |
+| **District Website Search** | `"<District Name> School" "Montana" OR "<County> County"` | Anchors to Montana and eliminates out-of-state duplicates when not in OPI. |
 | **K12 MT Subdomain** | `site:*.k12.mt.us "<District Name>"` | Hits official State of Montana school district subdomains directly. |
 | **Submittable Boards** | `site:submittable.com/submit "<District Name>" "School" "MT"` | Catches districts using Submittable (e.g. West Valley). |
 | **Frontline / AppliTrack** | `site:applitrack.com "<District Name>" "MT"` | Direct hit on Frontline portals (e.g. Harlem). |
@@ -115,7 +117,9 @@ The `/district-scraper` tool should be implemented as an R script (`scripts/dist
    │
 2. RESOLUTION ENGINE:
    ├─ Check k12_district_registry.csv for existing record
-   ├─ If new, probe <slug>.k12.mt.us, then run targeted Google/DuckDuckGo API
+   ├─ Query OPI Directory (rptDirectoryDistrictPDF.pdf / OPI Jobs for Teachers detail page)
+   │    └─ Extract exact official domain from "Trustee Website:" or superintendent email domain
+   ├─ If unlisted in OPI, probe <slug>.k12.mt.us, then fallback to targeted Montana web search
    └─ Validate Montana address / 406 phone / county match
    │
 3. PROBING & TIERED FETCHER:
