@@ -69,6 +69,7 @@ geyser.k12.mt.us
 gfcmsu.edu
 grps.k12.mt.us
 heartbutte.k12.mt.us
+helenaflats.org
 hellgate.k12.mt.us
 highwood.k12.mt.us
 hinsdale.k12.mt.us
@@ -144,6 +145,7 @@ turner.k12.mt.us
 tylerportico.com
 uprovidence.edu
 valier.k12.mt.us
+vaughnschool.com
 victor.k12.mt.us
 westbyschool.k12.mt.us
 whitehallschools.org
@@ -153,6 +155,7 @@ wibauxschools.net
 winnettschool.org
 wolfpointschools.org
 wolverine.life
+woodmanschool.org
 zurichelementary17.org
 
 # Render-time asset hosts: not job-board URLs, but chromote needs them for

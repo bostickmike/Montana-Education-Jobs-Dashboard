@@ -63,6 +63,8 @@ To verify and likely add:
 | Lambert School District | Richland | `lambertschool.net/career-opportunities/employment-opportunities` | Finalsite CMS; 1 active posting in `#fsPageContent .fsContent ul li` | ✅ **Adopted** (2026-10-21) |
 | Richey Public Schools | Dawson | `richey.k12.mt.us/currentopenings` | CyberSchool CMS; 1 active posting in `#maincontent .cs-html-widget strong` | ✅ **Adopted** (2026-10-21) |
 | Charlo School District 7J | Lake | `charlo.k12.mt.us` | Custom CMS; 2 active positions (Bus Drivers, Paraprofessionals) in `.announcements__card-title` | ✅ **Adopted** (2026-10-21, Batch 13) |
+| Helena Flats School District #15 | Flathead | `helenaflats.org/page/employment` | Apptegy CMS; 2 active positions (Special Education Paraprofessional, Substitutes Needed - all positions) in `window.clientWorkStateTemp` | ✅ **Adopted** (2026-10-22, Batch 14) |
+| Woodman Elementary School District #3 | Missoula | `woodmanschool.org/district-information/employment-opportunities` | Google Sites; 1 active position (Substitute Teacher) | ✅ **Adopted** (2026-10-22, Batch 14) |
 
 ---
 
@@ -96,7 +98,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Finalsite CMS (#fsEl_3056); 3 active positions (substitutes, bus drivers, custodians) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/o/geraldine-ps/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
 | Denton Public Schools | Fergus | `denton.k12.mt.us/employment` | CyberSchool; 0 active postings listed; checked 2026-10-21 | TODO |
-| Vaughn Elementary | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool; standing substitute notice only; checked 2026-10-21 | TODO |
+| Vaughn Elementary School District #74 | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool CMS; 1 active position (Substitutes Needed) | ✅ **Adopted** (2026-10-22, Batch 14) |
 | Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
 | Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site; real page found via menu drawer; single consolidated PDF vacancy notice (`_Current-Open-Positions-7_13_26.pdf`); checked 2026-10-21 | RECHECK |
 | Clancy School District | Jefferson | `clancyschool.org/page/employment` | CyberSchool CMS page is empty shell with empty placeholders; checked 2026-10-21 | TODO |
@@ -216,8 +218,8 @@ Long tail of tiny lone-elementary districts checked and declined the same way:
 Alder, Alzada, Amsterdam, Ayers, Biddle, Birney, Brorson, Cleveland, Cohagen,
 Cooke City, Davey, Deerfield, Greycliff, Helmville, King Colony, Kinsey,
 Knees, Liberty, Lindsay, Malmborg, Nye, Ovando, Pendroy, Pioneer, Plenty
-Coups, Polaris, Potomac, Reichle, Ross, Springhill, Sunset, Trinity, Vaughn,
-West Glacier, Wisdom, Wise River, Woodman, Yaak.
+Coups, Polaris, Potomac, Reichle, Ross, Springhill, Sunset, Trinity,
+West Glacier, Wisdom, Wise River, Yaak.
 
 Also: Cottonwood School District #22 (Montessori K-5 near Bozeman — real,
 separate from #57, no careers link found).

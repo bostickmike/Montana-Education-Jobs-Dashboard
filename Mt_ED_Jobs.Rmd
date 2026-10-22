@@ -1898,6 +1898,81 @@ if (nrow(hellgate_df) > 0) {
                             Posting_Source = character(0))
 }
 
+# Helena Flats School District #15 (helenaflats.org, Apptegy CMS, found 2026-10-22)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+helenaflats_districts <- registry[registry$Platform == "HelenaFlatsHeuristic", ]
+helenaflats_results <- lapply(seq_len(nrow(helenaflats_districts)), function(i) {
+  row <- helenaflats_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_helenaflats_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+helenaflats_df <- bind_rows(helenaflats_results)
+if (nrow(helenaflats_df) > 0) {
+  helenaflats_df <- helenaflats_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Helena Flats district site (direct board)")
+} else {
+  helenaflats_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
+}
+
+# Woodman Elementary School District #3 (woodmanschool.org, Google Sites, found 2026-10-22)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+woodman_districts <- registry[registry$Platform == "WoodmanHeuristic", ]
+woodman_results <- lapply(seq_len(nrow(woodman_districts)), function(i) {
+  row <- woodman_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_woodman_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+woodman_df <- bind_rows(woodman_results)
+if (nrow(woodman_df) > 0) {
+  woodman_df <- woodman_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Woodman Elementary district site (direct board)")
+} else {
+  woodman_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Vaughn Elementary School District #74 (vaughnschool.com, CyberSchool CMS, found 2026-10-22)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+vaughn_districts <- registry[registry$Platform == "VaughnHeuristic", ]
+vaughn_results <- lapply(seq_len(nrow(vaughn_districts)), function(i) {
+  row <- vaughn_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_vaughn_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+vaughn_df <- bind_rows(vaughn_results)
+if (nrow(vaughn_df) > 0) {
+  vaughn_df <- vaughn_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Vaughn Elementary district site (direct board)")
+} else {
+  vaughn_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2397,6 +2472,9 @@ eastglacier_df <- eastglacier_df %>% mutate(date_posted = standardize_date(date_
 charlo_df <- charlo_df %>% mutate(date_posted = standardize_date(date_posted))
 canyoncreek_df <- canyoncreek_df %>% mutate(date_posted = standardize_date(date_posted))
 hellgate_df <- hellgate_df %>% mutate(date_posted = standardize_date(date_posted))
+helenaflats_df <- helenaflats_df %>% mutate(date_posted = standardize_date(date_posted))
+woodman_df <- woodman_df %>% mutate(date_posted = standardize_date(date_posted))
+vaughn_df <- vaughn_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -2416,6 +2494,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        bigtimbergs_df, eldergrove_df, monforton_df, grassrange_df,
                        heartbutte_df, noxon_df, seeleylake_df, eastglacier_df,
                        charlo_df, canyoncreek_df, hellgate_df,
+                       helenaflats_df, woodman_df, vaughn_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

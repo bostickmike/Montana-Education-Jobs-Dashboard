@@ -186,7 +186,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Heart Butte K-12 Schools", "Noxon Public Schools",
                      "Seeley Lake Elementary #34", "East Glacier Park Grade School",
                      "Charlo School District 7J", "Canyon Creek School District",
-                     "Hellgate Elementary School District"))
+                     "Hellgate Elementary School District",
+                     "Helena Flats School District #15",
+                     "Woodman Elementary School District #3",
+                     "Vaughn Elementary School District #74"))
 })
 
 # ---------------------------------------------------------------------------

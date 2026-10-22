@@ -6289,6 +6289,170 @@ parse_hellgate_postings <- function(html_text, url = "https://www.hellgate.k12.m
   unique(df)
 }
 
+# ---------------------------------------------------------------------------
+# Helena Flats School District #15 (Apptegy CMS)
+# ---------------------------------------------------------------------------
+fetch_helenaflats_postings <- function(url = "https://www.helenaflats.org/page/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_helenaflats_postings(resp_body_string(resp), url = url)
+}
+
+parse_helenaflats_postings <- function(html_text, url = "https://www.helenaflats.org/page/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  m <- regmatches(html_text, regexec("window[.]clientWorkStateTemp[[:space:]]*=[[:space:]]*JSON[.]parse[(](.*?)[)];", html_text))[[1]]
+  if (length(m) < 2) return(empty)
+
+  parsed_data <- tryCatch({
+    raw_json <- jsonlite::fromJSON(m[2])
+    jsonlite::fromJSON(raw_json)
+  }, error = function(e) NULL)
+  if (is.null(parsed_data) || is.null(parsed_data$page$content)) return(empty)
+
+  extract_all_html <- function(x) {
+    out <- character(0)
+    if (is.character(x)) {
+      if (any(grepl("<[a-z]+[^>]*>", x, ignore.case = TRUE))) {
+        out <- c(out, x[grepl("<[a-z]+[^>]*>", x, ignore.case = TRUE)])
+      }
+    } else if (is.data.frame(x)) {
+      for (col in names(x)) out <- c(out, extract_all_html(x[[col]]))
+    } else if (is.list(x)) {
+      for (elem in x) out <- c(out, extract_all_html(elem))
+    }
+    out
+  }
+
+  htmls <- extract_all_html(parsed_data$page$content)
+  roles <- character(0)
+  for (h in htmls) {
+    doc <- tryCatch(rvest::read_html(h), error = function(e) NULL)
+    if (is.null(doc)) next
+    st_nodes <- rvest::html_elements(doc, "strong, b")
+    for (st in st_nodes) {
+      txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(st)))
+      if (grepl("Paraprofessional|Teacher|Substitute|Custodian|Driver|Aide", txt, ignore.case = TRUE) &&
+          !grepl("Equal Opportunity|Qualifications|Why Join|How to Apply", txt, ignore.case = TRUE)) {
+        txt <- sub("[[:space:]]+[-–—][[:space:]]*Helena Flats.*$", "", txt, ignore.case = TRUE)
+        txt <- trimws(txt)
+        if (nzchar(txt)) roles <- c(roles, txt)
+      }
+    }
+    p_nodes <- rvest::html_elements(doc, "p")
+    for (p in p_nodes) {
+      txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(p)))
+      if (grepl("Substitutes Needed", txt, ignore.case = TRUE)) {
+        sub_match <- regmatches(txt, regexec("(Substitutes Needed[^$0-9<]*)", txt))[[1]]
+        if (length(sub_match) >= 2) {
+          roles <- c(roles, trimws(sub_match[2]))
+        }
+      }
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Kalispell",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Woodman Elementary School District #3 (Google Sites)
+# ---------------------------------------------------------------------------
+fetch_woodman_postings <- function(url = "http://www.woodmanschool.org/district-information/employment-opportunities") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_woodman_postings(resp_body_string(resp), url = url)
+}
+
+parse_woodman_postings <- function(html_text, url = "http://www.woodmanschool.org/district-information/employment-opportunities") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  paras <- rvest::html_elements(doc, "p, h1, h2, h3, h4, li")
+  roles <- character(0)
+  for (p in paras) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(p)))
+    if (grepl("accepting applications for substitute teachers|substitute teacher application", txt, ignore.case = TRUE)) {
+      roles <- c(roles, "Substitute Teacher")
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Lolo",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Vaughn Elementary School District #74 (CyberSchool CMS)
+# ---------------------------------------------------------------------------
+fetch_vaughn_postings <- function(url = "https://www.vaughnschool.com/District/Jobs/") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_vaughn_postings(resp_body_string(resp), url = url)
+}
+
+parse_vaughn_postings <- function(html_text, url = "https://www.vaughnschool.com/District/Jobs/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  nodes <- rvest::html_elements(doc, ".listItem_headingLink, .data_headingLink")
+  if (length(nodes) == 0) return(empty)
+
+  titles <- character(0)
+  links_out <- character(0)
+  for (n in nodes) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(n)))
+    href <- rvest::html_attr(n, "href")
+    if (nzchar(txt) && !grepl("^(?:Title|Jobs)$", txt, ignore.case = TRUE)) {
+      full_link <- if (!is.na(href) && nzchar(href)) xml2::url_absolute(href, url) else url
+      titles <- c(titles, txt)
+      links_out <- c(links_out, full_link)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = "Vaughn",
+    Posted_Date = NA_character_,
+    Link = links_out,
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two
