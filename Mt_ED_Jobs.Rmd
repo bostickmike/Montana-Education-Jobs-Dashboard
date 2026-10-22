@@ -1748,6 +1748,106 @@ if (nrow(grassrange_df) > 0) {
                               Posting_Source = character(0))
 }
 
+# Heart Butte K-12 Schools (WordPress page, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+heartbutte_districts <- registry[registry$Platform == "HeartButteHeuristic", ]
+heartbutte_results <- lapply(seq_len(nrow(heartbutte_districts)), function(i) {
+  row <- heartbutte_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_heartbutte_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+heartbutte_df <- bind_rows(heartbutte_results)
+if (nrow(heartbutte_df) > 0) {
+  heartbutte_df <- heartbutte_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Heart Butte district site (direct board)")
+} else {
+  heartbutte_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# Noxon Public Schools (Apptegy CMS page, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+noxon_districts <- registry[registry$Platform == "NoxonHeuristic", ]
+noxon_results <- lapply(seq_len(nrow(noxon_districts)), function(i) {
+  row <- noxon_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_noxon_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+noxon_df <- bind_rows(noxon_results)
+if (nrow(noxon_df) > 0) {
+  noxon_df <- noxon_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Noxon district site (direct board)")
+} else {
+  noxon_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                         location = character(0), url = character(0), District = character(0),
+                         Posting_Source = character(0))
+}
+
+# Seeley Lake Elementary #34 (Apptegy CMS page, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+seeleylake_districts <- registry[registry$Platform == "SeeleyLakeHeuristic", ]
+seeleylake_results <- lapply(seq_len(nrow(seeleylake_districts)), function(i) {
+  row <- seeleylake_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_seeleylake_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+seeleylake_df <- bind_rows(seeleylake_results)
+if (nrow(seeleylake_df) > 0) {
+  seeleylake_df <- seeleylake_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Seeley Lake district site (direct board)")
+} else {
+  seeleylake_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
+# East Glacier Park Grade School (CyberSchool CMS, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+eastglacier_districts <- registry[registry$Platform == "EastGlacierHeuristic", ]
+eastglacier_results <- lapply(seq_len(nrow(eastglacier_districts)), function(i) {
+  row <- eastglacier_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_eastglacier_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+eastglacier_df <- bind_rows(eastglacier_results)
+if (nrow(eastglacier_df) > 0) {
+  eastglacier_df <- eastglacier_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "East Glacier Park district site (direct board)")
+} else {
+  eastglacier_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2241,6 +2341,10 @@ bigtimbergs_df <- bigtimbergs_df %>% mutate(date_posted = standardize_date(date_
 eldergrove_df <- eldergrove_df %>% mutate(date_posted = standardize_date(date_posted))
 monforton_df <- monforton_df %>% mutate(date_posted = standardize_date(date_posted))
 grassrange_df <- grassrange_df %>% mutate(date_posted = standardize_date(date_posted))
+heartbutte_df <- heartbutte_df %>% mutate(date_posted = standardize_date(date_posted))
+noxon_df <- noxon_df %>% mutate(date_posted = standardize_date(date_posted))
+seeleylake_df <- seeleylake_df %>% mutate(date_posted = standardize_date(date_posted))
+eastglacier_df <- eastglacier_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -2258,6 +2362,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        judithgap_df, whitewater_df, victor_df, superior_df,
                        ashland_df, rapelje_df, cayuseprairie_df,
                        bigtimbergs_df, eldergrove_df, monforton_df, grassrange_df,
+                       heartbutte_df, noxon_df, seeleylake_df, eastglacier_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

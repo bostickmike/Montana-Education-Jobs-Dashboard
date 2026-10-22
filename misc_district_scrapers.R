@@ -5905,6 +5905,239 @@ parse_grassrange_postings <- function(html_text, url = "https://grps.k12.mt.us/s
   )
 }
 
+# ---------------------------------------------------------------------------
+# Heart Butte K-12 Schools (WordPress CMS)
+# ---------------------------------------------------------------------------
+fetch_heartbutte_postings <- function(url = "https://heartbutte.k12.mt.us/employment/") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_heartbutte_postings(resp_body_string(resp), url = url)
+}
+
+parse_heartbutte_postings <- function(html_text, url = "https://heartbutte.k12.mt.us/employment/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  p_nodes <- rvest::html_elements(doc, ".wpb_wrapper p, p")
+  roles <- character(0)
+  found_header <- FALSE
+  for (p in p_nodes) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(p)))
+    if (grepl("Positions Available:", txt, ignore.case = TRUE)) {
+      found_header <- TRUE
+      next
+    }
+    if (found_header) {
+      if (grepl("Application deadline|Please call", txt, ignore.case = TRUE)) break
+      if (nzchar(txt)) {
+        roles <- c(roles, txt)
+      }
+    }
+  }
+
+  coach_li <- rvest::html_elements(doc, ".gmail_default li, .wpb_wrapper ul li")
+  for (li in coach_li) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(li)))
+    if (nzchar(txt)) {
+      roles <- c(roles, paste0("Head Coach - ", txt))
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Heart Butte",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Noxon Public Schools (Apptegy CMS)
+# ---------------------------------------------------------------------------
+fetch_noxon_postings <- function(url = "https://www.noxonschools.com/o/nps/page/certified-listings") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_noxon_postings(resp_body_string(resp), url = url)
+}
+
+parse_noxon_postings <- function(html_text, url = "https://www.noxonschools.com/o/nps/page/certified-listings") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  m <- regmatches(html_text, regexec("window[.]clientWorkStateTemp[[:space:]]*=[[:space:]]*JSON[.]parse[(](.*?)[)];", html_text))[[1]]
+  if (length(m) < 2) return(empty)
+
+  parsed_data <- tryCatch({
+    raw_json <- jsonlite::fromJSON(m[2])
+    jsonlite::fromJSON(raw_json)
+  }, error = function(e) NULL)
+  if (is.null(parsed_data) || is.null(parsed_data$page$content)) return(empty)
+
+  extract_all_html <- function(x) {
+    out <- character(0)
+    if (is.character(x)) {
+      if (any(grepl("<[a-z]+[^>]*>", x, ignore.case = TRUE))) {
+        out <- c(out, x[grepl("<[a-z]+[^>]*>", x, ignore.case = TRUE)])
+      }
+    } else if (is.data.frame(x)) {
+      for (col in names(x)) out <- c(out, extract_all_html(x[[col]]))
+    } else if (is.list(x)) {
+      for (elem in x) out <- c(out, extract_all_html(elem))
+    }
+    out
+  }
+
+  htmls <- extract_all_html(parsed_data$page$content)
+  roles <- character(0)
+  for (h in htmls) {
+    doc <- tryCatch(rvest::read_html(h), error = function(e) NULL)
+    if (is.null(doc)) next
+    st_nodes <- rvest::html_elements(doc, "strong, b")
+    for (st in st_nodes) {
+      txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(st)))
+      if (grepl("Teacher|Instructor|Counselor|Principal|Superintendent|Coach|Custodian|Driver|Aide", txt, ignore.case = TRUE) &&
+          !grepl("Open Certified Positions|About Our School|Why Noxon|What We|Contact Information", txt, ignore.case = TRUE)) {
+        txt <- sub("[[:space:]]+[-–—][[:space:]]*$", "", txt)
+        txt <- sub("^(?:full-time|part-time)[[:space:]]+", "", txt, ignore.case = TRUE)
+        if (nzchar(txt)) roles <- c(roles, txt)
+      }
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Noxon",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Seeley Lake Elementary #34 (Apptegy CMS)
+# ---------------------------------------------------------------------------
+fetch_seeleylake_postings <- function(url = "https://www.sleonline.org/page/join-our-team") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_seeleylake_postings(resp_body_string(resp), url = url)
+}
+
+parse_seeleylake_postings <- function(html_text, url = "https://www.sleonline.org/page/join-our-team") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  m <- regmatches(html_text, regexec("window[.]clientWorkStateTemp[[:space:]]*=[[:space:]]*JSON[.]parse[(](.*?)[)];", html_text))[[1]]
+  if (length(m) < 2) return(empty)
+
+  parsed_data <- tryCatch({
+    raw_json <- jsonlite::fromJSON(m[2])
+    jsonlite::fromJSON(raw_json)
+  }, error = function(e) NULL)
+  if (is.null(parsed_data) || is.null(parsed_data$page$content)) return(empty)
+
+  extract_all_html <- function(x) {
+    out <- character(0)
+    if (is.character(x)) {
+      if (any(grepl("<[a-z]+[^>]*>", x, ignore.case = TRUE))) {
+        out <- c(out, x[grepl("<[a-z]+[^>]*>", x, ignore.case = TRUE)])
+      }
+    } else if (is.data.frame(x)) {
+      for (col in names(x)) out <- c(out, extract_all_html(x[[col]]))
+    } else if (is.list(x)) {
+      for (elem in x) out <- c(out, extract_all_html(elem))
+    }
+    out
+  }
+
+  htmls <- extract_all_html(parsed_data$page$content)
+  roles <- character(0)
+  for (h in htmls) {
+    doc <- tryCatch(rvest::read_html(h), error = function(e) NULL)
+    if (is.null(doc)) next
+    st_nodes <- rvest::html_elements(doc, "strong, b")
+    for (st in st_nodes) {
+      txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(st)))
+      if (grepl("Substitute|Teacher|Coach|Driver|Para|Custodian|Clerk|Aide", txt, ignore.case = TRUE) &&
+          !grepl("looking to fill|following positions|completed applications", txt, ignore.case = TRUE)) {
+        txt <- sub("[[:space:]]*[-–—][[:space:]]*Approx.*$", "", txt, ignore.case = TRUE)
+        txt <- trimws(txt)
+        if (nzchar(txt)) roles <- c(roles, txt)
+      }
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Seeley Lake",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# East Glacier Park Grade School (CyberSchool CMS)
+# ---------------------------------------------------------------------------
+fetch_eastglacier_postings <- function(url = "https://eastglacierschool.com/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_eastglacier_postings(resp_body_string(resp), url = url)
+}
+
+parse_eastglacier_postings <- function(html_text, url = "https://eastglacierschool.com/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  widgets <- rvest::html_elements(doc, ".cs-html-widget p strong, .cs-html-widget h2 strong, .cs-html-widget span strong")
+  roles <- character(0)
+  for (w in widgets) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(w)))
+    if (grepl("Teacher|Coach|Driver|Para|Custodian|Clerk|Aide|Specialist", txt, ignore.case = TRUE) &&
+        !grepl("All Other Applicants|Application|Notaries|Available Positions", txt, ignore.case = TRUE)) {
+      roles <- c(roles, txt)
+    }
+  }
+
+  roles <- unique(roles)
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "East Glacier Park",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two
