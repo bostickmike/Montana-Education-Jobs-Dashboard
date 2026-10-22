@@ -1973,6 +1973,81 @@ if (nrow(vaughn_df) > 0) {
                           Posting_Source = character(0))
 }
 
+# Jordan Public Schools (jordanpublicschools.org, SchoolInSites CMS, found 2026-10-22)
+# has active positions in homepage announcement banner image metadata -- a plain httr2 fetch.
+jordan_districts <- registry[registry$Platform == "JordanHeuristic", ]
+jordan_results <- lapply(seq_len(nrow(jordan_districts)), function(i) {
+  row <- jordan_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_jordan_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+jordan_df <- bind_rows(jordan_results)
+if (nrow(jordan_df) > 0) {
+  jordan_df <- jordan_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Jordan Public Schools district site (direct board)")
+} else {
+  jordan_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
+# Pioneer Elementary School District #41 (pioneerschool.us, SchoolCMS, found 2026-10-22)
+# has active positions on its job openings page -- a plain httr2 fetch.
+pioneer_districts <- registry[registry$Platform == "PioneerHeuristic", ]
+pioneer_results <- lapply(seq_len(nrow(pioneer_districts)), function(i) {
+  row <- pioneer_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_pioneer_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+pioneer_df <- bind_rows(pioneer_results)
+if (nrow(pioneer_df) > 0) {
+  pioneer_df <- pioneer_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Pioneer Elementary district site (direct board)")
+} else {
+  pioneer_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                           location = character(0), url = character(0), District = character(0),
+                           Posting_Source = character(0))
+}
+
+# Opheim Public Schools (sites.google.com/site/opheimschool/office, Google Sites, found 2026-10-22)
+# has active positions on its office page -- a plain httr2 fetch.
+opheim_districts <- registry[registry$Platform == "OpheimHeuristic", ]
+opheim_results <- lapply(seq_len(nrow(opheim_districts)), function(i) {
+  row <- opheim_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_opheim_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+opheim_df <- bind_rows(opheim_results)
+if (nrow(opheim_df) > 0) {
+  opheim_df <- opheim_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Opheim Public Schools district site (direct board)")
+} else {
+  opheim_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2475,6 +2550,9 @@ hellgate_df <- hellgate_df %>% mutate(date_posted = standardize_date(date_posted
 helenaflats_df <- helenaflats_df %>% mutate(date_posted = standardize_date(date_posted))
 woodman_df <- woodman_df %>% mutate(date_posted = standardize_date(date_posted))
 vaughn_df <- vaughn_df %>% mutate(date_posted = standardize_date(date_posted))
+jordan_df <- jordan_df %>% mutate(date_posted = standardize_date(date_posted))
+pioneer_df <- pioneer_df %>% mutate(date_posted = standardize_date(date_posted))
+opheim_df <- opheim_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -2495,6 +2573,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        heartbutte_df, noxon_df, seeleylake_df, eastglacier_df,
                        charlo_df, canyoncreek_df, hellgate_df,
                        helenaflats_df, woodman_df, vaughn_df,
+                       jordan_df, pioneer_df, opheim_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

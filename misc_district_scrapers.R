@@ -6453,6 +6453,169 @@ parse_vaughn_postings <- function(html_text, url = "https://www.vaughnschool.com
   unique(df)
 }
 
+# ---------------------------------------------------------------------------
+# Jordan Public Schools (SchoolInSites CMS / homepage announcements)
+# ---------------------------------------------------------------------------
+fetch_jordan_postings <- function(url = "https://www.jordanpublicschools.org") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_jordan_postings(resp_body_string(resp), url = url)
+}
+
+parse_jordan_postings <- function(html_text, url = "https://www.jordanpublicschools.org") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  imgs <- rvest::html_elements(doc, "img[alt*='looking to hire'], img[alt*='Positions Available'], img[alt*='positions available'], img[alt*='Coaching']")
+  titles <- character(0)
+  for (img in imgs) {
+    alt <- rvest::html_attr(img, "alt")
+    m_hire <- regmatches(alt, regexec("looking to hire (?:a |an )?([^.]+)", alt, ignore.case = TRUE))[[1]]
+    if (length(m_hire) > 1) {
+      raw <- m_hire[2]
+      if (grepl("head of maintenance", raw, ignore.case = TRUE)) {
+        titles <- c(titles, "Head of Maintenance")
+      } else if (grepl("music teacher", raw, ignore.case = TRUE)) {
+        titles <- c(titles, "K-12 Music Teacher")
+      } else {
+        titles <- c(titles, trimws(raw))
+      }
+    }
+    if (grepl("Coaching Positions Available!", alt, ignore.case = TRUE)) {
+      if (grepl("Junior High Football Head Coach", alt)) titles <- c(titles, "Junior High Football Head Coach and Assistant Coach")
+      if (grepl("Junior High Boys Basketball Coach", alt)) titles <- c(titles, "Junior High Boys Basketball Coach")
+      if (grepl("High School Boys Basketball Coach", alt)) titles <- c(titles, "High School Boys Basketball Coach")
+    }
+  }
+
+  extra_nodes <- rvest::html_elements(doc, ".cs-item-title, .cs-image-widget p, .content-zone p")
+  for (node in extra_nodes) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(node)))
+    if (nzchar(txt) && grepl("^(?:teacher|coach|custodian|para|substitute)", txt, ignore.case = TRUE) &&
+        !grepl("application|handbook|welcome", txt, ignore.case = TRUE)) {
+      titles <- c(titles, txt)
+    }
+  }
+
+  titles <- unique(titles[nzchar(titles)])
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Jordan",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Pioneer Elementary School District #41 (SchoolCMS)
+# ---------------------------------------------------------------------------
+fetch_pioneer_postings <- function(url = "http://pioneerschool.us/41034_2") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_pioneer_postings(resp_body_string(resp), url = url)
+}
+
+parse_pioneer_postings <- function(html_text, url = "http://pioneerschool.us/41034_2") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  headings <- rvest::html_elements(doc, "h1, h2, h3, h4, strong")
+  titles <- character(0)
+  for (h in headings) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(h)))
+    if (grepl("substitute teachers wanted", txt, ignore.case = TRUE)) {
+      titles <- c(titles, "Substitute Teacher")
+    } else if (nzchar(txt) && !grepl("^(?:job opening|join our team|welcome|navigation|home|calendar|pioneer)", txt, ignore.case = TRUE) &&
+               grepl("teacher|aide|custodian|coach|driver|specialist|principal|superintendent", txt, ignore.case = TRUE)) {
+      titles <- c(titles, txt)
+    }
+  }
+
+  titles <- unique(titles[nzchar(titles)])
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Billings",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Opheim Public Schools (Google Sites)
+# ---------------------------------------------------------------------------
+fetch_opheim_postings <- function(url = "https://sites.google.com/site/opheimschool/office") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_opheim_postings(resp_body_string(resp), url = url)
+}
+
+parse_opheim_postings <- function(html_text, url = "https://sites.google.com/site/opheimschool/office") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  body_text <- rvest::html_text2(rvest::html_element(doc, "body"))
+  lines <- trimws(strsplit(body_text, "\n")[[1]])
+  lines <- lines[nzchar(lines)]
+
+  titles <- character(0)
+  for (i in seq_along(lines)) {
+    l <- lines[i]
+    if (grepl("Substitute teachers", l, ignore.case = TRUE)) {
+      titles <- c(titles, "Substitute Teacher")
+    }
+    if (grepl("Substitute (?:e-)?bus drivers", l, ignore.case = TRUE)) {
+      titles <- c(titles, "Substitute Bus Driver")
+    }
+    if (grepl("School Faculty Openings", l, ignore.case = TRUE)) {
+      for (j in (i + 1):min(length(lines), i + 5)) {
+        next_l <- lines[j]
+        if (grepl("application|report abuse|current staff|google sites", next_l, ignore.case = TRUE)) break
+        if (grepl("complete listing|see OPI|^[(]", next_l, ignore.case = TRUE)) next
+        if (grepl("^music$", next_l, ignore.case = TRUE)) {
+          titles <- c(titles, "Music Teacher")
+        } else if (grepl("teacher|math|science|english|grade|elementary", next_l, ignore.case = TRUE)) {
+          titles <- c(titles, next_l)
+        }
+      }
+    }
+  }
+
+  titles <- unique(titles[nzchar(titles)])
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Opheim",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

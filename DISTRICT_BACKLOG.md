@@ -92,7 +92,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Sheridan Public Schools | Madison | `sheridan.k12.mt.us/district/employment` | Google Sites; 4 active postings (coaches, subs, drivers) | ✅ **Adopted** (2026-10-21) |
 | Lockwood School District | Yellowstone | `lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d` | Covered via primary AppliTrack feed (`Lockwood Schools`, `lockwoodschool`); duplicate heuristic entry retired | ✅ **Covered** |
 | Canyon Creek School | Yellowstone | `canyoncreekschool.org/apps/jobs/` | Edlio CMS (/apps/jobs/); 1 active position (Paraprofessional Pre-K (All Day Full-Time)) | ✅ **Adopted** (2026-10-21, Batch 13) |
-| Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; single standing substitute notice only; checked 2026-10-21 | RECHECK |
+| Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; 1 active position (Substitute Teacher) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Montana City ESD 27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS; current jobs list empty; checked 2026-10-21 | RECHECK |
 | Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; generic personnel application links only; checked 2026-10-21 | RECHECK |
 | Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Finalsite CMS (#fsEl_3056); 3 active positions (substitutes, bus drivers, custodians) | ✅ **Adopted** (2026-10-21, Batch 9) |
@@ -114,7 +114,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Savage School District #7 | Richland | Apptegy | 3 bare category labels, no title text | TODO |
 | Dodson School District | Phillips | Apptegy | single sentence deferring to OPI | TODO |
 | Monforton School District #27 | Gallatin | `monfortonschool.org/contact-us/job-openings/` | WordPress site with dedicated job buttons; 2 active positions (Business Manager, District Clerk) | ✅ **Adopted** (2026-10-21, Batch 11) |
-| Jordan Public Schools | Garfield | `jordanpublicschools.org/employment` | generic Certified/Classified application forms only; checked 2026-10-21 | TODO |
+| Jordan Public Schools | Garfield | `jordanpublicschools.org` | SchoolInSites CMS; 5 active positions in homepage announcement banners (Head of Maintenance, K-12 Music Teacher, JH Football Coach, JH Boys Basketball Coach, HS Boys Basketball Coach) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Vida Elementary School | McCone | `vidaschool.k12.mt.us` | resources page has only generic application PDFs; checked 2026-10-21 | TODO |
 | Frenchtown School District | Missoula | `ftsd.org` | Apptegy site with no dedicated employment board; links to generic application link `5il.co/14q4o`; checked 2026-10-21 | TODO |
 | Lima Public Schools | Beaverhead | `lima.k12.mt.us` | Apptegy site with generic application PDF `5il.co/kopg` only; checked 2026-10-21 | TODO |
@@ -123,7 +123,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Bainville K-12 Schools | Roosevelt | `bainvilleschool.com/page/employment` | Apptegy site; links to generic application Google Docs only; checked 2026-10-21 | TODO |
 | Twin Bridges K-12 Schools | Madison | `twinbridges.k12.mt.us/page/employment-opportunities` | Apptegy site; 0 positions listed under 2026-2027 vacancies; checked 2026-10-21 | TODO |
 | Troy School District #1 | Lincoln | `troyk12.org/documents/...` | Apptegy site; documents folder contains generic application PDFs only; checked 2026-10-21 | TODO |
-| Opheim Public Schools | Valley | `sites.google.com/site/opheimschool/office` | Google Sites; defers certified roles to OPI; standing substitute notice; checked 2026-10-21 | TODO |
+| Opheim Public Schools | Valley | `sites.google.com/site/opheimschool/office` | Google Sites; 3 active positions (Substitute Teacher, Substitute Bus Driver, Music Teacher) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Anderson School District #41 | Gallatin | district site | "Come Work With Us" recruiting copy, no titles | TODO |
 | Marion School District #54 | Flathead | real MT Marion is a Google Sites page (`marionschools.org` = Jasper TN) | boilerplate application PDFs + one generic substitute sentence | TODO |
 | Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath; rechecked 2026-10-20 | TODO |

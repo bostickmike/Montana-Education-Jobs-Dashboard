@@ -189,7 +189,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Hellgate Elementary School District",
                      "Helena Flats School District #15",
                      "Woodman Elementary School District #3",
-                     "Vaughn Elementary School District #74"))
+                     "Vaughn Elementary School District #74",
+                     "Jordan Public Schools",
+                     "Pioneer Elementary School District #41",
+                     "Opheim Public Schools"))
 })
 
 # ---------------------------------------------------------------------------
