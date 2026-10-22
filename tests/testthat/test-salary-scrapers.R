@@ -201,7 +201,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Lavina Public Schools",
                      "Fromberg Public Schools",
                      "Pleasant Valley School District #27",
-                     "Sun River Valley School District #24"))
+                     "Sun River Valley School District #24",
+                     "Circle Public Schools",
+                     "Forsyth Public Schools",
+                     "DeSmet Public School"))
 })
 
 # ---------------------------------------------------------------------------

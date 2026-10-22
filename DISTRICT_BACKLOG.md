@@ -142,7 +142,9 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Simms / Sun River Valley #24 | Cascade | `srvs.k12.mt.us/apps/jobs/` | Educational Networks / Edlio CMS; clean jobs widget; extracts show_job postings on demand | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Divide School District #4 | Silver Bow | `divideschool.org` | Squarespace "under construction" | TODO |
 | McCormick School District #22 | Petroleum | district site | site under active rebuild, no employment nav | TODO |
-| Forsyth School District #4 | Rosebud | district site | single combined "Vacancy Announcement" PDF (not one PDF per role) | TODO |
+| Forsyth School District #4 | Rosebud | `forsythpublicschools.org/bus-drivers-wanted/` | WordPress CMS; 1 active position (Bus Drivers Wanted!); links to training program PDF | ✅ **Adopted** (2026-10-22, Batch 19) |
+| Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; clean page marker; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 19) |
+| DeSmet Public School | Missoula | `desmetschool.org/available-employment-opportunities/` | WordPress / Divi CMS; clean application page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 19) |
 
 ---
 

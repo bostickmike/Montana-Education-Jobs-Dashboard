@@ -2267,6 +2267,78 @@ if (nrow(sunrivervalley_df) > 0) {
                       Posting_Source = character(0))
 }
 
+# Circle Public Schools (circleschools.org, found 2026-10-22)
+circle_districts <- registry[registry$Platform == "CircleHeuristic", ]
+circle_results <- lapply(seq_len(nrow(circle_districts)), function(i) {
+  row <- circle_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_circle_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+circle_df <- bind_rows(circle_results)
+if (nrow(circle_df) > 0) {
+  circle_df <- circle_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Circle Public Schools site (direct board)")
+} else {
+  circle_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Forsyth Public Schools (forsythpublicschools.org, found 2026-10-22)
+forsyth_districts <- registry[registry$Platform == "ForsythHeuristic", ]
+forsyth_results <- lapply(seq_len(nrow(forsyth_districts)), function(i) {
+  row <- forsyth_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_forsyth_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+forsyth_df <- bind_rows(forsyth_results)
+if (nrow(forsyth_df) > 0) {
+  forsyth_df <- forsyth_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Forsyth Public Schools site (direct board)")
+} else {
+  forsyth_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# DeSmet Public School (desmetschool.org, found 2026-10-22)
+desmet_districts <- registry[registry$Platform == "DeSmetHeuristic", ]
+desmet_results <- lapply(seq_len(nrow(desmet_districts)), function(i) {
+  row <- desmet_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_desmet_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+desmet_df <- bind_rows(desmet_results)
+if (nrow(desmet_df) > 0) {
+  desmet_df <- desmet_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "DeSmet Public School site (direct board)")
+} else {
+  desmet_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2781,7 +2853,8 @@ lavina_df <- lavina_df %>% mutate(date_posted = standardize_date(date_posted))
 fromberg_df <- fromberg_df %>% mutate(date_posted = standardize_date(date_posted))
 pleasantvalley_df <- pleasantvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 sunrivervalley_df <- sunrivervalley_df %>% mutate(date_posted = standardize_date(date_posted))
-apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
+circle_df <- circle_df %>% mutate(date_posted = standardize_date(date_posted))
+apptegy_df <- apptegy_df
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
@@ -2809,6 +2882,9 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        fromberg_df,
                        pleasantvalley_df,
                        sunrivervalley_df,
+                       circle_df,
+                       forsyth_df,
+                       desmet_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

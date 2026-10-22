@@ -7082,6 +7082,152 @@ parse_sunrivervalley_postings <- function(html, url) {
   unique(df)
 }
 
+# ---------------------------------------------------------------------------
+# Circle Public Schools
+# ---------------------------------------------------------------------------
+fetch_circle_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_circle_postings(html, url)
+}
+
+parse_circle_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_element(doc, "#wsite-content")
+  if (is.null(content)) return(empty)
+
+  h2s <- html_elements(content, "h2.wsite-content-title, .wsite-content-title, .paragraph")
+  if (length(h2s) == 0) return(empty)
+
+  raw_titles <- trimws(html_text2(h2s))
+  raw_titles <- raw_titles[nzchar(raw_titles)]
+  titles <- raw_titles[!grepl("^(Employment Opportunities|Certified Salary|Click here for|Classified Personnel|Certified Personnel|Coaching Personnel|NOTE:|No opening)", raw_titles, ignore.case = TRUE)]
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Circle", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = rep(url, length(titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Forsyth Public Schools
+# ---------------------------------------------------------------------------
+fetch_forsyth_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_forsyth_postings(html, url)
+}
+
+parse_forsyth_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  titles <- character(0)
+  links_out <- character(0)
+
+  h1s <- html_elements(doc, "h1.entry-title, .post-title, h1, h2")
+  h1_texts <- trimws(html_text2(h1s))
+  valid_h1 <- h1_texts[grepl("wanted|opening|position|teacher|driver|custodian|coach", h1_texts, ignore.case = TRUE) &
+                       !grepl("^(ADA Web Accessibility)$", h1_texts, ignore.case = TRUE)]
+
+  pdf_link <- html_attr(html_elements(doc, ".entry-content a[href*=\".pdf\"], article a[href*=\".pdf\"]"), "href")
+
+  if (length(valid_h1) > 0) {
+    for (t in valid_h1) {
+      titles <- c(titles, t)
+      link <- if (length(pdf_link) > 0 && nzchar(pdf_link[1])) xml2::url_absolute(pdf_link[1], url) else url
+      links_out <- c(links_out, link)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Forsyth", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = links_out,
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# DeSmet Public School
+# ---------------------------------------------------------------------------
+fetch_desmet_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_desmet_postings(html, url)
+}
+
+parse_desmet_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_elements(doc, ".entry-content, article, #main-content")
+  if (length(content) == 0) return(empty)
+
+  elements <- html_elements(content, "h1, h2, h3, h4, li, a")
+  texts <- trimws(html_text2(elements))
+  texts <- texts[nzchar(texts)]
+
+  clean_titles <- texts[!grepl("^(Available Employment Opportunities|Fill Out an Application|Certified Staff Application|Classified Staff Application|DeSmet School is built|Jobs Available|DeSmet School|Character, Community)", texts, ignore.case = TRUE) &
+                        grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position", texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("Missoula", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

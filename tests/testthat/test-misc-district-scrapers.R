@@ -4346,6 +4346,80 @@ test_that("parse_sunrivervalley_postings returns zero rows on empty or non-match
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_circle_postings returns zero rows on fixture with only generic applications", {
+  fixture <- paste(readLines(test_path("fixtures", "circle_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.circleschools.org/employment-opportunities.html"
+
+  result <- parse_circle_postings(fixture, url)
+
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_circle_postings extracts real positions when present", {
+  sample_html <- '<div id="wsite-content"><h2 class="wsite-content-title">Employment Opportunities</h2><h2 class="wsite-content-title">High School English Teacher</h2></div>'
+  url <- "https://www.circleschools.org/employment-opportunities.html"
+
+  result <- parse_circle_postings(sample_html, url)
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "High School English Teacher")
+  expect_equal(result$Location, "Circle")
+  expect_equal(result$Link, url)
+})
+
+test_that("parse_circle_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_circle_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_forsyth_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "forsyth_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://forsythpublicschools.org/bus-drivers-wanted/"
+
+  result <- parse_forsyth_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Bus Drivers Wanted!")
+  expect_true(all(result$Location == "Forsyth"))
+  expect_true(all(is.na(result$Posted_Date)))
+  expect_equal(result$Link, "https://www.forsythpublicschools.org/kL14New/uploads/2025/11/Bus-Driver-Education.pdf")
+})
+
+test_that("parse_forsyth_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_forsyth_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_desmet_postings returns zero rows on fixture with only generic applications", {
+  fixture <- paste(readLines(test_path("fixtures", "desmet_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://desmetschool.org/available-employment-opportunities/"
+
+  result <- parse_desmet_postings(fixture, url)
+
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_desmet_postings extracts real positions when present", {
+  sample_html <- '<div class="entry-content"><h2>Special Education Teacher</h2></div>'
+  url <- "https://desmetschool.org/available-employment-opportunities/"
+
+  result <- parse_desmet_postings(sample_html, url)
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Special Education Teacher")
+  expect_equal(result$Location, "Missoula")
+  expect_equal(result$Link, url)
+})
+
+test_that("parse_desmet_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_desmet_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(
