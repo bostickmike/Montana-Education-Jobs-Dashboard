@@ -124,8 +124,9 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Vida Elementary School | McCone | `vidaschool.k12.mt.us` | resources page has only generic application PDFs; checked 2026-10-21 | TODO |
 | Frenchtown School District | Missoula | `ftsd.org` | Apptegy site with Fastly Client Challenge JS bot-gate; checked 2026-10-22 | TODO |
 | Lima Public Schools | Beaverhead | `lima.k12.mt.us` | Apptegy site with generic application PDF `5il.co/kopg` only; checked 2026-10-21 | TODO |
-| Fromberg Public Schools | Carbon | `frombergpublicschools.com/district-info/employment` | Finalsite CMS; Current Postings section empty; generic application PDFs only; checked 2026-10-21 | TODO |
+| Fromberg Public Schools | Carbon | `frombergpublicschools.com/district-info/employment` | Finalsite CMS; 1 active position in Current Postings (Subs Music Teaching Position) | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Lavina Public Schools | Golden Valley | `lavinapublicschools.com/District/2269-Untitled.html` | CyberSchool CMS; 2 active positions (JH Assistant Volleyball/Football Coaches) | ✅ **Adopted** (2026-10-22, Batch 17) |
+| Pleasant Valley School District #27 | Flathead | `pvsmt.org/employment-opportunities.html` | Weebly CMS; clean page marker ("No opening at this time"); extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Bainville K-12 Schools | Roosevelt | `bainvilleschool.com/page/employment` | Apptegy site; links to generic application Google Docs only; checked 2026-10-21 | TODO |
 | Twin Bridges K-12 Schools | Madison | `twinbridges.k12.mt.us/page/employment-opportunities` | Apptegy site; 0 positions listed under 2026-2027 vacancies; checked 2026-10-21 | TODO |
 | Troy School District #1 | Lincoln | `troyk12.org/documents/...` | Apptegy site; documents folder contains generic application PDFs only; checked 2026-10-21 | TODO |
@@ -138,7 +139,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Ashland Public School | Rosebud | `sites.google.com/ashlandpublicschool.com/aps-district-site/employment` | Published Google Sites; 7 active positions (Clerk, Specialists, Elementary Teacher, Para, SpEd Para, Counselor, Subs) | ✅ **Adopted** (2026-10-21, Batch 10) |
 | Rosebud School District | Rosebud | `sites.google.com/site/rosebudhs12` | Google Sites; employment page redirects out to OPI statewide portal; checked 2026-10-21 | TODO |
 | Absarokee School District | Stillwater | `absarokee.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs page; checked 2026-10-20 | TODO |
-| Simms / Sun River Valley #24 | Cascade | "Educational Networks" CMS | job page currently empty | TODO |
+| Simms / Sun River Valley #24 | Cascade | `srvs.k12.mt.us/apps/jobs/` | Educational Networks / Edlio CMS; clean jobs widget; extracts show_job postings on demand | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Divide School District #4 | Silver Bow | `divideschool.org` | Squarespace "under construction" | TODO |
 | McCormick School District #22 | Petroleum | district site | site under active rebuild, no employment nav | TODO |
 | Forsyth School District #4 | Rosebud | district site | single combined "Vacancy Announcement" PDF (not one PDF per role) | TODO |

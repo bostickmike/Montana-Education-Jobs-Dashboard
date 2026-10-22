@@ -157,7 +157,7 @@ if (grepl(sprintf("%s_df <-", slug), rmd_content, fixed = TRUE)) {
 })
 %s_df <- bind_rows(%s_results)
 if (nrow(%s_df) > 0) {
-  %s_df <- %s_df %%%%
+  %s_df <- %s_df %%>%%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
               Posting_Source = "%s site (direct board)")
@@ -185,8 +185,8 @@ if (nrow(%s_df) > 0) {
   }
 
   # B. Insert date standardization line
-  date_line <- sprintf("%s_df <- %s_df %%%% mutate(date_posted = standardize_date(date_posted))\napptegy_df <- apptegy_df", slug, slug)
-  rmd_content <- sub("apptegy_df <- apptegy_df %%%% mutate(date_posted = standardize_date(date_posted))",
+  date_line <- sprintf("%s_df <- %s_df %%>%% mutate(date_posted = standardize_date(date_posted))\napptegy_df <- apptegy_df", slug, slug)
+  rmd_content <- sub("apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))",
                      date_line, rmd_content, fixed = TRUE)
 
   # C. Insert into direct_df bind_rows
@@ -216,8 +216,8 @@ if (grepl(sprintf("fetch_%s_postings", slug), misc_content, fixed = TRUE)) {
 # %s
 # ---------------------------------------------------------------------------
 fetch_%s_postings <- function(url) {
-  resp <- request(url) %%%%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %%%%
+  resp <- request(url) %%>%%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %%>%%
     perform_with_retry()
   html <- resp_body_string(resp)
   parse_%s_postings(html, url)

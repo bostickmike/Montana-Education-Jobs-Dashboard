@@ -198,7 +198,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Trout Creek School District #6",
                      "Power Public Schools",
                      "Kila School District #20",
-                     "Lavina Public Schools"))
+                     "Lavina Public Schools",
+                     "Fromberg Public Schools",
+                     "Pleasant Valley School District #27",
+                     "Sun River Valley School District #24"))
 })
 
 # ---------------------------------------------------------------------------

@@ -4272,6 +4272,80 @@ test_that("parse_lavina_postings returns zero rows on empty or non-matching HTML
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_fromberg_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "fromberg_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.frombergpublicschools.com/district-info/employment"
+
+  result <- parse_fromberg_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Subs Music Teaching Position")
+  expect_true(all(result$Location == "Fromberg"))
+  expect_true(all(is.na(result$Posted_Date)))
+  expect_equal(result$Link, "https://resources.finalsite.net/images/v1788191968/frombergpublicschoolscom/ubmikbqkr9khjuq2znyw/SubsMusicTeachingPosition.pdf")
+})
+
+test_that("parse_fromberg_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_fromberg_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_pleasantvalley_postings returns zero rows when no openings", {
+  fixture <- paste(readLines(test_path("fixtures", "pleasantvalley_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.pvsmt.org/employment-opportunities.html"
+
+  result <- parse_pleasantvalley_postings(fixture, url)
+
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_pleasantvalley_postings extracts positions when present", {
+  sample_html <- '<div id="wsite-content"><h2 class="wsite-content-title">Employment Opportunities</h2><h2 class="wsite-content-title">Elementary Teacher (K-5)</h2></div>'
+  url <- "https://www.pvsmt.org/employment-opportunities.html"
+
+  result <- parse_pleasantvalley_postings(sample_html, url)
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Elementary Teacher (K-5)")
+  expect_equal(result$Location, "Marion")
+  expect_equal(result$Link, url)
+})
+
+test_that("parse_pleasantvalley_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_pleasantvalley_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_sunrivervalley_postings returns zero rows on fixture with only generic applications", {
+  fixture <- paste(readLines(test_path("fixtures", "sunrivervalley_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://srvs.k12.mt.us/apps/jobs/"
+
+  result <- parse_sunrivervalley_postings(fixture, url)
+
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_sunrivervalley_postings extracts real positions when present", {
+  sample_html <- '<table width="100%"><tr><td class="light pale lightBorderBottom"><b><a href="/apps/jobs/show_job.jsp?REC_ID=19999">7-12 Science Teacher</a></b><br></td></tr></table>'
+  url <- "https://srvs.k12.mt.us/apps/jobs/"
+
+  result <- parse_sunrivervalley_postings(sample_html, url)
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "7-12 Science Teacher")
+  expect_equal(result$Location, "Simms")
+  expect_equal(result$Link, "https://srvs.k12.mt.us/apps/jobs/show_job.jsp?REC_ID=19999")
+})
+
+test_that("parse_sunrivervalley_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_sunrivervalley_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

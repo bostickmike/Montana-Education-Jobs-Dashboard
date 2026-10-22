@@ -2195,6 +2195,78 @@ if (nrow(lavina_df) > 0) {
                       Posting_Source = character(0))
 }
 
+# Fromberg Public Schools (frombergpublicschools.com, found 2026-10-22)
+fromberg_districts <- registry[registry$Platform == "FrombergHeuristic", ]
+fromberg_results <- lapply(seq_len(nrow(fromberg_districts)), function(i) {
+  row <- fromberg_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_fromberg_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+fromberg_df <- bind_rows(fromberg_results)
+if (nrow(fromberg_df) > 0) {
+  fromberg_df <- fromberg_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Fromberg Public Schools site (direct board)")
+} else {
+  fromberg_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Pleasant Valley School District #27 (pvsmt.org, found 2026-10-22)
+pleasantvalley_districts <- registry[registry$Platform == "PleasantValleyHeuristic", ]
+pleasantvalley_results <- lapply(seq_len(nrow(pleasantvalley_districts)), function(i) {
+  row <- pleasantvalley_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_pleasantvalley_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+pleasantvalley_df <- bind_rows(pleasantvalley_results)
+if (nrow(pleasantvalley_df) > 0) {
+  pleasantvalley_df <- pleasantvalley_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Pleasant Valley School District #27 site (direct board)")
+} else {
+  pleasantvalley_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Sun River Valley School District #24 (srvs.k12.mt.us, found 2026-10-22)
+sunrivervalley_districts <- registry[registry$Platform == "SunRiverValleyHeuristic", ]
+sunrivervalley_results <- lapply(seq_len(nrow(sunrivervalley_districts)), function(i) {
+  row <- sunrivervalley_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_sunrivervalley_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+sunrivervalley_df <- bind_rows(sunrivervalley_results)
+if (nrow(sunrivervalley_df) > 0) {
+  sunrivervalley_df <- sunrivervalley_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Sun River Valley School District #24 site (direct board)")
+} else {
+  sunrivervalley_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2703,6 +2775,12 @@ opheim_df <- opheim_df %>% mutate(date_posted = standardize_date(date_posted))
 pryor_df <- pryor_df %>% mutate(date_posted = standardize_date(date_posted))
 westglacier_df <- westglacier_df %>% mutate(date_posted = standardize_date(date_posted))
 troutcreek_df <- troutcreek_df %>% mutate(date_posted = standardize_date(date_posted))
+power_df <- power_df %>% mutate(date_posted = standardize_date(date_posted))
+kila_df <- kila_df %>% mutate(date_posted = standardize_date(date_posted))
+lavina_df <- lavina_df %>% mutate(date_posted = standardize_date(date_posted))
+fromberg_df <- fromberg_df %>% mutate(date_posted = standardize_date(date_posted))
+pleasantvalley_df <- pleasantvalley_df %>% mutate(date_posted = standardize_date(date_posted))
+sunrivervalley_df <- sunrivervalley_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -2728,6 +2806,9 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        power_df,
                        kila_df,
                        lavina_df,
+                       fromberg_df,
+                       pleasantvalley_df,
+                       sunrivervalley_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

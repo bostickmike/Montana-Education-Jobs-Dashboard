@@ -6922,6 +6922,166 @@ parse_lavina_postings <- function(html, url) {
   unique(df)
 }
 
+# ---------------------------------------------------------------------------
+# Fromberg Public Schools
+# ---------------------------------------------------------------------------
+fetch_fromberg_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_fromberg_postings(html, url)
+}
+
+parse_fromberg_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  links <- html_elements(doc, ".fsResourceElement a.fsResourceLink, .fsResource a.fsResourceLink")
+  titles <- character(0)
+  links_out <- character(0)
+
+  for (a in links) {
+    href <- html_attr(a, "href")
+    res_title <- html_attr(a, "data-resource-title")
+    img_alt <- html_attr(html_element(a, "img"), "alt")
+    txt <- trimws(html_text2(a))
+
+    raw_title <- if (!is.na(res_title) && nzchar(res_title)) {
+      res_title
+    } else if (!is.na(img_alt) && nzchar(img_alt)) {
+      img_alt
+    } else {
+      txt
+    }
+
+    if (!is.na(raw_title) && nzchar(raw_title)) {
+      clean_title <- sub("[.][a-zA-Z0-9]+$", "", raw_title)
+      clean_title <- sub("\\s*\\(PDF\\)$", "", clean_title, ignore.case = TRUE)
+      clean_title <- trimws(gsub("([a-z])([A-Z])", "\\1 \\2", clean_title))
+      if (nzchar(clean_title) && !grepl("^(Application|Form)$", clean_title, ignore.case = TRUE)) {
+        titles <- c(titles, clean_title)
+        links_out <- c(links_out, xml2::url_absolute(href, url))
+      }
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Fromberg", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = links_out,
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Pleasant Valley School District #27
+# ---------------------------------------------------------------------------
+fetch_pleasantvalley_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_pleasantvalley_postings(html, url)
+}
+
+parse_pleasantvalley_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_element(doc, "#wsite-content")
+  if (is.null(content)) return(empty)
+
+  h2s <- html_elements(content, "h2.wsite-content-title, .wsite-content-title")
+  if (length(h2s) == 0) return(empty)
+
+  titles <- trimws(html_text2(h2s))
+  titles <- titles[nzchar(titles)]
+  titles <- titles[!grepl("^(Careers|Employment|Application|No opening|No vacancies|None at this time)", titles, ignore.case = TRUE)]
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Marion", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = rep(url, length(titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Sun River Valley School District #24
+# ---------------------------------------------------------------------------
+fetch_sunrivervalley_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_sunrivervalley_postings(html, url)
+}
+
+parse_sunrivervalley_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  links <- html_elements(doc, "a[href*=\"show_job.jsp\"], a[href*=\"/apps/jobs/\"]")
+  titles <- character(0)
+  links_out <- character(0)
+
+  for (a in links) {
+    href <- html_attr(a, "href")
+    txt <- trimws(html_text2(a))
+    if (grepl("show_job\\.jsp", href) && nzchar(txt) && !grepl("^(Job Applications|Employment Opportunities)$", txt, ignore.case = TRUE)) {
+      titles <- c(titles, txt)
+      links_out <- c(links_out, xml2::url_absolute(href, url))
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Simms", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = links_out,
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

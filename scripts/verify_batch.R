@@ -41,7 +41,23 @@ for (s in suites) {
 
   out <- tryCatch({
     if (!is.null(filter_pattern) && s == "test-misc-district-scrapers.R") {
-      testthat::test_file(path, filter = filter_pattern, stop_on_failure = FALSE)
+      lines <- readLines(path, warn = FALSE)
+      parsed <- parse(text = lines)
+      matched_lines <- c("library(testthat)", "source(here::here(\"misc_district_scrapers.R\"))")
+      for (i in seq_along(parsed)) {
+        e <- parsed[[i]]
+        if (is.call(e) && identical(as.character(e[[1]]), "test_that")) {
+          desc_txt <- as.character(e[[2]])
+          if (grepl(filter_pattern, desc_txt, ignore.case = TRUE)) {
+            matched_lines <- c(matched_lines, deparse(e), "")
+          }
+        }
+      }
+      temp_path <- here::here("tests", "testthat", "_temp_verify_batch.R")
+      writeLines(matched_lines, temp_path)
+      res_out <- testthat::test_file(temp_path, stop_on_failure = FALSE)
+      unlink(temp_path)
+      res_out
     } else {
       testthat::test_file(path, stop_on_failure = FALSE)
     }
