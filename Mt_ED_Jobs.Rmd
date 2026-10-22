@@ -2123,6 +2123,78 @@ if (nrow(troutcreek_df) > 0) {
                               Posting_Source = character(0))
 }
 
+# Power Public Schools (power.k12.mt.us, found 2026-10-22)
+power_districts <- registry[registry$Platform == "PowerHeuristic", ]
+power_results <- lapply(seq_len(nrow(power_districts)), function(i) {
+  row <- power_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_power_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+power_df <- bind_rows(power_results)
+if (nrow(power_df) > 0) {
+  power_df <- power_df %%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Power Public Schools site (direct board)")
+} else {
+  power_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Kila School District #20 (docs.google.com, found 2026-10-22)
+kila_districts <- registry[registry$Platform == "KilaHeuristic", ]
+kila_results <- lapply(seq_len(nrow(kila_districts)), function(i) {
+  row <- kila_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_kila_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+kila_df <- bind_rows(kila_results)
+if (nrow(kila_df) > 0) {
+  kila_df <- kila_df %%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Kila School District #20 site (direct board)")
+} else {
+  kila_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Lavina Public Schools (lavinapublicschools.com, found 2026-10-22)
+lavina_districts <- registry[registry$Platform == "LavinaHeuristic", ]
+lavina_results <- lapply(seq_len(nrow(lavina_districts)), function(i) {
+  row <- lavina_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_lavina_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+lavina_df <- bind_rows(lavina_results)
+if (nrow(lavina_df) > 0) {
+  lavina_df <- lavina_df %%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Lavina Public Schools site (direct board)")
+} else {
+  lavina_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2653,6 +2725,9 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        helenaflats_df, woodman_df, vaughn_df,
                        jordan_df, pioneer_df, opheim_df,
                        pryor_df, westglacier_df, troutcreek_df,
+                       power_df,
+                       kila_df,
+                       lavina_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

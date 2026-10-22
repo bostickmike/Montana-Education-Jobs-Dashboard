@@ -6769,6 +6769,159 @@ parse_troutcreek_postings <- function(html_text, url = "https://www.troutcreekea
   )
 }
 
+# ---------------------------------------------------------------------------
+# Power Public Schools
+# ---------------------------------------------------------------------------
+fetch_power_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_power_postings(html, url)
+}
+
+parse_power_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  links <- html_elements(doc, "a[href*=\"/District/Jobs/\"], a[href*=\"Jobs/\"]")
+  titles <- character(0)
+  links_out <- character(0)
+
+  for (a in links) {
+    href <- html_attr(a, "href")
+    txt <- trimws(html_text2(a))
+    if (grepl("[0-9]+-[A-Za-z0-9_-]+[.]html$", href) && nzchar(txt)) {
+      titles <- c(titles, txt)
+      links_out <- c(links_out, xml2::url_absolute(href, url))
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Power", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = links_out,
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Kila School District #20
+# ---------------------------------------------------------------------------
+fetch_kila_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_kila_postings(html, url)
+}
+
+parse_kila_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  tables <- html_elements(doc, "table")
+  titles <- character(0)
+  dates <- character(0)
+
+  for (tbl in tables) {
+    rows <- html_elements(tbl, "tr")
+    for (r in rows) {
+      cells <- trimws(html_text2(html_elements(r, "td, th")))
+      if (length(cells) >= 3) {
+        title <- cells[1]
+        open_dt <- cells[3]
+        if (nzchar(title) && !grepl("^(CLASSIFIED|SUBSTITUTE|COACHING|CERTIFIED|Job Title|No Open Positions)$", title, ignore.case = TRUE)) {
+          titles <- c(titles, title)
+          dates <- c(dates, if (grepl("^[0-9]{1,2}/[0-9]{1,2}/[0-9]{2,4}$", open_dt)) open_dt else NA_character_)
+        }
+      }
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Kila", length(titles)),
+    Posted_Date = dates,
+    Link = rep(url, length(titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Lavina Public Schools
+# ---------------------------------------------------------------------------
+fetch_lavina_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_lavina_postings(html, url)
+}
+
+parse_lavina_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  ps <- html_elements(doc, ".pageData p, #content p, .maincontent p")
+  texts <- trimws(html_text2(ps))
+
+  start_idx <- which(grepl("accepting applications for the following positions", texts, ignore.case = TRUE))
+  end_idx <- which(grepl("pending the number of participants|Open Until Filled", texts, ignore.case = TRUE))
+
+  if (length(start_idx) == 0 || length(end_idx) == 0 || end_idx[1] <= start_idx[1] + 1) {
+    return(empty)
+  }
+
+  titles <- texts[(start_idx[1] + 1):(end_idx[1] - 1)]
+  titles <- titles[nzchar(titles)]
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Lavina", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = rep(url, length(titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

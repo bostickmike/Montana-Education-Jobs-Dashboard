@@ -4215,6 +4215,63 @@ test_that("parse_troutcreek_postings returns zero rows on empty or non-matching 
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_power_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "power_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://power.k12.mt.us/District/Jobs/"
+
+  result <- parse_power_postings(fixture, url)
+
+  expect_equal(nrow(result), 3)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("Substitute Teachers", "Substitute After-School Custodians", "Substitute Kitchen Aides"))
+  expect_true(all(result$Location == "Power"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_power_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_power_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_kila_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "kila_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/export?format=html"
+
+  result <- parse_kila_postings(fixture, url)
+
+  expect_equal(nrow(result), 4)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("Custodian", "Substitute Custodian", "Substitute Para/Student Support", "Substitute Teachers"))
+  expect_true(all(result$Location == "Kila"))
+  expect_false(any(is.na(result$Posted_Date)))
+})
+
+test_that("parse_kila_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_kila_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_lavina_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "lavina_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.lavinapublicschools.com/District/2269-Untitled.html"
+
+  result <- parse_lavina_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("Junior High Assistant Volleyball Coach", "Junior High Assistant Football Coach"))
+  expect_true(all(result$Location == "Lavina"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_lavina_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_lavina_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

@@ -1,19 +1,11 @@
-# Custom allowlist for the Copilot cloud agent's firewall
-# (repo Settings -> Copilot -> Internet access -> Copilot cloud agent ->
-# Custom allowlist). Settings don't sync from this file -- it's the source
-# of truth you copy from. One domain per line; an entry is assumed to cover
-# its subdomains (schoolspring.com covers bridger.schoolspring.com).
-#
-# test-copilot-allowlist.R fails when a registry Job_Link/Feed_URL host or
-# a URL hardcoded in a scraper file isn't covered here -- so adding a
-# district means adding its domain here AND in the repo settings, or the
-# agent can't fetch that page to fix it.
+5il.co
 adp.com
 alberton.k12.mt.us
 ancollege.edu
 applitrack.com
 applytojob.com
 apps.opi.mt.gov
+apptegy.net
 aptg.co
 arleeschools.org
 arrowheadk8.com
@@ -21,8 +13,8 @@ asdmt.org
 augustaschool.org
 baker.k12.mt.us
 belfrybats.org
-bgs.k12.mt.us
 beltschool.com
+bgs.k12.mt.us
 bigforkschools.org
 bonner.k12.mt.us
 broadus.net
@@ -79,11 +71,12 @@ hssdmt.org
 huntley.k12.mt.us
 hyshamschools.com
 independent.k12.mt.us
+isolvedhire.com
 jhs.k12.mt.us
 jordanpublicschools.org
 judithgap.k12.mt.us
-isolvedhire.com
 lambertschool.net
+lavinapublicschools.com
 lbhc.edu
 lgschools.org
 livingston.k12.mt.us
@@ -109,6 +102,7 @@ paycomonline.net
 pioneerschool.us
 plentywood.k12.mt.us
 plevnacougars.com
+power.k12.mt.us
 pryorwarriors.org
 ramsayschool.com
 rapelje.k12.mt.us
@@ -144,8 +138,8 @@ terryschools.org
 thompsonfalls.net
 townsend.k12.mt.us
 tregoschool.org
-turner.k12.mt.us
 troutcreekeagles.org
+turner.k12.mt.us
 tylerportico.com
 uprovidence.edu
 valier.k12.mt.us
@@ -162,10 +156,3 @@ wolfpointschools.org
 wolverine.life
 woodmanschool.org
 zurichelementary17.org
-
-# Render-time asset hosts: not job-board URLs, but chromote needs them for
-# the page to hydrate. Without Apptegy's CDNs the agent's headless Chrome
-# gets an empty shell, so innerText shows no postings (issue #7 / PR #8,
-# 2026-09-30). test-copilot-allowlist.R checks these per platform.
-5il.co
-apptegy.net

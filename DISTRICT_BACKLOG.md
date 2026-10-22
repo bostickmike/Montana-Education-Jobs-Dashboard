@@ -68,6 +68,9 @@ To verify and likely add:
 | Pryor Public Schools | Big Horn | `pryorwarriors.org/human-resources/` | Divi CMS; 2 active positions (Literacy Tutors, Bus Drivers) | ✅ **Adopted** (2026-10-22, Batch 16) |
 | West Glacier Elementary School District #8 | Flathead | `westglacierelementary.org/opportunities/employment` | Google Sites; 2 active positions (Substitute Teacher, Part-Time Custodian / Maintenance Worker) | ✅ **Adopted** (2026-10-22, Batch 16) |
 | Trout Creek School District #6 | Sanders | `troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685` | Edlio CMS; 4 active positions (Teachers, Business Manager/Clerk, Substitute Teachers, Para-Professional) | ✅ **Adopted** (2026-10-22, Batch 16) |
+| Power Public Schools | Teton | `power.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); 3 active positions (Substitute Teachers, Substitute After-School Custodians, Substitute Kitchen Aides) | ✅ **Adopted** (2026-10-22, Batch 17) |
+| Kila School District #20 | Flathead | `docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/` | Google Sites with live Google Doc HTML table; 4 active positions (Custodian, Substitute Custodian, Substitute Para/Student Support, Substitute Teachers) | ✅ **Adopted** (2026-10-22, Batch 17) |
+| Lavina Public Schools | Golden Valley | `lavinapublicschools.com/District/2269-Untitled.html` | CyberSchool CMS; 2 active positions (JH Assistant Volleyball Coach, JH Assistant Football Coach) | ✅ **Adopted** (2026-10-22, Batch 17) |
 
 ---
 
@@ -110,7 +113,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |
 | Olney-Bissell School | Flathead | `olneybissellschool.com/o/obs/page/employment` | Apptegy; generic "Certified Application" link only | TODO |
 | East Glacier Park Grade School | Glacier | `eastglacierschool.com/employment` | CyberSchool CMS; 1 active position (Licensed Teachers); checked 2026-10-21 | ✅ **Adopted** (2026-10-21, Batch 12) |
-| Kila School District #20 | Flathead | "Open Positions" page | generic application-packet links only | TODO |
+| Kila School District #20 | Flathead | `docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/` | Google Sites with live Google Doc HTML table; 4 active positions | ✅ **Adopted** (2026-10-22, Batch 17) |
 | DeSmet School District #20 | Missoula | employment page | generic Certified/Classified application-form links | TODO |
 | Gildford Colony School | Hill | employment page | "New Hire Packet" download links only | TODO |
 | Fairfield (Greenfield #75) | Teton | `fairfield.k12.mt.us` | Apptegy "Employment Applications" page links only to generic blank PDFs (`5il.co/11rg` / `Classified_Staff_Application.pdf`); checked 2026-10-21 | TODO |
@@ -119,10 +122,10 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Monforton School District #27 | Gallatin | `monfortonschool.org/contact-us/job-openings/` | WordPress site with dedicated job buttons; 2 active positions (Business Manager, District Clerk) | ✅ **Adopted** (2026-10-21, Batch 11) |
 | Jordan Public Schools | Garfield | `jordanpublicschools.org` | SchoolInSites CMS; 5 active positions in homepage announcement banners (Head of Maintenance, K-12 Music Teacher, JH Football Coach, JH Boys Basketball Coach, HS Boys Basketball Coach) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Vida Elementary School | McCone | `vidaschool.k12.mt.us` | resources page has only generic application PDFs; checked 2026-10-21 | TODO |
-| Frenchtown School District | Missoula | `ftsd.org` | Apptegy site with no dedicated employment board; links to generic application link `5il.co/14q4o`; checked 2026-10-21 | TODO |
+| Frenchtown School District | Missoula | `ftsd.org` | Apptegy site with Fastly Client Challenge JS bot-gate; checked 2026-10-22 | TODO |
 | Lima Public Schools | Beaverhead | `lima.k12.mt.us` | Apptegy site with generic application PDF `5il.co/kopg` only; checked 2026-10-21 | TODO |
 | Fromberg Public Schools | Carbon | `frombergpublicschools.com/district-info/employment` | Finalsite CMS; Current Postings section empty; generic application PDFs only; checked 2026-10-21 | TODO |
-| Lavina Public Schools | Golden Valley | `lavinapublicschools.com` | no active jobs board or openings listed; checked 2026-10-21 | TODO |
+| Lavina Public Schools | Golden Valley | `lavinapublicschools.com/District/2269-Untitled.html` | CyberSchool CMS; 2 active positions (JH Assistant Volleyball/Football Coaches) | ✅ **Adopted** (2026-10-22, Batch 17) |
 | Bainville K-12 Schools | Roosevelt | `bainvilleschool.com/page/employment` | Apptegy site; links to generic application Google Docs only; checked 2026-10-21 | TODO |
 | Twin Bridges K-12 Schools | Madison | `twinbridges.k12.mt.us/page/employment-opportunities` | Apptegy site; 0 positions listed under 2026-2027 vacancies; checked 2026-10-21 | TODO |
 | Troy School District #1 | Lincoln | `troyk12.org/documents/...` | Apptegy site; documents folder contains generic application PDFs only; checked 2026-10-21 | TODO |
@@ -225,7 +228,8 @@ Coups, Polaris, Potomac, Reichle, Ross, Springhill, Sunset, Trinity,
 West Glacier, Wisdom, Wise River, Yaak.
 
 Also: Cottonwood School District #22 (Montessori K-5 near Bozeman — real,
-separate from #57, no careers link found).
+separate from #57, no careers link found). Swan Lake-Salmon Prairie School District #73
+(Salmon Prairie Elementary permanently closed at end of 2025-2026 school year).
 
 ---
 

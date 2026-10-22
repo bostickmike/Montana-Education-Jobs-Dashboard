@@ -195,7 +195,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Opheim Public Schools",
                      "Pryor Public Schools",
                      "West Glacier Elementary School District #8",
-                     "Trout Creek School District #6"))
+                     "Trout Creek School District #6",
+                     "Power Public Schools",
+                     "Kila School District #20",
+                     "Lavina Public Schools"))
 })
 
 # ---------------------------------------------------------------------------
