@@ -1848,6 +1848,81 @@ if (nrow(eastglacier_df) > 0) {
                                Posting_Source = character(0))
 }
 
+# Charlo School District 7J (charlo.k12.mt.us, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+charlo_districts <- registry[registry$Platform == "CharloHeuristic", ]
+charlo_results <- lapply(seq_len(nrow(charlo_districts)), function(i) {
+  row <- charlo_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_charlo_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+charlo_df <- bind_rows(charlo_results)
+if (nrow(charlo_df) > 0) {
+  charlo_df <- charlo_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Charlo district site (direct board)")
+} else {
+  charlo_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
+# Canyon Creek School District #4 (canyoncreekschool.org, Edlio CMS, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+canyoncreek_districts <- registry[registry$Platform == "CanyonCreekHeuristic", ]
+canyoncreek_results <- lapply(seq_len(nrow(canyoncreek_districts)), function(i) {
+  row <- canyoncreek_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_canyoncreek_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+canyoncreek_df <- bind_rows(canyoncreek_results)
+if (nrow(canyoncreek_df) > 0) {
+  canyoncreek_df <- canyoncreek_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Canyon Creek district site (direct board)")
+} else {
+  canyoncreek_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
+}
+
+# Hellgate Elementary School District #4 (hellgate.k12.mt.us, found 2026-10-21)
+# has no structured ATS -- a plain httr2 fetch, no chromote needed.
+hellgate_districts <- registry[registry$Platform == "HellgateHeuristic", ]
+hellgate_results <- lapply(seq_len(nrow(hellgate_districts)), function(i) {
+  row <- hellgate_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_hellgate_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+hellgate_df <- bind_rows(hellgate_results)
+if (nrow(hellgate_df) > 0) {
+  hellgate_df <- hellgate_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Hellgate Elementary district site (direct board)")
+} else {
+  hellgate_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2345,6 +2420,9 @@ heartbutte_df <- heartbutte_df %>% mutate(date_posted = standardize_date(date_po
 noxon_df <- noxon_df %>% mutate(date_posted = standardize_date(date_posted))
 seeleylake_df <- seeleylake_df %>% mutate(date_posted = standardize_date(date_posted))
 eastglacier_df <- eastglacier_df %>% mutate(date_posted = standardize_date(date_posted))
+charlo_df <- charlo_df %>% mutate(date_posted = standardize_date(date_posted))
+canyoncreek_df <- canyoncreek_df %>% mutate(date_posted = standardize_date(date_posted))
+hellgate_df <- hellgate_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -2363,6 +2441,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        ashland_df, rapelje_df, cayuseprairie_df,
                        bigtimbergs_df, eldergrove_df, monforton_df, grassrange_df,
                        heartbutte_df, noxon_df, seeleylake_df, eastglacier_df,
+                       charlo_df, canyoncreek_df, hellgate_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

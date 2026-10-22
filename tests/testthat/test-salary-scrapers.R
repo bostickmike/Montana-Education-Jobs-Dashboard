@@ -184,7 +184,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Big Timber Grade School", "Elder Grove School District",
                      "Monforton School District #27", "Grass Range Public Schools",
                      "Heart Butte K-12 Schools", "Noxon Public Schools",
-                     "Seeley Lake Elementary #34", "East Glacier Park Grade School"))
+                     "Seeley Lake Elementary #34", "East Glacier Park Grade School",
+                     "Charlo School District 7J", "Canyon Creek School District",
+                     "Hellgate Elementary School District"))
 })
 
 # ---------------------------------------------------------------------------

@@ -6138,6 +6138,157 @@ parse_eastglacier_postings <- function(html_text, url = "https://eastglacierscho
   )
 }
 
+# ---------------------------------------------------------------------------
+# Charlo School District 7J (charlo.k12.mt.us)
+# ---------------------------------------------------------------------------
+fetch_charlo_postings <- function(url = "https://charlo.k12.mt.us/") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_charlo_postings(resp_body_string(resp), url = url)
+}
+
+parse_charlo_postings <- function(html_text, url = "https://charlo.k12.mt.us/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  title_nodes <- rvest::html_elements(doc, ".announcements__card-title")
+  if (length(title_nodes) == 0) return(empty)
+
+  roles <- character(0)
+  links <- character(0)
+
+  for (ti in title_nodes) {
+    txt <- trimws(rvest::html_text(ti))
+    if (grepl("^[Hh]iring[[:space:]]+", txt)) {
+      role <- trimws(sub("^[Hh]iring[[:space:]]+", "", txt))
+      a_parent <- rvest::html_element(ti, xpath = "./ancestor::a[1]")
+      href <- if (!is.na(a_parent)) rvest::html_attr(a_parent, "href") else NA_character_
+      if (is.na(href) || href == "#main-content" || !nzchar(href)) {
+        href <- url
+      } else {
+        href <- xml2::url_absolute(href, url)
+      }
+      if (nzchar(role)) {
+        roles <- c(roles, role)
+        links <- c(links, href)
+      }
+    }
+  }
+
+  if (length(roles) == 0) return(empty)
+
+  data.frame(
+    Title = roles,
+    Location = "Charlo",
+    Posted_Date = NA_character_,
+    Link = links,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Canyon Creek School District #4 (canyoncreekschool.org, Edlio CMS)
+# ---------------------------------------------------------------------------
+fetch_canyoncreek_postings <- function(url = "https://www.canyoncreekschool.org/apps/jobs/") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_canyoncreek_postings(resp_body_string(resp), url = url)
+}
+
+parse_canyoncreek_postings <- function(html_text, url = "https://www.canyoncreekschool.org/apps/jobs/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  job_nodes <- rvest::html_elements(doc, "a[href*='show_job.jsp']")
+  if (length(job_nodes) == 0) return(empty)
+
+  titles <- character(0)
+  links <- character(0)
+
+  for (n in job_nodes) {
+    t <- trimws(rvest::html_text(n))
+    h <- rvest::html_attr(n, "href")
+    full_link <- if (!is.na(h) && nzchar(h)) xml2::url_absolute(h, url) else url
+    if (nzchar(t)) {
+      titles <- c(titles, t)
+      links <- c(links, full_link)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Billings",
+    Posted_Date = NA_character_,
+    Link = links,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Hellgate Elementary School District #4 (hellgate.k12.mt.us)
+# ---------------------------------------------------------------------------
+fetch_hellgate_postings <- function(url = "https://www.hellgate.k12.mt.us/our-district/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_hellgate_postings(resp_body_string(resp), url = url)
+}
+
+parse_hellgate_postings <- function(html_text, url = "https://www.hellgate.k12.mt.us/our-district/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- rvest::html_element(doc, "#fsPageContent")
+  if (is.null(content)) return(empty)
+
+  links <- rvest::html_elements(content, "span.fs_style_1 a, .fsElementContent a")
+  if (length(links) == 0) return(empty)
+
+  titles <- character(0)
+  urls_out <- character(0)
+
+  for (a in links) {
+    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(a)))
+    href <- rvest::html_attr(a, "href")
+    if (grepl("Substitute|Teacher|Para|Custodial|Food Service|Nurse|Driver|Coach|Aide|Specialist|Principal|Superintendent", txt, ignore.case = TRUE) &&
+        !grepl("Forms|Schools|Handbook|Policy", txt, ignore.case = TRUE)) {
+      full_link <- if (!is.na(href) && nzchar(href)) xml2::url_absolute(href, url) else url
+      titles <- c(titles, txt)
+      urls_out <- c(urls_out, full_link)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = "Missoula",
+    Posted_Date = NA_character_,
+    Link = urls_out,
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

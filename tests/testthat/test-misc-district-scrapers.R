@@ -3973,6 +3973,68 @@ test_that("parse_eastglacier_postings returns zero rows on empty or non-matching
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_charlo_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "charlo_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://charlo.k12.mt.us/"
+
+  result <- parse_charlo_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c("Bus Drivers", "Paraprofessionals"))
+  expect_equal(unique(result$Location), "Charlo")
+  expect_equal(result$Link, c("https://charlo.k12.mt.us/announcements/hiring-bus-drivers/",
+                              "https://charlo.k12.mt.us/announcements/hiring-paraprofessionals/"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_charlo_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_charlo_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_canyoncreek_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "canyoncreek_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.canyoncreekschool.org/apps/jobs/"
+
+  result <- parse_canyoncreek_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, "Paraprofessional Pre-K (All Day Full-Time)")
+  expect_equal(unique(result$Location), "Billings")
+  expect_equal(result$Link, "https://www.canyoncreekschool.org/apps/jobs/show_job.jsp?REC_ID=23398")
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_canyoncreek_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_canyoncreek_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_hellgate_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "hellgate_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.hellgate.k12.mt.us/our-district/employment"
+
+  result <- parse_hellgate_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c("Substitute Teacher", "Custodial substitutes"))
+  expect_equal(unique(result$Location), "Missoula")
+  expect_equal(result$Link, c("https://www.hellgate.k12.mt.us/fs/pages/3391",
+                              "https://www.hellgate.k12.mt.us/fs/pages/3392"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_hellgate_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_hellgate_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

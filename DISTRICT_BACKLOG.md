@@ -50,7 +50,7 @@ live pages -- nothing fabricated.
 | Noxon Public Schools | Sanders | `noxonschools.com/o/nps/page/certified-listings` | ✅ **Adopted** (2026-10-21, Batch 12) -- Apptegy CMS; 1 active position (7–12 Science Teacher) |
 | Cayuse Prairie School District #10 | Flathead | `cayuseprairie.com/page/employment` | ✅ **Adopted** (2026-10-21, Batch 10) -- Apptegy custom notice; 2 active positions (Special Education Paraprofessional, 7th & 8th Grade Science Teacher) |
 | Judith Gap Schools | Wheatland | `judithgap.k12.mt.us/District/Portal/Employment` | ✅ **Adopted** (2026-10-21, Batch 9) -- CyberSchool CMS jobs widget; 2 active positions (Custodian/Maint/Boiler Operator, School Cook) |
-| Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | ✅ 4 on the main page (School Nurse, paras, Sub Teacher, Custodial Subs). Add subpage rows if content is missed. |
+| Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | ✅ **Adopted** (2026-10-21, Batch 13) -- Finalsite CMS (#fsPageContent); 2 active positions (Substitute Teacher, Custodial substitutes) |
 | ~~Power School District~~ | Teton | `power.k12.mt.us/District/Portal/Employment` | ❌ **removed** -- page rot: three "Date Posted: March 20, 2023" entries under one undated 2026 blurb. Stale-date filter drops the old ones; the one real item isn't cleanly titled. Recheck if the district cleans up the page. |
 
 To verify and likely add:
@@ -62,6 +62,7 @@ To verify and likely add:
 | Frazer Public Schools | Valley | `frazer.k12.mt.us/District/Jobs/` | CyberSchool CMS; 26 active postings in `.listItem_bodyContent li` | ✅ **Adopted** (2026-10-21) |
 | Lambert School District | Richland | `lambertschool.net/career-opportunities/employment-opportunities` | Finalsite CMS; 1 active posting in `#fsPageContent .fsContent ul li` | ✅ **Adopted** (2026-10-21) |
 | Richey Public Schools | Dawson | `richey.k12.mt.us/currentopenings` | CyberSchool CMS; 1 active posting in `#maincontent .cs-html-widget strong` | ✅ **Adopted** (2026-10-21) |
+| Charlo School District 7J | Lake | `charlo.k12.mt.us` | Custom CMS; 2 active positions (Bus Drivers, Paraprofessionals) in `.announcements__card-title` | ✅ **Adopted** (2026-10-21, Batch 13) |
 
 ---
 
@@ -88,7 +89,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Jefferson High School District #1 | Jefferson | `jhs.k12.mt.us/EmploymentOpportunities.aspx` | eSchoolView CMS; 6 active postings (cheer, football, volleyball, teachers, paras) | ✅ **Adopted** (2026-10-21) |
 | Sheridan Public Schools | Madison | `sheridan.k12.mt.us/district/employment` | Google Sites; 4 active postings (coaches, subs, drivers) | ✅ **Adopted** (2026-10-21) |
 | Lockwood School District | Yellowstone | `lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d` | Edlio CMS; 8 active postings (teachers, paras, coaches, subs, crosswalk) | ✅ **Adopted** (2026-10-21) |
-| Canyon Creek School | Yellowstone | `canyoncreekschool.org/apps/pages/index.jsp?uREC_ID=532741&type=d` | Edlio CMS; 2 generic printable application PDFs only; checked 2026-10-21 | RECHECK |
+| Canyon Creek School | Yellowstone | `canyoncreekschool.org/apps/jobs/` | Edlio CMS (/apps/jobs/); 1 active position (Paraprofessional Pre-K (All Day Full-Time)) | ✅ **Adopted** (2026-10-21, Batch 13) |
 | Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; single standing substitute notice only; checked 2026-10-21 | RECHECK |
 | Montana City ESD 27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS; current jobs list empty; checked 2026-10-21 | RECHECK |
 | Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; generic personnel application links only; checked 2026-10-21 | RECHECK |
@@ -164,7 +165,7 @@ direct scraper.
 
 | District | County | Page | Note | Status |
 |---|---|---|---|---|
-| Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` + `/para-professional-positions` + ~4 more | main page is in the pilot; capture the subpage URLs and add them | IN PROGRESS |
+| Hellgate Elementary School District | Missoula | `hellgate.k12.mt.us/our-district/employment` | Finalsite CMS (#fsPageContent); 2 active positions (Substitute Teacher, Custodial substitutes) | ✅ **Adopted** (2026-10-21, Batch 13) |
 
 ---
 
