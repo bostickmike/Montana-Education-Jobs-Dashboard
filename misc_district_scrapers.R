@@ -6616,6 +6616,159 @@ parse_opheim_postings <- function(html_text, url = "https://sites.google.com/sit
   )
 }
 
+# ---------------------------------------------------------------------------
+# Pryor Public Schools (Divi CMS, pryorwarriors.org)
+# ---------------------------------------------------------------------------
+fetch_pryor_postings <- function(url = "https://pryorwarriors.org/human-resources/") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_pryor_postings(resp_body_string(resp), url = url)
+}
+
+parse_pryor_postings <- function(html_text, url = "https://pryorwarriors.org/human-resources/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  blurbs <- rvest::html_elements(doc, ".et_pb_blurb")
+  titles <- character(0)
+  links <- character(0)
+
+  for (b in blurbs) {
+    hdr <- rvest::html_element(b, ".et_pb_module_header")
+    if (is.na(hdr)) next
+    hdr_txt <- trimws(rvest::html_text2(hdr))
+    if (!grepl("hiring", hdr_txt, ignore.case = TRUE) || grepl("^we are hiring$", hdr_txt, ignore.case = TRUE)) next
+    if (grepl("application|handbook|agreement|compensation|form|plan|proposal", hdr_txt, ignore.case = TRUE)) next
+
+    clean_title <- sub("^(foundations|we are)[[:space:]]+hiring[[:space:]]+(for[[:space:]]+)?", "", hdr_txt, ignore.case = TRUE)
+    clean_title <- trimws(clean_title)
+    if (!nzchar(clean_title)) next
+
+    link_node <- rvest::html_element(b, ".et_pb_blurb_description a")
+    link_href <- if (!is.na(link_node)) rvest::html_attr(link_node, "href") else url
+    if (is.na(link_href) || !nzchar(link_href)) link_href <- url
+
+    titles <- c(titles, clean_title)
+    links <- c(links, link_href)
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = "Pryor",
+    Posted_Date = NA_character_,
+    Link = links,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# West Glacier Elementary School District #8 (Google Sites)
+# ---------------------------------------------------------------------------
+fetch_westglacier_postings <- function(url = "https://www.westglacierelementary.org/opportunities/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_westglacier_postings(resp_body_string(resp), url = url)
+}
+
+parse_westglacier_postings <- function(html_text, url = "https://www.westglacierelementary.org/opportunities/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  links <- rvest::html_elements(doc, "a")
+  titles <- character(0)
+  links_out <- character(0)
+
+  for (l in links) {
+    txt <- trimws(rvest::html_text2(l))
+    href <- rvest::html_attr(l, "href")
+    if (is.na(href) || !nzchar(href)) next
+    clean_title <- sub("[[:space:]]+Position[[:space:]]+Description.*$", "", txt, ignore.case = TRUE)
+    clean_title <- trimws(clean_title)
+
+    if (grepl("(Teacher|Custodian|Maintenance|Aide|Paraprofessional|Driver|Coach|Nurse|Cook|Secretary)", clean_title, ignore.case = TRUE) &&
+        !grepl("(Application|Handbook|Policy|Plan)", clean_title, ignore.case = TRUE)) {
+      if (length(titles) > 0 && any(sapply(titles, function(t) grepl(t, clean_title, fixed = TRUE) || grepl(clean_title, t, fixed = TRUE)))) {
+        next
+      }
+      abs_url <- xml2::url_absolute(href, url)
+      titles <- c(titles, clean_title)
+      links_out <- c(links_out, abs_url)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = rep("West Glacier", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = links_out,
+    stringsAsFactors = FALSE
+  )
+}
+
+# ---------------------------------------------------------------------------
+# Trout Creek School District #6 (Edlio CMS, troutcreekeagles.org)
+# ---------------------------------------------------------------------------
+fetch_troutcreek_postings <- function(url = "https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  parse_troutcreek_postings(resp_body_string(resp), url = url)
+}
+
+parse_troutcreek_postings <- function(html_text, url = "https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                      Posted_Date = character(0), Link = character(0),
+                      stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  links <- rvest::html_elements(doc, ".page-block-text div a")
+  titles <- character(0)
+  links_out <- character(0)
+
+  for (a in links) {
+    txt <- trimws(rvest::html_text2(a))
+    href <- rvest::html_attr(a, "href")
+    if (nzchar(txt)) {
+      clean_title <- sub("^[Ww]e are currently looking for[[:space:]]+", "", txt)
+      clean_title <- sub("!$", "", clean_title)
+      clean_title <- trimws(clean_title)
+      if (!nzchar(clean_title) || grepl("Application|Form|Handbook", clean_title, ignore.case = TRUE)) next
+      abs_url <- xml2::url_absolute(href, url)
+      titles <- c(titles, clean_title)
+      links_out <- c(links_out, abs_url)
+    }
+  }
+
+  if (length(titles) == 0) return(empty)
+
+  data.frame(
+    Title = titles,
+    Location = rep("Trout Creek", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = links_out,
+    stringsAsFactors = FALSE
+  )
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

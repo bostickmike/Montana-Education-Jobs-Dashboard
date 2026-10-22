@@ -65,6 +65,9 @@ To verify and likely add:
 | Charlo School District 7J | Lake | `charlo.k12.mt.us` | Custom CMS; 2 active positions (Bus Drivers, Paraprofessionals) in `.announcements__card-title` | ✅ **Adopted** (2026-10-21, Batch 13) |
 | Helena Flats School District #15 | Flathead | `helenaflats.org/page/employment` | Apptegy CMS; 2 active positions (Special Education Paraprofessional, Substitutes Needed - all positions) in `window.clientWorkStateTemp` | ✅ **Adopted** (2026-10-22, Batch 14) |
 | Woodman Elementary School District #3 | Missoula | `woodmanschool.org/district-information/employment-opportunities` | Google Sites; 1 active position (Substitute Teacher) | ✅ **Adopted** (2026-10-22, Batch 14) |
+| Pryor Public Schools | Big Horn | `pryorwarriors.org/human-resources/` | Divi CMS; 2 active positions (Literacy Tutors, Bus Drivers) | ✅ **Adopted** (2026-10-22, Batch 16) |
+| West Glacier Elementary School District #8 | Flathead | `westglacierelementary.org/opportunities/employment` | Google Sites; 2 active positions (Substitute Teacher, Part-Time Custodian / Maintenance Worker) | ✅ **Adopted** (2026-10-22, Batch 16) |
+| Trout Creek School District #6 | Sanders | `troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685` | Edlio CMS; 4 active positions (Teachers, Business Manager/Clerk, Substitute Teachers, Para-Professional) | ✅ **Adopted** (2026-10-22, Batch 16) |
 
 ---
 
@@ -149,7 +152,7 @@ real one (verify address/phone), then re-triage.
 | Avon | Powell | `avon*` resolves to Avon-by-the-Sea, NJ; real MT school is `avon.k12.mt.us` | TODO |
 | Bynum | Teton | `bynumschool.org` → Midland, TX; real MT school is `bynum.k12.mt.us` | TODO |
 | Luther School | Carbon | `lutherlions.org` → Luther, OK; real MT site is `lutherschool.org/index.php/documents` (Joomla); 2 active postings | ✅ **Adopted** (2026-10-21) |
-| Pryor Public Schools | Big Horn | `pryorschools.org` → Pryor, OK; real MT site is `pryorwarriors.org` (Arrow Creek Elem / Plenty Coups HS), links to OPI statewide portal; checked 2026-10-21 | TODO |
+| Pryor Public Schools | Big Horn | `pryorschools.org` → Pryor, OK; real MT site is `pryorwarriors.org` (Arrow Creek Elem / Plenty Coups HS); 2 active positions | ✅ **Adopted** (2026-10-22, Batch 16) |
 | Pine Grove | Rosebud | `pgasd.com` → Pennsylvania | TODO |
 | Hawks Home | Powder River | `r-mschool.org` → Republic-Michigamme, MI | TODO |
 | Basin (Boulder area) | Jefferson | Real MT Basin School reopened April 2026; registered domain is `basin.k12.mt.us`; DNS pending / site under construction; `basinschools.net` = Idaho City, ID | RECHECK |

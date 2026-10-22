@@ -4158,6 +4158,63 @@ test_that("parse_opheim_postings returns zero rows on empty or non-matching HTML
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_pryor_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "pryor_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://pryorwarriors.org/human-resources/"
+
+  result <- parse_pryor_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("Literacy Tutors", "Bus Drivers"))
+  expect_true(all(result$Location == "Pryor"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_pryor_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_pryor_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_westglacier_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "westglacier_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.westglacierelementary.org/opportunities/employment"
+
+  result <- parse_westglacier_postings(fixture, url)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("Substitute Teacher", "Part-Time Custodian / Maintenance Worker"))
+  expect_true(all(result$Location == "West Glacier"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_westglacier_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_westglacier_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_troutcreek_postings extracts real positions from captured fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "troutcreek_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685"
+
+  result <- parse_troutcreek_postings(fixture, url)
+
+  expect_equal(nrow(result), 4)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_setequal(result$Title, c("Teachers", "Business Manager/Clerk", "Substitute Teachers", "Para-Professional"))
+  expect_true(all(result$Location == "Trout Creek"))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_troutcreek_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_troutcreek_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

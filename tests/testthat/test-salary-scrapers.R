@@ -192,7 +192,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Vaughn Elementary School District #74",
                      "Jordan Public Schools",
                      "Pioneer Elementary School District #41",
-                     "Opheim Public Schools"))
+                     "Opheim Public Schools",
+                     "Pryor Public Schools",
+                     "West Glacier Elementary School District #8",
+                     "Trout Creek School District #6"))
 })
 
 # ---------------------------------------------------------------------------

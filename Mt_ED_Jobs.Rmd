@@ -2048,6 +2048,81 @@ if (nrow(opheim_df) > 0) {
                           Posting_Source = character(0))
 }
 
+# Pryor Public Schools (pryorwarriors.org, Divi CMS, found 2026-10-22)
+# has active positions on its HR page -- a plain httr2 fetch.
+pryor_districts <- registry[registry$Platform == "PryorHeuristic", ]
+pryor_results <- lapply(seq_len(nrow(pryor_districts)), function(i) {
+  row <- pryor_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_pryor_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+pryor_df <- bind_rows(pryor_results)
+if (nrow(pryor_df) > 0) {
+  pryor_df <- pryor_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Pryor Public Schools district site (direct board)")
+} else {
+  pryor_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                         location = character(0), url = character(0), District = character(0),
+                         Posting_Source = character(0))
+}
+
+# West Glacier Elementary School District #8 (westglacierelementary.org, Google Sites, found 2026-10-22)
+# has active positions on its employment page -- a plain httr2 fetch.
+westglacier_districts <- registry[registry$Platform == "WestGlacierHeuristic", ]
+westglacier_results <- lapply(seq_len(nrow(westglacier_districts)), function(i) {
+  row <- westglacier_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_westglacier_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+westglacier_df <- bind_rows(westglacier_results)
+if (nrow(westglacier_df) > 0) {
+  westglacier_df <- westglacier_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "West Glacier Elementary district site (direct board)")
+} else {
+  westglacier_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                               location = character(0), url = character(0), District = character(0),
+                               Posting_Source = character(0))
+}
+
+# Trout Creek School District #6 (troutcreekeagles.org, Edlio CMS, found 2026-10-22)
+# has active positions on its Open Positions page -- a plain httr2 fetch.
+troutcreek_districts <- registry[registry$Platform == "TroutCreekHeuristic", ]
+troutcreek_results <- lapply(seq_len(nrow(troutcreek_districts)), function(i) {
+  row <- troutcreek_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_troutcreek_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+troutcreek_df <- bind_rows(troutcreek_results)
+if (nrow(troutcreek_df) > 0) {
+  troutcreek_df <- troutcreek_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Trout Creek School District site (direct board)")
+} else {
+  troutcreek_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2553,6 +2628,9 @@ vaughn_df <- vaughn_df %>% mutate(date_posted = standardize_date(date_posted))
 jordan_df <- jordan_df %>% mutate(date_posted = standardize_date(date_posted))
 pioneer_df <- pioneer_df %>% mutate(date_posted = standardize_date(date_posted))
 opheim_df <- opheim_df %>% mutate(date_posted = standardize_date(date_posted))
+pryor_df <- pryor_df %>% mutate(date_posted = standardize_date(date_posted))
+westglacier_df <- westglacier_df %>% mutate(date_posted = standardize_date(date_posted))
+troutcreek_df <- troutcreek_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -2574,6 +2652,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        charlo_df, canyoncreek_df, hellgate_df,
                        helenaflats_df, woodman_df, vaughn_df,
                        jordan_df, pioneer_df, opheim_df,
+                       pryor_df, westglacier_df, troutcreek_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(
