@@ -88,7 +88,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Boulder Elementary School District #7 | Jefferson | `bgs.k12.mt.us/employment` | SchoolCMS / html widget; 2 active postings (coach, after school) | ✅ **Adopted** (2026-10-21) |
 | Jefferson High School District #1 | Jefferson | `jhs.k12.mt.us/EmploymentOpportunities.aspx` | eSchoolView CMS; 6 active postings (cheer, football, volleyball, teachers, paras) | ✅ **Adopted** (2026-10-21) |
 | Sheridan Public Schools | Madison | `sheridan.k12.mt.us/district/employment` | Google Sites; 4 active postings (coaches, subs, drivers) | ✅ **Adopted** (2026-10-21) |
-| Lockwood School District | Yellowstone | `lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d` | Edlio CMS; 8 active postings (teachers, paras, coaches, subs, crosswalk) | ✅ **Adopted** (2026-10-21) |
+| Lockwood School District | Yellowstone | `lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d` | Covered via primary AppliTrack feed (`Lockwood Schools`, `lockwoodschool`); duplicate heuristic entry retired | ✅ **Covered** |
 | Canyon Creek School | Yellowstone | `canyoncreekschool.org/apps/jobs/` | Edlio CMS (/apps/jobs/); 1 active position (Paraprofessional Pre-K (All Day Full-Time)) | ✅ **Adopted** (2026-10-21, Batch 13) |
 | Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; single standing substitute notice only; checked 2026-10-21 | RECHECK |
 | Montana City ESD 27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS; current jobs list empty; checked 2026-10-21 | RECHECK |

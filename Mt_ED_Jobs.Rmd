@@ -1373,31 +1373,6 @@ if (nrow(sheridan_df) > 0) {
                             Posting_Source = character(0))
 }
 
-# Lockwood School District (found 2026-10-21 via OPI Directory) -- Edlio CMS,
-# plain httr2 fetch, no chromote needed.
-lockwood_districts <- registry[registry$Platform == "LockwoodHeuristic", ]
-lockwood_results <- lapply(seq_len(nrow(lockwood_districts)), function(i) {
-  row <- lockwood_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_lockwood_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-lockwood_df <- bind_rows(lockwood_results)
-if (nrow(lockwood_df) > 0) {
-  lockwood_df <- lockwood_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Lockwood district site (direct board)")
-} else {
-  lockwood_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                            location = character(0), url = character(0), District = character(0),
-                            Posting_Source = character(0))
-}
-
 # Frazer Public Schools (found 2026-10-21 via OPI Directory) -- CyberSchool CMS,
 # plain httr2 fetch, no chromote needed.
 frazer_districts <- registry[registry$Platform == "FrazerHeuristic", ]
@@ -2401,7 +2376,6 @@ cardwell_df <- cardwell_df %>% mutate(date_posted = standardize_date(date_posted
 boulder_df <- boulder_df %>% mutate(date_posted = standardize_date(date_posted))
 jeffersonhigh_df <- jeffersonhigh_df %>% mutate(date_posted = standardize_date(date_posted))
 sheridan_df <- sheridan_df %>% mutate(date_posted = standardize_date(date_posted))
-lockwood_df <- lockwood_df %>% mutate(date_posted = standardize_date(date_posted))
 frazer_df <- frazer_df %>% mutate(date_posted = standardize_date(date_posted))
 lambert_df <- lambert_df %>% mutate(date_posted = standardize_date(date_posted))
 richey_df <- richey_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -2435,7 +2409,7 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        belfry_df, nashua_df, whitehall_df, broadus_df, wibaux_df,
                        westvalley_df, luther_df, swanvalley_df,
                        highwood_df, smithvalley_df, moore_df, cardwell_df,
-                       boulder_df, jeffersonhigh_df, sheridan_df, lockwood_df,
+                       boulder_df, jeffersonhigh_df, sheridan_df,
                        frazer_df, lambert_df, richey_df,
                        judithgap_df, whitewater_df, victor_df, superior_df,
                        ashland_df, rapelje_df, cayuseprairie_df,
