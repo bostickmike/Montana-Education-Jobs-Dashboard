@@ -2339,6 +2339,78 @@ if (nrow(desmet_df) > 0) {
                       Posting_Source = character(0))
 }
 
+# Fishtail School District #13 (fishtailschool.org, found 2026-10-22)
+fishtail_districts <- registry[registry$Platform == "FishtailHeuristic", ]
+fishtail_results <- lapply(seq_len(nrow(fishtail_districts)), function(i) {
+  row <- fishtail_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_fishtail_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+fishtail_df <- bind_rows(fishtail_results)
+if (nrow(fishtail_df) > 0) {
+  fishtail_df <- fishtail_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Fishtail School District #13 site (direct board)")
+} else {
+  fishtail_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Nye School District #31 (nyeschooldistrict.org, found 2026-10-22)
+nye_districts <- registry[registry$Platform == "NyeHeuristic", ]
+nye_results <- lapply(seq_len(nrow(nye_districts)), function(i) {
+  row <- nye_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_nye_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+nye_df <- bind_rows(nye_results)
+if (nrow(nye_df) > 0) {
+  nye_df <- nye_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Nye School District #31 site (direct board)")
+} else {
+  nye_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Potomac Elementary School District #11 (potomacschoolmontana.us, found 2026-10-22)
+potomac_districts <- registry[registry$Platform == "PotomacHeuristic", ]
+potomac_results <- lapply(seq_len(nrow(potomac_districts)), function(i) {
+  row <- potomac_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_potomac_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+potomac_df <- bind_rows(potomac_results)
+if (nrow(potomac_df) > 0) {
+  potomac_df <- potomac_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Potomac Elementary School District #11 site (direct board)")
+} else {
+  potomac_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2885,6 +2957,9 @@ direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_d
                        circle_df,
                        forsyth_df,
                        desmet_df,
+                       fishtail_df,
+                       nye_df,
+                       potomac_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
                        gallatingateway_df, apptegy_df)
 opi_df <- remove_opi_direct_duplicates(

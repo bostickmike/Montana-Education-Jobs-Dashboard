@@ -7228,6 +7228,157 @@ parse_desmet_postings <- function(html, url) {
   unique(df)
 }
 
+# ---------------------------------------------------------------------------
+# Fishtail School District #13
+# ---------------------------------------------------------------------------
+fetch_fishtail_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_fishtail_postings(html, url)
+}
+
+parse_fishtail_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_elements(doc, "#av-primary-content, .entry-content, article")
+  if (length(content) == 0) return(empty)
+
+  elements <- html_elements(content, "h1, h2, h3, h4, li, a, p")
+  if (length(elements) == 0) return(empty)
+
+  texts <- trimws(html_text2(elements))
+  texts <- texts[nzchar(texts)]
+
+  clean_titles <- texts[!grepl("^(Available Employment Opportunities|Employment Opportunities|Job Openings|Safe Re-Opening|Application Form|Staff Application|ADA Web Accessibility|Click here|Download|Resources|Our School)", texts, ignore.case = TRUE) &
+                        grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute|wanted", texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  pdf_links <- html_attr(html_elements(content, "a[href*=\".pdf\"]"), "href")
+  link_out <- if (length(pdf_links) > 0 && nzchar(pdf_links[1])) xml2::url_absolute(pdf_links[1], url) else url
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("Fishtail", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(link_out, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Nye School District #31
+# ---------------------------------------------------------------------------
+fetch_nye_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_nye_postings(html, url)
+}
+
+parse_nye_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_elements(doc, ".entry-content, article, #main-content")
+  if (length(content) == 0) return(empty)
+
+  elements <- html_elements(content, "h1, h2, h3, h4, li, a, p")
+  if (length(elements) == 0) return(empty)
+
+  texts <- trimws(html_text2(elements))
+  texts <- texts[nzchar(texts)]
+
+  clean_titles <- texts[!grepl("^(Available Employment Opportunities|Employment Opportunities|Job Openings|Safe Re-Opening|Application Form|Staff Application|ADA Web Accessibility|Click here|Download|Resources|Our School)", texts, ignore.case = TRUE) &
+                        grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute|wanted", texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  pdf_links <- html_attr(html_elements(content, "a[href*=\".pdf\"]"), "href")
+  link_out <- if (length(pdf_links) > 0 && nzchar(pdf_links[1])) xml2::url_absolute(pdf_links[1], url) else url
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("Nye", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(link_out, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Potomac Elementary School District #11
+# ---------------------------------------------------------------------------
+fetch_potomac_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_potomac_postings(html, url)
+}
+
+parse_potomac_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_elements(doc, "main, [role=\"main\"], #SITE_PAGES")
+  if (length(content) == 0) return(empty)
+
+  elements <- html_elements(content, "h1, h2, h3, h4, p, li, a")
+  if (length(elements) == 0) return(empty)
+
+  raw_texts <- trimws(html_text2(elements))
+  raw_texts <- raw_texts[nzchar(raw_texts)]
+
+  # Filter generic headings, navigation, and standing application prompts
+  clean_titles <- raw_texts[!grepl("^(Jobs|Contact the Clerk|Potomac School District Application|Click the document link|Document|Home|Calendar|Menu|Resources|Contact Us)", raw_texts, ignore.case = TRUE) &
+                            grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute", raw_texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("Potomac", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

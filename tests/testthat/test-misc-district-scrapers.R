@@ -4420,6 +4420,90 @@ test_that("parse_desmet_postings returns zero rows on empty or non-matching HTML
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_fishtail_postings returns zero rows on fixture with no active openings", {
+  fixture <- paste(readLines(test_path("fixtures", "fishtail_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://fishtailschool.org/job-openings/"
+
+  result <- parse_fishtail_postings(fixture, url)
+
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_fishtail_postings extracts real positions when present", {
+  test_html <- "<div id=\"av-primary-content\"><h2>Elementary Teacher</h2><a href=\"/app.pdf\">Apply</a></div>"
+  url <- "https://fishtailschool.org/job-openings/"
+
+  result <- parse_fishtail_postings(test_html, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Elementary Teacher")
+  expect_equal(result$Location, "Fishtail")
+  expect_equal(result$Link, "https://fishtailschool.org/app.pdf")
+})
+
+test_that("parse_fishtail_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_fishtail_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_nye_postings returns zero rows on fixture with no active openings", {
+  fixture <- paste(readLines(test_path("fixtures", "nye_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.nyeschooldistrict.org/job-openings/"
+
+  result <- parse_nye_postings(fixture, url)
+
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_nye_postings extracts real positions when present", {
+  test_html <- "<div class=\"entry-content\"><h2>K-8 Music Teacher</h2><a href=\"/app.pdf\">Apply</a></div>"
+  url <- "https://www.nyeschooldistrict.org/job-openings/"
+
+  result <- parse_nye_postings(test_html, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "K-8 Music Teacher")
+  expect_equal(result$Location, "Nye")
+  expect_equal(result$Link, "https://www.nyeschooldistrict.org/app.pdf")
+})
+
+test_that("parse_nye_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_nye_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_potomac_postings returns zero rows on fixture with only application prompt", {
+  fixture <- paste(readLines(test_path("fixtures", "potomac_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.potomacschoolmontana.us/general-9"
+
+  result <- parse_potomac_postings(fixture, url)
+
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_potomac_postings extracts real positions when present", {
+  test_html <- "<main><h2>Special Education Paraprofessional</h2></main>"
+  url <- "https://www.potomacschoolmontana.us/general-9"
+
+  result <- parse_potomac_postings(test_html, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Special Education Paraprofessional")
+  expect_equal(result$Location, "Potomac")
+  expect_equal(result$Link, url)
+})
+
+test_that("parse_potomac_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_potomac_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

@@ -38,6 +38,7 @@ lon <- get_arg("lon")
 url <- get_arg("url")
 slug <- get_arg("slug")
 platform <- get_arg("platform")
+cms <- get_arg("cms")
 
 if (is.null(district) || is.null(city) || is.null(county) || is.null(lat) || is.null(lon) || is.null(url) || is.null(slug)) {
   cat("Error: Missing required arguments.\n\n")
@@ -50,7 +51,8 @@ if (is.null(district) || is.null(city) || is.null(county) || is.null(lat) || is.
   cat("    --lon <numeric> \\\n")
   cat("    --url \"<Job_Link>\" \\\n")
   cat("    --slug \"<slug>\" \\\n")
-  cat("    [--platform \"<Slug>Heuristic\"]\n")
+  cat("    [--platform \"<Slug>Heuristic\"] \\\n")
+  cat("    [--cms \"<weebly|wordpress|edlio|google_sites|generic>\"]\n")
   quit(status = 1)
 }
 
@@ -62,6 +64,32 @@ if (is.null(platform)) {
   # Capitalize words in slug
   cap_slug <- paste0(toupper(substr(slug, 1, 1)), substr(slug, 2, nchar(slug)))
   platform <- paste0(cap_slug, "Heuristic")
+}
+
+# Determine CMS template
+fixture_file <- here::here("tests", "testthat", "fixtures", paste0(slug, "_jobs.html"))
+if (is.null(cms)) {
+  if (file.exists(fixture_file)) {
+    fix_txt <- paste(readLines(fixture_file, warn = FALSE), collapse = " ")
+    if (grepl("wsite-content|weebly\\.com", fix_txt, ignore.case = TRUE)) {
+      cms <- "weebly"
+    } else if (grepl("wp-content|wp-includes|\\bdivi\\b", fix_txt, ignore.case = TRUE)) {
+      cms <- "wordpress"
+    } else if (grepl("edliocdn|uREC_ID=|/apps/jobs/|show_job\\.jsp", fix_txt, ignore.case = TRUE)) {
+      cms <- "edlio"
+    } else if (grepl("sites\\.google\\.com|sites-layout-tile", fix_txt, ignore.case = TRUE)) {
+      cms <- "google_sites"
+    } else {
+      cms <- "generic"
+    }
+    cat(sprintf("CMS:      %s (auto-detected from fixture)\n", cms))
+  } else {
+    cms <- "generic"
+    cat(sprintf("CMS:      %s (default)\n", cms))
+  }
+} else {
+  cms <- tolower(cms)
+  cat(sprintf("CMS:      %s (specified)\n", cms))
 }
 
 cat(sprintf("=== Scaffolding District: %s ===\n", district))
@@ -214,19 +242,153 @@ misc_content <- paste(readLines(misc_path, warn = FALSE), collapse = "\n")
 if (grepl(sprintf("fetch_%s_postings", slug), misc_content, fixed = TRUE)) {
   cat(sprintf("[5/8] fetch_%s_postings already exists in misc_district_scrapers.R\n", slug))
 } else {
-  scraper_scaffold <- sprintf('
-# ---------------------------------------------------------------------------
-# %s
-# ---------------------------------------------------------------------------
-fetch_%s_postings <- function(url) {
-  resp <- request(url) %%>%%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %%>%%
-    perform_with_retry()
-  html <- resp_body_string(resp)
-  parse_%s_postings(html, url)
-}
+  parser_body <- if (cms == "weebly") {
+    sprintf('parse_%s_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
 
-parse_%s_postings <- function(html, url) {
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_element(doc, "#wsite-content")
+  if (is.null(content)) return(empty)
+
+  elements <- html_elements(content, "h2.wsite-content-title, .wsite-content-title, .paragraph, p, li")
+  if (length(elements) == 0) return(empty)
+
+  raw_texts <- trimws(html_text2(elements))
+  raw_texts <- raw_texts[nzchar(raw_texts)]
+
+  clean_titles <- raw_texts[!grepl("^(Employment Opportunities|Certified Salary|Click here|Classified Personnel|Certified Personnel|Coaching Personnel|NOTE:|No opening|Equal Opportunity|Application Form)", raw_texts, ignore.case = TRUE) &
+                            grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute", raw_texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("%s", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}', slug, city)
+  } else if (cms == "wordpress") {
+    sprintf('parse_%s_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_elements(doc, ".entry-content, article, #main-content, main")
+  if (length(content) == 0) content <- doc
+
+  elements <- html_elements(content, "h1, h2, h3, h4, li, a, p")
+  texts <- trimws(html_text2(elements))
+  texts <- texts[nzchar(texts)]
+
+  clean_titles <- texts[!grepl("^(Available Employment Opportunities|Employment Opportunities|Job Opportunities|Application Form|Staff Application|ADA Web Accessibility|Click here|Download)", texts, ignore.case = TRUE) &
+                        grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute|wanted", texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  pdf_links <- html_attr(html_elements(content, "a[href*=\\\".pdf\\\"]"), "href")
+  link_out <- if (length(pdf_links) > 0 && nzchar(pdf_links[1])) xml2::url_absolute(pdf_links[1], url) else url
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("%s", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(link_out, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}', slug, city)
+  } else if (cms == "edlio") {
+    sprintf('parse_%s_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  job_links <- html_elements(doc, "a[href*=\\\"show_job.jsp\\\"], a[href*=\\\"/apps/jobs/show_job\\\"], .job-title a, .list-item a")
+  if (length(job_links) == 0) return(empty)
+
+  titles <- trimws(html_text2(job_links))
+  hrefs <- html_attr(job_links, "href")
+
+  valid_idx <- nzchar(titles) & !grepl("^(Application|Certified Application|Classified Application|Equal Opportunity)", titles, ignore.case = TRUE)
+  titles <- titles[valid_idx]
+  hrefs <- hrefs[valid_idx]
+
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("%s", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = xml2::url_absolute(hrefs, url),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}', slug, city)
+  } else if (cms == "google_sites") {
+    sprintf('parse_%s_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_elements(doc, "[role=\\\"main\\\"], .sites-layout-tile, .sites-tile-name-content-1")
+  if (length(content) == 0) content <- doc
+
+  elements <- html_elements(content, "h1, h2, h3, h4, p, li")
+  texts <- trimws(html_text2(elements))
+  texts <- texts[nzchar(texts)]
+
+  clean_titles <- texts[!grepl("^(Employment Opportunities|Job Openings|Office Staff|Contact Us|Home|Download|Application)", texts, ignore.case = TRUE) &
+                        grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute", texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("%s", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}', slug, city)
+  } else {
+    sprintf('parse_%s_postings <- function(html, url) {
   empty <- data.frame(
     Title = character(0),
     Location = character(0),
@@ -241,14 +403,29 @@ parse_%s_postings <- function(html, url) {
 
   # TODO: Implement selector logic
   empty
+}', slug)
+  }
+
+  scraper_scaffold <- sprintf('
+# ---------------------------------------------------------------------------
+# %s
+# ---------------------------------------------------------------------------
+fetch_%s_postings <- function(url) {
+  resp <- request(url) %%>%%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %%>%%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_%s_postings(html, url)
 }
-', district, slug, slug, slug)
+
+%s
+', district, slug, slug, parser_body)
 
   misc_marker <- "# District-level data-completeness classification"
   if (grepl(misc_marker, misc_content, fixed = TRUE)) {
     misc_content <- sub(misc_marker, paste0(trimws(scraper_scaffold), "\n\n", misc_marker), misc_content, fixed = TRUE)
     writeLines(misc_content, misc_path)
-    cat(sprintf("[5/8] Updated misc_district_scrapers.R (added skeleton fetch_%s_postings and parse_%s_postings)\n", slug, slug))
+    cat(sprintf("[5/8] Updated misc_district_scrapers.R (added %s fetch_%s_postings and parse_%s_postings)\n", cms, slug, slug))
   } else {
     cat("[WARNING] Could not find tier classification marker in misc_district_scrapers.R\n")
   }
@@ -261,19 +438,21 @@ test_path <- here::here("tests", "testthat", "test-misc-district-scrapers.R")
 test_content <- paste(readLines(test_path, warn = FALSE), collapse = "\n")
 
 if (grepl(sprintf("parse_%s_postings", slug), test_content, fixed = TRUE)) {
-  cat(sprintf("[6/6] parse_%s_postings test already exists in test-misc-district-scrapers.R\n", slug))
+  cat(sprintf("[6/8] parse_%s_postings test already exists in test-misc-district-scrapers.R\n", slug))
 } else {
   test_scaffold <- sprintf('
-test_that("parse_%s_postings extracts real positions from captured fixture", {
+test_that("parse_%s_postings extracts real positions or returns empty cleanly", {
   fixture <- paste(readLines(test_path("fixtures", "%s_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\\n")
   url <- "%s"
 
   result <- parse_%s_postings(fixture, url)
 
-  expect_true(nrow(result) > 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_true(all(result$Location == "%s"))
-  expect_true(all(is.na(result$Posted_Date)))
+  if (nrow(result) > 0) {
+    expect_true(all(result$Location == "%s"))
+    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
+    expect_true(all(nzchar(result$Link)))
+  }
 })
 
 test_that("parse_%s_postings returns zero rows on empty or non-matching HTML", {

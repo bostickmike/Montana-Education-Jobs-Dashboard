@@ -191,12 +191,25 @@ if (nrow(useful_links) == 0) {
   }
 }
 
-if (!bot_gate) {
+if (!is_bot_gated) {
   domain <- sub("^www\\.", "", tolower(sub("^https?://([^/:?#]+).*$", "\\1", final_url)))
   suggested_slug <- tolower(gsub("[^a-zA-Z0-9]", "", strsplit(domain, "\\.")[[1]][1]))
+  suggested_cms <- "generic"
+  if (any(grepl("weebly", platforms, ignore.case = TRUE))) {
+    suggested_cms <- "weebly"
+  } else if (any(grepl("wordpress|divi", platforms, ignore.case = TRUE))) {
+    suggested_cms <- "wordpress"
+  } else if (any(grepl("edlio", platforms, ignore.case = TRUE))) {
+    suggested_cms <- "edlio"
+  } else if (any(grepl("google sites", platforms, ignore.case = TRUE))) {
+    suggested_cms <- "google_sites"
+  } else if (any(grepl("finalsite", platforms, ignore.case = TRUE))) {
+    suggested_cms <- "finalsite"
+  }
+
   cat("\n--- Suggested Tool Commands ---\n")
   cat(sprintf("Capture fixture:\n  Rscript scripts/capture_fixture.R --url \"%s\" --slug \"%s\"\n\n", final_url, suggested_slug))
-  cat(sprintf("Scaffold district:\n  Rscript scripts/scaffold_district.R --district \"<Name>\" --city \"<City>\" --county \"<County>\" --lat <lat> --lon <lon> --url \"%s\" --slug \"%s\"\n", final_url, suggested_slug))
+  cat(sprintf("Scaffold district:\n  Rscript scripts/scaffold_district.R --district \"<Name>\" --city \"<City>\" --county \"<County>\" --lat <lat> --lon <lon> --url \"%s\" --slug \"%s\" --cms \"%s\"\n", final_url, suggested_slug, suggested_cms))
 }
 
 cat("\n=== Probe Complete ===\n")

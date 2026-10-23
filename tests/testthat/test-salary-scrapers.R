@@ -204,7 +204,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Sun River Valley School District #24",
                      "Circle Public Schools",
                      "Forsyth Public Schools",
-                     "DeSmet Public School"))
+                     "DeSmet Public School",
+                     "Fishtail School District #13",
+                     "Nye School District #31",
+                     "Potomac Elementary School District #11"))
 })
 
 # ---------------------------------------------------------------------------

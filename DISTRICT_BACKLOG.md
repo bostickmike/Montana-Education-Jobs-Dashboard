@@ -145,6 +145,9 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Forsyth School District #4 | Rosebud | `forsythpublicschools.org/bus-drivers-wanted/` | WordPress CMS; 1 active position (Bus Drivers Wanted!); links to training program PDF | ✅ **Adopted** (2026-10-22, Batch 19) |
 | Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; clean page marker; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 19) |
 | DeSmet Public School | Missoula | `desmetschool.org/available-employment-opportunities/` | WordPress / Divi CMS; clean application page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 19) |
+| Fishtail School District #13 | Stillwater | `fishtailschool.org/job-openings/` | WordPress CMS; dedicated job openings page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
+| Nye School District #31 | Stillwater | `nyeschooldistrict.org/job-openings/` | WordPress CMS; dedicated job openings page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
+| Potomac Elementary School District #11 | Missoula | `potomacschoolmontana.us/general-9` | Wix CMS; dedicated Jobs page with application prompt; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
 
 ---
 
@@ -210,7 +213,7 @@ covers their teacher postings.
 | District | County | Issue | Status |
 |---|---|---|---|
 | Kester School District #29 | Fallon | banner says "no longer accepting applications" while the body still describes the position in present tense | TODO (recheck) |
-| Fishtail School District #16 | Stillwater | "Job Openings" page is a broken template with literal `sample@email.com` placeholder text | TODO (recheck) |
+| Fishtail School District #13 | Stillwater | `fishtailschool.org/job-openings/` | Clean job openings page without broken placeholders | ✅ **Adopted** (2026-10-22, Batch 20) |
 
 ---
 
