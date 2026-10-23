@@ -77,15 +77,18 @@ cat(sprintf("Job Link: %s\n\n", url))
 reg_path <- here::here("k12_district_registry.csv")
 reg_lines <- readLines(reg_path, warn = FALSE)
 existing_reg <- read.csv(reg_path, stringsAsFactors = FALSE)
+old_count <- nrow(existing_reg)
+new_count <- old_count
 
 if (district %in% existing_reg$District) {
-  cat(sprintf("[1/6] District '%s' already exists in k12_district_registry.csv\n", district))
+  cat(sprintf("[1/8] District '%s' already exists in k12_district_registry.csv\n", district))
 } else {
+  new_count <- old_count + 1
   new_reg_row <- sprintf('"%s","%s","%s",%s,%s,"%s","","%s"',
                          district, city, county, lat, lon, platform, url)
   # Append row
   writeLines(c(reg_lines, new_reg_row), reg_path)
-  cat(sprintf("[1/6] Updated k12_district_registry.csv (+1 row, total %d)\n", nrow(existing_reg) + 1))
+  cat(sprintf("[1/8] Updated k12_district_registry.csv (+1 row, total %d)\n", new_count))
 }
 
 # ---------------------------------------------------------------------------
@@ -106,9 +109,9 @@ if (!covered) {
   clean_lines <- allow_lines[nzchar(trimws(allow_lines)) & !startsWith(trimws(allow_lines), "#")]
   updated_allow <- sort(unique(c(clean_lines, url_host)))
   writeLines(updated_allow, allow_path)
-  cat(sprintf("[2/6] Updated .github/copilot-allowlist.txt (added %s)\n", url_host))
+  cat(sprintf("[2/8] Updated .github/copilot-allowlist.txt (added %s)\n", url_host))
 } else {
-  cat(sprintf("[2/6] Host %s already covered in .github/copilot-allowlist.txt\n", url_host))
+  cat(sprintf("[2/8] Host %s already covered in .github/copilot-allowlist.txt\n", url_host))
 }
 
 # ---------------------------------------------------------------------------
@@ -118,7 +121,7 @@ sal_path <- here::here("tests", "testthat", "test-salary-scrapers.R")
 sal_content <- paste(readLines(sal_path, warn = FALSE), collapse = "\n")
 
 if (grepl(sprintf('"%s"', district), sal_content, fixed = TRUE)) {
-  cat("[3/6] District already present in test-salary-scrapers.R\n")
+  cat("[3/8] District already present in test-salary-scrapers.R\n")
 } else {
   # Match the last quoted district inside the unmapped setdiff expect_setequal block
   pattern <- '("[^"]+")\\)\\)\\s*\\n\\}\\)'
@@ -126,7 +129,7 @@ if (grepl(sprintf('"%s"', district), sal_content, fixed = TRUE)) {
     replacement <- sprintf('\\1,\n                     "%s"))\n})', district)
     sal_content <- sub(pattern, replacement, sal_content)
     writeLines(sal_content, sal_path)
-    cat(sprintf("[3/6] Updated test-salary-scrapers.R (added '%s' to unmapped setdiff)\n", district))
+    cat(sprintf("[3/8] Updated test-salary-scrapers.R (added '%s' to unmapped setdiff)\n", district))
   } else {
     cat("[WARNING] Could not automatically update test-salary-scrapers.R unmapped list. Please add manually.\n")
   }
@@ -139,7 +142,7 @@ rmd_path <- here::here("Mt_ED_Jobs.Rmd")
 rmd_content <- paste(readLines(rmd_path, warn = FALSE), collapse = "\n")
 
 if (grepl(sprintf("%s_df <-", slug), rmd_content, fixed = TRUE)) {
-  cat(sprintf("[4/6] District slug '%s' already wired in Mt_ED_Jobs.Rmd\n", slug))
+  cat(sprintf("[4/8] District slug '%s' already wired in Mt_ED_Jobs.Rmd\n", slug))
 } else {
   # A. Insert scraper block right before Lincoln School District block
   scrape_block <- sprintf('
@@ -199,7 +202,7 @@ if (nrow(%s_df) > 0) {
   }
 
   writeLines(rmd_content, rmd_path)
-  cat("[4/6] Updated Mt_ED_Jobs.Rmd (scraper block, standardize_date, direct_df)\n")
+  cat("[4/8] Updated Mt_ED_Jobs.Rmd (scraper block, standardize_date, direct_df)\n")
 }
 
 # ---------------------------------------------------------------------------
@@ -209,7 +212,7 @@ misc_path <- here::here("misc_district_scrapers.R")
 misc_content <- paste(readLines(misc_path, warn = FALSE), collapse = "\n")
 
 if (grepl(sprintf("fetch_%s_postings", slug), misc_content, fixed = TRUE)) {
-  cat(sprintf("[5/6] fetch_%s_postings already exists in misc_district_scrapers.R\n", slug))
+  cat(sprintf("[5/8] fetch_%s_postings already exists in misc_district_scrapers.R\n", slug))
 } else {
   scraper_scaffold <- sprintf('
 # ---------------------------------------------------------------------------
@@ -245,7 +248,7 @@ parse_%s_postings <- function(html, url) {
   if (grepl(misc_marker, misc_content, fixed = TRUE)) {
     misc_content <- sub(misc_marker, paste0(trimws(scraper_scaffold), "\n\n", misc_marker), misc_content, fixed = TRUE)
     writeLines(misc_content, misc_path)
-    cat(sprintf("[5/6] Updated misc_district_scrapers.R (added skeleton fetch_%s_postings and parse_%s_postings)\n", slug, slug))
+    cat(sprintf("[5/8] Updated misc_district_scrapers.R (added skeleton fetch_%s_postings and parse_%s_postings)\n", slug, slug))
   } else {
     cat("[WARNING] Could not find tier classification marker in misc_district_scrapers.R\n")
   }
@@ -284,10 +287,44 @@ test_that("parse_%s_postings returns zero rows on empty or non-matching HTML", {
   if (grepl(test_marker, test_content, fixed = TRUE)) {
     test_content <- sub(test_marker, paste0(trimws(test_scaffold), "\n\n", test_marker), test_content, fixed = TRUE)
     writeLines(test_content, test_path)
-    cat(sprintf("[6/6] Updated test-misc-district-scrapers.R (added unit test templates for parse_%s_postings)\n", slug))
+    cat(sprintf("[6/8] Updated test-misc-district-scrapers.R (added unit test templates for parse_%s_postings)\n", slug))
   } else {
     cat("[WARNING] Could not find test marker in test-misc-district-scrapers.R\n")
   }
+}
+
+# ---------------------------------------------------------------------------
+# 7. README.md & DATA_COOKBOOK.md (District count sync)
+# ---------------------------------------------------------------------------
+if (new_count > old_count) {
+  readme_path <- here::here("README.md")
+  if (file.exists(readme_path)) {
+    rm_content <- paste(readLines(readme_path, warn = FALSE), collapse = "\n")
+    rm_content <- gsub(sprintf("K-12 covers %d directly-scraped districts", old_count),
+                       sprintf("K-12 covers %d directly-scraped districts", new_count),
+                       rm_content)
+    writeLines(rm_content, readme_path)
+    cat(sprintf("[7/8] Updated README.md (count %d -> %d)\n", old_count, new_count))
+  }
+
+  cookbook_path <- here::here("DATA_COOKBOOK.md")
+  if (file.exists(cookbook_path)) {
+    cb_content <- paste(readLines(cookbook_path, warn = FALSE), collapse = "\n")
+    cb_content <- gsub(sprintf("scraping scope (%d K-12 districts", old_count),
+                       sprintf("scraping scope (%d K-12 districts", new_count),
+                       cb_content, fixed = TRUE)
+    cb_content <- gsub(sprintf("Within that %d/23 scope", old_count),
+                       sprintf("Within that %d/23 scope", new_count),
+                       cb_content, fixed = TRUE)
+    cb_content <- gsub(sprintf("cover 32 of the %d K-12 districts", old_count),
+                       sprintf("cover 32 of the %d K-12 districts", new_count),
+                       cb_content, fixed = TRUE)
+    writeLines(cb_content, cookbook_path)
+    cat(sprintf("[8/8] Updated DATA_COOKBOOK.md (count %d -> %d)\n", old_count, new_count))
+  }
+} else {
+  cat("[7/8] README.md already at current count\n")
+  cat("[8/8] DATA_COOKBOOK.md already at current count\n")
 }
 
 cat("\n=== Scaffolding Complete! ===\n")

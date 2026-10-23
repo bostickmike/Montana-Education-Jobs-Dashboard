@@ -190,4 +190,13 @@ if (nrow(useful_links) == 0) {
     cat(sprintf("  [%02d] %s -> %s\n", i, preview_links$text[i], preview_links$href[i]))
   }
 }
+
+if (!bot_gate) {
+  domain <- sub("^www\\.", "", tolower(sub("^https?://([^/:?#]+).*$", "\\1", final_url)))
+  suggested_slug <- tolower(gsub("[^a-zA-Z0-9]", "", strsplit(domain, "\\.")[[1]][1]))
+  cat("\n--- Suggested Tool Commands ---\n")
+  cat(sprintf("Capture fixture:\n  Rscript scripts/capture_fixture.R --url \"%s\" --slug \"%s\"\n\n", final_url, suggested_slug))
+  cat(sprintf("Scaffold district:\n  Rscript scripts/scaffold_district.R --district \"<Name>\" --city \"<City>\" --county \"<County>\" --lat <lat> --lon <lon> --url \"%s\" --slug \"%s\"\n", final_url, suggested_slug))
+}
+
 cat("\n=== Probe Complete ===\n")

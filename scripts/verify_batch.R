@@ -13,10 +13,26 @@ suppressMessages({
 })
 
 args <- commandArgs(trailingOnly = TRUE)
+run_all <- "--all" %in% args
 filter_pattern <- NULL
 if ("--filter" %in% args) {
   idx <- which(args == "--filter")
   if (length(args) >= idx + 1) filter_pattern <- args[idx + 1]
+}
+
+# Auto-detect active batch from git status if --filter and --all are not specified
+if (is.null(filter_pattern) && !run_all) {
+  git_stat <- tryCatch(system("git status --porcelain tests/testthat/fixtures/", intern = TRUE), error = function(e) character(0))
+  fixtures <- grep("_jobs\\.html", git_stat, value = TRUE)
+  if (length(fixtures) > 0) {
+    slugs <- gsub(".*fixtures/([a-zA-Z0-9_-]+)_jobs\\.html.*", "\\1", fixtures)
+    slugs <- unique(slugs[nzchar(slugs)])
+    if (length(slugs) > 0) {
+      filter_pattern <- paste(slugs, collapse = "|")
+      cat(sprintf("[AUTO-DETECT] Detected active batch fixture(s): %s\n", paste(slugs, collapse = ", ")))
+      cat(sprintf("[AUTO-DETECT] Setting filter: '%s' (use --all to run full 390+ test regression suite)\n\n", filter_pattern))
+    }
+  }
 }
 
 suites <- c(
