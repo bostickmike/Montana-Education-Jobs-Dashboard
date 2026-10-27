@@ -88,7 +88,7 @@ run_canaries <- function(fips = "30") {
   checks[[2]] <- check_endpoint("Urban Institute CCD Directory", ccd_url, validate_urban_ccd)
 
   # 3. OPI Statewide Feed
-  opi_url <- "https://apps.opi.mt.gov/mtjobsforteachers/Teachers/TeacherSearch.aspx"
+  opi_url <- "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx"
   checks[[3]] <- check_endpoint("OPI Statewide Feed", opi_url, validate_opi)
 
   # 4. Census Bureau (if key present)
