@@ -123,6 +123,27 @@ mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
   rename(Name = District) %>%
   mutate(Finance_FY = as.character(Finance_FY))
 
+# District salary lookup for the Jobs Table
+k12_salary_lookup <- mapdata2_k12 %>%
+  select(Name, Teacher_Avg_Salary, Teacher_Salary_10th_Pctile, Teacher_Salary_90th_Pctile) %>%
+  mutate(
+    `District Avg Salary` = ifelse(
+      is.na(Teacher_Avg_Salary),
+      "—",
+      scales::dollar(Teacher_Avg_Salary, accuracy = 1)
+    ),
+    `Salary Band (10th-90th)` = ifelse(
+      is.na(Teacher_Salary_10th_Pctile) | is.na(Teacher_Salary_90th_Pctile),
+      "—",
+      paste0(scales::dollar(Teacher_Salary_10th_Pctile, accuracy = 1), " – ", scales::dollar(Teacher_Salary_90th_Pctile, accuracy = 1))
+    )
+  )
+
+combineddata <- combineddata %>%
+  left_join(k12_salary_lookup, by = c("District" = "Name")) %>%
+  select(District, Title, Position, Location, `District Avg Salary`, `Salary Band (10th-90th)`,
+         `Posted / listed`, Link, Source, `Identity method`)
+
 # Weekly ALL-category posting totals per district/institution -- powers the
 # sparkline trend next to each entity's raw count on the Top Hiring tables.
 k12_district_weekly_totals <- read.csv("k12_district_weekly_totals.csv", fileEncoding = "UTF-8") %>%
@@ -352,6 +373,21 @@ mapdata2_he <- read.csv("salarymap.csv") %>%
                              "Enrollment", "Enrollment_Change_Pct", "Pell_Recipient_Share", "Pell_Year"),
                            "salarymap.csv") %>%
   mutate(Salary_Year = as.character(Salary_Year), Pell_Year = as.character(Pell_Year))
+
+# Institution faculty salary lookup for the Higher Ed Jobs Table
+he_salary_lookup <- mapdata2_he %>%
+  select(Name, Faculty_Avg_Salary) %>%
+  mutate(
+    `Avg Faculty Salary` = ifelse(
+      is.na(Faculty_Avg_Salary),
+      "—",
+      scales::dollar(Faculty_Avg_Salary, accuracy = 1)
+    )
+  )
+
+ccdata <- ccdata %>%
+  left_join(he_salary_lookup, by = c("Institution" = "Name")) %>%
+  select(Institution, Title, Location, Appointment, `Avg Faculty Salary`, `Posted / listed`, Link)
 
 hesum_he <- read.csv("allsum_he.csv") %>%
   validate_and_pad_schema(c("Category", "Archive_Date", "Institution", "Job_Type", "sum"), "allsum_he.csv") %>%
@@ -829,7 +865,7 @@ ui <- dashboardPage(
       tabItem(
         tabName = "k12_table",
         div(style = "display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 8px;",
-            tags$span(class = "help-block", style = "margin: 0;", "Source is included in this table and its exports. OPI Jobs for Teachers rows use OPI's raw employer/location label, not a canonical district identifier."),
+            tags$span(class = "help-block", style = "margin: 0;", "District salary benchmarks reflect MT DLI Teacher Compensation data (Source: OPI GEMS). OPI Jobs for Teachers rows use OPI's raw employer/location label."),
             tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues/new?template=data_issue.yml",
                    target = "_blank", class = "btn btn-default btn-xs",
                    icon("flag"), " Report Mistake / Closed Job")
@@ -919,11 +955,12 @@ ui <- dashboardPage(
       tabItem(
         tabName = "he_table",
         div(style = "display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 8px;",
-            uiOutput("he_filter_status"),
+            tags$span(class = "help-block", style = "margin: 0;", "Avg Faculty Salary reflects full-time instructional staff compensation from IPEDS via Urban Institute."),
             tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues/new?template=data_issue.yml",
                    target = "_blank", class = "btn btn-default btn-xs",
                    icon("flag"), " Report Mistake / Closed Job")
         ),
+        uiOutput("he_filter_status"),
         radioButtons(
           "he_table_appointment", "Appointment:",
           choices = c(
