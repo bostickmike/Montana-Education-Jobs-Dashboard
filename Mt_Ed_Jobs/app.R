@@ -1034,7 +1034,7 @@ ui <- dashboardPage(
             "K-12 vacancy rate is current teacher postings ÷ CCD teacher FTE; Higher Ed vacancy rate is current instructor/faculty postings ÷ IPEDS full-time instructional staff. ",
             "The two use different staffing sources and reporting years — compare rates within a type (district vs. district, institution vs. institution), not across K-12 and Higher Ed."),
         div(style = "text-align:center; color:#999; font-size:0.85em; padding:15px;",
-            paste0("Refreshed on: ", last_refreshed_date, " · Created by Michael Bostick"))
+            paste0("Refreshed on: ", last_refreshed_date, " · Created by Mike Bostick and Mark Perkins"))
       ),
 
       tabItem(
@@ -1209,7 +1209,7 @@ ui <- dashboardPage(
             p("This project is open-source and maintained to promote labor market transparency in public education. If you use these datasets in academic research, policy analysis, or journalism, please cite:"),
             tags$blockquote(
               style = "font-size: 13px; background: #f9f9f9; padding: 10px 15px; border-left: 4px solid #2a78d6;",
-              "Bostick, M. (2026). Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context. ",
+              "Bostick, M., & Perkins, M. (2026). Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context. ",
               tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard", target = "_blank", "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard")
             ),
             p(style = "margin-bottom: 0; font-size: 12px; color: #777;",

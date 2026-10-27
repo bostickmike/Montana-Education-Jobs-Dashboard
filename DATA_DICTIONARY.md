@@ -154,8 +154,8 @@ To support seamless merges with federal, state, and academic datasets, the follo
 Researchers utilizing these datasets should cite the project as follows:
 
 ```bibtex
-@misc{bostick2026montana,
-  author = {Bostick, Mike},
+@misc{bostick_perkins_2026_montana,
+  author = {Bostick, Mike and Perkins, Mark},
   title = {Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context},
   year = {2026},
   publisher = {GitHub},

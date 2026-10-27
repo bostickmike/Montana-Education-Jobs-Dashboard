@@ -1,5 +1,7 @@
 ---
 title: "MT Job Scrape"
+author: "Mike Bostick and Mark Perkins"
+date: "2025-09-18"
 output: html_document
 ---
 
@@ -2137,7 +2139,7 @@ power_results <- lapply(seq_len(nrow(power_districts)), function(i) {
 })
 power_df <- bind_rows(power_results)
 if (nrow(power_df) > 0) {
-  power_df <- power_df %%
+  power_df <- power_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
               Posting_Source = "Power Public Schools site (direct board)")
@@ -2161,7 +2163,7 @@ kila_results <- lapply(seq_len(nrow(kila_districts)), function(i) {
 })
 kila_df <- bind_rows(kila_results)
 if (nrow(kila_df) > 0) {
-  kila_df <- kila_df %%
+  kila_df <- kila_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
               Posting_Source = "Kila School District #20 site (direct board)")
@@ -2185,7 +2187,7 @@ lavina_results <- lapply(seq_len(nrow(lavina_districts)), function(i) {
 })
 lavina_df <- bind_rows(lavina_results)
 if (nrow(lavina_df) > 0) {
-  lavina_df <- lavina_df %%
+  lavina_df <- lavina_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
               Posting_Source = "Lavina Public Schools site (direct board)")
