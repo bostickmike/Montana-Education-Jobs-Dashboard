@@ -903,6 +903,7 @@ ui <- dashboardPage(
       id = "sidebar_tabs",
       menuItem("Home", tabName = "intro", icon = icon("house")),
       menuItem("Map", tabName = "map_tab", icon = icon("map-location-dot")),
+      menuItem("Data Sources & Downloads", tabName = "data_tab", icon = icon("database")),
       tags$li(class = "header", "K-12 CAREERS"),
       menuItem("Jobs Table", tabName = "k12_table", icon = icon("table")),
       menuItem("District Summary", tabName = "k12_summary", icon = icon("school")),
@@ -1051,6 +1052,144 @@ ui <- dashboardPage(
               "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison. ",
               "A red \"Partial\" badge means that district's postings come from a heuristic scrape of the district's own site rather than a real structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-scraped district's count."
             ))
+        )
+      ),
+
+      tabItem(
+        tabName = "data_tab",
+        h1("Data Sources & Open Research Downloads"),
+        p(class = "lead", "Transparent data provenance, methodology documentation, and downloadable datasets for researchers, policy analysts, school administrators, and the public."),
+        
+        fluidRow(
+          box(
+            width = 12, title = "Open Research Downloads", status = "primary", solidHeader = TRUE,
+            p("Every weekly snapshot is preserved. Download current or multi-year longitudinal datasets in standard CSV format:"),
+            fluidRow(
+              column(4,
+                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
+                  h4(icon("briefcase"), " Active K-12 Jobs", style = "margin-top: 0; font-size: 16px; font-weight: 600;"),
+                  p(style = "font-size: 13px; color: #555;", "All current public school job openings in Montana with standardized titles, categories, employer districts, and district salary benchmarks."),
+                  downloadButton("download_active_k12", "Download Active Jobs (CSV)", class = "btn-default btn-sm btn-block")
+                )
+              ),
+              column(4,
+                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
+                  h4(icon("clock-rotate-left"), " K-12 Postings Archive", style = "margin-top: 0; font-size: 16px; font-weight: 600;"),
+                  p(style = "font-size: 13px; color: #555;", "Historical record of weekly K-12 job postings across Montana (3,200+ records). For hiring seasonality and longitudinal teacher demand studies."),
+                  downloadButton("download_history_k12", "Download Historical K-12 (CSV)", class = "btn-default btn-sm btn-block")
+                )
+              ),
+              column(4,
+                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
+                  h4(icon("school"), " District Profiles & DLI Salaries", style = "margin-top: 0; font-size: 16px; font-weight: 600;"),
+                  p(style = "font-size: 13px; color: #555;", "District-level profiles: MT DLI 10th percentile, average, and 90th percentile salaries, NCES teacher FTE & enrollment, student-to-teacher ratios, and Census poverty/income."),
+                  downloadButton("download_district_benchmarks", "Download District Profiles (CSV)", class = "btn-default btn-sm btn-block")
+                )
+              )
+            ),
+            fluidRow(
+              column(4,
+                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
+                  h4(icon("building-columns"), " Higher Ed Historical Archive", style = "margin-top: 0; font-size: 16px; font-weight: 600;"),
+                  p(style = "font-size: 13px; color: #555;", "Longitudinal postings for instructional faculty, adjuncts, and staff across the Montana University System, tribal colleges, and community colleges (2,200+ records)."),
+                  downloadButton("download_history_he", "Download Higher Ed Archive (CSV)", class = "btn-default btn-sm btn-block")
+                )
+              ),
+              column(4,
+                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
+                  h4(icon("graduation-cap"), " Higher Ed Benchmarks", style = "margin-top: 0; font-size: 16px; font-weight: 600;"),
+                  p(style = "font-size: 13px; color: #555;", "Institution-level profiles: IPEDS instructional faculty salaries (all ranks and professor rank), enrollment counts, and federal FSA Pell Grant recipient shares."),
+                  downloadButton("download_he_benchmarks", "Download Higher Ed Profiles (CSV)", class = "btn-default btn-sm btn-block")
+                )
+              ),
+              column(4,
+                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
+                  h4(icon("chart-line"), " K-12 Weekly Vacancy Series", style = "margin-top: 0; font-size: 16px; font-weight: 600;"),
+                  p(style = "font-size: 13px; color: #555;", "Weekly longitudinal vacancy totals across Montana school districts (3,700+ district-week observations). Ideal for seasonal hiring cycles and supply/demand modeling."),
+                  downloadButton("download_weekly_totals", "Download Vacancy Time Series (CSV)", class = "btn-default btn-sm btn-block")
+                )
+              )
+            )
+          )
+        ),
+
+        fluidRow(
+          box(
+            width = 12, title = "Data Provenance & Source Transparency", status = "primary",
+            p("All datasets are compiled through automated, reproducible scraping and federal/state data integration pipelines. Here is where every data point originates:"),
+            div(class = "table-responsive",
+              tags$table(
+                class = "table table-striped table-bordered table-hover",
+                tags$thead(
+                  tags$tr(
+                    tags$th("Dataset Layer"),
+                    tags$th("Primary Authority / Source"),
+                    tags$th("Refresh Frequency"),
+                    tags$th("Description & Research Utility")
+                  )
+                ),
+                tags$tbody(
+                  tags$tr(
+                    tags$td(strong("K-12 Active Vacancies")),
+                    tags$td("Direct District ATS Platforms (AppliTrack, SchoolSpring, TalentEd, Tyler Portico) + Montana OPI Jobs for Teachers"),
+                    tags$td(span(class = "label label-success", "Weekly")),
+                    tags$td("Standardized active postings across 180+ Montana school districts and regional education cooperatives, deduplicated and enriched with standardized job roles, categories, and direct application links.")
+                  ),
+                  tags$tr(
+                    tags$td(strong("K-12 Historical Archive")),
+                    tags$td("Longitudinal Project Archive (2023-Present)"),
+                    tags$td(span(class = "label label-info", "Weekly Append")),
+                    tags$td("Cumulative longitudinal archive of education postings used to model seasonal hiring waves, subject-area shortages (STEM, Special Education, CTE), and geographic vacancy concentrations.")
+                  ),
+                  tags$tr(
+                    tags$td(strong("K-12 Teacher Compensation")),
+                    tags$td("Montana Dept of Labor & Industry (DLI) / OPI GEMS Certified Staff Collection"),
+                    tags$td(span(class = "label label-info", "Annual / Periodic")),
+                    tags$td("Published teacher compensation distributions (10th percentile, average, and 90th percentile) across 105+ Montana school districts. Sourced directly from official state regional wage reports.")
+                  ),
+                  tags$tr(
+                    tags$td(strong("District Staffing & Enrollment")),
+                    tags$td("NCES Common Core of Data (CCD) via Urban Institute"),
+                    tags$td(span(class = "label label-info", "Annual")),
+                    tags$td("Federal National Center for Education Statistics district-level teacher FTE and student enrollment counts. Powers vacancy-rate calculations and student-to-teacher ratios.")
+                  ),
+                  tags$tr(
+                    tags$td(strong("Higher Ed Faculty Compensation")),
+                    tags$td("NCES IPEDS Instructional Staff Salary Survey"),
+                    tags$td(span(class = "label label-info", "Annual")),
+                    tags$td("Average full-time instructional faculty salaries (all combined and full professor rank) for Montana University System campuses, tribal colleges, and community colleges.")
+                  ),
+                  tags$tr(
+                    tags$td(strong("County Economic Context")),
+                    tags$td("US Census Bureau (ACS 5-Year Estimates)"),
+                    tags$td(span(class = "label label-info", "Annual")),
+                    tags$td("County median household income, median gross rent, share of civilian labor force in agriculture/resource extraction, and 5-year population trajectory.")
+                  ),
+                  tags$tr(
+                    tags$td(strong("Student Need Context")),
+                    tags$td("Census SAIPE & US Dept of Education FSA"),
+                    tags$td(span(class = "label label-info", "Annual")),
+                    tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level child poverty rates for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
+                  )
+                )
+              )
+            )
+          )
+        ),
+        
+        fluidRow(
+          box(
+            width = 12, title = "Open Research Citation & Code", status = "primary",
+            p("This project is open-source and maintained to promote labor market transparency in public education. If you use these datasets in academic research, policy analysis, or journalism, please cite:"),
+            tags$blockquote(
+              style = "font-size: 13px; background: #f9f9f9; padding: 10px 15px; border-left: 4px solid #2a78d6;",
+              "Bostick, M. (2026). Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context. ",
+              tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard", target = "_blank", "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard")
+            ),
+            p(style = "margin-bottom: 0; font-size: 12px; color: #777;",
+              "To report discrepancies, missing districts, or data issues, please submit an issue on the ",
+              tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues", target = "_blank", "GitHub Issue Tracker"), ".")
+          )
         )
       ),
 
@@ -1406,6 +1545,49 @@ server <- function(input, output, session) {
       options = list(scrollX = TRUE)
     )
   })
+
+  # ------------------ Open Research Downloads ------------------
+  output$download_active_k12 <- downloadHandler(
+    filename = function() { paste0("montana_active_k12_jobs_", Sys.Date(), ".csv") },
+    content = function(file) {
+      write.csv(combineddata, file, row.names = FALSE, na = "")
+    }
+  )
+
+  output$download_history_k12 <- downloadHandler(
+    filename = function() { paste0("montana_k12_historical_archive_", Sys.Date(), ".csv") },
+    content = function(file) {
+      file.copy("k12jobanalysis.csv", file)
+    }
+  )
+
+  output$download_district_benchmarks <- downloadHandler(
+    filename = function() { paste0("montana_district_profiles_", Sys.Date(), ".csv") },
+    content = function(file) {
+      file.copy("salarymap2.csv", file)
+    }
+  )
+
+  output$download_history_he <- downloadHandler(
+    filename = function() { paste0("montana_higher_ed_historical_archive_", Sys.Date(), ".csv") },
+    content = function(file) {
+      file.copy("facultydata.csv", file)
+    }
+  )
+
+  output$download_he_benchmarks <- downloadHandler(
+    filename = function() { paste0("montana_higher_ed_profiles_", Sys.Date(), ".csv") },
+    content = function(file) {
+      file.copy("salarymap.csv", file)
+    }
+  )
+
+  output$download_weekly_totals <- downloadHandler(
+    filename = function() { paste0("montana_k12_weekly_vacancy_series_", Sys.Date(), ".csv") },
+    content = function(file) {
+      file.copy("k12_district_weekly_totals.csv", file)
+    }
+  )
 
   # -------- K-12 --------
   output$k12_jobs <- renderDT({

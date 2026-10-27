@@ -30,7 +30,7 @@ skip_if_not(file.exists(file.path(app_dir, "combinedclean.csv")),
 # every leaf tab a user can actually land on (the two menuItem parents,
 # k12_root / he_root, are containers, not destinations)
 LEAF_TABS <- c(
-  "intro", "map_tab",
+  "intro", "map_tab", "data_tab",
   "k12_table", "k12_summary", "k12_trends", "k12_current", "k12_new",
   "he_table", "he_summary", "he_trends", "he_current", "he_new"
 )
