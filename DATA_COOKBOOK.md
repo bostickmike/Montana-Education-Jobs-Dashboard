@@ -1,4 +1,8 @@
-# Data Cookbook
+# Data Cookbook [SUPERSEDED]
+
+> [!NOTE]
+> **This internal document has been superseded by the official [DATA_DICTIONARY.md](DATA_DICTIONARY.md) and `data_dictionary.csv`.**
+> For standardized variable definitions, federal identifiers (`IPEDS_UNITID`), and empirical research documentation, please consult `DATA_DICTIONARY.md`.
 
 Every dataset the pipeline (`Mt_ED_Jobs.Rmd`) produces and ships to `Mt_Ed_Jobs/`, where `Mt_Ed_Jobs/app.R` reads it. Mirrors the Wyoming Education Jobs Dashboard's own `DATA_COOKBOOK.md` structure, but Montana's actual data sources differ from Wyoming's in several real, documented ways — see "Notes on the data model" at the end for the summary, and each dataset's own notes for specifics. All of these except `combinedclean.csv`, `hedata.xlsx`, `allnow.csv`, and `allnow_he.csv` are **accumulated, growing datasets** — each run appends that run's newly classified rows onto what's already there (see `history_accumulator.R`), rather than rebuilding from scratch. `schema_check.R`'s `REQUIRED_SCHEMAS` is the enforced, tested version of the column lists below — if this document and that list ever disagree, trust the code and open an issue.
 
