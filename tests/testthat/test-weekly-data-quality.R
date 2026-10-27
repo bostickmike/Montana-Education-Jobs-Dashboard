@@ -90,7 +90,10 @@ test_that("salarymap2.csv (K-12): salary / staffing / finance columns are in a p
   in_band <- function(x, lo, hi) all(is.na(x) | (x >= lo & x <= hi))
 
   expect_true(in_band(d$Teacher_Avg_Salary, 20000, 150000), info = "Teacher_Avg_Salary")
-  expect_true(in_band(d$Teacher_Salary_10th_Pctile, 15000, 150000), info = "10th pctile")
+  # Lower bound accommodates small rural districts reporting part-time/stipend
+  # instructional staff at the 10th percentile (e.g. Philipsburg's real $2,900
+  # row in DLI's Western region PDF).
+  expect_true(in_band(d$Teacher_Salary_10th_Pctile, 2500, 150000), info = "10th pctile")
   expect_true(in_band(d$Teacher_Salary_90th_Pctile, 20000, 250000), info = "90th pctile")
   # 10th <= avg <= 90th wherever all three are present
   band <- d[!is.na(d$Teacher_Salary_10th_Pctile) & !is.na(d$Teacher_Avg_Salary) &
