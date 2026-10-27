@@ -43,10 +43,17 @@ applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
 # district, matching every other source's convention -- not a per-posting
 # deep link) since AppliTrack's own fetch doesn't carry the district's URL
 # through per-row.
-applitrack_df <- bind_rows(applitrack_results) %>%
-  left_join(select(applitrack_districts, District, Job_Link), by = "District") %>%
-  transmute(title, date_posted, position = NA_character_, location, url = Job_Link, District,
-            Posting_Source = "AppliTrack (direct district board)")
+applitrack_raw <- bind_rows(applitrack_results)
+if (nrow(applitrack_raw) > 0) {
+  applitrack_df <- applitrack_raw %>%
+    left_join(select(applitrack_districts, District, Job_Link), by = "District") %>%
+    transmute(title, date_posted, position = NA_character_, location, url = Job_Link, District,
+              Posting_Source = "AppliTrack (direct district board)")
+} else {
+  applitrack_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                              location = character(0), url = character(0), District = character(0),
+                              Posting_Source = character(0))
+}
 
 # SchoolSpring / Tyler Portico -- same output shape (Title/Location/
 # Posted_Date/Link), position is always recomputed from title downstream so
@@ -2828,6 +2835,18 @@ standardize_date <- function(x) {
   as.Date(parsed)
 }
 
+standardize_df_date <- function(df) {
+  if (is.null(df)) return(NULL)
+  if ("date_posted" %in% names(df)) {
+    if (nrow(df) == 0) {
+      df$date_posted <- as.Date(character(0))
+    } else {
+      df$date_posted <- standardize_date(df$date_posted)
+    }
+  }
+  df
+}
+
 applitrack_df <- applitrack_df %>% mutate(date_posted = standardize_date(date_posted))
 schoolspring_df <- schoolspring_df %>% mutate(date_posted = standardize_date(date_posted))
 tylerportico_df <- tylerportico_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -2928,42 +2947,51 @@ fromberg_df <- fromberg_df %>% mutate(date_posted = standardize_date(date_posted
 pleasantvalley_df <- pleasantvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 sunrivervalley_df <- sunrivervalley_df %>% mutate(date_posted = standardize_date(date_posted))
 circle_df <- circle_df %>% mutate(date_posted = standardize_date(date_posted))
-apptegy_df <- apptegy_df
+forsyth_df <- forsyth_df %>% mutate(date_posted = standardize_date(date_posted))
+desmet_df <- desmet_df %>% mutate(date_posted = standardize_date(date_posted))
+fishtail_df <- fishtail_df %>% mutate(date_posted = standardize_date(date_posted))
+nye_df <- nye_df %>% mutate(date_posted = standardize_date(date_posted))
+potomac_df <- potomac_df %>% mutate(date_posted = standardize_date(date_posted))
+apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
-direct_df <- bind_rows(applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
-                       livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
-                       roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
-                       lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
-                       roberts_df, winnett_df, milescity_df, augusta_df, brockton_df, culbertson_df, cottonwood57_df,
-                       creston_df, clinton_df, dixon_df, elysian_df, fairmontegan_df, lustre_df, miami_df, zurich_df, dayton_df,
-                       belfry_df, nashua_df, whitehall_df, broadus_df, wibaux_df,
-                       westvalley_df, luther_df, swanvalley_df,
-                       highwood_df, smithvalley_df, moore_df, cardwell_df,
-                       boulder_df, jeffersonhigh_df, sheridan_df,
-                       frazer_df, lambert_df, richey_df,
-                       judithgap_df, whitewater_df, victor_df, superior_df,
-                       ashland_df, rapelje_df, cayuseprairie_df,
-                       bigtimbergs_df, eldergrove_df, monforton_df, grassrange_df,
-                       heartbutte_df, noxon_df, seeleylake_df, eastglacier_df,
-                       charlo_df, canyoncreek_df, hellgate_df,
-                       helenaflats_df, woodman_df, vaughn_df,
-                       jordan_df, pioneer_df, opheim_df,
-                       pryor_df, westglacier_df, troutcreek_df,
-                       power_df,
-                       kila_df,
-                       lavina_df,
-                       fromberg_df,
-                       pleasantvalley_df,
-                       sunrivervalley_df,
-                       circle_df,
-                       forsyth_df,
-                       desmet_df,
-                       fishtail_df,
-                       nye_df,
-                       potomac_df,
-                       swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
-                       gallatingateway_df, apptegy_df)
+direct_dfs <- list(
+  applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
+  livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
+  roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
+  lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
+  roberts_df, winnett_df, milescity_df, augusta_df, brockton_df, culbertson_df, cottonwood57_df,
+  creston_df, clinton_df, dixon_df, elysian_df, fairmontegan_df, lustre_df, miami_df, zurich_df, dayton_df,
+  belfry_df, nashua_df, whitehall_df, broadus_df, wibaux_df,
+  westvalley_df, luther_df, swanvalley_df,
+  highwood_df, smithvalley_df, moore_df, cardwell_df,
+  boulder_df, jeffersonhigh_df, sheridan_df,
+  frazer_df, lambert_df, richey_df,
+  judithgap_df, whitewater_df, victor_df, superior_df,
+  ashland_df, rapelje_df, cayuseprairie_df,
+  bigtimbergs_df, eldergrove_df, monforton_df, grassrange_df,
+  heartbutte_df, noxon_df, seeleylake_df, eastglacier_df,
+  charlo_df, canyoncreek_df, hellgate_df,
+  helenaflats_df, woodman_df, vaughn_df,
+  jordan_df, pioneer_df, opheim_df,
+  pryor_df, westglacier_df, troutcreek_df,
+  power_df,
+  kila_df,
+  lavina_df,
+  fromberg_df,
+  pleasantvalley_df,
+  sunrivervalley_df,
+  circle_df,
+  forsyth_df,
+  desmet_df,
+  fishtail_df,
+  nye_df,
+  potomac_df,
+  swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
+  gallatingateway_df, apptegy_df
+)
+direct_dfs <- lapply(direct_dfs, standardize_df_date)
+direct_df <- bind_rows(direct_dfs)
 opi_df <- remove_opi_direct_duplicates(
   opi_df,
   direct_df,
@@ -3073,14 +3101,14 @@ teacher_fte <- safe_scrape(
 # chunks) -- so salarymap2.csv is read back first (if it exists) rather
 # than rebuilt fresh from the registry every run.
 registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE) %>%
-  select(District, County, Latitude, Longitude, Job_Link)
+  select(District, any_of("NCES_LEAID"), County, Latitude, Longitude, Job_Link)
 
 salarymap2_path <- file.path("Mt_Ed_Jobs", "salarymap2.csv")
 salarymap2 <- if (file.exists(salarymap2_path)) {
   read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
     select(-any_of(c("County", "Latitude", "Longitude", "Job_Link"))) %>%
     right_join(registry, by = "District") %>%
-    select(District, County, Latitude, Longitude, Job_Link, everything())
+    select(District, any_of("NCES_LEAID"), County, Latitude, Longitude, Job_Link, everything())
 } else {
   registry
 }
@@ -3464,9 +3492,19 @@ cdkc_results <- lapply(seq_len(nrow(cdkc_institutions)), function(i) {
 })
 cdkc_df <- bind_rows(cdkc_results)
 
-hedata_raw <- bind_rows(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, dawsoncc_df,
-                         isolvedhire_df, neogov_df, carroll_df, rockymtn_df, adp_df,
-                         skc_df, lbhc_df, fpcc_df, stonechild_df, ancollege_df, cdkc_df)
+standardize_he_df_date <- function(df) {
+  if (is.null(df)) return(NULL)
+  if ("Posted_Date" %in% names(df)) {
+    df$Posted_Date <- as.character(df$Posted_Date)
+  }
+  df
+}
+
+he_dfs <- list(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, dawsoncc_df,
+               isolvedhire_df, neogov_df, carroll_df, rockymtn_df, adp_df,
+               skc_df, lbhc_df, fpcc_df, stonechild_df, ancollege_df, cdkc_df)
+he_dfs <- lapply(he_dfs, standardize_he_df_date)
+hedata_raw <- bind_rows(he_dfs)
 ```
 
 ### Combine all HE data, classify, archive, and accumulate history

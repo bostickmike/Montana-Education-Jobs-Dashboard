@@ -24,6 +24,7 @@ Each dataset is accessible via the **Data Sources & Open Research Downloads** ta
 
 To support seamless merges with federal, state, and academic datasets, the following universal identifiers and architectural crosswalks are embedded:
 
+- **`NCES_LEAID`**: Official 7-digit federal National Center for Education Statistics Local Education Agency identifier (e.g., `3003870` for Billings, `3018570` for Missoula, `3000655` for East Helena). Enables 1:1 joining with the **Stanford Educational Data Archive (SEDA)**, **Civil Rights Data Collection (CRDC)**, and **Census F-33 School District Finance Survey**.
 - **`IPEDS_UNITID`**: Official 6-digit federal Integrated Postsecondary Education Data System identifier (e.g., `180489` for University of Montana, `180461` for Montana State University). Enables 1:1 linkage with IPEDS, College Scorecard, and federal research datasets.
 - **Montana K-12 District Structure**: Montana operates with a dual-district structure where many municipalities maintain separate elementary and high school LEAs (e.g., Billings Elementary and Billings High School) governed under a single unified administration and job board. The dashboard benchmarks aggregate both elementary and secondary CCD and OPI finance records to align with real-world applicant tracking portals.
 
@@ -56,6 +57,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `District` | String | Canonical Registry | Canonical public school district or employer location name. |
+| `NCES_LEAID` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier. |
 | `Title` | String | District Job Board / OPI | Standardized job vacancy title. |
 | `Position` | Categorical | Classifier | Broad staff position group (Teacher, Administrator, Support Services). |
 | `Category` | String | Classifier | Fine-grained subject area or functional assignment. |
@@ -80,6 +82,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `District` | String | Canonical Registry | Canonical public school district name. |
+| `NCES_LEAID` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier. |
 | `County` | String | US Census Bureau | Primary county in which the district central administrative office is located. |
 | `Latitude` / `Longitude` | Decimal Degrees | US Census / Geocoding | Geographic coordinates of district central headquarters. |
 | `Job_Link` | URL | District Registry | Official employment or applicant tracking portal link for the district. |

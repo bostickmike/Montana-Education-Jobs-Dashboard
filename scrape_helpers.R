@@ -143,6 +143,8 @@ safe_scrape <- function(source_name, scrape_fn, expected_cols, log_path = "scrap
   }
 
   log_scrape_result(source_name, status = "ok", n_rows = nrow(df), log_path = log_path)
+  if ("Posted_Date" %in% names(df)) df$Posted_Date <- as.character(df$Posted_Date)
+  if ("date_posted" %in% names(df)) df$date_posted <- as.character(df$date_posted)
   df
 }
 

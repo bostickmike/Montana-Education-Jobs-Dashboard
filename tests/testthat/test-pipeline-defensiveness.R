@@ -67,3 +67,11 @@ test_that("Mt_ED_Jobs.Rmd does not contain typo %% modulo operator instead of %>
   expect_equal(length(typo_lines), 0,
                info = paste("Typo %% operator found on line(s):", paste(typo_lines, collapse = ", ")))
 })
+
+test_that("Mt_ED_Jobs.Rmd applies standardize_df_date to direct_dfs before bind_rows", {
+  rmd_path <- here::here("Mt_ED_Jobs.Rmd")
+  lines <- readLines(rmd_path, warn = FALSE)
+  code <- paste(lines, collapse = "\n")
+  expect_true(grepl("direct_dfs\\s*<-\\s*lapply\\(direct_dfs,\\s*standardize_df_date\\)", code))
+  expect_true(grepl("direct_df\\s*<-\\s*bind_rows\\(direct_dfs\\)", code))
+})
