@@ -169,6 +169,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * Added `data_dictionary.csv` to `ALL_OUTPUT_CSVS` in `tests/testthat/test-weekly-data-quality.R`.
   * Verified 2,929 passing tests across the entire test suite (0 fails, 0 warnings, 2 skips).
 
+### Milestone 10: K-12 District Coverage Expansion — Batch 22 & Group 3 Triage (2026-10-28)
+* **Adopted Districts into Direct Pipeline (191 -> 194 districts):**
+  * **Montana City Elementary School District #27** (Jefferson County, NCES `3018780`): Scaffolded CyberSchool scraper targeting `https://www.mtcityschool.net/District/Jobs/`.
+  * **Denton Public Schools** (Fergus County, NCES `3008850`): Scaffolded CyberSchool scraper targeting `https://www.denton.k12.mt.us/District/Jobs/`.
+  * **Clancy Elementary School District #1** (Jefferson County, NCES `3006840`): Scaffolded CyberSchool scraper targeting `https://www.clancyschool.org/District/Jobs/`.
+* **Group 3 & Group 8 Backlog Triage:**
+  * Investigated and resolved geographic/website status for Pine Grove (Garfield County District 19, Brusett MT; 1-teacher 7-student rural school) and Hawks Home (Carter County District 78, Hammond MT; ~5-12 students). Both lack standalone web portals and were triaged to Group 8 (declined / covered via OPI).
+  * Verified Basin School status (reopened 2026, site/DNS pending; triaged to Group 8).
+* **Test Suite Expansion:**
+  * Added HTML test fixtures for Montana City, Denton, and Clancy in `tests/testthat/fixtures/`.
+  * Added unit test suites in `tests/testthat/test-misc-district-scrapers.R`.
+  * Added unmapped DLI coverage tests in `tests/testthat/test-salary-scrapers.R`.
+  * Verified full test suite: **2,944 PASS, 0 FAIL, 0 WARN** (2 skips).
+
 ---
 
 ## 4. Key Architectural Contracts & Invariants
@@ -207,3 +221,4 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [x] Implement Head-to-Head District and College Comparator modules.
 - [x] Multi-dimensional map filtering (salary tiers, county cluster, posting volume/urgency) with dynamic count badge and auto-zoom.
 - [x] 100% data dictionary column coverage and automated codebook invariant test suite.
+- [x] Expand Montana K-12 coverage backlog (Batch 22: Montana City, Denton, Clancy adopted; Group 3 triaged to Group 8).

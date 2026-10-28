@@ -2492,6 +2492,78 @@ if (nrow(ulm_df) > 0) {
                       Posting_Source = character(0))
 }
 
+# Montana City Elementary School District #27 (mtcityschool.net, found 2026-10-28)
+montanacity_districts <- registry[registry$Platform == "MontanacityHeuristic", ]
+montanacity_results <- lapply(seq_len(nrow(montanacity_districts)), function(i) {
+  row <- montanacity_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_montanacity_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+montanacity_df <- bind_rows(montanacity_results)
+if (nrow(montanacity_df) > 0) {
+  montanacity_df <- montanacity_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Montana City Elementary School District #27 site (direct board)")
+} else {
+  montanacity_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Denton Public Schools (denton.k12.mt.us, found 2026-10-28)
+denton_districts <- registry[registry$Platform == "DentonHeuristic", ]
+denton_results <- lapply(seq_len(nrow(denton_districts)), function(i) {
+  row <- denton_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_denton_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+denton_df <- bind_rows(denton_results)
+if (nrow(denton_df) > 0) {
+  denton_df <- denton_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Denton Public Schools site (direct board)")
+} else {
+  denton_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Clancy Elementary School District #1 (clancyschool.org, found 2026-10-28)
+clancy_districts <- registry[registry$Platform == "ClancyHeuristic", ]
+clancy_results <- lapply(seq_len(nrow(clancy_districts)), function(i) {
+  row <- clancy_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_clancy_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+clancy_df <- bind_rows(clancy_results)
+if (nrow(clancy_df) > 0) {
+  clancy_df <- clancy_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Clancy Elementary School District #1 site (direct board)")
+} else {
+  clancy_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -3063,6 +3135,9 @@ direct_dfs <- list(
   frontier_df,
                        saco_df,
                        ulm_df,
+                       montanacity_df,
+                       denton_df,
+                       clancy_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
   gallatingateway_df, apptegy_df
 )

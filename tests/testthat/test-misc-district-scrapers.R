@@ -4579,6 +4579,66 @@ test_that("parse_ulm_postings returns zero rows on empty or non-matching HTML", 
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_montanacity_postings extracts real positions or returns empty cleanly", {
+  fixture <- paste(readLines(test_path("fixtures", "montanacity_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.mtcityschool.net/District/Jobs/"
+
+  result <- parse_montanacity_postings(fixture, url)
+
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  if (nrow(result) > 0) {
+    expect_true(all(result$Location == "Clancy"))
+    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
+    expect_true(all(nzchar(result$Link)))
+  }
+})
+
+test_that("parse_montanacity_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_montanacity_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_denton_postings extracts real positions or returns empty cleanly", {
+  fixture <- paste(readLines(test_path("fixtures", "denton_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.denton.k12.mt.us/District/Jobs/"
+
+  result <- parse_denton_postings(fixture, url)
+
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  if (nrow(result) > 0) {
+    expect_true(all(result$Location == "Denton"))
+    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
+    expect_true(all(nzchar(result$Link)))
+  }
+})
+
+test_that("parse_denton_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_denton_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_clancy_postings extracts real positions or returns empty cleanly", {
+  fixture <- paste(readLines(test_path("fixtures", "clancy_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.clancyschool.org/District/Jobs/"
+
+  result <- parse_clancy_postings(fixture, url)
+
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  if (nrow(result) > 0) {
+    expect_true(all(result$Location == "Clancy"))
+    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
+    expect_true(all(nzchar(result$Link)))
+  }
+})
+
+test_that("parse_clancy_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_clancy_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

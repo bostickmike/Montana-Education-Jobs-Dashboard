@@ -99,15 +99,15 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Lockwood School District | Yellowstone | `lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d` | Covered via primary AppliTrack feed (`Lockwood Schools`, `lockwoodschool`); duplicate heuristic entry retired | ✅ **Covered** |
 | Canyon Creek School | Yellowstone | `canyoncreekschool.org/apps/jobs/` | Edlio CMS (/apps/jobs/); 1 active position (Paraprofessional Pre-K (All Day Full-Time)) | ✅ **Adopted** (2026-10-21, Batch 13) |
 | Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; 1 active position (Substitute Teacher) | ✅ **Adopted** (2026-10-22, Batch 15) |
-| Montana City ESD 27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS; current jobs list empty; checked 2026-10-21 | RECHECK |
+| Montana City Elementary School District #27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; generic personnel application links only; checked 2026-10-21 | RECHECK |
 | Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Finalsite CMS (#fsEl_3056); 3 active positions (substitutes, bus drivers, custodians) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/o/geraldine-ps/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
-| Denton Public Schools | Fergus | `denton.k12.mt.us/employment` | CyberSchool; 0 active postings listed; checked 2026-10-21 | TODO |
+| Denton Public Schools | Fergus | `denton.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Vaughn Elementary School District #74 | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool CMS; 1 active position (Substitutes Needed) | ✅ **Adopted** (2026-10-22, Batch 14) |
 | Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
 | Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site; real page found via menu drawer; single consolidated PDF vacancy notice (`_Current-Open-Positions-7_13_26.pdf`); checked 2026-10-21 | RECHECK |
-| Clancy School District | Jefferson | `clancyschool.org/page/employment` | CyberSchool CMS page is empty shell with empty placeholders; checked 2026-10-21 | TODO |
+| Clancy Elementary School District #1 | Jefferson | `clancyschool.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Seeley Lake Elementary #34 | Missoula | `sleonline.org/page/join-our-team` | Apptegy site; 1 active position (Substitute (All Areas)); checked 2026-10-21 | ✅ **Adopted** (2026-10-21, Batch 12) |
 | Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site; links to generic blank application PDFs only (`5il.co/1dfyi`); checked 2026-10-21 | TODO |
 | Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |
@@ -166,9 +166,9 @@ real one (verify address/phone), then re-triage.
 | Bynum | Teton | `bynumschool.org` → Midland, TX; real MT site is GoDaddy (`bynumsch.org` / `bynumschool.godaddysites.com`), 1-page site with calendar download links only | DECLINED (Group 8) |
 | Luther School | Carbon | `lutherlions.org` → Luther, OK; real MT site is `lutherschool.org/index.php/documents` (Joomla); 2 active postings | ✅ **Adopted** (2026-10-21) |
 | Pryor Public Schools | Big Horn | `pryorschools.org` → Pryor, OK; real MT site is `pryorwarriors.org` (Arrow Creek Elem / Plenty Coups HS); 2 active positions | ✅ **Adopted** (2026-10-22, Batch 16) |
-| Pine Grove | Rosebud | `pgasd.com` → Pennsylvania | TODO |
-| Hawks Home | Powder River | `r-mschool.org` → Republic-Michigamme, MI | TODO |
-| Basin (Boulder area) | Jefferson | Real MT Basin School reopened April 2026; registered domain is `basin.k12.mt.us`; DNS pending / site under construction; `basinschools.net` = Idaho City, ID | RECHECK |
+| Pine Grove | Rosebud/Garfield | `pgasd.com` → Pennsylvania; real MT school is Garfield County District 19 (Brusett MT); 1-teacher 7-student rural school, no standalone website | DECLINED (Group 8) |
+| Hawks Home | Carter/Powder River | `r-mschool.org` → Republic-Michigamme, MI; real MT school is Carter County District 78 (Hammond MT); tiny rural school (~5-12 students), no standalone website | DECLINED (Group 8) |
+| Basin (Boulder area) | Jefferson | Real MT Basin School reopened April 2026; registered domain is `basin.k12.mt.us`; DNS pending / site under construction; notices covered via OPI statewide feed | DECLINED (Group 8) |
 | Medicine Lake School District #10 | Sheridan | Real site is Apptegy (`medicinelake.k12.mt.us`); staff directory active, no open job board posted | RECHECK |
 | Park City Schools | Stillwater | Real site is Apptegy (`parkcityschools.org`); 2 active postings | ✅ **Adopted** (earlier batch) |
 | Elliston | Powell | Powell County District 27; notices hosted on `powellcountymt.gov`; no standalone website | DECLINED (Group 8) |
@@ -230,13 +230,13 @@ Confirmed no employment page in nav/sitemap, or a "no employment nav item"
 result. Very low priority — most are 1–2-room districts that don't maintain a
 jobs page at all. Recheck only if one grows.
 
-Denton, Saco, Ryegate, Highwood, Cardwell (~35 students), Kircher, LaMotte,
+Ryegate, Highwood, Cardwell (~35 students), Kircher, LaMotte,
 Rau, Somers Lakeside #29, Morin.
 
 Long tail of tiny lone-elementary districts checked and declined the same way:
-Alder, Alzada, Amsterdam, Ayers, Biddle, Birney, Brorson, Cleveland, Cohagen,
-Cooke City, Davey, Deerfield, Golden Ridge, Grant, Greycliff, Helmville, King Colony, Kinsey,
-Knees, Liberty, Lindsay, Malmborg, Nye, Ovando, Pendroy, Pioneer, Plenty
+Alder, Alzada, Amsterdam, Ayers, Basin, Biddle, Birney, Brorson, Cleveland, Cohagen,
+Cooke City, Davey, Deerfield, Golden Ridge, Grant, Greycliff, Hawks Home, Helmville, King Colony, Kinsey,
+Knees, Liberty, Lindsay, Malmborg, Nye, Ovando, Pendroy, Pine Grove, Pioneer, Plenty
 Coups, Polaris, Potomac, Reichle, Ross, Springhill, Sunset, Trinity,
 West Glacier, Wisdom, Wise River, Yaak.
 
