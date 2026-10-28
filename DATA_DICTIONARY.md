@@ -16,6 +16,7 @@ Each dataset is accessible via the **Data Sources & Open Research Downloads** ta
 | **K-12 Weekly Vacancy Time Series** | `k12_district_weekly_totals.csv` | Weekly aggregate open job vacancy counts by school district over time. | District × Week | Weekly |
 | **Higher Ed Institutional Profiles** | `salarymap.csv` | College and university profiles: IPEDS instructional faculty salaries, enrollment, and Pell recipient shares. | Institution level | Weekly / Annual |
 | **Higher Ed Historical Postings** | `facultydata.csv` | Multi-year longitudinal postings for instructional faculty, adjuncts, and staff. | Posting level | Weekly |
+| **Higher Ed Job Duration Spells** | `he_job_duration_spells.csv` | Longitudinal spell panel tracking collegiate faculty search duration (time-to-fill) and discipline flags. | Posting spell | Weekly |
 | **Data Dictionary & Codebook** | `data_dictionary.csv` | Machine-readable column definitions, types, and primary source authorities across all files. | Variable level | Static / Maintained |
 
 ---
@@ -149,6 +150,29 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Category` | String | Classifier | Academic discipline or administrative functional area. |
 | `Archive_Date` | Date (YYYY-MM-DD) | Project Scraper | Snapshot observation date when the posting was captured open. |
 | `Link` | URL | Institutional Board | Direct web URL to the employment vacancy listing. |
+
+---
+
+### G. Higher Education Job Duration Spells Panel (`he_job_duration_spells.csv`)
+*Longitudinal spell panel tracking vacancy duration, search persistence, and academic disciplines across colleges and universities.*
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Institution` | String | IPEDS Directory | Collegiate institution name. |
+| `IPEDS_UNITID` | String (6-digit) | NCES IPEDS | Official 6-digit federal NCES Integrated Postsecondary Education Data System Unit ID. |
+| `Title` | String | Institutional Board | Standardized collegiate job vacancy title. |
+| `Category` | String | Classifier | Academic discipline or functional assignment area. |
+| `Job_Type` | Categorical | Classifier | Collegiate appointment type (Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty). |
+| `First_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Earliest weekly scraper run in which this job posting was observed active. |
+| `Last_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Latest weekly scraper run in which this job posting was observed active. |
+| `Weeks_Observed` | Integer | Project Scraper | Total count of weekly snapshots where this posting was present. |
+| `Estimated_Days_Open` | Integer | Derived Metric | Estimated calendar duration of the vacancy (proxy for search length and time-to-fill). |
+| `Status` | Categorical | Derived Metric | State of posting: `Closed / Filled` or `Still Active` as of the latest pipeline run. |
+| `is_stem` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
+| `is_health` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if position is Health Sciences, Nursing, or Medical; 0 otherwise. |
+| `is_cte` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if position is Career & Technical Education; 0 otherwise. |
+| `is_adjunct` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if appointment is Adjunct or Part-Time Faculty; 0 otherwise. |
+| `is_faculty` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if appointment is Full-Time or Regular Instructional Faculty; 0 otherwise. |
 
 ---
 

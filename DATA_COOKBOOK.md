@@ -212,6 +212,28 @@ One row per (`Institution`, `Archive_Date`), all job types. **Accumulated.**
 | `Archive_Date` | date | |
 | `n` | integer | |
 
+### `he_job_duration_spells.csv` — collegiate faculty vacancy duration spells
+
+Longitudinal spell panel tracking vacancy duration (time-to-fill) across weekly snapshots for higher education institutions. Derived from `facultydata.csv` via `scripts/generate_he_job_duration_spells.R`.
+
+| Column | Type | Notes |
+|---|---|---|
+| `Institution` | text | Canonical collegiate institution name matching `salarymap.csv`. |
+| `IPEDS_UNITID` | integer | Official 6-digit federal NCES IPEDS Unit ID. |
+| `Title` | text | Standardized collegiate job vacancy title. |
+| `Category` | text | Academic discipline or functional assignment area. |
+| `Job_Type` | text | Appointment type (`Instructor/Teacher/Faculty` or `Adjunct/Part-Time Faculty`). |
+| `First_Seen_Date` | text | Earliest weekly snapshot date (YYYY-MM-DD) where posting was active. |
+| `Last_Seen_Date` | text | Latest weekly snapshot date (YYYY-MM-DD) where posting was active. |
+| `Weeks_Observed` | integer | Total weekly snapshots the posting appeared. |
+| `Estimated_Days_Open` | integer | Estimated calendar duration open (`as.Date(Last_Seen_Date) - as.Date(First_Seen_Date) + 7`). |
+| `Status` | text | `"Still Active"` or `"Closed / Filled"`. |
+| `is_stem` | integer | 1 if STEM discipline; 0 otherwise. |
+| `is_health` | integer | 1 if Health Sciences or Nursing; 0 otherwise. |
+| `is_cte` | integer | 1 if Career & Technical Education; 0 otherwise. |
+| `is_adjunct` | integer | 1 if Adjunct / Part-Time Faculty; 0 otherwise. |
+| `is_faculty` | integer | 1 if Regular / Full-Time Instructional Faculty; 0 otherwise. |
+
 ### `salarymap.csv` — one row per registered institution, static reference + refreshed figures
 
 One current row per this project's **23 registered HE institutions** — matching Wyoming's own `salarymap.csv` scope (its 9 rows are exactly its 9 job-scraped institutions, not a broader MUS-wide reference set), not the full ~16-institution MUS-plus-tribal-college universe `RESEARCH_NOTES.md` originally scoped for job-postings coverage (a coincidental near-match in count, not the same set of institutions). Of the 23, 4 (Highlands College, Helena College, University of Montana Western, and Missoula College) aren't independently scraped — they ride a parent institution's shared job board (Montana Tech's JazzHR board, University of Montana's NEOGOV board) and are attributed per-posting to their own real institution instead of their parent's count (`Platform` is `"SharesBoard"` for these 4, not the platform they actually ride). `Name`/`County`/`Longitude`/`Latitude`/`Link` come from `he_institution_registry.csv`; everything else refreshes from IPEDS/FSA each run. `MT_IPEDS_UNITID_MAP` (`ipeds_salary_scraper.R`) covers 22 of the 23 — extended 2026-08-07 from the original 6 to cover 7 more, then the 4 tribal colleges, then Highlands College/Helena College/UM Western once their postings were split out from their parent institutions' feeds, each confirmed live against both the Urban Institute's college directory and its own real salary/enrollment/Pell response. **Missoula College is the one real, permanent exception**: confirmed live it has no independent unitid in the Urban Institute's IPEDS directory for Montana at all (not even a branch ID) — its salary/enrollment/Pell figures are fully consolidated into University of Montana's own reporting, the same structural case as Bitterroot College/Gallatin College MSU noted in `RESEARCH_NOTES.md`. Highlands College's own case is a *partial* gap, not a full one: confirmed live it has no salary or Pell data under its own unitid (likely consolidated into Montana Tech's HR/financial-aid reporting), but real, separate fall-enrollment data.
