@@ -17,6 +17,7 @@ Each dataset is accessible via the **Data Sources & Open Research Downloads** ta
 | **Higher Ed Institutional Profiles** | `salarymap.csv` | College and university profiles: IPEDS instructional faculty salaries, enrollment, and Pell recipient shares. | Institution level | Weekly / Annual |
 | **Higher Ed Historical Postings** | `facultydata.csv` | Multi-year longitudinal postings for instructional faculty, adjuncts, and staff. | Posting level | Weekly |
 | **Higher Ed Job Duration Spells** | `he_job_duration_spells.csv` | Longitudinal spell panel tracking collegiate faculty search duration (time-to-fill) and discipline flags. | Posting spell | Weekly |
+| **Higher Ed Weekly Vacancy Time Series** | `he_institution_weekly_totals.csv` | Weekly aggregate open job vacancy counts by higher education institution. | Institution × Week | Weekly |
 | **Data Dictionary & Codebook** | `data_dictionary.csv` | Machine-readable column definitions, types, and primary source authorities across all files. | Variable level | Static / Maintained |
 
 ---
@@ -173,6 +174,17 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `is_cte` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if position is Career & Technical Education; 0 otherwise. |
 | `is_adjunct` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if appointment is Adjunct or Part-Time Faculty; 0 otherwise. |
 | `is_faculty` | Binary (0/1) | Taxonomy Indicator | Dummy indicator: 1 if appointment is Full-Time or Regular Instructional Faculty; 0 otherwise. |
+
+---
+
+### H. Higher Education Weekly Vacancy Time Series (`he_institution_weekly_totals.csv`)
+*Longitudinal weekly vacancy counts by higher education institution.*
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Institution` | String | IPEDS Directory | Canonical public or tribal higher education institution name. |
+| `Archive_Date` | Date (YYYY-MM-DD) | Project Scraper | Snapshot observation date for that weekly pipeline sweep. |
+| `n` | Integer | Project Scraper | Total count of active collegiate job postings observed open for that institution in that week. |
 
 ---
 

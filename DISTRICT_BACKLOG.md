@@ -235,7 +235,7 @@ Rau, Somers Lakeside #29, Morin.
 
 Long tail of tiny lone-elementary districts checked and declined the same way:
 Alder, Alzada, Amsterdam, Ayers, Biddle, Birney, Brorson, Cleveland, Cohagen,
-Cooke City, Davey, Deerfield, Greycliff, Helmville, King Colony, Kinsey,
+Cooke City, Davey, Deerfield, Golden Ridge, Grant, Greycliff, Helmville, King Colony, Kinsey,
 Knees, Liberty, Lindsay, Malmborg, Nye, Ovando, Pendroy, Pioneer, Plenty
 Coups, Polaris, Potomac, Reichle, Ross, Springhill, Sunset, Trinity,
 West Glacier, Wisdom, Wise River, Yaak.
@@ -269,5 +269,4 @@ authoritative artifacts are in the session memory directory:
   `has_hs_pair` column flagging the higher-yield rows
 - `opi_raw_district_dropdown_2026-08-24.csv` — the raw 602-row OPI dropdown
 
-**Resume by checking:** Golden Ridge, Grant — then re-diff the low-yield rows against `k12_district_registry.csv` +
-Group 8 above to catch anything skipped. (Dupuyer, Elliston, and Garrison were evaluated and triaged to Group 8; Frontier was adopted in Batch 21).
+**Triage status:** Golden Ridge and Grant were investigated and confirmed as 1-room rural elementary districts without standalone job boards, triaged to Group 8. (Dupuyer, Elliston, and Garrison were previously triaged to Group 8; Frontier was adopted in Batch 21). Low-yield towns remain cross-referenced against `k12_district_registry.csv` and Group 8.

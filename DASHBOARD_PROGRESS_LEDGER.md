@@ -99,6 +99,25 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * Resolved Group 3 & Group 10 backlog items: triaged Avon, Bynum, Elliston, Garrison, and Dupuyer to Group 8 (county-managed or no standalone job boards).
   * Enhanced `scripts/scaffold_district.R` to support 9-column registry schema with `--leaid` and CyberSchool CMS scaffolding.
 
+### Milestone 6: Interactive Spells Hardening, Research Downloads Parity & UX Polish
+* **Interactive Vacancy Spells Resiliency:**
+  * Added zero-row / empty filter state handling across both K-12 and Higher Ed vacancy spells modules (`k12_spells`, `he_spells`):
+    - Reactive KPIs return clean zero counts (`0 Days`, `0 Open Spells`, `0 Persistent Spells`, `None`) instead of NaN or errors.
+    - Plotly duration and distribution charts render clean, informative placeholder notifications (`"No vacancy spells match the selected filter criteria"`) instead of leaving an empty white canvas.
+    - Duration distribution histograms regularized with `tidyr::complete()` across all 5 standard duration bins (`1–14 Days`, `15–30 Days`, `31–60 Days`, `61–90 Days`, `90+ Days` for K-12; `1–30 Days`, `31–60 Days`, `61–90 Days`, `91–180 Days`, `180+ Days` for Higher Ed), guaranteeing consistent axes and comparable geometries under dynamic filtering.
+    - Searchable DT spell tables render clean empty states without `req()` blocking.
+* **Homepage Interactive Drill-Down:**
+  * Enhanced "Top K-12 Hiring Districts This Week" and "Top Higher Ed Hiring Institutions This Week" tables with clickable employer action links.
+  * Clicking any top employer automatically selects that employer, switches to the filtered `k12_table` or `he_table`, and displays all active positions.
+  * Hardened `observeEvent(input$popup_view_jobs)` to seamlessly handle mapped institutions, direct scrape LEAs, and OPI statewide locations.
+* **Open Research Downloads Completeness:**
+  * Added direct CSV download for **Higher Ed Weekly Vacancies** (`download_he_weekly_totals`, serving `he_institution_weekly_totals.csv`).
+  * Documented `he_institution_weekly_totals.csv` in `Mt_Ed_Jobs/data_dictionary.csv` and `DATA_DICTIONARY.md`.
+* **Data Quality Test Suite Expansion:**
+  * Registered `job_duration_spells.csv` and `he_job_duration_spells.csv` into `ALL_OUTPUT_CSVS` in `test-weekly-data-quality.R`, enforcing automated verification against NaN, Inf, and literal string leakage across 2,839 passing tests.
+* **Coverage Backlog Triage:**
+  * Triaged Golden Ridge (Teton County #45) and Grant (Beaverhead County #7) to Group 8 in `DISTRICT_BACKLOG.md` (1-room rural schools with no standalone job boards).
+
 ---
 
 ## 4. Key Architectural Contracts & Invariants
@@ -128,3 +147,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [x] Create reproducible generator script `scripts/generate_job_duration_spells.R`.
 - [x] Create Higher Ed vacancy duration spells panel (`he_job_duration_spells.csv`) and `he_spells` dashboard tab.
 - [x] Expand Montana K-12 coverage backlog (Batch 21: Frontier, Saco, Ulm adopted; Brockton drift recovered; Group 3/10 triaged).
+- [x] Harden interactive Vacancy Spells modules against empty filter states and regularize duration distribution bins.
+- [x] Enable 1-click drill-down navigation from Homepage top hiring employers tables to filtered jobs tables.
+- [x] Add Higher Ed weekly vacancy series downloads and codebook definitions.
+- [x] Add spell panels to automated data-quality invariant suite.
+- [x] Triage Golden Ridge and Grant in district coverage backlog.

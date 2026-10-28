@@ -1143,7 +1143,14 @@ ui <- dashboardPage(
               )
             ),
             fluidRow(
-              column(4,
+              column(6,
+                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
+                  h4(icon("chart-line"), " Higher Ed Weekly Vacancies", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
+                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Weekly longitudinal vacancy totals across Montana colleges, universities, and tribal colleges. Ideal for tracking higher ed hiring seasonality."),
+                  downloadButton("download_he_weekly_totals", "Higher Ed Weekly Totals (CSV)", class = "btn-default btn-xs btn-block")
+                )
+              ),
+              column(6,
                 div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
                   h4(icon("book"), " Data Dictionary", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
                   p(style = "font-size: 12px; color: #555; min-height: 48px;", "Comprehensive machine-readable codebook documenting variable names, data types, definitions, and source authorities across all datasets."),
@@ -1641,6 +1648,13 @@ server <- function(input, output, session) {
         pull(n)
       make_sparkline_svg(series, accent = "#2a78d6")
     }, character(1))
+    top$District <- paste0(
+      '<a href="#" onclick="Shiny.setInputValue(\'popup_view_jobs\', \'',
+      gsub("'", "&#39;", top$District, fixed = TRUE),
+      '\', {priority: \'event\'}); return false;">',
+      top$District,
+      '</a>'
+    )
     top
   }, sanitize.text.function = function(x) x)
 
@@ -1654,6 +1668,13 @@ server <- function(input, output, session) {
         pull(n)
       make_sparkline_svg(series, accent = "#4a3aa7")
     }, character(1))
+    top$Institution <- paste0(
+      '<a href="#" onclick="Shiny.setInputValue(\'popup_view_jobs\', \'',
+      gsub("'", "&#39;", top$Institution, fixed = TRUE),
+      '\', {priority: \'event\'}); return false;">',
+      top$Institution,
+      '</a>'
+    )
     top
   }, sanitize.text.function = function(x) x)
 
@@ -1757,6 +1778,13 @@ server <- function(input, output, session) {
     filename = function() { paste0("montana_k12_weekly_vacancy_series_", Sys.Date(), ".csv") },
     content = function(file) {
       file.copy("k12_district_weekly_totals.csv", file)
+    }
+  )
+
+  output$download_he_weekly_totals <- downloadHandler(
+    filename = function() { paste0("montana_he_weekly_vacancy_series_", Sys.Date(), ".csv") },
+    content = function(file) {
+      file.copy("he_institution_weekly_totals.csv", file)
     }
   )
 
@@ -2033,12 +2061,18 @@ server <- function(input, output, session) {
   observeEvent(input$popup_view_jobs, {
     entity <- input$popup_view_jobs
     row <- combined_map_data %>% filter(Name == entity)
-    req(nrow(row) > 0)
-
-    if (row$Type[1] == "K-12 District") {
+    if (nrow(row) > 0) {
+      if (row$Type[1] == "K-12 District") {
+        selected_district(entity)
+        updateTabItems(session, "sidebar_tabs", "k12_table")
+      } else {
+        selected_institution(entity)
+        updateTabItems(session, "sidebar_tabs", "he_table")
+      }
+    } else if (entity %in% combineddata$District) {
       selected_district(entity)
       updateTabItems(session, "sidebar_tabs", "k12_table")
-    } else {
+    } else if (entity %in% ccdata$Institution) {
       selected_institution(entity)
       updateTabItems(session, "sidebar_tabs", "he_table")
     }
@@ -2465,12 +2499,12 @@ server <- function(input, output, session) {
 
   output$k12_spell_hardest_box <- renderValueBox({
     df <- filtered_spells()
-    hardest <- "N/A"
-    if (nrow(df) >= 3 && "Broad_Category" %in% names(df)) {
+    hardest <- "None"
+    if (nrow(df) >= 1 && "Broad_Category" %in% names(df)) {
       cat_dur <- df %>%
         group_by(Broad_Category) %>%
         summarize(med = median(Estimated_Days_Open, na.rm = TRUE), n = n(), .groups = "drop") %>%
-        filter(n >= 2) %>%
+        filter(n >= 1) %>%
         arrange(desc(med))
       if (nrow(cat_dur) > 0) hardest <- cat_dur$Broad_Category[1]
     }
@@ -2484,7 +2518,12 @@ server <- function(input, output, session) {
 
   output$k12_spell_duration_plot <- renderPlotly({
     df <- filtered_spells()
-    req(nrow(df) > 0)
+    if (nrow(df) == 0) {
+      p <- ggplot() +
+        annotate("text", x = 0.5, y = 0.5, label = "No vacancy spells match the selected filter criteria", size = 4, color = "#666666") +
+        theme_void()
+      return(ggplotly(p) %>% config(displayModeBar = FALSE))
+    }
 
     cat_summary <- df %>%
       group_by(Broad_Category) %>%
@@ -2493,11 +2532,16 @@ server <- function(input, output, session) {
         Postings = n(),
         .groups = "drop"
       ) %>%
-      filter(!is.na(Broad_Category) & Broad_Category != "" & Postings >= 2) %>%
+      filter(!is.na(Broad_Category) & Broad_Category != "" & Postings >= 1) %>%
       arrange(desc(Median_Days)) %>%
       head(12)
 
-    req(nrow(cat_summary) > 0)
+    if (nrow(cat_summary) == 0) {
+      p <- ggplot() +
+        annotate("text", x = 0.5, y = 0.5, label = "No category data available for selected filter", size = 4, color = "#666666") +
+        theme_void()
+      return(ggplotly(p) %>% config(displayModeBar = FALSE))
+    }
 
     p <- ggplot(cat_summary, aes(
       x = reorder(Broad_Category, Median_Days),
@@ -2518,7 +2562,13 @@ server <- function(input, output, session) {
 
   output$k12_spell_distrib_plot <- renderPlotly({
     df <- filtered_spells()
-    req(nrow(df) > 0)
+    bin_levels <- c("1–14 Days", "15–30 Days", "31–60 Days", "61–90 Days", "90+ Days")
+    if (nrow(df) == 0) {
+      p <- ggplot() +
+        annotate("text", x = 0.5, y = 0.5, label = "No vacancy spells match the selected filter criteria", size = 4, color = "#666666") +
+        theme_void()
+      return(ggplotly(p) %>% config(displayModeBar = FALSE))
+    }
 
     df <- df %>%
       mutate(Duration_Bin = case_when(
@@ -2528,10 +2578,11 @@ server <- function(input, output, session) {
         Estimated_Days_Open <= 90 ~ "61–90 Days",
         TRUE ~ "90+ Days"
       )) %>%
-      mutate(Duration_Bin = factor(Duration_Bin, levels = c("1–14 Days", "15–30 Days", "31–60 Days", "61–90 Days", "90+ Days")))
+      mutate(Duration_Bin = factor(Duration_Bin, levels = bin_levels))
 
     bin_counts <- df %>%
       count(Duration_Bin, name = "Count") %>%
+      tidyr::complete(Duration_Bin = factor(bin_levels, levels = bin_levels), fill = list(Count = 0)) %>%
       filter(!is.na(Duration_Bin))
 
     p <- ggplot(bin_counts, aes(
@@ -2551,15 +2602,15 @@ server <- function(input, output, session) {
 
   output$k12_spell_table <- renderDT({
     df <- filtered_spells()
-    req(nrow(df) > 0)
-
     cols_to_show <- c("District", "Title", "Position", "Broad_Category",
                       "First_Seen_Date", "Last_Seen_Date", "Estimated_Days_Open", "Status")
     existing_cols <- intersect(cols_to_show, names(df))
 
-    df_display <- df %>%
-      select(all_of(existing_cols)) %>%
-      arrange(desc(Estimated_Days_Open))
+    df_display <- if (nrow(df) > 0) {
+      df %>% select(all_of(existing_cols)) %>% arrange(desc(Estimated_Days_Open))
+    } else {
+      df[0, existing_cols, drop = FALSE]
+    }
 
     datatable(
       df_display,
@@ -2646,12 +2697,12 @@ server <- function(input, output, session) {
 
   output$he_spell_hardest_box <- renderValueBox({
     df <- filtered_he_spells()
-    hardest <- "N/A"
-    if (nrow(df) >= 3 && "Category" %in% names(df)) {
+    hardest <- "None"
+    if (nrow(df) >= 1 && "Category" %in% names(df)) {
       cat_dur <- df %>%
         group_by(Category) %>%
         summarize(med = median(Estimated_Days_Open, na.rm = TRUE), n = n(), .groups = "drop") %>%
-        filter(n >= 2) %>%
+        filter(n >= 1) %>%
         arrange(desc(med))
       if (nrow(cat_dur) > 0) hardest <- cat_dur$Category[1]
     }
@@ -2665,7 +2716,12 @@ server <- function(input, output, session) {
 
   output$he_spell_duration_plot <- renderPlotly({
     df <- filtered_he_spells()
-    req(nrow(df) > 0)
+    if (nrow(df) == 0) {
+      p <- ggplot() +
+        annotate("text", x = 0.5, y = 0.5, label = "No vacancy spells match the selected filter criteria", size = 4, color = "#666666") +
+        theme_void()
+      return(ggplotly(p) %>% config(displayModeBar = FALSE))
+    }
 
     cat_summary <- df %>%
       group_by(Category) %>%
@@ -2674,11 +2730,16 @@ server <- function(input, output, session) {
         Postings = n(),
         .groups = "drop"
       ) %>%
-      filter(!is.na(Category) & Category != "" & Postings >= 2) %>%
+      filter(!is.na(Category) & Category != "" & Postings >= 1) %>%
       arrange(desc(Median_Days)) %>%
       head(12)
 
-    req(nrow(cat_summary) > 0)
+    if (nrow(cat_summary) == 0) {
+      p <- ggplot() +
+        annotate("text", x = 0.5, y = 0.5, label = "No discipline data available for selected filter", size = 4, color = "#666666") +
+        theme_void()
+      return(ggplotly(p) %>% config(displayModeBar = FALSE))
+    }
 
     p <- ggplot(cat_summary, aes(
       x = reorder(Category, Median_Days),
@@ -2699,7 +2760,13 @@ server <- function(input, output, session) {
 
   output$he_spell_distrib_plot <- renderPlotly({
     df <- filtered_he_spells()
-    req(nrow(df) > 0)
+    bin_levels <- c("1–30 Days", "31–60 Days", "61–90 Days", "91–180 Days", "180+ Days")
+    if (nrow(df) == 0) {
+      p <- ggplot() +
+        annotate("text", x = 0.5, y = 0.5, label = "No vacancy spells match the selected filter criteria", size = 4, color = "#666666") +
+        theme_void()
+      return(ggplotly(p) %>% config(displayModeBar = FALSE))
+    }
 
     df <- df %>%
       mutate(Duration_Bin = case_when(
@@ -2709,10 +2776,11 @@ server <- function(input, output, session) {
         Estimated_Days_Open <= 180 ~ "91–180 Days",
         TRUE ~ "180+ Days"
       )) %>%
-      mutate(Duration_Bin = factor(Duration_Bin, levels = c("1–30 Days", "31–60 Days", "61–90 Days", "91–180 Days", "180+ Days")))
+      mutate(Duration_Bin = factor(Duration_Bin, levels = bin_levels))
 
     bin_counts <- df %>%
       count(Duration_Bin, name = "Count") %>%
+      tidyr::complete(Duration_Bin = factor(bin_levels, levels = bin_levels), fill = list(Count = 0)) %>%
       filter(!is.na(Duration_Bin))
 
     p <- ggplot(bin_counts, aes(
@@ -2732,15 +2800,15 @@ server <- function(input, output, session) {
 
   output$he_spell_table <- renderDT({
     df <- filtered_he_spells()
-    req(nrow(df) > 0)
-
     cols_to_show <- c("Institution", "Title", "Job_Type", "Category",
                       "First_Seen_Date", "Last_Seen_Date", "Estimated_Days_Open", "Status")
     existing_cols <- intersect(cols_to_show, names(df))
 
-    df_display <- df %>%
-      select(all_of(existing_cols)) %>%
-      arrange(desc(Estimated_Days_Open))
+    df_display <- if (nrow(df) > 0) {
+      df %>% select(all_of(existing_cols)) %>% arrange(desc(Estimated_Days_Open))
+    } else {
+      df[0, existing_cols, drop = FALSE]
+    }
 
     datatable(
       df_display,
