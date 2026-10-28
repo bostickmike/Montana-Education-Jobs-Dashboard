@@ -118,6 +118,24 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 * **Coverage Backlog Triage:**
   * Triaged Golden Ridge (Teton County #45) and Grant (Beaverhead County #7) to Group 8 in `DISTRICT_BACKLOG.md` (1-room rural schools with no standalone job boards).
 
+### Milestone 7: Tab Navigation Consolidation & Head-to-Head Comparator Modules
+* **Sidebar Navigation Consolidation:**
+  * Streamlined sidebar navigation from 16 tabs down to 10 tabs, removing sidebar clutter while preserving 100% of underlying analytical modules.
+  * Replaced flat tab list with organized `tabBox` subtab navigation:
+    - **Profiles & Compare** (`k12_summary` / `he_summary`): Subtab 1: Directory Table, Subtab 2: Head-to-Head Comparator.
+    - **Current Trends & New** (`k12_current` / `he_current`): Subtab 1: Category & Discipline Breakdown, Subtab 2: New This Week Postings.
+    - **Trends & Duration Spells** (`k12_trends` / `he_trends`): Subtab 1: Longitudinal Hiring Trends, Subtab 2: Vacancy Spells & Time-to-Fill.
+* **Side-by-Side District & College Comparator:**
+  * Built interactive Head-to-Head Comparators allowing users to select and benchmark up to 4 districts or colleges simultaneously.
+  * Dynamic comparative cards display active openings, vacancy rates, compensation (MT DLI teacher average salary, 10th-90th percentile bands, IPEDS faculty compensation), general fund operating expenditures, student enrollment, student-to-staff ratios, and community socioeconomic context.
+  * Comparative Plotly visualizations for compensation benchmarks, staffing scale, and collegiate appointment distributions.
+  * Real-time filtered openings table showing active postings across the selected employers.
+  * One-touch quick presets for "Top Hiring" and "Largest Enrollment" employers.
+* **Test Suite Expansion & Zero-Warning Cleanliness:**
+  * Added automated reactive tests in `test-app-reactives.R` verifying comparator card rendering, Plotly graphics, tabular filters, and preset button event handlers.
+  * Updated `LEAF_TABS` contract in `test-app-boot-smoke.R` to reflect the 10 consolidated destination tabs.
+  * Verified 2,855 passing tests (0 fails, 0 warnings, 2 skips).
+
 ---
 
 ## 4. Key Architectural Contracts & Invariants
@@ -152,3 +170,5 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [x] Add Higher Ed weekly vacancy series downloads and codebook definitions.
 - [x] Add spell panels to automated data-quality invariant suite.
 - [x] Triage Golden Ridge and Grant in district coverage backlog.
+- [x] Streamline sidebar navigation into consolidated tabBoxes (10 main tabs).
+- [x] Implement Head-to-Head District and College Comparator modules.

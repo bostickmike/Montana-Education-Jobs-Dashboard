@@ -479,3 +479,43 @@ test_that("HE Vacancy_Numerator counts only full-time faculty postings, not adju
     expect_equal(row$Vacancy_Numerator, ft_only_count(inst), info = paste("institution:", inst))
   }
 })
+
+test_that("K-12 and HE comparator reactives and presets execute cleanly", {
+  env <- load_app()
+  shiny::testServer(env$server, {
+    # Initial state tests
+    session$setInputs(k12_compare_districts = c("Billings Public Schools", "Kalispell Public Schools"))
+    expect_no_error(output$k12_compare_cards)
+    expect_no_error(output$k12_compare_salary_plot)
+    expect_no_error(output$k12_compare_metrics_plot)
+    expect_no_error(output$k12_compare_jobs_table)
+
+    # Empty state handling
+    session$setInputs(k12_compare_districts = character(0))
+    expect_no_error(output$k12_compare_cards)
+    expect_no_error(output$k12_compare_salary_plot)
+    expect_no_error(output$k12_compare_metrics_plot)
+    expect_no_error(output$k12_compare_jobs_table)
+
+    # Preset button triggers
+    session$setInputs(k12_comp_preset_top = 1)
+    session$setInputs(k12_comp_preset_largest = 1)
+    session$setInputs(k12_comp_preset_clear = 1)
+
+    # HE comparator
+    session$setInputs(he_compare_insts = c("Montana State University", "University of Montana"))
+    expect_no_error(output$he_compare_cards)
+    expect_no_error(output$he_compare_salary_plot)
+    expect_no_error(output$he_compare_openings_plot)
+    expect_no_error(output$he_compare_jobs_table)
+
+    session$setInputs(he_compare_insts = character(0))
+    expect_no_error(output$he_compare_cards)
+    expect_no_error(output$he_compare_salary_plot)
+    expect_no_error(output$he_compare_openings_plot)
+    expect_no_error(output$he_compare_jobs_table)
+
+    session$setInputs(he_comp_preset_top = 1)
+    session$setInputs(he_comp_preset_clear = 1)
+  })
+})
