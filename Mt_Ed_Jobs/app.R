@@ -899,6 +899,11 @@ map_he <- mapdata2_he %>%
 
 combined_map_data <- bind_rows(map_k12, map_he)
 
+map_county_choices <- c("All Counties" = "all", setNames(
+  sort(unique(na.omit(combined_map_data$County))),
+  sub(", Montana$", "", sort(unique(na.omit(combined_map_data$County))))
+))
+
 # Map marker size/color -- ported verbatim.
 MAP_MARKER_MIN_RADIUS <- 6
 MAP_MARKER_MAX_RADIUS <- 24
@@ -1063,22 +1068,73 @@ ui <- dashboardPage(
       tabItem(
         tabName = "map_tab",
         h1("Where the Openings Are"),
-        box(width = 12, title = "Montana Education Job Openings Map", status = "primary",
-            checkboxGroupInput(
-              "map_types", "Show:",
-              choices = c("K-12 Districts" = "K-12 District", "Higher Ed Institutions" = "Higher Ed Institution"),
-              selected = c("K-12 District", "Higher Ed Institution"),
-              inline = TRUE
+        box(
+          width = 12, title = "Montana Education Job Openings Map", status = "primary",
+          fluidRow(
+            column(
+              3,
+              checkboxGroupInput(
+                "map_types", "Employer Type:",
+                choices = c("K-12 Districts" = "K-12 District", "Higher Ed" = "Higher Ed Institution"),
+                selected = c("K-12 District", "Higher Ed Institution"),
+                inline = TRUE
+              )
             ),
-            withSpinner(leafletOutput("combined_map", height = 650)),
-            helpText(paste0(
-              "Only this project's ", n_distinct(map_k12$Name), " directly-scraped K-12 districts and ",
-              n_distinct(map_he$Name), " directly-scraped Higher Ed institutions are shown here (with current openings). ",
-              "The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies; OPI-only source locations are not canonical district identifiers and cannot be mapped reliably. ",
-              "Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table. ",
-              "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison. ",
-              "A red \"Partial\" badge means that district's postings come from a heuristic scrape of the district's own site rather than a real structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-scraped district's count."
-            ))
+            column(
+              3,
+              selectInput(
+                "map_county", "Filter by County:",
+                choices = map_county_choices,
+                selected = "all"
+              )
+            ),
+            column(
+              2,
+              selectInput(
+                "map_salary_tier", "Salary Level:",
+                choices = c(
+                  "All Salaries" = "all",
+                  "$60,000+ Average Pay" = "60k_plus",
+                  "$50,000 - $60,000" = "50k_60k",
+                  "Under $50,000" = "under_50k"
+                ),
+                selected = "all"
+              )
+            ),
+            column(
+              2,
+              selectInput(
+                "map_urgency", "Posting Volume:",
+                choices = c(
+                  "All Active Locations" = "all",
+                  "High Volume (5+ openings)" = "5_plus",
+                  "Multiple Openings (2+)" = "2_plus",
+                  "New Postings This Week" = "has_new"
+                ),
+                selected = "all"
+              )
+            ),
+            column(
+              2,
+              div(
+                style = "padding-top: 25px;",
+                actionButton("map_filter_reset", "Reset Filters", icon = icon("arrow-rotate-left"), class = "btn-sm btn-default btn-block")
+              )
+            )
+          ),
+          div(
+            style = "margin: 2px 0 12px 2px;",
+            uiOutput("map_filter_count")
+          ),
+          withSpinner(leafletOutput("combined_map", height = 650)),
+          helpText(paste0(
+            "Only this project's ", n_distinct(map_k12$Name), " directly-scraped K-12 districts and ",
+            n_distinct(map_he$Name), " directly-scraped Higher Ed institutions are shown here (with current openings). ",
+            "The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies; OPI-only source locations are not canonical district identifiers and cannot be mapped reliably. ",
+            "Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table. ",
+            "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison. ",
+            "A red \"Partial\" badge means that district's postings come from a heuristic scrape of the district's own site rather than a real structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-scraped district's count."
+          ))
         )
       ),
 
@@ -2238,8 +2294,93 @@ server <- function(input, output, session) {
 
   map_filtered <- reactive({
     df <- combined_map_data %>% filter(Type %in% input$map_types, CurrentCount > 0)
+
+    # Filter by county
+    if (!is.null(input$map_county) && input$map_county != "all") {
+      df <- df %>% filter(County == input$map_county)
+    }
+
+    # Filter by salary tier (Average Teacher Salary with 10th percentile fallback for K-12, Average Faculty Salary for HE)
+    if (!is.null(input$map_salary_tier) && input$map_salary_tier != "all") {
+      df <- df %>% mutate(
+        .bench_sal = coalesce(Teacher_Avg_Salary, Faculty_Avg_Salary, Teacher_Salary_10th_Pctile)
+      )
+      if (input$map_salary_tier == "60k_plus") {
+        df <- df %>% filter(!is.na(.bench_sal) & .bench_sal >= 60000)
+      } else if (input$map_salary_tier == "50k_60k") {
+        df <- df %>% filter(!is.na(.bench_sal) & .bench_sal >= 50000 & .bench_sal < 60000)
+      } else if (input$map_salary_tier == "under_50k") {
+        df <- df %>% filter(!is.na(.bench_sal) & .bench_sal < 50000)
+      }
+      df <- df %>% select(-.bench_sal)
+    }
+
+    # Filter by posting volume / freshness
+    if (!is.null(input$map_urgency) && input$map_urgency != "all") {
+      if (input$map_urgency == "5_plus") {
+        df <- df %>% filter(CurrentCount >= 5)
+      } else if (input$map_urgency == "2_plus") {
+        df <- df %>% filter(CurrentCount >= 2)
+      } else if (input$map_urgency == "has_new") {
+        df <- df %>% filter(WeeklyNew > 0)
+      }
+    }
+
     df
   })
+
+  output$map_filter_count <- renderUI({
+    filtered_df <- map_filtered()
+    filtered_n <- nrow(filtered_df)
+    total_active <- nrow(combined_map_data %>% filter(CurrentCount > 0))
+    total_postings <- sum(filtered_df$CurrentCount, na.rm = TRUE)
+
+    if (filtered_n == 0) {
+      tags$span(
+        class = "badge",
+        style = "background-color: #d9534f; font-size: 0.9em; padding: 6px 12px; font-weight: 500; border-radius: 4px;",
+        "No locations match all selected filters — broaden criteria or click Reset Filters."
+      )
+    } else {
+      tags$span(
+        class = "badge",
+        style = "background-color: #3c8dbc; font-size: 0.9em; padding: 6px 12px; font-weight: 500; border-radius: 4px;",
+        sprintf("Showing %d of %d active locations (%s current openings across filtered locations)",
+                filtered_n, total_active, format(total_postings, big.mark = ","))
+      )
+    }
+  })
+
+  observeEvent(input$map_filter_reset, {
+    updateCheckboxGroupInput(session, "map_types", selected = c("K-12 District", "Higher Ed Institution"))
+    updateSelectInput(session, "map_county", selected = "all")
+    updateSelectInput(session, "map_salary_tier", selected = "all")
+    updateSelectInput(session, "map_urgency", selected = "all")
+  })
+
+  observeEvent(input$map_county, {
+    if (is.null(input$map_county) || input$map_county == "all") {
+      leafletProxy("combined_map") %>%
+        setView(lng = -111.5, lat = 46.8, zoom = 7)
+    } else {
+      county_data <- combined_map_data %>%
+        filter(County == input$map_county, !is.na(Latitude), !is.na(Longitude))
+      if (nrow(county_data) > 0) {
+        if (nrow(county_data) == 1) {
+          leafletProxy("combined_map") %>%
+            setView(lng = county_data$Longitude[1], lat = county_data$Latitude[1], zoom = 9)
+        } else {
+          leafletProxy("combined_map") %>%
+            fitBounds(
+              lng1 = min(county_data$Longitude) - 0.15,
+              lat1 = min(county_data$Latitude) - 0.15,
+              lng2 = max(county_data$Longitude) + 0.15,
+              lat2 = max(county_data$Latitude) + 0.15
+            )
+        }
+      }
+    }
+  }, ignoreInit = TRUE)
 
   observe({
     df <- map_filtered()

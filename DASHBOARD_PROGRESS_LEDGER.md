@@ -136,6 +136,24 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * Updated `LEAF_TABS` contract in `test-app-boot-smoke.R` to reflect the 10 consolidated destination tabs.
   * Verified 2,855 passing tests (0 fails, 0 warnings, 2 skips).
 
+### Milestone 8: Map Multi-Dimensional Filtering & Responsive Navigation (2026-10-28)
+* **Multi-Dimensional Map Filter Panel:**
+  * Built an integrated responsive control panel directly above the interactive Leaflet map featuring:
+    - **Employer Type:** Toggle K-12 Districts, Higher Ed Institutions, or both.
+    - **County Filter:** Dropdown populated from all 56 Montana counties with clean user-facing labels.
+    - **Salary Benchmark Tier:** Filter by average educator compensation ($60,000+ Average Pay, $50,000 - $60,000, Under $50,000) harmonizing MT DLI teacher average salary (with 10th percentile fallback) and IPEDS faculty average pay.
+    - **Posting Volume & Urgency:** Filter by employer hiring intensity (All Active Locations, High Volume 5+ openings, Multiple Openings 2+, New Postings This Week).
+    - **1-Click Reset:** Single-click "Reset Filters" action button restoring all controls to default statewide view.
+* **Dynamic Filter Result Badge:**
+  * Real-time indicator displaying matching location counts and cumulative active openings across the filtered locations (`Showing X of Y active locations (Z current openings across filtered locations)`).
+  * Informative warning state with guidance to broaden filters when zero locations match the selected criteria.
+* **Responsive Geo-Spatial Viewport Centering:**
+  * Automatically pans and bounds-zooms the Leaflet map viewport to the selected county when a user chooses a county filter, and smoothly returns to the statewide Montana view when reset.
+* **Defensive Marker Lifecycle & Zero-Row Guarding:**
+  * Ensured `leafletProxy` reliably clears markers without generating orphaned popups or JavaScript errors on 0-row filter states.
+* **Automated Reactive Test Coverage:**
+  * Added comprehensive tests in `test-app-reactives.R` verifying default filtering, single and combined filter attributes, county zoom coordinates, empty state handling, and reset triggers (20 new tests, 2,875 total tests passing with 0 fails and 0 warnings).
+
 ---
 
 ## 4. Key Architectural Contracts & Invariants
@@ -172,3 +190,4 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [x] Triage Golden Ridge and Grant in district coverage backlog.
 - [x] Streamline sidebar navigation into consolidated tabBoxes (10 main tabs).
 - [x] Implement Head-to-Head District and College Comparator modules.
+- [x] Multi-dimensional map filtering (salary tiers, county cluster, posting volume/urgency) with dynamic count badge and auto-zoom.
