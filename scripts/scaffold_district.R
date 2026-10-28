@@ -39,6 +39,7 @@ url <- get_arg("url")
 slug <- get_arg("slug")
 platform <- get_arg("platform")
 cms <- get_arg("cms")
+leaid <- get_arg("leaid")
 
 if (is.null(district) || is.null(city) || is.null(county) || is.null(lat) || is.null(lon) || is.null(url) || is.null(slug)) {
   cat("Error: Missing required arguments.\n\n")
@@ -75,6 +76,8 @@ if (is.null(cms)) {
       cms <- "weebly"
     } else if (grepl("wp-content|wp-includes|\\bdivi\\b", fix_txt, ignore.case = TRUE)) {
       cms <- "wordpress"
+    } else if (grepl("cyberschool|cs2\\.chat|District/Jobs", fix_txt, ignore.case = TRUE)) {
+      cms <- "cyberschool"
     } else if (grepl("edliocdn|uREC_ID=|/apps/jobs/|show_job\\.jsp", fix_txt, ignore.case = TRUE)) {
       cms <- "edlio"
     } else if (grepl("sites\\.google\\.com|sites-layout-tile", fix_txt, ignore.case = TRUE)) {
@@ -112,8 +115,9 @@ if (district %in% existing_reg$District) {
   cat(sprintf("[1/8] District '%s' already exists in k12_district_registry.csv\n", district))
 } else {
   new_count <- old_count + 1
-  new_reg_row <- sprintf('"%s","%s","%s",%s,%s,"%s","","%s"',
-                         district, city, county, lat, lon, platform, url)
+  leaid_val <- if (!is.null(leaid) && nzchar(leaid)) leaid else ""
+  new_reg_row <- sprintf('"%s",%s,"%s","%s",%s,%s,"%s","","%s"',
+                         district, leaid_val, city, county, lat, lon, platform, url)
   # Append row
   writeLines(c(reg_lines, new_reg_row), reg_path)
   cat(sprintf("[1/8] Updated k12_district_registry.csv (+1 row, total %d)\n", new_count))
@@ -375,6 +379,45 @@ if (grepl(sprintf("fetch_%s_postings", slug), misc_content, fixed = TRUE)) {
 
   clean_titles <- texts[!grepl("^(Employment Opportunities|Job Openings|Office Staff|Contact Us|Home|Download|Application)", texts, ignore.case = TRUE) &
                         grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute", texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("%s", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}', slug, city)
+  } else if (cms == "cyberschool") {
+    sprintf('parse_%s_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  container <- html_elements(doc, ".listItem_bodyContent, #maincontent, .cs-html-widget, main, #content")
+  if (length(container) == 0) container <- doc
+
+  elements <- html_elements(container, "li, p, .listItem_holder, strong, h2, h3, h4")
+  if (length(elements) == 0) return(empty)
+
+  raw_titles <- trimws(html_text2(elements))
+  raw_titles <- raw_titles[nzchar(raw_titles)]
+
+  exclude_patterns <- "^(Applications?|Click Here|Download|None|Equal Opportunity|Back to|Current Jobs|Archive Jobs|View Jobs|Site Map|Skip To|Share|Alert|Login|Subscribe|Views)"
+  clean_titles <- raw_titles[!grepl(exclude_patterns, raw_titles, ignore.case = TRUE) &
+                             grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute|kitchen", raw_titles, ignore.case = TRUE)]
+  clean_titles <- clean_titles[nchar(clean_titles) < 90]
 
   if (length(clean_titles) == 0) return(empty)
 

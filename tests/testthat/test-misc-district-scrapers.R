@@ -2513,6 +2513,18 @@ test_that("parse_brockton_postings extracts the 2 real postings between the head
   expect_true(all(result$Location == "Brockton"))
 })
 
+test_that("parse_brockton_postings extracts the 3 real postings from the updated 2026 website", {
+  html <- paste(readLines(test_path("fixtures", "brockton_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_brockton_postings(html, "https://www.brockton.k12.mt.us/employment")
+
+  expect_equal(nrow(result), 3)
+  expect_true(all(c("Elementary Teacher (Multiple Openings)",
+                    "Secondary Teacher – STEM (Multiple Openings)",
+                    "Secondary Teacher – Humanities (Multiple Openings)") %in% result$Title))
+  expect_true(all(result$Location == "Brockton"))
+})
+
 test_that("parse_brockton_postings returns zero rows (not an error) when there's no real start marker", {
   result <- parse_brockton_postings("<html><body><p>Nothing here.</p></body></html>", "url")
   expect_equal(nrow(result), 0)
@@ -4503,6 +4515,66 @@ test_that("parse_potomac_postings extracts real positions when present", {
 
 test_that("parse_potomac_postings returns zero rows on empty or non-matching HTML", {
   result <- parse_potomac_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_frontier_postings extracts real positions or returns empty cleanly", {
+  fixture <- paste(readLines(test_path("fixtures", "frontier_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.frontierk8.org/District/Jobs/"
+
+  result <- parse_frontier_postings(fixture, url)
+
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  if (nrow(result) > 0) {
+    expect_true(all(result$Location == "Wolf Point"))
+    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
+    expect_true(all(nzchar(result$Link)))
+  }
+})
+
+test_that("parse_frontier_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_frontier_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_saco_postings extracts real positions or returns empty cleanly", {
+  fixture <- paste(readLines(test_path("fixtures", "saco_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.sacoschools.k12.mt.us/District/Jobs/"
+
+  result <- parse_saco_postings(fixture, url)
+
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  if (nrow(result) > 0) {
+    expect_true(all(result$Location == "Saco"))
+    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
+    expect_true(all(nzchar(result$Link)))
+  }
+})
+
+test_that("parse_saco_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_saco_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_ulm_postings extracts real positions or returns empty cleanly", {
+  fixture <- paste(readLines(test_path("fixtures", "ulm_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.ulmschools.com/forms--files.html"
+
+  result <- parse_ulm_postings(fixture, url)
+
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  if (nrow(result) > 0) {
+    expect_true(all(result$Location == "Ulm"))
+    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
+    expect_true(all(nzchar(result$Link)))
+  }
+})
+
+test_that("parse_ulm_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_ulm_postings("<html><body><p>No jobs</p></body></html>", "url")
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })

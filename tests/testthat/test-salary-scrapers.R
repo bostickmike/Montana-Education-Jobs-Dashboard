@@ -127,7 +127,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                    c("Lame Deer Public Schools", "Lodge Grass Public Schools",
                      "Trego School District 53", "Heart Butte K-12 Schools",
                      "Pleasant Valley School District #27", "Fishtail School District #13",
-                     "Nye School District #31"))
+                     "Nye School District #31",
+                     "Frontier Elementary School",
+                     "Saco Public Schools",
+                     "Ulm Public Schools"))
 })
 
 # ---------------------------------------------------------------------------

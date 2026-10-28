@@ -2420,6 +2420,78 @@ if (nrow(potomac_df) > 0) {
                       Posting_Source = character(0))
 }
 
+# Frontier Elementary School (frontierk8.org, found 2026-10-27)
+frontier_districts <- registry[registry$Platform == "FrontierHeuristic", ]
+frontier_results <- lapply(seq_len(nrow(frontier_districts)), function(i) {
+  row <- frontier_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_frontier_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+frontier_df <- bind_rows(frontier_results)
+if (nrow(frontier_df) > 0) {
+  frontier_df <- frontier_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Frontier Elementary School site (direct board)")
+} else {
+  frontier_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Saco Public Schools (sacoschools.k12.mt.us, found 2026-10-27)
+saco_districts <- registry[registry$Platform == "SacoHeuristic", ]
+saco_results <- lapply(seq_len(nrow(saco_districts)), function(i) {
+  row <- saco_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_saco_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+saco_df <- bind_rows(saco_results)
+if (nrow(saco_df) > 0) {
+  saco_df <- saco_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Saco Public Schools site (direct board)")
+} else {
+  saco_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
+# Ulm Public Schools (ulmschools.com, found 2026-10-27)
+ulm_districts <- registry[registry$Platform == "UlmHeuristic", ]
+ulm_results <- lapply(seq_len(nrow(ulm_districts)), function(i) {
+  row <- ulm_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_ulm_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+ulm_df <- bind_rows(ulm_results)
+if (nrow(ulm_df) > 0) {
+  ulm_df <- ulm_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Ulm Public Schools site (direct board)")
+} else {
+  ulm_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                      location = character(0), url = character(0), District = character(0),
+                      Posting_Source = character(0))
+}
+
 # Lincoln School District #38 (a publicly published Google Sites page,
 # found 2026-08-24) also has no structured ATS -- a plain httr2 fetch,
 # no chromote needed, same pattern as the other heuristic districts
@@ -2952,7 +3024,8 @@ desmet_df <- desmet_df %>% mutate(date_posted = standardize_date(date_posted))
 fishtail_df <- fishtail_df %>% mutate(date_posted = standardize_date(date_posted))
 nye_df <- nye_df %>% mutate(date_posted = standardize_date(date_posted))
 potomac_df <- potomac_df %>% mutate(date_posted = standardize_date(date_posted))
-apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))
+frontier_df <- frontier_df %>% mutate(date_posted = standardize_date(date_posted))
+apptegy_df <- apptegy_df
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_dfs <- list(
@@ -2987,7 +3060,10 @@ direct_dfs <- list(
   fishtail_df,
   nye_df,
   potomac_df,
-  swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
+  frontier_df,
+                       saco_df,
+                       ulm_df,
+                       swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
   gallatingateway_df, apptegy_df
 )
 direct_dfs <- lapply(direct_dfs, standardize_df_date)

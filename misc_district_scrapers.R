@@ -2136,18 +2136,11 @@ parse_augusta_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Augusta", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
-# Brockton School District (mtbrocktonps.schoolinsites.com, found
-# 2026-08-24) -- SCHOOLinSITES CMS, same platform as Miles City above,
-# but here the real postings live directly on the HTML page instead of a
-# linked Google Sheet. One flat list of real titles between "Current Job
-# Openings for the [school year] School Year" and the "To apply for any
-# of the job openings above..." closing sentence -- confirmed live
-# 2026-08-24, 2 real postings ("Maintenance", "Bus Driver"). The page
-# also lists a separate, much longer "Employment Applications & Job
-# Descriptions (JD)" section further down (generic role-description
-# templates like Custodian JD/Principal K-12 JD/etc., not real open
-# postings), correctly excluded by stopping before it.
-fetch_brockton_postings <- function(url = "https://mtbrocktonps.schoolinsites.com/employment") {
+# Brockton School District (brockton.k12.mt.us/employment) -- Migrated from
+# SchoolInSites to district site in 2026. Current postings appear on the
+# HTML page with "Position: <Title> Duties: ...". Supports both new format
+# and legacy SchoolInSites layout for backward compatibility.
+fetch_brockton_postings <- function(url = "https://www.brockton.k12.mt.us/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
     perform_with_retry()
@@ -2159,11 +2152,32 @@ parse_brockton_postings <- function(html_text, url) {
                        Posted_Date = character(0), Link = character(0),
                        stringsAsFactors = FALSE)
 
-  page <- rvest::read_html(html_text)
+  if (!nzchar(html_text)) return(empty)
+  page <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(page)) return(empty)
+
   lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
   lines <- trimws(lines)
   lines <- lines[nzchar(lines)]
 
+  # Support new website format: "Position: <Title> Duties: ..."
+  pos_lines <- grep("^Position:[[:space:]]+", lines, value = TRUE)
+  if (length(pos_lines) > 0) {
+    titles <- sub("^Position:[[:space:]]*", "", sub("[[:space:]]+Duties:.*$", "", pos_lines))
+    titles <- trimws(titles)
+    titles <- titles[nzchar(titles)]
+    if (length(titles) > 0) {
+      return(data.frame(
+        Title = titles,
+        Location = "Brockton",
+        Posted_Date = NA_character_,
+        Link = url,
+        stringsAsFactors = FALSE
+      ))
+    }
+  }
+
+  # Fallback for legacy SchoolInSites layout
   start_idx <- which(grepl("^Current Job Openings for the .* School Year$", lines))
   stop_idx <- which(grepl("^To apply for any of the job openings above", lines))
   if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
@@ -7372,6 +7386,154 @@ parse_potomac_postings <- function(html, url) {
   df <- data.frame(
     Title = clean_titles,
     Location = rep("Potomac", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Frontier Elementary School
+# ---------------------------------------------------------------------------
+fetch_frontier_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_frontier_postings(html, url)
+}
+
+parse_frontier_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  container <- html_elements(doc, ".listItem_bodyContent, #maincontent, .cs-html-widget, main, #content")
+  if (length(container) == 0) container <- doc
+
+  elements <- html_elements(container, "li, p, .listItem_holder, strong, h2, h3, h4")
+  if (length(elements) == 0) return(empty)
+
+  raw_titles <- trimws(html_text2(elements))
+  raw_titles <- raw_titles[nzchar(raw_titles)]
+
+  exclude_patterns <- "^(Applications?|Click Here|Download|None|Equal Opportunity|Back to|Current Jobs|Archive Jobs|View Jobs|Site Map|Skip To|Share|Alert|Login|Subscribe|Views)"
+  clean_titles <- raw_titles[!grepl(exclude_patterns, raw_titles, ignore.case = TRUE) &
+                             grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute|kitchen", raw_titles, ignore.case = TRUE)]
+  clean_titles <- clean_titles[nchar(clean_titles) < 90]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("Wolf Point", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Saco Public Schools
+# ---------------------------------------------------------------------------
+fetch_saco_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_saco_postings(html, url)
+}
+
+parse_saco_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  container <- html_elements(doc, ".listItem_bodyContent, #maincontent, .cs-html-widget, main, #content")
+  if (length(container) == 0) container <- doc
+
+  elements <- html_elements(container, "li, p, .listItem_holder, strong, h2, h3, h4")
+  if (length(elements) == 0) return(empty)
+
+  raw_titles <- trimws(html_text2(elements))
+  raw_titles <- raw_titles[nzchar(raw_titles)]
+
+  exclude_patterns <- "^(Applications?|Click Here|Download|None|Equal Opportunity|Back to|Current Jobs|Archive Jobs|View Jobs|Site Map|Skip To|Share|Alert|Login|Subscribe|Views)"
+  clean_titles <- raw_titles[!grepl(exclude_patterns, raw_titles, ignore.case = TRUE) &
+                             grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute|kitchen", raw_titles, ignore.case = TRUE)]
+  clean_titles <- clean_titles[nchar(clean_titles) < 90]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("Saco", length(clean_titles)),
+    Posted_Date = rep(NA_character_, length(clean_titles)),
+    Link = rep(url, length(clean_titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Ulm Public Schools
+# ---------------------------------------------------------------------------
+fetch_ulm_postings <- function(url) {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_ulm_postings(html, url)
+}
+
+parse_ulm_postings <- function(html, url) {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  content <- html_element(doc, "#wsite-content")
+  if (is.null(content)) return(empty)
+
+  elements <- html_elements(content, "h2.wsite-content-title, .wsite-content-title, .paragraph, p, li")
+  if (length(elements) == 0) return(empty)
+
+  raw_texts <- trimws(html_text2(elements))
+  raw_texts <- raw_texts[nzchar(raw_texts)]
+
+  clean_titles <- raw_texts[!grepl("^(Employment Opportunities|Certified Salary|Click here|Classified Personnel|Certified Personnel|Coaching Personnel|NOTE:|No opening|Equal Opportunity|Application Form)", raw_texts, ignore.case = TRUE) &
+                            grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute", raw_texts, ignore.case = TRUE)]
+
+  if (length(clean_titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = clean_titles,
+    Location = rep("Ulm", length(clean_titles)),
     Posted_Date = rep(NA_character_, length(clean_titles)),
     Link = rep(url, length(clean_titles)),
     stringsAsFactors = FALSE

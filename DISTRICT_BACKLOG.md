@@ -148,6 +148,10 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Fishtail School District #13 | Stillwater | `fishtailschool.org/job-openings/` | WordPress CMS; dedicated job openings page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
 | Nye School District #31 | Stillwater | `nyeschooldistrict.org/job-openings/` | WordPress CMS; dedicated job openings page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
 | Potomac Elementary School District #11 | Missoula | `potomacschoolmontana.us/general-9` | Wix CMS; dedicated Jobs page with application prompt; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
+| Frontier Elementary School | Roosevelt | `frontierk8.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
+| Saco Public Schools | Phillips | `sacoschools.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
+| Ulm Public Schools | Cascade | `ulmschools.com/forms--files.html` | Weebly CMS; dedicated forms & files page; extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
+| Brockton School District | Roosevelt | `brockton.k12.mt.us/employment` | Plain HTML; migrated from SchoolInSites to district site; 3 active positions (Elementary Teacher, STEM Secondary, Humanities Secondary) | ✅ **Recovered** (2026-10-27, Batch 21) |
 
 ---
 
@@ -158,8 +162,8 @@ real one (verify address/phone), then re-triage.
 
 | District | County | Trap / status | Status |
 |---|---|---|---|
-| Avon | Powell | `avon*` resolves to Avon-by-the-Sea, NJ; real MT school is `avon.k12.mt.us` | TODO |
-| Bynum | Teton | `bynumschool.org` → Midland, TX; real MT school is `bynum.k12.mt.us` | TODO |
+| Avon | Powell | `avon*` resolves to Avon-by-the-Sea, NJ; real MT school is Powell County District 29 (notices hosted on `powellcountymt.gov`; no standalone website) | DECLINED (Group 8) |
+| Bynum | Teton | `bynumschool.org` → Midland, TX; real MT site is GoDaddy (`bynumsch.org` / `bynumschool.godaddysites.com`), 1-page site with calendar download links only | DECLINED (Group 8) |
 | Luther School | Carbon | `lutherlions.org` → Luther, OK; real MT site is `lutherschool.org/index.php/documents` (Joomla); 2 active postings | ✅ **Adopted** (2026-10-21) |
 | Pryor Public Schools | Big Horn | `pryorschools.org` → Pryor, OK; real MT site is `pryorwarriors.org` (Arrow Creek Elem / Plenty Coups HS); 2 active positions | ✅ **Adopted** (2026-10-22, Batch 16) |
 | Pine Grove | Rosebud | `pgasd.com` → Pennsylvania | TODO |
@@ -167,6 +171,9 @@ real one (verify address/phone), then re-triage.
 | Basin (Boulder area) | Jefferson | Real MT Basin School reopened April 2026; registered domain is `basin.k12.mt.us`; DNS pending / site under construction; `basinschools.net` = Idaho City, ID | RECHECK |
 | Medicine Lake School District #10 | Sheridan | Real site is Apptegy (`medicinelake.k12.mt.us`); staff directory active, no open job board posted | RECHECK |
 | Park City Schools | Stillwater | Real site is Apptegy (`parkcityschools.org`); 2 active postings | ✅ **Adopted** (earlier batch) |
+| Elliston | Powell | Powell County District 27; notices hosted on `powellcountymt.gov`; no standalone website | DECLINED (Group 8) |
+| Garrison | Powell | Powell County District 20; notices hosted on `powellcountymt.gov`; no standalone website | DECLINED (Group 8) |
+| Dupuyer | Pondera | Pondera County District 2; no standalone website domain | DECLINED (Group 8) |
 
 ---
 
@@ -262,6 +269,5 @@ authoritative artifacts are in the session memory directory:
   `has_hs_pair` column flagging the higher-yield rows
 - `opi_raw_district_dropdown_2026-08-24.csv` — the raw 602-row OPI dropdown
 
-**Resume by checking:** Dupuyer, Elliston, Frontier, Garrison, Golden Ridge,
-Grant — then re-diff the low-yield rows against `k12_district_registry.csv` +
-Group 8 above to catch anything skipped.
+**Resume by checking:** Golden Ridge, Grant — then re-diff the low-yield rows against `k12_district_registry.csv` +
+Group 8 above to catch anything skipped. (Dupuyer, Elliston, and Garrison were evaluated and triaged to Group 8; Frontier was adopted in Batch 21).

@@ -110,7 +110,7 @@ Florence-Carlton School District 15-6,3011100,Florence,Ravalli County,46.6278,-1
 Miles City Unified School District 1,3018410,Miles City,Custer County,46.4083,-105.8405,MilesCityHeuristic,,https://docs.google.com/spreadsheets/d/1Ct4NASCs-jCEllcMREDsXNdgx8zaKYCosoyo6fHGtKY/export?format=csv&gid=0
 West Yellowstone School District,3027630,West Yellowstone,Gallatin County,44.6621,-111.1046,Apptegy,,https://wolverine.life/page/employment-opportunities
 Augusta School District #45,3002430,Augusta,Lewis and Clark County,47.4972,-112.4136,AugustaHeuristic,,https://www.augustaschool.org/job-openings
-Brockton School District,3005010,Brockton,Roosevelt County,48.2244,-104.9591,BrocktonHeuristic,,https://mtbrocktonps.schoolinsites.com/employment
+Brockton School District,3005010,Brockton,Roosevelt County,48.2244,-104.9591,BrocktonHeuristic,,https://www.brockton.k12.mt.us/employment
 Culbertson School District 17-C,3007830,Culbertson,Roosevelt County,48.1483,-104.5147,CulbertsonHeuristic,,https://www.culbertsonschool.com/about-us/employment
 Cottonwood School District #57,3007500,Havre,Hill County,48.6474,-109.9410,Cottonwood57Heuristic,,https://www.cottonwood57.org/job-openings
 Bonner School District #14,3004260,Bonner,Missoula County,46.8724,-113.8574,Apptegy,,https://www.bonner.k12.mt.us/o/bonner-school-district-14/page/employment
@@ -187,3 +187,6 @@ DeSmet Public School,3008880,Missoula,Missoula County,46.9238,-114.1017,DeSmetHe
 Fishtail School District #13,3010800,Fishtail,Stillwater County,45.4795,-109.5085,FishtailHeuristic,,https://fishtailschool.org/job-openings/
 Nye School District #31,3019530,Nye,Stillwater County,45.4316,-109.8055,NyeHeuristic,,https://www.nyeschooldistrict.org/job-openings/
 Potomac Elementary School District #11,3021330,Potomac,Missoula County,46.8906,-113.5786,PotomacHeuristic,,https://www.potomacschoolmontana.us/general-9
+"Frontier Elementary School",3011670,"Wolf Point","Roosevelt County",48.0934,-105.5599,"FrontierHeuristic","","https://www.frontierk8.org/District/Jobs/"
+"Saco Public Schools",3023370,"Saco","Phillips County",48.4605,-107.3447,"SacoHeuristic","","https://www.sacoschools.k12.mt.us/District/Jobs/"
+"Ulm Public Schools",3026880,"Ulm","Cascade County",47.4361,-111.5074,"UlmHeuristic","","https://www.ulmschools.com/forms--files.html"

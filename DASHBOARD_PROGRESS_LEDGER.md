@@ -31,7 +31,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 | **Higher Ed Summary & Trends** | Implemented | Implemented | **Full Parity** | IPEDS instructional salary benchmarks & enrollment. |
 | **Geographic Leaflet Map** | Implemented | Implemented | **Full Parity** | Cluster-mapped district & college vacancy pins. |
 | **Data Sources & Codebook Tab** | Implemented | Implemented | **Full Parity** | Direct CSV download buttons and interactive schemas. |
-| **Federal NCES LEA IDs** | Embedded (48/48) | Embedded (188/188) | **Full Parity** | 7-digit `NCES_LEAID` in registry, `salarymap2.csv`, and `job_duration_spells.csv`. |
+| **Federal NCES LEA IDs** | Embedded (48/48) | Embedded (191/191) | **Full Parity** | 7-digit `NCES_LEAID` in registry, `salarymap2.csv`, and `job_duration_spells.csv`. |
 | **Federal IPEDS UNITIDs** | Embedded (8/8) | Embedded (23/23) | **Full Parity** | 6-digit `IPEDS_UNITID` in higher ed institutional registry and `salarymap.csv`. |
 | **Pipeline Dry-Run Test Harness** | Implemented | Implemented | **Full Parity** | Evaluates scrape combination chunks against mock data frames in CI. |
 | **Pipeline AST Defensive Linting**| Implemented | Implemented | **Full Parity** | Blocks syntax typos (`%%`) and enforces date coercions. |
@@ -87,6 +87,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * Documented all schema variables in `DATA_DICTIONARY.md`, `data_dictionary.csv`, and `DATA_COOKBOOK.md`.
   * Integrated automated spell generation step into `.github/workflows/weekly-scrape.yml`.
 
+### Milestone 5: Montana K-12 Coverage Expansion (Batch 21) & Scraper Drift Recovery
+* **Scraper Drift Recovery:**
+  * Fixed drifted `Brockton School District` scraper: updated endpoint from deprecated SchoolInSites URL to live district site (`https://www.brockton.k12.mt.us/employment`), extracting 3 active positions (`Elementary Teacher`, `Secondary STEM`, `Secondary Humanities`) while maintaining backward-compatible parser tests.
+* **Batch 21 District Adoption:**
+  * Adopted 3 new Montana K-12 districts with verified 7-digit `NCES_LEAID` universal identifiers from NCES CCD, coordinates, and automated test coverage:
+    - **Frontier Elementary School** (`NCES_LEAID`: `3011670`, Roosevelt County / Wolf Point, CyberSchool 2.0).
+    - **Saco Public Schools** (`NCES_LEAID`: `3023370`, Phillips County, CyberSchool 2.0).
+    - **Ulm Public Schools** (`NCES_LEAID`: `3026880`, Cascade County, Weebly CMS).
+  * Expanded Montana district registry coverage from 188 to 191 directly-tracked districts.
+  * Resolved Group 3 & Group 10 backlog items: triaged Avon, Bynum, Elliston, Garrison, and Dupuyer to Group 8 (county-managed or no standalone job boards).
+  * Enhanced `scripts/scaffold_district.R` to support 9-column registry schema with `--leaid` and CyberSchool CMS scaffolding.
+
 ---
 
 ## 4. Key Architectural Contracts & Invariants
@@ -115,4 +127,4 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [x] Mock `Sys.sleep()` during unit tests in `test-misc-district-scrapers.R` reducing test run time from 416s down to 6.7s.
 - [x] Create reproducible generator script `scripts/generate_job_duration_spells.R`.
 - [x] Create Higher Ed vacancy duration spells panel (`he_job_duration_spells.csv`) and `he_spells` dashboard tab.
-- [ ] Expand Montana K-12 coverage backlog (Group 3 URL verification and Group 10 lone-elementary towns).
+- [x] Expand Montana K-12 coverage backlog (Batch 21: Frontier, Saco, Ulm adopted; Brockton drift recovered; Group 3/10 triaged).
