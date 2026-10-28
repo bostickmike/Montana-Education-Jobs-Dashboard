@@ -1,0 +1,102 @@
+# Montana Education Jobs Dashboard — Project Progress Ledger
+
+**Maintainers & Authors:** Mike Bostick & Mark Perkins  
+**Target Environment:** Posit Connect Cloud (Shiny for R)  
+**CI/CD Orchestration:** GitHub Actions (`.github/workflows/weekly-scrape.yml`)  
+**Production Cadence:** Automated weekly scrape & build every Tuesday 05:00 UTC (and manual `workflow_dispatch`)  
+**Repository Branch:** `main`
+
+---
+
+## 1. Executive Summary & Purpose
+
+This ledger serves as the authoritative, version-controlled record of feature development, pipeline hardening, data schema evolution, and feature parity between the **Montana Education Jobs Dashboard** and its sister project, the **Wyoming Education Jobs Dashboard**.
+
+Unlike ephemeral conversation logs or local scratch handoffs, this document lives within the repository root so any human contributor, collaborator, or autonomous coding agent can instantly understand the exact state of the system, what has been implemented, active guardrails, and what remains to be completed.
+
+---
+
+## 2. Feature & Architecture Parity Matrix (WY vs. MT)
+
+| Capability / Module | Wyoming (`Wy_Ed_Jobs`) | Montana (`Mt_Ed_Jobs`) | Parity Status | Implementation Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **K-12 Active Jobs Table** | Implemented | Implemented | **Full Parity** | Filterable by district, position, subject, broad category; exportable. |
+| **K-12 District Summary** | Implemented | Implemented | **Full Parity** | District profiles, student-teacher ratios, salary benchmarks. |
+| **K-12 Longitudinal Trends** | Implemented | Implemented | **Full Parity** | Multi-year vacancy volume time series with rolling averages. |
+| **K-12 Current Trends** | Implemented | Implemented | **Full Parity** | In-season bar/donut distributions by category & subject. |
+| **K-12 New This Week** | Implemented | Implemented | **Full Parity** | Delta detection vs. prior week's scrape snapshot. |
+| **Vacancy Spells & Time-to-Fill** | Implemented | Implemented | **Full Parity** | Interactive Shiny tab (`k12_spells`) with KPIs, histograms, and spell tables. |
+| **Higher Ed Jobs Table** | Implemented | Implemented | **Full Parity** | Faculty, adjunct, and institutional staff postings. |
+| **Higher Ed Summary & Trends** | Implemented | Implemented | **Full Parity** | IPEDS instructional salary benchmarks & enrollment. |
+| **Geographic Leaflet Map** | Implemented | Implemented | **Full Parity** | Cluster-mapped district & college vacancy pins. |
+| **Data Sources & Codebook Tab** | Implemented | Implemented | **Full Parity** | Direct CSV download buttons and interactive schemas. |
+| **Federal NCES LEA IDs** | Embedded (48/48) | Embedded (188/188) | **Full Parity** | 7-digit `NCES_LEAID` in registry, `salarymap2.csv`, and `job_duration_spells.csv`. |
+| **Federal IPEDS UNITIDs** | Embedded (8/8) | Embedded (23/23) | **Full Parity** | 6-digit `IPEDS_UNITID` in higher ed institutional registry and `salarymap.csv`. |
+| **Pipeline Dry-Run Test Harness** | Implemented | Implemented | **Full Parity** | Evaluates scrape combination chunks against mock data frames in CI. |
+| **Pipeline AST Defensive Linting**| Implemented | Implemented | **Full Parity** | Blocks syntax typos (`%%`) and enforces date coercions. |
+| **Connect Cloud Manifest Engine** | Implemented | Implemented | **Full Parity** | Enforces literal `null` metadata and users blocks for Connect Cloud. |
+
+---
+
+## 3. Implementation Chronology & Milestones
+
+### Milestone 1: Cross-State Feature Porting (October 2026)
+* **Federal Universal Identifiers:**
+  * Embedded official 7-digit `NCES_LEAID` Local Education Agency identifiers from the NCES Common Core of Data (CCD) and Census SAIPE across 100% of Montana districts (188/188) in `k12_district_registry.csv`.
+  * Joined `NCES_LEAID` into `Mt_Ed_Jobs/salarymap2.csv` (128/128 districts) and `Mt_Ed_Jobs/job_duration_spells.csv` (362/367 rows).
+  * Updated `Mt_ED_Jobs.Rmd` join pipeline, `DATA_DICTIONARY.md`, and `Mt_Ed_Jobs/data_dictionary.csv`.
+* **Vacancy Spells & Time-to-Fill Tab:**
+  * Ported interactive `k12_spells` module to `Mt_Ed_Jobs/app.R` matching the Wyoming implementation:
+    - 4 reactive summary KPIs: Median Vacancy Duration (Days), Long-Duration Vacancies (>45d), Active Openings, Closed/Filled Spells.
+    - 4 reactive user filters: Position Type, Subject Category, District Picker, Spell Status (All / Closed / Still Open).
+    - 2 Plotly interactive visualizations: Duration Histogram & Density curve, and Category-Level Box Plots.
+    - Searchable DT data table with CSV and Excel export buttons.
+  * Added `job_duration_spells.csv` to `REQUIRED_SCHEMAS` in `schema_check.R` to satisfy the strict schema verification suite.
+* **Citation & Attribution Harmonization:**
+  * Standardized citations and footer attribution across `Mt_ED_Jobs.Rmd`, `Mt_Ed_Jobs/app.R`, and `DATA_DICTIONARY.md` to:  
+    *"Developed by Mike Bostick and Mark Perkins"*.
+
+### Milestone 2: Scraper Pipeline Hardening & Error Eradication
+* **Date Parsing Homogenization:**
+  * Resolved fatal CI pipeline crashes caused by `bind_rows()` encountering conflicting types (`date` vs `character` in `date_posted`).
+  * Created `standardize_df_date()` and `standardize_he_df_date()` functions in `Mt_ED_Jobs.Rmd` mapped via `lapply()` before combining direct K-12 and HE data frames.
+  * Hardened `safe_scrape()` in `scrape_helpers.R` to coerce `date_posted` and `Posted_Date` to `character` upon return, preventing type collisions with `empty_df()` (`character(0)`).
+* **AST Typo Guardrails:**
+  * Corrected modulo operator typo `%%` at lines 2140, 2164, 2188 of `Mt_ED_Jobs.Rmd` to `%>%`.
+  * Added AST analysis tests in `tests/testthat/test-pipeline-defensiveness.R` to ensure syntax typos never pass CI again.
+
+### Milestone 3: Advanced Pipeline Test Harness
+* **Mock Pipeline Dry-Run Harness (`test-pipeline-orchestration-dryrun.R`):**
+  * Created unit test suites evaluating all scraping combination and munge chunks against heterogeneous mock inputs (mixed character/Date formats, empty scrapers, missing columns) in ~1.2s without making live network calls.
+  * Enforces that all combiners correctly handle empty scrape results gracefully.
+* **Manifest Deploy Guardrails:**
+  * Validated that `manifest.json` generation preserves explicit `null` JSON literals for `primary_rmd`, `primary_html`, `content_category`, and `users`, preventing deployment rejections on Posit Connect Cloud.
+
+---
+
+## 4. Key Architectural Contracts & Invariants
+
+1. **Pipeline / Dashboard Decoupling:**
+   * `Mt_ED_Jobs.Rmd` is the sole pipeline entry point; it scrapes, munges, and saves derived CSVs to `Mt_Ed_Jobs/`.
+   * `Mt_Ed_Jobs/app.R` is the Shiny dashboard reading committed CSVs. It **never** scrapes live pages.
+2. **Posting Identity Contract (`Posting_ID`):**
+   * Assigned once prior to deduplication, longitudinal accumulation, or spell calculations.
+   * Uses real per-posting URLs when available; falls back to `title + location + date_posted` with an occurrence suffix.
+3. **Schema Integrity:**
+   * Every CSV consumed by `app.R` must be registered in `REQUIRED_SCHEMAS` inside `schema_check.R` and tested in `test-schema-check.R`.
+4. **Posit Connect Cloud Manifest Safety:**
+   * Empty lists in R become `{}` in JSON via `jsonlite::toJSON()`, which Connect Cloud rejects. Post-processing in `regenerate_manifest.R` forces `metadata` and `users` to `null`.
+
+---
+
+## 5. Active & Upcoming Workstreams
+
+- [x] Port `NCES_LEAID` universal identifiers to Montana registry and data layers.
+- [x] Port Vacancy Spells & Time-to-Fill interactive tab to `Mt_Ed_Jobs/app.R`.
+- [x] Harmonize attribution to Mike Bostick & Mark Perkins.
+- [x] Eradicate `bind_rows` date collision errors across all heuristic scrapers.
+- [x] Add pipeline dry-run and AST linting tests to CI test suite.
+- [x] Incorporate October 27 weekly scrape output into refreshed `job_duration_spells.csv` (390 total spells; 217 active, 173 closed).
+- [x] Mock `Sys.sleep()` during unit tests in `test-misc-district-scrapers.R` reducing test run time from 416s down to 6.7s.
+- [x] Create reproducible generator script `scripts/generate_job_duration_spells.R`.
+- [ ] Explore longitudinal Higher Ed vacancy duration panels.

@@ -1,3 +1,6 @@
+# Mock Sys.sleep to no-op so fake-chromote session tests do not sleep 4-5s per scraper:
+testthat::local_mocked_bindings(Sys.sleep = function(...) invisible(NULL), .package = "base")
+
 # Real fixture captured 2026-08-07 from
 # https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638.
 
