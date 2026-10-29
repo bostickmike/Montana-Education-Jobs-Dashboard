@@ -4500,13 +4500,13 @@
       "checksum": "146445df74c647936daeeddaff6a6628"
     },
     "allsum.csv": {
-      "checksum": "41481d25d55558499cb53e55d16a3fa2"
+      "checksum": "091abf3b99492c4350065341752f3ad8"
     },
     "app.R": {
       "checksum": "bd6264a3aff530b37a34266241395a5f"
     },
     "combinedclean.csv": {
-      "checksum": "48da4a3a77376b10e803f8c89fed8b05"
+      "checksum": "18e68bb7f80e4de530e0ef30728fcdad"
     },
     "data_dictionary.csv": {
       "checksum": "2b7bc7106b655acfda980ccc0cd454d6"
@@ -4524,7 +4524,7 @@
       "checksum": "e5f847442139263a09b82995387965fe"
     },
     "job_duration_spells.csv": {
-      "checksum": "315c7e0367899fc70466a26cc70bbe09"
+      "checksum": "70b16d309422fa9ff0d29dc30dd8e05a"
     },
     "k12_district_weekly_totals.csv": {
       "checksum": "17b1b9b47af658486c1695d9dacc62c7"
@@ -4533,7 +4533,7 @@
       "checksum": "d4632bb4f231dec189cef711851c3934"
     },
     "k12jobanalysis.csv": {
-      "checksum": "300727d8e47d9031f506fc18f8451676"
+      "checksum": "fe8ccdc57ef4d3fd7bbfd8c95d413c0a"
     },
     "llm_extract_shadow.csv": {
       "checksum": "38f0c2ee1e4de154fc0a16b60ba61efe"
@@ -4542,7 +4542,7 @@
       "checksum": "06a9df7d06532a8842c6bac9164e942e"
     },
     "salarymap2.csv": {
-      "checksum": "9a1122f255dcab3d2ca59f4ac72a5c57"
+      "checksum": "27200368ce1130d322c932a38168c2ae"
     }
   },
   "users": null

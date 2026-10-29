@@ -288,11 +288,19 @@ parse_dli_teacher_compensation <- function(page2_text, report_name) {
   ))[[1]]
   if (length(m) != 5) return(empty)
 
+  p10 <- parse_dli_numeric_field(m[3])
+  avg <- parse_dli_numeric_field(m[4])
+  p90 <- parse_dli_numeric_field(m[5])
+  # Sanity check: annual salary figure < $15k is an OCR/data-entry anomaly
+  if (!is.na(p10) && p10 < 15000) p10 <- NA_real_
+  if (!is.na(avg) && avg < 15000) avg <- NA_real_
+  if (!is.na(p90) && p90 < 15000) p90 <- NA_real_
+
   data.frame(
     Teacher_Count = parse_dli_numeric_field(m[2]),
-    Teacher_Salary_10th_Pctile = parse_dli_numeric_field(m[3]),
-    Teacher_Avg_Salary = parse_dli_numeric_field(m[4]),
-    Teacher_Salary_90th_Pctile = parse_dli_numeric_field(m[5]),
+    Teacher_Salary_10th_Pctile = p10,
+    Teacher_Avg_Salary = avg,
+    Teacher_Salary_90th_Pctile = p90,
     stringsAsFactors = FALSE
   )
 }
