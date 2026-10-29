@@ -116,7 +116,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Kila School District #20 | Flathead | `docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/` | Google Sites with live Google Doc HTML table; 4 active positions | ✅ **Adopted** (2026-10-22, Batch 17) |
 | DeSmet School District #20 | Missoula | employment page | generic Certified/Classified application-form links | TODO |
 | Gildford Colony School | Hill | employment page | "New Hire Packet" download links only | TODO |
-| Fairfield (Greenfield #75) | Teton | `fairfield.k12.mt.us` | Apptegy "Employment Applications" page links only to generic blank PDFs (`5il.co/11rg` / `Classified_Staff_Application.pdf`); checked 2026-10-21 | TODO |
+| Fairfield (Greenfield #75) | Teton | `fairfield.k12.mt.us/o/district/browse/51027` | Apptegy documents page links only to generic blank PDFs (Classified, Substitute, Certified Applications); rechecked 2026-10-29 | DECLINED (Group 8) |
 | Savage School District #7 (Savage Public Schools) | Richland | `savagepublicschool.com/page/employment` | Apptegy CMS (accordion pagebuilder decoded via `decode_apptegy_pagebuilder_nodes()`); 8 active positions (Elementary Teacher, 6-12 History, K-12 Music, K-12 Counselor, 2 Paras, 3 Coaches) | ✅ **Adopted** (2026-10-29, Batch 25) |
 | Dodson School District | Phillips | `dodsonschool.com/page/employment` | Apptegy site with single sentence deferring to OPI; verified 2026-10-29 | Group 2 (Defers to OPI) |
 | Monforton School District #27 | Gallatin | `monfortonschool.org/contact-us/job-openings/` | WordPress site with dedicated job buttons; 2 active positions (Business Manager, District Clerk) | ✅ **Adopted** (2026-10-21, Batch 11) |
@@ -129,7 +129,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Pleasant Valley School District #27 | Flathead | `pvsmt.org/employment-opportunities.html` | Weebly CMS; clean page marker ("No opening at this time"); extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Bainville K-12 Schools | Roosevelt | `bainvilleschool.com/page/employment` | Apptegy site links live Google Docs for certified/classified vacancies; 7 active positions (Art, History, Elem Teacher, Para, Subs) | ✅ **Adopted** (2026-10-28, Batch 23) |
 | Twin Bridges K-12 Schools | Madison | `twinbridges.k12.mt.us/page/employment-opportunities` | Apptegy site; 0 positions listed under 2026-2027 vacancies; checked 2026-10-21 | TODO |
-| Troy School District #1 | Lincoln | `troyk12.org/documents/...` | Apptegy site; documents folder contains generic application PDFs only; checked 2026-10-21 | TODO |
+| Troy School District #1 | Lincoln | `troyk12.org/documents/about-our-district/employment/377243` | Apptegy site; "Vacancy Announcements" links directly to Google Drive folder (`1CdUiMRs63JU5xLbNkLaJ1r3HndXnnQpS`); rechecked 2026-10-29 | BLOCKED (Group 6) |
 | Opheim Public Schools | Valley | `sites.google.com/site/opheimschool/office` | Google Sites; 3 active positions (Substitute Teacher, Substitute Bus Driver, Music Teacher) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Anderson School District #41 | Gallatin | `andersonmt.org/careers` | ParentSquare CMS; recruiting prose copy only ("Come Work With Us"), no specific openings listed; checked 2026-10-28 | RECHECK |
 | Marion School District #54 | Flathead | `sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment` | Google Sites; extracts vacancies under VACANCIES; 1 active position (Guest Teacher / Pool of Substitutes) | ✅ **Adopted** (2026-10-28, Batch 23) |
@@ -138,7 +138,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Superior School District #3 | Mineral | `ssd3.us/page/employment` | Apptegy page links Google Doc job board (`1ujnHba2a-gWdThpUB-T43LoCZoR_ViXzxZKTEuq67_g`); 3 active positions (bus drivers, substitutes, paraprofessionals) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Ashland Public School | Rosebud | `sites.google.com/ashlandpublicschool.com/aps-district-site/employment` | Published Google Sites; 7 active positions (Clerk, Specialists, Elementary Teacher, Para, SpEd Para, Counselor, Subs) | ✅ **Adopted** (2026-10-21, Batch 10) |
 | Rosebud School District | Rosebud | `sites.google.com/site/rosebudhs12` | Google Sites; employment page redirects out to OPI statewide portal; checked 2026-10-21 | TODO |
-| Absarokee School District | Stillwater | `absarokee.k12.mt.us` | Apptegy site, /page/employment 404s, no jobs page; checked 2026-10-20 | TODO |
+| Absarokee School District | Stillwater | `absarokee.k12.mt.us` | Apptegy/Thrillshare site; all document folders and board notices link directly to Google Drive folders; rechecked 2026-10-29 | BLOCKED (Group 6) |
 | Simms / Sun River Valley #24 | Cascade | `srvs.k12.mt.us/apps/jobs/` | Educational Networks / Edlio CMS; clean jobs widget; extracts show_job postings on demand | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Divide School District #4 | Silver Bow | `divideschool.org` | Squarespace "under construction" | TODO |
 | McCormick School District #22 | Petroleum | district site | site under active rebuild, no employment nav | TODO |
@@ -211,8 +211,9 @@ covers their teacher postings.
 |---|---|---|---|
 | Victor School District #7 | Ravalli | Apptegy page links Google Doc job board (`1hPjGJCP2_6t4nOMl9xx7oZlK061x5KWd`); 4 active positions (SpEd teacher, paraprofessional, track coach, substitute) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Eureka (Lincoln County #13) | Lincoln | "Job Openings" link → unstructured Google Drive folder | BLOCKED |
-| Troy School District #1 | Lincoln | "Vacancy Announcements" link → unstructured Google Drive folder | BLOCKED |
+| Troy School District #1 | Lincoln | "Vacancy Announcements" link → unstructured Google Drive folder (`1CdUiMRs63JU5xLbNkLaJ1r3HndXnnQpS`) | BLOCKED |
 | Plains School District #1 | Sanders | `plainsschools.net/employment/` embeds an unstructured Google Drive folder (`1PLQRtQHAjWSZxlyn3kcWtEp1N7crZh-m`) | BLOCKED |
+| Absarokee School District | Stillwater | Apptegy site (`absarokeesdmt.sites.thrillshare.com`); all district document folders and board notices link directly to Google Drive folders | BLOCKED |
 
 ---
 
@@ -232,7 +233,8 @@ result. Very low priority — most are 1–2-room districts that don't maintain 
 jobs page at all. Recheck only if one grows.
 
 Ryegate, Highwood, Cardwell (~35 students), Kircher, LaMotte,
-Rau, Somers Lakeside #29, Morin.
+Rau, Somers Lakeside #29 (HR folder contains only CBAs and generic application link; 0 openings),
+Blue Creek School (employment folders empty; 0 openings), Fairfield (only generic application form PDFs), Morin.
 
 Long tail of tiny lone-elementary districts checked and declined the same way:
 Alder, Alzada, Amsterdam, Ayers, Basin, Biddle, Birney, Brorson, Cleveland, Cohagen,
@@ -285,3 +287,5 @@ Districts previously registered on legacy platforms that migrated silently and h
 | Townsend School District | Apptegy (`townsend.k12.mt.us/page/employment`) | Layout drift recovery (hyphen header & retired ATHLETIC DIRECTOR marker) | 4 active positions | 2026-10-28 |
 | Bozeman Public Schools | AppliTrack (HTTP 500 server error) | Tyler Portico (`https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/jobs`) | 46 active positions | 2026-10-29 |
 | Polson School District | SchoolSpring (`polson.schoolspring.com` returning 0) | Tyler Portico (`https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/jobs`) | 3 active positions | 2026-10-29 |
+| Arrowhead Elementary School District #75 | ArrowheadHeuristic (Cloudflare HTTP 520 server error) | Cloudflare user-agent recovery (retired obsolete Windows Chrome UA header) | 3 active positions | 2026-10-29 |
+| Manhattan School District | TylerPortico (endpoint redirect) | Verified live endpoint (`manhattanpublicschoolsmt.employeeaccess.tylerapp.com`) | Clean empty array (0 vacancies) | 2026-10-29 |

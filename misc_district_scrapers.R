@@ -442,7 +442,6 @@ ARROWHEAD_STOP_HEADING <- "Equal Opportunity Employer"
 
 fetch_arrowhead_postings <- function(url = "https://arrowheadk8.com/careers/") {
   resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36") %>%
     perform_with_retry()
   parse_arrowhead_postings(resp_body_string(resp), url)
 }
