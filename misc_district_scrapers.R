@@ -1845,6 +1845,52 @@ parse_hotsprings_postings <- function(rendered_text, url) {
   data.frame(Title = titles, Location = "Hot Springs", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
+# Frenchtown K-12 Schools (ftsd.org, Missoula County, adopted 2026-10-28 Batch 24).
+# District website runs Apptegy behind Fastly. Headless chromote navigates directly.
+# Employment page: https://www.ftsd.org/page/open-employment-opportunities/
+# Confirmed live 2026-10-28: 6 real active postings. Handled via the shared
+# chromote session in fetch_apptegy_k12_postings().
+fetch_frenchtown_postings <- function(chromote_session, url = "https://www.ftsd.org/page/open-employment-opportunities/") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
+  parse_frenchtown_postings(text, url)
+}
+
+parse_frenchtown_postings <- function(rendered_text, url = "https://www.ftsd.org/page/open-employment-opportunities/") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  if (is.null(rendered_text) || !nzchar(trimws(rendered_text))) return(empty)
+
+  lines <- trimws(strsplit(rendered_text, "\n")[[1]])
+  lines <- lines[nzchar(lines)]
+
+  start_idx <- which(grepl("OPEN EMPLOYMENT OPPORTUNITIES", lines, ignore.case = TRUE))
+  stop_idx <- which(lines == "Find Us" | grepl("^Frenchtown School District$", lines))
+
+  if (length(start_idx) == 0) return(empty)
+
+  valid_stops <- stop_idx[stop_idx > start_idx[1]]
+  end_pos <- if (length(valid_stops) > 0) valid_stops[1] - 1 else length(lines)
+  if (end_pos <= start_idx[1]) return(empty)
+
+  window <- lines[(start_idx[1] + 1):end_pos]
+  ignore_patterns <- "^(Employment/Current Open Positions|Job Application|Certified Application|Classified Application|Coaching Application)$"
+  window <- window[!grepl(ignore_patterns, window, ignore.case = TRUE)]
+
+  if (length(window) == 0) return(empty)
+
+  data.frame(
+    Title = window,
+    Location = "Frenchtown",
+    Posted_Date = NA_character_,
+    Link = url,
+    stringsAsFactors = FALSE
+  )
+}
+
 # Highwood Public Schools (highwood.k12.mt.us, found 2026-10-21 via OPI Directory) --
 # Chouteau County rural district on CyberSchool CMS. Positions sit within
 # .listItem_holder with clean .listItem_heading, .listItem_metaPostedDate, and
@@ -3339,8 +3385,8 @@ parse_townsend_postings <- function(rendered_text, url) {
   lines <- trimws(lines)
   lines <- lines[nzchar(lines)]
 
-  start_idx <- which(grepl("^Townsend School Job Vacancies:", lines))
-  stop_idx <- which(lines == "ATHLETIC DIRECTOR")
+  start_idx <- which(grepl("^Townsend School Job Vacancies", lines))
+  stop_idx <- which(grepl("^Contact:", lines) | lines == "ATHLETIC DIRECTOR")
   if (length(start_idx) == 0 || length(stop_idx) == 0 || stop_idx[1] <= start_idx[1]) return(empty)
   window <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
 
@@ -3352,10 +3398,22 @@ parse_townsend_postings <- function(rendered_text, url) {
       next
     }
     if (is.na(location)) next
-    title <- if (grepl(" - ", line, fixed = TRUE)) trimws(sub(" -.*$", "", line)) else line
-    if (nzchar(title)) {
-      rows[[length(rows) + 1]] <- data.frame(Title = title, Location = location,
-                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+    if (grepl(" - ", line, fixed = TRUE)) {
+      title <- trimws(sub(" -.*$", "", line))
+      if (nzchar(title)) {
+        rows[[length(rows) + 1]] <- data.frame(Title = title, Location = location,
+                                                Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+      }
+    } else {
+      # Reject prose / continuation fragments
+      if (grepl("[.]|[$]|available here|master agreement|endorsement|qualify|application|prorated|agreement", line, ignore.case = TRUE)) next
+      if (grepl("^[a-z]", line)) next
+      if (nchar(line) > 60) next
+      title <- line
+      if (nzchar(title)) {
+        rows[[length(rows) + 1]] <- data.frame(Title = title, Location = location,
+                                                Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+      }
     }
   }
   if (length(rows) == 0) return(empty)
@@ -5049,7 +5107,8 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
   "Evergreen School District #50" = fetch_evergreen_postings,
   "Lone Rock School District" = fetch_lonerock_postings,
   "Sweet Grass County High School" = fetch_bigtimber_postings,
-  "Hot Springs School District" = fetch_hotsprings_postings
+  "Hot Springs School District" = fetch_hotsprings_postings,
+  "Frenchtown K-12 Schools" = fetch_frenchtown_postings
 )
 
 fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
@@ -7895,6 +7954,75 @@ parse_marion_postings <- function(html, url = "https://sites.google.com/a/marion
     stringsAsFactors = FALSE
   )
   unique(df)
+}
+
+# Lima School District #12 (limaschoolmt.org, Beaverhead County, adopted 2026-10-28 Batch 24).
+# District runs Apptegy with job announcements published via Thrillshare Live Feeds API.
+# Live feed API: https://thrillshare-cmsv2.services.thrillshare.com/api/v2/s/107780/live_feeds
+# Confirmed live 2026-10-28: 3 real active postings.
+fetch_lima_postings <- function(url = "https://thrillshare-cmsv2.services.thrillshare.com/api/v2/s/107780/live_feeds") {
+  json_str <- tryCatch({
+    resp <- request(url) %>%
+      req_headers("User-Agent" = "Mozilla/5.0") %>%
+      perform_with_retry()
+    resp_body_string(resp)
+  }, error = function(e) "")
+  parse_lima_postings(json_str)
+}
+
+parse_lima_postings <- function(json_str, base_url = "https://www.limaschoolmt.org") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  if (is.null(json_str) || !nzchar(trimws(json_str))) return(empty)
+
+  parsed <- tryCatch(jsonlite::fromJSON(json_str), error = function(e) NULL)
+  if (is.null(parsed) || is.null(parsed$live_feeds) || length(parsed$live_feeds) == 0) return(empty)
+
+  feeds <- parsed$live_feeds
+  vacancy_idx <- which(grepl("POSITION VACANCY ANNOUNCEMENT", feeds$status, ignore.case = TRUE))
+  if (length(vacancy_idx) == 0) return(empty)
+
+  rows <- list()
+  for (i in vacancy_idx) {
+    status_raw <- feeds$status[i]
+    status_text <- gsub("<br[ ]*/?>", "\n", status_raw, ignore.case = TRUE)
+    status_text <- gsub("</p>", "\n", status_text, ignore.case = TRUE)
+    status_text <- gsub("<[^>]+>", " ", status_text)
+    doc_node <- tryCatch(xml2::read_html(paste0("<span>", status_text, "</span>")), error = function(e) NULL)
+    if (!is.null(doc_node)) {
+      status_text <- xml2::xml_text(doc_node)
+    }
+
+    lines <- trimws(strsplit(status_text, "\n")[[1]])
+    lines <- lines[nzchar(lines)]
+
+    title <- NA_character_
+    pos_title_line <- grep("Position Title:", lines, ignore.case = TRUE, value = TRUE)
+    if (length(pos_title_line) > 0) {
+      title <- trimws(sub("^Position Title:[[:space:]]*", "", pos_title_line[1], ignore.case = TRUE))
+    } else {
+      hdr_idx <- which(grepl("POSITION VACANCY ANNOUNCEMENT", lines, ignore.case = TRUE))
+      if (length(hdr_idx) > 0 && hdr_idx[1] < length(lines)) {
+        title <- lines[hdr_idx[1] + 1]
+      }
+    }
+
+    posted_date <- if (!is.null(feeds$formatted_date[i])) as.character(as.Date(feeds$formatted_date[i])) else NA_character_
+
+    if (!is.na(title) && nzchar(title)) {
+      rows[[length(rows) + 1]] <- data.frame(
+        Title = title,
+        Location = "Lima",
+        Posted_Date = posted_date,
+        Link = base_url,
+        stringsAsFactors = FALSE
+      )
+    }
+  }
+
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
 }
 
 # District-level data-completeness classification -- ported from Wyoming's

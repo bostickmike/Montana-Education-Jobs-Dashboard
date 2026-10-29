@@ -122,8 +122,8 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Monforton School District #27 | Gallatin | `monfortonschool.org/contact-us/job-openings/` | WordPress site with dedicated job buttons; 2 active positions (Business Manager, District Clerk) | ✅ **Adopted** (2026-10-21, Batch 11) |
 | Jordan Public Schools | Garfield | `jordanpublicschools.org` | SchoolInSites CMS; 5 active positions in homepage announcement banners (Head of Maintenance, K-12 Music Teacher, JH Football Coach, JH Boys Basketball Coach, HS Boys Basketball Coach) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Vida Elementary School | McCone | `vidaschool.k12.mt.us` | resources page has only generic application PDFs; checked 2026-10-21 | TODO |
-| Frenchtown School District | Missoula | `ftsd.org` | Apptegy site with Fastly Client Challenge JS bot-gate; checked 2026-10-22 | TODO |
-| Lima Public Schools | Beaverhead | `lima.k12.mt.us` | Apptegy site with generic application PDF `5il.co/kopg` only; checked 2026-10-21 | TODO |
+| Frenchtown K-12 Schools | Missoula | `ftsd.org` | Apptegy site behind Fastly bot-gate; headless chromote extracts 6 active positions | ✅ **Adopted** (2026-10-28, Batch 24) |
+| Lima School District #12 | Beaverhead | `limaschoolmt.org` | Apptegy site with job announcements in Thrillshare live feeds API; 3 active positions | ✅ **Adopted** (2026-10-28, Batch 24) |
 | Fromberg Public Schools | Carbon | `frombergpublicschools.com/district-info/employment` | Finalsite CMS; 1 active position in Current Postings (Subs Music Teaching Position) | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Lavina Public Schools | Golden Valley | `lavinapublicschools.com/District/2269-Untitled.html` | CyberSchool CMS; 2 active positions (JH Assistant Volleyball/Football Coaches) | ✅ **Adopted** (2026-10-22, Batch 17) |
 | Pleasant Valley School District #27 | Flathead | `pvsmt.org/employment-opportunities.html` | Weebly CMS; clean page marker ("No opening at this time"); extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 18) |
@@ -281,3 +281,4 @@ Districts previously registered on legacy platforms that migrated silently and h
 |---|---|---|---|---|
 | Brockton School District | SchoolInSites | Direct HTML (`brockton.k12.mt.us/employment`) | 3 active positions | 2026-10-27 |
 | Columbia Falls School District 6 | SchoolSpring (`sd6.schoolspring.com` returning 0) | RedRover (`https://jobs.redroverk12.com/org/sd659912`) | 25 active positions | 2026-10-28 |
+| Townsend School District | Apptegy (`townsend.k12.mt.us/page/employment`) | Layout drift recovery (hyphen header & retired ATHLETIC DIRECTOR marker) | 4 active positions | 2026-10-28 |

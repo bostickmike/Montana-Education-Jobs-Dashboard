@@ -136,7 +136,9 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Clancy Elementary School District #1",
                      "Bainville K-12 Schools",
                      "Chester-Joplin-Inverness Public Schools",
-                     "Marion School District #54"))
+                     "Marion School District #54",
+                     "Frenchtown K-12 Schools",
+                     "Lima School District #12"))
 })
 
 # ---------------------------------------------------------------------------
