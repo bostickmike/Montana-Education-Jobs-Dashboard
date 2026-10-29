@@ -3062,6 +3062,44 @@ parse_conrad_postings <- function(html_text, url) {
   do.call(rbind, rows)
 }
 
+# Savage Public Schools (savagepublicschool.com, Richland County, adopted 2026-10-29 Batch 25).
+# Apptegy CMS behind Fastly. Job openings authored inside accordion panels:
+# "Certified Positions", "Classified Positions", and "Extracurricular Positions".
+# Decodes the page-builder nodes tree via decode_apptegy_pagebuilder_nodes().
+# Confirmed live 2026-10-29: 8 real active postings.
+parse_savage_postings <- function(html_text, url = "https://www.savagepublicschool.com/page/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  nodes <- decode_apptegy_pagebuilder_nodes(html_text)
+  if (is.null(nodes)) return(empty)
+
+  panels <- find_all_apptegy_nodes(nodes, function(n) {
+    !is.null(n$type) && n$type == "CONTENT_NODE_PANEL" &&
+      !is.null(n$properties$text) && grepl("Positions", n$properties$text, ignore.case = TRUE)
+  })
+  if (length(panels) == 0) return(empty)
+
+  rows <- lapply(panels, function(panel) {
+    text_node <- find_apptegy_node(panel$nodes, function(n) !is.null(n$type) && n$type == "CONTENT_NODE_TEXT")
+    if (is.null(text_node)) return(NULL)
+    titles <- apptegy_html_fragment_to_lines(text_node$content$html)
+    if (length(titles) == 0) return(NULL)
+    data.frame(
+      Title = titles,
+      Location = "Savage",
+      Posted_Date = NA_character_,
+      Link = url,
+      stringsAsFactors = FALSE
+    )
+  })
+  rows <- rows[!vapply(rows, is.null, logical(1))]
+  if (length(rows) == 0) return(empty)
+  do.call(rbind, rows)
+}
+
 # Gardiner Public Schools (gardiner.org) -- real postings sit in a
 # two-column button layout: one "Two Columns" node holds just the 2 category
 # headings ("Certified Positions"/"Classified Positions"), and a SEPARATE
@@ -5031,6 +5069,14 @@ fetch_townsend_postings <- function(chromote_session, url = "https://www.townsen
   parse_townsend_postings(text, url)
 }
 
+fetch_savage_postings <- function(chromote_session, url = "https://www.savagepublicschool.com/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  html <- chromote_session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+  parse_savage_postings(html, url)
+}
+
 # Fetches all 43 districts (40 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's and Hamilton's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
@@ -5108,7 +5154,8 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
   "Lone Rock School District" = fetch_lonerock_postings,
   "Sweet Grass County High School" = fetch_bigtimber_postings,
   "Hot Springs School District" = fetch_hotsprings_postings,
-  "Frenchtown K-12 Schools" = fetch_frenchtown_postings
+  "Frenchtown K-12 Schools" = fetch_frenchtown_postings,
+  "Savage Public Schools" = fetch_savage_postings
 )
 
 fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,
@@ -8023,6 +8070,73 @@ parse_lima_postings <- function(json_str, base_url = "https://www.limaschoolmt.o
 
   if (length(rows) == 0) return(empty)
   do.call(rbind, rows)
+}
+
+# Joliet Public School District 86 (jolietschools.org, Carbon County, adopted 2026-10-29 Batch 25).
+# Re-anchored to real Montana district website replacing stale Illinois SD86 TedK12 link.
+# Job openings are displayed in a structured HTML table (table.employment-table) on
+# https://www.jolietschools.org/district-information/important-clicks/employment-information.html.
+# Confirmed live 2026-10-29: 5 real active postings (Bus Driver, Subs, 3 Coaching positions).
+parse_joliet_postings <- function(html_text, url = "https://www.jolietschools.org/district-information/important-clicks/employment-information.html") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  table <- rvest::html_element(doc, "table.employment-table")
+  if (is.null(table)) return(empty)
+
+  rows <- rvest::html_elements(table, "tbody tr")
+  if (length(rows) == 0) return(empty)
+
+  res <- lapply(rows, function(r) {
+    title <- rvest::html_text2(rvest::html_element(r, ".el-title"))
+    if (is.na(title) || !nzchar(trimws(title))) return(NULL)
+    title <- trimws(title)
+
+    desc <- rvest::html_text2(rvest::html_element(r, ".el-content"))
+    link_el <- rvest::html_element(r, "a.el-link")
+    link <- if (!is.null(link_el)) rvest::html_attr(link_el, "href") else url
+    if (is.na(link) || !nzchar(link)) link <- url
+
+    if (grepl("coaching", title, ignore.case = TRUE) && !is.na(desc) && nzchar(desc)) {
+      lines <- trimws(strsplit(desc, "\n")[[1]])
+      coach_titles <- lines[grepl("Coach", lines, ignore.case = TRUE) &
+                            !grepl("looking for|positions for", lines, ignore.case = TRUE)]
+      if (length(coach_titles) > 0) {
+        return(data.frame(
+          Title = coach_titles,
+          Location = "Joliet",
+          Posted_Date = NA_character_,
+          Link = link,
+          stringsAsFactors = FALSE
+        ))
+      }
+    }
+
+    data.frame(
+      Title = title,
+      Location = "Joliet",
+      Posted_Date = NA_character_,
+      Link = link,
+      stringsAsFactors = FALSE
+    )
+  })
+
+  res <- res[!vapply(res, is.null, logical(1))]
+  if (length(res) == 0) return(empty)
+  do.call(rbind, res)
+}
+
+fetch_joliet_postings <- function(url = "https://www.jolietschools.org/district-information/important-clicks/employment-information.html") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_joliet_postings(html, url)
 }
 
 # District-level data-completeness classification -- ported from Wyoming's

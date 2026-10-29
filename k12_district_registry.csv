@@ -2,7 +2,7 @@ District,NCES_LEAID,City,County,Latitude,Longitude,Platform,Slug,Job_Link
 Billings Public Schools,3003870,Billings,Yellowstone County,45.7833,-108.5007,AppliTrack,billings,https://www.applitrack.com/billings/onlineapp/default.aspx
 Missoula County Public Schools,3018570,Missoula,Missoula County,46.8721,-113.9940,AppliTrack,mcpsmt,https://www.applitrack.com/mcpsmt/onlineapp/default.aspx
 Great Falls Public Schools,3013040,Great Falls,Cascade County,47.5053,-111.3008,AppliTrack,greatfalls,https://www.applitrack.com/greatfalls/onlineapp/default.aspx
-Bozeman Public Schools,3004560,Bozeman,Gallatin County,45.6770,-111.0429,AppliTrack,bozeman,https://www.applitrack.com/bozeman/onlineapp/default.aspx
+Bozeman Public Schools,3004560,Bozeman,Gallatin County,45.6770,-111.0429,TylerPortico,bozemanschooldistrict7mt,https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/jobs
 Helena Public Schools,3000005,Helena,Lewis and Clark County,46.5891,-112.0391,AppliTrack,helena,https://www.applitrack.com/helena/onlineapp/default.aspx
 Butte School District 1,3005280,Butte,Silver Bow County,46.0038,-112.5348,TylerPortico,buttepublicschoolsmt,https://buttepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/jobs
 Belgrade School District 44,3003290,Belgrade,Gallatin County,45.7766,-111.1832,SchoolSpring,bsd44.schoolspring.com,https://bsd44.schoolspring.com/
@@ -12,7 +12,7 @@ Hamilton School District 3,3013260,Hamilton,Ravalli County,46.2483,-114.1618,Red
 Havre Public Schools,3013560,Havre,Hill County,48.5497,-109.6845,AppliTrack,havre,https://www.applitrack.com/havre/onlineapp/default.aspx
 Whitefish School District,3027740,Whitefish,Flathead County,48.4111,-114.3376,SchoolSpring,whitefishschools.schoolspring.com,https://whitefishschools.schoolspring.com/
 Columbia Falls School District 6,3007110,Columbia Falls,Flathead County,48.3705,-114.1801,RedRoverK12,,https://jobs.redroverk12.com/org/sd659912
-Polson School District,3021060,Polson,Lake County,47.6935,-114.1631,SchoolSpring,polson.schoolspring.com,https://polson.schoolspring.com/
+Polson School District,3021060,Polson,Lake County,47.6935,-114.1631,TylerPortico,polsonschooldistrict23mt,https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/jobs
 Lewistown Public Schools,3016490,Lewistown,Fergus County,47.0631,-109.4282,SchoolSpring,lewistown.schoolspring.com,https://lewistown.schoolspring.com/
 Laurel Public Schools,3016200,Laurel,Yellowstone County,45.6710,-108.7712,SchoolSpring,laurel.schoolspring.com,https://laurel.schoolspring.com/
 Kalispell Public Schools,3015450,Kalispell,Flathead County,48.1958,-114.3129,TylerPortico,kalispellpublicschoolsmt,https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/jobs
@@ -98,7 +98,7 @@ Baker Public Schools,3002730,Baker,Fallon County,46.3670,-104.2847,BakerHeuristi
 Cut Bank School District #15,3000003,Cut Bank,Glacier County,48.6330,-112.3262,CutBankHeuristic,,https://sites.google.com/view/cutbankjobs/employment
 Bridger School District 2,3004800,Bridger,Carbon County,45.2947,-108.9167,SchoolSpring,bridger.schoolspring.com,https://bridger.schoolspring.com/
 Red Lodge School District 1,3022080,Red Lodge,Carbon County,45.1933,-109.2486,SchoolSpring,redlodge.schoolspring.com,https://redlodge.schoolspring.com/
-Joliet Public School District 86,3015200,Joliet,Carbon County,45.4844,-108.9722,TedK12,https://joliet86.tedk12.com/hire/index.aspx,https://joliet86.tedk12.com/hire/index.aspx
+Joliet Public School District 86,3015200,Joliet,Carbon County,45.4844,-108.9722,JolietHeuristic,,https://www.jolietschools.org/district-information/important-clicks/employment-information.html
 Ennis Schools,3009930,Ennis,Madison County,45.3461,-111.7319,Apptegy,,https://www.ennisschools.org/page/job-opportunities
 Columbus Public Schools,3007190,Columbus,Stillwater County,45.6347,-109.2458,Apptegy,,https://columbuscougars.com/page/district-employment
 Hinsdale Public Schools,3014340,Hinsdale,Valley County,48.3942,-107.0848,HinsdaleHeuristic,,https://hinsdale.k12.mt.us/District/1557-Untitled.html
@@ -198,3 +198,4 @@ Potomac Elementary School District #11,3021330,Potomac,Missoula County,46.8906,-
 "Marion School District #54",3017700,"Marion","Flathead County",48.1052,-114.6596,"MarionHeuristic","","https://sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment"
 "Frenchtown K-12 Schools",3011520,"Frenchtown","Missoula County",47.0163,-114.2323,"Apptegy","","https://www.ftsd.org/page/open-employment-opportunities/"
 "Lima School District #12",3016710,"Lima","Beaverhead County",44.6339,-112.5908,"LimaHeuristic","","https://www.limaschoolmt.org"
+"Savage Public Schools",3023520,"Savage","Richland County",47.4533,-104.3414,"Apptegy","","https://www.savagepublicschool.com/page/employment"

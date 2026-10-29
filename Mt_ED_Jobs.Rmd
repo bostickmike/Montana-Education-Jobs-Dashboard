@@ -2954,6 +2954,30 @@ if (nrow(lima_df) > 0) {
                         Posting_Source = character(0))
 }
 
+# Joliet Public School District 86 (Batch 25)
+joliet_districts <- registry[registry$Platform == "JolietHeuristic", ]
+joliet_results <- lapply(seq_len(nrow(joliet_districts)), function(i) {
+  row <- joliet_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_joliet_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+joliet_df <- bind_rows(joliet_results)
+if (nrow(joliet_df) > 0) {
+  joliet_df <- joliet_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Joliet district site (direct board)")
+} else {
+  joliet_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                          location = character(0), url = character(0), District = character(0),
+                          Posting_Source = character(0))
+}
+
 # The browser-backed districts use a shared Chromote session because their
 # Apptegy/CyberSchool pages require JavaScript to render (a plain httr2
 # request receives a bot-challenge shell). Each district is independently
@@ -2961,7 +2985,7 @@ if (nrow(lima_df) > 0) {
 # discarding healthy districts' results. The outer safe_scrape() protects the
 # pipeline if the shared session itself cannot start.
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Hamilton, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock, Sweet Grass County High School, Hot Springs School District, Frenchtown K-12 Schools)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Hamilton, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock, Sweet Grass County High School, Hot Springs School District, Frenchtown K-12 Schools, Savage Public Schools)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
@@ -3197,6 +3221,7 @@ bainville_df <- bainville_df %>% mutate(date_posted = standardize_date(date_post
 cji_df <- cji_df %>% mutate(date_posted = standardize_date(date_posted))
 marion_df <- marion_df %>% mutate(date_posted = standardize_date(date_posted))
 lima_df <- lima_df %>% mutate(date_posted = standardize_date(date_posted))
+joliet_df <- joliet_df %>% mutate(date_posted = standardize_date(date_posted))
 apptegy_df <- apptegy_df
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
@@ -3239,7 +3264,7 @@ direct_dfs <- list(
                        denton_df,
                        clancy_df,
                        swanriver_df, bigfork_df, reedpoint_df, hobson_df, turner_df, terry_df,
-                       bainville_df, cji_df, marion_df, lima_df,
+                       bainville_df, cji_df, marion_df, lima_df, joliet_df,
   gallatingateway_df, apptegy_df
 )
 direct_dfs <- lapply(direct_dfs, standardize_df_date)

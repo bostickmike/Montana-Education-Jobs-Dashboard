@@ -117,8 +117,8 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | DeSmet School District #20 | Missoula | employment page | generic Certified/Classified application-form links | TODO |
 | Gildford Colony School | Hill | employment page | "New Hire Packet" download links only | TODO |
 | Fairfield (Greenfield #75) | Teton | `fairfield.k12.mt.us` | Apptegy "Employment Applications" page links only to generic blank PDFs (`5il.co/11rg` / `Classified_Staff_Application.pdf`); checked 2026-10-21 | TODO |
-| Savage School District #7 | Richland | Apptegy | 3 bare category labels, no title text | TODO |
-| Dodson School District | Phillips | Apptegy | single sentence deferring to OPI | TODO |
+| Savage School District #7 (Savage Public Schools) | Richland | `savagepublicschool.com/page/employment` | Apptegy CMS (accordion pagebuilder decoded via `decode_apptegy_pagebuilder_nodes()`); 8 active positions (Elementary Teacher, 6-12 History, K-12 Music, K-12 Counselor, 2 Paras, 3 Coaches) | ✅ **Adopted** (2026-10-29, Batch 25) |
+| Dodson School District | Phillips | `dodsonschool.com/page/employment` | Apptegy site with single sentence deferring to OPI; verified 2026-10-29 | Group 2 (Defers to OPI) |
 | Monforton School District #27 | Gallatin | `monfortonschool.org/contact-us/job-openings/` | WordPress site with dedicated job buttons; 2 active positions (Business Manager, District Clerk) | ✅ **Adopted** (2026-10-21, Batch 11) |
 | Jordan Public Schools | Garfield | `jordanpublicschools.org` | SchoolInSites CMS; 5 active positions in homepage announcement banners (Head of Maintenance, K-12 Music Teacher, JH Football Coach, JH Boys Basketball Coach, HS Boys Basketball Coach) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Vida Elementary School | McCone | `vidaschool.k12.mt.us` | resources page has only generic application PDFs; checked 2026-10-21 | TODO |
@@ -162,6 +162,7 @@ real one (verify address/phone), then re-triage.
 
 | District | County | Trap / status | Status |
 |---|---|---|---|
+| Joliet Public School District 86 | Carbon | Previous registry link was Illinois SD86 (`joliet86.tedk12.com`); real MT site is `jolietschools.org` (`table.employment-table`); 5 active positions (Bus Driver, Subs, 3 Coaches) | ✅ **Adopted** (2026-10-29, Batch 25) |
 | Avon | Powell | `avon*` resolves to Avon-by-the-Sea, NJ; real MT school is Powell County District 29 (notices hosted on `powellcountymt.gov`; no standalone website) | DECLINED (Group 8) |
 | Bynum | Teton | `bynumschool.org` → Midland, TX; real MT site is GoDaddy (`bynumsch.org` / `bynumschool.godaddysites.com`), 1-page site with calendar download links only | DECLINED (Group 8) |
 | Luther School | Carbon | `lutherlions.org` → Luther, OK; real MT site is `lutherschool.org/index.php/documents` (Joomla); 2 active postings | ✅ **Adopted** (2026-10-21) |
@@ -282,3 +283,5 @@ Districts previously registered on legacy platforms that migrated silently and h
 | Brockton School District | SchoolInSites | Direct HTML (`brockton.k12.mt.us/employment`) | 3 active positions | 2026-10-27 |
 | Columbia Falls School District 6 | SchoolSpring (`sd6.schoolspring.com` returning 0) | RedRover (`https://jobs.redroverk12.com/org/sd659912`) | 25 active positions | 2026-10-28 |
 | Townsend School District | Apptegy (`townsend.k12.mt.us/page/employment`) | Layout drift recovery (hyphen header & retired ATHLETIC DIRECTOR marker) | 4 active positions | 2026-10-28 |
+| Bozeman Public Schools | AppliTrack (HTTP 500 server error) | Tyler Portico (`https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/jobs`) | 46 active positions | 2026-10-29 |
+| Polson School District | SchoolSpring (`polson.schoolspring.com` returning 0) | Tyler Portico (`https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/jobs`) | 3 active positions | 2026-10-29 |

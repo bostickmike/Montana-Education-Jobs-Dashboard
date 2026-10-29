@@ -59,3 +59,23 @@ test_that("fetch_tylerportico_postings fetches and parses a live-shaped response
   expect_equal(nrow(result), 49)
   expect_equal(result$Title[1], "BUS - DRIVER")
 })
+
+test_that("fetch_tylerportico_postings works for migrated districts (Bozeman, Polson)", {
+  fixture <- '[{"id":"pos-1","title":"Teacher","postingStartDate":"2026-10-01T00:00:00","postingEndDate":null,"locationDescription":"High School"}]'
+  httr2::local_mocked_responses(
+    list(
+      httr2::response(200, headers = list("Content-Type" = "application/json; charset=utf-8"), body = charToRaw(fixture)),
+      httr2::response(200, headers = list("Content-Type" = "application/json; charset=utf-8"), body = charToRaw(fixture))
+    )
+  )
+
+  res_bozeman <- fetch_tylerportico_postings("bozemanschooldistrict7mt", "Bozeman Public Schools")
+  expect_equal(nrow(res_bozeman), 1)
+  expect_equal(res_bozeman$Title, "Teacher")
+  expect_equal(res_bozeman$Link, "https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/pos-1")
+
+  res_polson <- fetch_tylerportico_postings("polsonschooldistrict23mt", "Polson School District")
+  expect_equal(nrow(res_polson), 1)
+  expect_equal(res_polson$Title, "Teacher")
+  expect_equal(res_polson$Link, "https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/pos-1")
+})

@@ -138,7 +138,8 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Chester-Joplin-Inverness Public Schools",
                      "Marion School District #54",
                      "Frenchtown K-12 Schools",
-                     "Lima School District #12"))
+                     "Lima School District #12",
+                     "Savage Public Schools"))
 })
 
 # ---------------------------------------------------------------------------

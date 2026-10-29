@@ -2285,7 +2285,7 @@ test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy/RedR
   expect_setequal(names(APPTEGY_DISTRICT_SCRAPERS), registry_districts)
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 47 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 48 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2333,6 +2333,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 47 districts
   bigtimber_text <- paste(readLines(test_path("fixtures", "apptegy_bigtimber_rendered_2026-10-20.txt"), warn = FALSE), collapse = "\n")
   hotsprings_text <- paste(readLines(test_path("fixtures", "apptegy_hotsprings_rendered_2026-10-21.txt"), warn = FALSE), collapse = "\n")
   frenchtown_text <- paste(readLines(test_path("fixtures", "frenchtown_employment_rendered.txt"), warn = FALSE), collapse = "\n")
+  savage_html <- paste(readLines(test_path("fixtures", "savage_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
 
   # Same fake session serves every district's fetch, real URL routing comes
   # from each fetch_*_postings()'s own default url= argument -- this fake
@@ -2395,6 +2396,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 47 districts
           else if (grepl("sgchs", navigated_url)) bigtimber_text
           else if (grepl("hssdmt", navigated_url)) hotsprings_text
           else if (grepl("ftsd", navigated_url)) frenchtown_text
+          else if (grepl("savage", navigated_url)) savage_html
           else ""
           list(result = list(value = value))
         }
@@ -2405,7 +2407,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 47 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 25 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8 + 6)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 25 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8 + 6 + 8)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -2453,6 +2455,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 47 districts
   expect_equal(sum(result$District == "Sweet Grass County High School"), 5)
   expect_equal(sum(result$District == "Hot Springs School District"), 8)
   expect_equal(sum(result$District == "Frenchtown K-12 Schools"), 6)
+  expect_equal(sum(result$District == "Savage Public Schools"), 8)
 })
 
 # Real fixture captured 2026-08-24 from Miles City's Google Sheets CSV
@@ -4781,6 +4784,67 @@ test_that("parse_townsend_postings extracts all 4 active positions from modern r
   ))
   expect_true(all(result$Location == "External"))
   expect_true(all(result$Link == url))
+})
+
+test_that("parse_savage_postings extracts all 8 active positions from pagebuilder HTML fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "savage_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.savagepublicschool.com/page/employment"
+
+  result <- parse_savage_postings(fixture, url)
+
+  expect_equal(nrow(result), 8)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c(
+    "Elementary Teacher",
+    "6-12 History Teacher",
+    "K-12 Music Teacher",
+    "K-12 Counselor",
+    "Two paraeducators (Bona fide occupational qualifications) to support a student with a disability",
+    "Head H.S. Boys Basketball Coach",
+    "Assistant H.S. Boys Basketball Coach",
+    "Head H.S. Golf Coach"
+  ))
+  expect_true(all(result$Location == "Savage"))
+  expect_true(all(result$Link == url))
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_savage_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_savage_postings("", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+
+  result2 <- parse_savage_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result2), 0)
+})
+
+test_that("parse_joliet_postings extracts all 5 active positions from table fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "joliet_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.jolietschools.org/district-information/important-clicks/employment-information.html"
+
+  result <- parse_joliet_postings(fixture, url)
+
+  expect_equal(nrow(result), 5)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(result$Title, c(
+    "Bus Route & Bus Route Sub Drivers",
+    "Substitute Teachers",
+    "Head High School Boys Basketball Coach",
+    "Asst High School Girls Basketball Coach",
+    "Head High School Boys/Girls Golf Coach"
+  ))
+  expect_true(all(result$Location == "Joliet"))
+  expect_equal(unique(result$Link), "https://www.gojhawks.com/applications/classified.php")
+  expect_true(all(is.na(result$Posted_Date)))
+})
+
+test_that("parse_joliet_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_joliet_postings("", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+
+  result2 <- parse_joliet_postings("<html><body><p>No employment table</p></body></html>", "url")
+  expect_equal(nrow(result2), 0)
 })
 
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
