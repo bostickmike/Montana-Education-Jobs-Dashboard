@@ -1,6 +1,6 @@
 # Montana Education Jobs Dashboard — Project Progress Ledger
 
-**Maintainers & Authors:** Mike Bostick & Mark Perkins  
+**Maintainers & Authors:** Mike Bostick  
 **Target Environment:** Posit Connect Cloud (Shiny for R)  
 **CI/CD Orchestration:** GitHub Actions (`.github/workflows/weekly-scrape.yml`)  
 **Production Cadence:** Automated weekly scrape & build every Tuesday 05:00 UTC (and manual `workflow_dispatch`)  
@@ -313,4 +313,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     - K-12 CAREERS: `All Postings`, `Districts`, `Trends`, `Vacancy Spells`
     - HIGHER EDUCATION: `All Postings`, `Colleges & Universities`, `Trends`, `Vacancy Spells`
   * 100% test pass rate across both MT (3,051 tests) and WY (1,424 tests).
+- [x] Refine public-facing terminology, attribution, and sidebar proportions:
+  * Montana attribution: Confirmed Mike Bostick as sole creator/maintainer for Montana across UI footer, citation, and pipeline documentation.
+  * Public-friendly language: Replaced technical jargon like "scraped" / "directly-scraped" with clean phrasing ("tracked", "monitored", "compiled", "weekly updates") across District/Institution directories, map descriptions, and Vacancy Spells modules.
+  * Single-word navigation clarity: Renamed tabs to concise, intuitive terms (`Jobs` for postings, `Colleges` for institutions, `Time-to-Fill` for duration metrics, `Feedback` for bug reporting).
+  * Narrowed sidebar container: Reduced sidebar width from default 230px to 180px (`width = "180px"`, `titleWidth = "180px"`), eliminating empty void space after tab labels and giving 50px more width to data tables and maps. Streamlined category headers to `K-12`, `HIGHER ED`, and `COMMUNITY`.
 - [ ] Expand Montana K-12 coverage backlog (Batch 25: next active vacancy districts).

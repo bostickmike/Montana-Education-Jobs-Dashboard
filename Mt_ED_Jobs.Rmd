@@ -1,6 +1,6 @@
 ---
 title: "MT Job Scrape"
-author: "Mike Bostick and Mark Perkins"
+author: "Mike Bostick"
 date: "2025-09-18"
 output: html_document
 ---
