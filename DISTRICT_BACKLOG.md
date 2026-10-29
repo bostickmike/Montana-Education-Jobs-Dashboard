@@ -106,7 +106,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Denton Public Schools | Fergus | `denton.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Vaughn Elementary School District #74 | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool CMS; 1 active position (Substitutes Needed) | ✅ **Adopted** (2026-10-22, Batch 14) |
 | Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
-| Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site; real page found via menu drawer; single consolidated PDF vacancy notice (`_Current-Open-Positions-7_13_26.pdf`); checked 2026-10-21 | RECHECK |
+| Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site links live PDF vacancy notice; 5 active positions (Math Teacher, Activities Coord, Admin Assistant, Custodial/Teacher Subs) | ✅ **Adopted** (2026-10-28, Batch 23) |
 | Clancy Elementary School District #1 | Jefferson | `clancyschool.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Seeley Lake Elementary #34 | Missoula | `sleonline.org/page/join-our-team` | Apptegy site; 1 active position (Substitute (All Areas)); checked 2026-10-21 | ✅ **Adopted** (2026-10-21, Batch 12) |
 | Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site; links to generic blank application PDFs only (`5il.co/1dfyi`); checked 2026-10-21 | TODO |
@@ -127,12 +127,12 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Fromberg Public Schools | Carbon | `frombergpublicschools.com/district-info/employment` | Finalsite CMS; 1 active position in Current Postings (Subs Music Teaching Position) | ✅ **Adopted** (2026-10-22, Batch 18) |
 | Lavina Public Schools | Golden Valley | `lavinapublicschools.com/District/2269-Untitled.html` | CyberSchool CMS; 2 active positions (JH Assistant Volleyball/Football Coaches) | ✅ **Adopted** (2026-10-22, Batch 17) |
 | Pleasant Valley School District #27 | Flathead | `pvsmt.org/employment-opportunities.html` | Weebly CMS; clean page marker ("No opening at this time"); extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 18) |
-| Bainville K-12 Schools | Roosevelt | `bainvilleschool.com/page/employment` | Apptegy site; links to generic application Google Docs only; checked 2026-10-21 | TODO |
+| Bainville K-12 Schools | Roosevelt | `bainvilleschool.com/page/employment` | Apptegy site links live Google Docs for certified/classified vacancies; 7 active positions (Art, History, Elem Teacher, Para, Subs) | ✅ **Adopted** (2026-10-28, Batch 23) |
 | Twin Bridges K-12 Schools | Madison | `twinbridges.k12.mt.us/page/employment-opportunities` | Apptegy site; 0 positions listed under 2026-2027 vacancies; checked 2026-10-21 | TODO |
 | Troy School District #1 | Lincoln | `troyk12.org/documents/...` | Apptegy site; documents folder contains generic application PDFs only; checked 2026-10-21 | TODO |
 | Opheim Public Schools | Valley | `sites.google.com/site/opheimschool/office` | Google Sites; 3 active positions (Substitute Teacher, Substitute Bus Driver, Music Teacher) | ✅ **Adopted** (2026-10-22, Batch 15) |
 | Anderson School District #41 | Gallatin | `andersonmt.org/careers` | ParentSquare CMS; recruiting prose copy only ("Come Work With Us"), no specific openings listed; checked 2026-10-28 | RECHECK |
-| Marion School District #54 | Flathead | real MT Marion is a Google Sites page (`marionschools.org` = Jasper TN) | boilerplate application PDFs + one generic substitute sentence | TODO |
+| Marion School District #54 | Flathead | `sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment` | Google Sites; extracts vacancies under VACANCIES; 1 active position (Guest Teacher / Pool of Substitutes) | ✅ **Adopted** (2026-10-28, Batch 23) |
 | Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath; rechecked 2026-10-20 | TODO |
 | Melville School District #16 | Sweet Grass | Apptegy | real header, empty beneath | TODO |
 | Superior School District #3 | Mineral | `ssd3.us/page/employment` | Apptegy page links Google Doc job board (`1ujnHba2a-gWdThpUB-T43LoCZoR_ViXzxZKTEuq67_g`); 3 active positions (bus drivers, substitutes, paraprofessionals) | ✅ **Adopted** (2026-10-21, Batch 9) |

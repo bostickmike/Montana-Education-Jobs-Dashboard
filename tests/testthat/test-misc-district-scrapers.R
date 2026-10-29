@@ -4655,6 +4655,65 @@ test_that("parse_clancy_postings returns zero rows on empty or non-matching HTML
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+test_that("parse_bainville_postings extracts certified and classified vacancies from Google Docs HTML fixtures", {
+  cert_fixture <- paste(readLines(test_path("fixtures", "bainville_certified.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  class_fixture <- paste(readLines(test_path("fixtures", "bainville_classified.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.bainvilleschool.com/page/employment"
+
+  result <- parse_bainville_postings(cert_fixture, class_fixture, url)
+
+  expect_equal(nrow(result), 7)
+  expect_true(all(c("K-12 Art Teacher", "7-12 History", "Elementary Teacher",
+                     "Paraprofessional- small intervention group", "Substitute Teachers",
+                     "Custodian Subs", "Substitute Bus Drivers") %in% result$Title))
+  expect_true(all(result$Location == "Bainville"))
+  expect_true(all(result$Link == url))
+})
+
+test_that("parse_bainville_postings returns zero rows on empty input", {
+  result <- parse_bainville_postings("", "", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_cji_postings extracts vacancies from PDF text fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "cji_positions_text.txt"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://www.cji.k12.mt.us/page/employmentcji"
+
+  result <- parse_cji_postings(fixture, url)
+
+  expect_equal(nrow(result), 5)
+  expect_true(all(c("Assistant Activities Coordinator/ Concessions Manager",
+                     "Administrative Assistant", "JH/HS MathTeacher",
+                     "Custodial Subs", "Substitute Teachers") %in% result$Title))
+  expect_true(all(result$Location == "Chester"))
+  expect_true(all(result$Link == url))
+})
+
+test_that("parse_cji_postings returns zero rows on empty text", {
+  result <- parse_cji_postings("", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
+test_that("parse_marion_postings extracts vacancies from Google Sites HTML fixture", {
+  fixture <- paste(readLines(test_path("fixtures", "marion_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  url <- "https://sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment"
+
+  result <- parse_marion_postings(fixture, url)
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title[1], "Guest Teacher / Pool of Substitutes")
+  expect_equal(result$Location[1], "Marion")
+  expect_equal(result$Link[1], url)
+})
+
+test_that("parse_marion_postings returns zero rows on empty or non-matching HTML", {
+  result <- parse_marion_postings("<html><body><p>No jobs</p></body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+})
+
 test_that("k12_district_coverage_tiers labels non-direct-API-platform districts Partial, leaves the rest for the caller's Full coalesce", {
   registry <- withr::local_tempfile(fileext = ".csv")
   write.csv(data.frame(

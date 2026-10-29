@@ -7696,6 +7696,207 @@ parse_clancy_postings <- function(html, url) {
   unique(df)
 }
 
+# ---------------------------------------------------------------------------
+# Bainville K-12 Schools (Batch 23)
+# ---------------------------------------------------------------------------
+fetch_bainville_postings <- function(url = "https://www.bainvilleschool.com/page/employment") {
+  doc_cert_url <- "https://docs.google.com/document/d/1n0ed1N5YGWsSs948BfXk1CYqK9BvzrGXIz4DRklS3mw/export?format=html"
+  doc_class_url <- "https://docs.google.com/document/d/1nQVTrVJJususbBn9EvdT7xD1gDHFYeW3RQhdR10RTbQ/export?format=html"
+
+  html_cert <- tryCatch({
+    resp <- request(doc_cert_url) %>%
+      req_headers("User-Agent" = "Mozilla/5.0") %>%
+      perform_with_retry()
+    resp_body_string(resp)
+  }, error = function(e) "")
+
+  html_class <- tryCatch({
+    resp <- request(doc_class_url) %>%
+      req_headers("User-Agent" = "Mozilla/5.0") %>%
+      perform_with_retry()
+    resp_body_string(resp)
+  }, error = function(e) "")
+
+  parse_bainville_postings(html_cert, html_class, url)
+}
+
+parse_bainville_postings <- function(html_cert, html_class, url = "https://www.bainvilleschool.com/page/employment") {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  titles <- character(0)
+
+  if (nzchar(html_cert)) {
+    doc1 <- tryCatch(read_html(html_cert), error = function(e) NULL)
+    if (!is.null(doc1)) {
+      lines <- strsplit(html_text2(doc1), "\n")[[1]]
+      lines <- trimws(lines)
+      lines <- lines[nzchar(lines)]
+      start_i <- which(grepl("CERTIFIED JOB OPENINGS", lines, ignore.case = TRUE))
+      stop_i <- which(grepl("Bainville School is a small", lines, ignore.case = TRUE))
+      if (length(start_i) > 0 && length(stop_i) > 0 && stop_i[1] > start_i[1] + 1) {
+        titles <- c(titles, lines[(start_i[1] + 1):(stop_i[1] - 1)])
+      }
+    }
+  }
+
+  if (nzchar(html_class)) {
+    doc2 <- tryCatch(read_html(html_class), error = function(e) NULL)
+    if (!is.null(doc2)) {
+      lines <- strsplit(html_text2(doc2), "\n")[[1]]
+      lines <- trimws(lines)
+      lines <- lines[nzchar(lines)]
+      curr_i <- which(grepl("^(202[0-9]-[0-9]{2}|Current Openings)$", lines, ignore.case = TRUE))
+      addl_i <- which(grepl("Additional Openings for:", lines, ignore.case = TRUE))
+      stop_i <- which(grepl("All applicants will be subject", lines, ignore.case = TRUE))
+      if (length(curr_i) > 0 && length(addl_i) > 0) {
+        last_curr <- max(curr_i[curr_i < addl_i[1]])
+        if (addl_i[1] > last_curr + 1) {
+          titles <- c(titles, lines[(last_curr + 1):(addl_i[1] - 1)])
+        }
+      }
+      if (length(addl_i) > 0 && length(stop_i) > 0 && stop_i[1] > addl_i[1] + 1) {
+        titles <- c(titles, lines[(addl_i[1] + 1):(stop_i[1] - 1)])
+      }
+    }
+  }
+
+  titles <- trimws(titles)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Bainville", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = rep(url, length(titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Chester-Joplin-Inverness Public Schools (Batch 23)
+# ---------------------------------------------------------------------------
+fetch_cji_postings <- function(url = "https://www.cji.k12.mt.us/page/employmentcji") {
+  pdf_url <- "https://aptg.co/c5tzQ5"
+  text <- tryCatch({
+    tmp <- tempfile(fileext = ".pdf")
+    on.exit(unlink(tmp), add = TRUE)
+    resp <- request(pdf_url) %>%
+      req_headers("User-Agent" = "Mozilla/5.0") %>%
+      perform_with_retry()
+    writeBin(resp_body_raw(resp), tmp)
+    paste(pdftools::pdf_text(tmp), collapse = "\n")
+  }, error = function(e) "")
+  parse_cji_postings(text, url)
+}
+
+parse_cji_postings <- function(text, url = "https://www.cji.k12.mt.us/page/employmentcji") {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(text)) return(empty)
+
+  lines <- strsplit(text, "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- gsub("[\u200b\ufeff]", "", lines)
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  app_idx <- which(grepl("^Application$", lines, ignore.case = TRUE))
+  if (length(app_idx) == 0) return(empty)
+
+  titles <- character(0)
+  for (idx in app_idx) {
+    if (idx > 1) {
+      prev_line <- lines[idx - 1]
+      if (!grepl("CJI Current Open Positions|completed resumes", prev_line, ignore.case = TRUE)) {
+        titles <- c(titles, prev_line)
+      }
+    }
+  }
+
+  titles <- trimws(titles)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Chester", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = rep(url, length(titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
+# ---------------------------------------------------------------------------
+# Marion School District #54 (Batch 23)
+# ---------------------------------------------------------------------------
+fetch_marion_postings <- function(url = "https://sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment") {
+  resp <- request(url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0") %>%
+    perform_with_retry()
+  html <- resp_body_string(resp)
+  parse_marion_postings(html, url)
+}
+
+parse_marion_postings <- function(html, url = "https://sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment") {
+  empty <- data.frame(
+    Title = character(0),
+    Location = character(0),
+    Posted_Date = character(0),
+    Link = character(0),
+    stringsAsFactors = FALSE
+  )
+  if (!nzchar(html)) return(empty)
+  doc <- tryCatch(read_html(html), error = function(e) NULL)
+  if (is.null(doc)) return(empty)
+
+  lines <- strsplit(html_text2(doc), "\n")[[1]]
+  lines <- trimws(lines)
+  lines <- lines[nzchar(lines)]
+
+  start_i <- which(grepl("^VACANCIES$", lines, ignore.case = TRUE))
+  stop_i <- which(grepl("^DISCLAIMER", lines, ignore.case = TRUE))
+  if (length(start_i) == 0 || length(stop_i) == 0 || stop_i[1] <= start_i[1] + 1) return(empty)
+
+  vac_lines <- lines[(start_i[1] + 1):(stop_i[1] - 1)]
+  vac_lines <- vac_lines[!grepl("\\.pdf$", vac_lines, ignore.case = TRUE)]
+  if (length(vac_lines) == 0) return(empty)
+
+  titles <- character(0)
+  for (vl in vac_lines) {
+    if (grepl("guest teachers.*pool of substitutes", vl, ignore.case = TRUE)) {
+      titles <- c(titles, "Guest Teacher / Pool of Substitutes")
+    } else {
+      titles <- c(titles, vl)
+    }
+  }
+
+  titles <- trimws(titles)
+  titles <- titles[nzchar(titles)]
+  if (length(titles) == 0) return(empty)
+
+  df <- data.frame(
+    Title = titles,
+    Location = rep("Marion", length(titles)),
+    Posted_Date = rep(NA_character_, length(titles)),
+    Link = rep(url, length(titles)),
+    stringsAsFactors = FALSE
+  )
+  unique(df)
+}
+
 # District-level data-completeness classification -- ported from Wyoming's
 # own misc_district_coverage_tiers(), adapted to this project's different
 # registry shape. Wyoming keeps directly-scraped districts split across two

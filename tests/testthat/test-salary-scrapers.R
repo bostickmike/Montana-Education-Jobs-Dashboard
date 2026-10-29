@@ -133,7 +133,10 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Ulm Public Schools",
                      "Montana City Elementary School District #27",
                      "Denton Public Schools",
-                     "Clancy Elementary School District #1"))
+                     "Clancy Elementary School District #1",
+                     "Bainville K-12 Schools",
+                     "Chester-Joplin-Inverness Public Schools",
+                     "Marion School District #54"))
 })
 
 # ---------------------------------------------------------------------------
