@@ -183,6 +183,24 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * Added unmapped DLI coverage tests in `tests/testthat/test-salary-scrapers.R`.
   * Verified full test suite: **2,944 PASS, 0 FAIL, 0 WARN** (2 skips).
 
+### Milestone 11: Columbia Falls RedRover Platform Recovery & Modernized Parser (2026-10-28)
+* **Silent Platform Drift Discovery & Recovery:**
+  * Identified that **Columbia Falls School District 6** (Flathead County, NCES LEAID `3007110`) had migrated away from its deprecated SchoolSpring portal (`sd6.schoolspring.com` returning 0 postings) to RedRover (`https://jobs.redroverk12.com/org/sd659912`), silently dropping 25 active vacancies.
+  * Migrated Columbia Falls from `SchoolSpring` to `RedRoverK12` in `k12_district_registry.csv` and added its scraper dispatch function to `APPTEGY_DISTRICT_SCRAPERS` in `misc_district_scrapers.R`.
+* **RedRover Parsing Engine Modernization:**
+  * Modernized `parse_redrover_postings()` in `misc_district_scrapers.R` to support modern Next.js DOM structures where the "Apply Now" button and relative timestamp are concatenated within the same line (`Apply Now3 days ago`, `Apply Nowabout 1 month ago`) in addition to standalone "APPLY NOW" button stamps followed by next-line relative timestamps (e.g. St. Ignatius) or no relative timestamps (e.g. Hamilton).
+  * Maintained 100% backward compatibility with all existing RedRover districts.
+* **Test Fixture & Cross-Check Suite:**
+  * Added clean fixture `columbiafalls_jobs_rendered.txt` to `tests/testthat/fixtures/`.
+  * Expanded shared-session testing in `tests/testthat/test-misc-district-scrapers.R` from 45 to 46 districts, verifying exact district-tagging and row-count totals (45-district count + 25 = 265 total postings across fixtures).
+  * Added dedicated unit test for Columbia Falls in `test-misc-district-scrapers.R`.
+  * Verified 2-way set equality cross-check between `k12_district_registry.csv` and `APPTEGY_DISTRICT_SCRAPERS`.
+  * Verified full test suite: **2,952 PASS, 0 FAIL, 0 WARN** (2 skips).
+* **Backlog Triage Refinement:**
+  * Triaged **Anderson School District #41** (Gallatin County): confirmed ParentSquare CMS at `andersonmt.org/careers` contains only recruiting prose without active vacancies (`RECHECK`).
+  * Triaged **Kester School District #29** (Garfield County): confirmed `kesterschool23.org/employment` banner states it is no longer accepting applications (1-room rural school, `Group 8 DECLINED`).
+  * Created **Group 11 — Platform Drift Recoveries** in `DISTRICT_BACKLOG.md` documenting Brockton and Columbia Falls.
+
 ---
 
 ## 4. Key Architectural Contracts & Invariants
@@ -222,3 +240,4 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [x] Multi-dimensional map filtering (salary tiers, county cluster, posting volume/urgency) with dynamic count badge and auto-zoom.
 - [x] 100% data dictionary column coverage and automated codebook invariant test suite.
 - [x] Expand Montana K-12 coverage backlog (Batch 22: Montana City, Denton, Clancy adopted; Group 3 triaged to Group 8).
+- [x] Recover Columbia Falls School District 6 from silent coverage failure (RedRover migration) and modernize RedRover parser.

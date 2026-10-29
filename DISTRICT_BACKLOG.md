@@ -131,7 +131,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Twin Bridges K-12 Schools | Madison | `twinbridges.k12.mt.us/page/employment-opportunities` | Apptegy site; 0 positions listed under 2026-2027 vacancies; checked 2026-10-21 | TODO |
 | Troy School District #1 | Lincoln | `troyk12.org/documents/...` | Apptegy site; documents folder contains generic application PDFs only; checked 2026-10-21 | TODO |
 | Opheim Public Schools | Valley | `sites.google.com/site/opheimschool/office` | Google Sites; 3 active positions (Substitute Teacher, Substitute Bus Driver, Music Teacher) | ✅ **Adopted** (2026-10-22, Batch 15) |
-| Anderson School District #41 | Gallatin | district site | "Come Work With Us" recruiting copy, no titles | TODO |
+| Anderson School District #41 | Gallatin | `andersonmt.org/careers` | ParentSquare CMS; recruiting prose copy only ("Come Work With Us"), no specific openings listed; checked 2026-10-28 | RECHECK |
 | Marion School District #54 | Flathead | real MT Marion is a Google Sites page (`marionschools.org` = Jasper TN) | boilerplate application PDFs + one generic substitute sentence | TODO |
 | Fortine School District #14 | Lincoln | Apptegy | real header, empty / "Coming Soon" beneath; rechecked 2026-10-20 | TODO |
 | Melville School District #16 | Sweet Grass | Apptegy | real header, empty beneath | TODO |
@@ -219,7 +219,7 @@ covers their teacher postings.
 
 | District | County | Issue | Status |
 |---|---|---|---|
-| Kester School District #29 | Fallon | banner says "no longer accepting applications" while the body still describes the position in present tense | TODO (recheck) |
+| Kester School District #29 | Garfield | `kesterschool23.org/employment` banner explicitly states: "Kester School is no longer accepting applications for the 2025/2026 teaching position." Tiny 1-room rural district (~2-6 students), no active openings; checked 2026-10-28 | DECLINED (Group 8) |
 | Fishtail School District #13 | Stillwater | `fishtailschool.org/job-openings/` | Clean job openings page without broken placeholders | ✅ **Adopted** (2026-10-22, Batch 20) |
 
 ---
@@ -235,7 +235,7 @@ Rau, Somers Lakeside #29, Morin.
 
 Long tail of tiny lone-elementary districts checked and declined the same way:
 Alder, Alzada, Amsterdam, Ayers, Basin, Biddle, Birney, Brorson, Cleveland, Cohagen,
-Cooke City, Davey, Deerfield, Golden Ridge, Grant, Greycliff, Hawks Home, Helmville, King Colony, Kinsey,
+Cooke City, Davey, Deerfield, Golden Ridge, Grant, Greycliff, Hawks Home, Helmville, Kester, King Colony, Kinsey,
 Knees, Liberty, Lindsay, Malmborg, Nye, Ovando, Pendroy, Pine Grove, Pioneer, Plenty
 Coups, Polaris, Potomac, Reichle, Ross, Springhill, Sunset, Trinity,
 West Glacier, Wisdom, Wise River, Yaak.
@@ -270,3 +270,14 @@ authoritative artifacts are in the session memory directory:
 - `opi_raw_district_dropdown_2026-08-24.csv` — the raw 602-row OPI dropdown
 
 **Triage status:** Golden Ridge and Grant were investigated and confirmed as 1-room rural elementary districts without standalone job boards, triaged to Group 8. (Dupuyer, Elliston, and Garrison were previously triaged to Group 8; Frontier was adopted in Batch 21). Low-yield towns remain cross-referenced against `k12_district_registry.csv` and Group 8.
+
+---
+
+## Group 11 — Platform Drift Recoveries
+
+Districts previously registered on legacy platforms that migrated silently and have been recovered into active coverage:
+
+| District | Previous Platform | New Platform & URL | Restored Openings | Date Recovered |
+|---|---|---|---|---|
+| Brockton School District | SchoolInSites | Direct HTML (`brockton.k12.mt.us/employment`) | 3 active positions | 2026-10-27 |
+| Columbia Falls School District 6 | SchoolSpring (`sd6.schoolspring.com` returning 0) | RedRover (`https://jobs.redroverk12.com/org/sd659912`) | 25 active positions | 2026-10-28 |

@@ -4143,13 +4143,13 @@ fetch_dutton_postings <- function(chromote_session, url = "https://dbps.k12.mt.u
 # than real openings -- the same class of noise Arlee's own "Classified
 # Application"/"Certified Application" exclusion handles. Each real posting
 # is a repeating block of [employment type, title, category, location,
-# (salary, optional), ("Internal applicants only", optional)] followed by a
-# literal "APPLY NOW" line -- parsed by splitting on "APPLY NOW" as the
+# (salary, optional), ("Internal applicants only", optional)] followed by an
+# "APPLY NOW" button line -- parsed by matching "^apply now" as the
 # reliable per-posting boundary (the salary line's presence varies, so a
-# fixed stride doesn't work). Some boards then show a relative-date stamp
-# ("27 days ago"), others go straight to the next block; the stamp is
-# skipped only when the following line actually matches one (consuming a
-# fixed number of lines would eat the next posting on the no-stamp boards).
+# fixed stride doesn't work). Some boards show a relative-date stamp on the
+# following line ("27 days ago"), others go straight to the next block, and
+# newer Next.js layouts concatenate the button and relative stamp into the
+# same line ("Apply Now3 days ago" / "Apply Nowabout 1 month ago").
 # The date isn't carried through -- standardize_date() only handles
 # absolute dates anyway. "No location specified" is the board's own literal
 # placeholder for a real missing value; rows carrying it fall back to
@@ -4181,7 +4181,7 @@ parse_redrover_postings <- function(rendered_text, url, default_location = NA_ch
   i <- 1
   while (i <= length(lines)) {
     line <- lines[i]
-    if (line == "APPLY NOW") {
+    if (grepl("^apply now", line, ignore.case = TRUE)) {
       if (length(block) >= 2) {
         title <- block[2]
         location <- if (length(block) >= 4) block[4] else NA_character_
@@ -4191,11 +4191,12 @@ parse_redrover_postings <- function(rendered_text, url, default_location = NA_ch
                                                    Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
         }
       }
+      is_exact_apply_now <- grepl("^apply now$", line, ignore.case = TRUE)
       block <- character(0)
-      i <- i + 1  # consume "APPLY NOW"
-      if (i <= length(lines) &&
+      i <- i + 1  # consume "APPLY NOW" (or "Apply Now<timestamp>")
+      if (is_exact_apply_now && i <= length(lines) &&
           grepl("\\bago$|^(just posted|today|yesterday)$", lines[i], ignore.case = TRUE)) {
-        i <- i + 1  # ... and the relative "posted" stamp, when this board shows one
+        i <- i + 1  # ... and the relative "posted" stamp, when on separate line
       }
       next
     }
@@ -5026,6 +5027,10 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
   "Hamilton School District 3" = function(session) {
     fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2362",
                             default_location = "Hamilton")
+  },
+  "Columbia Falls School District 6" = function(session) {
+    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/sd659912",
+                            default_location = "Columbia Falls")
   },
   "Stanford Public Schools" = fetch_stanford_postings,
   "Lolo School District 7" = fetch_lolo_postings,

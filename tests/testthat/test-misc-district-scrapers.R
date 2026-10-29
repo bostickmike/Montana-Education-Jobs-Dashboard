@@ -1255,6 +1255,19 @@ test_that("parse_redrover_postings handles a board with no relative-date stamp a
   expect_equal(result$Location[result$Title == "Substitute Custodian"], "Hamilton")
 })
 
+test_that("parse_redrover_postings handles inline relative-date stamp button text (Columbia Falls)", {
+  text <- paste(readLines(test_path("fixtures", "columbiafalls_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_redrover_postings(text, "https://jobs.redroverk12.com/org/sd659912", default_location = "Columbia Falls")
+
+  expect_equal(nrow(result), 25)
+  expect_true(all(c("HOSA Advisor", "LEARNING STRATEGIES AND STUDENT TUTORING SUPPORT PARA", "Pre-K Paraeducator",
+                     "Substitute Teacher", "Traffic Education Teacher") %in% result$Title))
+  expect_equal(result$Location[result$Title == "HOSA Advisor"], "High School")
+  expect_equal(result$Location[result$Title == "Pre-K Paraeducator"], "Glacier Gateway")
+  expect_equal(result$Location[result$Title == "Substitute Teacher"], "Columbia Falls")
+})
+
 # Real fixture: document.body.innerText captured via a live chromote
 # session 2026-08-24 from stanfordmtschool.com's Job Openings page.
 
@@ -2272,7 +2285,7 @@ test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy/RedR
   expect_setequal(names(APPTEGY_DISTRICT_SCRAPERS), registry_districts)
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 45 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 46 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2300,6 +2313,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 45 districts
   dutton_text <- paste(readLines(test_path("fixtures", "apptegy_dutton_rendered.txt"), warn = FALSE), collapse = "\n")
   stignatius_text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
   hamilton_redrover_text <- paste(readLines(test_path("fixtures", "redrover_hamilton_rendered.txt"), warn = FALSE), collapse = "\n")
+  columbiafalls_text <- paste(readLines(test_path("fixtures", "columbiafalls_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
   stanford_text <- paste(readLines(test_path("fixtures", "apptegy_stanford_rendered.txt"), warn = FALSE), collapse = "\n")
   lolo_text <- paste(readLines(test_path("fixtures", "apptegy_lolo_rendered.txt"), warn = FALSE), collapse = "\n")
   froid_text <- paste(readLines(test_path("fixtures", "apptegy_froid_rendered.txt"), warn = FALSE), collapse = "\n")
@@ -2360,6 +2374,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 45 districts
           else if (grepl("dbps", navigated_url)) dutton_text
           else if (grepl("redroverk12.*org/2261", navigated_url)) stignatius_text
           else if (grepl("redroverk12.*org/2362", navigated_url)) hamilton_redrover_text
+          else if (grepl("redroverk12.*org/sd659912", navigated_url)) columbiafalls_text
           else if (grepl("stanfordmtschool", navigated_url)) stanford_text
           else if (grepl("loloschools", navigated_url)) lolo_text
           else if (grepl("froidschool", navigated_url)) froid_text
@@ -2388,7 +2403,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 45 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 25 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -2416,6 +2431,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 45 districts
   expect_equal(sum(result$District == "Dutton/Brady Public School District"), 2)
   expect_equal(sum(result$District == "St. Ignatius School District"), 6)
   expect_equal(sum(result$District == "Hamilton School District 3"), 13)
+  expect_equal(sum(result$District == "Columbia Falls School District 6"), 25)
   expect_equal(sum(result$District == "Stanford Public Schools"), 6)
   expect_equal(sum(result$District == "Lolo School District 7"), 4)
   expect_equal(sum(result$District == "Froid Public Schools"), 3)
