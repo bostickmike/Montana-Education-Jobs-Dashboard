@@ -3275,6 +3275,7 @@ opi_df <- remove_opi_direct_duplicates(
   registry,
   report_path = "mt_discrepancy_report.csv"
 )
+opi_df <- apply_opi_district_fallback(opi_df, registry, direct_df)
 
 combined <- bind_rows(direct_df, opi_df) %>%
   mutate(

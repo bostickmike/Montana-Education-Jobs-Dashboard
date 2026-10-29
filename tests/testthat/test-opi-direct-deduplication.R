@@ -124,3 +124,76 @@ test_that("generate_opi_discrepancy_report categorizes ghosts, unmatched jobs, a
   expect_equal(nrow(deduped), 4) # 1 duplicate dropped, 4 survived (including Butte)
   unlink(tmp)
 })
+
+test_that("apply_opi_district_fallback maps single-district cities to canonical names when direct scraper is empty", {
+  registry <- data.frame(
+    District = c("Bozeman Public Schools", "Livingston Public Schools", "Whitefish School District"),
+    City = c("Bozeman", "Livingston", "Whitefish"),
+    stringsAsFactors = FALSE
+  )
+  # Direct scraper errored or returned 0 rows for Bozeman & Livingston
+  direct_df <- data.frame(
+    title = "High School Science",
+    date_posted = as.Date("2026-10-28"),
+    District = "Whitefish School District",
+    stringsAsFactors = FALSE
+  )
+  opi_df <- data.frame(
+    title = c("Middle School Math", "Elementary Teacher"),
+    location = c("Bozeman, MT", "Livingston"),
+    date_posted = as.Date(c("2026-10-28", "2026-10-29")),
+    District = c("Bozeman, MT", "Livingston"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- apply_opi_district_fallback(opi_df, registry, direct_df)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(result$District, c("Bozeman Public Schools", "Livingston Public Schools"))
+})
+
+test_that("apply_opi_district_fallback resolves multi-district cities and specific keywords cleanly", {
+  registry <- data.frame(
+    District = c("Bozeman Public Schools", "Monforton School District #27", "Missoula County Public Schools", "Hellgate Elementary School District"),
+    City = c("Bozeman", "Bozeman", "Missoula", "Missoula"),
+    stringsAsFactors = FALSE
+  )
+  direct_df <- data.frame(
+    title = character(0),
+    date_posted = as.Date(character(0)),
+    District = character(0),
+    stringsAsFactors = FALSE
+  )
+  opi_df <- data.frame(
+    title = c("Elementary Teacher", "Middle School Science", "High School English", "K-5 Teacher"),
+    location = c("Bozeman", "Monforton School", "Missoula", "Hellgate"),
+    date_posted = as.Date(c("2026-10-28", "2026-10-28", "2026-10-29", "2026-10-29")),
+    District = c("Bozeman", "Monforton School", "Missoula", "Hellgate"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- apply_opi_district_fallback(opi_df, registry, direct_df)
+
+  expect_equal(nrow(result), 4)
+  expect_equal(result$District, c("Bozeman Public Schools", "Monforton School District #27", "Missoula County Public Schools", "Hellgate Elementary School District"))
+})
+
+test_that("apply_opi_district_fallback retains raw location for unregistered rural or private schools", {
+  registry <- data.frame(
+    District = c("Billings Public Schools"),
+    City = c("Billings"),
+    stringsAsFactors = FALSE
+  )
+  opi_df <- data.frame(
+    title = c("Teacher", "Itinerant SLP"),
+    location = c("Busby", "Itinerant"),
+    date_posted = as.Date(c("2026-10-28", "2026-10-29")),
+    District = c("Busby", "Itinerant"),
+    stringsAsFactors = FALSE
+  )
+
+  result <- apply_opi_district_fallback(opi_df, registry)
+
+  expect_equal(nrow(result), 2)
+  expect_equal(result$District, c("Busby", "Itinerant"))
+})

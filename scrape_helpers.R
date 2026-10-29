@@ -332,3 +332,162 @@ remove_opi_direct_duplicates <- function(opi_df, direct_df, registry, report_pat
 
   opi_df[!is_duplicate, , drop = FALSE]
 }
+
+# Assigns surviving OPI postings to their canonical legal district names where
+# they correspond to registered K-12 districts. This provides the Central Safety
+# Net Fallback: if any directly scraped district encounters an ATS outage,
+# platform migration, or scraping error, its active jobs on OPI are automatically
+# mapped to the canonical district name rather than raw city text, ensuring
+# continuity in dashboard filtering, map visualization, and weekly vacancy trends.
+apply_opi_district_fallback <- function(opi_df, registry, direct_df = NULL) {
+  if (nrow(opi_df) == 0) return(opi_df)
+  if (!"location" %in% names(opi_df)) return(opi_df)
+  if (!"District" %in% names(opi_df)) {
+    opi_df$District <- opi_df$location
+  }
+
+  normalize_txt <- function(x) {
+    normalized <- tolower(trimws(as.character(x)))
+    normalized[is.na(x)] <- ""
+    normalized <- gsub(",\\s*mt\\.?", "", normalized, ignore.case = TRUE)
+    normalized <- gsub(",\\s*montana\\.?", "", normalized, ignore.case = TRUE)
+    normalized <- gsub("\\s+mt$", "", normalized, ignore.case = TRUE)
+    normalized <- gsub("\\s+montana$", "", normalized, ignore.case = TRUE)
+    gsub("[^[:alnum:]]+", " ", normalized)
+  }
+
+  norm_cities <- trimws(normalize_txt(registry$City))
+  city_counts <- table(norm_cities[nzchar(norm_cities)])
+  unique_cities <- names(city_counts[city_counts == 1])
+
+  primary_multi <- c(
+    "big timber" = "Sweet Grass County High School",
+    "bigfork" = "Bigfork School District 38",
+    "billings" = "Billings Public Schools",
+    "boulder" = "Boulder Elementary",
+    "bozeman" = "Bozeman Public Schools",
+    "clancy" = "Montana City Elementary School District #27",
+    "columbia falls" = "Columbia Falls School District 6",
+    "conrad" = "Conrad Public Schools",
+    "havre" = "Havre Public Schools",
+    "kalispell" = "Kalispell Public Schools",
+    "lolo" = "Lolo School District 7",
+    "marion" = "Marion School District #54",
+    "missoula" = "Missoula County Public Schools",
+    "stevensville" = "Stevensville Public Schools",
+    "wolf point" = "Wolf Point Public Schools"
+  )
+
+  custom_phrases <- c(
+    "10 miles north of troy" = "Troy School District",
+    "4 miles north of harlem" = "Harlem Public Schools",
+    "5 miles west of stanford" = "Stanford Public Schools",
+    "6 miles east of wolf point" = "Frontier Elementary School",
+    "841 bear canyon road" = "Bozeman Public Schools",
+    "billings sd3" = "Billings Public Schools",
+    "billings shepherd worden custer hysham" = "Billings Public Schools",
+    "bozeman area" = "Bozeman Public Schools",
+    "clancy mt city" = "Montana City Elementary School District #27",
+    "east of kalispell" = "Kalispell Public Schools",
+    "eureka" = "Eureka Public Schools",
+    "manhattan amsterdam" = "Amsterdam School District #75",
+    "mcleod" = "Sweet Grass County High School",
+    "melville" = "Sweet Grass County High School",
+    "mosby" = "Winnett Public Schools",
+    "rocky boy" = "Rocky Boy Public Schools",
+    "rocky boy agency" = "Rocky Boy Public Schools",
+    "rudyard" = "North Star Public Schools",
+    "rudyard gildford" = "North Star Public Schools",
+    "rural havre" = "Havre Public Schools",
+    "saint ignatius" = "St. Ignatius School District 28",
+    "saint ignatius salish teacher" = "St. Ignatius School District 28",
+    "sand coulee" = "Centerville Public Schools",
+    "seeley lake" = "Seeley Lake Elementary #34",
+    "st regis" = "Superior School District",
+    "swan river in bigfork" = "Swan River School District #4",
+    "ten minutes from missoula" = "Missoula County Public Schools",
+    "valley view polson" = "Polson School District",
+    "vida" = "Circle Public Schools",
+    "wilsall" = "Shields Valley Public Schools"
+  )
+
+  direct_active <- if (!is.null(direct_df) && "District" %in% names(direct_df)) {
+    unique(direct_df$District[!is.na(direct_df$District) & nzchar(direct_df$District)])
+  } else {
+    character(0)
+  }
+
+  for (i in seq_len(nrow(opi_df))) {
+    cur_district <- as.character(opi_df$District[i])
+    if (!is.na(cur_district) && cur_district %in% registry$District) next
+
+    loc_raw <- as.character(opi_df$location[i])
+    loc_norm <- trimws(normalize_txt(loc_raw))
+    title_norm <- if ("title" %in% names(opi_df)) trimws(normalize_txt(opi_df$title[i])) else ""
+
+    mapped_district <- NA_character_
+
+    # 1. Custom phrase match
+    for (phrase in names(custom_phrases)) {
+      if (grepl(phrase, loc_norm, fixed = TRUE)) {
+        mapped_district <- custom_phrases[[phrase]]
+        break
+      }
+    }
+
+    # 2. Specific sub-district match in title or location
+    if (is.na(mapped_district)) {
+      for (k in seq_len(nrow(registry))) {
+        d_name <- registry$District[k]
+        d_norm <- normalize_txt(d_name)
+        d_base <- trimws(sub(" (school|district|elementary|public|high|schools|unified).*", "", d_norm))
+        if (nchar(d_base) >= 5) {
+          if (grepl(paste0(" ", d_base, " "), paste0(" ", loc_norm, " "), fixed = TRUE) ||
+              grepl(paste0(" ", d_base, " "), paste0(" ", title_norm, " "), fixed = TRUE)) {
+            mapped_district <- d_name
+            break
+          }
+        }
+      }
+    }
+
+    # 3. Direct unique city match or primary multi match
+    if (is.na(mapped_district)) {
+      city_idx <- which(norm_cities == loc_norm)
+      if (length(city_idx) == 1) {
+        mapped_district <- registry$District[city_idx]
+      } else if (length(city_idx) > 1) {
+        matching_districts <- registry$District[city_idx]
+        if (loc_norm %in% names(primary_multi)) {
+          empty_matches <- setdiff(matching_districts, direct_active)
+          if (length(empty_matches) == 1) {
+            mapped_district <- empty_matches
+          } else {
+            mapped_district <- primary_multi[[loc_norm]]
+          }
+        } else {
+          mapped_district <- matching_districts[1]
+        }
+      }
+    }
+
+    # 4. Partial city match
+    if (is.na(mapped_district)) {
+      for (city in unique_cities) {
+        if (nzchar(city) && grepl(paste0(" ", city, " "), paste0(" ", loc_norm, " "), fixed = TRUE)) {
+          city_idx <- which(norm_cities == city)
+          if (length(city_idx) == 1) {
+            mapped_district <- registry$District[city_idx]
+            break
+          }
+        }
+      }
+    }
+
+    if (!is.na(mapped_district) && mapped_district %in% registry$District) {
+      opi_df$District[i] <- mapped_district
+    }
+  }
+
+  opi_df
+}
