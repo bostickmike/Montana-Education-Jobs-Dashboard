@@ -46,9 +46,12 @@ applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
 applitrack_raw <- bind_rows(applitrack_results)
 if (nrow(applitrack_raw) > 0) {
   applitrack_df <- applitrack_raw %>%
+    # A failed scrape's safe_scrape() placeholder has no Pay_* columns.
+    ensure_posted_pay_columns() %>%
     left_join(select(applitrack_districts, District, Job_Link), by = "District") %>%
     transmute(title, date_posted, position = NA_character_, location, url = Job_Link, District,
-              Posting_Source = "AppliTrack (direct district board)")
+              Posting_Source = "AppliTrack (direct district board)",
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
   applitrack_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                               location = character(0), url = character(0), District = character(0),
@@ -3295,8 +3298,11 @@ combinedclean <- combined %>%
   filter(!is_placeholder_posting(title)) %>%
   mutate(position = classify_k12_position(title),
          District = canonicalize_k12_district(District)) %>%
+  # Pay_* is the pay the posting itself states (extract_posted_pay()); NA
+  # where the source states none.
+  ensure_posted_pay_columns() %>%
   select(title, Archive_Date, date_posted, position, location, url, District,
-         Posting_Source, Posting_Identity_Method, Posting_ID)
+         Posting_Source, Posting_Identity_Method, Posting_ID, all_of(POSTED_PAY_COLUMNS))
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)

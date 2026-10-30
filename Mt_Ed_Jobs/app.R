@@ -86,14 +86,35 @@ format_posted_or_listed_date <- function(dates, stale_after_days = 180) {
   values
 }
 
+# Pay as the posting itself states it (Pay_* from extract_posted_pay() in the
+# pipeline): "$21.46–$22.81/hr", "$46,500–$71,803/yr", "$3,691 stipend".
+# Units are never converted -- an hourly wage isn't turned into an annual
+# figure, since hours per year aren't known.
+format_posted_pay <- function(pay_min, pay_max, pay_unit) {
+  fmt <- function(x) ifelse(x >= 1000, scales::dollar(x, accuracy = 1), scales::dollar(x, accuracy = 0.01))
+  amount <- ifelse(is.na(pay_min), NA_character_,
+                   ifelse(is.na(pay_max) | pay_min == pay_max, fmt(pay_min), paste0(fmt(pay_min), "\u2013", fmt(pay_max))))
+  suffix <- unname(c(hour = "/hr", day = "/day", month = "/mo", year = "/yr",
+                     "credit hour" = "/credit hr", stipend = " stipend")[pay_unit])
+  ifelse(is.na(amount), "\u2014", paste0(amount, ifelse(is.na(suffix), "", suffix)))
+}
+
 #--------------------------------------------------
 # Load K-12 data
 #--------------------------------------------------
-combineddata <- read.csv("combinedclean.csv", fileEncoding = "UTF-8") %>%
+combineddata <- read.csv("combinedclean.csv", fileEncoding = "UTF-8")
+# Posted-pay columns are optional (absent from files written before the
+# pipeline captured pay) -- padded here rather than in validate_and_pad_schema(),
+# which would flag their absence as a schema problem on the Home tab.
+for (col in c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text")) {
+  if (!col %in% names(combineddata)) combineddata[[col]] <- NA
+}
+combineddata <- combineddata %>%
   validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url",
                             "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
                           "combinedclean.csv") %>%
-  select(District, title, position, location, date_posted, url,
+  mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit)) %>%
+  select(District, title, position, location, `Posted Pay`, date_posted, url,
          Posting_Source, Posting_Identity_Method, Posting_ID) %>%
   distinct(Posting_ID, .keep_all = TRUE) %>%
   mutate(District = str_squish(as.character(District))) %>%
@@ -341,7 +362,7 @@ combineddata <- combineddata %>%
     `Teacher Avg Salary` = ifelse(.is_teacher_row, `District Avg Salary`, "—"),
     `Teacher Salary Band (10th-90th)` = ifelse(.is_teacher_row, `Salary Band (10th-90th)`, "—")
   ) %>%
-  select(District, Title, Position, Location, `Teacher Avg Salary`, `Teacher Salary Band (10th-90th)`,
+  select(District, Title, Position, Location, `Posted Pay`, `Teacher Avg Salary`, `Teacher Salary Band (10th-90th)`,
          `Posted / listed`, Link, Source, `Identity method`, Posting_ID)
 
 # Weekly ALL-category posting totals per district/institution -- powers the
@@ -1449,7 +1470,7 @@ ui <- dashboardPage(
           ),
           uiOutput("k12_filter_status")
         ),
-        p(class = "help-block", style = "margin-bottom: 8px;", "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."),
+        p(class = "help-block", style = "margin-bottom: 8px;", "Posted Pay is the pay the job posting itself states (hourly, daily, annual, or a season stipend, as written); blank where the posting gives no figure. Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."),
         DTOutput("k12_jobs")
       ),
       tabItem(

@@ -51,8 +51,9 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data") {
     filter(!is_placeholder_posting(title)) %>%
     mutate(position = classify_k12_position(title),
            District = canonicalize_k12_district(District)) %>%
+    ensure_posted_pay_columns() %>%
     dplyr::select(title, Archive_Date, date_posted, position, location, url, District,
-                  Posting_Source, Posting_Identity_Method, Posting_ID)
+                  Posting_Source, Posting_Identity_Method, Posting_ID, all_of(POSTED_PAY_COLUMNS))
 
   k12jobs <- combinedclean %>%
     filter(position == "Teacher") %>%
