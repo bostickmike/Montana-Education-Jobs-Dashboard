@@ -333,7 +333,15 @@ combineddata <- combineddata %>%
     resolve_k12_district(District)
   )) %>%
   left_join(k12_salary_lookup, by = c(".salary_district" = "Name")) %>%
-  select(District, Title, Position, Location, `District Avg Salary`, `Salary Band (10th-90th)`,
+  # MT DLI publishes teacher compensation only, so these columns describe
+  # teaching postings and stay blank on paraprofessional, bus driver, coach,
+  # etc. rows rather than implying those jobs pay the teacher average.
+  mutate(
+    .is_teacher_row = Position %in% c("Teacher", "Part-Time Teacher"),
+    `Teacher Avg Salary` = ifelse(.is_teacher_row, `District Avg Salary`, "—"),
+    `Teacher Salary Band (10th-90th)` = ifelse(.is_teacher_row, `Salary Band (10th-90th)`, "—")
+  ) %>%
+  select(District, Title, Position, Location, `Teacher Avg Salary`, `Teacher Salary Band (10th-90th)`,
          `Posted / listed`, Link, Source, `Identity method`, Posting_ID)
 
 # Weekly ALL-category posting totals per district/institution -- powers the
@@ -1441,7 +1449,7 @@ ui <- dashboardPage(
           ),
           uiOutput("k12_filter_status")
         ),
-        p(class = "help-block", style = "margin-bottom: 8px;", "District salary benchmarks reflect MT DLI Teacher Compensation data (Source: OPI GEMS). OPI Jobs for Teachers rows use OPI's raw employer/location label."),
+        p(class = "help-block", style = "margin-bottom: 8px;", "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."),
         DTOutput("k12_jobs")
       ),
       tabItem(
