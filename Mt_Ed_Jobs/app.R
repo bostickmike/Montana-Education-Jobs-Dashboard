@@ -1920,6 +1920,10 @@ server <- function(input, output, session) {
 
   selected_district <- reactiveVal(NULL)
   selected_institution <- reactiveVal(NULL)
+  # Map search carried over from a map popup's "View matching jobs" link;
+  # NULL whenever the Jobs tab is reached any other way.
+  selected_k12_query <- reactiveVal(NULL)
+  selected_he_query <- reactiveVal(NULL)
 
   output$data_load_issues_banner <- renderUI({
     req(length(DATA_LOAD_ISSUES) > 0)
@@ -2167,6 +2171,11 @@ server <- function(input, output, session) {
   output$k12_jobs <- renderDT({
     df <- combineddata
     if (!is.null(selected_district())) df <- df %>% filter(District == selected_district())
+    # Same matcher and searchable text as map_filtered(), so the count here
+    # equals the popup's "N matching openings".
+    if (!is.null(selected_k12_query())) {
+      df <- df[match_job_query(paste(coalesce(df$Title, ""), coalesce(df$Position, "")), selected_k12_query()), , drop = FALSE]
+    }
     if (isTRUE(identical(input$k12_quick_filter, "new"))) {
       df <- df %>% filter(Posting_ID %in% k12_new_this_week$Posting_ID)
     }
@@ -2178,11 +2187,12 @@ server <- function(input, output, session) {
   output$k12_filter_status <- renderUI({
     if (is.null(selected_district())) return(NULL)
     div(style = "margin-bottom: 10px;",
-        strong(paste("Showing:", selected_district())),
+        strong(paste0("Showing: ", selected_district(),
+                      if (!is.null(selected_k12_query())) paste0(" \u2014 jobs matching \u201c", selected_k12_query(), "\u201d") else "")),
         actionButton("clear_k12_filter", "Show All Districts", class = "btn-xs", style = "margin-left: 10px;")
     )
   })
-  observeEvent(input$clear_k12_filter, { selected_district(NULL) })
+  observeEvent(input$clear_k12_filter, { selected_district(NULL); selected_k12_query(NULL) })
 
   # District Summary -- everything the map popups show, as a real
   # exportable table. Teacher_Avg_Salary + 10th/90th percentile band (MT
@@ -2767,9 +2777,20 @@ server <- function(input, output, session) {
       "<div style='margin-top:6px;'>",
       "<a href='", Link, "' target='_blank'>Careers page</a>",
       " &nbsp;|&nbsp; ",
-      "<a href='#' onclick=\"Shiny.setInputValue('popup_view_jobs', '",
+      # Carries the active map search with it, so the Jobs tab opens on just
+      # the postings this popup counted. URL-encoded so quotes in the query
+      # can't break out of the JS string.
+      "<a href='#' onclick=\"Shiny.setInputValue('map_popup_view_jobs', {entity: '",
       gsub("'", "&#39;", Name, fixed = TRUE),
-      "', {priority: 'event'}); return false;\">View all jobs &rarr;</a>",
+      "', query: '",
+      ifelse(SearchActive,
+             vapply(coalesce(SearchQuery, ""), utils::URLencode, character(1), reserved = TRUE, USE.NAMES = FALSE),
+             ""),
+      "'}, {priority: 'event'}); return false;\">",
+      ifelse(SearchActive,
+             paste0("View ", DisplayCount, " matching job", ifelse(DisplayCount == 1, "", "s")),
+             "View all jobs"),
+      " &rarr;</a>",
       "</div>"
     ))
 
@@ -2792,7 +2813,18 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$popup_view_jobs, {
-    entity <- input$popup_view_jobs
+    navigate_to_entity_jobs(input$popup_view_jobs)
+  })
+
+  observeEvent(input$map_popup_view_jobs, {
+    ev <- input$map_popup_view_jobs
+    query <- trimws(utils::URLdecode(if (is.null(ev$query)) "" else ev$query))
+    navigate_to_entity_jobs(ev$entity, if (nzchar(query)) query else NULL)
+  })
+
+  navigate_to_entity_jobs <- function(entity, query = NULL) {
+    selected_k12_query(query)
+    selected_he_query(query)
     row <- combined_map_data %>% filter(Name == entity)
     if (nrow(row) > 0) {
       if (row$Type[1] == "K-12 District") {
@@ -2809,7 +2841,7 @@ server <- function(input, output, session) {
       selected_institution(entity)
       updateTabItems(session, "sidebar_tabs", "he_table")
     }
-  })
+  }
 
 
   # ---- K-12 longitudinal trends ----
@@ -2925,6 +2957,9 @@ server <- function(input, output, session) {
   output$he_jobs <- renderDT({
     df <- ccdata
     if (!is.null(selected_institution())) df <- df %>% filter(Institution == selected_institution())
+    if (!is.null(selected_he_query())) {
+      df <- df[match_job_query(paste(coalesce(df$Title, ""), coalesce(df$Appointment, "")), selected_he_query()), , drop = FALSE]
+    }
     if (!identical(input$he_table_appointment, "all")) {
       df <- df %>% filter(Appointment == input$he_table_appointment)
     }
@@ -2940,11 +2975,12 @@ server <- function(input, output, session) {
   output$he_filter_status <- renderUI({
     if (is.null(selected_institution())) return(NULL)
     div(style = "margin-bottom: 10px;",
-        strong(paste("Showing:", selected_institution())),
+        strong(paste0("Showing: ", selected_institution(),
+                      if (!is.null(selected_he_query())) paste0(" \u2014 jobs matching \u201c", selected_he_query(), "\u201d") else "")),
         actionButton("clear_he_filter", "Show All Institutions", class = "btn-xs", style = "margin-left: 10px;")
     )
   })
-  observeEvent(input$clear_he_filter, { selected_institution(NULL) })
+  observeEvent(input$clear_he_filter, { selected_institution(NULL); selected_he_query(NULL) })
 
   output$he_summary_table <- renderDT({
     he_rows <- combined_map_data %>% filter(Type == "Higher Ed Institution")
