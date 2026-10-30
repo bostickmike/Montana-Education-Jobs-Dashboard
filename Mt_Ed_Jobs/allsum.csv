@@ -28,21 +28,21 @@
 "CTE - Business & Family Sciences",2026-10-13,"Total",7
 "CTE - Business & Family Sciences",2026-10-20,"Total",6
 "CTE - Business & Family Sciences",2026-10-27,"Total",7
-"CTE - Trades, Ag & Technical",2026-08-06,"Total",27
-"CTE - Trades, Ag & Technical",2026-08-07,"Total",23
-"CTE - Trades, Ag & Technical",2026-08-11,"Total",31
-"CTE - Trades, Ag & Technical",2026-08-18,"Total",26
-"CTE - Trades, Ag & Technical",2026-08-25,"Total",27
-"CTE - Trades, Ag & Technical",2026-09-01,"Total",25
-"CTE - Trades, Ag & Technical",2026-09-07,"Total",26
-"CTE - Trades, Ag & Technical",2026-09-08,"Total",26
-"CTE - Trades, Ag & Technical",2026-09-15,"Total",23
-"CTE - Trades, Ag & Technical",2026-09-22,"Total",22
-"CTE - Trades, Ag & Technical",2026-09-29,"Total",23
-"CTE - Trades, Ag & Technical",2026-10-06,"Total",23
-"CTE - Trades, Ag & Technical",2026-10-13,"Total",21
-"CTE - Trades, Ag & Technical",2026-10-20,"Total",21
-"CTE - Trades, Ag & Technical",2026-10-27,"Total",21
+"CTE - Trades, Ag & Technical",2026-08-06,"Total",28
+"CTE - Trades, Ag & Technical",2026-08-07,"Total",25
+"CTE - Trades, Ag & Technical",2026-08-11,"Total",33
+"CTE - Trades, Ag & Technical",2026-08-18,"Total",28
+"CTE - Trades, Ag & Technical",2026-08-25,"Total",30
+"CTE - Trades, Ag & Technical",2026-09-01,"Total",28
+"CTE - Trades, Ag & Technical",2026-09-07,"Total",29
+"CTE - Trades, Ag & Technical",2026-09-08,"Total",29
+"CTE - Trades, Ag & Technical",2026-09-15,"Total",26
+"CTE - Trades, Ag & Technical",2026-09-22,"Total",25
+"CTE - Trades, Ag & Technical",2026-09-29,"Total",26
+"CTE - Trades, Ag & Technical",2026-10-06,"Total",26
+"CTE - Trades, Ag & Technical",2026-10-13,"Total",24
+"CTE - Trades, Ag & Technical",2026-10-20,"Total",23
+"CTE - Trades, Ag & Technical",2026-10-27,"Total",23
 "Early Childhood",2026-08-06,"Total",1
 "Early Childhood",2026-08-07,"Total",9
 "Early Childhood",2026-08-11,"Total",10
@@ -139,14 +139,14 @@
 "Math",2026-10-13,"Total",38
 "Math",2026-10-20,"Total",37
 "Math",2026-10-27,"Total",33
-"Music",2026-08-06,"Total",2
-"Music",2026-08-07,"Total",3
-"Music",2026-08-11,"Total",4
+"Music",2026-08-06,"Total",3
+"Music",2026-08-07,"Total",4
+"Music",2026-08-11,"Total",5
 "Music",2026-08-18,"Total",3
-"Music",2026-08-25,"Total",3
-"Music",2026-09-01,"Total",4
-"Music",2026-09-07,"Total",4
-"Music",2026-09-08,"Total",4
+"Music",2026-08-25,"Total",5
+"Music",2026-09-01,"Total",5
+"Music",2026-09-07,"Total",5
+"Music",2026-09-08,"Total",5
 "Music",2026-09-15,"Total",4
 "Music",2026-09-22,"Total",4
 "Music",2026-09-29,"Total",3
@@ -154,21 +154,21 @@
 "Music",2026-10-13,"Total",3
 "Music",2026-10-20,"Total",3
 "Music",2026-10-27,"Total",6
-"Other",2026-08-06,"Total",5
-"Other",2026-08-07,"Total",5
-"Other",2026-08-11,"Total",4
-"Other",2026-08-18,"Total",5
-"Other",2026-08-25,"Total",7
-"Other",2026-09-01,"Total",8
-"Other",2026-09-07,"Total",7
-"Other",2026-09-08,"Total",7
-"Other",2026-09-15,"Total",7
-"Other",2026-09-22,"Total",8
-"Other",2026-09-29,"Total",8
-"Other",2026-10-06,"Total",9
-"Other",2026-10-13,"Total",9
-"Other",2026-10-20,"Total",9
-"Other",2026-10-27,"Total",12
+"Other",2026-08-06,"Total",6
+"Other",2026-08-07,"Total",6
+"Other",2026-08-11,"Total",5
+"Other",2026-08-18,"Total",6
+"Other",2026-08-25,"Total",8
+"Other",2026-09-01,"Total",9
+"Other",2026-09-07,"Total",8
+"Other",2026-09-08,"Total",8
+"Other",2026-09-15,"Total",8
+"Other",2026-09-22,"Total",9
+"Other",2026-09-29,"Total",9
+"Other",2026-10-06,"Total",10
+"Other",2026-10-13,"Total",10
+"Other",2026-10-20,"Total",10
+"Other",2026-10-27,"Total",13
 "Physical Education",2026-08-06,"Total",1
 "Physical Education",2026-08-07,"Total",4
 "Physical Education",2026-08-11,"Total",3
@@ -375,6 +375,7 @@
 "CTE - Trades, Ag & Technical",2026-08-06,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-06,"Choteau",1
 "CTE - Trades, Ag & Technical",2026-08-06,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-08-06,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-06,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-08-06,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-08-06,"Gardiner",1
@@ -395,8 +396,10 @@
 "CTE - Trades, Ag & Technical",2026-08-07,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-07,"Choteau",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-08-07,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Gardiner",1
+"CTE - Trades, Ag & Technical",2026-08-07,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Hays",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-08-07,"Jordan",1
@@ -412,9 +415,11 @@
 "CTE - Trades, Ag & Technical",2026-08-11,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-11,"Choteau",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-08-11,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-11,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Gardiner",1
+"CTE - Trades, Ag & Technical",2026-08-11,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Hays",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-08-11,"Jordan",1
@@ -435,9 +440,11 @@
 "CTE - Trades, Ag & Technical",2026-08-18,"Billings Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-18,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-18,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-08-18,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-18,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-08-18,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-08-18,"Gardiner",1
+"CTE - Trades, Ag & Technical",2026-08-18,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-18,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-08-18,"Kalispell",1
 "CTE - Trades, Ag & Technical",2026-08-18,"Lame Deer",2
@@ -455,10 +462,12 @@
 "CTE - Trades, Ag & Technical",2026-08-25,"Billings Public Schools",2
 "CTE - Trades, Ag & Technical",2026-08-25,"Broadus",2
 "CTE - Trades, Ag & Technical",2026-08-25,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-08-25,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-25,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Gardiner",1
+"CTE - Trades, Ag & Technical",2026-08-25,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Hysham Public Schools",1
@@ -470,17 +479,20 @@
 "CTE - Trades, Ag & Technical",2026-08-25,"Rudyard/Gildford",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Scobey",4
 "CTE - Trades, Ag & Technical",2026-08-25,"Sheridan, MT",1
+"CTE - Trades, Ag & Technical",2026-08-25,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-08-25,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Absarokee",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Billings Public Schools",2
 "CTE - Trades, Ag & Technical",2026-09-01,"Browning Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Centerville Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-09-01,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-01,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Geyser Public Schools",1
+"CTE - Trades, Ag & Technical",2026-09-01,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Hysham Public Schools",1
@@ -491,6 +503,7 @@
 "CTE - Trades, Ag & Technical",2026-09-01,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Rudyard/Gildford",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Sheridan, MT",1
+"CTE - Trades, Ag & Technical",2026-09-01,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-09-01,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Absarokee",1
@@ -499,11 +512,13 @@
 "CTE - Trades, Ag & Technical",2026-09-07,"Butte School District 1",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Centerville Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-09-07,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-07,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Geyser Public Schools",1
+"CTE - Trades, Ag & Technical",2026-09-07,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Hysham Public Schools",1
@@ -514,6 +529,7 @@
 "CTE - Trades, Ag & Technical",2026-09-07,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Rudyard/Gildford",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Sheridan, MT",1
+"CTE - Trades, Ag & Technical",2026-09-07,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-09-07,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Absarokee",1
@@ -522,11 +538,13 @@
 "CTE - Trades, Ag & Technical",2026-09-08,"Butte School District 1",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Centerville Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-09-08,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-08,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Fromberg",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Geyser Public Schools",1
+"CTE - Trades, Ag & Technical",2026-09-08,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Hysham Public Schools",1
@@ -537,6 +555,7 @@
 "CTE - Trades, Ag & Technical",2026-09-08,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Rudyard/Gildford",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Sheridan, MT",1
+"CTE - Trades, Ag & Technical",2026-09-08,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-09-08,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Absarokee",1
@@ -544,10 +563,12 @@
 "CTE - Trades, Ag & Technical",2026-09-15,"Browning Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Butte School District 1",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-09-15,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-15,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Geyser Public Schools",1
+"CTE - Trades, Ag & Technical",2026-09-15,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Hysham Public Schools",1
@@ -557,6 +578,7 @@
 "CTE - Trades, Ag & Technical",2026-09-15,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical",2026-09-15,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-09-15,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Absarokee",1
@@ -564,10 +586,12 @@
 "CTE - Trades, Ag & Technical",2026-09-22,"Browning Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Butte School District 1",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-09-22,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-22,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Geyser Public Schools",1
+"CTE - Trades, Ag & Technical",2026-09-22,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Hysham Public Schools",1
@@ -577,6 +601,7 @@
 "CTE - Trades, Ag & Technical",2026-09-22,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical",2026-09-22,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-09-22,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Absarokee",1
@@ -584,11 +609,13 @@
 "CTE - Trades, Ag & Technical",2026-09-29,"Browning Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Butte School District 1",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-09-29,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-29,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Geyser Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Glasgow School District 1-A",1
+"CTE - Trades, Ag & Technical",2026-09-29,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Hysham Public Schools",1
@@ -598,6 +625,7 @@
 "CTE - Trades, Ag & Technical",2026-09-29,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical",2026-09-29,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-09-29,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Absarokee",1
@@ -605,11 +633,13 @@
 "CTE - Trades, Ag & Technical",2026-10-06,"Browning Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Butte School District 1",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-10-06,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-06,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Geyser Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Glasgow School District 1-A",1
+"CTE - Trades, Ag & Technical",2026-10-06,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Hot Springs",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Hysham Public Schools",1
@@ -619,6 +649,7 @@
 "CTE - Trades, Ag & Technical",2026-10-06,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical",2026-10-06,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Wibaux",1
 "CTE - Trades, Ag & Technical",2026-10-06,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Absarokee",1
@@ -626,11 +657,13 @@
 "CTE - Trades, Ag & Technical",2026-10-13,"Browning Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Butte School District 1",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Drummond",2
+"CTE - Trades, Ag & Technical",2026-10-13,"East Helena Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Ekalaka Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"FAIRVIEW",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Geyser Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Glasgow School District 1-A",1
+"CTE - Trades, Ag & Technical",2026-10-13,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Hysham Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Kalispell",1
@@ -639,6 +672,7 @@
 "CTE - Trades, Ag & Technical",2026-10-13,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical",2026-10-13,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-13,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Absarokee",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Billings Public Schools",1
@@ -650,6 +684,7 @@
 "CTE - Trades, Ag & Technical",2026-10-20,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Geyser Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Glasgow School District 1-A",1
+"CTE - Trades, Ag & Technical",2026-10-20,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Hysham Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Kalispell",1
@@ -658,6 +693,7 @@
 "CTE - Trades, Ag & Technical",2026-10-20,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical",2026-10-20,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-20,"Wolf Point Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Absarokee",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Billings Public Schools",1
@@ -669,6 +705,7 @@
 "CTE - Trades, Ag & Technical",2026-10-27,"Gardiner",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Geyser Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Glasgow School District 1-A",1
+"CTE - Trades, Ag & Technical",2026-10-27,"Glendive Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Hobson Public School",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Hysham Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Kalispell",1
@@ -677,6 +714,7 @@
 "CTE - Trades, Ag & Technical",2026-10-27,"Poplar",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Rocky Boy",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Rudyard/Gildford",1
+"CTE - Trades, Ag & Technical",2026-10-27,"Three Forks Public Schools",1
 "CTE - Trades, Ag & Technical",2026-10-27,"Wolf Point Public Schools",1
 "Early Childhood",2026-08-06,"Helena Public Schools",1
 "Early Childhood",2026-08-07,"Fairview Public Schools",2
@@ -2044,11 +2082,14 @@
 "Math",2026-10-27,"Sheridan, MT",1
 "Math",2026-10-27,"Shields Valley Public Schools",1
 "Music",2026-08-06,"Great Falls Public Schools",1
+"Music",2026-08-06,"Havre Public Schools",1
 "Music",2026-08-06,"Missoula County Public Schools",1
 "Music",2026-08-07,"Great Falls Public Schools",1
+"Music",2026-08-07,"Havre Public Schools",1
 "Music",2026-08-07,"Lame Deer Public Schools",1
 "Music",2026-08-07,"Missoula County Public Schools",1
 "Music",2026-08-11,"Great Falls Public Schools",1
+"Music",2026-08-11,"Havre Public Schools",1
 "Music",2026-08-11,"Lame Deer Public Schools",1
 "Music",2026-08-11,"Missoula County Public Schools",1
 "Music",2026-08-11,"Wolf Point Public Schools",1
@@ -2057,18 +2098,22 @@
 "Music",2026-08-18,"Wolf Point Public Schools",1
 "Music",2026-08-25,"Great Falls Public Schools",1
 "Music",2026-08-25,"Lame Deer Public Schools",1
+"Music",2026-08-25,"Missoula County Public Schools",2
 "Music",2026-08-25,"Scobey Schools",1
 "Music",2026-09-01,"Great Falls Public Schools",1
 "Music",2026-09-01,"Huntley Project School District",1
 "Music",2026-09-01,"Lame Deer Public Schools",1
+"Music",2026-09-01,"Missoula County Public Schools",1
 "Music",2026-09-01,"Scobey Schools",1
 "Music",2026-09-07,"Great Falls Public Schools",1
 "Music",2026-09-07,"Huntley Project School District",1
 "Music",2026-09-07,"Lame Deer Public Schools",1
+"Music",2026-09-07,"Missoula County Public Schools",1
 "Music",2026-09-07,"Scobey Schools",1
 "Music",2026-09-08,"Great Falls Public Schools",1
 "Music",2026-09-08,"Huntley Project School District",1
 "Music",2026-09-08,"Lame Deer Public Schools",1
+"Music",2026-09-08,"Missoula County Public Schools",1
 "Music",2026-09-08,"Scobey Schools",1
 "Music",2026-09-15,"Great Falls Public Schools",1
 "Music",2026-09-15,"Huntley Project School District",1
@@ -2099,21 +2144,26 @@
 "Other",2026-08-06,"East Helena Public Schools",1
 "Other",2026-08-06,"Great Falls Public Schools",2
 "Other",2026-08-06,"Havre Public Schools",1
+"Other",2026-08-06,"Philipsburg",1
 "Other",2026-08-06,"Whitefish School District",1
 "Other",2026-08-07,"East Helena Public Schools",1
 "Other",2026-08-07,"Great Falls Public Schools",2
 "Other",2026-08-07,"Havre Public Schools",1
+"Other",2026-08-07,"Philipsburg",1
 "Other",2026-08-07,"Whitefish School District",1
 "Other",2026-08-11,"Great Falls Public Schools",2
 "Other",2026-08-11,"Havre Public Schools",1
+"Other",2026-08-11,"Philipsburg",1
 "Other",2026-08-11,"Whitefish School District",1
 "Other",2026-08-18,"Great Falls Public Schools",2
 "Other",2026-08-18,"Havre Public Schools",1
 "Other",2026-08-18,"Libby Public Schools",1
+"Other",2026-08-18,"Philipsburg",1
 "Other",2026-08-18,"Whitefish School District",1
 "Other",2026-08-25,"Great Falls Public Schools",2
 "Other",2026-08-25,"Havre Public Schools",1
 "Other",2026-08-25,"Libby Public Schools",1
+"Other",2026-08-25,"Philipsburg",1
 "Other",2026-08-25,"Swan River School District #4",1
 "Other",2026-08-25,"Three Forks Public Schools",1
 "Other",2026-08-25,"Whitefish School District",1
@@ -2122,36 +2172,42 @@
 "Other",2026-09-01,"Great Falls Public Schools",2
 "Other",2026-09-01,"Havre Public Schools",1
 "Other",2026-09-01,"Libby Public Schools",1
+"Other",2026-09-01,"Philipsburg",1
 "Other",2026-09-01,"Swan River School District #4",1
 "Other",2026-09-01,"Whitefish School District",1
 "Other",2026-09-07,"Big Sky School District 72",1
 "Other",2026-09-07,"Great Falls Public Schools",2
 "Other",2026-09-07,"Havre Public Schools",1
 "Other",2026-09-07,"Libby Public Schools",1
+"Other",2026-09-07,"Philipsburg",1
 "Other",2026-09-07,"Swan River School District #4",1
 "Other",2026-09-07,"Whitefish School District",1
 "Other",2026-09-08,"Big Sky School District 72",1
 "Other",2026-09-08,"Great Falls Public Schools",2
 "Other",2026-09-08,"Havre Public Schools",1
 "Other",2026-09-08,"Libby Public Schools",1
+"Other",2026-09-08,"Philipsburg",1
 "Other",2026-09-08,"Swan River School District #4",1
 "Other",2026-09-08,"Whitefish School District",1
 "Other",2026-09-15,"Big Sky School District 72",1
 "Other",2026-09-15,"Great Falls Public Schools",2
 "Other",2026-09-15,"Havre Public Schools",1
 "Other",2026-09-15,"Libby Public Schools",1
+"Other",2026-09-15,"Philipsburg",1
 "Other",2026-09-15,"Swan River School District #4",1
 "Other",2026-09-15,"Whitefish School District",1
 "Other",2026-09-22,"Big Sky School District 72",1
 "Other",2026-09-22,"Great Falls Public Schools",2
 "Other",2026-09-22,"Havre Public Schools",1
 "Other",2026-09-22,"Libby Public Schools",1
+"Other",2026-09-22,"Philipsburg",1
 "Other",2026-09-22,"Shelby School District",1
 "Other",2026-09-22,"Swan River School District #4",1
 "Other",2026-09-22,"Whitefish School District",1
 "Other",2026-09-29,"Big Sky School District 72",1
 "Other",2026-09-29,"Great Falls Public Schools",2
 "Other",2026-09-29,"Libby Public Schools",1
+"Other",2026-09-29,"Philipsburg",1
 "Other",2026-09-29,"Philipsburg School District",1
 "Other",2026-09-29,"Shelby School District",1
 "Other",2026-09-29,"Swan River School District #4",1
@@ -2160,6 +2216,7 @@
 "Other",2026-10-06,"Colstrip Public Schools",1
 "Other",2026-10-06,"Great Falls Public Schools",2
 "Other",2026-10-06,"Libby Public Schools",1
+"Other",2026-10-06,"Philipsburg",1
 "Other",2026-10-06,"Philipsburg School District",1
 "Other",2026-10-06,"Shelby School District",1
 "Other",2026-10-06,"Swan River School District #4",1
@@ -2169,6 +2226,7 @@
 "Other",2026-10-13,"Great Falls Public Schools",2
 "Other",2026-10-13,"Hamilton School District 3",1
 "Other",2026-10-13,"Libby Public Schools",1
+"Other",2026-10-13,"Philipsburg",1
 "Other",2026-10-13,"Shelby School District",1
 "Other",2026-10-13,"Swan River School District #4",1
 "Other",2026-10-13,"Whitefish School District",1
@@ -2177,6 +2235,7 @@
 "Other",2026-10-20,"Great Falls Public Schools",2
 "Other",2026-10-20,"Hamilton School District 3",1
 "Other",2026-10-20,"Libby Public Schools",1
+"Other",2026-10-20,"Philipsburg",1
 "Other",2026-10-20,"Shelby School District",1
 "Other",2026-10-20,"Swan River School District #4",1
 "Other",2026-10-20,"Whitefish School District",1
@@ -2188,6 +2247,7 @@
 "Other",2026-10-27,"Hamilton School District 3",1
 "Other",2026-10-27,"Jefferson High School",1
 "Other",2026-10-27,"Libby Public Schools",1
+"Other",2026-10-27,"Philipsburg",1
 "Other",2026-10-27,"Shelby School District",1
 "Other",2026-10-27,"Swan River School District #4",1
 "Other",2026-10-27,"Whitefish School District",1
