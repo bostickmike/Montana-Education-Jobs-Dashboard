@@ -1,389 +1,743 @@
 "District","NCES_LEAID","Title","Category","Broad_Category","Position","First_Seen_Date","Last_Seen_Date","Weeks_Observed","Estimated_Days_Open","Status","is_stem","is_sped","is_elementary","is_secondary","is_admin","is_support_staff"
-"841 Bear Canyon Road",,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Absarokee",3001710,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Anaconda School District #10",3002010,"Elementary Special Education Teacher (2 positions)","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,1,0,0,0,0
-"Arlee",3002220,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Arlee Joint School District",3002220,"Elementary Teacher (6th grade)","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-13",8,49,"Closed / Filled",0,0,1,0,0,0
-"Arlee Joint School District",3002220,"HS Math Teacher (1 FTE)","Mathematics Education","Math","Teacher","2026-09-01","2026-10-13",8,49,"Closed / Filled",1,0,0,0,0,0
+"10 miles North of Troy",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-13","2026-10-27",3,21,"Still Active",0,0,1,0,0,0
+"4 miles north of Harlem",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"5 miles West of Stanford",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"6 miles east of Wolf Point",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,1,0,0,0
+"6 miles east of Wolf Point",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
+"841 Bear Canyon Road",,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Absarokee",3001710,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Absarokee",3001710,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Absarokee",3001710,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Anaconda",3002010,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,1,0,0,0
+"Anaconda",3002010,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Anaconda School District #10",3002010,"Elementary Special Education Teacher (2 positions)","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,1,0,0,0,0
+"Arlee",3002220,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,1,0,0,0
+"Arlee",3002220,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Arlee Joint School District",3002220,"Elementary Teacher (6th grade)","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-13",7,49,"Closed / Filled",0,0,1,0,0,0
+"Arlee Joint School District",3002220,"HS Math Teacher (1 FTE)","Mathematics Education","Math","Teacher","2026-09-01","2026-10-13",7,49,"Closed / Filled",1,0,0,0,0,0
 "Arrowhead Elementary School District #75",3002300,"Certified Teachers","Uncategorized","Other","Teacher","2026-09-01","2026-09-01",1,7,"Closed / Filled",0,0,0,0,0,0
-"Ashland",3000008,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
+"Ashland",3000008,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Ashland",3000008,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-07","2026-10-27",8,57,"Still Active",0,0,1,0,0,0
+"Ashland",3000008,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
 "Ashland Public School",3000008,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,1,0,0,0
 "Ashland Public School",3000008,"Specialists (PE/Library)","Physical Education","Physical Education","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"BILLINGS",3003870,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"BUSBY",,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
+"Bainville",3002640,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,0,0,0
+"Bainville",3002640,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,1,0,0,0
+"Bainville",3002640,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,0,1,0,0
+"Baker",3002730,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,0,1,0,0,0
 "Baker",3002730,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,0,0,1,0,0
 "Baker",3002730,"Science (Broadfield)","Science Education","Science","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",1,0,0,0,0,0
-"Belgrade",3003290,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-09-08",6,35,"Closed / Filled",0,0,0,1,0,0
-"Belgrade",3003290,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-08",6,35,"Closed / Filled",1,0,0,0,0,0
-"Belgrade",3003290,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
+"Baker",3002730,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,1,0,0,0,0
+"Belfry",3003270,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,1,0,0,0
+"Belfry",3003270,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Belgrade",3003290,"Art","Art Teacher","Art","Teacher","2026-08-11","2026-09-08",5,35,"Closed / Filled",0,0,0,0,0,0
+"Belgrade",3003290,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-09-08",5,35,"Closed / Filled",0,0,0,1,0,0
+"Belgrade",3003290,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-08",5,35,"Closed / Filled",1,0,0,0,0,0
+"Belgrade",3003290,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Belgrade",3003290,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,1,0,0,0,0
+"Belgrade",3003290,"World Languages","Language Education","Language","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
 "Belgrade School District 44",3003290,"(Medically Fragile) Life Skills Special Education Teacher DW2627_71","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-10-20","2026-10-27",2,14,"Still Active",0,1,0,0,0,0
-"Belgrade School District 44",3003290,"Life Skills Teacher MS2627_21","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-09-07","2026-10-27",9,57,"Still Active",0,1,0,0,0,0
-"Belgrade School District 44",3003290,"Math Teacher  MS2627_24","Mathematics Education","Math","Teacher","2026-09-07","2026-09-08",2,8,"Closed / Filled",1,0,0,0,0,0
+"Belgrade School District 44",3003290,"Life Skills Teacher MS2627_21","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-09-07","2026-10-27",8,57,"Still Active",0,1,0,0,0,0
+"Belgrade School District 44",3003290,"Math Teacher  MS2627_24","Mathematics Education","Math","Teacher","2026-09-07","2026-09-08",1,8,"Closed / Filled",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Math Teacher  MS2627_24 .5 FTE","Mathematics Education","Math","Teacher","2026-09-15","2026-10-27",7,49,"Still Active",1,0,0,0,0,0
-"Belgrade School District 44",3003290,"Math Teacher HS2627_15 .5 FTE","Mathematics Education","Math","Teacher","2026-09-07","2026-09-08",2,8,"Closed / Filled",1,0,0,0,0,0
+"Belgrade School District 44",3003290,"Math Teacher HS2627_15 .5 FTE","Mathematics Education","Math","Teacher","2026-09-07","2026-09-08",1,8,"Closed / Filled",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Spanish Teacher HS2627_38","Language Education","Language","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,0,0,0,0
-"Belgrade School District 44",3003290,"Special Education Resource Teacher SP2627_31","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-09-07","2026-10-27",9,57,"Still Active",0,1,0,0,0,0
-"Big Sandy",3003750,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-29",10,61,"Closed / Filled",0,0,0,1,0,0
+"Belgrade School District 44",3003290,"Special Education Resource Teacher SP2627_31","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-09-07","2026-10-27",8,57,"Still Active",0,1,0,0,0,0
+"Belt",3003420,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Belt",3003420,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
+"Big Sandy",3003750,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Big Sandy",3003750,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,0,1,0,0
+"Big Sandy",3003750,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Big Sandy",3003750,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Big Sandy",3003750,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
 "Big Sandy Public Schools",3003750,"Elementary Head Start Teacher","Early Childhood Education","Early Childhood","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"Big Sandy Public Schools",3003750,"Elementary Life Skills Teacher","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-07","2026-10-20",13,81,"Closed / Filled",0,1,0,0,0,0
-"Big Sandy Public Schools",3003750,"Mathematics Teacher","Mathematics Education","Math","Teacher","2026-08-07","2026-10-20",13,81,"Closed / Filled",1,0,0,0,0,0
+"Big Sandy Public Schools",3003750,"Elementary Life Skills Teacher","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-07","2026-10-20",12,81,"Closed / Filled",0,1,0,0,0,0
+"Big Sandy Public Schools",3003750,"Mathematics Teacher","Mathematics Education","Math","Teacher","2026-08-07","2026-10-20",12,81,"Closed / Filled",1,0,0,0,0,0
 "Big Sandy Public Schools",3003750,"Special Education Teacher (Life Skills Grades 6-12)","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,1,0,0,0,0
-"Big Sky School District 72",3000654,"Guest Teachers","Substitute Teaching","Other","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,0,0,0
-"Big Sky School District 72",3000654,"High School Science Teacher","Science Education","Science","Teacher","2026-09-01","2026-09-15",4,21,"Closed / Filled",1,0,0,0,0,0
+"Big Sky",3000654,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-01",5,33,"Closed / Filled",0,0,1,0,0,0
+"Big Sky",3000654,"World Languages","Language Education","Language","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Big Sky School District 72",3000654,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-01","2026-09-15",3,21,"Closed / Filled",0,0,1,0,0,0
+"Big Sky School District 72",3000654,"Guest Teachers","Substitute Teaching","Other","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Big Sky School District 72",3000654,"High School Science Teacher","Science Education","Science","Teacher","2026-09-01","2026-09-15",3,21,"Closed / Filled",1,0,0,0,0,0
+"Big Timber",3003800,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,0,1,0,0,0
+"Big Timber",3003800,"History","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Big Timber",3003800,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Big Timber Grade School",3003800,"SPED Case Manager","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
 "Big Timber Grade School",3003800,"SPED Teacher","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
-"Big Timber- Between Bozeman and Billings",3003800,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Billings",3003870,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Billings - Billings Christian School",,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-20",12,77,"Closed / Filled",1,0,0,0,0,0
+"Big Timber- Between Bozeman and Billings",3003800,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Billings",3003870,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
+"Billings",3003870,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Billings",3003870,"Music","Music Education","Music","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Billings",3003870,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Billings",3003870,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,1,0,0
+"Billings",3003870,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-09-29",8,56,"Closed / Filled",0,1,0,0,0,0
+"Billings - Billings Christian School",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-20",11,77,"Closed / Filled",0,0,1,0,0,0
+"Billings - Billings Christian School",,"Music","Music Education","Music","Teacher","2026-08-11","2026-10-20",11,77,"Closed / Filled",0,0,0,0,0,0
+"Billings - Billings Christian School",,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-20",11,77,"Closed / Filled",1,0,0,0,0,0
+"Billings Public Schools",3003870,"Adaptive Music Specialist (Elementary)","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,1,0,0,0
 "Billings Public Schools",3003870,"Certified Nursing Assistant (CNA) Instructor","Health Science","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",1,0,0,0,0,0
 "Billings Public Schools",3003870,"Cheyenne Language Teacher (Middle School/High School)","Language Education","Language","Teacher","2026-09-15","2026-09-22",2,14,"Closed / Filled",0,0,0,0,0,0
 "Billings Public Schools",3003870,"EMPOWER (Family Consumer Science) Teacher LTA","Science Education","Science","Teacher","2026-09-22","2026-09-29",2,14,"Closed / Filled",1,0,0,0,0,0
-"Billings Public Schools",3003870,"Elementary Teacher Long-Term Assignments (K-5) (2026-2027 School Year)","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,1,0,0,0
-"Billings Public Schools",3003870,"Elementary Teachers and Long-Term Assignments (K-5) (2026-2027 School Year)","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",5,26,"Closed / Filled",0,0,1,0,0,0
+"Billings Public Schools",3003870,"Elementary Teacher Long-Term Assignments (K-5) (2026-2027 School Year)","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,1,0,0,0
+"Billings Public Schools",3003870,"Elementary Teachers and Long-Term Assignments (K-5) (2026-2027 School Year)","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,1,0,0,0
 "Billings Public Schools",3003870,"English Teacher LTA","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,0,1,0,0
-"Billings Public Schools",3003870,"Family Consumer Science Teacher","Science Education","Science","Teacher","2026-08-06","2026-08-07",2,8,"Closed / Filled",1,0,0,0,0,0
+"Billings Public Schools",3003870,"Family Consumer Science Teacher","Science Education","Science","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",1,0,0,0,0,0
 "Billings Public Schools",3003870,"Gifted and Talented/QUEST Teacher (K-8)","Gifted and Talented","Gifted and Talented","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,0,0,0,0,0
-"Billings Public Schools",3003870,"JROTC Aerospace Science Instructor","Science Education","Science","Teacher","2026-08-11","2026-10-06",10,63,"Closed / Filled",1,0,0,0,0,0
-"Billings Public Schools",3003870,"JROTC Air Force Instructor","CTE Teacher","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-07",2,8,"Closed / Filled",0,0,0,0,0,0
+"Billings Public Schools",3003870,"JROTC Aerospace Science Instructor","Science Education","Science","Teacher","2026-08-11","2026-10-06",9,63,"Closed / Filled",1,0,0,0,0,0
+"Billings Public Schools",3003870,"JROTC Air Force Instructor","CTE Teacher","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",0,0,0,0,0,0
 "Billings Public Schools",3003870,"JROTC Senior Aerospace Science Instructor","Science Education","Science","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",1,0,0,0,0,0
-"Billings Public Schools",3003870,"Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-09-29",11,61,"Closed / Filled",1,0,0,0,0,0
-"Billings Public Schools",3003870,"Math Teacher LTA","Mathematics Education","Math","Teacher","2026-08-06","2026-08-18",4,19,"Closed / Filled",1,0,0,0,0,0
+"Billings Public Schools",3003870,"Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",1,0,0,0,0,0
+"Billings Public Schools",3003870,"Math Teacher LTA","Mathematics Education","Math","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",1,0,0,0,0,0
 "Billings Public Schools",3003870,"Physical Education/Health Enhancement Teacher","Physical Education","Physical Education","Teacher","2026-09-15","2026-10-27",6,49,"Still Active",0,0,0,0,0,0
 "Billings Public Schools",3003870,"Social Studies Teacher","Social Studies Education","Secondary Social Studies","Teacher","2026-10-13","2026-10-20",2,14,"Closed / Filled",0,0,0,1,0,0
-"Billings Public Schools",3003870,"Social Studies Teacher (LTA)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,1,0,0
-"Billings Public Schools",3003870,"Special Education Teacher K-12 (26/27)","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Billings Public Schools",3003870,"Special Education Teacher LTA","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Billings Public Schools",3003870,"Technical Education Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Billings-SD3",3003870,"Library","Library Media","Library Media","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,0,0,0,0,0
-"Boulder",3004380,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",1,0,0,0,0,0
-"Box Elder",3004440,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,1,0,0
-"Box Elder",3004440,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
+"Billings Public Schools",3003870,"Social Studies Teacher (LTA)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,1,0,0
+"Billings Public Schools",3003870,"Special Education Teacher K-12 (26/27)","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Billings Public Schools",3003870,"Special Education Teacher LTA","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Billings Public Schools",3003870,"Technical Education Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Billings-SD3",3003870,"Library","Library Media","Library Media","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Billings-SD3",3003870,"Music","Music Education","Music","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Bloomfield",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,1,0,0,0
+"Boulder",3004380,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-22","2026-10-20",5,35,"Closed / Filled",0,0,1,0,0,0
+"Boulder",3004380,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
+"Box Elder",3004440,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Box Elder",3004440,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Box Elder",3004440,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Bozeman",3004560,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
 "Bozeman",3004560,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,0,1,0,0
-"Bozeman",3004560,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-22",8,49,"Closed / Filled",1,0,0,0,0,0
+"Bozeman",3004560,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-22",7,49,"Closed / Filled",1,0,0,0,0,0
+"Bozeman",3004560,"Music","Music Education","Music","Teacher","2026-09-07","2026-10-27",8,57,"Still Active",0,0,0,0,0,0
+"Bozeman",3004560,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Bozeman Area",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-01","2026-09-22",4,28,"Closed / Filled",0,0,1,0,0,0
 "Bozeman Area",,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,0,0,1,0,0
-"Broadus",3000006,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-25",5,26,"Closed / Filled",0,0,0,0,0,0
+"Broadus",3000006,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",1,0,0,0,0,0
+"Broadus",3000006,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,1,0,0,0
+"Broadus",3000006,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
 "Broadus Public Schools",3000006,"JH/HS SPED Teacher","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
-"Broadview",3004890,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Browning",3005140,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Browning Public Schools",3005140,"7th-Grade PE/Health Teacher","Physical Education","Physical Education","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",0,0,0,0,0,0
-"Browning Public Schools",3005140,"English Language Arts (ELA)/Reading Teacher; 26-27 SY","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",0,0,0,1,0,0
+"Broadview",3004890,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Broadview",3004890,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Broadview",3004890,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Browning",3005140,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Browning",3005140,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Browning",3005140,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Browning",3005140,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Browning Public Schools",3005140,"7th-Grade PE/Health Teacher","Physical Education","Physical Education","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,0,0,0,0,0
+"Browning Public Schools",3005140,"English Language Arts (ELA)/Reading Teacher; 26-27 SY","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,0,0,1,0,0
 "Browning Public Schools",3005140,"Family Consumer Science Teacher - BHS","Science Education","Science","Teacher","2026-08-18","2026-08-25",2,14,"Closed / Filled",1,0,0,0,0,0
-"Browning Public Schools",3005140,"Middle School Wood Shop Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,0,0,0
-"Browning Public Schools",3005140,"Special Education Teachers; K-12","Special Education - General","Special Education - General","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",0,1,0,0,0,0
-"Browning, MT",3005140,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,1,0,0
-"Busby, Mt.",,"Mathematics","Mathematics Education","Math","Teacher","2026-09-07","2026-10-27",9,57,"Still Active",1,0,0,0,0,0
-"Butte School District 1",3005280,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-09-07","2026-10-06",6,36,"Closed / Filled",0,0,1,0,0,0
-"Butte School District 1",3005280,"Industrial Tech Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-07","2026-10-27",9,57,"Still Active",0,0,0,0,0,0
-"Butte School District 1",3005280,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-09-07","2026-10-27",9,57,"Still Active",0,1,0,0,0,0
-"Canyon Creek and Wolf Creek",3005460,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
+"Browning Public Schools",3005140,"Middle School Wood Shop Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Browning Public Schools",3005140,"Special Education Teachers; K-12","Special Education - General","Special Education - General","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,1,0,0,0,0
+"Brusett",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,0,1,0,0,0
+"Busby",,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Busby",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Busby",,"History","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Busby",,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Busby",,"Mathematics","Mathematics Education","Math","Teacher","2026-09-07","2026-10-27",8,57,"Still Active",1,0,0,0,0,0
+"Busby",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Butte",3005280,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
+"Butte School District 1",3005280,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-09-07","2026-10-06",5,36,"Closed / Filled",0,0,1,0,0,0
+"Butte School District 1",3005280,"Industrial Tech Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-07","2026-10-27",8,57,"Still Active",0,0,0,0,0,0
+"Butte School District 1",3005280,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-09-07","2026-10-27",8,57,"Still Active",0,1,0,0,0,0
+"Canyon Creek (Helena)",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-18","2026-08-18",1,7,"Closed / Filled",0,0,1,0,0,0
+"Canyon Creek and Wolf Creek",3005460,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Cardwell",3005550,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
 "Cardwell Elementary School",3005550,"1st and 2nd Grade Classroom Teacher (in January)","Elementary Education","Elementary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,1,0,0,0
-"Cascade",3005880,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Cascade",3005880,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Cascade Public Schools",3005880,"HS Math Teacher","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Cascade Public Schools",3005880,"High School Science & Robotics Teacher","Science Education","Science","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Cascade Public Schools",3005880,"JH/HS Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,1,0,0,0,0
+"Cascade",3005880,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Cascade",3005880,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Cascade",3005880,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Cascade Public Schools",3005880,"HS Math Teacher","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Cascade Public Schools",3005880,"High School Science & Robotics Teacher","Science Education","Science","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Cascade Public Schools",3005880,"JH/HS Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,1,0,0,0,0
 "Cayuse Prairie School District #10",3005990,"7th & 8th Grade Science Teacher with 1 Period of Social Studies","Science Education","Science","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",1,0,0,0,0,0
-"Centerville Public Schools",3025130,"Shop/Vo-Ag Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-09-08",3,14,"Closed / Filled",0,0,0,0,0,0
-"Chester Montana",3000098,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Chinook",3006260,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-15",9,47,"Closed / Filled",0,0,0,1,0,0
-"Chinook Public Schools",3006260,"Grade 6-8 English/Language Arts Teacher","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,1,0,0,0
-"Choteau",3006320,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
-"Colstrip Public Schools",3007050,"Elementary (6-8) Title 1 Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,1,0,0,0
-"Colstrip Public Schools",3007050,"Elementary Education Teacher K-8","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,1,0,0,0
-"Colstrip Public Schools",3007050,"High School English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,1,0,0
+"Centerville Public Schools",3025130,"Shop/Vo-Ag Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-09-08",2,14,"Closed / Filled",0,0,0,0,0,0
+"Charlo",3006112,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,0,1,0,0,0
+"Charlo",3006112,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,1,0,0
+"Chester",3000098,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Chester",3000098,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Chinook",3006260,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,0,1,0,0
+"Chinook Public Schools",3006260,"Grade 6-8 English/Language Arts Teacher","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,1,0,0,0
+"Choteau",3006320,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",1,0,0,0,0,0
+"Choteau",3006320,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Choteau School District",3006320,"Elementary Education","Elementary Education","Elementary","Teacher","2026-09-01","2026-09-29",5,35,"Closed / Filled",0,0,1,0,0,0
+"Circle",3006790,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,1,0,0,0
+"Circle",3006790,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
+"Clancy",3006840,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Clyde Park",,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Clyde Park",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Colstrip",3007050,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Colstrip",3007050,"World Languages","Language Education","Language","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Colstrip Public Schools",3007050,"Elementary (6-8) Title 1 Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Colstrip Public Schools",3007050,"Elementary Education Teacher K-8","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Colstrip Public Schools",3007050,"High School English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,1,0,0
 "Colstrip Public Schools",3007050,"K-8 Teacher","Uncategorized","Other","Teacher","2026-10-06","2026-10-27",4,28,"Still Active",0,0,0,0,0,0
-"Colstrip Public Schools",3007050,"Spanish Education Teacher / Foreign Language Teacher Grades 6-12","Language Education","Language","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Colstrip Public Schools",3007050,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,1,0,0,0,0
-"Colstrip Public Schools",3007050,"Title I Reading / Math Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,1,0,0
+"Colstrip Public Schools",3007050,"Spanish Education Teacher / Foreign Language Teacher Grades 6-12","Language Education","Language","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Colstrip Public Schools",3007050,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,1,0,0,0,0
+"Colstrip Public Schools",3007050,"Title I Reading / Math Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,1,0,0
 "Columbia Falls",3007110,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",1,0,0,0,0,0
 "Columbia Falls",3007110,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",1,0,0,0,0,0
-"Corvallis School District #1",3007410,"Adult Ed - Financial Literacy Instructor","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Corvallis School District #1",3007410,"Adult Ed - Pickleball Instructor","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
-"Corvallis School District #1",3007410,"Adult Ed - Small Business Instructor","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Corvallis School District #1",3007410,"Adult Ed - Yoga Instructor","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
-"Corvallis School District #1",3007410,"Middle School 5/6 SPED Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-09-15",5,28,"Closed / Filled",0,1,0,0,0,0
-"Corvallis School District #1",3007410,"Middle School Title I Teacher - .5 FTE 1 year only","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,1,0,0
+"Columbia Falls",3007110,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",0,1,0,0,0,0
+"Columbia Falls",3007110,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,1,0,0,0,0
+"Condon",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Condon",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,1,0,0,0,0
+"Conrad",3007330,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Conrad",3007330,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Corvallis",3007410,"Reading","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Corvallis",3007410,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Corvallis School District #1",3007410,"Adult Ed - Financial Literacy Instructor","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Corvallis School District #1",3007410,"Adult Ed - Pickleball Instructor","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Corvallis School District #1",3007410,"Adult Ed - Small Business Instructor","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Corvallis School District #1",3007410,"Adult Ed - Yoga Instructor","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Corvallis School District #1",3007410,"Middle School 5/6 SPED Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-09-15",4,28,"Closed / Filled",0,1,0,0,0,0
+"Corvallis School District #1",3007410,"Middle School Title I Teacher - .5 FTE 1 year only","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,1,0,0
 "Corvallis School District #1",3007410,"RISE Charter School Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-10-13","2026-10-27",3,21,"Still Active",0,1,0,0,0,0
-"Corvallis School District #1",3007410,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,1,0,0,0,0
-"Deer Lodge School District #1",3008670,"Elementary PE Teacher with a period of Intervention","Elementary Education","Elementary","Teacher","2026-09-01","2026-09-15",4,21,"Closed / Filled",0,0,1,0,0,0
-"Deer Lodge School District #1",3008670,"Special Education Teacher 5th/6th grades","Special Education - General","Special Education - General","Teacher","2026-09-01","2026-09-15",4,21,"Closed / Filled",0,1,0,0,0,0
-"Drummond",3009180,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Drummond",3009180,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Drummond Public Schools",3009180,"Family Consumer Science","Science Education","Science","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",1,0,0,0,0,0
+"Corvallis School District #1",3007410,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,1,0,0,0,0
+"Custer",3008130,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Custer",3008130,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Custer",3008130,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Custer",3008130,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Custer Public Schools",3008130,"Music Teaching Position","Music Education","Music","Teacher","2026-08-25","2026-10-27",9,70,"Still Active",0,0,0,0,0,0
+"Custer Public Schools",3008130,"PE Teaching Position","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",9,70,"Still Active",0,0,0,0,0,0
+"Custer Public Schools",3008130,"Vo-Ag Teaching Position","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",9,70,"Still Active",0,0,0,0,0,0
+"Cut Bank",3000003,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Cut Bank",3000003,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Darby",3008280,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Deer Lodge",3008670,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,0,0,0,0,0
+"Deer Lodge",3008670,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Deer Lodge School District #1",3008670,"Elementary PE Teacher with a period of Intervention","Elementary Education","Elementary","Teacher","2026-09-01","2026-09-15",3,21,"Closed / Filled",0,0,1,0,0,0
+"Deer Lodge School District #1",3008670,"Special Education Teacher 5th/6th grades","Special Education - General","Special Education - General","Teacher","2026-09-01","2026-09-15",3,21,"Closed / Filled",0,1,0,0,0,0
+"Dodson",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,1,0,0,0
+"Drummond",3009180,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Drummond",3009180,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Drummond",3009180,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Drummond Public Schools",3009180,"Elementary Teaching Position","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,1,0,0,0
+"Drummond Public Schools",3009180,"Family Consumer Science","Science Education","Science","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",1,0,0,0,0,0
+"Drummond Public Schools",3009180,"Half-Time K-12 Librarian","Library Media","Library Media","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Dutton",3000102,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
 "East Glacier Park Grade School",3009510,"Licensed Teachers","Uncategorized","Other","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"East Helena",3000655,"Earth Science","Science Education","Science","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
+"East Helena",3000655,"Earth Science","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"East Helena",3000655,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-08-25",3,21,"Closed / Filled",0,0,1,0,0,0
 "East Helena",3000655,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-08-25",3,21,"Closed / Filled",1,0,0,0,0,0
-"East Helena Public Schools",3000655,"6-12 Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-08-25",5,26,"Closed / Filled",1,0,0,0,0,0
-"East Helena Public Schools",3000655,"Drivers Education Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-13",13,75,"Closed / Filled",0,0,0,0,0,0
-"East Helena Public Schools",3000655,"Foreign Language Teacher","Language Education","Language","Teacher","2026-08-06","2026-09-15",9,47,"Closed / Filled",0,0,0,0,0,0
-"East Helena Public Schools",3000655,"Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-09-15",9,47,"Closed / Filled",1,0,0,0,0,0
+"East Helena",3000655,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",0,1,0,0,0,0
+"East Helena",3000655,"World Languages","Language Education","Language","Teacher","2026-08-11","2026-09-15",6,42,"Closed / Filled",0,0,0,0,0,0
+"East Helena Public Schools",3000655,"6-12 Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",1,0,0,0,0,0
+"East Helena Public Schools",3000655,"Drivers Education Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,0,0,0,0
+"East Helena Public Schools",3000655,"Foreign Language Teacher","Language Education","Language","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,0,0,0,0
+"East Helena Public Schools",3000655,"Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",1,0,0,0,0,0
 "East Helena Public Schools",3000655,"Middle School Science Teacher for the Remainder of the 2026-2027 School Year","Science Education","Science","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",1,0,0,0,0,0
-"East Helena Public Schools",3000655,"Middle School Teacher-Intervention Specialist","Uncategorized","Other","Teacher","2026-08-06","2026-08-07",2,8,"Closed / Filled",0,0,0,0,0,0
-"East Helena Public Schools",3000655,"Science Teacher","Science Education","Science","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Ekalaka Public Schools",3009670,"Agricultural teacher for the 2026-2027","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
-"Ekalaka Public Schools",3009670,"Elementary Teacher for 2026-2027 Year","Elementary Education","Elementary","Teacher","2026-08-25","2026-09-22",6,35,"Closed / Filled",0,0,1,0,0,0
-"FAIRVIEW",3010210,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",14,89,"Still Active",0,0,0,0,0,0
-"Fairview",3010210,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-20",13,82,"Closed / Filled",1,0,0,0,0,0
-"Fairview",3010210,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-22",9,54,"Closed / Filled",1,0,0,0,0,0
+"East Helena Public Schools",3000655,"Middle School Teacher-Intervention Specialist","Uncategorized","Other","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",0,0,0,0,0,0
+"East Helena Public Schools",3000655,"Science Teacher","Science Education","Science","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Ekalaka",3009670,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Ekalaka Public Schools",3009670,"Agricultural teacher for the 2026-2027","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Ekalaka Public Schools",3009670,"Elementary Teacher for 2026-2027 Year","Elementary Education","Elementary","Teacher","2026-08-25","2026-09-22",5,35,"Closed / Filled",0,0,1,0,0,0
+"Fairfield",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Fairview",3010210,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Fairview",3010210,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,1,0,0,0
+"Fairview",3010210,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",1,0,0,0,0,0
+"Fairview",3010210,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",1,0,0,0,0,0
 "Fairview Public Schools",3010210,"Preschool Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-08-11",2,11,"Closed / Filled",0,0,0,0,0,0
 "Fairview Public Schools",3010210,"Toddler Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-08-11",2,11,"Closed / Filled",0,0,0,0,0,0
-"Forsyth",3011160,"Computer Science","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
+"Forsyth",3011160,"Computer Science","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Fortine",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,1,0,0,0
+"Frazer",3011420,"CTE – Industrial Technology Education","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,0,0,0,0
+"Frazer",3011420,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,0,0,0,0,0
+"Frazer",3011420,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Frazer Public Schools",3011420,"Business Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",1,0,0,0,0,0
 "Frazer Public Schools",3011420,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,1,0,0,0
 "Frazer Public Schools",3011420,"Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",1,0,0,0,0,0
+"Frazer Public Schools",3011420,"Industrial Arts","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
 "Frazer Public Schools",3011420,"Junior High Teachers","Uncategorized","Other","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
+"Frazer Public Schools",3011420,"K - 12 Librarian","Library Media","Library Media","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
 "Frazer Public Schools",3011420,"K - 12 Music Teacher","Music Education","Music","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
 "Frazer Public Schools",3011420,"K - 12 Physical Education Teacher","Physical Education","Physical Education","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"Fromberg",3011650,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",0,0,0,0,0,0
-"Fromberg",3011650,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",0,0,0,1,0,0
-"GREAT FALLS",3013040,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"GREAT FALLS",3013040,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Gallatin Gateway",3011790,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Gardiner",3011820,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Gardiner Public Schools",3011820,"Intervention Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,1,0,0
-"Gardiner Public Schools",3011820,"JH/HS Family & Consumer Science Teacher","Science Education","Science","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",1,0,0,0,0,0
-"Gardiner Public Schools",3011820,"K-8 Elementary Teacher","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,1,0,0,0
-"Geyser",3012300,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,1,0,0
-"Geyser Public Schools",3012300,"Industrial Arts/Agriculture Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,0,0,0
+"Frazer Public Schools",3011420,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
+"Frazer Public Schools",3011420,"World Languages: Nakoda & Other","Language Education","Language","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
+"Frenchtown",3011520,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,0,0,0,0
+"Frenchtown",3011520,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,1,0,0,0
+"Frenchtown",3011520,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,0,0,0,0
+"Fromberg",3011650,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
+"Fromberg",3011650,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,1,0,0,0
+"Fromberg",3011650,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,1,0,0
+"Fromberg",3011650,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,0,0,0
+"Gallatin Gateway",3011790,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Gardiner",3011820,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Gardiner",3011820,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Gardiner",3011820,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Gardiner Public Schools",3011820,"Intervention Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,1,0,0
+"Gardiner Public Schools",3011820,"JH/HS Family & Consumer Science Teacher","Science Education","Science","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",1,0,0,0,0,0
+"Gardiner Public Schools",3011820,"K-8 Elementary Teacher","Elementary Education","Elementary","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,1,0,0,0
+"Geraldine",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,1,0,0,0
+"Geraldine",,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Geyser",3012300,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Geyser",3012300,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,0,0,0,0
+"Geyser",3012300,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Geyser Public Schools",3012300,"Industrial Arts/Agriculture Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
 "Glasgow School District 1-A",3012420,"2027-28 Family Consumer Science / Agriculture Teacher","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,0,0,0,0
 "Glasgow School District 1-A",3012420,"2027-28 Science Teacher (Two Positions)","Science Education","Science","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",1,0,0,0,0,0
-"Glendive Public Schools",3012510,"High School Drivers Education Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Glendive Public Schools",3012510,"High School Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,1,0,0,0,0
-"Glendive Public Schools",3012510,"Middle School Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,1,0,0,0,0
-"Great Falls",3013040,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Broadfield Science Teacher This position is oyo","Science Education","Science","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",1,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Elementary Art Teacher","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,1,0,0,0
-"Great Falls Public Schools",3013040,"Elementary General Music Teacher oyo","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,1,0,0,0
-"Great Falls Public Schools",3013040,"Elementary Instrumental Music Teacher - (Strings experience preferred)","Elementary Education","Elementary","Teacher","2026-08-18","2026-09-29",8,49,"Closed / Filled",0,0,1,0,0,0
-"Great Falls Public Schools",3013040,"Elementary Instrumental Music Teacher - Strings","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,1,0,0,0
+"Glasgow School District 1-A",3012420,"Elementary Special Education","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,1,0,0,0,0
+"Glendive",3012510,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,1,0,0,0
+"Glendive",3012510,"Music","Music Education","Music","Teacher","2026-08-06","2026-08-06",1,7,"Closed / Filled",0,0,0,0,0,0
+"Glendive",3012510,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-06",9,68,"Closed / Filled",0,0,0,0,0,0
+"Glendive",3012510,"Psychology","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Glendive",3012510,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Glendive Public Schools",3012510,"High School Drivers Education Teacher","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Glendive Public Schools",3012510,"High School Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,1,0,0,0,0
+"Glendive Public Schools",3012510,"Middle School Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,1,0,0,0,0
+"Great Falls",3013040,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Great Falls",3013040,"Music","Music Education","Music","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Great Falls",3013040,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Broadfield Science Teacher This position is oyo","Science Education","Science","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Elementary Art Teacher","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,1,0,0,0
+"Great Falls Public Schools",3013040,"Elementary General Music Teacher oyo","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,1,0,0,0
+"Great Falls Public Schools",3013040,"Elementary Instrumental Music Teacher - (Strings experience preferred)","Elementary Education","Elementary","Teacher","2026-08-18","2026-09-29",7,49,"Closed / Filled",0,0,1,0,0,0
+"Great Falls Public Schools",3013040,"Elementary Instrumental Music Teacher - Strings","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,1,0,0,0
 "Great Falls Public Schools",3013040,"Elementary Instrumental Music Teacher -oyo","Elementary Education","Elementary","Teacher","2026-10-06","2026-10-27",4,28,"Still Active",0,0,1,0,0,0
-"Great Falls Public Schools",3013040,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,1,0,0,0
-"Great Falls Public Schools",3013040,"Health Enhancement Teacher Elementary MS/WH","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-15",9,47,"Closed / Filled",0,0,1,0,0,0
-"Great Falls Public Schools",3013040,"Health Science Instructor for Healthcare Trainings","Health Science","CTE - Business & Family Sciences","Teacher","2026-09-07","2026-09-22",4,22,"Closed / Filled",1,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Math Teacher oyo CMR","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Middle School Band Teacher","Music Education","Music","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Science Teacher - EMS","Science Education","Science","Teacher","2026-08-06","2026-08-07",2,8,"Closed / Filled",1,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Secondary Teacher 7-8","Uncategorized","Other","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Secondary Teacher 9-12","Uncategorized","Other","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Great Falls Public Schools",3013040,"Special Education Teacher - Elementary","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Great Falls Public Schools",3013040,"Special Education Teacher on Special Assignment, 7-12","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,1,0,0,0,0
-"Great Falls Public Schools",3013040,"Special Education Teacher on Special Assignment, PK-6","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,1,0,0,0,0
-"Great Falls Public Schools",3013040,"Special Education Teacher – High School","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Great Falls Public Schools",3013040,"Special Education Teacher – Middle School","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
+"Great Falls Public Schools",3013040,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Great Falls Public Schools",3013040,"Health Enhancement Teacher Elementary MS/WH","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,1,0,0,0
+"Great Falls Public Schools",3013040,"Health Science Instructor for Healthcare Trainings","Health Science","CTE - Business & Family Sciences","Teacher","2026-09-07","2026-09-22",3,22,"Closed / Filled",1,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Math Teacher oyo CMR","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Middle School Band Teacher","Music Education","Music","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Science Teacher - EMS","Science Education","Science","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",1,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Secondary Teacher 7-8","Uncategorized","Other","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Secondary Teacher 9-12","Uncategorized","Other","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Great Falls Public Schools",3013040,"Special Education Teacher - Elementary","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Great Falls Public Schools",3013040,"Special Education Teacher on Special Assignment, 7-12","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,1,0,0,0,0
+"Great Falls Public Schools",3013040,"Special Education Teacher on Special Assignment, PK-6","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,1,0,0,0,0
+"Great Falls Public Schools",3013040,"Special Education Teacher – High School","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Great Falls Public Schools",3013040,"Special Education Teacher – Middle School","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Hamilton",3013260,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-20","2026-10-27",2,14,"Still Active",0,1,0,0,0,0
 "Hamilton School District 3",3013260,"Adult Education Instructor","Uncategorized","Other","Teacher","2026-10-13","2026-10-27",3,21,"Still Active",0,0,0,0,0,0
 "Hamilton School District 3",3013260,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-10-20","2026-10-27",2,14,"Still Active",0,1,0,0,0,0
 "Hardin",3013310,"Computer Science","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",1,0,0,0,0,0
+"Hardin",3013310,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,1,0,0,0
 "Hardin",3013310,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,0,1,0,0
+"Hardin",3013310,"Music","Music Education","Music","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,0,0,0,0
 "Hardin Public Schools",3013310,"Elementary Teacher - District Wide  SY26-27","Elementary Education","Elementary","Teacher","2026-08-11","2026-08-25",3,21,"Closed / Filled",0,0,1,0,0,0
-"Hardin Public Schools",3013310,"Special Education Teacher-District Wide SY26-27","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",5,26,"Closed / Filled",0,1,0,0,0,0
-"Harlem",3013395,"Mathematics","Mathematics Education","Math","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",1,0,0,0,0,0
+"Hardin Public Schools",3013310,"Special Education Teacher-District Wide SY26-27","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,1,0,0,0,0
+"Harlem",3013395,"Mathematics","Mathematics Education","Math","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",1,0,0,0,0,0
 "Harlem Public Schools",3013395,"Title I Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,1,0,0
-"Harrison",3013530,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",14,89,"Still Active",1,0,0,0,0,0
-"Havre",3013560,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-09-22",8,49,"Closed / Filled",0,0,0,1,0,0
-"Havre",3013560,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-22",8,49,"Closed / Filled",1,0,0,0,0,0
-"Havre Public Schools",3013560,"Elementary Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-20",14,82,"Closed / Filled",0,1,0,0,0,0
-"Havre Public Schools",3013560,"High School Assistant Band Director","Music Education","Music","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
-"Havre Public Schools",3013560,"High School English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,0,1,0,0
-"Havre Public Schools",3013560,"High School Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",1,0,0,0,0,0
-"Havre Public Schools",3013560,"Middle School English Language Arts Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,0,1,0,0
-"Havre Public Schools",3013560,"Middle School Teacher","Uncategorized","Other","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,0,0,0,0
-"Hays",3013660,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
+"Harlowton District",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,1,0,0,0
+"Harrison",3013530,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,1,0,0,0
+"Harrison",3013530,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",12,89,"Still Active",1,0,0,0,0,0
+"Havre",3013560,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
+"Havre",3013560,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-09-22",7,49,"Closed / Filled",0,0,0,1,0,0
+"Havre",3013560,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-22",7,49,"Closed / Filled",1,0,0,0,0,0
+"Havre",3013560,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Havre",3013560,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Havre Public Schools",3013560,"Elementary Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,1,0,0,0,0
+"Havre Public Schools",3013560,"High School Assistant Band Director","Music Education","Music","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Havre Public Schools",3013560,"High School English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,1,0,0
+"Havre Public Schools",3013560,"High School Math Teacher","Mathematics Education","Math","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",1,0,0,0,0,0
+"Havre Public Schools",3013560,"Middle School English Language Arts Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,1,0,0
+"Havre Public Schools",3013560,"Middle School Teacher","Uncategorized","Other","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
+"Hays",3013660,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Hays",3013660,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",1,0,0,0,0,0
 "Hays-Lodge Pole School District",3013660,"Consumer Science Teacher","Science Education","Science","Teacher","2026-10-20","2026-10-27",2,14,"Still Active",1,0,0,0,0,0
-"Hays-Lodge Pole School District",3013660,"JH/HS Art Teacher","Art Teacher","Art","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,0,0,0
+"Hays-Lodge Pole School District",3013660,"JH/HS Art Teacher","Art Teacher","Art","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
 "Hays-Lodge Pole School District",3013660,"Native Language Teacher","Language Education","Language","Teacher","2026-10-06","2026-10-27",4,28,"Still Active",0,0,0,0,0,0
-"Helena",3000005,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,0,0,1,0,0
-"Helena",3000005,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Helena Public Schools",3000005,"SACC Lead Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-06","2026-09-07",7,39,"Closed / Filled",0,0,0,0,0,0
-"Helena Public Schools",3000005,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Highwood",3014070,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",1,0,0,0,0,0
-"Hobson Public School",3014430,"Vo-Ag Teacher","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
-"Hot Springs",3014640,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-06",12,68,"Closed / Filled",0,0,0,0,0,0
-"Hot Springs",3014640,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-06",12,68,"Closed / Filled",0,0,0,0,0,0
-"Huntley Project School District",3014700,"K-6 Music Teacher","Music Education","Music","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,0,0,0
-"Hysham",3014760,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-15",9,47,"Closed / Filled",1,0,0,0,0,0
-"Hysham Public Schools",3014760,"Vo-Ag Teacher","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
+"Helena",3000005,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,1,0,0
+"Helena",3000005,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Helena",3000005,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Helena Public Schools",3000005,"SACC Lead Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-06","2026-09-07",6,39,"Closed / Filled",0,0,0,0,0,0
+"Helena Public Schools",3000005,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Highwood",3014070,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
+"Hobson",3014430,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Hobson Public School",3014430,"Elementary Education","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,1,0,0,0
+"Hobson Public School",3014430,"Physical Education","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Hobson Public School",3014430,"Vo-Ag Teacher","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Hot Springs",3014640,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",1,0,0,0,0,0
+"Hot Springs",3014640,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",1,0,0,0,0,0
+"Hot Springs",3014640,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,0,1,0,0,0
+"Hot Springs",3014640,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,0,0,0,0,0
+"Huntley Project School District",3014700,"K-6 Music Teacher","Music Education","Music","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Hysham",3014760,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",1,0,0,0,0,0
+"Hysham Public Schools",3014760,"Vo-Ag Teacher","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
 "Independent School",3014820,"SPECIAL EDUCATION TEACHER","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",0,1,0,0,0,0
+"Independent School - Billings",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Itinerant",,"Psychology","Social Studies Education","Secondary Social Studies","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,0,1,0,0
 "Jefferson High School",3015120,"Teachers","Uncategorized","Other","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"Jordan",3015340,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
+"Joliet",3015200,"Music","Music Education","Music","Teacher","2026-08-18","2026-08-25",2,14,"Closed / Filled",0,0,0,0,0,0
+"Jordan",3015340,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Jordan",3015340,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",1,0,0,0,0,0
+"Jordan",3015340,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,1,0,0,0
+"Jordan",3015340,"Music","Music Education","Music","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
 "Jordan Public Schools",3015340,"K-12 Music Teacher","Music Education","Music","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"Kalispell",3015450,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,0,0,0,0,0
+"Judith Gap",3015360,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Kalispell",3015450,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Kalispell",3015450,"CTE – Industrial Technology Education","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,0,0,0,0
+"Kalispell",3015450,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",0,0,1,0,0,0
+"Kalispell",3015450,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-13","2026-10-27",3,21,"Still Active",0,0,1,0,0,0
 "Kalispell",3015450,"Library","Library Media","Library Media","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,0,0,0,0
+"Kalispell",3015450,"Music","Music Education","Music","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,0,0,0,0
+"Kalispell",3015450,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,0,0,0,0
 "Kalispell",3015450,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",1,0,0,0,0,0
-"Kalispell Public Schools",3015450,"LIBRARY MEDIA SPECIALIST","Library Media","Library Media","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
-"Kalispell Public Schools",3015450,"SE - TEACHER","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Kalispell Public Schools",3015450,"SE - TEACHER LS","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-06","2026-09-01",6,33,"Closed / Filled",0,1,0,0,0,0
-"Kalispell Public Schools",3015450,"TEACHER - FAMILY CONSUMER SCIENCE","Science Education","Science","Teacher","2026-08-18","2026-09-22",7,42,"Closed / Filled",1,0,0,0,0,0
-"Kalispell Public Schools",3015450,"TEACHER - PHYSICAL EDUCATION","Physical Education","Physical Education","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,0,0,0,0
-"Kalispell Public Schools",3015450,"TEACHER - SOCIAL STUDIES","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,0,1,0,0
-"Lame Deer",3016050,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",14,89,"Still Active",0,0,0,0,0,0
-"Lame Deer",3016050,"Mathematics","Mathematics Education","Math","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",1,0,0,0,0,0
-"Lame Deer Public Schools",3016050,"Copy Of Copy Of Middle School Classroom Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,1,0,0,0
-"Lame Deer Public Schools",3016050,"Copy Of Middle School Classroom Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,1,0,0,0
-"Lame Deer Public Schools",3016050,"Culture Teacher (K-6)","Language Education","Language","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Lame Deer Public Schools",3016050,"Elementary Curriculum Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,1,0,0,0
-"Lame Deer Public Schools",3016050,"English Teacher (7-12)","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,1,0,0
-"Lame Deer Public Schools",3016050,"HS Science Teacher (7-12)","Science Education","Science","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",1,0,0,0,0,0
-"Lame Deer Public Schools",3016050,"JH/HS Music Teacher","Music Education","Music","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Lame Deer Public Schools",3016050,"Jr. High Social Studies Teacher","Social Studies Education","Secondary Social Studies","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,1,0,0
-"Lame Deer Public Schools",3016050,"Mathematics Teacher (Grades 7-12)","Mathematics Education","Math","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",1,0,0,0,0,0
-"Lame Deer Public Schools",3016050,"Physical Education Teacher","Physical Education","Physical Education","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Lame Deer Public Schools",3016050,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,1,0,0,0,0
-"Lame Deer, MT",3016050,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-20",13,82,"Closed / Filled",1,0,0,0,0,0
-"Lame Deer, MT",3016050,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-20",13,82,"Closed / Filled",1,0,0,0,0,0
-"Laurel",3016200,"Mathematics","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Laurel Public Schools",3016200,"26-27 Special Education Teacher - ECS/Adult Transition/Homebound","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-18",4,19,"Closed / Filled",0,1,0,0,0,0
+"Kalispell",3015450,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Kalispell Public Schools",3015450,"LIBRARY MEDIA SPECIALIST","Library Media","Library Media","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Kalispell Public Schools",3015450,"SE - TEACHER","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Kalispell Public Schools",3015450,"SE - TEACHER LS","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-06","2026-09-01",5,33,"Closed / Filled",0,1,0,0,0,0
+"Kalispell Public Schools",3015450,"TEACHER - FAMILY CONSUMER SCIENCE","Science Education","Science","Teacher","2026-08-18","2026-09-22",6,42,"Closed / Filled",1,0,0,0,0,0
+"Kalispell Public Schools",3015450,"TEACHER - PHYSICAL EDUCATION","Physical Education","Physical Education","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
+"Kalispell Public Schools",3015450,"TEACHER - SOCIAL STUDIES","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,1,0,0
+"Lambert",3015990,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
+"Lambert",3015990,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,0,0,0,0
+"Lambert Public Schools",3015990,"Music K-12","Music Education","Music","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
+"Lame Deer",3016050,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Lame Deer",3016050,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
+"Lame Deer",3016050,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Lame Deer",3016050,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",1,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"Copy Of Copy Of Middle School Classroom Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Lame Deer Public Schools",3016050,"Copy Of Middle School Classroom Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Lame Deer Public Schools",3016050,"Culture Teacher (K-6)","Language Education","Language","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"Elementary Curriculum Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Lame Deer Public Schools",3016050,"Elementary Librarian (Grades K-6)","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Lame Deer Public Schools",3016050,"English Teacher (7-12)","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,1,0,0
+"Lame Deer Public Schools",3016050,"HS Science Teacher (7-12)","Science Education","Science","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",1,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"JH/HS Music Teacher","Music Education","Music","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"Jr. High Social Studies Teacher","Social Studies Education","Secondary Social Studies","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,1,0,0
+"Lame Deer Public Schools",3016050,"Librarian (Jr High/High School)","Library Media","Library Media","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"Mathematics Teacher (Grades 7-12)","Mathematics Education","Math","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",1,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"Physical Education Teacher","Physical Education","Physical Education","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,1,0,0,0,0
+"Laurel",3016200,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",0,0,1,0,0,0
+"Laurel",3016200,"Mathematics","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Laurel",3016200,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",0,1,0,0,0,0
+"Laurel Public Schools",3016200,"26-27 Special Education Teacher - ECS/Adult Transition/Homebound","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,1,0,0,0,0
 "Laurel Public Schools",3016200,"Early Childhood Services Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-09-15","2026-09-15",1,7,"Closed / Filled",0,1,0,0,0,0
-"Laurel Public Schools",3016200,"High School Math Teacher","Mathematics Education","Math","Teacher","2026-08-25","2026-09-08",4,21,"Closed / Filled",1,0,0,0,0,0
-"Laurel Public Schools",3016200,"Teacher for the Visually Impaired","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Libby",3016530,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Libby Public Schools",3016530,"2026-27 Central Charter School Teacher Grades 9-12","Uncategorized","Other","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",0,0,0,0,0,0
-"Libby Public Schools",3016530,"2026-27 Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",0,0,1,0,0,0
-"Libby Public Schools",3016530,"2026-27 Math Teacher","Mathematics Education","Math","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",1,0,0,0,0,0
+"Laurel Public Schools",3016200,"High School Math Teacher","Mathematics Education","Math","Teacher","2026-08-25","2026-09-08",3,21,"Closed / Filled",1,0,0,0,0,0
+"Laurel Public Schools",3016200,"Teacher for the Visually Impaired","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Lavina",3016290,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,0,1,0,0,0
+"Lewistown",3016490,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
+"Libby",3016530,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Libby",3016530,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Libby",3016530,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Libby Public Schools",3016530,"2026-27 Central Charter School Teacher Grades 9-12","Uncategorized","Other","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,0,0,0,0,0
+"Libby Public Schools",3016530,"2026-27 Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,0,1,0,0,0
+"Libby Public Schools",3016530,"2026-27 Math Teacher","Mathematics Education","Math","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",1,0,0,0,0,0
 "Libby Public Schools",3016530,"2026-27 Social Studies Teacher","Social Studies Education","Secondary Social Studies","Teacher","2026-08-18","2026-09-01",3,21,"Closed / Filled",0,0,0,1,0,0
-"Libby Public Schools",3016530,"2026-27 Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",0,1,0,0,0,0
-"Lima",3016710,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",0,0,0,1,0,0
-"Lima",3016710,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Livingston",3016880,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
+"Libby Public Schools",3016530,"2026-27 Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,1,0,0,0,0
+"Lima",3016710,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,1,0,0
+"Lima",3016710,"History","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,1,0,0
+"Lima",3016710,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Lima",3016710,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,0,0,0
+"Lima",3016710,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,1,0,0,0,0
+"Lincoln",3016810,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Lindsay",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",0,0,1,0,0,0
+"Livingston",3016880,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Livingston",3016880,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Livingston",3016880,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
 "Livingston Public Schools",3016880,"PHS Math Teacher","Mathematics Education","Math","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",1,0,0,0,0,0
-"Lockwood",3000656,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,0,0,1,0,0
-"Lockwood",3000656,"Library","Library Media","Library Media","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,0,0,0,0,0
-"Lockwood",3000656,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Lockwood Schools",3000656,"Business Education Teacher","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",1,0,0,0,0,0
-"Lockwood Schools",3000656,"High School Art Teacher","Art Teacher","Art","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
-"Lockwood Schools",3000656,"High School English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,1,0,0
-"Lockwood Schools",3000656,"Mathematics Teacher (Grades 9-12)","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Lockwood Schools",3000656,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Lodge Grass Public Schools",3017010,"Certified Special Ed. Teacher (Elementary)","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,1,0,0,0,0
-"Lodge Grass Public Schools",3017010,"Elementary Teacher k-6","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,0,1,0,0,0
-"Lodge Grass Public Schools",3017010,"Mathematics HS 7-12","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Lodge Grass, Montana",3017010,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-20",14,82,"Closed / Filled",1,0,0,0,0,0
-"Lolo School District 7",3017130,"Foreign Language Teacher (.33)","Language Education","Language","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,0,0,0
-"MELSTONE",3018240,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-01",6,33,"Closed / Filled",0,0,0,1,0,0
-"MISSOULA",3018570,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-22","2026-10-06",3,21,"Closed / Filled",0,0,0,1,0,0
-"MISSOULA",3018570,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-15",7,42,"Closed / Filled",1,0,0,0,0,0
-"Manhattan",3017610,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",1,0,0,0,0,0
-"Miles City MT",3018410,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Miles City Unified School District 1",3018410,"Business Teacher","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-10-06",8,49,"Closed / Filled",1,0,0,0,0,0
-"Miles City Unified School District 1",3018410,"Math Teacher","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Miles City Unified School District 1",3018410,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,1,0,0,0,0
-"Miles City, MT",3018410,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",8,89,"Still Active",1,0,0,0,0,0
-"Missoula",3018570,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",0,0,0,1,0,0
-"Missoula",3018570,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",13,84,"Still Active",1,0,0,0,0,0
-"Missoula",3018570,"Science (Broadfield)","Science Education","Science","Teacher","2026-09-01","2026-09-29",6,35,"Closed / Filled",1,0,0,0,0,0
-"Missoula County Public Schools",3018570,"Assistant Band Director - Percussion Coach - Sentinel High School","Music Education","Music","Teacher","2026-08-25","2026-09-08",4,21,"Closed / Filled",0,0,0,0,0,0
+"Lockwood",3000656,"Art","Art Teacher","Art","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Lockwood",3000656,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,1,0,0
+"Lockwood",3000656,"Library","Library Media","Library Media","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Lockwood",3000656,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Lockwood",3000656,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Lockwood Schools",3000656,"Business Education Teacher","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",1,0,0,0,0,0
+"Lockwood Schools",3000656,"High School Art Teacher","Art Teacher","Art","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Lockwood Schools",3000656,"High School English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,1,0,0
+"Lockwood Schools",3000656,"Mathematics Teacher (Grades 9-12)","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Lockwood Schools",3000656,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Lodge Grass",3017010,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Lodge Grass",3017010,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Lodge Grass",3017010,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Lodge Grass",3017010,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Lodge Grass",3017010,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",1,0,0,0,0,0
+"Lodge Grass",3017010,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Lodge Grass",3017010,"Reading","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-07",6,39,"Closed / Filled",0,0,0,1,0,0
+"Lodge Grass",3017010,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Lodge Grass",3017010,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,1,0,0,0,0
+"Lodge Grass Public Schools",3017010,"Agriculture Education HS 7-12","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Lodge Grass Public Schools",3017010,"Art HS 7-12","Art Teacher","Art","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Lodge Grass Public Schools",3017010,"Business Education HS 7-12","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Lodge Grass Public Schools",3017010,"Certified Reading Specialist","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,1,0,0
+"Lodge Grass Public Schools",3017010,"Certified Special Ed. Teacher (Elementary)","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Lodge Grass Public Schools",3017010,"Elementary Teacher k-6","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
+"Lodge Grass Public Schools",3017010,"Mathematics HS 7-12","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Lodge Grass Public Schools",3017010,"P.E. / HEALTH HS 7-12","Physical Education","Physical Education","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Lodge Grass Public Schools",3017010,"Social Studies HS 7-12","Social Studies Education","Secondary Social Studies","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,1,0,0
+"Lolo",3017130,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Lolo",3017130,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
+"Lolo School District 7",3017130,"Foreign Language Teacher (.33)","Language Education","Language","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Loring Colony",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,1,0,0,0
+"Luther",3017370,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-01",3,33,"Closed / Filled",0,0,1,0,0,0
+"Malta",3017580,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Malta",3017580,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Malta",3017580,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,1,0,0,0,0
+"Malta Public Schools",3017580,"Agricultural Education - FFA","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Malta Public Schools",3017580,"High School Social Studies","Social Studies Education","Secondary Social Studies","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,1,0,0
+"Malta Public Schools",3017580,"Music - Instrumental","Music Education","Music","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Malta Public Schools",3017580,"Music - Vocal","Music Education","Music","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Manhattan",3017610,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,1,0,0,0
+"Manhattan",3017610,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
+"Manhattan",3017610,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-15","2026-10-13",5,35,"Closed / Filled",0,1,0,0,0,0
+"Manhattan (Amsterdam)",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-18","2026-08-18",1,7,"Closed / Filled",0,0,1,0,0,0
+"Manhattan (Amsterdam)",,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Marion",3017700,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-15","2026-10-27",7,49,"Still Active",0,0,1,0,0,0
+"McLeod",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
+"Medicine Lake",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
+"Melstone",3018240,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-01",5,33,"Closed / Filled",0,0,0,1,0,0
+"Melville",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
+"Miles City",3018410,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,0,0,0
+"Miles City",3018410,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",1,0,0,0,0,0
+"Miles City",3018410,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Miles City",3018410,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Miles City",3018410,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",1,0,0,0,0,0
+"Miles City",3018410,"Mathematics","Mathematics Education","Math","Teacher","2026-10-13","2026-10-27",3,21,"Still Active",1,0,0,0,0,0
+"Miles City",3018410,"Physics","Science Education","Science","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Miles City Unified School District 1",3018410,"Business Teacher","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-10-06",7,49,"Closed / Filled",1,0,0,0,0,0
+"Miles City Unified School District 1",3018410,"Math Teacher","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Miles City Unified School District 1",3018410,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,1,0,0,0,0
+"Missoula",3018570,"CTE – Industrial Technology Education","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-11","2026-08-25",3,21,"Closed / Filled",0,0,0,0,0,0
+"Missoula",3018570,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-09-15",6,42,"Closed / Filled",0,0,1,0,0,0
+"Missoula",3018570,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-13","2026-10-27",3,21,"Still Active",0,0,1,0,0,0
+"Missoula",3018570,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,1,0,0
+"Missoula",3018570,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",1,0,0,0,0,0
+"Missoula",3018570,"Music","Music Education","Music","Teacher","2026-08-11","2026-09-29",8,56,"Closed / Filled",0,0,0,0,0,0
+"Missoula",3018570,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
+"Missoula",3018570,"Science (Broadfield)","Science Education","Science","Teacher","2026-09-01","2026-09-29",5,35,"Closed / Filled",1,0,0,0,0,0
+"Missoula",3018570,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-09-08",5,35,"Closed / Filled",0,1,0,0,0,0
+"Missoula County Public Schools",3018570,"Assistant Band Director - Percussion Coach - Sentinel High School","Music Education","Music","Teacher","2026-08-25","2026-09-08",3,21,"Closed / Filled",0,0,0,0,0,0
 "Missoula County Public Schools",3018570,"Assistant Band Director - Woodwind Coach - Sentinel High School","Music Education","Music","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",0,0,0,0,0,0
 "Missoula County Public Schools",3018570,"Grade 7 Teacher (Job Share)","Elementary Education","Elementary","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,1,0,0,0
 "Missoula County Public Schools",3018570,"Industrial Arts ~ Automotive Teacher (reposted)","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",0,0,0,0,0,0
-"Missoula County Public Schools",3018570,"Mathematics Teacher","Mathematics Education","Math","Teacher","2026-08-18","2026-09-15",6,35,"Closed / Filled",1,0,0,0,0,0
-"Missoula County Public Schools",3018570,"Music - Choir Teacher ~ 1 year only (reposted)","Music Education","Music","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
-"Missoula County Public Schools",3018570,"Sp Ed Extended Resource Teacher (K-2)","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,1,0,0,0,0
+"Missoula County Public Schools",3018570,"Mathematics Teacher","Mathematics Education","Math","Teacher","2026-08-18","2026-09-15",5,35,"Closed / Filled",1,0,0,0,0,0
+"Missoula County Public Schools",3018570,"Music - Choir Teacher ~ 1 year only (reposted)","Music Education","Music","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Missoula County Public Schools",3018570,"Sp Ed Extended Resource Teacher (K-2)","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,1,0,0,0,0
 "Missoula County Public Schools",3018570,"Sp Ed Resource Teacher (3-5)","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,1,0,0,0,0
 "Missoula County Public Schools",3018570,"Sp Ed Resource Teacher ~ 1 year only","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-18","2026-08-25",2,14,"Closed / Filled",0,1,0,0,0,0
 "Missoula County Public Schools",3018570,"Sp Ed Teacher Horizons Ages 18-22 ~ 1 year only (reposted)","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,1,0,0,0,0
-"Nashua",3019170,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-20",14,82,"Closed / Filled",0,0,0,0,0,0
+"Montana City",3018780,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-09-08",5,35,"Closed / Filled",0,1,0,0,0,0
+"Moore",3018870,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,1,0,0,0
+"Moore",3018870,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,0,0,0,0
+"Mosby",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Nashua",3019170,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,0,0,0,0
+"Nashua",3019170,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,0,0,0,0
+"Nashua",3019170,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,0,0,0,0
+"Nashua",3019170,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,1,0,0,0,0
+"Nashua Public Schools",3019170,"Music (full or part-time)","Music Education","Music","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
+"Nashua Public Schools",3019170,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
+"Northwest of Cut Bank",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,1,0,0,0
+"Opheim",3019740,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,0,0,0,0
+"Opheim",3019740,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,1,0,0,0,0
 "Opheim Public Schools",3019740,"Music Teacher","Music Education","Music","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"Philipsburg",3012840,"Traffic Education","Uncategorized","Other","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
+"Park City",3020040,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",0,0,0,0,0,0
+"Park City",3020040,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,0,0,0,0
+"Philipsburg",3012840,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,1,0,0,0
+"Philipsburg",3012840,"Traffic Education","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
 "Philipsburg School District",3012840,"High School Physical Education / Health Teacher / TCH00111","Physical Education","Physical Education","Teacher","2026-09-29","2026-10-06",2,14,"Closed / Filled",0,0,0,0,0,0
 "Philipsburg School District",3012840,"PES / PMS Morning Enrichment Teachers (2)","Uncategorized","Other","Teacher","2026-09-29","2026-10-06",2,14,"Closed / Filled",0,0,0,0,0,0
 "Philipsburg School District",3012840,"Preschool Teachers (Evening Events) - Early Childhood Learning Center","Early Childhood Education","Early Childhood","Teacher","2026-09-29","2026-10-06",2,14,"Closed / Filled",0,0,0,0,0,0
+"Philipsburg School District",3012840,"Special Education Maternity Leave (2) - PMS - (8/26/26-12/14/26)/TCH00532 - (11/2/26-3/15/27)/TCH00073","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-09-08",3,21,"Closed / Filled",0,1,0,0,0,0
 "Philipsburg School District",3012840,"Special Education Teacher (Anticipated) - Phillipsburg Elementary School/TCH00416","Special Education - General","Special Education - General","Teacher","2026-10-20","2026-10-20",1,7,"Closed / Filled",0,1,0,0,0,0
 "Philipsburg School District",3012840,"Special Education Teacher - Phillipsburg High School (Anticipated)/TCH00430","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
-"Philipsburg School District",3012840,"Special Education Teacher - Phillipsburg Middle School (Leave Replacement August - October 2026 / TCH00320","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-09-08",4,21,"Closed / Filled",0,1,0,0,0,0
+"Philipsburg School District",3012840,"Special Education Teacher - Phillipsburg Middle School (Leave Replacement August - October 2026 / TCH00320","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-09-08",3,21,"Closed / Filled",0,1,0,0,0,0
 "Philipsburg School District",3012840,"Special Education Teachers (2 positions) - High School / TCH00316 - TCH00271","Special Education - General","Special Education - General","Teacher","2026-09-29","2026-10-06",2,14,"Closed / Filled",0,1,0,0,0,0
-"Plentywood, MT",3020960,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,0,0,0,0,0
-"Plentywood, MT",3020960,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",0,0,0,1,0,0
-"Plentywood, MT",3020960,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",1,0,0,0,0,0
-"Plentywood, MT",3020960,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",1,0,0,0,0,0
-"Plevna School District #55",3021000,"7-12 Broadfield Science","Science Education","Science","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",1,0,0,0,0,0
-"Plevna School District #55",3021000,"Math","Mathematics Education","Math","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",1,0,0,0,0,0
-"Plevna, Montana",3021000,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Plevna, Montana",3021000,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Poplar",3021240,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",14,89,"Still Active",0,0,0,0,0,0
-"Poplar Public Schools",3021240,"Elementary Classroom Teacher K-4","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,1,0,0,0
-"Poplar Public Schools",3021240,"Elementary Music Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,1,0,0,0
-"Poplar Public Schools",3021240,"Social Studies Teacher (Grades 9-12)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,1,0,0
-"Poplar Public Schools",3021240,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,1,0,0,0,0
-"Poplar Public Schools",3021240,"Technology Education Teacher","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",1,0,0,0,0,0
-"Power",3021510,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-08-18",4,19,"Closed / Filled",0,0,0,0,0,0
+"Plentywood",3020960,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",1,0,0,0,0,0
+"Plentywood",3020960,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,1,0,0,0
+"Plentywood",3020960,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,1,0,0
+"Plentywood",3020960,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
+"Plentywood",3020960,"Music","Music Education","Music","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,0,0,0
+"Plentywood",3020960,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",1,0,0,0,0,0
+"Plevna",3021000,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Plevna",3021000,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Plevna",3021000,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,1,0,0
+"Plevna School District #55",3021000,"7-12 Broadfield Science","Science Education","Science","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",1,0,0,0,0,0
+"Plevna School District #55",3021000,"Math","Mathematics Education","Math","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",1,0,0,0,0,0
+"Poplar",3021240,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Poplar",3021240,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Poplar Public Schools",3021240,"Elementary Classroom Teacher K-4","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Poplar Public Schools",3021240,"Elementary Music Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Poplar Public Schools",3021240,"Social Studies Teacher (Grades 9-12)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,1,0,0
+"Poplar Public Schools",3021240,"Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,1,0,0,0,0
+"Poplar Public Schools",3021240,"Technology Education Teacher","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",1,0,0,0,0,0
+"Power",3021510,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,0,0,0,0
+"Pray/Emigrant",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,1,0,0,0
+"Pryor",3021720,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-15","2026-10-27",7,49,"Still Active",0,0,1,0,0,0
 "Pryor",3021720,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-15","2026-10-27",7,49,"Still Active",0,0,0,1,0,0
+"Pryor",3021720,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Ramsay",3021850,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,1,0,0,0
 "Rapelje School District",3021870,"Preschool Teacher","Early Childhood Education","Early Childhood","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
-"Rocky Boy",3022750,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",14,89,"Still Active",0,0,0,0,0,0
-"Rocky Boy Public Schools",3022750,"Copy Of Pre -K Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-09-22",9,53,"Closed / Filled",0,0,0,0,0,0
+"Reed Point",3022230,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,0,0,0
+"Reed Point",3022230,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",0,0,1,0,0,0
+"Richey",3022370,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",1,0,0,0,0,0
+"Richey",3022370,"Music","Music Education","Music","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
+"Richey",3022370,"Physical Ed","Physical Education","Physical Education","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
+"Richey",3022370,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,1,0,0,0,0
+"Richey",3022370,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
+"Rocky Boy",3022750,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Rocky Boy",3022750,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Rocky Boy",3022750,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,1,0,0,0,0
+"Rocky Boy Public Schools",3022750,"(1) K-8 1st Grade","Elementary Education","Elementary","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,1,0,0,0
+"Rocky Boy Public Schools",3022750,"Copy Of Pre -K Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-09-22",8,53,"Closed / Filled",0,0,0,0,0,0
 "Rocky Boy Public Schools",3022750,"Cree Enhancement Preschool Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-08-18",3,18,"Closed / Filled",0,0,0,0,0,0
 "Rocky Boy Public Schools",3022750,"Disabilities Educator","Special Education - General","Special Education - General","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,1,0,0,0,0
-"Rocky Boy Public Schools",3022750,"Early Head Start Educators","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
+"Rocky Boy Public Schools",3022750,"Early Head Start Educators","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
 "Rocky Boy Public Schools",3022750,"Early Head Start Educators (2)","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-08-18",3,18,"Closed / Filled",0,0,0,0,0,0
-"Rocky Boy Public Schools",3022750,"Elementary School Teacher - 5th Grade","Elementary Education","Elementary","Teacher","2026-08-07","2026-09-22",9,53,"Closed / Filled",0,0,1,0,0,0
-"Rocky Boy Public Schools",3022750,"Elementary School Teacher -4th Grade","Elementary Education","Elementary","Teacher","2026-08-07","2026-09-22",9,53,"Closed / Filled",0,0,1,0,0,0
+"Rocky Boy Public Schools",3022750,"Elementary School Teacher - 5th Grade","Elementary Education","Elementary","Teacher","2026-08-07","2026-09-22",8,53,"Closed / Filled",0,0,1,0,0,0
+"Rocky Boy Public Schools",3022750,"Elementary School Teacher -4th Grade","Elementary Education","Elementary","Teacher","2026-08-07","2026-09-22",8,53,"Closed / Filled",0,0,1,0,0,0
 "Rocky Boy Public Schools",3022750,"Head Start Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-08-18",3,18,"Closed / Filled",0,0,0,0,0,0
-"Rocky Boy Public Schools",3022750,"Rocky Boy School 7-12 Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",1,0,0,0,0,0
+"Rocky Boy Public Schools",3022750,"Rocky Boy School 7-12 Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",1,0,0,0,0,0
 "Rocky Boy Public Schools",3022750,"Rocky Boy School Cree Enhancement Program- Pre-School Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-07","2026-08-18",3,18,"Closed / Filled",0,0,0,0,0,0
-"Ronan",3022790,"Computer Science","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-09-15",8,47,"Closed / Filled",1,0,0,0,0,0
-"Ronan",3022790,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-15",8,47,"Closed / Filled",1,0,0,0,0,0
+"Ronan",3022790,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,0,0,0,0
+"Ronan",3022790,"Computer Science","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",1,0,0,0,0,0
+"Ronan",3022790,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,1,0,0,0
+"Ronan",3022790,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,0,0,0,0
+"Ronan",3022790,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,0,0,0,0,0
+"Ronan",3022790,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",1,0,0,0,0,0
+"Ronan",3022790,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,1,0,0,0,0
+"Ronan",3022790,"World Languages","Language Education","Language","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
 "Ronan Public Schools",3022790,"KWH Elementary Teacher ~ 2026-2027","Elementary Education","Elementary","Teacher","2026-08-07","2026-08-07",1,7,"Closed / Filled",0,0,1,0,0,0
 "Ronan Public Schools",3022790,"KWH Teacher ~ 2nd Grade ~ 2026-2027","Elementary Education","Elementary","Teacher","2026-08-18","2026-08-18",1,7,"Closed / Filled",0,0,1,0,0,0
 "Ronan Public Schools",3022790,"KWH Teacher ~ Physical Education ~ 2026-2027","Physical Education","Physical Education","Teacher","2026-08-07","2026-08-07",1,7,"Closed / Filled",0,0,0,0,0,0
 "Ronan Public Schools",3022790,"RHS Teacher ~ Science 2026-2027","Science Education","Science","Teacher","2026-08-07","2026-08-07",1,7,"Closed / Filled",1,0,0,0,0,0
 "Ronan Public Schools",3022790,"RHS Teacher ~ Vo/Ag 2026-2027","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-07","2026-08-18",3,18,"Closed / Filled",0,0,0,0,0,0
-"Ronan Public Schools",3022790,"RMS Teacher ~ Salish and/or Kootenai Language ~ 2026-27","Language Education","Language","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Ronan Public Schools",3022790,"RMS Teacher ~ Special Education ~ 2026-2027","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-06",11,67,"Closed / Filled",0,1,0,0,0,0
+"Ronan Public Schools",3022790,"RMS Teacher ~ Salish and/or Kootenai Language ~ 2026-27","Language Education","Language","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Ronan Public Schools",3022790,"RMS Teacher ~ Special Education ~ 2026-2027","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-06",10,67,"Closed / Filled",0,1,0,0,0,0
+"Rosebud",3022920,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
 "Rosebud",3022920,"Science (Broadfield)","Science Education","Science","Teacher","2026-10-06","2026-10-27",4,28,"Still Active",1,0,0,0,0,0
-"Roundup School District",3023040,"Elementary Education Teacher","Elementary Education","Elementary","Teacher","2026-09-01","2026-09-29",6,35,"Closed / Filled",0,0,1,0,0,0
-"Roy, Montana",3023160,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-08-18",4,19,"Closed / Filled",0,0,0,1,0,0
-"Rudyard/Gildford",3000096,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Scobey",3023670,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-25",5,26,"Closed / Filled",0,0,0,0,0,0
-"Scobey",3023670,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-08-25",5,26,"Closed / Filled",1,0,0,0,0,0
-"Scobey",3023670,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-08-25",5,26,"Closed / Filled",1,0,0,0,0,0
-"Scobey Schools",3023670,"7-12 FAMILY & CONSUMER SCIENCE TEACHER","Science Education","Science","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Scobey Schools",3023670,"7-12 MATH TEACHER","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",1,0,0,0,0,0
-"Scobey Schools",3023670,"ELEMENTARY TEACHER","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,1,0,0,0
-"Scobey Schools",3023670,"K-12 ART TEACHER","Art Teacher","Art","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
-"Scobey Schools",3023670,"K-12 MUSIC TEACHER","Music Education","Music","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
-"Scobey Schools",3023670,"K-6 SPECIAL EDUCATION TEACHER","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,1,0,0,0,0
+"Roundup",3023040,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,1,0,0,0
+"Roundup School District",3023040,"Elementary Education Teacher","Elementary Education","Elementary","Teacher","2026-09-01","2026-09-29",5,35,"Closed / Filled",0,0,1,0,0,0
+"Roy",3023160,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,1,0,0,0
+"Roy",3023160,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,0,1,0,0
+"Rudyard",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,1,0,0,0
+"Rudyard",,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Rudyard/Gildford",3000096,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Rudyard/Gildford",3000096,"CTE – Industrial Technology Education","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Rudyard/Gildford",3000096,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Rural Havre",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
+"Ryegate",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"SIdney",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,1,0,0,0,0
+"Saint Ignatius",,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Saint Ignatius- Salish Teacher",,"World Languages","Language Education","Language","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Sand Coulee",,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,0,0,0,0
+"Sand Coulee",,"CTE – Industrial Technology Education","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,0,0,0,0
+"Savage",3023520,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,0,1,0,0
+"Scobey",3023670,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,0,0,0
+"Scobey",3023670,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",1,0,0,0,0,0
+"Scobey",3023670,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,1,0,0,0
+"Scobey",3023670,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",1,0,0,0,0,0
+"Scobey",3023670,"Music","Music Education","Music","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,0,0,0
+"Scobey",3023670,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,0,0,0
+"Scobey",3023670,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",1,0,0,0,0,0
+"Scobey",3023670,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,1,0,0,0,0
+"Scobey Schools",3023670,"7-12 FAMILY & CONSUMER SCIENCE TEACHER","Science Education","Science","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Scobey Schools",3023670,"7-12 MATH TEACHER","Mathematics Education","Math","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",1,0,0,0,0,0
+"Scobey Schools",3023670,"ELEMENTARY TEACHER","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,1,0,0,0
+"Scobey Schools",3023670,"K-12 ART TEACHER","Art Teacher","Art","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Scobey Schools",3023670,"K-12 LIBRARIAN","Library Media","Library Media","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Scobey Schools",3023670,"K-12 MUSIC TEACHER","Music Education","Music","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Scobey Schools",3023670,"K-6 SPECIAL EDUCATION TEACHER","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,1,0,0,0,0
+"Seeley Lake",3023730,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Seeley Lake",3023730,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Shelby",3023900,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
 "Shelby School District",3023900,"K-8 COLONY TEACHER","Elementary Education","Elementary","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,1,0,0,0
 "Shelby School District",3023900,"teachers","Uncategorized","Other","Teacher","2026-09-22","2026-10-27",6,42,"Still Active",0,0,0,0,0,0
-"Shepherd",3023940,"Computer Science","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",1,0,0,0,0,0
-"Shepherd",3023940,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-15",9,47,"Closed / Filled",1,0,0,0,0,0
-"Shepherd School District #37",3023940,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,1,0,0,0
-"Sheridan, MT",3024150,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-09-08",8,40,"Closed / Filled",0,0,0,0,0,0
-"Sheridan, MT",3024150,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
+"Shepherd",3023940,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,0,0,0,0
+"Shepherd",3023940,"Computer Science","Computer Science Education","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-13",9,75,"Closed / Filled",1,0,0,0,0,0
+"Shepherd",3023940,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,1,0,0,0
+"Shepherd",3023940,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-13","2026-10-20",2,14,"Closed / Filled",0,0,1,0,0,0
+"Shepherd",3023940,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,0,0,0,0,0
+"Shepherd",3023940,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",1,0,0,0,0,0
+"Shepherd",3023940,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-13",10,75,"Closed / Filled",0,1,0,0,0,0
+"Shepherd School District #37",3023940,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,1,0,0,0
+"Sheridan",3024150,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",0,0,0,0,0,0
+"Sheridan",3024150,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
+"Sheridan",3024150,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Sheridan",3024150,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-07",6,39,"Closed / Filled",0,0,0,0,0,0
 "Shields Valley Public Schools",3000932,"Early Literacy/Math-2YK Teacher","Mathematics Education","Math","Teacher","2026-09-15","2026-10-27",7,49,"Still Active",1,0,0,0,0,0
+"Shields Valley Public Schools",3000932,"K-12 Art","Art Teacher","Art","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Sidney",3024200,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
+"Sidney",3024200,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Sidney",3024200,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
 "Sidney Public Schools",3024200,"Art Teacher","Art Teacher","Art","Teacher","2026-08-07","2026-08-11",2,11,"Closed / Filled",0,0,0,0,0,0
-"Sidney Public Schools",3024200,"Library Media Specialist","Library Media","Library Media","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Sidney Public Schools",3024200,"Special Education Teacher Grades 7-12","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,1,0,0,0,0
-"St. Ignatius School District",3006110,"Salish Teacher","Language Education","Language","Teacher","2026-09-01","2026-10-27",10,63,"Still Active",0,0,0,0,0,0
+"Sidney Public Schools",3024200,"Library Media Specialist","Library Media","Library Media","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Sidney Public Schools",3024200,"Special Education Teacher Grades 7-12","Special Education - General","Special Education - General","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,1,0,0,0,0
+"Simms",,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"St. Ignatius - 40 miles North of Missoula!",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-09-22",7,49,"Closed / Filled",0,0,1,0,0,0
+"St. Ignatius School District",3006110,"Salish Teacher","Language Education","Language","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"St. Ignatius School District",3006110,"Special Ed K-12","Special Education - General","Special Education - General","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,1,0,0,0,0
+"St. Regis",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-20","2026-10-27",2,14,"Still Active",0,0,1,0,0,0
+"St. Regis",,"History","Social Studies Education","Secondary Social Studies","Teacher","2026-10-20","2026-10-27",2,14,"Still Active",0,0,0,1,0,0
+"Stanford",3024990,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,0,1,0,0,0
+"Stevensville",3025020,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,1,0,0,0
+"Stevensville",3025020,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,1,0,0,0
+"Stevensville",3025020,"World Languages","Language Education","Language","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,0,0,0
 "Stevensville Public Schools",3025020,"Early Learning Program Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-11","2026-08-11",1,7,"Closed / Filled",0,0,0,0,0,0
 "Stevensville Public Schools",3025020,"Early Learning Program Teacher (2 positions open)","Early Childhood Education","Early Childhood","Teacher","2026-08-18","2026-08-18",1,7,"Closed / Filled",0,0,0,0,0,0
 "Stevensville Public Schools",3025020,"Foreign Language Teacher","Language Education","Language","Teacher","2026-08-07","2026-08-18",3,18,"Closed / Filled",0,0,0,0,0,0
 "Stevensville Public Schools",3025020,"Middle School PE/Health Teacher 2026-2027 School Year","Physical Education","Physical Education","Teacher","2026-08-07","2026-08-18",3,18,"Closed / Filled",0,0,0,0,0,0
-"Stevensville Public Schools",3025020,"Spanish Teacher","Language Education","Language","Teacher","2026-08-07","2026-10-27",14,88,"Still Active",0,0,0,0,0,0
-"Swan River School District #4",3025500,"Teachers","Uncategorized","Other","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
+"Stevensville Public Schools",3025020,"Spanish Teacher","Language Education","Language","Teacher","2026-08-07","2026-10-27",13,88,"Still Active",0,0,0,0,0,0
+"Sunburst",3025320,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Superior",3025470,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Swan River School District #4",3025500,"Teachers","Uncategorized","Other","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
+"Ten minutes from Missoula",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,1,0,0,0,0
+"Terry",3025950,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
 "Terry Public Schools",3025950,"3 Elementary Teachers","Elementary Education","Elementary","Teacher","2026-08-25","2026-09-01",2,14,"Closed / Filled",0,0,1,0,0,0
 "Terry Public Schools",3025950,"Physical Education Teacher","Physical Education","Physical Education","Teacher","2026-08-25","2026-09-01",2,14,"Closed / Filled",0,0,0,0,0,0
 "Terry Public Schools",3025950,"Title 1 Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-25","2026-09-01",2,14,"Closed / Filled",0,0,1,0,0,0
-"Thompson Falls",3026070,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-09-22",10,54,"Closed / Filled",0,0,0,0,0,0
+"Thompson Falls",3026070,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Thompson Falls",3026070,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
 "Thompson Falls Public Schools",3026070,"1st Grade Teacher","Elementary Education","Elementary","Teacher","2026-10-13","2026-10-27",3,21,"Still Active",0,0,1,0,0,0
+"Three Forks",3026160,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
 "Three Forks",3026160,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,1,0,0
+"Three Forks",3026160,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
 "Three Forks Public Schools",3026160,"Daycare Teacher","Early Childhood Education","Early Childhood","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",0,0,0,0,0,0
-"Three Forks Public Schools",3026160,"Drivers Education (Traffic Ed.) Instructor","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",11,70,"Still Active",0,0,0,0,0,0
+"Three Forks Public Schools",3026160,"Drivers Education (Traffic Ed.) Instructor","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-25","2026-10-27",10,70,"Still Active",0,0,0,0,0,0
 "Three Forks Public Schools",3026160,"Elementary Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",0,1,0,0,0,0
+"Three Forks Public Schools",3026160,"Middle School Special Education","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",0,1,0,0,0,0
 "Three Forks Public Schools",3026160,"Middle School Teacher","Uncategorized","Other","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",0,0,0,0,0,0
+"Townsend",3004980,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Townsend",3004980,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-15","2026-10-27",7,49,"Still Active",0,1,0,0,0,0
+"Townsend School District",3004980,"Title I Certified Teaching Position","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-01","2026-09-01",1,7,"Closed / Filled",0,0,0,1,0,0
+"Trego",3026460,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
 "Trego School District 53",3026460,"K-1 Teacher","Elementary Education","Elementary","Teacher","2026-08-25","2026-08-25",1,7,"Closed / Filled",0,0,1,0,0,0
+"Trout Creek",3026520,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,1,0,0,0
+"Troy",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Turner",3026640,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,1,0,0,0
+"Turner",3026640,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,0,1,0,0
+"Ulm",3026880,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Valley View/Polson",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,1,0,0,0
+"Victor",3027270,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,1,0,0,0
 "Victor",3027270,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,0,0,1,0,0
+"Victor",3027270,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-29","2026-10-27",5,35,"Still Active",0,1,0,0,0,0
 "Victor School District",3027270,"HS/MS Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
-"Westby",3027730,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-06",12,68,"Closed / Filled",1,0,0,0,0,0
-"Whitefish School District",3027740,"Guest Teacher","Substitute Teaching","Other","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Whitefish School District",3027740,"Special Education Teacher - Muldown Elementary","Special Education - General","Special Education - General","Teacher","2026-08-18","2026-10-27",12,77,"Still Active",0,1,0,0,0,0
-"Whitefish School District",3027740,"WHS Special Education Teacher-Extended Resource (beginning 26/27) Multiple Positions","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-11",3,12,"Closed / Filled",0,1,0,0,0,0
-"Whitefish School District",3027740,"WMS Special Education Teacher (Structured Learning)","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,1,0,0,0,0
-"Whitewater",3027930,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",1,0,0,0,0,0
-"Wibaux",3028020,"CTE – Family and Consumer Sciences","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-06",12,68,"Closed / Filled",0,0,0,0,0,0
+"Vida",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Vida",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Westby",3027730,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Westby",3027730,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Westby",3027730,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",1,0,0,0,0,0
+"Westby",3027730,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"White Sulphur Springs",3028770,"Art","Art Teacher","Art","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"White Sulphur Springs",3028770,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"White Sulphur Springs Schools",3028770,"Music","Music Education","Music","Teacher","2026-09-01","2026-10-27",9,63,"Still Active",0,0,0,0,0,0
+"Whitefish",3027740,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-09-15","2026-10-20",6,42,"Closed / Filled",0,0,1,0,0,0
+"Whitefish",3027740,"Health Enhancement","Physical Education","Physical Education","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,0,0,0,0,0
+"Whitefish",3027740,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,1,0,0,0,0
+"Whitefish School District",3027740,"Guest Teacher","Substitute Teaching","Other","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Whitefish School District",3027740,"Special Education Teacher - Muldown Elementary","Special Education - General","Special Education - General","Teacher","2026-08-18","2026-10-27",11,77,"Still Active",0,1,0,0,0,0
+"Whitefish School District",3027740,"WHS Special Education Teacher-Extended Resource (beginning 26/27) Multiple Positions","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,1,0,0,0,0
+"Whitefish School District",3027740,"WMS Special Education Teacher (Structured Learning)","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
+"Whitewater",3027930,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",1,0,0,0,0,0
+"Wibaux",3028020,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,0,0,0,0,0
+"Wibaux",3028020,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",1,0,0,0,0,0
+"Wibaux",3028020,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,0,1,0,0,0
+"Wibaux",3028020,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,1,0,0,0,0
 "Wibaux Public Schools",3028020,"Special Education Teacher","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Still Active",0,1,0,0,0,0
-"Wilsall",3000932,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Wolf Point",3028590,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-01",6,33,"Closed / Filled",0,0,0,1,0,0
-"Wolf Point",3028590,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",15,89,"Still Active",0,0,0,0,0,0
-"Wolf Point",3028590,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-01",6,33,"Closed / Filled",1,0,0,0,0,0
-"Wolf Point Public Schools",3028590,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-11","2026-09-15",6,42,"Closed / Filled",0,0,1,0,0,0
+"Wilsall",3000932,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Wilsall",3000932,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Winifred",,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,0,0,0,0
+"Winifred",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,1,0,0,0,0
+"Wolf Point",3028590,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Wolf Point",3028590,"CTE – Industrial Technology Education","Technical Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Wolf Point",3028590,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,1,0,0,0
+"Wolf Point",3028590,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-01",5,33,"Closed / Filled",0,0,0,1,0,0
+"Wolf Point",3028590,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Wolf Point",3028590,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Wolf Point",3028590,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,0,0,0
+"Wolf Point",3028590,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-06","2026-09-01",5,33,"Closed / Filled",1,0,0,0,0,0
+"Wolf Point",3028590,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-10-27",13,89,"Still Active",0,0,0,1,0,0
+"Wolf Point Public Schools",3028590,"Elementary Teacher","Elementary Education","Elementary","Teacher","2026-08-11","2026-09-15",5,42,"Closed / Filled",0,0,1,0,0,0
 "Wolf Point Public Schools",3028590,"Family Consumer Science","Science Education","Science","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",1,0,0,0,0,0
-"Wolf Point Public Schools",3028590,"HS Vo-Ag Teacher","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-11","2026-10-27",12,84,"Still Active",0,0,0,0,0,0
-"Wolf Point Public Schools",3028590,"JH English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-09-15",6,42,"Closed / Filled",0,0,0,1,0,0
+"Wolf Point Public Schools",3028590,"HS Vo-Ag Teacher","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-11","2026-10-27",11,84,"Still Active",0,0,0,0,0,0
+"Wolf Point Public Schools",3028590,"JH English Teacher","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-09-15",5,42,"Closed / Filled",0,0,0,1,0,0
 "Wolf Point Public Schools",3028590,"JH Science","Science Education","Science","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",1,0,0,0,0,0
 "Wolf Point Public Schools",3028590,"JH/HS Choir/Band Teacher","Music Education","Music","Teacher","2026-08-11","2026-08-18",2,14,"Closed / Filled",0,0,0,0,0,0
+"Wyola",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-01",5,33,"Closed / Filled",0,0,1,0,0,0
+"Wyola",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-13",11,75,"Closed / Filled",0,1,0,0,0,0
+"Yaak",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",0,0,1,0,0,0

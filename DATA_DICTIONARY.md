@@ -81,7 +81,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Position` | Categorical | Classification Model | Broad staff position group (Teacher, Administrator, Support Services). |
 | `First_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Earliest weekly scraper run in which this job posting was observed active. |
 | `Last_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Latest weekly scraper run in which this job posting was observed active. |
-| `Weeks_Observed` | Integer | Project Derived | Total count of weekly snapshots where this posting was present. |
+| `Weeks_Observed` | Integer | Project Derived | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
 | `Estimated_Days_Open` | Integer | Project Derived | Estimated calendar duration of the vacancy (proxy for labor shortage / time-to-fill). |
 | `Status` | Categorical | Project Derived | State of posting: Closed / Filled or Still Active as of the latest pipeline run. |
 | `is_stem` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
@@ -102,8 +102,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Latitude` | Decimal Degrees | US Census / Geocoding | Geographic latitude coordinate of district central headquarters. |
 | `Longitude` | Decimal Degrees | US Census / Geocoding | Geographic longitude coordinate of district central headquarters. |
 | `Job_Link` | URL | District Registry | Official employment or applicant tracking portal link for the district. |
-| `NCES_LEAID.x` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier (primary match). |
-| `NCES_LEAID.y` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier (cross-reference match). |
+| `NCES_LEAID` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier. |
 | `Teacher_Count` | Integer | MT DLI Compensation Report | Total certified classroom teachers reported in the regional DLI compensation dataset. |
 | `Teacher_Salary_10th_Pctile` | Currency ($) | MT DLI Compensation Report | 10th percentile teacher salary published in the Montana DLI Regional Wage Report. |
 | `Teacher_Avg_Salary` | Currency ($) | MT DLI Compensation Report | Average annual compensation paid across all employed certified classroom teachers. |
@@ -155,7 +154,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Job_Type` | Categorical | Classification Model | Collegiate appointment type (Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty). |
 | `First_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Earliest weekly scraper run in which this job posting was observed active. |
 | `Last_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Latest weekly scraper run in which this job posting was observed active. |
-| `Weeks_Observed` | Integer | Project Derived | Total count of weekly snapshots where this posting was present. |
+| `Weeks_Observed` | Integer | Project Derived | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
 | `Estimated_Days_Open` | Integer | Project Derived | Estimated calendar duration of the vacancy (proxy for search length and time-to-fill). |
 | `Status` | Categorical | Project Derived | State of posting: Closed / Filled or Still Active as of the latest pipeline run. |
 | `is_stem` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |

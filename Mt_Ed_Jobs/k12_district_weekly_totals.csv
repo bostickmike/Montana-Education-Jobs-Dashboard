@@ -1,7 +1,7 @@
 "District","Archive_Date","n"
-"10 miles North of Troy, MT",2026-10-13,1
-"10 miles North of Troy, MT",2026-10-20,1
-"10 miles North of Troy, MT",2026-10-27,1
+"10 miles North of Troy",2026-10-13,1
+"10 miles North of Troy",2026-10-20,1
+"10 miles North of Troy",2026-10-27,1
 "4 miles north of Harlem",2026-08-06,1
 "4 miles north of Harlem",2026-08-07,1
 "4 miles north of Harlem",2026-08-11,1
@@ -151,74 +151,6 @@
 "Augusta School District #45",2026-10-13,3
 "Augusta School District #45",2026-10-20,3
 "Augusta School District #45",2026-10-27,3
-"BILLINGS",2026-08-11,2
-"BILLINGS",2026-08-18,2
-"BILLINGS",2026-08-25,2
-"BILLINGS",2026-09-01,2
-"BILLINGS",2026-09-07,2
-"BILLINGS",2026-09-08,2
-"BILLINGS",2026-09-15,2
-"BILLINGS",2026-09-22,2
-"BILLINGS",2026-09-29,2
-"BILLINGS",2026-10-06,2
-"BILLINGS",2026-10-13,2
-"BILLINGS",2026-10-20,2
-"BILLINGS",2026-10-27,2
-"BRUSETT",2026-08-06,2
-"BRUSETT",2026-08-07,2
-"BRUSETT",2026-08-11,2
-"BRUSETT",2026-08-18,2
-"BRUSETT",2026-08-25,2
-"BRUSETT",2026-09-01,2
-"BRUSETT",2026-09-07,2
-"BRUSETT",2026-09-08,2
-"BRUSETT",2026-09-15,2
-"BRUSETT",2026-09-22,2
-"BRUSETT",2026-09-29,2
-"BRUSETT",2026-10-06,2
-"BUSBY",2026-08-06,6
-"BUSBY",2026-08-07,6
-"BUSBY",2026-08-11,6
-"BUSBY",2026-08-18,6
-"BUSBY",2026-08-25,6
-"BUSBY",2026-09-01,6
-"BUSBY",2026-09-07,6
-"BUSBY",2026-09-08,6
-"BUSBY",2026-09-15,6
-"BUSBY",2026-09-22,6
-"BUSBY",2026-09-29,6
-"BUSBY",2026-10-06,6
-"BUSBY",2026-10-13,9
-"BUSBY",2026-10-20,9
-"BUSBY",2026-10-27,9
-"BUSBY, MT",2026-08-06,2
-"BUSBY, MT",2026-08-07,2
-"BUSBY, MT",2026-08-11,2
-"BUSBY, MT",2026-08-18,2
-"BUSBY, MT",2026-08-25,2
-"BUSBY, MT",2026-09-01,2
-"BUSBY, MT",2026-09-07,2
-"BUSBY, MT",2026-09-08,2
-"BUSBY, MT",2026-09-15,2
-"BUSBY, MT",2026-09-22,2
-"BUSBY, MT",2026-09-29,2
-"BUSBY, MT",2026-10-06,2
-"BUSBY, MT",2026-10-13,1
-"BUSBY, MT",2026-10-20,1
-"BUSBY, MT",2026-10-27,1
-"BUTTE",2026-08-11,1
-"BUTTE",2026-08-18,1
-"BUTTE",2026-08-25,1
-"BUTTE",2026-09-01,1
-"BUTTE",2026-09-07,1
-"BUTTE",2026-09-08,1
-"BUTTE",2026-09-15,1
-"BUTTE",2026-09-22,1
-"BUTTE",2026-09-29,1
-"BUTTE",2026-10-06,1
-"BUTTE",2026-10-13,1
-"BUTTE",2026-10-20,1
-"BUTTE",2026-10-27,1
 "Bainville",2026-08-06,3
 "Bainville",2026-08-07,3
 "Bainville",2026-08-11,3
@@ -363,34 +295,22 @@
 "Big Sky School District 72",2026-10-13,3
 "Big Sky School District 72",2026-10-20,5
 "Big Sky School District 72",2026-10-27,5
-"Big Timber",2026-08-18,1
-"Big Timber",2026-08-25,1
-"Big Timber",2026-09-01,1
-"Big Timber",2026-09-07,1
-"Big Timber",2026-09-08,1
-"Big Timber",2026-09-15,1
-"Big Timber",2026-09-22,1
-"Big Timber",2026-09-29,1
-"Big Timber",2026-10-06,1
-"Big Timber",2026-10-13,1
-"Big Timber",2026-10-20,1
-"Big Timber",2026-10-27,1
+"Big Timber",2026-08-06,3
+"Big Timber",2026-08-07,3
+"Big Timber",2026-08-11,3
+"Big Timber",2026-08-18,4
+"Big Timber",2026-08-25,4
+"Big Timber",2026-09-01,4
+"Big Timber",2026-09-07,4
+"Big Timber",2026-09-08,4
+"Big Timber",2026-09-15,4
+"Big Timber",2026-09-22,4
+"Big Timber",2026-09-29,4
+"Big Timber",2026-10-06,4
+"Big Timber",2026-10-13,4
+"Big Timber",2026-10-20,4
+"Big Timber",2026-10-27,4
 "Big Timber Grade School",2026-10-27,3
-"Big Timber, MT",2026-08-06,3
-"Big Timber, MT",2026-08-07,3
-"Big Timber, MT",2026-08-11,3
-"Big Timber, MT",2026-08-18,3
-"Big Timber, MT",2026-08-25,3
-"Big Timber, MT",2026-09-01,3
-"Big Timber, MT",2026-09-07,3
-"Big Timber, MT",2026-09-08,3
-"Big Timber, MT",2026-09-15,3
-"Big Timber, MT",2026-09-22,3
-"Big Timber, MT",2026-09-29,3
-"Big Timber, MT",2026-10-06,3
-"Big Timber, MT",2026-10-13,3
-"Big Timber, MT",2026-10-20,3
-"Big Timber, MT",2026-10-27,3
 "Big Timber- Between Bozeman and Billings",2026-08-11,2
 "Big Timber- Between Bozeman and Billings",2026-08-18,2
 "Big Timber- Between Bozeman and Billings",2026-08-25,2
@@ -430,19 +350,19 @@
 "Bigfork School District 38",2026-10-13,9
 "Bigfork School District 38",2026-10-20,9
 "Bigfork School District 38",2026-10-27,9
-"Billings",2026-08-11,17
-"Billings",2026-08-18,15
-"Billings",2026-08-25,11
-"Billings",2026-09-01,11
-"Billings",2026-09-07,11
-"Billings",2026-09-08,11
-"Billings",2026-09-15,11
-"Billings",2026-09-22,10
-"Billings",2026-09-29,10
-"Billings",2026-10-06,9
-"Billings",2026-10-13,9
-"Billings",2026-10-20,8
-"Billings",2026-10-27,8
+"Billings",2026-08-11,19
+"Billings",2026-08-18,17
+"Billings",2026-08-25,13
+"Billings",2026-09-01,13
+"Billings",2026-09-07,13
+"Billings",2026-09-08,13
+"Billings",2026-09-15,13
+"Billings",2026-09-22,12
+"Billings",2026-09-29,12
+"Billings",2026-10-06,11
+"Billings",2026-10-13,11
+"Billings",2026-10-20,10
+"Billings",2026-10-27,10
 "Billings - Billings Christian School",2026-08-11,5
 "Billings - Billings Christian School",2026-08-18,5
 "Billings - Billings Christian School",2026-08-25,5
@@ -496,9 +416,9 @@
 "Billings-SD3",2026-10-13,3
 "Billings-SD3",2026-10-20,3
 "Billings-SD3",2026-10-27,2
-"Bloomfield, MT",2026-08-06,1
-"Bloomfield, MT",2026-08-07,1
-"Bloomfield, MT",2026-08-11,1
+"Bloomfield",2026-08-06,1
+"Bloomfield",2026-08-07,1
+"Bloomfield",2026-08-11,1
 "Bonner",2026-09-15,1
 "Bonner",2026-09-22,1
 "Bonner",2026-09-29,1
@@ -595,21 +515,21 @@
 "Broadus",2026-10-20,1
 "Broadus",2026-10-27,1
 "Broadus Public Schools",2026-10-27,4
-"Broadview",2026-08-06,5
-"Broadview",2026-08-07,5
-"Broadview",2026-08-11,5
-"Broadview",2026-08-18,5
-"Broadview",2026-08-25,5
-"Broadview",2026-09-01,5
-"Broadview",2026-09-07,5
-"Broadview",2026-09-08,5
-"Broadview",2026-09-15,5
-"Broadview",2026-09-22,5
-"Broadview",2026-09-29,5
-"Broadview",2026-10-06,5
-"Broadview",2026-10-13,5
-"Broadview",2026-10-20,5
-"Broadview",2026-10-27,5
+"Broadview",2026-08-06,6
+"Broadview",2026-08-07,6
+"Broadview",2026-08-11,6
+"Broadview",2026-08-18,6
+"Broadview",2026-08-25,6
+"Broadview",2026-09-01,6
+"Broadview",2026-09-07,6
+"Broadview",2026-09-08,6
+"Broadview",2026-09-15,6
+"Broadview",2026-09-22,6
+"Broadview",2026-09-29,6
+"Broadview",2026-10-06,6
+"Broadview",2026-10-13,6
+"Broadview",2026-10-20,6
+"Broadview",2026-10-27,6
 "Broadview School District",2026-08-25,7
 "Broadview School District",2026-09-01,7
 "Broadview School District",2026-09-07,7
@@ -621,37 +541,22 @@
 "Broadview School District",2026-10-13,7
 "Broadview School District",2026-10-20,7
 "Broadview School District",2026-10-27,7
-"Broadview, MT",2026-08-06,1
-"Broadview, MT",2026-08-07,1
-"Broadview, MT",2026-08-11,1
-"Broadview, MT",2026-08-18,1
-"Broadview, MT",2026-08-25,1
-"Broadview, MT",2026-09-01,1
-"Broadview, MT",2026-09-07,1
-"Broadview, MT",2026-09-08,1
-"Broadview, MT",2026-09-15,1
-"Broadview, MT",2026-09-22,1
-"Broadview, MT",2026-09-29,1
-"Broadview, MT",2026-10-06,1
-"Broadview, MT",2026-10-13,1
-"Broadview, MT",2026-10-20,1
-"Broadview, MT",2026-10-27,1
 "Brockton School District",2026-08-25,2
-"Browning",2026-08-06,4
-"Browning",2026-08-07,4
-"Browning",2026-08-11,4
-"Browning",2026-08-18,4
-"Browning",2026-08-25,4
-"Browning",2026-09-01,4
-"Browning",2026-09-07,4
-"Browning",2026-09-08,4
-"Browning",2026-09-15,4
-"Browning",2026-09-22,4
-"Browning",2026-09-29,4
-"Browning",2026-10-06,4
-"Browning",2026-10-13,3
-"Browning",2026-10-20,3
-"Browning",2026-10-27,3
+"Browning",2026-08-06,6
+"Browning",2026-08-07,6
+"Browning",2026-08-11,6
+"Browning",2026-08-18,6
+"Browning",2026-08-25,6
+"Browning",2026-09-01,6
+"Browning",2026-09-07,6
+"Browning",2026-09-08,6
+"Browning",2026-09-15,6
+"Browning",2026-09-22,6
+"Browning",2026-09-29,6
+"Browning",2026-10-06,6
+"Browning",2026-10-13,5
+"Browning",2026-10-20,5
+"Browning",2026-10-27,5
 "Browning Public Schools",2026-08-18,10
 "Browning Public Schools",2026-08-25,9
 "Browning Public Schools",2026-09-01,9
@@ -664,43 +569,46 @@
 "Browning Public Schools",2026-10-13,9
 "Browning Public Schools",2026-10-20,9
 "Browning Public Schools",2026-10-27,10
-"Browning, MT",2026-08-06,2
-"Browning, MT",2026-08-07,2
-"Browning, MT",2026-08-11,2
-"Browning, MT",2026-08-18,2
-"Browning, MT",2026-08-25,2
-"Browning, MT",2026-09-01,2
-"Browning, MT",2026-09-07,2
-"Browning, MT",2026-09-08,2
-"Browning, MT",2026-09-15,2
-"Browning, MT",2026-09-22,2
-"Browning, MT",2026-09-29,2
-"Browning, MT",2026-10-06,2
-"Browning, MT",2026-10-13,2
-"Browning, MT",2026-10-20,2
-"Browning, MT",2026-10-27,2
-"Busby, Mt.",2026-09-07,1
-"Busby, Mt.",2026-09-08,1
-"Busby, Mt.",2026-09-15,1
-"Busby, Mt.",2026-09-22,1
-"Busby, Mt.",2026-09-29,1
-"Busby, Mt.",2026-10-06,1
-"Busby, Mt.",2026-10-13,1
-"Busby, Mt.",2026-10-20,1
-"Busby, Mt.",2026-10-27,1
-"Butte",2026-08-11,1
-"Butte",2026-08-18,1
-"Butte",2026-08-25,1
-"Butte",2026-09-01,1
-"Butte",2026-09-07,1
-"Butte",2026-09-08,1
-"Butte",2026-09-15,1
-"Butte",2026-09-22,1
-"Butte",2026-09-29,1
-"Butte",2026-10-06,1
-"Butte",2026-10-13,1
-"Butte",2026-10-20,1
-"Butte",2026-10-27,1
+"Brusett",2026-08-06,2
+"Brusett",2026-08-07,2
+"Brusett",2026-08-11,2
+"Brusett",2026-08-18,2
+"Brusett",2026-08-25,2
+"Brusett",2026-09-01,2
+"Brusett",2026-09-07,2
+"Brusett",2026-09-08,2
+"Brusett",2026-09-15,2
+"Brusett",2026-09-22,2
+"Brusett",2026-09-29,2
+"Brusett",2026-10-06,2
+"Busby",2026-08-06,8
+"Busby",2026-08-07,8
+"Busby",2026-08-11,8
+"Busby",2026-08-18,8
+"Busby",2026-08-25,8
+"Busby",2026-09-01,8
+"Busby",2026-09-07,9
+"Busby",2026-09-08,9
+"Busby",2026-09-15,9
+"Busby",2026-09-22,9
+"Busby",2026-09-29,9
+"Busby",2026-10-06,9
+"Busby",2026-10-13,11
+"Busby",2026-10-20,11
+"Busby",2026-10-27,11
+"Butte",2026-08-11,2
+"Butte",2026-08-18,2
+"Butte",2026-08-25,2
+"Butte",2026-09-01,2
+"Butte",2026-09-07,2
+"Butte",2026-09-08,2
+"Butte",2026-09-15,2
+"Butte",2026-09-22,2
+"Butte",2026-09-29,2
+"Butte",2026-10-06,2
+"Butte",2026-10-13,2
+"Butte",2026-10-20,2
+"Butte",2026-10-27,2
 "Butte School District 1",2026-09-07,16
 "Butte School District 1",2026-09-08,16
 "Butte School District 1",2026-09-15,17
@@ -710,56 +618,26 @@
 "Butte School District 1",2026-10-13,14
 "Butte School District 1",2026-10-20,13
 "Butte School District 1",2026-10-27,11
-"CARDWELL",2026-08-06,1
-"CARDWELL",2026-08-07,1
-"CARDWELL",2026-08-11,1
-"CARDWELL",2026-08-18,1
-"CARDWELL",2026-08-25,1
-"CARDWELL",2026-09-01,1
-"CARDWELL",2026-09-07,1
-"CARDWELL",2026-09-08,1
-"CARDWELL",2026-09-15,1
-"CARDWELL",2026-09-22,1
-"CARDWELL",2026-09-29,1
-"CARDWELL",2026-10-06,1
-"CARDWELL",2026-10-13,1
-"CARDWELL",2026-10-20,1
-"CARDWELL",2026-10-27,1
-"CHOTEAU",2026-08-06,1
-"CHOTEAU",2026-08-07,1
-"CHOTEAU",2026-08-11,1
-"CHOTEAU",2026-08-18,1
-"CHOTEAU",2026-08-25,1
-"CHOTEAU",2026-09-01,1
-"CHOTEAU",2026-09-07,1
-"CHOTEAU",2026-09-08,1
-"CHOTEAU",2026-09-15,1
-"CHOTEAU",2026-09-22,1
-"CHOTEAU",2026-09-29,1
-"CHOTEAU",2026-10-06,1
-"CHOTEAU",2026-10-13,1
-"CHOTEAU",2026-10-20,1
-"CHOTEAU",2026-10-27,1
-"CORVALLIS",2026-08-06,1
-"CORVALLIS",2026-08-07,1
-"CORVALLIS",2026-08-11,1
-"CORVALLIS",2026-08-18,1
-"CORVALLIS",2026-08-25,1
-"CORVALLIS",2026-09-01,1
-"CORVALLIS",2026-09-07,1
-"CORVALLIS",2026-09-08,1
-"CORVALLIS",2026-09-15,1
-"CORVALLIS",2026-09-22,1
-"CORVALLIS",2026-09-29,1
-"CORVALLIS",2026-10-06,1
-"CORVALLIS",2026-10-13,1
-"CORVALLIS",2026-10-20,1
-"CORVALLIS",2026-10-27,1
 "Canyon Creek (Helena)",2026-08-18,1
 "Canyon Creek School District",2026-10-27,1
 "Canyon Creek and Wolf Creek",2026-08-06,1
 "Canyon Creek and Wolf Creek",2026-08-07,1
 "Canyon Creek and Wolf Creek",2026-08-11,1
+"Cardwell",2026-08-06,1
+"Cardwell",2026-08-07,1
+"Cardwell",2026-08-11,1
+"Cardwell",2026-08-18,1
+"Cardwell",2026-08-25,1
+"Cardwell",2026-09-01,1
+"Cardwell",2026-09-07,1
+"Cardwell",2026-09-08,1
+"Cardwell",2026-09-15,1
+"Cardwell",2026-09-22,1
+"Cardwell",2026-09-29,1
+"Cardwell",2026-10-06,1
+"Cardwell",2026-10-13,1
+"Cardwell",2026-10-20,1
+"Cardwell",2026-10-27,1
 "Cardwell Elementary School",2026-10-27,1
 "Cascade",2026-08-06,3
 "Cascade",2026-08-07,3
@@ -814,36 +692,21 @@
 "Charlo",2026-10-20,1
 "Charlo",2026-10-27,1
 "Charlo School District 7J",2026-10-27,2
-"Chester",2026-08-06,1
-"Chester",2026-08-07,1
-"Chester",2026-08-11,1
-"Chester",2026-08-18,1
-"Chester",2026-08-25,1
-"Chester",2026-09-01,1
-"Chester",2026-09-07,1
-"Chester",2026-09-08,1
-"Chester",2026-09-15,1
-"Chester",2026-09-22,1
-"Chester",2026-09-29,1
-"Chester",2026-10-06,1
-"Chester",2026-10-13,1
-"Chester",2026-10-20,1
-"Chester",2026-10-27,1
-"Chester Montana",2026-08-06,1
-"Chester Montana",2026-08-07,1
-"Chester Montana",2026-08-11,1
-"Chester Montana",2026-08-18,1
-"Chester Montana",2026-08-25,1
-"Chester Montana",2026-09-01,1
-"Chester Montana",2026-09-07,1
-"Chester Montana",2026-09-08,1
-"Chester Montana",2026-09-15,1
-"Chester Montana",2026-09-22,1
-"Chester Montana",2026-09-29,1
-"Chester Montana",2026-10-06,1
-"Chester Montana",2026-10-13,1
-"Chester Montana",2026-10-20,1
-"Chester Montana",2026-10-27,1
+"Chester",2026-08-06,2
+"Chester",2026-08-07,2
+"Chester",2026-08-11,2
+"Chester",2026-08-18,2
+"Chester",2026-08-25,2
+"Chester",2026-09-01,2
+"Chester",2026-09-07,2
+"Chester",2026-09-08,2
+"Chester",2026-09-15,2
+"Chester",2026-09-22,2
+"Chester",2026-09-29,2
+"Chester",2026-10-06,2
+"Chester",2026-10-13,2
+"Chester",2026-10-20,2
+"Chester",2026-10-27,2
 "Chinook",2026-08-06,1
 "Chinook",2026-08-07,1
 "Chinook",2026-08-11,1
@@ -863,21 +726,21 @@
 "Chinook Public Schools",2026-10-13,6
 "Chinook Public Schools",2026-10-20,6
 "Chinook Public Schools",2026-10-27,6
-"Choteau",2026-08-06,3
-"Choteau",2026-08-07,3
-"Choteau",2026-08-11,3
-"Choteau",2026-08-18,2
-"Choteau",2026-08-25,2
-"Choteau",2026-09-01,2
-"Choteau",2026-09-07,2
-"Choteau",2026-09-08,2
-"Choteau",2026-09-15,2
-"Choteau",2026-09-22,2
-"Choteau",2026-09-29,1
-"Choteau",2026-10-06,1
-"Choteau",2026-10-13,1
-"Choteau",2026-10-20,1
-"Choteau",2026-10-27,1
+"Choteau",2026-08-06,4
+"Choteau",2026-08-07,4
+"Choteau",2026-08-11,4
+"Choteau",2026-08-18,3
+"Choteau",2026-08-25,3
+"Choteau",2026-09-01,3
+"Choteau",2026-09-07,3
+"Choteau",2026-09-08,3
+"Choteau",2026-09-15,3
+"Choteau",2026-09-22,3
+"Choteau",2026-09-29,2
+"Choteau",2026-10-06,2
+"Choteau",2026-10-13,2
+"Choteau",2026-10-20,2
+"Choteau",2026-10-27,2
 "Choteau School District",2026-09-01,5
 "Choteau School District",2026-09-07,5
 "Choteau School District",2026-09-08,5
@@ -898,21 +761,21 @@
 "Circle",2026-09-08,2
 "Circle",2026-09-15,2
 "Circle",2026-09-22,2
-"Clancy, MT",2026-08-06,3
-"Clancy, MT",2026-08-07,3
-"Clancy, MT",2026-08-11,3
-"Clancy, MT",2026-08-18,3
-"Clancy, MT",2026-08-25,3
-"Clancy, MT",2026-09-01,3
-"Clancy, MT",2026-09-07,3
-"Clancy, MT",2026-09-08,3
-"Clancy, MT",2026-09-15,3
-"Clancy, MT",2026-09-22,3
-"Clancy, MT",2026-09-29,3
-"Clancy, MT",2026-10-06,3
-"Clancy, MT",2026-10-13,3
-"Clancy, MT",2026-10-20,3
-"Clancy, MT",2026-10-27,3
+"Clancy",2026-08-06,3
+"Clancy",2026-08-07,3
+"Clancy",2026-08-11,3
+"Clancy",2026-08-18,3
+"Clancy",2026-08-25,3
+"Clancy",2026-09-01,3
+"Clancy",2026-09-07,3
+"Clancy",2026-09-08,3
+"Clancy",2026-09-15,3
+"Clancy",2026-09-22,3
+"Clancy",2026-09-29,3
+"Clancy",2026-10-06,3
+"Clancy",2026-10-13,3
+"Clancy",2026-10-20,3
+"Clancy",2026-10-27,3
 "Clancy/Mt City",2026-08-06,1
 "Clancy/Mt City",2026-08-07,1
 "Clancy/Mt City",2026-08-11,1
@@ -1051,21 +914,21 @@
 "Conrad Public Schools",2026-10-13,2
 "Conrad Public Schools",2026-10-20,2
 "Conrad Public Schools",2026-10-27,2
-"Corvallis",2026-08-06,2
-"Corvallis",2026-08-07,2
-"Corvallis",2026-08-11,2
-"Corvallis",2026-08-18,2
-"Corvallis",2026-08-25,2
-"Corvallis",2026-09-01,2
-"Corvallis",2026-09-07,2
-"Corvallis",2026-09-08,2
-"Corvallis",2026-09-15,2
-"Corvallis",2026-09-22,2
-"Corvallis",2026-09-29,2
-"Corvallis",2026-10-06,2
-"Corvallis",2026-10-13,2
-"Corvallis",2026-10-20,2
-"Corvallis",2026-10-27,2
+"Corvallis",2026-08-06,3
+"Corvallis",2026-08-07,3
+"Corvallis",2026-08-11,3
+"Corvallis",2026-08-18,3
+"Corvallis",2026-08-25,3
+"Corvallis",2026-09-01,3
+"Corvallis",2026-09-07,3
+"Corvallis",2026-09-08,3
+"Corvallis",2026-09-15,3
+"Corvallis",2026-09-22,3
+"Corvallis",2026-09-29,3
+"Corvallis",2026-10-06,3
+"Corvallis",2026-10-13,3
+"Corvallis",2026-10-20,3
+"Corvallis",2026-10-27,3
 "Corvallis School District #1",2026-08-25,25
 "Corvallis School District #1",2026-09-01,22
 "Corvallis School District #1",2026-09-07,22
@@ -1150,21 +1013,21 @@
 "Cut Bank School District #15",2026-10-13,6
 "Cut Bank School District #15",2026-10-20,6
 "Cut Bank School District #15",2026-10-27,6
-"Darby Montana",2026-08-06,1
-"Darby Montana",2026-08-07,1
-"Darby Montana",2026-08-11,1
-"Darby Montana",2026-08-18,1
-"Darby Montana",2026-08-25,1
-"Darby Montana",2026-09-01,1
-"Darby Montana",2026-09-07,1
-"Darby Montana",2026-09-08,1
-"Darby Montana",2026-09-15,1
-"Darby Montana",2026-09-22,1
-"Darby Montana",2026-09-29,1
-"Darby Montana",2026-10-06,1
-"Darby Montana",2026-10-13,1
-"Darby Montana",2026-10-20,1
-"Darby Montana",2026-10-27,1
+"Darby",2026-08-06,1
+"Darby",2026-08-07,1
+"Darby",2026-08-11,1
+"Darby",2026-08-18,1
+"Darby",2026-08-25,1
+"Darby",2026-09-01,1
+"Darby",2026-09-07,1
+"Darby",2026-09-08,1
+"Darby",2026-09-15,1
+"Darby",2026-09-22,1
+"Darby",2026-09-29,1
+"Darby",2026-10-06,1
+"Darby",2026-10-13,1
+"Darby",2026-10-20,1
+"Darby",2026-10-27,1
 "Darby School District 9",2026-09-01,6
 "Darby School District 9",2026-09-07,6
 "Darby School District 9",2026-09-08,5
@@ -1194,12 +1057,12 @@
 "Deer Lodge School District #1",2026-09-07,4
 "Deer Lodge School District #1",2026-09-08,4
 "Deer Lodge School District #1",2026-09-15,4
-"Deer Lodge School District #1",2026-09-22,7
-"Deer Lodge School District #1",2026-09-29,7
-"Deer Lodge School District #1",2026-10-06,7
-"Deer Lodge School District #1",2026-10-13,7
-"Deer Lodge School District #1",2026-10-20,7
-"Deer Lodge School District #1",2026-10-27,9
+"Deer Lodge School District #1",2026-09-22,6
+"Deer Lodge School District #1",2026-09-29,6
+"Deer Lodge School District #1",2026-10-06,6
+"Deer Lodge School District #1",2026-10-13,6
+"Deer Lodge School District #1",2026-10-20,6
+"Deer Lodge School District #1",2026-10-27,8
 "Deer Park School District",2026-09-01,1
 "Deer Park School District",2026-09-07,1
 "Deer Park School District",2026-09-08,1
@@ -1405,20 +1268,6 @@
 "Evergreen School District #50",2026-10-13,3
 "Evergreen School District #50",2026-10-20,3
 "Evergreen School District #50",2026-10-27,4
-"FAIRVIEW",2026-08-06,1
-"FAIRVIEW",2026-08-11,1
-"FAIRVIEW",2026-08-18,1
-"FAIRVIEW",2026-08-25,1
-"FAIRVIEW",2026-09-01,1
-"FAIRVIEW",2026-09-07,1
-"FAIRVIEW",2026-09-08,1
-"FAIRVIEW",2026-09-15,1
-"FAIRVIEW",2026-09-22,1
-"FAIRVIEW",2026-09-29,1
-"FAIRVIEW",2026-10-06,1
-"FAIRVIEW",2026-10-13,1
-"FAIRVIEW",2026-10-20,1
-"FAIRVIEW",2026-10-27,1
 "Fair-Mont-Egan Schools",2026-08-25,2
 "Fair-Mont-Egan Schools",2026-09-01,3
 "Fair-Mont-Egan Schools",2026-09-07,2
@@ -1430,36 +1279,35 @@
 "Fair-Mont-Egan Schools",2026-10-13,2
 "Fair-Mont-Egan Schools",2026-10-20,2
 "Fair-Mont-Egan Schools",2026-10-27,2
-"Fairfield",2026-08-06,1
-"Fairfield",2026-08-07,1
-"Fairfield, MT",2026-08-06,1
-"Fairfield, MT",2026-08-07,1
-"Fairfield, MT",2026-08-11,1
-"Fairfield, MT",2026-08-18,1
-"Fairfield, MT",2026-08-25,1
-"Fairfield, MT",2026-09-01,1
-"Fairfield, MT",2026-09-07,1
-"Fairfield, MT",2026-09-08,1
-"Fairfield, MT",2026-09-15,1
-"Fairfield, MT",2026-09-22,1
-"Fairfield, MT",2026-09-29,1
-"Fairfield, MT",2026-10-06,1
-"Fairfield, MT",2026-10-13,1
-"Fairfield, MT",2026-10-20,1
-"Fairfield, MT",2026-10-27,1
-"Fairview",2026-08-06,4
-"Fairview",2026-08-11,4
-"Fairview",2026-08-18,4
-"Fairview",2026-08-25,4
-"Fairview",2026-09-01,4
-"Fairview",2026-09-07,4
-"Fairview",2026-09-08,4
-"Fairview",2026-09-15,4
-"Fairview",2026-09-22,4
-"Fairview",2026-09-29,2
-"Fairview",2026-10-06,2
-"Fairview",2026-10-13,2
-"Fairview",2026-10-20,1
+"Fairfield",2026-08-06,2
+"Fairfield",2026-08-07,2
+"Fairfield",2026-08-11,1
+"Fairfield",2026-08-18,1
+"Fairfield",2026-08-25,1
+"Fairfield",2026-09-01,1
+"Fairfield",2026-09-07,1
+"Fairfield",2026-09-08,1
+"Fairfield",2026-09-15,1
+"Fairfield",2026-09-22,1
+"Fairfield",2026-09-29,1
+"Fairfield",2026-10-06,1
+"Fairfield",2026-10-13,1
+"Fairfield",2026-10-20,1
+"Fairfield",2026-10-27,1
+"Fairview",2026-08-06,5
+"Fairview",2026-08-11,5
+"Fairview",2026-08-18,5
+"Fairview",2026-08-25,5
+"Fairview",2026-09-01,5
+"Fairview",2026-09-07,5
+"Fairview",2026-09-08,5
+"Fairview",2026-09-15,5
+"Fairview",2026-09-22,5
+"Fairview",2026-09-29,3
+"Fairview",2026-10-06,3
+"Fairview",2026-10-13,3
+"Fairview",2026-10-20,2
+"Fairview",2026-10-27,1
 "Fairview Public Schools",2026-08-07,7
 "Fairview Public Schools",2026-08-11,7
 "Fairview Public Schools",2026-08-18,4
@@ -1535,57 +1383,43 @@
 "Fortine",2026-09-29,1
 "Fortine",2026-10-06,1
 "Fortine",2026-10-13,1
-"Frazer",2026-08-06,2
-"Frazer",2026-08-07,2
-"Frazer",2026-08-11,2
-"Frazer",2026-08-18,2
-"Frazer",2026-08-25,2
-"Frazer",2026-09-01,2
-"Frazer",2026-09-07,2
-"Frazer",2026-09-08,2
-"Frazer",2026-09-15,2
-"Frazer",2026-09-22,2
-"Frazer",2026-09-29,2
-"Frazer",2026-10-06,2
-"Frazer",2026-10-13,1
-"Frazer",2026-10-20,1
+"Frazer",2026-08-06,3
+"Frazer",2026-08-07,3
+"Frazer",2026-08-11,3
+"Frazer",2026-08-18,3
+"Frazer",2026-08-25,3
+"Frazer",2026-09-01,3
+"Frazer",2026-09-07,3
+"Frazer",2026-09-08,3
+"Frazer",2026-09-15,3
+"Frazer",2026-09-22,3
+"Frazer",2026-09-29,3
+"Frazer",2026-10-06,3
+"Frazer",2026-10-13,2
+"Frazer",2026-10-20,2
 "Frazer",2026-10-27,1
 "Frazer Public Schools",2026-10-27,26
-"Frazer, MT",2026-08-06,1
-"Frazer, MT",2026-08-07,1
-"Frazer, MT",2026-08-11,1
-"Frazer, MT",2026-08-18,1
-"Frazer, MT",2026-08-25,1
-"Frazer, MT",2026-09-01,1
-"Frazer, MT",2026-09-07,1
-"Frazer, MT",2026-09-08,1
-"Frazer, MT",2026-09-15,1
-"Frazer, MT",2026-09-22,1
-"Frazer, MT",2026-09-29,1
-"Frazer, MT",2026-10-06,1
-"Frazer, MT",2026-10-13,1
-"Frazer, MT",2026-10-20,1
 "Frenchtown",2026-08-06,5
 "Frenchtown",2026-08-07,5
 "Frenchtown",2026-08-11,5
 "Frenchtown",2026-08-18,4
 "Frenchtown",2026-10-20,1
 "Frenchtown",2026-10-27,1
-"Froid MT",2026-08-06,1
-"Froid MT",2026-08-07,1
-"Froid MT",2026-08-11,1
-"Froid MT",2026-08-18,1
-"Froid MT",2026-08-25,1
-"Froid MT",2026-09-01,1
-"Froid MT",2026-09-07,1
-"Froid MT",2026-09-08,1
-"Froid MT",2026-09-15,1
-"Froid MT",2026-09-22,1
-"Froid MT",2026-09-29,1
-"Froid MT",2026-10-06,1
-"Froid MT",2026-10-13,1
-"Froid MT",2026-10-20,1
-"Froid MT",2026-10-27,1
+"Froid",2026-08-06,1
+"Froid",2026-08-07,1
+"Froid",2026-08-11,1
+"Froid",2026-08-18,1
+"Froid",2026-08-25,1
+"Froid",2026-09-01,1
+"Froid",2026-09-07,1
+"Froid",2026-09-08,1
+"Froid",2026-09-15,1
+"Froid",2026-09-22,1
+"Froid",2026-09-29,1
+"Froid",2026-10-06,1
+"Froid",2026-10-13,1
+"Froid",2026-10-20,1
+"Froid",2026-10-27,1
 "Froid Public Schools",2026-09-01,3
 "Froid Public Schools",2026-09-07,3
 "Froid Public Schools",2026-09-08,3
@@ -1605,21 +1439,6 @@
 "Fromberg",2026-09-07,5
 "Fromberg",2026-09-08,5
 "Fromberg Public Schools",2026-10-27,1
-"GILDFORD",2026-08-06,1
-"GILDFORD",2026-08-07,1
-"GREAT FALLS",2026-08-11,7
-"GREAT FALLS",2026-08-18,7
-"GREAT FALLS",2026-08-25,7
-"GREAT FALLS",2026-09-01,7
-"GREAT FALLS",2026-09-07,7
-"GREAT FALLS",2026-09-08,7
-"GREAT FALLS",2026-09-15,7
-"GREAT FALLS",2026-09-22,7
-"GREAT FALLS",2026-09-29,7
-"GREAT FALLS",2026-10-06,6
-"GREAT FALLS",2026-10-13,6
-"GREAT FALLS",2026-10-20,6
-"GREAT FALLS",2026-10-27,6
 "Gallatin Gateway",2026-08-06,1
 "Gallatin Gateway",2026-08-07,1
 "Gallatin Gateway",2026-08-11,1
@@ -1686,21 +1505,21 @@
 "Geraldine",2026-10-13,1
 "Geraldine",2026-10-20,1
 "Geraldine",2026-10-27,1
-"Geyser",2026-08-06,1
-"Geyser",2026-08-07,1
-"Geyser",2026-08-11,1
-"Geyser",2026-08-18,1
-"Geyser",2026-08-25,1
-"Geyser",2026-09-01,1
-"Geyser",2026-09-07,1
-"Geyser",2026-09-08,1
-"Geyser",2026-09-15,1
-"Geyser",2026-09-22,1
-"Geyser",2026-09-29,1
-"Geyser",2026-10-06,1
-"Geyser",2026-10-13,1
-"Geyser",2026-10-20,1
-"Geyser",2026-10-27,1
+"Geyser",2026-08-06,3
+"Geyser",2026-08-07,3
+"Geyser",2026-08-11,3
+"Geyser",2026-08-18,3
+"Geyser",2026-08-25,3
+"Geyser",2026-09-01,3
+"Geyser",2026-09-07,3
+"Geyser",2026-09-08,3
+"Geyser",2026-09-15,3
+"Geyser",2026-09-22,3
+"Geyser",2026-09-29,3
+"Geyser",2026-10-06,3
+"Geyser",2026-10-13,3
+"Geyser",2026-10-20,2
+"Geyser",2026-10-27,2
 "Geyser Public Schools",2026-09-01,1
 "Geyser Public Schools",2026-09-07,1
 "Geyser Public Schools",2026-09-08,1
@@ -1711,21 +1530,8 @@
 "Geyser Public Schools",2026-10-13,1
 "Geyser Public Schools",2026-10-20,1
 "Geyser Public Schools",2026-10-27,1
-"Geyser, Montana",2026-08-06,2
-"Geyser, Montana",2026-08-07,2
-"Geyser, Montana",2026-08-11,2
-"Geyser, Montana",2026-08-18,2
-"Geyser, Montana",2026-08-25,2
-"Geyser, Montana",2026-09-01,2
-"Geyser, Montana",2026-09-07,2
-"Geyser, Montana",2026-09-08,2
-"Geyser, Montana",2026-09-15,2
-"Geyser, Montana",2026-09-22,2
-"Geyser, Montana",2026-09-29,2
-"Geyser, Montana",2026-10-06,2
-"Geyser, Montana",2026-10-13,2
-"Geyser, Montana",2026-10-20,1
-"Geyser, Montana",2026-10-27,1
+"Gildford",2026-08-06,1
+"Gildford",2026-08-07,1
 "Glasgow School District 1-A",2026-08-25,7
 "Glasgow School District 1-A",2026-09-01,6
 "Glasgow School District 1-A",2026-09-07,6
@@ -1766,19 +1572,19 @@
 "Glendive Public Schools",2026-10-20,17
 "Glendive Public Schools",2026-10-27,17
 "Grass Range Public Schools",2026-10-27,2
-"Great Falls",2026-08-11,3
-"Great Falls",2026-08-18,3
-"Great Falls",2026-08-25,3
-"Great Falls",2026-09-01,3
-"Great Falls",2026-09-07,3
-"Great Falls",2026-09-08,2
-"Great Falls",2026-09-15,2
-"Great Falls",2026-09-22,2
-"Great Falls",2026-09-29,2
-"Great Falls",2026-10-06,2
-"Great Falls",2026-10-13,2
-"Great Falls",2026-10-20,2
-"Great Falls",2026-10-27,2
+"Great Falls",2026-08-11,10
+"Great Falls",2026-08-18,10
+"Great Falls",2026-08-25,10
+"Great Falls",2026-09-01,10
+"Great Falls",2026-09-07,10
+"Great Falls",2026-09-08,9
+"Great Falls",2026-09-15,9
+"Great Falls",2026-09-22,9
+"Great Falls",2026-09-29,9
+"Great Falls",2026-10-06,8
+"Great Falls",2026-10-13,8
+"Great Falls",2026-10-20,8
+"Great Falls",2026-10-27,8
 "Great Falls Public Schools",2026-08-06,46
 "Great Falls Public Schools",2026-08-07,46
 "Great Falls Public Schools",2026-08-11,44
@@ -1923,19 +1729,19 @@
 "Hays-Lodge Pole School District",2026-10-20,6
 "Hays-Lodge Pole School District",2026-10-27,6
 "Heart Butte K-12 Schools",2026-10-27,8
-"Helena",2026-08-11,4
-"Helena",2026-08-18,4
-"Helena",2026-08-25,4
-"Helena",2026-09-01,4
-"Helena",2026-09-07,4
-"Helena",2026-09-08,4
-"Helena",2026-09-15,4
-"Helena",2026-09-22,4
-"Helena",2026-09-29,4
-"Helena",2026-10-06,4
-"Helena",2026-10-13,5
-"Helena",2026-10-20,5
-"Helena",2026-10-27,5
+"Helena",2026-08-11,5
+"Helena",2026-08-18,5
+"Helena",2026-08-25,5
+"Helena",2026-09-01,5
+"Helena",2026-09-07,5
+"Helena",2026-09-08,5
+"Helena",2026-09-15,5
+"Helena",2026-09-22,5
+"Helena",2026-09-29,5
+"Helena",2026-10-06,5
+"Helena",2026-10-13,6
+"Helena",2026-10-20,6
+"Helena",2026-10-27,6
 "Helena Public Schools",2026-08-06,34
 "Helena Public Schools",2026-08-07,34
 "Helena Public Schools",2026-08-11,33
@@ -1951,19 +1757,6 @@
 "Helena Public Schools",2026-10-13,30
 "Helena Public Schools",2026-10-20,27
 "Helena Public Schools",2026-10-27,25
-"Helena, MT",2026-08-11,1
-"Helena, MT",2026-08-18,1
-"Helena, MT",2026-08-25,1
-"Helena, MT",2026-09-01,1
-"Helena, MT",2026-09-07,1
-"Helena, MT",2026-09-08,1
-"Helena, MT",2026-09-15,1
-"Helena, MT",2026-09-22,1
-"Helena, MT",2026-09-29,1
-"Helena, MT",2026-10-06,1
-"Helena, MT",2026-10-13,1
-"Helena, MT",2026-10-20,1
-"Helena, MT",2026-10-27,1
 "Hellgate Elementary School District",2026-10-27,2
 "Highwood",2026-08-06,1
 "Highwood",2026-08-07,1
@@ -2145,21 +1938,6 @@
 "Kalispell Public Schools",2026-10-20,37
 "Kalispell Public Schools",2026-10-27,38
 "Kila School District #20",2026-10-27,4
-"LOLO",2026-08-06,1
-"LOLO",2026-08-07,1
-"LOLO",2026-08-11,1
-"LOLO",2026-08-18,1
-"LOLO",2026-08-25,1
-"LOLO",2026-09-01,1
-"LOLO",2026-09-07,1
-"LOLO",2026-09-08,1
-"LOLO",2026-09-15,1
-"LOLO",2026-09-22,1
-"LOLO",2026-09-29,1
-"LOLO",2026-10-06,1
-"LOLO",2026-10-13,1
-"LOLO",2026-10-20,1
-"LOLO",2026-10-27,1
 "Lambert",2026-08-06,2
 "Lambert",2026-08-07,2
 "Lambert",2026-08-11,2
@@ -2175,19 +1953,19 @@
 "Lambert",2026-10-13,1
 "Lambert",2026-10-20,1
 "Lambert Public Schools",2026-10-27,1
-"Lame Deer",2026-08-06,4
-"Lame Deer",2026-08-11,4
-"Lame Deer",2026-08-18,4
-"Lame Deer",2026-08-25,5
-"Lame Deer",2026-09-01,6
-"Lame Deer",2026-09-07,6
-"Lame Deer",2026-09-08,6
-"Lame Deer",2026-09-15,6
-"Lame Deer",2026-09-22,6
-"Lame Deer",2026-09-29,6
-"Lame Deer",2026-10-06,6
-"Lame Deer",2026-10-13,6
-"Lame Deer",2026-10-20,6
+"Lame Deer",2026-08-06,8
+"Lame Deer",2026-08-11,8
+"Lame Deer",2026-08-18,8
+"Lame Deer",2026-08-25,9
+"Lame Deer",2026-09-01,10
+"Lame Deer",2026-09-07,10
+"Lame Deer",2026-09-08,10
+"Lame Deer",2026-09-15,10
+"Lame Deer",2026-09-22,10
+"Lame Deer",2026-09-29,10
+"Lame Deer",2026-10-06,10
+"Lame Deer",2026-10-13,10
+"Lame Deer",2026-10-20,10
 "Lame Deer",2026-10-27,6
 "Lame Deer Public Schools",2026-08-07,30
 "Lame Deer Public Schools",2026-08-11,30
@@ -2203,19 +1981,6 @@
 "Lame Deer Public Schools",2026-10-13,30
 "Lame Deer Public Schools",2026-10-20,30
 "Lame Deer Public Schools",2026-10-27,30
-"Lame Deer, MT",2026-08-06,4
-"Lame Deer, MT",2026-08-11,4
-"Lame Deer, MT",2026-08-18,4
-"Lame Deer, MT",2026-08-25,4
-"Lame Deer, MT",2026-09-01,4
-"Lame Deer, MT",2026-09-07,4
-"Lame Deer, MT",2026-09-08,4
-"Lame Deer, MT",2026-09-15,4
-"Lame Deer, MT",2026-09-22,4
-"Lame Deer, MT",2026-09-29,4
-"Lame Deer, MT",2026-10-06,4
-"Lame Deer, MT",2026-10-13,4
-"Lame Deer, MT",2026-10-20,4
 "Laurel",2026-08-11,7
 "Laurel",2026-08-18,5
 "Laurel",2026-08-25,4
@@ -2300,18 +2065,18 @@
 "Libby",2026-10-13,4
 "Libby",2026-10-20,4
 "Libby",2026-10-27,4
-"Libby Public Schools",2026-08-18,20
-"Libby Public Schools",2026-08-25,20
-"Libby Public Schools",2026-09-01,19
-"Libby Public Schools",2026-09-07,19
-"Libby Public Schools",2026-09-08,19
-"Libby Public Schools",2026-09-15,18
-"Libby Public Schools",2026-09-22,17
-"Libby Public Schools",2026-09-29,17
-"Libby Public Schools",2026-10-06,17
-"Libby Public Schools",2026-10-13,13
-"Libby Public Schools",2026-10-20,12
-"Libby Public Schools",2026-10-27,13
+"Libby Public Schools",2026-08-18,18
+"Libby Public Schools",2026-08-25,18
+"Libby Public Schools",2026-09-01,17
+"Libby Public Schools",2026-09-07,17
+"Libby Public Schools",2026-09-08,17
+"Libby Public Schools",2026-09-15,16
+"Libby Public Schools",2026-09-22,15
+"Libby Public Schools",2026-09-29,15
+"Libby Public Schools",2026-10-06,15
+"Libby Public Schools",2026-10-13,11
+"Libby Public Schools",2026-10-20,10
+"Libby Public Schools",2026-10-27,11
 "Lima",2026-08-06,6
 "Lima",2026-08-07,6
 "Lima",2026-08-11,6
@@ -2327,6 +2092,21 @@
 "Lima",2026-10-13,2
 "Lima",2026-10-20,1
 "Lima",2026-10-27,1
+"Lincoln",2026-08-06,1
+"Lincoln",2026-08-07,1
+"Lincoln",2026-08-11,1
+"Lincoln",2026-08-18,1
+"Lincoln",2026-08-25,1
+"Lincoln",2026-09-01,1
+"Lincoln",2026-09-07,1
+"Lincoln",2026-09-08,1
+"Lincoln",2026-09-15,1
+"Lincoln",2026-09-22,1
+"Lincoln",2026-09-29,1
+"Lincoln",2026-10-06,1
+"Lincoln",2026-10-13,1
+"Lincoln",2026-10-20,1
+"Lincoln",2026-10-27,1
 "Lincoln School District #38",2026-08-25,1
 "Lincoln School District #38",2026-09-01,2
 "Lincoln School District #38",2026-09-07,2
@@ -2338,21 +2118,6 @@
 "Lincoln School District #38",2026-10-13,2
 "Lincoln School District #38",2026-10-20,2
 "Lincoln School District #38",2026-10-27,2
-"Lincoln, Montana",2026-08-06,1
-"Lincoln, Montana",2026-08-07,1
-"Lincoln, Montana",2026-08-11,1
-"Lincoln, Montana",2026-08-18,1
-"Lincoln, Montana",2026-08-25,1
-"Lincoln, Montana",2026-09-01,1
-"Lincoln, Montana",2026-09-07,1
-"Lincoln, Montana",2026-09-08,1
-"Lincoln, Montana",2026-09-15,1
-"Lincoln, Montana",2026-09-22,1
-"Lincoln, Montana",2026-09-29,1
-"Lincoln, Montana",2026-10-06,1
-"Lincoln, Montana",2026-10-13,1
-"Lincoln, Montana",2026-10-20,1
-"Lincoln, Montana",2026-10-27,1
 "Lindsay",2026-08-06,1
 "Lindsay",2026-08-07,1
 "Livingston",2026-08-06,8
@@ -2411,20 +2176,20 @@
 "Lockwood Schools",2026-10-13,11
 "Lockwood Schools",2026-10-20,11
 "Lockwood Schools",2026-10-27,13
-"Lodge Grass",2026-08-06,9
-"Lodge Grass",2026-08-07,9
-"Lodge Grass",2026-08-11,9
-"Lodge Grass",2026-08-18,8
-"Lodge Grass",2026-08-25,8
-"Lodge Grass",2026-09-01,8
-"Lodge Grass",2026-09-07,8
-"Lodge Grass",2026-09-08,7
-"Lodge Grass",2026-09-15,7
-"Lodge Grass",2026-09-22,7
-"Lodge Grass",2026-09-29,7
-"Lodge Grass",2026-10-06,7
-"Lodge Grass",2026-10-13,7
-"Lodge Grass",2026-10-20,7
+"Lodge Grass",2026-08-06,11
+"Lodge Grass",2026-08-07,11
+"Lodge Grass",2026-08-11,11
+"Lodge Grass",2026-08-18,10
+"Lodge Grass",2026-08-25,10
+"Lodge Grass",2026-09-01,9
+"Lodge Grass",2026-09-07,9
+"Lodge Grass",2026-09-08,8
+"Lodge Grass",2026-09-15,8
+"Lodge Grass",2026-09-22,8
+"Lodge Grass",2026-09-29,8
+"Lodge Grass",2026-10-06,8
+"Lodge Grass",2026-10-13,8
+"Lodge Grass",2026-10-20,8
 "Lodge Grass",2026-10-27,7
 "Lodge Grass Public Schools",2026-08-11,15
 "Lodge Grass Public Schools",2026-08-18,15
@@ -2439,26 +2204,21 @@
 "Lodge Grass Public Schools",2026-10-13,15
 "Lodge Grass Public Schools",2026-10-20,15
 "Lodge Grass Public Schools",2026-10-27,15
-"Lodge Grass, MT",2026-08-06,1
-"Lodge Grass, MT",2026-08-07,1
-"Lodge Grass, MT",2026-08-11,1
-"Lodge Grass, MT",2026-08-18,1
-"Lodge Grass, MT",2026-08-25,1
-"Lodge Grass, Montana",2026-08-06,1
-"Lodge Grass, Montana",2026-08-07,1
-"Lodge Grass, Montana",2026-08-11,1
-"Lodge Grass, Montana",2026-08-18,1
-"Lodge Grass, Montana",2026-08-25,1
-"Lodge Grass, Montana",2026-09-01,1
-"Lodge Grass, Montana",2026-09-07,1
-"Lodge Grass, Montana",2026-09-08,1
-"Lodge Grass, Montana",2026-09-15,1
-"Lodge Grass, Montana",2026-09-22,1
-"Lodge Grass, Montana",2026-09-29,1
-"Lodge Grass, Montana",2026-10-06,1
-"Lodge Grass, Montana",2026-10-13,1
-"Lodge Grass, Montana",2026-10-20,1
-"Lolo",2026-10-27,1
+"Lolo",2026-08-06,1
+"Lolo",2026-08-07,1
+"Lolo",2026-08-11,1
+"Lolo",2026-08-18,1
+"Lolo",2026-08-25,1
+"Lolo",2026-09-01,1
+"Lolo",2026-09-07,1
+"Lolo",2026-09-08,1
+"Lolo",2026-09-15,1
+"Lolo",2026-09-22,1
+"Lolo",2026-09-29,1
+"Lolo",2026-10-06,1
+"Lolo",2026-10-13,1
+"Lolo",2026-10-20,1
+"Lolo",2026-10-27,2
 "Lolo School District 7",2026-09-01,4
 "Lolo School District 7",2026-09-07,4
 "Lolo School District 7",2026-09-08,4
@@ -2498,38 +2258,22 @@
 "Lustre District 23",2026-10-13,3
 "Lustre District 23",2026-10-20,3
 "Lustre District 23",2026-10-27,3
-"Luther Montana",2026-08-06,1
-"Luther Montana",2026-08-25,1
-"Luther Montana",2026-09-01,1
+"Luther",2026-08-06,1
+"Luther",2026-08-25,1
+"Luther",2026-09-01,1
 "Luther School",2026-10-27,2
-"MELSTONE",2026-08-06,2
-"MELSTONE",2026-08-07,2
-"MELSTONE",2026-08-11,2
-"MELSTONE",2026-08-18,2
-"MELSTONE",2026-08-25,2
-"MELSTONE",2026-09-01,2
-"MISSOULA",2026-08-11,2
-"MISSOULA",2026-08-18,2
-"MISSOULA",2026-08-25,2
-"MISSOULA",2026-09-01,2
-"MISSOULA",2026-09-07,2
-"MISSOULA",2026-09-08,2
-"MISSOULA",2026-09-15,2
-"MISSOULA",2026-09-22,1
-"MISSOULA",2026-09-29,1
-"MISSOULA",2026-10-06,1
-"Malta",2026-08-06,3
-"Malta",2026-08-07,3
-"Malta",2026-08-11,3
-"Malta",2026-08-18,3
-"Malta",2026-08-25,3
-"Malta",2026-09-01,3
-"Malta",2026-09-07,3
-"Malta",2026-09-08,3
-"Malta",2026-09-15,3
-"Malta",2026-09-22,3
-"Malta",2026-09-29,3
-"Malta",2026-10-06,3
+"Malta",2026-08-06,4
+"Malta",2026-08-07,4
+"Malta",2026-08-11,4
+"Malta",2026-08-18,4
+"Malta",2026-08-25,4
+"Malta",2026-09-01,4
+"Malta",2026-09-07,4
+"Malta",2026-09-08,4
+"Malta",2026-09-15,4
+"Malta",2026-09-22,4
+"Malta",2026-09-29,4
+"Malta",2026-10-06,4
 "Malta",2026-10-13,3
 "Malta",2026-10-20,2
 "Malta",2026-10-27,2
@@ -2543,18 +2287,6 @@
 "Malta Public Schools",2026-10-13,9
 "Malta Public Schools",2026-10-20,9
 "Malta Public Schools",2026-10-27,9
-"Malta, MT",2026-08-06,1
-"Malta, MT",2026-08-07,1
-"Malta, MT",2026-08-11,1
-"Malta, MT",2026-08-18,1
-"Malta, MT",2026-08-25,1
-"Malta, MT",2026-09-01,1
-"Malta, MT",2026-09-07,1
-"Malta, MT",2026-09-08,1
-"Malta, MT",2026-09-15,1
-"Malta, MT",2026-09-22,1
-"Malta, MT",2026-09-29,1
-"Malta, MT",2026-10-06,1
 "Manhattan",2026-08-06,2
 "Manhattan",2026-08-07,2
 "Manhattan",2026-08-11,2
@@ -2617,6 +2349,12 @@
 "Medicine Lake",2026-10-06,1
 "Medicine Lake",2026-10-13,1
 "Medicine Lake",2026-10-20,1
+"Melstone",2026-08-06,2
+"Melstone",2026-08-07,2
+"Melstone",2026-08-11,2
+"Melstone",2026-08-18,2
+"Melstone",2026-08-25,2
+"Melstone",2026-09-01,2
 "Melstone Public Schools",2026-09-01,4
 "Melstone Public Schools",2026-09-07,4
 "Melstone Public Schools",2026-09-08,4
@@ -2652,23 +2390,21 @@
 "Miami Elementary School District #31",2026-10-13,1
 "Miami Elementary School District #31",2026-10-20,1
 "Miami Elementary School District #31",2026-10-27,1
-"Miles City",2026-08-06,1
-"Miles City",2026-08-07,1
-"Miles City MT",2026-08-06,5
-"Miles City MT",2026-08-07,5
-"Miles City MT",2026-08-11,5
-"Miles City MT",2026-08-18,6
-"Miles City MT",2026-08-25,6
-"Miles City MT",2026-09-01,3
-"Miles City MT",2026-09-07,3
-"Miles City MT",2026-09-08,3
-"Miles City MT",2026-09-15,3
-"Miles City MT",2026-09-22,3
-"Miles City MT",2026-09-29,3
-"Miles City MT",2026-10-06,3
-"Miles City MT",2026-10-13,3
-"Miles City MT",2026-10-20,3
-"Miles City MT",2026-10-27,3
+"Miles City",2026-08-06,11
+"Miles City",2026-08-07,11
+"Miles City",2026-08-11,10
+"Miles City",2026-08-18,11
+"Miles City",2026-08-25,11
+"Miles City",2026-09-01,3
+"Miles City",2026-09-07,3
+"Miles City",2026-09-08,3
+"Miles City",2026-09-15,3
+"Miles City",2026-09-22,3
+"Miles City",2026-09-29,3
+"Miles City",2026-10-06,3
+"Miles City",2026-10-13,4
+"Miles City",2026-10-20,4
+"Miles City",2026-10-27,4
 "Miles City Unified School District 1",2026-08-25,20
 "Miles City Unified School District 1",2026-09-01,20
 "Miles City Unified School District 1",2026-09-07,20
@@ -2680,24 +2416,16 @@
 "Miles City Unified School District 1",2026-10-13,17
 "Miles City Unified School District 1",2026-10-20,17
 "Miles City Unified School District 1",2026-10-27,17
-"Miles City, MT",2026-08-06,5
-"Miles City, MT",2026-08-07,5
-"Miles City, MT",2026-08-11,5
-"Miles City, MT",2026-08-18,5
-"Miles City, MT",2026-08-25,5
-"Miles City, MT",2026-10-13,1
-"Miles City, MT",2026-10-20,1
-"Miles City, MT",2026-10-27,1
-"Missoula",2026-08-11,20
-"Missoula",2026-08-18,17
-"Missoula",2026-08-25,17
-"Missoula",2026-09-01,15
-"Missoula",2026-09-07,15
-"Missoula",2026-09-08,15
-"Missoula",2026-09-15,12
-"Missoula",2026-09-22,11
-"Missoula",2026-09-29,9
-"Missoula",2026-10-06,7
+"Missoula",2026-08-11,22
+"Missoula",2026-08-18,19
+"Missoula",2026-08-25,19
+"Missoula",2026-09-01,17
+"Missoula",2026-09-07,17
+"Missoula",2026-09-08,17
+"Missoula",2026-09-15,14
+"Missoula",2026-09-22,12
+"Missoula",2026-09-29,10
+"Missoula",2026-10-06,8
 "Missoula",2026-10-13,8
 "Missoula",2026-10-20,8
 "Missoula",2026-10-27,8
@@ -2783,19 +2511,19 @@
 "North Star Public Schools",2026-10-13,2
 "North Star Public Schools",2026-10-20,2
 "North Star Public Schools",2026-10-27,2
-"Northwest of Cut Bank, MT",2026-08-06,1
-"Northwest of Cut Bank, MT",2026-08-07,1
-"Northwest of Cut Bank, MT",2026-08-11,1
-"Northwest of Cut Bank, MT",2026-08-18,1
-"Northwest of Cut Bank, MT",2026-08-25,1
-"Northwest of Cut Bank, MT",2026-09-01,1
-"Northwest of Cut Bank, MT",2026-09-07,1
-"Northwest of Cut Bank, MT",2026-09-08,1
-"Northwest of Cut Bank, MT",2026-09-15,1
-"Northwest of Cut Bank, MT",2026-09-22,1
-"Northwest of Cut Bank, MT",2026-09-29,1
-"Northwest of Cut Bank, MT",2026-10-06,1
-"Northwest of Cut Bank, MT",2026-10-13,1
+"Northwest of Cut Bank",2026-08-06,1
+"Northwest of Cut Bank",2026-08-07,1
+"Northwest of Cut Bank",2026-08-11,1
+"Northwest of Cut Bank",2026-08-18,1
+"Northwest of Cut Bank",2026-08-25,1
+"Northwest of Cut Bank",2026-09-01,1
+"Northwest of Cut Bank",2026-09-07,1
+"Northwest of Cut Bank",2026-09-08,1
+"Northwest of Cut Bank",2026-09-15,1
+"Northwest of Cut Bank",2026-09-22,1
+"Northwest of Cut Bank",2026-09-29,1
+"Northwest of Cut Bank",2026-10-06,1
+"Northwest of Cut Bank",2026-10-13,1
 "Opheim",2026-08-06,2
 "Opheim",2026-08-07,2
 "Opheim",2026-08-11,2
@@ -2854,6 +2582,14 @@
 "Philipsburg School District",2026-10-20,9
 "Philipsburg School District",2026-10-27,8
 "Pioneer Elementary School District #41",2026-10-27,1
+"Plentywood",2026-08-06,8
+"Plentywood",2026-08-07,8
+"Plentywood",2026-08-11,8
+"Plentywood",2026-08-18,4
+"Plentywood",2026-08-25,4
+"Plentywood",2026-09-01,4
+"Plentywood",2026-09-07,4
+"Plentywood",2026-09-08,4
 "Plentywood Public Schools",2026-08-11,4
 "Plentywood Public Schools",2026-08-18,4
 "Plentywood Public Schools",2026-09-01,4
@@ -2866,14 +2602,21 @@
 "Plentywood Public Schools",2026-10-13,4
 "Plentywood Public Schools",2026-10-20,4
 "Plentywood Public Schools",2026-10-27,4
-"Plentywood, MT",2026-08-06,8
-"Plentywood, MT",2026-08-07,8
-"Plentywood, MT",2026-08-11,8
-"Plentywood, MT",2026-08-18,4
-"Plentywood, MT",2026-08-25,4
-"Plentywood, MT",2026-09-01,4
-"Plentywood, MT",2026-09-07,4
-"Plentywood, MT",2026-09-08,4
+"Plevna",2026-08-06,3
+"Plevna",2026-08-07,3
+"Plevna",2026-08-11,3
+"Plevna",2026-08-18,3
+"Plevna",2026-08-25,3
+"Plevna",2026-09-01,3
+"Plevna",2026-09-07,3
+"Plevna",2026-09-08,3
+"Plevna",2026-09-15,2
+"Plevna",2026-09-22,2
+"Plevna",2026-09-29,2
+"Plevna",2026-10-06,2
+"Plevna",2026-10-13,2
+"Plevna",2026-10-20,2
+"Plevna",2026-10-27,2
 "Plevna School District #55",2026-09-01,10
 "Plevna School District #55",2026-09-07,10
 "Plevna School District #55",2026-09-08,10
@@ -2884,21 +2627,6 @@
 "Plevna School District #55",2026-10-13,8
 "Plevna School District #55",2026-10-20,8
 "Plevna School District #55",2026-10-27,8
-"Plevna, Montana",2026-08-06,3
-"Plevna, Montana",2026-08-07,3
-"Plevna, Montana",2026-08-11,3
-"Plevna, Montana",2026-08-18,3
-"Plevna, Montana",2026-08-25,3
-"Plevna, Montana",2026-09-01,3
-"Plevna, Montana",2026-09-07,3
-"Plevna, Montana",2026-09-08,3
-"Plevna, Montana",2026-09-15,2
-"Plevna, Montana",2026-09-22,2
-"Plevna, Montana",2026-09-29,2
-"Plevna, Montana",2026-10-06,2
-"Plevna, Montana",2026-10-13,2
-"Plevna, Montana",2026-10-20,2
-"Plevna, Montana",2026-10-27,2
 "Polson",2026-08-11,1
 "Polson",2026-08-18,1
 "Polson",2026-08-25,1
@@ -2943,58 +2671,22 @@
 "Pray/Emigrant",2026-08-11,3
 "Pray/Emigrant",2026-08-18,3
 "Pray/Emigrant",2026-08-25,3
-"Pryor",2026-08-06,1
-"Pryor",2026-08-07,1
-"Pryor",2026-08-11,1
-"Pryor",2026-08-18,1
-"Pryor",2026-08-25,1
-"Pryor",2026-09-01,1
-"Pryor",2026-09-07,1
-"Pryor",2026-09-08,1
-"Pryor",2026-09-15,5
-"Pryor",2026-09-22,5
-"Pryor",2026-09-29,5
-"Pryor",2026-10-06,5
-"Pryor",2026-10-13,5
-"Pryor",2026-10-20,5
-"Pryor",2026-10-27,5
+"Pryor",2026-08-06,2
+"Pryor",2026-08-07,2
+"Pryor",2026-08-11,2
+"Pryor",2026-08-18,2
+"Pryor",2026-08-25,2
+"Pryor",2026-09-01,2
+"Pryor",2026-09-07,2
+"Pryor",2026-09-08,2
+"Pryor",2026-09-15,6
+"Pryor",2026-09-22,6
+"Pryor",2026-09-29,6
+"Pryor",2026-10-06,6
+"Pryor",2026-10-13,6
+"Pryor",2026-10-20,6
+"Pryor",2026-10-27,6
 "Pryor Public Schools",2026-10-27,2
-"Pryor, MT",2026-08-06,1
-"Pryor, MT",2026-08-07,1
-"Pryor, MT",2026-08-11,1
-"Pryor, MT",2026-08-18,1
-"Pryor, MT",2026-08-25,1
-"Pryor, MT",2026-09-01,1
-"Pryor, MT",2026-09-07,1
-"Pryor, MT",2026-09-08,1
-"Pryor, MT",2026-09-15,1
-"Pryor, MT",2026-09-22,1
-"Pryor, MT",2026-09-29,1
-"Pryor, MT",2026-10-06,1
-"Pryor, MT",2026-10-13,1
-"Pryor, MT",2026-10-20,1
-"Pryor, MT",2026-10-27,1
-"RICHEY",2026-08-06,3
-"RICHEY",2026-08-07,3
-"RICHEY",2026-08-11,3
-"RICHEY",2026-08-18,3
-"RICHEY",2026-08-25,3
-"RICHEY",2026-10-27,10
-"RUDYARD",2026-08-06,3
-"RUDYARD",2026-08-07,3
-"RUDYARD",2026-08-11,3
-"RUDYARD",2026-08-18,3
-"RUDYARD",2026-08-25,3
-"RUDYARD",2026-09-01,3
-"RUDYARD",2026-09-07,3
-"RUDYARD",2026-09-08,2
-"RUDYARD",2026-09-15,2
-"RUDYARD",2026-09-22,2
-"RUDYARD",2026-09-29,2
-"RUDYARD",2026-10-06,2
-"RUDYARD",2026-10-13,2
-"RUDYARD",2026-10-20,1
-"RUDYARD",2026-10-27,1
 "Ramsay",2026-08-06,3
 "Ramsay",2026-08-07,3
 "Ramsay",2026-08-11,3
@@ -3038,6 +2730,12 @@
 "Reed Point School District",2026-10-13,2
 "Reed Point School District",2026-10-20,2
 "Reed Point School District",2026-10-27,2
+"Richey",2026-08-06,3
+"Richey",2026-08-07,3
+"Richey",2026-08-11,3
+"Richey",2026-08-18,3
+"Richey",2026-08-25,3
+"Richey",2026-10-27,10
 "Richey Public Schools",2026-10-27,1
 "Roberts Public School",2026-08-25,3
 "Roberts Public School",2026-09-01,3
@@ -3154,6 +2852,10 @@
 "Roundup School District",2026-10-13,8
 "Roundup School District",2026-10-20,8
 "Roundup School District",2026-10-27,9
+"Roy",2026-08-06,3
+"Roy",2026-08-07,3
+"Roy",2026-08-11,3
+"Roy",2026-08-18,3
 "Roy School District 74",2026-08-25,3
 "Roy School District 74",2026-09-01,3
 "Roy School District 74",2026-09-07,3
@@ -3165,10 +2867,21 @@
 "Roy School District 74",2026-10-13,3
 "Roy School District 74",2026-10-20,3
 "Roy School District 74",2026-10-27,3
-"Roy, Montana",2026-08-06,3
-"Roy, Montana",2026-08-07,3
-"Roy, Montana",2026-08-11,3
-"Roy, Montana",2026-08-18,3
+"Rudyard",2026-08-06,3
+"Rudyard",2026-08-07,3
+"Rudyard",2026-08-11,3
+"Rudyard",2026-08-18,3
+"Rudyard",2026-08-25,3
+"Rudyard",2026-09-01,3
+"Rudyard",2026-09-07,3
+"Rudyard",2026-09-08,2
+"Rudyard",2026-09-15,2
+"Rudyard",2026-09-22,2
+"Rudyard",2026-09-29,2
+"Rudyard",2026-10-06,2
+"Rudyard",2026-10-13,2
+"Rudyard",2026-10-20,1
+"Rudyard",2026-10-27,1
 "Rudyard/Gildford",2026-08-06,3
 "Rudyard/Gildford",2026-08-07,3
 "Rudyard/Gildford",2026-08-11,3
@@ -3212,11 +2925,6 @@
 "Ryegate",2026-10-13,2
 "Ryegate",2026-10-20,2
 "Ryegate",2026-10-27,2
-"SCOBEY",2026-08-06,4
-"SCOBEY",2026-08-07,4
-"SCOBEY",2026-08-11,4
-"SCOBEY",2026-08-18,4
-"SCOBEY",2026-08-25,4
 "SIdney",2026-09-29,2
 "SIdney",2026-10-06,2
 "SIdney",2026-10-13,2
@@ -3269,11 +2977,11 @@
 "Savage",2026-08-06,1
 "Savage",2026-08-07,1
 "Savage",2026-08-11,1
-"Scobey",2026-08-06,16
-"Scobey",2026-08-07,16
-"Scobey",2026-08-11,16
-"Scobey",2026-08-18,16
-"Scobey",2026-08-25,16
+"Scobey",2026-08-06,20
+"Scobey",2026-08-07,20
+"Scobey",2026-08-11,20
+"Scobey",2026-08-18,20
+"Scobey",2026-08-25,20
 "Scobey Schools",2026-08-25,13
 "Scobey Schools",2026-09-01,13
 "Scobey Schools",2026-09-07,13
@@ -3325,32 +3033,20 @@
 "Shelby School District",2026-10-13,5
 "Shelby School District",2026-10-20,5
 "Shelby School District",2026-10-27,5
-"Shepherd",2026-08-06,5
-"Shepherd",2026-08-07,5
-"Shepherd",2026-08-11,5
-"Shepherd",2026-08-18,4
-"Shepherd",2026-08-25,4
-"Shepherd",2026-09-01,4
-"Shepherd",2026-09-07,4
-"Shepherd",2026-09-08,4
-"Shepherd",2026-09-15,4
-"Shepherd",2026-09-22,3
-"Shepherd",2026-09-29,2
+"Shepherd",2026-08-06,6
+"Shepherd",2026-08-07,6
+"Shepherd",2026-08-11,6
+"Shepherd",2026-08-18,5
+"Shepherd",2026-08-25,5
+"Shepherd",2026-09-01,5
+"Shepherd",2026-09-07,5
+"Shepherd",2026-09-08,5
+"Shepherd",2026-09-15,5
+"Shepherd",2026-09-22,4
+"Shepherd",2026-09-29,3
 "Shepherd",2026-10-06,2
-"Shepherd",2026-10-13,4
+"Shepherd",2026-10-13,5
 "Shepherd",2026-10-20,1
-"Shepherd MT",2026-08-06,1
-"Shepherd MT",2026-08-07,1
-"Shepherd MT",2026-08-11,1
-"Shepherd MT",2026-08-18,1
-"Shepherd MT",2026-08-25,1
-"Shepherd MT",2026-09-01,1
-"Shepherd MT",2026-09-07,1
-"Shepherd MT",2026-09-08,1
-"Shepherd MT",2026-09-15,1
-"Shepherd MT",2026-09-22,1
-"Shepherd MT",2026-09-29,1
-"Shepherd MT",2026-10-13,1
 "Shepherd School District #37",2026-08-25,1
 "Shepherd School District #37",2026-09-01,1
 "Shepherd School District #37",2026-09-07,1
@@ -3362,22 +3058,22 @@
 "Shepherd School District #37",2026-10-13,1
 "Shepherd School District #37",2026-10-20,1
 "Shepherd School District #37",2026-10-27,1
+"Sheridan",2026-08-06,4
+"Sheridan",2026-08-07,4
+"Sheridan",2026-08-11,4
+"Sheridan",2026-08-18,4
+"Sheridan",2026-08-25,4
+"Sheridan",2026-09-01,4
+"Sheridan",2026-09-07,4
+"Sheridan",2026-09-08,3
+"Sheridan",2026-09-15,1
+"Sheridan",2026-09-22,1
+"Sheridan",2026-09-29,1
+"Sheridan",2026-10-06,1
+"Sheridan",2026-10-13,1
+"Sheridan",2026-10-20,1
+"Sheridan",2026-10-27,1
 "Sheridan Public Schools",2026-10-27,4
-"Sheridan, MT",2026-08-06,4
-"Sheridan, MT",2026-08-07,4
-"Sheridan, MT",2026-08-11,4
-"Sheridan, MT",2026-08-18,4
-"Sheridan, MT",2026-08-25,4
-"Sheridan, MT",2026-09-01,4
-"Sheridan, MT",2026-09-07,4
-"Sheridan, MT",2026-09-08,3
-"Sheridan, MT",2026-09-15,1
-"Sheridan, MT",2026-09-22,1
-"Sheridan, MT",2026-09-29,1
-"Sheridan, MT",2026-10-06,1
-"Sheridan, MT",2026-10-13,1
-"Sheridan, MT",2026-10-20,1
-"Sheridan, MT",2026-10-27,1
 "Shields Valley Public Schools",2026-08-25,4
 "Shields Valley Public Schools",2026-09-01,4
 "Shields Valley Public Schools",2026-09-07,4
@@ -3463,6 +3159,9 @@
 "St. Ignatius School District",2026-10-27,3
 "St. Regis",2026-10-20,2
 "St. Regis",2026-10-27,2
+"Stanford",2026-08-06,2
+"Stanford",2026-08-07,1
+"Stanford",2026-08-11,1
 "Stanford Public Schools",2026-09-01,1
 "Stanford Public Schools",2026-09-07,1
 "Stanford Public Schools",2026-09-08,1
@@ -3473,9 +3172,6 @@
 "Stanford Public Schools",2026-10-13,1
 "Stanford Public Schools",2026-10-20,1
 "Stanford Public Schools",2026-10-27,1
-"Stanford, MT",2026-08-06,2
-"Stanford, MT",2026-08-07,1
-"Stanford, MT",2026-08-11,1
 "Stevensville",2026-08-06,8
 "Stevensville",2026-08-11,11
 "Stevensville",2026-08-18,10
@@ -3529,33 +3225,22 @@
 "Sunburst Schools",2026-10-13,2
 "Sunburst Schools",2026-10-20,2
 "Sunburst Schools",2026-10-27,2
-"Superior Montana",2026-08-06,1
-"Superior Montana",2026-08-07,1
-"Superior Montana",2026-08-11,1
-"Superior Montana",2026-08-18,1
-"Superior Montana",2026-08-25,1
-"Superior Montana",2026-09-01,1
-"Superior Montana",2026-09-07,1
-"Superior Montana",2026-09-08,1
-"Superior Montana",2026-09-15,1
-"Superior Montana",2026-09-22,1
-"Superior Montana",2026-09-29,1
+"Superior",2026-08-06,2
+"Superior",2026-08-07,2
+"Superior",2026-08-11,2
+"Superior",2026-08-18,2
+"Superior",2026-08-25,2
+"Superior",2026-09-01,2
+"Superior",2026-09-07,2
+"Superior",2026-09-08,2
+"Superior",2026-09-15,2
+"Superior",2026-09-22,2
+"Superior",2026-09-29,2
+"Superior",2026-10-06,1
+"Superior",2026-10-13,1
+"Superior",2026-10-20,1
+"Superior",2026-10-27,1
 "Superior School District",2026-10-27,3
-"Superior, Montana",2026-08-06,1
-"Superior, Montana",2026-08-07,1
-"Superior, Montana",2026-08-11,1
-"Superior, Montana",2026-08-18,1
-"Superior, Montana",2026-08-25,1
-"Superior, Montana",2026-09-01,1
-"Superior, Montana",2026-09-07,1
-"Superior, Montana",2026-09-08,1
-"Superior, Montana",2026-09-15,1
-"Superior, Montana",2026-09-22,1
-"Superior, Montana",2026-09-29,1
-"Superior, Montana",2026-10-06,1
-"Superior, Montana",2026-10-13,1
-"Superior, Montana",2026-10-20,1
-"Superior, Montana",2026-10-27,1
 "Swan River School District #4",2026-08-25,5
 "Swan River School District #4",2026-09-01,5
 "Swan River School District #4",2026-09-07,5
@@ -3623,15 +3308,15 @@
 "Terry",2026-10-27,1
 "Terry Public Schools",2026-08-25,14
 "Terry Public Schools",2026-09-01,14
-"Terry Public Schools",2026-09-07,8
-"Terry Public Schools",2026-09-08,8
-"Terry Public Schools",2026-09-15,8
-"Terry Public Schools",2026-09-22,8
-"Terry Public Schools",2026-09-29,8
-"Terry Public Schools",2026-10-06,8
-"Terry Public Schools",2026-10-13,8
-"Terry Public Schools",2026-10-20,8
-"Terry Public Schools",2026-10-27,8
+"Terry Public Schools",2026-09-07,7
+"Terry Public Schools",2026-09-08,7
+"Terry Public Schools",2026-09-15,7
+"Terry Public Schools",2026-09-22,7
+"Terry Public Schools",2026-09-29,7
+"Terry Public Schools",2026-10-06,7
+"Terry Public Schools",2026-10-13,7
+"Terry Public Schools",2026-10-20,7
+"Terry Public Schools",2026-10-27,7
 "Thompson Falls",2026-08-06,2
 "Thompson Falls",2026-08-07,2
 "Thompson Falls",2026-08-11,2
@@ -3683,34 +3368,37 @@
 "Three Forks Public Schools",2026-10-13,5
 "Three Forks Public Schools",2026-10-20,5
 "Three Forks Public Schools",2026-10-27,6
-"Townsend",2026-08-06,2
-"Townsend",2026-08-07,2
-"Townsend",2026-08-11,2
-"Townsend",2026-08-18,2
-"Townsend",2026-08-25,2
-"Townsend",2026-09-01,2
-"Townsend",2026-09-07,2
-"Townsend",2026-09-08,2
-"Townsend",2026-09-15,3
-"Townsend",2026-09-22,3
-"Townsend",2026-09-29,3
-"Townsend",2026-10-06,3
+"Townsend",2026-08-06,3
+"Townsend",2026-08-07,3
+"Townsend",2026-08-11,3
+"Townsend",2026-08-18,3
+"Townsend",2026-08-25,3
+"Townsend",2026-09-01,3
+"Townsend",2026-09-07,3
+"Townsend",2026-09-08,3
+"Townsend",2026-09-15,4
+"Townsend",2026-09-22,4
+"Townsend",2026-09-29,4
+"Townsend",2026-10-06,4
 "Townsend",2026-10-13,3
 "Townsend",2026-10-20,3
 "Townsend",2026-10-27,3
 "Townsend School District",2026-09-01,5
-"Townsend, MT",2026-08-06,1
-"Townsend, MT",2026-08-07,1
-"Townsend, MT",2026-08-11,1
-"Townsend, MT",2026-08-18,1
-"Townsend, MT",2026-08-25,1
-"Townsend, MT",2026-09-01,1
-"Townsend, MT",2026-09-07,1
-"Townsend, MT",2026-09-08,1
-"Townsend, MT",2026-09-15,1
-"Townsend, MT",2026-09-22,1
-"Townsend, MT",2026-09-29,1
-"Townsend, MT",2026-10-06,1
+"Trego",2026-08-06,1
+"Trego",2026-08-07,1
+"Trego",2026-08-11,1
+"Trego",2026-08-18,1
+"Trego",2026-08-25,1
+"Trego",2026-09-01,1
+"Trego",2026-09-07,1
+"Trego",2026-09-08,1
+"Trego",2026-09-15,1
+"Trego",2026-09-22,1
+"Trego",2026-09-29,1
+"Trego",2026-10-06,1
+"Trego",2026-10-13,1
+"Trego",2026-10-20,1
+"Trego",2026-10-27,1
 "Trego School District 53",2026-08-25,2
 "Trego School District 53",2026-09-01,1
 "Trego School District 53",2026-09-07,1
@@ -3722,21 +3410,6 @@
 "Trego School District 53",2026-10-13,1
 "Trego School District 53",2026-10-20,1
 "Trego School District 53",2026-10-27,1
-"Trego, MT",2026-08-06,1
-"Trego, MT",2026-08-07,1
-"Trego, MT",2026-08-11,1
-"Trego, MT",2026-08-18,1
-"Trego, MT",2026-08-25,1
-"Trego, MT",2026-09-01,1
-"Trego, MT",2026-09-07,1
-"Trego, MT",2026-09-08,1
-"Trego, MT",2026-09-15,1
-"Trego, MT",2026-09-22,1
-"Trego, MT",2026-09-29,1
-"Trego, MT",2026-10-06,1
-"Trego, MT",2026-10-13,1
-"Trego, MT",2026-10-20,1
-"Trego, MT",2026-10-27,1
 "Trout Creek",2026-08-06,2
 "Trout Creek",2026-08-07,2
 "Trout Creek",2026-08-11,2
@@ -3856,48 +3529,18 @@
 "Vida",2026-10-13,3
 "Vida",2026-10-20,3
 "Vida",2026-10-27,3
-"WIBAUX",2026-08-06,1
-"WIBAUX",2026-08-07,1
-"WIBAUX",2026-08-11,1
-"WIBAUX",2026-08-18,1
-"WIBAUX",2026-08-25,1
-"WIBAUX",2026-09-01,1
-"WIBAUX",2026-09-07,1
-"WIBAUX",2026-09-08,1
-"WIBAUX",2026-09-15,1
-"WIBAUX",2026-09-22,1
-"WIBAUX",2026-09-29,1
-"WIBAUX",2026-10-06,1
-"WIBAUX",2026-10-13,1
-"WIBAUX",2026-10-20,1
-"WIBAUX",2026-10-27,1
-"WYOLA",2026-08-06,1
-"WYOLA",2026-08-07,1
-"WYOLA",2026-08-11,1
-"WYOLA",2026-08-18,1
-"WYOLA",2026-08-25,1
-"WYOLA",2026-09-01,1
-"WYOLA",2026-09-07,2
-"WYOLA",2026-09-08,2
-"WYOLA",2026-09-15,2
-"WYOLA",2026-09-22,2
-"WYOLA",2026-09-29,2
-"WYOLA",2026-10-06,2
-"WYOLA",2026-10-13,2
-"WYOLA",2026-10-20,1
-"WYOLA",2026-10-27,1
 "West Glacier Elementary School District #8",2026-10-27,1
 "West Valley School District #1",2026-10-27,1
-"West Yellowstone School District",2026-09-01,5
-"West Yellowstone School District",2026-09-07,4
-"West Yellowstone School District",2026-09-08,4
-"West Yellowstone School District",2026-09-15,4
-"West Yellowstone School District",2026-09-22,4
-"West Yellowstone School District",2026-09-29,4
-"West Yellowstone School District",2026-10-06,4
-"West Yellowstone School District",2026-10-13,4
-"West Yellowstone School District",2026-10-20,4
-"West Yellowstone School District",2026-10-27,4
+"West Yellowstone School District",2026-09-01,3
+"West Yellowstone School District",2026-09-07,2
+"West Yellowstone School District",2026-09-08,2
+"West Yellowstone School District",2026-09-15,2
+"West Yellowstone School District",2026-09-22,2
+"West Yellowstone School District",2026-09-29,2
+"West Yellowstone School District",2026-10-06,2
+"West Yellowstone School District",2026-10-13,2
+"West Yellowstone School District",2026-10-20,2
+"West Yellowstone School District",2026-10-27,2
 "Westby",2026-08-06,6
 "Westby",2026-08-07,6
 "Westby",2026-08-11,6
@@ -3993,18 +3636,21 @@
 "Whitewater",2026-10-20,1
 "Whitewater",2026-10-27,1
 "Whitewater Public Schools",2026-10-27,3
-"Wibaux",2026-08-06,4
-"Wibaux",2026-08-07,4
-"Wibaux",2026-08-11,4
-"Wibaux",2026-08-18,4
-"Wibaux",2026-08-25,4
-"Wibaux",2026-09-01,4
-"Wibaux",2026-09-07,4
-"Wibaux",2026-09-08,4
-"Wibaux",2026-09-15,4
-"Wibaux",2026-09-22,4
-"Wibaux",2026-09-29,3
-"Wibaux",2026-10-06,3
+"Wibaux",2026-08-06,5
+"Wibaux",2026-08-07,5
+"Wibaux",2026-08-11,5
+"Wibaux",2026-08-18,5
+"Wibaux",2026-08-25,5
+"Wibaux",2026-09-01,5
+"Wibaux",2026-09-07,5
+"Wibaux",2026-09-08,5
+"Wibaux",2026-09-15,5
+"Wibaux",2026-09-22,5
+"Wibaux",2026-09-29,4
+"Wibaux",2026-10-06,4
+"Wibaux",2026-10-13,1
+"Wibaux",2026-10-20,1
+"Wibaux",2026-10-27,1
 "Wibaux Public Schools",2026-10-27,1
 "Wilsall",2026-08-06,2
 "Wilsall",2026-08-07,2
@@ -4021,20 +3667,20 @@
 "Wilsall",2026-10-13,2
 "Wilsall",2026-10-20,2
 "Wilsall",2026-10-27,2
-"Winifred, MT",2026-08-06,2
-"Winifred, MT",2026-08-07,2
-"Winifred, MT",2026-08-11,2
-"Winifred, MT",2026-08-18,2
-"Winifred, MT",2026-08-25,2
-"Winifred, MT",2026-09-01,2
-"Winifred, MT",2026-09-07,2
-"Winifred, MT",2026-09-08,2
-"Winifred, MT",2026-09-15,2
-"Winifred, MT",2026-09-22,2
-"Winifred, MT",2026-09-29,2
-"Winifred, MT",2026-10-06,2
-"Winifred, MT",2026-10-13,2
-"Winifred, MT",2026-10-20,2
+"Winifred",2026-08-06,2
+"Winifred",2026-08-07,2
+"Winifred",2026-08-11,2
+"Winifred",2026-08-18,2
+"Winifred",2026-08-25,2
+"Winifred",2026-09-01,2
+"Winifred",2026-09-07,2
+"Winifred",2026-09-08,2
+"Winifred",2026-09-15,2
+"Winifred",2026-09-22,2
+"Winifred",2026-09-29,2
+"Winifred",2026-10-06,2
+"Winifred",2026-10-13,2
+"Winifred",2026-10-20,2
 "Winnett Public Schools",2026-08-25,4
 "Winnett Public Schools",2026-09-01,4
 "Winnett Public Schools",2026-09-07,4
@@ -4047,21 +3693,21 @@
 "Winnett Public Schools",2026-10-20,4
 "Winnett Public Schools",2026-10-27,4
 "Wolf Creek, MT (Helena)",2026-08-11,1
-"Wolf Point",2026-08-06,10
-"Wolf Point",2026-08-07,10
-"Wolf Point",2026-08-11,10
-"Wolf Point",2026-08-18,10
-"Wolf Point",2026-08-25,10
-"Wolf Point",2026-09-01,10
-"Wolf Point",2026-09-07,8
-"Wolf Point",2026-09-08,8
-"Wolf Point",2026-09-15,8
-"Wolf Point",2026-09-22,8
-"Wolf Point",2026-09-29,8
-"Wolf Point",2026-10-06,8
-"Wolf Point",2026-10-13,8
-"Wolf Point",2026-10-20,8
-"Wolf Point",2026-10-27,8
+"Wolf Point",2026-08-06,12
+"Wolf Point",2026-08-07,12
+"Wolf Point",2026-08-11,12
+"Wolf Point",2026-08-18,12
+"Wolf Point",2026-08-25,12
+"Wolf Point",2026-09-01,12
+"Wolf Point",2026-09-07,10
+"Wolf Point",2026-09-08,10
+"Wolf Point",2026-09-15,10
+"Wolf Point",2026-09-22,10
+"Wolf Point",2026-09-29,10
+"Wolf Point",2026-10-06,10
+"Wolf Point",2026-10-13,10
+"Wolf Point",2026-10-20,10
+"Wolf Point",2026-10-27,10
 "Wolf Point Public Schools",2026-08-11,19
 "Wolf Point Public Schools",2026-08-18,19
 "Wolf Point Public Schools",2026-09-01,12
@@ -4074,42 +3720,21 @@
 "Wolf Point Public Schools",2026-10-13,13
 "Wolf Point Public Schools",2026-10-20,13
 "Wolf Point Public Schools",2026-10-27,13
-"Wolf Point, MT",2026-08-06,1
-"Wolf Point, MT",2026-08-07,1
-"Wolf Point, MT",2026-08-11,1
-"Wolf Point, MT",2026-08-18,1
-"Wolf Point, MT",2026-08-25,1
-"Wolf Point, MT",2026-09-01,1
-"Wolf Point, MT",2026-09-07,1
-"Wolf Point, MT",2026-09-08,1
-"Wolf Point, MT",2026-09-15,1
-"Wolf Point, MT",2026-09-22,1
-"Wolf Point, MT",2026-09-29,1
-"Wolf Point, MT",2026-10-06,1
-"Wolf Point, MT",2026-10-13,1
-"Wolf Point, MT",2026-10-20,1
-"Wolf Point, MT",2026-10-27,1
-"Wolf Point, Montana",2026-08-06,1
-"Wolf Point, Montana",2026-08-07,1
-"Wolf Point, Montana",2026-08-11,1
-"Wolf Point, Montana",2026-08-18,1
-"Wolf Point, Montana",2026-08-25,1
-"Wolf Point, Montana",2026-09-01,1
-"Wolf Point, Montana",2026-09-07,1
-"Wolf Point, Montana",2026-09-08,1
-"Wolf Point, Montana",2026-09-15,1
-"Wolf Point, Montana",2026-09-22,1
-"Wolf Point, Montana",2026-09-29,1
-"Wolf Point, Montana",2026-10-06,1
-"Wolf Point, Montana",2026-10-13,1
-"Wolf Point, Montana",2026-10-20,1
-"Wolf Point, Montana",2026-10-27,1
 "Woodman Elementary School District #3",2026-10-27,1
-"Wyola",2026-08-06,2
-"Wyola",2026-08-07,2
-"Wyola",2026-08-11,2
-"Wyola",2026-08-18,1
-"Wyola",2026-08-25,1
-"Wyola",2026-09-01,1
-"Yaak, Montana",2026-08-06,1
-"Yaak, Montana",2026-08-07,1
+"Wyola",2026-08-06,3
+"Wyola",2026-08-07,3
+"Wyola",2026-08-11,3
+"Wyola",2026-08-18,2
+"Wyola",2026-08-25,2
+"Wyola",2026-09-01,2
+"Wyola",2026-09-07,2
+"Wyola",2026-09-08,2
+"Wyola",2026-09-15,2
+"Wyola",2026-09-22,2
+"Wyola",2026-09-29,2
+"Wyola",2026-10-06,2
+"Wyola",2026-10-13,2
+"Wyola",2026-10-20,1
+"Wyola",2026-10-27,1
+"Yaak",2026-08-06,1
+"Yaak",2026-08-07,1

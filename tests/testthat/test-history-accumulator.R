@@ -138,6 +138,7 @@ test_that("incrementally appending the latest week reproduces a full rebuild thr
                   normalize_posting_text)) %>%
     add_k12_posting_identity() %>%
     distinct(Posting_ID, Archive_Date, .keep_all = TRUE) %>%
+    filter(!is_placeholder_posting(title)) %>%
     mutate(position = classify_k12_position(title),
            District = canonicalize_k12_district(District)) %>%
     select(title, Archive_Date, position, location, url, District,

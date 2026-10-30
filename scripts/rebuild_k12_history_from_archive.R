@@ -48,6 +48,7 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data") {
     distinct(Posting_ID, Archive_Date, .keep_all = TRUE)
 
   combinedclean <- combined_k12_data %>%
+    filter(!is_placeholder_posting(title)) %>%
     mutate(position = classify_k12_position(title),
            District = canonicalize_k12_district(District)) %>%
     dplyr::select(title, Archive_Date, date_posted, position, location, url, District,

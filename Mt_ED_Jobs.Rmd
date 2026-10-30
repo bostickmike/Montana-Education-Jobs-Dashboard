@@ -3290,6 +3290,9 @@ file_name <- paste0("combined_", Sys.Date(), ".csv")
 write.csv(combined, file = file.path("Archivek12_Data", file_name), row.names = FALSE)
 
 combinedclean <- combined %>%
+  # Placeholder board entries ("Sample Certified Position", account-creation
+  # templates) are kept in the raw archive above but never counted as jobs.
+  filter(!is_placeholder_posting(title)) %>%
   mutate(position = classify_k12_position(title),
          District = canonicalize_k12_district(District)) %>%
   select(title, Archive_Date, date_posted, position, location, url, District,
@@ -3384,7 +3387,9 @@ registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE) %>%
 salarymap2_path <- file.path("Mt_Ed_Jobs", "salarymap2.csv")
 salarymap2 <- if (file.exists(salarymap2_path)) {
   read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
-    select(-any_of(c("County", "Latitude", "Longitude", "Job_Link"))) %>%
+    # NCES_LEAID comes from the registry too; keeping last run's copy here made
+    # the join emit NCES_LEAID.x/.y (and a third copy the run after).
+    select(-any_of(c("County", "Latitude", "Longitude", "Job_Link")), -starts_with("NCES_LEAID")) %>%
     right_join(registry, by = "District") %>%
     select(District, any_of("NCES_LEAID"), County, Latitude, Longitude, Job_Link, everything())
 } else {
@@ -3800,6 +3805,9 @@ if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 
 file_name <- paste0("hedata_", Sys.Date(), ".xlsx")
 write_xlsx(hedata, path = file.path("Archived_HE_Data", file_name))
+# Non-postings (a scraped "Job Title" header, "No Jobs" notices) stay in the
+# raw archive above but are dropped from everything shown or counted.
+hedata <- hedata %>% filter(!is_placeholder_posting(Title))
 write_xlsx(hedata, path = file.path("Mt_Ed_Jobs", "hedata.xlsx"))
 
 # Fix historical institution-name typos before anything downstream keys off
