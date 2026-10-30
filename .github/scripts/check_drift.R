@@ -43,9 +43,10 @@ he_snapshots <- load_snapshots("Archived_HE_Data", "^hedata_.*\\.xlsx$", date_re
 k12_baseline <- build_historical_counts(k12_snapshots, "name")
 he_baseline <- build_historical_counts(he_snapshots, "name")
 
-current_k12 <- as.data.frame(table(collapse_statewide_feed_names(
-  read.csv("Mt_Ed_Jobs/combinedclean.csv", stringsAsFactors = FALSE)
-)))
+combined_raw <- read.csv("Mt_Ed_Jobs/combinedclean.csv", stringsAsFactors = FALSE)
+registry <- if (file.exists("k12_district_registry.csv")) read.csv("k12_district_registry.csv", stringsAsFactors = FALSE) else NULL
+
+current_k12 <- as.data.frame(table(collapse_statewide_feed_names(combined_raw)))
 names(current_k12) <- c("name", "count")
 current_he <- as.data.frame(table(readxl::read_xlsx("Mt_Ed_Jobs/hedata.xlsx")$Institution))
 names(current_he) <- c("name", "count")
@@ -77,9 +78,35 @@ scrape_log <- if (file.exists("scrape_log.csv")) {
 }
 flagged <- attach_scrape_log_errors(flagged, scrape_log)
 
+safety_net_summary <- summarize_central_safety_net(
+  combined_df = combined_raw,
+  registry = registry,
+  scrape_log = scrape_log,
+  feed_label = OPI_STATEWIDE_SOURCE,
+  feed_short_name = "OPI",
+  discrepancy_path = "mt_discrepancy_report.csv"
+)
+
+flagged$safety_net_vacancies <- if (nrow(flagged) == 0) {
+  integer(0)
+} else {
+  vapply(seq_len(nrow(flagged)), function(i) {
+    if (flagged$type[i] == "K-12") {
+      val <- safety_net_summary$fallback_districts[[flagged$name[i]]]
+      if (!is.null(val)) as.integer(val) else 0L
+    } else {
+      NA_integer_
+    }
+  }, integer(1))
+}
+
 cat(sprintf(
   "Drift check: %d K-12 baseline sources, %d HE baseline sources, %d flagged (%d confirmed by scrape_log as errored).\n",
   nrow(k12_baseline), nrow(he_baseline), nrow(flagged), sum(!is.na(flagged$scrape_error))
+))
+cat(sprintf(
+  "Central Safety Net: %d total statewide feed vacancies, %d district(s) protected by fallback (%d vacancies preserved).\n",
+  safety_net_summary$total_feed_vacancies, length(safety_net_summary$fallback_districts), safety_net_summary$total_fallback_vacancies
 ))
 if (nrow(flagged) > 0) print(flagged)
 

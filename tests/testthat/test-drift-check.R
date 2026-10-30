@@ -590,3 +590,121 @@ test_that("a long capture is truncated to fit an issue body", {
   expect_true(any(grepl("page text truncated", md, fixed = TRUE)))
   expect_true(any(grepl("diff truncated", md, fixed = TRUE)))
 })
+
+test_that("summarize_central_safety_net handles empty or NULL inputs gracefully", {
+  summary <- summarize_central_safety_net()
+  expect_equal(summary$total_feed_vacancies, 0L)
+  expect_equal(summary$total_fallback_vacancies, 0L)
+  expect_equal(length(summary$fallback_districts), 0)
+  expect_equal(nrow(summary$discrepancies), 0)
+  expect_true(any(grepl("0 registered districts currently require Central Safety Net fallback", summary$markdown, fixed = TRUE)))
+})
+
+test_that("summarize_central_safety_net identifies active fallback districts and counts", {
+  registry <- data.frame(
+    District = c("Bozeman Public Schools", "Polson School District", "Billings Public Schools"),
+    stringsAsFactors = FALSE
+  )
+  combined <- data.frame(
+    District = c("Bozeman Public Schools", "Bozeman Public Schools", "Polson School District", "Unregistered Town", "Billings Public Schools"),
+    Posting_Source = c(
+      OPI_STATEWIDE_SOURCE,
+      OPI_STATEWIDE_SOURCE,
+      OPI_STATEWIDE_SOURCE,
+      OPI_STATEWIDE_SOURCE,
+      "AppliTrack (direct district board)"
+    ),
+    stringsAsFactors = FALSE
+  )
+
+  summary <- summarize_central_safety_net(
+    combined_df = combined,
+    registry = registry,
+    feed_label = OPI_STATEWIDE_SOURCE,
+    feed_short_name = "OPI"
+  )
+
+  expect_equal(summary$total_feed_vacancies, 4L)
+  expect_equal(summary$total_fallback_vacancies, 3L)
+  expect_equal(summary$fallback_districts[["Bozeman Public Schools"]], 2L)
+  expect_equal(summary$fallback_districts[["Polson School District"]], 1L)
+  expect_null(summary$fallback_districts[["Billings Public Schools"]])
+
+  md <- paste(summary$markdown, collapse = "\n")
+  expect_match(md, "2 registered district(s) currently protected by Central Safety Net fallback", fixed = TRUE)
+  expect_match(md, "Bozeman Public Schools**: 2 vacancy/vacancies preserved", fixed = TRUE)
+  expect_match(md, "Polson School District**: 1 vacancy/vacancies preserved", fixed = TRUE)
+})
+
+test_that("summarize_central_safety_net reads discrepancy report for unmatched postings", {
+  disc <- data.frame(
+    District = c("Billings Public Schools", "Helena Public Schools"),
+    Source = c("OPI", "OPI"),
+    Title = c("Math Teacher", "Custodian (stale)"),
+    Date_Posted = c("2026-10-25", "2026-05-01"),
+    Discrepancy_Type = c("Unmatched on direct scraper (investigate ATS drift)", "Potential ghost posting on OPI"),
+    stringsAsFactors = FALSE
+  )
+
+  summary <- summarize_central_safety_net(
+    discrepancy_report = disc,
+    feed_short_name = "OPI"
+  )
+
+  expect_equal(nrow(summary$discrepancies), 1)
+  expect_equal(summary$discrepancies$District, "Billings Public Schools")
+  md <- paste(summary$markdown, collapse = "\n")
+  expect_match(md, "1 unmatched vacancy/vacancies detected on central feed", fixed = TRUE)
+  expect_match(md, "Billings Public Schools**: \"Math Teacher\" (posted 2026-10-25)", fixed = TRUE)
+})
+
+test_that("build_drift_report_markdown includes Central Safety Net status annotations and summary", {
+  actionable <- data.frame(
+    name = c("Bozeman Public Schools", "Havre Public Schools", "Montana State University"),
+    type = c("K-12", "K-12", "Higher Ed"),
+    mean_count = c(45.0, 10.0, 30.0),
+    count = c(0, 0, 2),
+    url = c("https://bozeman.k12.mt.us", "https://havre.k12.mt.us", "https://msu.edu"),
+    verdict = c("confirmed_broken", "likely_broken", "likely_broken"),
+    error_message = c("500 Server Error", NA, NA),
+    llm_note = c(NA, "an LLM read 4 postings", NA),
+    safety_net_vacancies = c(5L, 0L, NA_integer_),
+    stringsAsFactors = FALSE
+  )
+
+  safety_net_summary <- list(
+    total_feed_vacancies = 350L,
+    fallback_districts = list("Bozeman Public Schools" = 5L),
+    total_fallback_vacancies = 5L,
+    markdown = c(
+      "### Central Safety Net Status Summary",
+      "",
+      "- **Statewide Feed (OPI)**: 350 active vacancies captured.",
+      "- **Active Fallback Districts**: 1 registered district(s) currently protected by Central Safety Net fallback (5 total vacancies preserved):",
+      "  - **Bozeman Public Schools**: 5 vacancy/vacancies preserved via fallback",
+      "- **Central Feed Discrepancies**: 0 unmatched vacancies detected for active direct scrapers.",
+      ""
+    )
+  )
+
+  lines <- build_drift_report_markdown(
+    actionable = actionable,
+    safety_net_summary = safety_net_summary,
+    date = as.Date("2026-10-29"),
+    feed_short_name = "OPI"
+  )
+
+  report <- paste(lines, collapse = "\n")
+  # Bozeman: active fallback
+  expect_match(report, "Bozeman Public Schools", fixed = TRUE)
+  expect_match(report, "Central Safety Net**: Active (5 fallback vacancies preserved via OPI)", fixed = TRUE)
+  # Havre: inactive fallback
+  expect_match(report, "Havre Public Schools", fixed = TRUE)
+  expect_match(report, "Central Safety Net**: Inactive (0 fallback vacancies on OPI)", fixed = TRUE)
+  # Higher Ed: no Central Safety Net bullet under its entry
+  expect_match(report, "Montana State University", fixed = TRUE)
+  expect_false(grepl("Montana State University.*\\n\\s+- \\*\\*Central Safety Net", report))
+  # Bottom summary block included
+  expect_match(report, "### Central Safety Net Status Summary", fixed = TRUE)
+  expect_match(report, "Statewide Feed (OPI)**: 350 active vacancies captured", fixed = TRUE)
+})
