@@ -333,12 +333,15 @@ remove_opi_direct_duplicates <- function(opi_df, direct_df, registry, report_pat
   opi_df[!is_duplicate, , drop = FALSE]
 }
 
-# Assigns surviving OPI postings to their canonical legal district names where
-# they correspond to registered K-12 districts. This provides the Central Safety
-# Net Fallback: if any directly scraped district encounters an ATS outage,
-# platform migration, or scraping error, its active jobs on OPI are automatically
-# mapped to the canonical district name rather than raw city text, ensuring
-# continuity in dashboard filtering, map visualization, and weekly vacancy trends.
+# Central Safety Net Fallback: when a registered district's own direct scrape
+# produced no rows this run (ATS outage, platform migration, scraping error),
+# its surviving OPI postings are relabeled to the canonical registry district
+# name so the district doesn't vanish from the dashboard for that week.
+# Districts whose direct scrape did return rows keep their OPI rows under OPI's
+# raw location label -- the registry-backed views (Map, District Summary,
+# vacancy rates) count only direct rows for them, per DATA_COOKBOOK.md, and
+# relabeling would double count jobs OPI and the district board word
+# differently.
 apply_opi_district_fallback <- function(opi_df, registry, direct_df = NULL) {
   if (nrow(opi_df) == 0) return(opi_df)
   if (!"location" %in% names(opi_df)) return(opi_df)
@@ -417,6 +420,10 @@ apply_opi_district_fallback <- function(opi_df, registry, direct_df = NULL) {
     character(0)
   }
 
+  registry_bases <- trimws(sub(" (school|district|elementary|public|high|schools|unified).*", "",
+                               normalize_txt(registry$District)))
+  registry_by_length <- order(nchar(registry_bases), decreasing = TRUE)
+
   for (i in seq_len(nrow(opi_df))) {
     cur_district <- as.character(opi_df$District[i])
     if (!is.na(cur_district) && cur_district %in% registry$District) next
@@ -435,9 +442,11 @@ apply_opi_district_fallback <- function(opi_df, registry, direct_df = NULL) {
       }
     }
 
-    # 2. Specific sub-district match in title or location
+    # 2. Specific sub-district match in title or location. Longest district
+    # name first, so "East Helena" matches East Helena Public Schools rather
+    # than Helena Public Schools.
     if (is.na(mapped_district)) {
-      for (k in seq_len(nrow(registry))) {
+      for (k in registry_by_length) {
         d_name <- registry$District[k]
         d_norm <- normalize_txt(d_name)
         d_base <- trimws(sub(" (school|district|elementary|public|high|schools|unified).*", "", d_norm))
@@ -457,16 +466,10 @@ apply_opi_district_fallback <- function(opi_df, registry, direct_df = NULL) {
       if (length(city_idx) == 1) {
         mapped_district <- registry$District[city_idx]
       } else if (length(city_idx) > 1) {
-        matching_districts <- registry$District[city_idx]
+        # A bare city name shared by several registry districts only maps to
+        # that city's primary district; otherwise it's ambiguous and stays raw.
         if (loc_norm %in% names(primary_multi)) {
-          empty_matches <- setdiff(matching_districts, direct_active)
-          if (length(empty_matches) == 1) {
-            mapped_district <- empty_matches
-          } else {
-            mapped_district <- primary_multi[[loc_norm]]
-          }
-        } else {
-          mapped_district <- matching_districts[1]
+          mapped_district <- primary_multi[[loc_norm]]
         }
       }
     }
@@ -484,7 +487,8 @@ apply_opi_district_fallback <- function(opi_df, registry, direct_df = NULL) {
       }
     }
 
-    if (!is.na(mapped_district) && mapped_district %in% registry$District) {
+    if (!is.na(mapped_district) && mapped_district %in% registry$District &&
+        !mapped_district %in% direct_active) {
       opi_df$District[i] <- mapped_district
     }
   }

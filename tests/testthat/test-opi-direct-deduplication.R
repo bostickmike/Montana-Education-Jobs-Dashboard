@@ -197,3 +197,41 @@ test_that("apply_opi_district_fallback retains raw location for unregistered rur
   expect_equal(nrow(result), 2)
   expect_equal(result$District, c("Busby", "Itinerant"))
 })
+
+test_that("apply_opi_district_fallback leaves OPI rows raw for districts whose direct scrape returned rows", {
+  registry <- data.frame(
+    District = c("Bozeman Public Schools", "Livingston Public Schools"),
+    City = c("Bozeman", "Livingston"),
+    stringsAsFactors = FALSE
+  )
+  direct_df <- data.frame(title = "Math Teacher", date_posted = as.Date("2026-10-28"),
+                          District = "Bozeman Public Schools", stringsAsFactors = FALSE)
+  opi_df <- data.frame(title = c("Science Teacher", "Elementary Teacher"),
+                       location = c("Bozeman", "Livingston"),
+                       District = c("Bozeman", "Livingston"), stringsAsFactors = FALSE)
+
+  result <- apply_opi_district_fallback(opi_df, registry, direct_df)
+
+  expect_equal(result$District, c("Bozeman", "Livingston Public Schools"))
+})
+
+test_that("apply_opi_district_fallback prefers the longest district name and never guesses a same-city district", {
+  registry <- data.frame(
+    District = c("Helena Public Schools", "East Helena Public Schools", "Billings Public Schools",
+                 "Independent School", "Missoula County Public Schools", "DeSmet Public School"),
+    City = c("Helena", "East Helena", "Billings", "Billings", "Missoula", "Missoula"),
+    stringsAsFactors = FALSE
+  )
+  direct_df <- data.frame(title = "Teacher", date_posted = as.Date("2026-10-28"),
+                          District = "Missoula County Public Schools", stringsAsFactors = FALSE)
+  opi_df <- data.frame(title = c("Teacher", "Teacher", "Teacher"),
+                       location = c("East Helena", "Independent School - Billings", "Missoula"),
+                       District = c("East Helena", "Independent School - Billings", "Missoula"),
+                       stringsAsFactors = FALSE)
+
+  result <- apply_opi_district_fallback(opi_df, registry, direct_df)
+
+  # Missoula's primary district (MCPS) scraped fine, so its OPI row stays raw
+  # rather than being handed to DeSmet just because DeSmet had no direct rows.
+  expect_equal(result$District, c("East Helena Public Schools", "Independent School", "Missoula"))
+})

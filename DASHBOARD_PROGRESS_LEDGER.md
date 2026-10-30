@@ -31,7 +31,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 | **Higher Ed Summary & Trends** | Implemented | Implemented | **Full Parity** | IPEDS instructional salary benchmarks & enrollment. |
 | **Geographic Leaflet Map** | Implemented | Implemented | **Full Parity** | Interactive position/subject keyword search ("special ed", "mathematics"), suggestion chips, dynamic radius scaling, layer controls (Positron, OSM, Esri Topo), and cluster pins. |
 | **Data Sources & Codebook Tab** | Implemented | Implemented | **Full Parity** | Direct CSV download buttons and interactive schemas. |
-| **Federal NCES LEA IDs** | Embedded (48/48) | Embedded (191/191) | **Full Parity** | 7-digit `NCES_LEAID` in registry, `salarymap2.csv`, and `job_duration_spells.csv`. |
+| **Federal NCES LEA IDs** | Embedded (48/48) | Embedded (200/200) | **Full Parity** | 7-digit `NCES_LEAID` in registry, `salarymap2.csv`, and `job_duration_spells.csv`. |
 | **Federal IPEDS UNITIDs** | Embedded (8/8) | Embedded (23/23) | **Full Parity** | 6-digit `IPEDS_UNITID` in higher ed institutional registry and `salarymap.csv`. |
 | **Pipeline Dry-Run Test Harness** | Implemented | Implemented | **Full Parity** | Evaluates scrape combination chunks against mock data frames in CI. |
 | **Pipeline AST Defensive Linting**| Implemented | Implemented | **Full Parity** | Blocks syntax typos (`%%`) and enforces date coercions. |
@@ -54,8 +54,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     - Searchable DT data table with CSV and Excel export buttons.
   * Added `job_duration_spells.csv` to `REQUIRED_SCHEMAS` in `schema_check.R` to satisfy the strict schema verification suite.
 * **Citation & Attribution Harmonization:**
-  * Standardized citations and footer attribution across `Mt_ED_Jobs.Rmd`, `Mt_Ed_Jobs/app.R`, and `DATA_DICTIONARY.md` to:  
-    *"Developed by Mike Bostick and Mark Perkins"*.
+  * Standardized citations and footer attribution across `Mt_ED_Jobs.Rmd`, `Mt_Ed_Jobs/app.R`, and `DATA_DICTIONARY.md` (later changed to Mike Bostick as sole Montana author; see the 2026-10-29 terminology/attribution entry below).
 
 ### Milestone 2: Scraper Pipeline Hardening & Error Eradication
 * **Date Parsing Homogenization:**
@@ -348,3 +347,6 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * **Instant Suggestion Chips**: Integrated 1-click filter chips for popular subject areas (`Special Ed`, `Mathematics`, `Elementary`, `Science`, `Music / Art`, `Bus Driver`, and `Clear`).
   * **Multi-Basemap Layer Control**: Added interactive tile layer switcher offering CartoDB Positron (clean default), OpenStreetMap, and Esri World Topo Map.
   * Total suite: 3,127 tests PASS (0 failures, 0 warnings, 2 skips).
+- [x] Post-review fixes (2026-10-29):
+  * **Position classifier regressions from the precedence overhaul** (`classify_k12_position()`, identical in MT and WY): bare `Intern` matched inside "Internal Applicants Only" (teacher and bus-driver postings landed in Support Services); `Technician` was checked ahead of Custodial/Transportation/Food Services (cafeteria, maintenance, HVAC, facility technicians); `Director`/`Driver` ahead of Teacher sent "Band/Choir Director" to Administration and "Drivers Education Teacher" to Transportation. Fixed with a word-bounded `\bIntern\b`, a separate late Technician rule, and an early Teacher rule for ensemble directors and Drivers Ed; regression tests added in `test-k12-classification.R`. K-12 history and `job_duration_spells.csv` rebuilt from archive.
+  * **OPI Central Safety Net narrowed to a real fallback**: `apply_opi_district_fallback()` previously relabeled every matchable OPI row (358 of 396 on the 2026-10-27 data, 311 of them onto districts whose direct scrape was working), feeding OPI rows into the registry-backed district counts, map and vacancy rates and double counting differently worded duplicates. It now relabels only for districts with no direct rows this run (39 of 396 on the same data), matches the longest district name first (East Helena no longer maps to Helena; "Independent School - Billings" no longer maps to Billings Public Schools), and no longer hands a shared-city posting to whichever same-city district happens to be empty (Missoula -> DeSmet).

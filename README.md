@@ -34,7 +34,7 @@ MT DLI publishes only the current year's Teacher Compensation Report with no pub
 
 ### K-12 coverage and scope
 
-The K-12 Jobs Table combines 147 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
+The K-12 Jobs Table combines 200 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
 
 The Map and District Summary deliberately show only directly scraped districts: those records can be matched to verified district identities, coordinates, staffing, salary, and OPI General Fund expenditure data. OPI-only rows remain in the Jobs Table, but OPI exposes a raw location field rather than a canonical district identifier, so they cannot be reliably joined to district context or mapped.
 
