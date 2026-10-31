@@ -1228,7 +1228,8 @@ test_that("parse_redrover_postings extracts the 6 real postings, excluding the 2
 test_that("parse_redrover_postings returns zero rows (not an error) when there's no 'Found N job openings' header", {
   result <- parse_redrover_postings("Just some regular page text with no postings.", "url")
   expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link",
+                                 "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text"))
 })
 
 test_that("fetch_redrover_postings drives a chromote session and parses its real rendered text", {
@@ -1255,6 +1256,25 @@ test_that("parse_redrover_postings handles a board with no relative-date stamp a
   expect_equal(result$Location[result$Title == "Substitute Custodian"], "Hamilton")
 })
 
+test_that("parse_redrover_postings reads each posting's own salary line as Pay_* (Hamilton)", {
+  text <- paste(readLines(test_path("fixtures", "redrover_hamilton_rendered.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_redrover_postings(text, "url", default_location = "Hamilton")
+  pay <- function(title) result[result$Title == title, c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text")]
+
+  # Every Hamilton posting states pay, and the snippet is the board's own line.
+  expect_false(any(is.na(result$Pay_Min)))
+  expect_equal(unlist(pay("Substitute Teacher 2026-27")[1:2]), c(Pay_Min = 13.5, Pay_Max = 14.65))
+  expect_equal(pay("Substitute Teacher 2026-27")$Pay_Unit, "hour")
+  expect_equal(pay("Substitute Teacher 2026-27")$Pay_Text, "$13.50 - $14.65 per hour")
+  # "per unit" is RedRover's label for a stipend; amounts stay unconverted.
+  expect_equal(pay("HMS Head Basketball Coach")$Pay_Unit, "stipend")
+  expect_equal(unlist(pay("HMS Head Basketball Coach")[1:2]), c(Pay_Min = 2070, Pay_Max = 2525))
+  expect_equal(pay("Custodian")$Pay_Min, 16.5)
+  # The salary line doesn't displace title or location.
+  expect_equal(result$Location[result$Title == "HMS Head Basketball Coach"], "Hamilton Middle School")
+})
+
 test_that("parse_redrover_postings handles inline relative-date stamp button text (Columbia Falls)", {
   text <- paste(readLines(test_path("fixtures", "columbiafalls_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
 
@@ -1266,6 +1286,12 @@ test_that("parse_redrover_postings handles inline relative-date stamp button tex
   expect_equal(result$Location[result$Title == "HOSA Advisor"], "High School")
   expect_equal(result$Location[result$Title == "Pre-K Paraeducator"], "Glacier Gateway")
   expect_equal(result$Location[result$Title == "Substitute Teacher"], "Columbia Falls")
+  # Postings without a salary line keep NA pay rather than borrowing a neighbor's.
+  expect_equal(sum(!is.na(result$Pay_Min)), length(grep("^\\$", strsplit(text, "\n")[[1]])))
+  expect_true(is.na(result$Pay_Min[result$Title == "HOSA Advisor"]))
+  expect_equal(result$Pay_Unit[result$Title == "HS Boys Assistant Wrestling Coach (0.06)"], "stipend")
+  # An extra "Accepting remote/hybrid candidates" line ahead of the salary line.
+  expect_equal(result$Pay_Min[result$Title == "Key Club Advisor"], 1162.44)
 })
 
 # Real fixture: document.body.innerText captured via a live chromote

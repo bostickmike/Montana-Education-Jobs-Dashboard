@@ -4249,16 +4249,25 @@ fetch_dutton_postings <- function(chromote_session, url = "https://dbps.k12.mt.u
 # absolute dates anyway. "No location specified" is the board's own literal
 # placeholder for a real missing value; rows carrying it fall back to
 # `default_location` (the district's city) rather than keeping the prose.
+# The salary line, when present, is the board's own rendering of the
+# posting's pay ("$13.50 - $14.65 per hour", "$518.00 per unit" -- "per
+# unit" is how RedRover shows a STIPEND) and becomes Pay_* via
+# extract_posted_pay(), with the line itself kept as Pay_Text.
 REDROVER_PLACEHOLDER_TITLES <- c("Classified Application", "Certified Application", "Volunteer Application")
 
 # Parser for any Red Rover Hiring board's rendered innerText -- title is
 # always block[2] and location always block[4] of each "... APPLY NOW"
 # block. See the section comment above for the block shape and the
 # per-board "posted"-stamp difference this handles.
+# extract_posted_pay() lives in k12_he_classification.R, same guard as
+# direct_api_scrapers.R's.
+if (!exists("extract_posted_pay", mode = "function")) source("k12_he_classification.R")
+
 parse_redrover_postings <- function(rendered_text, url, default_location = NA_character_) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
+                       Pay_Min = numeric(0), Pay_Max = numeric(0), Pay_Unit = character(0),
+                       Pay_Text = character(0), stringsAsFactors = FALSE)
 
   lines <- strsplit(rendered_text, "\n")[[1]]
   lines <- trimws(lines)
@@ -4282,8 +4291,14 @@ parse_redrover_postings <- function(rendered_text, url, default_location = NA_ch
         location <- if (length(block) >= 4) block[4] else NA_character_
         if (!is.na(location) && location == "No location specified") location <- default_location
         if (!(title %in% REDROVER_PLACEHOLDER_TITLES)) {
-          rows[[length(rows) + 1]] <- data.frame(Title = title, Location = location,
-                                                   Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+          pay_line <- block[-(1:2)][grepl("^\\$", block[-(1:2)])][1]
+          pay <- extract_posted_pay(pay_line)
+          if (!is.na(pay$Pay_Min)) pay$Pay_Text <- pay_line
+          rows[[length(rows) + 1]] <- cbind(
+            data.frame(Title = title, Location = location,
+                       Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE),
+            pay
+          )
         }
       }
       is_exact_apply_now <- grepl("^apply now$", line, ignore.case = TRUE)

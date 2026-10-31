@@ -2994,9 +2994,12 @@ apptegy_raw <- safe_scrape(
 )
 if (nrow(apptegy_raw) > 0) {
   apptegy_df <- apptegy_raw %>%
+    # Only the RedRover boards in this batch state pay; the rest get NA.
+    ensure_posted_pay_columns() %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
-              Posting_Source = "Apptegy district site (direct board)")
+              Posting_Source = "Apptegy district site (direct board)",
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
   apptegy_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                             location = character(0), url = character(0), District = character(0),
