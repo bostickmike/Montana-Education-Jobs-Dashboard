@@ -3026,7 +3026,9 @@ opi_raw <- safe_scrape(
   expected_cols = c("Title", "Location", "Posted_Date", "Link")
 )
 
-opi_df <- opi_raw
+# Pay_* is the pay each posting's own detail view states (fetched by
+# fetch_opi_statewide_postings()); a failed scrape's placeholder has none.
+opi_df <- ensure_posted_pay_columns(opi_raw)
 if (nrow(opi_df) > 0) {
   # District is NOT a canonical legal district name here -- OPI's feed only
   # exposes a City column, so District is that raw City value passed
@@ -3036,11 +3038,13 @@ if (nrow(opi_df) > 0) {
   opi_df <- opi_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District = Location,
-              Posting_Source = "OPI Jobs for Teachers (statewide)")
+              Posting_Source = "OPI Jobs for Teachers (statewide)",
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
-  opi_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                        location = character(0), url = character(0), District = character(0),
-                        Posting_Source = character(0))
+  opi_df <- ensure_posted_pay_columns(
+    data.frame(title = character(0), date_posted = character(0), position = character(0),
+               location = character(0), url = character(0), District = character(0),
+               Posting_Source = character(0)))
 }
 ```
 
@@ -3295,6 +3299,24 @@ if (!dir.exists("Archivek12_Data")) dir.create("Archivek12_Data")
 file_name <- paste0("combined_", Sys.Date(), ".csv")
 write.csv(combined, file = file.path("Archivek12_Data", file_name), row.names = FALSE)
 
+# BLS OEWS regional pay by role, the labeled fallback for postings that state
+# no pay (bls_oews_scraper.R). Refreshed only when BLS publishes a new year;
+# a failed check keeps the committed file.
+source("bls_oews_scraper.R")
+oews_path <- file.path("Mt_Ed_Jobs", "oews_role_wages.csv")
+tryCatch(refresh_oews_wages("MT", oews_path),
+         error = function(e) message("OEWS refresh skipped: ", conditionMessage(e)))
+
+# BLS QCEW average pay of public school employees by county (all roles), the
+# map popup's county context (qcew_school_pay.R). A failed fetch keeps the
+# existing file.
+source("qcew_school_pay.R")
+tryCatch(write.csv(fetch_qcew_school_pay("30"), file.path("Mt_Ed_Jobs", "qcew_county_school_pay.csv"), row.names = FALSE),
+         error = function(e) message("QCEW school pay skipped: ", conditionMessage(e)))
+oews_wages <- read.csv(oews_path, stringsAsFactors = FALSE,
+                       colClasses = c(Area_Code = "character", SOC = "character", Year = "character"))
+district_county <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)[, c("District", "County")]
+
 combinedclean <- combined %>%
   # Placeholder board entries ("Sample Certified Position", account-creation
   # templates) are kept in the raw archive above but never counted as jobs.
@@ -3304,8 +3326,12 @@ combinedclean <- combined %>%
   # Pay_* is the pay the posting itself states (extract_posted_pay()); NA
   # where the source states none.
   ensure_posted_pay_columns() %>%
+  # Est_* is the BLS regional median for the posting's role, matched to its
+  # district's county (statewide for OPI rows, which carry no county).
+  attach_oews_estimates(oews_wages, district_county$County[match(.$District, district_county$District)], "MT") %>%
   select(title, Archive_Date, date_posted, position, location, url, District,
-         Posting_Source, Posting_Identity_Method, Posting_ID, all_of(POSTED_PAY_COLUMNS))
+         Posting_Source, Posting_Identity_Method, Posting_ID, all_of(POSTED_PAY_COLUMNS),
+         all_of(OEWS_ESTIMATE_COLUMNS))
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)
@@ -3821,6 +3847,18 @@ write_xlsx(hedata, path = file.path("Archived_HE_Data", file_name))
 # Non-postings (a scraped "Job Title" header, "No Jobs" notices) stay in the
 # raw archive above but are dropped from everything shown or counted.
 hedata <- hedata %>% filter(!is_placeholder_posting(Title))
+# Est_* is the institution's IPEDS average for the posting's staff category
+# (ipeds_staff_salaries.csv from the previous run), the labeled fallback for
+# staff postings that state no pay. Added after the raw archive write, so
+# the archive stays as scraped.
+source("ipeds_staff_salaries.R")
+staff_path <- file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv")
+if (file.exists(staff_path)) {
+  he_unitids <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"))[, c("Name", "IPEDS_UNITID")]
+  hedata <- attach_ipeds_staff_estimates(hedata, read.csv(staff_path, stringsAsFactors = FALSE,
+                                                          colClasses = c(Year = "character")),
+                                         he_unitids$IPEDS_UNITID[match(canonicalize_he_institution(hedata$Institution), he_unitids$Name)])
+}
 write_xlsx(hedata, path = file.path("Mt_Ed_Jobs", "hedata.xlsx"))
 
 # Fix historical institution-name typos before anything downstream keys off
@@ -3830,12 +3868,12 @@ write_xlsx(hedata, path = file.path("Mt_Ed_Jobs", "hedata.xlsx"))
 hedata <- hedata %>% mutate(Institution = canonicalize_he_institution(Institution))
 
 this_week_he_cat <- hedata %>% mutate(Job_Type = classify_he_job_type(Title))
-# Pay_* is left out of facultydata.csv: its accumulated history predates
+# Pay_* and Est_* are left out of facultydata.csv: its accumulated history predates
 # pay capture, and append_weekly_rows() refuses a changed column set.
 this_week_facultydata <- this_week_he_cat %>%
   filter(Job_Type %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")) %>%
   mutate(Category = classify_he_faculty_category(Title)) %>%
-  select(-all_of(POSTED_PAY_COLUMNS))
+  select(-all_of(POSTED_PAY_COLUMNS), -any_of(c("Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")))
 
 source("history_accumulator.R")
 
@@ -3893,6 +3931,21 @@ he_salary <- safe_scrape(
   expected_cols = c("Name", "Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor",
                      "Faculty_Count", "Salary_Year")
 )
+
+# IPEDS non-instructional staff pay by category (ipeds_staff_salaries.R), the
+# labeled fallback for HE staff postings that state no pay. The HE munge
+# step reads it on the next run; a failed fetch keeps the existing file.
+source("ipeds_staff_salaries.R")
+local({
+  unitids <- na.omit(read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"))$IPEDS_UNITID)
+  staff <- tryCatch(fetch_ipeds_staff_salaries(30, unitids), error = function(e) {
+    message("IPEDS staff salaries skipped: ", conditionMessage(e))
+    NULL
+  })
+  if (!is.null(staff) && nrow(staff) > 0) {
+    write.csv(staff, file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv"), row.names = FALSE)
+  }
+})
 
 he_enrollment <- safe_scrape(
   "IPEDS fall enrollment FTE (MT)",

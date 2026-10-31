@@ -99,6 +99,63 @@ format_posted_pay <- function(pay_min, pay_max, pay_unit) {
   ifelse(is.na(amount), "\u2014", paste0(amount, ifelse(is.na(suffix), "", suffix)))
 }
 
+# BLS OEWS regional median for the posting's role (Est_* from
+# attach_oews_estimates() in the pipeline), shown only where the posting
+# states no pay: "$34,750/yr", with the role and area in a hover tooltip
+# ("BLS median for teaching assistants, West Montana nonmetro").
+format_bls_estimate <- function(est_pay, est_unit, occupation, area, has_posted_pay) {
+  format_pay_estimate(est_pay, est_unit, paste0("BLS median for ", tolower(occupation), ", ", area), has_posted_pay)
+}
+
+# Same for higher-ed staff postings: the institution's IPEDS average for the
+# posting's staff category ("IPEDS average for full-time management staff,
+# Montana State University").
+format_ipeds_estimate <- function(est_pay, est_unit, category, institution, has_posted_pay) {
+  format_pay_estimate(est_pay, est_unit, paste0("IPEDS average for full-time ", category, " staff, ", institution),
+                      has_posted_pay)
+}
+
+format_pay_estimate <- function(est_pay, est_unit, tooltip, has_posted_pay) {
+  show <- !has_posted_pay & !is.na(est_pay)
+  tip <- htmltools::htmlEscape(tooltip, attribute = TRUE)
+  ifelse(show,
+         paste0("<span title=\"", tip, "\" style=\"border-bottom: 1px dotted #888; cursor: help;\">",
+                format_posted_pay(est_pay, est_pay, est_unit), "</span>"),
+         "\u2014")
+}
+
+# Map pay bands. Each posting is compared in its own unit -- an hourly wage
+# is never turned into an annual one -- so day rates, stipends and per-credit
+# pay appear only under "All".
+PAY_BANDS <- list(
+  hour_lt18  = list(unit = "hour", lo = 0,     hi = 18,    label = "under $18/hr"),
+  hour_18_25 = list(unit = "hour", lo = 18,    hi = 25,    label = "$18\u201325/hr"),
+  hour_25p   = list(unit = "hour", lo = 25,    hi = Inf,   label = "$25+/hr"),
+  year_lt50  = list(unit = "year", lo = 0,     hi = 50000, label = "under $50k/yr"),
+  year_50_60 = list(unit = "year", lo = 50000, hi = 60000, label = "$50\u201360k/yr"),
+  year_60p   = list(unit = "year", lo = 60000, hi = Inf,   label = "$60k+/yr")
+)
+in_pay_band <- function(value, unit, band) {
+  if (is.null(band) || !band %in% names(PAY_BANDS)) return(rep(TRUE, length(value)))
+  b <- PAY_BANDS[[band]]
+  !is.na(value) & !is.na(unit) & unit == b$unit & value >= b$lo & value < b$hi
+}
+
+# The figure a posting is filtered on: its posted pay (midpoint of a range)
+# when stated by the hour or year; nothing when stated in another unit (a
+# day rate or stipend is the posting's own figure, so no estimate replaces
+# it); otherwise the fallback the caller supplies (district role figure, then
+# the BLS estimate).
+posting_pay_value <- function(pay_min, pay_max, pay_unit, fallback_value, fallback_unit) {
+  posted <- !is.na(pay_min)
+  filterable <- posted & pay_unit %in% c("hour", "year")
+  data.frame(
+    value = ifelse(filterable, (pay_min + coalesce(pay_max, pay_min)) / 2, ifelse(posted, NA_real_, fallback_value)),
+    unit = ifelse(filterable, pay_unit, ifelse(posted, NA_character_, fallback_unit)),
+    stringsAsFactors = FALSE
+  )
+}
+
 #--------------------------------------------------
 # Load K-12 data
 #--------------------------------------------------
@@ -106,16 +163,20 @@ combineddata <- read.csv("combinedclean.csv", fileEncoding = "UTF-8")
 # Posted-pay columns are optional (absent from files written before the
 # pipeline captured pay) -- padded here rather than in validate_and_pad_schema(),
 # which would flag their absence as a schema problem on the Home tab.
-for (col in c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text")) {
+# The BLS estimate columns (Est_*) are optional the same way.
+for (col in c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
+              "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")) {
   if (!col %in% names(combineddata)) combineddata[[col]] <- NA
 }
+oews_year <- na.omit(combineddata$Est_Year)[1]
 combineddata <- combineddata %>%
   validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url",
                             "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
                           "combinedclean.csv") %>%
-  mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit)) %>%
-  select(District, title, position, location, `Posted Pay`, date_posted, url,
-         Posting_Source, Posting_Identity_Method, Posting_ID) %>%
+  mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit),
+         `Typical pay (BLS est.)` = format_bls_estimate(Est_Pay, Est_Pay_Unit, Est_Occupation, Est_Area, !is.na(Pay_Min))) %>%
+  select(District, title, position, location, `Posted Pay`, `Typical pay (BLS est.)`, date_posted, url,
+         Posting_Source, Posting_Identity_Method, Posting_ID, Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit) %>%
   distinct(Posting_ID, .keep_all = TRUE) %>%
   mutate(District = str_squish(as.character(District))) %>%
   mutate(date_posted = format_posted_or_listed_date(date_posted)) %>%
@@ -131,6 +192,15 @@ combineddata <- combineddata %>%
 # the OPI statewide fallback feed surfaces), but only the registry's districts
 # have a Latitude/Longitude to put on the map. See DATA_COOKBOOK.md's "OPI
 # statewide fallback feed" note.
+# BLS QCEW average pay of public school employees by county, all roles (the
+# pipeline's qcew_county_school_pay.csv); county context in the map popup.
+# Optional: counties BLS withholds, or a missing file, show nothing.
+qcew_school_pay <- if (file.exists("qcew_county_school_pay.csv")) {
+  read.csv("qcew_county_school_pay.csv", stringsAsFactors = FALSE, colClasses = c(Year = "character"))
+} else {
+  data.frame(County = character(0), Avg_Annual_Pay = numeric(0), Year = character(0))
+}
+
 mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("District", "County", "Latitude", "Longitude", "Job_Link",
                              "Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
@@ -360,10 +430,17 @@ combineddata <- combineddata %>%
   mutate(
     .is_teacher_row = Position %in% c("Teacher", "Part-Time Teacher"),
     `Teacher Avg Salary` = ifelse(.is_teacher_row, `District Avg Salary`, "—"),
-    `Teacher Salary Band (10th-90th)` = ifelse(.is_teacher_row, `Salary Band (10th-90th)`, "—")
+    `Teacher Salary Band (10th-90th)` = ifelse(.is_teacher_row, `Salary Band (10th-90th)`, "—"),
+    # Figure for the map's pay bands: posted pay, else the district teacher
+    # average on a teaching posting, else the BLS estimate.
+    .fallback_value = ifelse(.is_teacher_row & !is.na(Teacher_Avg_Salary), Teacher_Avg_Salary, Est_Pay),
+    .fallback_unit = ifelse(.is_teacher_row & !is.na(Teacher_Avg_Salary), "year", Est_Pay_Unit),
+    .Pay_Value = posting_pay_value(Pay_Min, Pay_Max, Pay_Unit, .fallback_value, .fallback_unit)$value,
+    .Pay_Unit = posting_pay_value(Pay_Min, Pay_Max, Pay_Unit, .fallback_value, .fallback_unit)$unit
   ) %>%
-  select(District, Title, Position, Location, `Posted Pay`, `Teacher Avg Salary`, `Teacher Salary Band (10th-90th)`,
-         `Posted / listed`, Link, Source, `Identity method`, Posting_ID)
+  select(District, Title, Position, Location, `Posted Pay`, `Typical pay (BLS est.)`, `Teacher Avg Salary`,
+         `Teacher Salary Band (10th-90th)`, `Posted / listed`, Link, Source, `Identity method`, Posting_ID,
+         .Pay_Value, .Pay_Unit)
 
 # Weekly ALL-category posting totals per district/institution -- powers the
 # sparkline trend next to each entity's raw count on the Top Hiring tables.
@@ -594,13 +671,16 @@ k12nowsum <- read.csv("allnow.csv", fileEncoding = "UTF-8") %>%
 #--------------------------------------------------
 ccdata <- read_xlsx("hedata.xlsx")
 # Optional posted-pay columns, padded the same way as combinedclean.csv's.
-for (col in c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text")) {
+for (col in c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
+              "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")) {
   if (!col %in% names(ccdata)) ccdata[[col]] <- NA
 }
 ccdata <- ccdata %>%
   validate_and_pad_schema(c("Institution", "Title", "Location", "Posted_Date", "Link"), "hedata.xlsx") %>%
-  mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit)) %>%
-  select(Institution, Title, Location, `Posted Pay`, Posted_Date, Link) %>%
+  mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit),
+         `Typical pay (IPEDS est.)` = format_ipeds_estimate(Est_Pay, Est_Pay_Unit, Est_Occupation, Est_Area, !is.na(Pay_Min))) %>%
+  select(Institution, Title, Location, `Posted Pay`, `Typical pay (IPEDS est.)`, Posted_Date, Link,
+         Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit) %>%
   arrange(Institution, Title) %>%
   mutate(
     Appointment = classify_he_appointment(Title),
@@ -633,7 +713,18 @@ he_salary_lookup <- mapdata2_he %>%
 
 ccdata <- ccdata %>%
   left_join(he_salary_lookup, by = c("Institution" = "Name")) %>%
-  select(Institution, Title, Location, Appointment, `Posted Pay`, `Avg Faculty Salary`, `Posted / listed`, Link)
+  # Figure for the map's pay bands: posted pay, else the institution's IPEDS
+  # faculty average on a full-time faculty posting, else its IPEDS average
+  # for the posting's staff category.
+  mutate(
+    .faculty_avg = Appointment == "Faculty/instructor (non-adjunct)" & !is.na(Faculty_Avg_Salary),
+    .fallback_value = ifelse(.faculty_avg, Faculty_Avg_Salary, Est_Pay),
+    .fallback_unit = ifelse(.faculty_avg, "year", Est_Pay_Unit),
+    .Pay_Value = posting_pay_value(Pay_Min, Pay_Max, Pay_Unit, .fallback_value, .fallback_unit)$value,
+    .Pay_Unit = posting_pay_value(Pay_Min, Pay_Max, Pay_Unit, .fallback_value, .fallback_unit)$unit
+  ) %>%
+  select(Institution, Title, Location, Appointment, `Posted Pay`, `Typical pay (IPEDS est.)`, `Avg Faculty Salary`,
+         `Posted / listed`, Link, .Pay_Value, .Pay_Unit)
 
 hesum_he <- read.csv("allsum_he.csv") %>%
   validate_and_pad_schema(c("Category", "Archive_Date", "Institution", "Job_Type", "sum"), "allsum_he.csv") %>%
@@ -1231,13 +1322,13 @@ ui <- dashboardPage(
             column(
               4,
               selectInput(
-                "map_salary_tier", "Salary Level:",
-                choices = c(
-                  "All Salaries" = "all",
-                  "$60,000+ Average Pay" = "60k_plus",
-                  "$50,000 - $60,000" = "50k_60k",
-                  "Under $50,000" = "under_50k"
-                ),
+                "map_salary_tier", "Pay:",
+                # Built from PAY_BANDS. A posting counts by its posted pay,
+                # else its district/institution role figure, else the BLS
+                # estimate -- each in its own unit.
+                choices = c("All pay" = "all", setNames(names(PAY_BANDS), vapply(PAY_BANDS, function(b) {
+                  paste0(if (b$unit == "hour") "Hourly: " else "Annual: ", b$label)
+                }, character(1)))),
                 selected = "all"
               )
             ),
@@ -1476,7 +1567,11 @@ ui <- dashboardPage(
           ),
           uiOutput("k12_filter_status")
         ),
-        p(class = "help-block", style = "margin-bottom: 8px;", "Posted Pay is the pay the job posting itself states (hourly, daily, annual, or a season stipend, as written); blank where the posting gives no figure. Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."),
+        p(class = "help-block", style = "margin-bottom: 8px;", paste0("Posted Pay is the pay the job posting itself states (hourly, daily, annual, or a season stipend, as written); blank where the posting gives no figure. ",
+          "Typical pay (BLS est.) fills in where the posting states none: the Bureau of Labor Statistics' ",
+          if (!is.na(oews_year)) paste0("May ", oews_year, " ") else "",
+          "median pay for that role in the posting's region (hover for the role and area; OEWS, all employers, not just schools), so treat it as a regional estimate, not this job's offer. "),
+          "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."),
         DTOutput("k12_jobs")
       ),
       tabItem(
@@ -1721,7 +1816,7 @@ ui <- dashboardPage(
           ),
           uiOutput("he_filter_status")
         ),
-        p(class = "help-block", style = "margin-bottom: 8px;", "Posted Pay is the pay the job posting itself states (hourly, annual, or per credit hour, as written); blank where the posting gives no figure. Avg Faculty Salary reflects full-time instructional staff compensation from IPEDS via Urban Institute."),
+        p(class = "help-block", style = "margin-bottom: 8px;", "Posted Pay is the pay the job posting itself states (hourly, annual, or per credit hour, as written); blank where the posting gives no figure. Typical pay (IPEDS est.) fills in for staff postings that state none: the college's average pay for its full-time staff in that job category (IPEDS; hover for the category), not this job's offer. Avg Faculty Salary reflects full-time instructional staff compensation from IPEDS via Urban Institute."),
         DTOutput("he_jobs")
       ),
       tabItem(
@@ -1951,6 +2046,8 @@ server <- function(input, output, session) {
   # NULL whenever the Jobs tab is reached any other way.
   selected_k12_query <- reactiveVal(NULL)
   selected_he_query <- reactiveVal(NULL)
+  # Pay band carried over from a map popup (PAY_BANDS name), or NULL.
+  selected_pay_band <- reactiveVal(NULL)
 
   output$data_load_issues_banner <- renderUI({
     req(length(DATA_LOAD_ISSUES) > 0)
@@ -2113,7 +2210,7 @@ server <- function(input, output, session) {
   output$download_active_k12 <- downloadHandler(
     filename = function() { paste0("montana_active_k12_jobs_", Sys.Date(), ".csv") },
     content = function(file) {
-      write.csv(combineddata, file, row.names = FALSE, na = "")
+      write.csv(combineddata %>% select(-any_of(c(".Pay_Value", ".Pay_Unit"))), file, row.names = FALSE, na = "")
     }
   )
 
@@ -2203,6 +2300,8 @@ server <- function(input, output, session) {
     if (!is.null(selected_k12_query())) {
       df <- df[match_job_query(paste(coalesce(df$Title, ""), coalesce(df$Position, "")), selected_k12_query()), , drop = FALSE]
     }
+    if (!is.null(selected_pay_band())) df <- df[in_pay_band(df$.Pay_Value, df$.Pay_Unit, selected_pay_band()), , drop = FALSE]
+    df <- df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit")))
     if (isTRUE(identical(input$k12_quick_filter, "new"))) {
       df <- df %>% filter(Posting_ID %in% k12_new_this_week$Posting_ID)
     }
@@ -2215,11 +2314,12 @@ server <- function(input, output, session) {
     if (is.null(selected_district())) return(NULL)
     div(style = "margin-bottom: 10px;",
         strong(paste0("Showing: ", selected_district(),
-                      if (!is.null(selected_k12_query())) paste0(" \u2014 jobs matching \u201c", selected_k12_query(), "\u201d") else "")),
+                      if (!is.null(selected_k12_query())) paste0(" \u2014 jobs matching \u201c", selected_k12_query(), "\u201d") else "",
+                      if (!is.null(selected_pay_band())) paste0(" \u2014 pay ", PAY_BANDS[[selected_pay_band()]]$label) else "")),
         actionButton("clear_k12_filter", "Show All Districts", class = "btn-xs", style = "margin-left: 10px;")
     )
   })
-  observeEvent(input$clear_k12_filter, { selected_district(NULL); selected_k12_query(NULL) })
+  observeEvent(input$clear_k12_filter, { selected_district(NULL); selected_k12_query(NULL); selected_pay_band(NULL) })
 
   # District Summary -- everything the map popups show, as a real
   # exportable table. Teacher_Avg_Salary + 10th/90th percentile band (MT
@@ -2464,7 +2564,7 @@ server <- function(input, output, session) {
     } else {
       df <- df[0, ]
     }
-    datatable(df, filter = "top", escape = FALSE, extensions = "Buttons",
+    datatable(df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit"))), filter = "top", escape = FALSE, extensions = "Buttons",
               options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 10))
   })
 
@@ -2519,14 +2619,19 @@ server <- function(input, output, session) {
   map_filtered <- reactive({
     df <- combined_map_data %>% filter(Type %in% input$map_types, CurrentCount > 0)
 
-    # Search keyword / role / subject query filter
+    # Search keyword / role / subject query filter, and the pay band. Both
+    # narrow each dot to its matching postings (count, samples, popup).
     kw <- if (!is.null(input$map_search_keyword)) trimws(input$map_search_keyword) else ""
-    if (nzchar(kw)) {
+    band <- input$map_salary_tier
+    band_on <- !is.null(band) && band %in% names(PAY_BANDS)
+    if (nzchar(kw) || band_on) {
       searchable_k12 <- paste(coalesce(combineddata$Title, ""), coalesce(combineddata$Position, ""))
-      k12_matches <- combineddata[match_job_query(searchable_k12, kw), , drop = FALSE]
+      k12_matches <- combineddata[match_job_query(searchable_k12, kw) &
+                                    in_pay_band(combineddata$.Pay_Value, combineddata$.Pay_Unit, if (band_on) band), , drop = FALSE]
 
       searchable_he <- paste(coalesce(ccdata$Title, ""), coalesce(ccdata$Appointment, ""))
-      he_matches <- ccdata[match_job_query(searchable_he, kw), , drop = FALSE]
+      he_matches <- ccdata[match_job_query(searchable_he, kw) &
+                             in_pay_band(ccdata$.Pay_Value, ccdata$.Pay_Unit, if (band_on) band), , drop = FALSE]
 
       k12_counts <- if (nrow(k12_matches) > 0) {
         as.data.frame(table(Name = k12_matches$District), stringsAsFactors = FALSE)
@@ -2571,7 +2676,9 @@ server <- function(input, output, session) {
           MatchingSample = coalesce(MatchingSample, ""),
           DisplayCount = MatchingCount,
           SearchActive = TRUE,
-          SearchQuery = kw
+          SearchQuery = paste(c(if (nzchar(kw)) kw, if (band_on) PAY_BANDS[[band]]$label), collapse = " \u00b7 "),
+          SearchKeyword = kw,
+          SearchBand = if (band_on) band else ""
         ) %>%
         filter(MatchingCount > 0)
     } else {
@@ -2581,28 +2688,15 @@ server <- function(input, output, session) {
           MatchingSample = SampleTitles,
           DisplayCount = CurrentCount,
           SearchActive = FALSE,
-          SearchQuery = ""
+          SearchQuery = "",
+          SearchKeyword = "",
+          SearchBand = ""
         )
     }
 
     # Filter by county
     if (!is.null(input$map_county) && input$map_county != "all") {
       df <- df %>% filter(County == input$map_county)
-    }
-
-    # Filter by salary tier (Average Teacher Salary with 10th percentile fallback for K-12, Average Faculty Salary for HE)
-    if (!is.null(input$map_salary_tier) && input$map_salary_tier != "all") {
-      df <- df %>% mutate(
-        .bench_sal = coalesce(Teacher_Avg_Salary, Faculty_Avg_Salary, Teacher_Salary_10th_Pctile)
-      )
-      if (input$map_salary_tier == "60k_plus") {
-        df <- df %>% filter(!is.na(.bench_sal) & .bench_sal >= 60000)
-      } else if (input$map_salary_tier == "50k_60k") {
-        df <- df %>% filter(!is.na(.bench_sal) & .bench_sal >= 50000 & .bench_sal < 60000)
-      } else if (input$map_salary_tier == "under_50k") {
-        df <- df %>% filter(!is.na(.bench_sal) & .bench_sal < 50000)
-      }
-      df <- df %>% select(-.bench_sal)
     }
 
     # Filter by posting volume / freshness
@@ -2700,6 +2794,9 @@ server <- function(input, output, session) {
     # length-1 popup vector is never read -- but an explicit guard so a
     # reader doesn't have to re-derive that; matches the he_scroll observer).
     proxy <- leafletProxy("combined_map", data = df) %>% clearMarkers()
+    qcew_row <- match(sub(",.*$", "", trimws(as.character(df$County))), qcew_school_pay$County)
+    df$School_Pay_County <- ifelse(df$Type == "K-12 District", qcew_school_pay$Avg_Annual_Pay[qcew_row], NA_real_)
+    df$School_Pay_Year <- qcew_school_pay$Year[qcew_row]
     if (nrow(df) == 0) return()
 
     # Informative hover tooltip labels
@@ -2801,6 +2898,11 @@ server <- function(input, output, session) {
              paste0("<div style='font-size:0.85em;color:#666;'>District: ",
                     scales::percent(Child_Poverty_Rate, accuracy = 0.1), " child poverty rate</div>"),
              ""),
+      ifelse(!is.na(School_Pay_County),
+             paste0("<div style='font-size:0.85em;color:#666;'>", sub(",.*$", "", County),
+                    " public school employees averaged ", scales::dollar(School_Pay_County, accuracy = 1),
+                    " in ", School_Pay_Year, " (all roles; BLS QCEW)</div>"),
+             ""),
       "<div style='margin-top:6px;'>",
       "<a href='", Link, "' target='_blank'>Careers page</a>",
       " &nbsp;|&nbsp; ",
@@ -2811,8 +2913,9 @@ server <- function(input, output, session) {
       gsub("'", "&#39;", Name, fixed = TRUE),
       "', query: '",
       ifelse(SearchActive,
-             vapply(coalesce(SearchQuery, ""), utils::URLencode, character(1), reserved = TRUE, USE.NAMES = FALSE),
+             vapply(coalesce(SearchKeyword, ""), utils::URLencode, character(1), reserved = TRUE, USE.NAMES = FALSE),
              ""),
+      "', band: '", ifelse(SearchActive, SearchBand, ""),
       "'}, {priority: 'event'}); return false;\">",
       ifelse(SearchActive,
              paste0("View ", DisplayCount, " matching job", ifelse(DisplayCount == 1, "", "s")),
@@ -2846,12 +2949,14 @@ server <- function(input, output, session) {
   observeEvent(input$map_popup_view_jobs, {
     ev <- input$map_popup_view_jobs
     query <- trimws(utils::URLdecode(if (is.null(ev$query)) "" else ev$query))
-    navigate_to_entity_jobs(ev$entity, if (nzchar(query)) query else NULL)
+    band <- if (!is.null(ev$band) && ev$band %in% names(PAY_BANDS)) ev$band else NULL
+    navigate_to_entity_jobs(ev$entity, if (nzchar(query)) query else NULL, band)
   })
 
-  navigate_to_entity_jobs <- function(entity, query = NULL) {
+  navigate_to_entity_jobs <- function(entity, query = NULL, band = NULL) {
     selected_k12_query(query)
     selected_he_query(query)
+    selected_pay_band(band)
     row <- combined_map_data %>% filter(Name == entity)
     if (nrow(row) > 0) {
       if (row$Type[1] == "K-12 District") {
@@ -2987,6 +3092,8 @@ server <- function(input, output, session) {
     if (!is.null(selected_he_query())) {
       df <- df[match_job_query(paste(coalesce(df$Title, ""), coalesce(df$Appointment, "")), selected_he_query()), , drop = FALSE]
     }
+    if (!is.null(selected_pay_band())) df <- df[in_pay_band(df$.Pay_Value, df$.Pay_Unit, selected_pay_band()), , drop = FALSE]
+    df <- df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit")))
     if (!identical(input$he_table_appointment, "all")) {
       df <- df %>% filter(Appointment == input$he_table_appointment)
     }
@@ -3003,11 +3110,12 @@ server <- function(input, output, session) {
     if (is.null(selected_institution())) return(NULL)
     div(style = "margin-bottom: 10px;",
         strong(paste0("Showing: ", selected_institution(),
-                      if (!is.null(selected_he_query())) paste0(" \u2014 jobs matching \u201c", selected_he_query(), "\u201d") else "")),
+                      if (!is.null(selected_he_query())) paste0(" \u2014 jobs matching \u201c", selected_he_query(), "\u201d") else "",
+                      if (!is.null(selected_pay_band())) paste0(" \u2014 pay ", PAY_BANDS[[selected_pay_band()]]$label) else "")),
         actionButton("clear_he_filter", "Show All Institutions", class = "btn-xs", style = "margin-left: 10px;")
     )
   })
-  observeEvent(input$clear_he_filter, { selected_institution(NULL); selected_he_query(NULL) })
+  observeEvent(input$clear_he_filter, { selected_institution(NULL); selected_he_query(NULL); selected_pay_band(NULL) })
 
   output$he_summary_table <- renderDT({
     he_rows <- combined_map_data %>% filter(Type == "Higher Ed Institution")
@@ -3240,7 +3348,7 @@ server <- function(input, output, session) {
     } else {
       df <- df[0, ]
     }
-    datatable(df, filter = "top", escape = FALSE, extensions = "Buttons",
+    datatable(df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit"))), filter = "top", escape = FALSE, extensions = "Buttons",
               options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 10))
   })
 

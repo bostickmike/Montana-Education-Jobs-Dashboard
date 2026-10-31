@@ -444,26 +444,92 @@ extract_aspnet_postback_fields <- function(html_text) {
 # appears twice in the raw HTML, once in its id= attribute and once inside
 # its own __doPostBack() call, so a naive substring count of
 # "btnJobDetailsPublic" reads 100 per page, double the real row count).
+#
+# fetch_details = TRUE also opens each posting's detail view to read the pay
+# its description states (Pay_* columns; ~25% of postings state one,
+# 2026-10-31). There's no per-posting URL, so each detail is the row's own
+# postback from the listing page it sits on, with a session cookie: ~0.75 s
+# per posting, ~5 minutes for a full week. A failed detail leaves only that
+# posting's pay NA, and detail fetching stops once detail_budget_secs is
+# spent (the rest keep NA pay), so it can't push the weekly run past its
+# timeout.
 fetch_opi_statewide_postings <- function(
     url = "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx",
-    page_size = 50, max_pages = 60) {
-  resp <- request(url) %>% perform_with_retry()
+    page_size = 50, max_pages = 60, fetch_details = TRUE,
+    detail_delay = 0.5, detail_budget_secs = 900) {
+  jar <- tempfile()
+  on.exit(unlink(jar), add = TRUE)
+  deadline <- Sys.time() + detail_budget_secs
+  read_page <- function(html) {
+    rows <- parse_opi_job_page(html, url)
+    if (!fetch_details || nrow(rows) == 0) return(rows)
+    cbind(rows, fetch_opi_page_details(html, url, jar, deadline, detail_delay))
+  }
+
+  resp <- request(url) %>% req_cookie_preserve(jar) %>% perform_with_retry()
   html <- resp_body_string(resp)
 
-  all_pages <- list(parse_opi_job_page(html, url))
+  all_pages <- list(read_page(html))
   page_num <- 2
   while (nrow(all_pages[[length(all_pages)]]) == page_size && page_num <= max_pages) {
     fields <- extract_aspnet_postback_fields(html)
     fields[["__EVENTTARGET"]] <- "ctl00$ContentPlaceHolder1$grdJobListing"
     fields[["__EVENTARGUMENT"]] <- paste0("Page$", page_num)
 
-    resp <- do.call(req_body_form, c(list(request(url)), fields)) %>% perform_with_retry()
+    resp <- do.call(req_body_form, c(list(request(url) %>% req_cookie_preserve(jar)), fields)) %>%
+      perform_with_retry()
     html <- resp_body_string(resp)
-    all_pages[[length(all_pages) + 1]] <- parse_opi_job_page(html, url)
+    all_pages[[length(all_pages) + 1]] <- read_page(html)
     page_num <- page_num + 1
   }
 
-  dplyr::bind_rows(all_pages)
+  out <- dplyr::bind_rows(all_pages)
+  if (fetch_details) ensure_posted_pay_columns(out) else out
+}
+
+# The postback target of each posting row's details link, in the same row
+# order parse_opi_job_page() returns.
+opi_detail_targets <- function(html_text) {
+  table <- rvest::html_element(rvest::read_html(html_text), "#ctl00_ContentPlaceHolder1_grdJobListing")
+  if (is.na(table)) return(character(0))
+  links <- rvest::html_elements(table, "a[id*='btnJobDetailsPublic']")
+  sub("^javascript:__doPostBack\\('([^']+)'.*$", "\\1", rvest::html_attr(links, "href"))
+}
+
+# Pay_* for every posting on one listing page, one detail postback each.
+fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
+  fields <- extract_aspnet_postback_fields(html_text)
+  dplyr::bind_rows(lapply(opi_detail_targets(html_text), function(target) {
+    if (Sys.time() > deadline) return(extract_posted_pay(NA_character_))
+    Sys.sleep(delay)
+    tryCatch({
+      f <- fields
+      f[["__EVENTTARGET"]] <- target
+      f[["__EVENTARGUMENT"]] <- ""
+      resp <- do.call(req_body_form, c(list(request(url) %>% req_cookie_preserve(jar)), f)) %>%
+        perform_with_retry()
+      extract_posted_pay(parse_opi_job_details(resp_body_string(resp))$Description)
+    }, error = function(e) extract_posted_pay(NA_character_))
+  }))
+}
+
+# One posting's detail view (frmJobDetailsPublic.aspx). The description sits
+# in a read-only textarea as escaped HTML, so it's parsed twice: once out of
+# the page, once to turn its markup into text. District_Name is the
+# employer's real district ("Darby K-12 Schools"), which the listing grid
+# lacks -- captured here but not yet used.
+parse_opi_job_details <- function(html_text) {
+  page <- rvest::read_html(html_text)
+  text_of <- function(selector) {
+    node <- rvest::html_element(page, selector)
+    if (is.na(node)) NA_character_ else trimws(rvest::html_text2(node))
+  }
+  raw <- text_of("#txtJobDescription")
+  description <- if (is.na(raw) || !nzchar(raw)) NA_character_ else
+    rvest::html_text2(rvest::read_html(paste0("<div>", raw, "</div>")))
+  data.frame(District_Name = text_of("#ctl00_ContentPlaceHolder1_lblDistrict"),
+             School = text_of("#ctl00_ContentPlaceHolder1_lblSchool"),
+             Description = description, stringsAsFactors = FALSE)
 }
 
 # The grid has no District column (only City) despite a District filter

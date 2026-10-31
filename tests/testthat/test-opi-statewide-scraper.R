@@ -78,7 +78,7 @@ test_that("fetch_opi_statewide_postings chains postback pages using each page's 
     httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(page3_short))
   ))
 
-  result <- fetch_opi_statewide_postings(page_size = 50)
+  result <- fetch_opi_statewide_postings(page_size = 50, fetch_details = FALSE)
 
   expect_equal(nrow(result), 103)
   expect_equal(result$Title[1], "CTE – Industrial Technology Education")
@@ -89,4 +89,67 @@ test_that("fetch_opi_statewide_postings chains postback pages using each page's 
   # actually stopped here (only 3 mocked responses were queued -- a fourth
   # request would error) rather than looping forever.
   expect_equal(sum(result$Title == "Music" & result$Location == "Terry"), 1)
+})
+
+# --- Posted pay from each posting's detail view ------------------------------
+
+opi_fixture <- function(name) paste(readLines(test_path("fixtures", name), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+test_that("parse_opi_job_details reads the district and the description's text", {
+  d <- parse_opi_job_details(opi_fixture("opi_job_details_lockwood_2026-10-31.html"))
+  expect_equal(d$District_Name, "Lockwood K-12")
+  # The description arrives as escaped HTML inside a textarea; no tags survive.
+  expect_false(grepl("<p>|&lt;", d$Description))
+  expect_match(d$Description, "starting salary next year is $39,281", fixed = TRUE)
+  expect_equal(extract_posted_pay(d$Description)$Pay_Min, 39281)
+})
+
+test_that("a district housing rent in an OPI description is not read as pay", {
+  d <- parse_opi_job_details(opi_fixture("opi_job_details_richey_2026-10-31.html"))
+  expect_match(d$Description, "$350 per month", fixed = TRUE)
+  expect_true(is.na(extract_posted_pay(d$Description)$Pay_Min))
+})
+
+test_that("fetch_opi_statewide_postings opens each row's detail postback and keeps its pay", {
+  page1 <- opi_fixture("opi_jobs_page1.html")
+  stated <- opi_fixture("opi_job_details_lockwood_2026-10-31.html")
+  rent <- opi_fixture("opi_job_details_richey_2026-10-31.html")
+  html <- function(body) httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(body))
+  targets <- character(0)
+  httr2::local_mocked_responses(function(req) {
+    target <- req$body$data[["__EVENTTARGET"]]
+    if (is.null(target)) return(html(page1))
+    # httr2 keeps form values URL-encoded ("$" as "%24").
+    target <- utils::URLdecode(as.character(target))
+    targets <<- c(targets, target)
+    if (grepl("ctl02\\$btnJobDetailsPublic$", target)) return(html(stated))
+    if (grepl("btnJobDetailsPublic$", target)) return(html(rent))
+    stop("unexpected request")
+  })
+  # page_size above the 50 real rows, so it stops after page 1.
+  result <- fetch_opi_statewide_postings(page_size = 51, detail_delay = 0)
+  expect_equal(nrow(result), 50)
+  expect_equal(length(targets), 50)
+  expect_equal(length(unique(targets)), 50)
+  expect_equal(result$Pay_Min[1], 39281)
+  expect_equal(result$Pay_Unit[1], "year")
+  expect_true(all(is.na(result$Pay_Min[-1])))
+})
+
+test_that("fetch_opi_statewide_postings keeps postings when details fail or the time budget is spent", {
+  page1 <- opi_fixture("opi_jobs_page1.html")
+  httr2::local_mocked_responses(function(req) {
+    if (is.null(req$body$data[["__EVENTTARGET"]])) {
+      return(httr2::response(200, headers = list("Content-Type" = "text/html"), body = charToRaw(page1)))
+    }
+    httr2::response(404)
+  })
+  failed <- fetch_opi_statewide_postings(page_size = 51, detail_delay = 0)
+  expect_equal(nrow(failed), 50)
+  expect_true(all(is.na(failed$Pay_Min)))
+  # A spent budget skips the detail requests entirely (a 404 mock would
+  # otherwise be hit, so none are made).
+  no_time <- fetch_opi_statewide_postings(page_size = 51, detail_delay = 0, detail_budget_secs = -1)
+  expect_equal(nrow(no_time), 50)
+  expect_true(all(POSTED_PAY_COLUMNS %in% names(no_time)))
 })

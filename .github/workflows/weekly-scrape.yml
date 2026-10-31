@@ -89,6 +89,9 @@ jobs:
         env:
           CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          # Optional: raises the BLS OEWS API limits (bls_oews_scraper.R); the
+          # once-a-year refresh also fits the keyless limits.
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
           # For llm_extract_scraper.R's SHADOW pilot -- Google Gemini free
           # tier (aistudio.google.com/apikey). A no-op if this secret is
           # unset (logs "skipped_no_key") or llm_extract_targets.csv is empty.
@@ -267,6 +270,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add \
             Mt_Ed_Jobs/combinedclean.csv \
+            Mt_Ed_Jobs/oews_role_wages.csv \
+            Mt_Ed_Jobs/ipeds_staff_salaries.csv \
+            Mt_Ed_Jobs/qcew_county_school_pay.csv \
             Mt_Ed_Jobs/allsum.csv \
             Mt_Ed_Jobs/allnow.csv \
             Mt_Ed_Jobs/allsum_he.csv \
