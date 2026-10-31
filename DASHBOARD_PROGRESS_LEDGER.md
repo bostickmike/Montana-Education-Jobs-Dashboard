@@ -392,6 +392,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (IPEDS est.)".
   * [x] QCEW county context (2026-10-31): `qcew_school_pay.R` (shared) -- average pay of public school employees by
     county (all roles), shown in the district map popup.
+  * [x] Hourly-pool, work-study, student and intern postings no longer get an annual IPEDS figure (shared
+    `is_salaried_staff_posting()`, 2026-10-31); "Executive Assistant" is office support, not management.
   * [ ] Declined: ACS county earnings (less specific than QCEW for the same question).
   * [x] OPI detail pages (2026-10-31): `fetch_opi_statewide_postings()` opens each posting's detail postback (~0.75 s each,
     ~5 min/week, capped at 15 min) and reads its description's pay; ~25% state one. District housing costs ("apartments
