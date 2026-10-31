@@ -160,6 +160,10 @@ One row per open posting across this project's 23 registered HE institutions, ev
 | `Posted_Date` | text | Original posted-date text; genuinely absent (`NA`) for JazzHR postings — that platform's listing page carries no date field at all. |
 | `Institution` | text | Canonical institution name (`canonicalize_he_institution()` applied). |
 | `Link` | text | Direct link to the posting. |
+| `Pay_Min` | number | Lowest pay the posting itself states, in `Pay_Unit`; never converted between units. `NA` when no figure is stated, and for every source except isolved Hire (structured min/max), Paycom (each posting's `salaryRange`) and University of Montana's NEOGOV board (the pay line on its schooljobs.com listing card). Adjunct postings at these boards mostly state none. |
+| `Pay_Max` | number | Highest stated amount (equals `Pay_Min` for a single figure). |
+| `Pay_Unit` | text | `hour`, `day`, `month`, `year`, `credit hour`, or `stipend`; `NA` when the stated unit is implausible for the amount (e.g. a $900 "Hourly" adjunct rate). |
+| `Pay_Text` | text | The board's own pay wording the figure was read from, e.g. "$16.15 - $20.00 Hourly". |
 | `Archive_Date` | date | |
 
 **Sources combined into this file**: PeopleAdmin (4 institutions), JazzHR (Montana Tech, which also covers Highlands College's postings under its own board), Paycom (Flathead Valley Community College), NEOGOV Attract (University of Montana, which also covers Missoula College, Helena College, and University of Montana Western under its own board), ADP Workforce Now (University of Providence), isolved Hire (Blackfeet Community College), and heuristic free-text/DOM scrapers (Miles Community College, Dawson Community College, Carroll College, Rocky Mountain College) — `he_institution_registry.csv`'s 12 institutions.

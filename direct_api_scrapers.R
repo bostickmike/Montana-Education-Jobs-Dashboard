@@ -593,7 +593,7 @@ extract_paycom_jwt <- function(html_text) {
   m
 }
 
-fetch_paycom_postings <- function(portal_key, institution_name, page_size = 100) {
+fetch_paycom_postings <- function(portal_key, institution_name, page_size = 100, detail_delay = 0.3) {
   career_page_url <- paste0("https://www.paycomonline.net/v4/ats/web.php/portal/", portal_key, "/career-page")
   career_resp <- request(career_page_url) %>% perform_with_retry()
   token <- extract_paycom_jwt(resp_body_string(career_resp))
@@ -621,7 +621,41 @@ fetch_paycom_postings <- function(portal_key, institution_name, page_size = 100)
     skip <- skip + page_size
   }
 
-  dplyr::bind_rows(all_pages)
+  postings <- dplyr::bind_rows(all_pages)
+  if (nrow(postings) == 0) return(ensure_posted_pay_columns(postings))
+
+  # The search previews cut each description off at ~150 characters, so pay
+  # comes from each posting's own detail record (api/ats/job-postings/{id},
+  # the call the SPA makes when a posting is opened; same bearer token). One
+  # request per posting, spaced out. A failed detail call leaves only that
+  # posting's pay blank.
+  detail_url <- "https://portal-applicant-tracking.us-cent.paycomonline.net/api/ats/job-postings/"
+  job_ids <- sub("^.*/jobs/", "", postings$Link)
+  pay <- dplyr::bind_rows(lapply(job_ids, function(id) {
+    Sys.sleep(detail_delay)
+    tryCatch({
+      resp <- request(paste0(detail_url, id)) %>%
+        req_headers(Authorization = paste("Bearer", token), Locale = "en-US", `Translation-Highlights` = "false") %>%
+        perform_with_retry()
+      parse_paycom_posting_pay(resp_body_string(resp))
+    }, error = function(e) parse_paycom_posting_pay(NA_character_))
+  }))
+  cbind(postings, pay)
+}
+
+# Pay from a posting's detail record: salaryRange is the line the posting
+# page prints ("$125,000.00 - $155,000.00 Salary", "$16.15 - $20.00 Hourly"),
+# empty when the posting states no pay (every adjunct posting at FVCC,
+# 2026-10-30). Kept verbatim as Pay_Text.
+parse_paycom_posting_pay <- function(json_text) {
+  salary_range <- NA_character_
+  if (!is.na(json_text)) {
+    salary_range <- jsonlite::fromJSON(json_text)$jobPosting$salaryRange
+    if (is.null(salary_range) || !nzchar(trimws(salary_range))) salary_range <- NA_character_
+  }
+  pay <- extract_posted_pay(salary_range)
+  pay$Pay_Text <- ifelse(is.na(pay$Pay_Min), NA_character_, trimws(salary_range))
+  pay
 }
 
 # postedOn is genuinely empty ("") on every real posting checked (confirmed
@@ -679,22 +713,37 @@ fetch_isolvedhire_postings <- function(subdomain, domain_id, institution_name) {
 # startDateRef consistently precedes endDateRef by weeks to years (the
 # latter driven by untilFilled postings carrying a multi-year placeholder
 # close date).
+#
+# Pay comes from the posting's own structured fields: minSalary/maxSalary
+# (strings, sometimes with commas: "45,888") and payTypeFrame ("per hour",
+# "per year"), the same words the board prints. They're joined into the
+# board's own wording and read with extract_posted_pay(), so a posting with
+# no stated pay stays NA.
 parse_isolvedhire_postings <- function(json_text, institution_name) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
+  empty <- ensure_posted_pay_columns(
+    data.frame(Title = character(0), Location = character(0),
+               Posted_Date = character(0), Link = character(0),
+               stringsAsFactors = FALSE))
 
   parsed <- jsonlite::fromJSON(json_text, simplifyVector = TRUE)
   jobs <- parsed$data$jobs
   if (is.null(jobs) || length(jobs) == 0 || nrow(jobs) == 0) return(empty)
 
-  data.frame(
+  field <- function(x) if (is.null(x)) rep(NA_character_, nrow(jobs)) else as.character(x)
+  lo <- field(jobs$minSalary); hi <- field(jobs$maxSalary)
+  pay_text <- ifelse(is.na(lo) | !nzchar(lo), NA_character_,
+                     paste0("$", lo, ifelse(is.na(hi) | !nzchar(hi), "", paste0(" - $", hi)),
+                            " ", field(jobs$payTypeFrame)))
+  pay <- extract_posted_pay(pay_text)
+  pay$Pay_Text <- ifelse(is.na(pay$Pay_Min), NA_character_, trimws(sub(" NA$", "", pay_text)))
+
+  cbind(data.frame(
     Title = trimws(jobs$title),
     Location = jobs$city,
     Posted_Date = as.character(as.Date(jobs$startDateRef, format = "%b %d, %Y")),
     Link = jobs$jobUrl,
     stringsAsFactors = FALSE
-  )
+  ), pay)
 }
 
 # ---------------------------------------------------------------------------
@@ -767,12 +816,75 @@ fetch_neogov_postings <- function(subdomain, institution_name, page_size = 50) {
   }
 
   if (length(all_pages) == 0) {
-    return(data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       Institution = character(0),
-                       stringsAsFactors = FALSE))
+    return(ensure_posted_pay_columns(
+      data.frame(Title = character(0), Location = character(0),
+                 Posted_Date = character(0), Link = character(0),
+                 Institution = character(0),
+                 stringsAsFactors = FALSE)))
+  }
+  postings <- dplyr::bind_rows(all_pages)
+
+  # The Attract job cards carry no pay, but every Link points at the same
+  # posting on NEOGOV's schooljobs.com board
+  # (schooljobs.com/careers/<subdomain>/jobs/<id>/...), whose listing prints
+  # the pay on each card ("Hourly Staff Full-time - $22.53 Hourly"). Pay is
+  # joined in by job ID; postings missing from that listing (47 of UM's 58
+  # were on it, 2026-10-30) keep NA. If the listing can't be fetched, every
+  # posting keeps NA pay and the postings themselves are unaffected.
+  pay <- tryCatch(fetch_schooljobs_card_pay(subdomain), error = function(e) {
+    message("schooljobs pay listing failed for ", subdomain, ": ", conditionMessage(e))
+    NULL
+  })
+  job_id <- sub("^.*/jobs/([0-9]+).*$", "\\1", postings$Link)
+  idx <- if (is.null(pay)) rep(NA_integer_, nrow(postings)) else match(job_id, pay$Job_ID)
+  for (col in POSTED_PAY_COLUMNS) {
+    postings[[col]] <- if (is.null(pay)) (if (col %in% c("Pay_Min", "Pay_Max")) NA_real_ else NA_character_) else pay[[col]][idx]
+  }
+  postings
+}
+
+# The schooljobs.com listing for one agency, as Job_ID + Pay_*. Same AJAX
+# endpoint, X-Requested-With gate and 10-per-page paging that Wyoming's
+# NEOGOV scraper uses for its colleges.
+fetch_schooljobs_card_pay <- function(agency, base_domain = "https://www.schooljobs.com") {
+  all_pages <- list()
+  page <- 1
+  repeat {
+    resp <- request(paste0(base_domain, "/careers/home/index")) %>%
+      req_url_query(agency = agency, sort = "PositionTitle", isDescendingSort = "false", page = page) %>%
+      req_headers(`X-Requested-With` = "XMLHttpRequest") %>%
+      perform_with_retry()
+    page_pay <- parse_neogov_card_pay(resp_body_string(resp))
+    if (nrow(page_pay) == 0) break
+    all_pages[[length(all_pages) + 1]] <- page_pay
+    page <- page + 1
   }
   dplyr::bind_rows(all_pages)
+}
+
+# Posted pay from each card of a NEOGOV (schooljobs.com / governmentjobs.com)
+# job-list fragment, keyed by the card's data-job-id. The card's meta line
+# carries the board's pay field ("Full-Time - $61,356.00 - $76,695.00
+# Annually"); "Depends on Qualifications" or "See Position Description" means
+# none is stated, and then the card's description preview is read instead
+# ("Current adjunct pay is $775 per credit hour"). Shared verbatim with the
+# Wyoming dashboard's direct_api_scrapers.R.
+parse_neogov_card_pay <- function(html_text) {
+  container <- rvest::html_elements(rvest::read_html(html_text), "ul.job-listing-container")
+  cards <- rvest::html_elements(container, "li.list-item")
+  if (length(cards) == 0) {
+    return(ensure_posted_pay_columns(data.frame(Job_ID = character(0), stringsAsFactors = FALSE)))
+  }
+  meta_pay <- vapply(cards, function(card) {
+    lines <- rvest::html_text2(rvest::html_elements(card, ".list-meta li"))
+    lines <- lines[grepl("$", lines, fixed = TRUE)]
+    if (length(lines) == 0) NA_character_ else trimws(lines[1])
+  }, character(1))
+  preview <- rvest::html_text2(rvest::html_element(cards, ".list-entry"))
+  pay <- extract_posted_pay(ifelse(is.na(meta_pay), preview, meta_pay))
+  from_meta <- !is.na(meta_pay) & !is.na(pay$Pay_Min)
+  pay$Pay_Text[from_meta] <- meta_pay[from_meta]
+  cbind(data.frame(Job_ID = rvest::html_attr(cards, "data-job-id"), stringsAsFactors = FALSE), pay)
 }
 
 parse_neogov_postings <- function(html_text, institution_name) {

@@ -53,13 +53,26 @@ test_that("fetch_paycom_postings fetches the career page, extracts the token, an
   career_html <- paste(readLines(test_path("fixtures", "paycom_fvcc_career_page.html"), warn = FALSE), collapse = "\n")
   jobs_json <- paste(readLines(test_path("fixtures", "paycom_fvcc.json"), warn = FALSE), collapse = "\n")
 
-  httr2::local_mocked_responses(list(
-    httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(career_html)),
-    httr2::response(200, headers = list("Content-Type" = "application/json"), body = charToRaw(jobs_json))
-  ))
+  # Each posting's pay comes from its own detail record: the second posting
+  # (jobId 74763) gets a real record that states pay, the rest one that
+  # doesn't.
+  stated_json <- paste(readLines(test_path("fixtures", "paycom_fvcc_posting_125040_2026-10-30.json"), warn = FALSE), collapse = "\n")
+  none_json <- paste(readLines(test_path("fixtures", "paycom_fvcc_posting_6792_2026-10-30.json"), warn = FALSE), collapse = "\n")
+  json <- function(body) httr2::response(200, headers = list("Content-Type" = "application/json"), body = charToRaw(body))
+  httr2::local_mocked_responses(function(req) {
+    if (grepl("career-page", req$url, fixed = TRUE)) {
+      return(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(career_html)))
+    }
+    if (grepl("job-posting-previews/search", req$url, fixed = TRUE)) return(json(jobs_json))
+    if (grepl("job-postings/74763$", req$url)) return(json(stated_json))
+    json(none_json)
+  })
 
-  result <- fetch_paycom_postings("23D9610C7FF62DF6DF80223B0B1ED6E3", "Flathead Valley Community College")
+  result <- fetch_paycom_postings("23D9610C7FF62DF6DF80223B0B1ED6E3", "Flathead Valley Community College",
+                                  detail_delay = 0)
 
   expect_equal(nrow(result), 29)
   expect_equal(result$Title[1], "Adjunct Instructor, Music")
+  expect_equal(result$Pay_Text[2], "$125,000.00 - $155,000.00 Salary")
+  expect_equal(sum(!is.na(result$Pay_Min)), 1)
 })

@@ -23,7 +23,7 @@ test_that("parse_isolvedhire_postings returns zero rows (not an error) for a gen
   result <- parse_isolvedhire_postings(empty_response, "Blackfeet Community College")
 
   expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", POSTED_PAY_COLUMNS))
 })
 
 test_that("fetch_isolvedhire_postings builds the getParams={} URL and parses the response", {
