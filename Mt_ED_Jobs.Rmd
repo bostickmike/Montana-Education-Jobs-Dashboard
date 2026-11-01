@@ -3026,9 +3026,11 @@ opi_raw <- safe_scrape(
   expected_cols = c("Title", "Location", "Posted_Date", "Link")
 )
 
-# Pay_* is the pay each posting's own detail view states (fetched by
-# fetch_opi_statewide_postings()); a failed scrape's placeholder has none.
+# Pay_* is the pay each posting's own detail view states and OPI_District
+# the employer's district it names (both fetched by
+# fetch_opi_statewide_postings()); a failed scrape's placeholder has neither.
 opi_df <- ensure_posted_pay_columns(opi_raw)
+if (!"OPI_District" %in% names(opi_df)) opi_df$OPI_District <- rep(NA_character_, nrow(opi_df))
 if (nrow(opi_df) > 0) {
   # District is NOT a canonical legal district name here -- OPI's feed only
   # exposes a City column, so District is that raw City value passed
@@ -3039,12 +3041,12 @@ if (nrow(opi_df) > 0) {
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District = Location,
               Posting_Source = "OPI Jobs for Teachers (statewide)",
-              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text, OPI_District)
 } else {
   opi_df <- ensure_posted_pay_columns(
     data.frame(title = character(0), date_posted = character(0), position = character(0),
                location = character(0), url = character(0), District = character(0),
-               Posting_Source = character(0)))
+               Posting_Source = character(0), OPI_District = character(0)))
 }
 ```
 
@@ -3316,6 +3318,16 @@ tryCatch(write.csv(fetch_qcew_school_pay("30"), file.path("Mt_Ed_Jobs", "qcew_co
 oews_wages <- read.csv(oews_path, stringsAsFactors = FALSE,
                        colClasses = c(Area_Code = "character", SOC = "character", Year = "character"))
 district_county <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)[, c("District", "County")]
+source("opi_finance_scraper.R")
+# Each OPI district's county, from OPI's finance workbook, so OPI rows naming
+# their district (OPI_District) get a local OEWS area rather than the
+# statewide one. A failed fetch keeps the committed file.
+opi_counties_path <- file.path("Mt_Ed_Jobs", "opi_district_counties.csv")
+tryCatch({
+  opi_counties <- fetch_opi_district_counties()
+  if (nrow(opi_counties) > 0) write.csv(opi_counties, opi_counties_path, row.names = FALSE)
+}, error = function(e) message("OPI district counties skipped: ", conditionMessage(e)))
+opi_counties <- read.csv(opi_counties_path, stringsAsFactors = FALSE)
 
 combinedclean <- combined %>%
   # Placeholder board entries ("Sample Certified Position", account-creation
@@ -3327,10 +3339,14 @@ combinedclean <- combined %>%
   # where the source states none.
   ensure_posted_pay_columns() %>%
   # Est_* is the BLS regional median for the posting's role, matched to its
-  # district's county (statewide for OPI rows, which carry no county).
-  attach_oews_estimates(oews_wages, district_county$County[match(.$District, district_county$District)], "MT") %>%
+  # district's county: the registry's, else (OPI rows) the county of the
+  # district its detail page names; statewide where neither is known.
+  attach_oews_estimates(oews_wages,
+                        dplyr::coalesce(district_county$County[match(.$District, district_county$District)],
+                                        opi_counties$County[match(.$OPI_District, opi_counties$OPI_District)]),
+                        "MT") %>%
   select(title, Archive_Date, date_posted, position, location, url, District,
-         Posting_Source, Posting_Identity_Method, Posting_ID, all_of(POSTED_PAY_COLUMNS),
+         Posting_Source, Posting_Identity_Method, Posting_ID, OPI_District, all_of(POSTED_PAY_COLUMNS),
          all_of(OEWS_ESTIMATE_COLUMNS))
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")

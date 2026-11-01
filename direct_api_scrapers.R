@@ -447,12 +447,12 @@ extract_aspnet_postback_fields <- function(html_text) {
 #
 # fetch_details = TRUE also opens each posting's detail view to read the pay
 # its description states (Pay_* columns; ~25% of postings state one,
-# 2026-10-31). There's no per-posting URL, so each detail is the row's own
-# postback from the listing page it sits on, with a session cookie: ~0.75 s
-# per posting, ~5 minutes for a full week. A failed detail leaves only that
-# posting's pay NA, and detail fetching stops once detail_budget_secs is
-# spent (the rest keep NA pay), so it can't push the weekly run past its
-# timeout.
+# 2026-10-31) and the employer's district (OPI_District). There's no
+# per-posting URL, so each detail is the row's own postback from the listing
+# page it sits on, with a session cookie: ~0.75 s per posting, ~5 minutes for
+# a full week. A failed detail leaves only that posting's pay and district
+# NA, and detail fetching stops once detail_budget_secs is spent (the rest
+# keep NA), so it can't push the weekly run past its timeout.
 fetch_opi_statewide_postings <- function(
     url = "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx",
     page_size = 50, max_pages = 60, fetch_details = TRUE,
@@ -484,7 +484,10 @@ fetch_opi_statewide_postings <- function(
   }
 
   out <- dplyr::bind_rows(all_pages)
-  if (fetch_details) ensure_posted_pay_columns(out) else out
+  if (!fetch_details) return(out)
+  out <- ensure_posted_pay_columns(out)
+  if (!"OPI_District" %in% names(out)) out$OPI_District <- rep(NA_character_, nrow(out))
+  out
 }
 
 # The postback target of each posting row's details link, in the same row
@@ -496,11 +499,13 @@ opi_detail_targets <- function(html_text) {
   sub("^javascript:__doPostBack\\('([^']+)'.*$", "\\1", rvest::html_attr(links, "href"))
 }
 
-# Pay_* for every posting on one listing page, one detail postback each.
+# Pay_* and OPI_District for every posting on one listing page, one detail
+# postback each.
 fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
   fields <- extract_aspnet_postback_fields(html_text)
+  none <- function() cbind(extract_posted_pay(NA_character_), OPI_District = NA_character_)
   dplyr::bind_rows(lapply(opi_detail_targets(html_text), function(target) {
-    if (Sys.time() > deadline) return(extract_posted_pay(NA_character_))
+    if (Sys.time() > deadline) return(none())
     Sys.sleep(delay)
     tryCatch({
       f <- fields
@@ -508,8 +513,9 @@ fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
       f[["__EVENTARGUMENT"]] <- ""
       resp <- do.call(req_body_form, c(list(request(url) %>% req_cookie_preserve(jar)), f)) %>%
         perform_with_retry()
-      extract_posted_pay(parse_opi_job_details(resp_body_string(resp))$Description)
-    }, error = function(e) extract_posted_pay(NA_character_))
+      details <- parse_opi_job_details(resp_body_string(resp))
+      cbind(extract_posted_pay(details$Description), OPI_District = details$District_Name)
+    }, error = function(e) none())
   }))
 }
 
@@ -517,7 +523,8 @@ fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
 # in a read-only textarea as escaped HTML, so it's parsed twice: once out of
 # the page, once to turn its markup into text. District_Name is the
 # employer's real district ("Darby K-12 Schools"), which the listing grid
-# lacks -- captured here but not yet used.
+# lacks; it's kept as OPI_District, in OPI's own (and OPI finance's)
+# district naming.
 parse_opi_job_details <- function(html_text) {
   page <- rvest::read_html(html_text)
   text_of <- function(selector) {

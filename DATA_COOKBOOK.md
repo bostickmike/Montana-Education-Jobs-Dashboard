@@ -26,10 +26,11 @@ One row per open K-12 posting, all position types (not just teachers). Rebuilt f
 | `Posting_Source` | text | Provenance shown in the Jobs Table and CSV export, e.g. the direct platform or `"OPI Jobs for Teachers (statewide)"`. |
 | `Posting_Identity_Method` | text | `"Stable per-posting URL"` where a source provides one; otherwise an explicit source/OPI fallback description. |
 | `Posting_ID` | text | Internal key used consistently for current counts, vacancy numerators, trends, and New This Week. See "Posting identity" below. |
+| `OPI_District` | text | OPI rows only: the employer's district named on the posting's detail page (`parse_opi_job_details()`), in OPI's own naming ("Lockwood K-12"). NA for direct-board rows, and for OPI rows whose detail page failed or fell past the time budget. Used only to find the posting's county for `Est_Area`; `District` and `Posting_ID` are unchanged. |
 
 **Sources combined into this file**: AppliTrack, SchoolSpring, Tyler Portico, and TedK12 direct-district scrapes (`k12_district_registry.csv`'s directly-scraped districts), plus OPI's "Jobs for Teachers" statewide feed. An OPI row is removed only when its normalized title and posted date match a direct-board row in the same registered city; city-only filtering is deliberately not used, because it would hide independent employers that share a city with a covered district.
 
-**Pay columns**: `Pay_Min`/`Pay_Max`/`Pay_Unit`/`Pay_Text` are the pay the posting itself states (`extract_posted_pay()`), NA where it states none. `Est_Pay`/`Est_Pay_Unit`/`Est_Occupation`/`Est_Area`/`Est_Year` are the BLS OEWS regional median for the posting's role (`attach_oews_estimates()` in `bls_oews_scraper.R`, from `oews_role_wages.csv`), the app's labeled fallback ("Typical pay (BLS est.)") where no pay is posted. The area comes from the district's county; rows with no county use the statewide figure.
+**Pay columns**: `Pay_Min`/`Pay_Max`/`Pay_Unit`/`Pay_Text` are the pay the posting itself states (`extract_posted_pay()`), NA where it states none. `Est_Pay`/`Est_Pay_Unit`/`Est_Occupation`/`Est_Area`/`Est_Year` are the BLS OEWS regional median for the posting's role (`attach_oews_estimates()` in `bls_oews_scraper.R`, from `oews_role_wages.csv`), the app's labeled fallback ("Typical pay (BLS est.)") where no pay is posted. The area comes from the district's county: the registry's for direct-board rows, and for OPI rows the county of `OPI_District` (`opi_district_counties.csv`). Rows with no county use the statewide figure.
 
 ### `oews_role_wages.csv` — BLS OEWS regional pay by role (annual)
 
@@ -44,6 +45,15 @@ One row per OEWS area x occupation: the state, each metro area and each nonmetro
 | `Annual_Median` | number | Annual median wage. `NA` where BLS suppresses the figure for that area. |
 | `Hourly_Median` | number | Hourly median, fetched only for roles usually paid hourly; `NA` where BLS publishes none (school-year roles such as teaching assistants). |
 | `Year` | text | Reference year (May). |
+
+### `opi_district_counties.csv` — each OPI district's county
+
+One row per district name in OPI's school finance workbook (the same `OPIEXP` file `opi_finance_scraper.R` reads; ~416 districts), used to give OPI postings a county from their `OPI_District`. Refreshed each run (`fetch_opi_district_counties()`); a failed fetch keeps the existing file. A name shared by districts in two counties ("Cottonwood Elem": Gallatin and Hill) is left out. Private schools, Head Starts, youth homes and other non-district employers that post on OPI aren't in the workbook, so their rows keep the statewide figure.
+
+| Column | Type | Notes |
+|---|---|---|
+| `OPI_District` | text | As OPI writes it ("Absarokee Elem", "Absarokee H S"). |
+| `County` | text | "Stillwater County", the registry's form. |
 
 ### `qcew_county_school_pay.csv` — average pay of public school employees by county (annual)
 
@@ -169,7 +179,7 @@ fields.
 
 ### OPI statewide feed — a note, not a dataset of its own
 
-Montana's analog of Wyoming's WSBA vacancies page is the MT OPI "Jobs for Teachers" feed (`apps.opi.mt.gov/mtjobsforteachers/`), folded directly into `combinedclean.csv`/`k12jobanalysis.csv`/`allsum.csv` above rather than kept as a separate file — Wyoming's WSBA data gets the same "combined in, not separate" treatment. To avoid duplicate rows without losing independent employers that share a city with a covered district, OPI rows are removed only when their normalized title and posted date match a direct-board row in the same registered city. Two real limitations worth knowing before trusting a District value from this source: (1) `District` for these rows is a raw City string, not a canonical legal district name (the feed exposes no district field), and (2) the feed is an ASP.NET WebForms page with no stable per-posting URL — `url` for these rows is the shared statewide listing page, not a deep link, so it can't be used to jump straight to one specific posting.
+Montana's analog of Wyoming's WSBA vacancies page is the MT OPI "Jobs for Teachers" feed (`apps.opi.mt.gov/mtjobsforteachers/`), folded directly into `combinedclean.csv`/`k12jobanalysis.csv`/`allsum.csv` above rather than kept as a separate file — Wyoming's WSBA data gets the same "combined in, not separate" treatment. To avoid duplicate rows without losing independent employers that share a city with a covered district, OPI rows are removed only when their normalized title and posted date match a direct-board row in the same registered city. Two real limitations worth knowing before trusting a District value from this source: (1) `District` for these rows is a raw City string, not a canonical legal district name (the listing grid exposes no district field; each posting's detail page does, and it's kept separately as `OPI_District`), and (2) the feed is an ASP.NET WebForms page with no stable per-posting URL — `url` for these rows is the shared statewide listing page, not a deep link, so it can't be used to jump straight to one specific posting.
 
 OPI is a statewide source, not a verified census of Montana vacancies. This project has not found published OPI submission rules or independently compared the feed against every district and employer, so its completeness must not be inferred from the word "statewide." OPI-only rows are labeled `"OPI Jobs for Teachers (statewide)"` in the Jobs Table and export, but they are intentionally excluded from registry-backed map, District Summary, staffing, salary, and vacancy-rate views until they can be tied to a verified canonical district.
 

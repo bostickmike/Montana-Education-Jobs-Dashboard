@@ -48,6 +48,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Posting_Source` | String | Project Pipeline | Original job feed source (direct district ATS board vs OPI Jobs for Teachers feed). |
 | `Posting_Identity_Method` | String | Project Pipeline | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
 | `Posting_ID` | String | Project Pipeline | Durable unique posting identifier used to track openings longitudinally across weekly snapshots. |
+| `OPI_District` | String | OPI Jobs for Teachers | For OPI statewide rows, the employer's district as the posting's detail page names it, in OPI's naming ("Lockwood K-12", "Richey Elem"); NA for direct-board rows and where the detail page could not be read. `District` stays the raw city. |
 | `Pay_Min` | Numeric | Job posting | Lowest pay amount stated in the posting itself, in `Pay_Unit` (NA when no dollar figure is stated). Never converted between units. |
 | `Pay_Max` | Numeric | Job posting | Highest stated amount (equals `Pay_Min` for a single figure). |
 | `Pay_Unit` | String | Job posting | `hour`, `day`, `month`, `year`, `credit hour`, or `stipend` (season/activity amount); NA when undeterminable. |

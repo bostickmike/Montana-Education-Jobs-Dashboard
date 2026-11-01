@@ -273,6 +273,7 @@ jobs:
             Mt_Ed_Jobs/oews_role_wages.csv \
             Mt_Ed_Jobs/ipeds_staff_salaries.csv \
             Mt_Ed_Jobs/qcew_county_school_pay.csv \
+            Mt_Ed_Jobs/opi_district_counties.csv \
             Mt_Ed_Jobs/allsum.csv \
             Mt_Ed_Jobs/allnow.csv \
             Mt_Ed_Jobs/allsum_he.csv \

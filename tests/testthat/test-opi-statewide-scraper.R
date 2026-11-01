@@ -153,3 +153,51 @@ test_that("fetch_opi_statewide_postings keeps postings when details fail or the 
   expect_equal(nrow(no_time), 50)
   expect_true(all(POSTED_PAY_COLUMNS %in% names(no_time)))
 })
+
+# --- The employer's district from each posting's detail view ----------------
+
+test_that("fetch_opi_statewide_postings keeps the district each detail page names", {
+  page1 <- opi_fixture("opi_jobs_page1.html")
+  lockwood <- opi_fixture("opi_job_details_lockwood_2026-10-31.html")
+  httr2::local_mocked_responses(function(req) {
+    target <- req$body$data[["__EVENTTARGET"]]
+    if (is.null(target)) return(httr2::response(200, headers = list("Content-Type" = "text/html"), body = charToRaw(page1)))
+    if (grepl("ctl02\\$btnJobDetailsPublic$", utils::URLdecode(as.character(target)))) {
+      return(httr2::response(200, headers = list("Content-Type" = "text/html"), body = charToRaw(lockwood)))
+    }
+    httr2::response(404)
+  })
+  result <- fetch_opi_statewide_postings(page_size = 51, detail_delay = 0)
+  expect_equal(nrow(result), 50)
+  expect_equal(result$OPI_District[1], "Lockwood K-12")
+  # A failed detail leaves only that posting's district NA.
+  expect_true(all(is.na(result$OPI_District[-1])))
+  no_time <- fetch_opi_statewide_postings(page_size = 51, detail_delay = 0, detail_budget_secs = -1)
+  expect_true(all(is.na(no_time$OPI_District)))
+})
+
+test_that("parse_opi_district_counties maps OPI district names to counties and drops ambiguous names", {
+  # Every LE's county and name from OPI's real FY2025 finance workbook (OPIEXP25.xlsx).
+  raw <- read.csv(test_path("fixtures", "opi_finance_fy2025_district_counties.csv"),
+                  stringsAsFactors = FALSE, colClasses = "character")
+  counties <- parse_opi_district_counties(raw)
+  county_of <- function(d) counties$County[match(d, counties$OPI_District)]
+  # The two detail-page fixtures' districts.
+  expect_equal(county_of(c("Lockwood K-12", "Richey Elem")), c("Yellowstone County", "Dawson County"))
+  # A split district's two LEs share a county.
+  expect_equal(county_of(c("Absarokee Elem", "Absarokee H S")), rep("Stillwater County", 2))
+  # "Cottonwood Elem" is an LE in both Gallatin and Hill counties.
+  expect_true(is.na(county_of("Cottonwood Elem")))
+  expect_false(any(duplicated(counties$OPI_District)))
+  # Counties come out in the registry's form, so they join to OEWS areas
+  # (OPI writes "Lewis & Clark").
+  expect_equal(county_of("Helena Elem"), "Lewis and Clark County")
+  expect_true(all(!is.na(oews_area_for_county(counties$County, "MT"))))
+})
+
+test_that("the committed OPI district county file joins to OEWS areas", {
+  counties <- read.csv(here::here("Mt_Ed_Jobs", "opi_district_counties.csv"), stringsAsFactors = FALSE)
+  expect_gt(nrow(counties), 300)
+  expect_false(any(duplicated(counties$OPI_District)))
+  expect_true(all(!is.na(oews_area_for_county(counties$County, "MT"))))
+})
