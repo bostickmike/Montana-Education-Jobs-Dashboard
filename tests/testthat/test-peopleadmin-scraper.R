@@ -58,7 +58,7 @@ test_that("fetch_peopleadmin_atom fetches and parses a live-shaped response", {
     list(httr2::response(200, headers = list("Content-Type" = "application/atom+xml; charset=utf-8"), body = charToRaw(fixture)))
   )
 
-  result <- fetch_peopleadmin_atom("https://jobs.gfcmsu.edu/postings/search.atom", location_fallback = "Great Falls College MSU")
+  result <- fetch_peopleadmin_atom("https://jobs.gfcmsu.edu/postings/search.atom", location_fallback = "Great Falls College MSU", fetch_pay = FALSE)
 
   expect_equal(nrow(result), 9)
   expect_equal(result$Title[1], "Early Learning Center Teachers")

@@ -198,7 +198,7 @@ One row per open posting across this project's 23 registered HE institutions, ev
 | `Posted_Date` | text | Original posted-date text; genuinely absent (`NA`) for JazzHR postings — that platform's listing page carries no date field at all. |
 | `Institution` | text | Canonical institution name (`canonicalize_he_institution()` applied). |
 | `Link` | text | Direct link to the posting. |
-| `Pay_Min` | number | Lowest pay the posting itself states, in `Pay_Unit`; never converted between units. `NA` when no figure is stated, and for every source except isolved Hire (structured min/max), Paycom (each posting's `salaryRange`) and University of Montana's NEOGOV board (the pay line on its schooljobs.com listing card). Adjunct postings at these boards mostly state none. |
+| `Pay_Min` | number | Lowest pay the posting itself states, in `Pay_Unit`; never converted between units. `NA` when no figure is stated, and for every source except the PeopleAdmin institutions (each posting page's "Salary" field, unit from its "Compensation" field when the figure has none), isolved Hire (structured min/max), Paycom (each posting's `salaryRange`) and University of Montana's NEOGOV board (the pay line on its schooljobs.com listing card). Adjunct postings at these boards mostly state none, and many MSU postings say only "commensurate with experience". |
 | `Pay_Max` | number | Highest stated amount (equals `Pay_Min` for a single figure). |
 | `Pay_Unit` | text | `hour`, `day`, `month`, `year`, `credit hour`, or `stipend`; `NA` when the stated unit is implausible for the amount (e.g. a $900 "Hourly" adjunct rate). |
 | `Pay_Text` | text | The board's own pay wording the figure was read from, e.g. "$16.15 - $20.00 Hourly". |

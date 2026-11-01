@@ -159,9 +159,68 @@ parse_applitrack_output <- function(js_text) {
 # community colleges where per-posting department granularity isn't in the
 # feed; that fallback path is kept here for any Montana entry that turns out
 # to lack an <author>, rather than assumed to never fire.
-fetch_peopleadmin_atom <- function(feed_url, location_fallback = NA_character_) {
+#
+# The feed carries no pay, so with fetch_pay each posting's own page is read
+# for it (parse_peopleadmin_posting_pay()): one request per posting, spaced
+# out. A failed page leaves only that posting's pay blank.
+fetch_peopleadmin_atom <- function(feed_url, location_fallback = NA_character_, fetch_pay = TRUE, detail_delay = 0.3) {
   resp <- request(feed_url) %>% perform_with_retry()
-  parse_peopleadmin_atom(resp_body_string(resp), location_fallback)
+  postings <- parse_peopleadmin_atom(resp_body_string(resp), location_fallback)
+  if (!fetch_pay || nrow(postings) == 0) return(ensure_posted_pay_columns(postings))
+  pay <- dplyr::bind_rows(lapply(postings$Link, function(link) {
+    Sys.sleep(detail_delay)
+    tryCatch(parse_peopleadmin_posting_pay(resp_body_string(request(link) %>% perform_with_retry())),
+             error = function(e) parse_peopleadmin_posting_pay(NA_character_))
+  }))
+  cbind(postings, pay)
+}
+
+# Pay from a PeopleAdmin posting page. Each college labels its pay field
+# differently (MSU campuses "Salary", Western "Estimated Salary", Sheridan
+# "Hiring Range"/"Hourly Rate (if applicable)"/"Full Salary Range", Northwest
+# "Starting Salary Range"); the first labeled field stating an amount wins,
+# and its text is kept as Pay_Text. When the figure has no unit next to it,
+# the unit comes from the posting's own "Compensation" field (MSU Billings,
+# Northern, Great Falls: Annual / Hourly / Monthly / By Credit) or from an
+# "Hourly Rate" label. Eastern has no pay field at all and puts pay in the job
+# description ("Salary Hire Range: $60,598 - 66,889 annually"), so a page
+# with no pay field is read from all its fields' text instead; a page that has
+# one but states no amount ("commensurate with experience") stays NA.
+PEOPLEADMIN_PAY_LABELS <- c("Salary", "Estimated Salary", "Hiring Range", "Starting Salary Range",
+                            "Hourly Rate (if applicable)", "Full Salary Range")
+
+parse_peopleadmin_posting_pay <- function(html_text) {
+  none <- extract_posted_pay(NA_character_)
+  if (is.na(html_text)) return(none)
+  rows <- rvest::html_elements(rvest::read_html(html_text), xpath = "//tr[th and td]")
+  labels <- trimws(rvest::html_text2(rvest::html_element(rows, "th")))
+  values <- trimws(gsub("\\s+", " ", rvest::html_text2(rvest::html_element(rows, "td"))))
+
+  pay_fields <- intersect(PEOPLEADMIN_PAY_LABELS, labels)
+  if (length(pay_fields) == 0) return(extract_posted_pay(paste(values, collapse = ". ")))
+  for (label in pay_fields) {
+    value <- values[match(label, labels)]
+    pay <- extract_posted_pay(value)
+    if (is.na(pay$Pay_Min)) next
+    if (is.na(pay$Pay_Unit)) {
+      basis <- tolower(values[match("Compensation", labels)])
+      pay$Pay_Unit <- dplyr::case_when(
+        grepl("^hourly", label, ignore.case = TRUE) ~ "hour",
+        basis %in% "annual" ~ "year",
+        basis %in% "hourly" ~ "hour",
+        basis %in% "monthly" ~ "month",
+        basis %in% "by credit" ~ "credit hour",
+        # A bare $7-$100 figure in a pay field ("Hiring Range: $18.44 -
+        # $23.06") can only be an hourly wage.
+        pay$Pay_Max >= 7 & pay$Pay_Max <= 100 ~ "hour",
+        TRUE ~ NA_character_
+      )
+    }
+    # A long salary paragraph keeps only the extractor's snippet around the amount.
+    if (nchar(value) <= 200) pay$Pay_Text <- value
+    return(pay)
+  }
+  none
 }
 
 parse_peopleadmin_atom <- function(xml_text, location_fallback = NA_character_) {

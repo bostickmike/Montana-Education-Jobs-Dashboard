@@ -3846,9 +3846,10 @@ hedata_raw <- bind_rows(he_dfs)
 library(dplyr)
 library(writexl)
 
-# Pay_* is the pay the posting states (isolved Hire, Paycom and UM's NEOGOV
-# board carry it; every other HE source is NA). It's kept in hedata.xlsx and
-# the raw archive, but not in the accumulated facultydata.csv below.
+# Pay_* is the pay the posting states (PeopleAdmin, isolved Hire, Paycom and
+# UM's NEOGOV board carry it; every other HE source is NA). It's kept in
+# hedata.xlsx and the raw archive, but not in the accumulated facultydata.csv
+# below.
 hedata <- hedata_raw %>%
   ensure_posted_pay_columns() %>%
   select(Title, Location, Posted_Date, Institution, Link, all_of(POSTED_PAY_COLUMNS)) %>%
