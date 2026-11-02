@@ -16,7 +16,7 @@ test_that("HE job type keeps staff and child-center aides out of faculty", {
   expect_equal(classify_he_job_type("Classroom Aide/Substitute Teacher (Part-Time)"), "Support Services")
   expect_equal(classify_he_job_type("Academic Instructional Technologist"), "Professional")
   expect_equal(classify_he_job_type("Instructional Professor, Assistant - Organizational Behavior"), "Instructor/Teacher/Faculty")
-  expect_equal(classify_he_job_type("Postdoctoral Researcher"), "Instructor/Teacher/Faculty")
+  expect_equal(classify_he_job_type("Postdoctoral Researcher"), "Research & Science")
   expect_equal(classify_he_job_type("Livestock Judging Coach/Recruiter"), "Coaching or Athletics")
   expect_equal(classify_he_job_type("Academic Support Center (ASC) Assistant Director"), "Management")
   expect_equal(classify_he_job_type("Student Assistant, Music"), "Student Positions")

@@ -26,7 +26,7 @@ test_that("a bare 'Part-Time' with no faculty-role word doesn't get counted as a
       "Part Time Faculty"
     )),
     c(
-      "Support Services",
+      "Maintenance & Service",
       "Professional",
       "Healthcare",
       "Adjunct/Part-Time Faculty"

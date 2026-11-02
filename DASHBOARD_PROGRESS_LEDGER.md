@@ -416,4 +416,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Ennis scraper (2026-11-01): a "Summary:" line between the title and "Reports to:" was taken as the title.
     Checked and left alone: Swan Valley #3's long title is the district's own heading for its one posting; Swan River
     #4's $16,900 10th-percentile teacher pay is DLI's published figure (9 teachers, NorthWest report).
+  * [x] Classification audit (2026-11-01, both states; shared classifier). Every archived title since Oct 2025 checked
+    against its bucket. K-12: new "Activities/Extracurricular" bucket (FFA/FBLA/DECA/HOSA advisors, drama, the musical,
+    speech & debate, robotics, color guard, student council; cheer stays Athletics); every substitute posting is
+    Substitute (substitute paras were Paraprofessional); coach/kitchen/bus aides go to Athletics/Food Services/
+    Transportation instead of Support Services; "Teacher Aide" is Paraprofessional; bare "Aid" no longer matches inside
+    "Paid" and "Para" no longer matches "Paradise Valley"; janitors, LPNs, accountants, district IT staff and
+    grade-band-only titles ("Junior High 7-8") leave Other; "None at this time" is a placeholder. HE: faculty
+    applicant pools are Adjunct/Part-Time; postdocs and research scientists are Research & Science; custodians are
+    Maintenance & Service; UW "Hourly Pooled - <job>" is classified by the job (student/intern jobs are Student
+    Positions). Spells `is_support_staff` now includes Transportation and Food Services, as documented. Committed
+    combinedclean (position, and Est_* on changed rows) and the teacher/faculty histories, aggregates and spells
+    reclassified; raw archives unchanged. Tests: test-classification-misroutes.R (identical in both repos).
+  * [x] Scrapers (2026-11-01): Florence-Carlton reads its new "Job Title:" line (it had emitted "FULL TIME. MON -
+    FRI." and "YEAR-ROUND POSITION." as postings and missed the custodian job); Plevna's level-only coaching lines get
+    the sport from their header ("Track Coach - High School - Head"). Real fixtures dated 2026-11-01.
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
