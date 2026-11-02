@@ -518,7 +518,11 @@ parse_northstar_postings <- function(html_text, url) {
       next
     }
     if (!is.na(current_header)) {
-      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+      title <- line
+      if (grepl("Coaching Positions?$", current_header) && !grepl("Coach", line, ignore.case = TRUE)) {
+        title <- paste(sub("\\s*Coaching Positions?$", " Coach", current_header), "-", line)
+      }
+      rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
                                               Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
     }
   }
@@ -863,11 +867,17 @@ parse_roberts_postings <- function(html_text, url) {
 # Trailing non-breaking spaces (U+00A0) are pervasive in this page's own
 # authored content, the same class of issue as Chinook/Lolo/St Regis,
 # stripped explicitly.
+# Since Oct 2026 some blocks open with a mixed-case "Job Title: General
+# Custodian (K–12 School)" line followed by ALL-CAPS schedule details
+# ("FULL TIME. MON - FRI.", "YEAR-ROUND POSITION."). The "Job Title:" line
+# is the title; ALL-CAPS lines ending in "." are those details, never a
+# title (no real title on the page has ever ended in one).
 FLORENCECARLTON_NBSP <- intToUtf8(160)
 
 looks_like_florencecarlton_title <- function(line) {
   if (nchar(line) > 90) return(FALSE)
   if (grepl(":$", line)) return(FALSE)
+  if (grepl("\\.$", line)) return(FALSE)
   if (grepl("^PLEASE COMPLETE", line)) return(FALSE)
   if (!grepl("^[A-Z0-9][A-Z0-9 ().,'&/-]*$", line)) return(FALSE)
   if (!grepl("[A-Z]{2,}", line)) return(FALSE)
@@ -889,7 +899,9 @@ parse_florencecarlton_postings <- function(rendered_text, url) {
   if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
   body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
 
-  caps_titles <- body[vapply(body, looks_like_florencecarlton_title, logical(1))]
+  is_job_title_line <- grepl("^Job Title:\\s*\\S", body)
+  body[is_job_title_line] <- trimws(sub("^Job Title:\\s*", "", body[is_job_title_line]))
+  caps_titles <- body[is_job_title_line | vapply(body, looks_like_florencecarlton_title, logical(1))]
   merged <- character(0)
   for (t in caps_titles) {
     if (grepl("^AND ", t) && length(merged) > 0) {
@@ -3540,6 +3552,10 @@ fetch_hayslodgepole_postings <- function(chromote_session, url = "https://www.hl
 # heuristic. Starts after "<school year> School Year Positions Open:" and
 # stops at "Full Family Health Insurance Offered", the real, stable start
 # of the page's benefits copy that immediately follows the last posting.
+# Coaching lines under a sport header name only the level ("High School -
+# Head", "Jr. High - Asst."), so the sport from the header goes in front of
+# the title ("Track Coach - High School - Head"); the header stays in
+# Location as before.
 PLEVNA_STOP_LINE <- "Full Family Health Insurance Offered"
 
 parse_plevna_postings <- function(rendered_text, url) {
@@ -3566,7 +3582,11 @@ parse_plevna_postings <- function(rendered_text, url) {
       next
     }
     if (!is.na(current_header)) {
-      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+      title <- line
+      if (grepl("Coaching Positions?$", current_header) && !grepl("Coach", line, ignore.case = TRUE)) {
+        title <- paste(sub("\\s*Coaching Positions?$", " Coach", current_header), "-", line)
+      }
+      rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
                                               Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
     }
   }
@@ -3660,7 +3680,11 @@ parse_belt_postings <- function(rendered_text, url) {
       next
     }
     if (!is.na(current_header)) {
-      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+      title <- line
+      if (grepl("Coaching Positions?$", current_header) && !grepl("Coach", line, ignore.case = TRUE)) {
+        title <- paste(sub("\\s*Coaching Positions?$", " Coach", current_header), "-", line)
+      }
+      rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
                                               Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
     }
   }
@@ -3711,7 +3735,11 @@ parse_bigsky_postings <- function(rendered_text, url) {
       next
     }
     if (!is.na(current_header)) {
-      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+      title <- line
+      if (grepl("Coaching Positions?$", current_header) && !grepl("Coach", line, ignore.case = TRUE)) {
+        title <- paste(sub("\\s*Coaching Positions?$", " Coach", current_header), "-", line)
+      }
+      rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
                                               Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
     }
   }
@@ -3800,7 +3828,11 @@ parse_roundup_postings <- function(rendered_text, url) {
       next
     }
     if (!is.na(current_header)) {
-      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_header,
+      title <- line
+      if (grepl("Coaching Positions?$", current_header) && !grepl("Coach", line, ignore.case = TRUE)) {
+        title <- paste(sub("\\s*Coaching Positions?$", " Coach", current_header), "-", line)
+      }
+      rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
                                               Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
     }
   }

@@ -479,6 +479,19 @@ test_that("parse_plevna_postings extracts all 10 real postings across 4 real cat
   expect_false(any(grepl("Health Insurance|HSA|Life Insurance", result$Title)))
 })
 
+test_that("parse_plevna_postings puts the sport in front of level-only coaching lines", {
+  # Real fixture captured 2026-11-01: the Track lines read only "High School
+  # - Head" / "Jr. High - Asst.", which classified as Other.
+  text <- paste(readLines(test_path("fixtures", "apptegy_plevna_rendered_2026-11-01.txt"), warn = FALSE), collapse = "\n")
+  result <- parse_plevna_postings(text, "url")
+  expect_equal(nrow(result), 8)
+  expect_equal(result$Title[result$Location == "Track Coaching Positions"],
+               c("Track Coach - High School - Head", "Track Coach - High School - Asst.",
+                 "Track Coach - Jr. High - Head", "Track Coach - Jr. High - Asst."))
+  expect_true(all(c("7-12 Broadfield Science", "Math", "Bus Driver - Substitutes") %in% result$Title))
+  expect_equal(unname(classify_k12_position(result$Title[result$Location == "Track Coaching Positions"])), rep("Athletics", 4))
+})
+
 test_that("parse_plevna_postings returns zero rows (not an error) when there's no Positions Open header", {
   result <- parse_plevna_postings("Just some regular page text with no postings.", "url")
   expect_equal(nrow(result), 0)
@@ -1617,6 +1630,19 @@ test_that("parse_florencecarlton_postings extracts all 9 real postings via the A
   expect_true(all(c("Substitute Teachers", "Substitute Custodians") %in% result$Title))
   expect_true(all(result$Location == "Florence-Carlton"))
   expect_false(any(grepl("^PLEASE COMPLETE", result$Title)))
+})
+
+test_that("parse_florencecarlton_postings reads a 'Job Title:' line and skips the ALL-CAPS schedule details under it", {
+  # Real fixture captured 2026-11-01: "Job Title: General Custodian (K–12
+  # School)" followed by "FULL TIME. MON - FRI." / "YEAR-ROUND POSITION.",
+  # which had been emitted as two postings with the custodian job missed.
+  text <- paste(readLines(test_path("fixtures", "apptegy_florencecarlton_rendered_2026-11-01.txt"), warn = FALSE), collapse = "\n")
+  result <- parse_florencecarlton_postings(text, "url")
+  expect_equal(result$Title, c("General Custodian (K\u201312 School)",
+                               "SEEKING ONE (1) HIGH SCHOOL WRESTLING ASSISTANT COACH - GIRLS TEAM",
+                               "Substitute Teachers", "Substitute Paraprofessionals",
+                               "Substitute Food Service Workers", "Substitute Custodians"))
+  expect_false(any(grepl("MON - FRI|YEAR-ROUND|PAY RANGE", result$Title)))
 })
 
 test_that("parse_florencecarlton_postings returns zero rows (not an error) when there's no real start marker", {
