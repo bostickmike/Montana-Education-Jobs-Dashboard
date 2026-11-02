@@ -1,5 +1,5 @@
 library(shiny)
-library(shinydashboard)
+library(bslib)
 library(shinyWidgets)
 library(tidyverse)
 library(DT)
@@ -620,7 +620,8 @@ render_mover_box <- function(mover, label) {
   if (is.null(mover)) return(NULL)
   arrow <- if (mover$delta >= 0) "▲" else "▼"
   delta_color <- if (mover$delta >= 0) "#1baf7a" else "#e34948"
-  box(width = 12, status = "info",
+  card(card_body(
+      class = "py-2",
       div(
         tags$span(style = "font-weight:bold;", paste0(label, ": ")),
         tags$span(mover$name),
@@ -630,7 +631,15 @@ render_mover_box <- function(mover, label) {
                    paste0("(", mover$prior, " → ", mover$latest,
                           " since ", format(mover$prior_date, "%b %d"), ")"))
       )
-  )
+  ))
+}
+
+# bslib value box with shinydashboard::valueBox()'s argument order, so the
+# Time-to-Fill boxes kept their calls. Colors map onto Bootstrap theme names.
+kpi_value_box <- function(value, subtitle, icon = NULL, color = "blue", ...) {
+  theme <- switch(color, blue = "primary", green = "success", red = "danger",
+                  purple = "purple", "primary")
+  value_box(title = subtitle, value = value, showcase = icon, theme = theme, ...)
 }
 
 k12sum <- read.csv("allsum.csv", fileEncoding = "UTF-8") %>%
@@ -1071,42 +1080,73 @@ vacancy_rate_domain <- compute_vacancy_rate_domain(combined_map_data$Vacancy_Rat
 vacancy_rate_palette <- colorNumeric(palette = "YlOrRd", domain = vacancy_rate_domain, na.color = "#9e9e9e")
 
 #--------------------------------------------------
-# UI
+# UI (bslib / Bootstrap 5)
 #--------------------------------------------------
-ui <- dashboardPage(
-  skin = 'black',
-  dashboardHeader(title = "Mont Edu Jobs", titleWidth = "180px"),
-  dashboardSidebar(
-    width = "180px",
-    sidebarMenu(
-      id = "sidebar_tabs",
-      menuItem("Home", tabName = "intro", icon = icon("house")),
-      menuItem("Map", tabName = "map_tab", icon = icon("map-location-dot")),
-      tags$li(class = "header", "K-12"),
-      menuItem("Jobs", tabName = "k12_table", icon = icon("table")),
-      menuItem("Districts", tabName = "k12_summary", icon = icon("school")),
-      menuItem("Trends", tabName = "k12_trends", icon = icon("chart-line")),
-      menuItem("Time-to-Fill", tabName = "k12_spells", icon = icon("stopwatch")),
-      tags$li(class = "header", "HIGHER ED"),
-      menuItem("Jobs", tabName = "he_table", icon = icon("table")),
-      menuItem("Colleges", tabName = "he_summary", icon = icon("building-columns")),
-      menuItem("Trends", tabName = "he_trends", icon = icon("chart-line")),
-      menuItem("Time-to-Fill", tabName = "he_spells", icon = icon("stopwatch")),
-      tags$li(class = "header", "COMMUNITY"),
-      menuItem("Data", tabName = "data_tab", icon = icon("database")),
-      menuItem("Feedback", icon = icon("flag"),
-               href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues/new?template=data_issue.yml",
-               newtab = TRUE)
-    )
-  ),
-  dashboardBody(
-    tags$head(
-      tags$style(HTML("
-    .main-header .logo {
-      font-size: 18px;
-      font-weight: 600;
-      padding: 0 8px;
-    }
+# The navbar's id stays "sidebar_tabs" and each page's value is the old
+# shinydashboard tabName, so the map's "View N matching jobs" link
+# (nav_select) and the boot smoke test's set_inputs(sidebar_tabs = ...) keep
+# working unchanged.
+app_theme <- bs_theme(
+  version = 5,
+  preset = "shiny",
+  primary = "#2a78d6",
+  base_font = font_collection(font_google("Inter", local = FALSE), "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"),
+  "font-size-base" = "0.925rem"
+)
+
+# Titled card, the bslib stand-in for shinydashboard::box().
+dash_card <- function(title = NULL, ..., full_screen = FALSE, class = NULL) {
+  card(
+    full_screen = full_screen,
+    class = class,
+    if (!is.null(title)) card_header(title),
+    card_body(..., fillable = FALSE)
+  )
+}
+
+# An "(i) label" link that opens explanatory text in a popover, so long
+# method notes stay one click away instead of filling the page.
+info_popover <- function(label, ..., placement = "auto") {
+  popover(
+    tags$a(href = "#", class = "info-pop", role = "button", onclick = "return false;",
+           icon("circle-info"), " ", label),
+    ...,
+    title = label,
+    placement = placement,
+    options = list(customClass = "info-popover")
+  )
+}
+
+# One download tile on the Data page.
+download_tile <- function(icon_name, heading, text, output_id, label) {
+  div(
+    class = "download-tile",
+    h4(icon(icon_name), " ", heading),
+    p(text),
+    downloadButton(output_id, label, class = "btn-outline-primary btn-sm w-100")
+  )
+}
+
+ui <- page_navbar(
+  id = "sidebar_tabs",
+  title = tags$span(icon("graduation-cap"), " Montana Education Jobs"),
+  window_title = "Montana Education Jobs",
+  theme = app_theme,
+  fillable = FALSE,
+  navbar_options = navbar_options(theme = "dark", bg = "#1e293b"),
+  header = tags$head(
+    tags$style(HTML("
+    .bslib-page-navbar > .navbar .navbar-brand { font-weight: 600; font-size: 1.1rem; }
+    .navbar .dropdown-header { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+    h1.page-title { font-size: 1.6rem; font-weight: 600; margin: 4px 0 14px; }
+    h3.page-title { font-size: 1.3rem; font-weight: 600; margin: 4px 0 8px; }
+    .card { margin-bottom: 1rem; }
+    .bslib-value-box .value-box-title { font-size: 0.85rem; }
+    .bslib-value-box .value-box-showcase svg { max-width: 100%; height: auto; }
+    .download-tile { border: 1px solid var(--bs-border-color); border-radius: 8px; padding: 14px;
+                     height: 100%; display: flex; flex-direction: column; background: var(--bs-tertiary-bg); }
+    .download-tile h4 { font-size: 15px; font-weight: 600; margin-top: 0; }
+    .download-tile p { font-size: 12px; color: var(--bs-secondary-color); flex-grow: 1; }
     .leaflet-tooltip {
       max-width: min(800px, 92vw) !important;
       min-width: min(320px, 85vw) !important;
@@ -1119,46 +1159,8 @@ ui <- dashboardPage(
       display: inline-block;
       box-sizing: border-box;
     }
-    /* Flat modern section headers */
-    .sidebar-menu .header {
-      font-size: 11px !important;
-      font-weight: 700 !important;
-      letter-spacing: 0.08em;
-      color: #8aa4af !important;
-      background: transparent !important;
-      text-transform: uppercase;
-      padding: 14px 15px 4px 15px !important;
-    }
-    /* Rounded pill navigation styling */
-    .sidebar-menu > li > a {
-      border-left: none !important;
-      border-radius: 6px;
-      margin: 1px 8px;
-      padding: 8px 12px;
-      transition: background-color 0.15s ease-in-out;
-    }
-    .sidebar-menu > li.active > a {
-      background-color: #2b3b4c !important;
-      color: #ffffff !important;
-      font-weight: 600;
-    }
     @media (max-width: 767px) {
-      .leaflet-container {
-        height: 480px !important;
-      }
-    }
-    /* Clean tabBox styling */
-    .nav-tabs-custom {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      border: 1px solid #e5e9ec;
-      border-radius: 4px;
-    }
-    .nav-tabs-custom > .nav-tabs > li.active {
-      border-top-color: #2a78d6;
-    }
-    .nav-tabs-custom > .nav-tabs > li.active > a {
-      font-weight: 600;
-      color: #2a78d6;
+      .leaflet-container { height: 480px !important; }
     }
     /* Table toolbar styling */
     .table-toolbar {
@@ -1173,6 +1175,7 @@ ui <- dashboardPage(
       border-radius: 6px;
       border: 1px solid #e2e8f0;
     }
+    .table-toolbar .form-group { margin-bottom: 0; }
     /* Clean table styling so tables do not overfill space */
     .trends-table-container {
       width: 100%;
@@ -1207,496 +1210,319 @@ ui <- dashboardPage(
       color: #1e293b;
       vertical-align: middle !important;
     }
-    .trends-table-container tr:last-child td {
-      border-bottom: none;
+    .trends-table-container tr:last-child td { border-bottom: none; }
+    .trends-table-container tr:hover td { background-color: #f8fafc; }
+    /* Light DT export buttons instead of BS5 btn-secondary blocks */
+    .dt-buttons .btn {
+      background: transparent !important; color: var(--bs-body-color) !important;
+      border: 1px solid var(--bs-border-color) !important;
+      padding: 0.2rem 0.75rem !important; font-size: 0.8rem !important;
     }
-    .trends-table-container tr:hover td {
-      background-color: #f8fafc;
+    .dt-buttons .btn:hover { background: var(--bs-tertiary-bg) !important; }
+    #map_filter_count .badge { white-space: normal; text-align: left; line-height: 1.4; }
+    .info-pop { font-size: 0.85rem; font-weight: 500; text-decoration: none; white-space: nowrap; }
+    .info-popover { --bs-popover-max-width: 420px; font-size: 0.85rem; }
+    .map-chips { margin-top: -8px; font-size: 12px; color: #64748b; line-height: 1.9; }
+    .map-chips a { margin-right: 8px; font-weight: 500; }
+    .bslib-sidebar-layout > .sidebar .form-group { margin-bottom: 0.75rem; }
+    .page-sidebar { border: none; --_sidebar-bg: transparent; }
+    /* On a phone the collapsed sidebar is just a chevron; name it. */
+    @media (max-width: 575.98px) {
+      .bslib-sidebar-layout.sidebar-collapsed > .collapse-toggle { width: auto; padding: 4px 10px; border: 1px solid var(--bs-border-color); border-radius: 6px; }
+      .bslib-sidebar-layout.sidebar-collapsed > .collapse-toggle::after { content: 'Filters'; margin-left: 6px; font-size: 0.9rem; }
     }
   ")),
-      tags$script(HTML("
-    $(document).on('click', '.sidebar-menu a[data-toggle=\"tab\"]', function() {
-      if ($(window).width() < 768) {
-        $('body').removeClass('sidebar-open');
-      }
+    # A DT table rendered while its page or tab was hidden measures its columns
+    # at zero width; re-measure whenever a page or tab is shown.
+    tags$script(HTML("
+    $(document).on('shown.bs.tab', function() {
+      if ($.fn.dataTable) $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+      // On a phone, close the collapsed navbar menu once a page is picked.
+      var menu = document.querySelector('.navbar-collapse.show');
+      if (menu && window.bootstrap) bootstrap.Collapse.getOrCreateInstance(menu).hide();
     });
   "))
+  ),
+
+  # ------------------ Global Introduction ------------------
+  nav_panel(
+    "Home", value = "intro", icon = icon("house"),
+    h1(class = "page-title", "Education Jobs in Montana"),
+    uiOutput("data_load_issues_banner"),
+    layout_columns(
+      col_widths = c(4, 4, 4),
+      uiOutput("kpi_k12_total", fill = TRUE),
+      uiOutput("kpi_he_total", fill = TRUE),
+      uiOutput("kpi_last_refreshed", fill = TRUE)
+    ),
+    layout_columns(
+      col_widths = c(6, 6),
+      uiOutput("k12_biggest_mover"),
+      uiOutput("he_biggest_mover")
+    ),
+    layout_columns(
+      col_widths = c(6, 6),
+      dash_card("Top K-12 Hiring Districts This Week",
+                div(style = "overflow-x: auto;", tableOutput("top_k12_districts"))),
+      dash_card("Top Higher Ed Hiring Institutions This Week",
+                div(style = "overflow-x: auto;", tableOutput("top_he_institutions")))
+    ),
+    layout_columns(
+      col_widths = c(6, 6),
+      dash_card("Highest Teacher Vacancy Rate",
+                withSpinner(plotlyOutput("k12_vacancy_leaderboard", height = 320)),
+                helpText("Districts with at least", VACANCY_RATE_MIN_FTE, "full-time teachers (FTE).")),
+      dash_card("Highest Faculty Vacancy Rate",
+                withSpinner(plotlyOutput("he_vacancy_leaderboard", height = 320)),
+                helpText("Institutions with at least", VACANCY_RATE_MIN_FTE, "full-time faculty."))
+    ),
+    dash_card(
+      "Montana K-12 coverage", class = "border-warning",
+      tags$p(
+        "The K-12 Jobs Table combines postings from ", n_distinct(map_k12$Name),
+        " directly tracked district boards with Montana OPI's statewide Jobs for Teachers feed."
+      ),
+      tags$p(
+        "OPI is a valuable statewide source, but its publication rules and coverage have not been independently verified as a complete census of Montana vacancies. ",
+        "A job absent from this dashboard is not evidence that no vacancy exists."
+      ),
+      tags$p(
+        class = "mb-0",
+        "The Map and District Summary intentionally cover only directly monitored districts, where postings can be matched to verified district identities, coordinates, staffing, and salary data. ",
+        "OPI-only rows remain in the Jobs Table; their source location is an employer/location label, not necessarily a canonical district."
+      )
+    ),
+    div(style = "color:#999; font-size:0.8em; padding: 0 5px 5px;",
+        "K-12 vacancy rate is current teacher postings ÷ full-time teacher staffing (NCES CCD); Higher Ed vacancy rate is current instructor/faculty postings ÷ full-time instructional staff (NCES IPEDS). ",
+        "The two use different staffing sources and reporting years — compare rates within a type (district vs. district, institution vs. institution), not across K-12 and Higher Ed."),
+    div(style = "text-align:center; color:#999; font-size:0.85em; padding:15px;",
+        paste0("Refreshed on: ", last_refreshed_date, " · Created by Mike Bostick"))
+  ),
+
+  nav_panel(
+    "Map", value = "map_tab", icon = icon("map-location-dot"),
+    h1(class = "page-title", "Where the Openings Are"),
+    card(
+      full_screen = TRUE,
+      card_header(
+        class = "d-flex justify-content-between align-items-center",
+        "Montana Education Job Openings Map",
+        info_popover(
+          "About this map",
+          p("Only this project's ", n_distinct(map_k12$Name), " directly tracked K-12 districts and ",
+            n_distinct(map_he$Name), " directly tracked Higher Ed institutions are shown here (with current openings)."),
+          p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies; OPI-only source locations are not canonical district identifiers and cannot be mapped reliably."),
+          p("Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table."),
+          p("K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison."),
+          p(class = "mb-0", "A red \"Partial\" badge means that district's postings come from an automated monitor of the district's own site rather than a structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-monitored district's count.")
+        )
+      ),
+      layout_sidebar(
+        fillable = FALSE,
+        sidebar = sidebar(
+          title = "Filters",
+          width = 300,
+          textInput(
+            "map_search_keyword",
+            label = tagList(icon("magnifying-glass"), " Search by keyword or role:"),
+            value = "",
+            placeholder = "e.g., special ed, coach, bus driver..."
+          ),
+          div(
+            class = "map-chips",
+            span("Popular: "),
+            actionLink("map_chip_sped", "Special Ed"),
+            actionLink("map_chip_math", "Mathematics"),
+            actionLink("map_chip_elem", "Elementary"),
+            actionLink("map_chip_science", "Science"),
+            actionLink("map_chip_music", "Music / Art"),
+            actionLink("map_chip_driver", "Bus Driver"),
+            actionLink("map_chip_clear", "✕ Clear", class = "text-danger fw-semibold")
+          ),
+          selectInput(
+            "map_county", "County:",
+            choices = map_county_choices,
+            selected = "all"
+          ),
+          checkboxGroupInput(
+            "map_types", "Employer type:",
+            choices = c("K-12 Districts" = "K-12 District", "Higher Ed" = "Higher Ed Institution"),
+            selected = c("K-12 District", "Higher Ed Institution"),
+            inline = TRUE
+          ),
+          selectInput(
+            "map_salary_tier", "Pay:",
+            # Built from PAY_BANDS. A posting counts by its posted pay,
+            # else its district/institution role figure, else the BLS
+            # estimate -- each in its own unit.
+            choices = c("All pay" = "all", setNames(names(PAY_BANDS), vapply(PAY_BANDS, function(b) {
+              paste0(if (b$unit == "hour") "Hourly: " else "Annual: ", b$label)
+            }, character(1)))),
+            selected = "all"
+          ),
+          selectInput(
+            "map_urgency", "Posting volume:",
+            choices = c(
+              "All Active Locations" = "all",
+              "High Volume (5+ openings)" = "5_plus",
+              "Multiple Openings (2+)" = "2_plus",
+              "New Postings This Week" = "has_new"
+            ),
+            selected = "all"
+          ),
+          actionButton("map_filter_reset", "Reset All Filters", icon = icon("arrow-rotate-left"),
+                       class = "btn-outline-secondary btn-sm w-100")
+        ),
+        div(class = "mb-2", uiOutput("map_filter_count")),
+        withSpinner(leafletOutput("combined_map", height = 650)),
+        p(class = "text-muted small mt-2 mb-0",
+          "Shows only the directly tracked districts and colleges, not OPI-only postings. Circle size = current openings; color = vacancy rate. ",
+          "Click a marker to see its jobs.")
+      )
     )
-    ,
-    tabItems(
-      # ------------------ Global Introduction ------------------
-      tabItem(
-        tabName = "intro",
-        h1("Education Jobs in Montana"),
-        uiOutput("data_load_issues_banner"),
-        fluidRow(
-          valueBoxOutput("kpi_k12_total", width = 4),
-          valueBoxOutput("kpi_he_total", width = 4),
-          valueBoxOutput("kpi_last_refreshed", width = 4)
-        ),
-        fluidRow(
-          column(width = 6, uiOutput("k12_biggest_mover")),
-          column(width = 6, uiOutput("he_biggest_mover"))
-        ),
-        fluidRow(
-          box(title = "Top K-12 Hiring Districts This Week", width = 6, status = "primary",
-              div(style = "overflow-x: auto;", tableOutput("top_k12_districts"))),
-          box(title = "Top Higher Ed Hiring Institutions This Week", width = 6, status = "primary",
-              div(style = "overflow-x: auto;", tableOutput("top_he_institutions")))
-        ),
-        fluidRow(
-          box(title = "Highest Teacher Vacancy Rate", width = 6, status = "primary",
-              withSpinner(plotlyOutput("k12_vacancy_leaderboard", height = 320)),
-              helpText("Districts with at least", VACANCY_RATE_MIN_FTE, "full-time teachers (FTE).")),
-          box(title = "Highest Faculty Vacancy Rate", width = 6, status = "primary",
-              withSpinner(plotlyOutput("he_vacancy_leaderboard", height = 320)),
-              helpText("Institutions with at least", VACANCY_RATE_MIN_FTE, "full-time faculty."))
-        ),
-        box(
-          title = "Montana K-12 coverage", width = 12, status = "warning", solidHeader = FALSE,
-          tags$p(
-            "The K-12 Jobs Table combines postings from ", n_distinct(map_k12$Name),
-            " directly tracked district boards with Montana OPI's statewide Jobs for Teachers feed."
-          ),
-          tags$p(
-            "OPI is a valuable statewide source, but its publication rules and coverage have not been independently verified as a complete census of Montana vacancies. ",
-            "A job absent from this dashboard is not evidence that no vacancy exists."
-          ),
-          tags$p(
-            "The Map and District Summary intentionally cover only directly monitored districts, where postings can be matched to verified district identities, coordinates, staffing, and salary data. ",
-            "OPI-only rows remain in the Jobs Table; their source location is an employer/location label, not necessarily a canonical district."
-          )
-        ),
-        div(style = "color:#999; font-size:0.8em; padding: 0 5px 5px;",
-            "K-12 vacancy rate is current teacher postings ÷ full-time teacher staffing (NCES CCD); Higher Ed vacancy rate is current instructor/faculty postings ÷ full-time instructional staff (NCES IPEDS). ",
-            "The two use different staffing sources and reporting years — compare rates within a type (district vs. district, institution vs. institution), not across K-12 and Higher Ed."),
-        div(style = "text-align:center; color:#999; font-size:0.85em; padding:15px;",
-            paste0("Refreshed on: ", last_refreshed_date, " · Created by Mike Bostick"))
-      ),
+  ),
 
-      tabItem(
-        tabName = "map_tab",
-        h1("Where the Openings Are"),
-        box(
-          width = 12, title = "Montana Education Job Openings Map", status = "primary",
-          fluidRow(
-            column(
-              6,
-              textInput(
-                "map_search_keyword",
-                label = tagList(icon("magnifying-glass"), " Search Open Positions by Keyword or Role:"),
-                value = "",
-                placeholder = "e.g., special ed, mathematics, science, music, coach, bus driver..."
-              ),
-              div(
-                style = "margin-top: -5px; margin-bottom: 8px; font-size: 11.5px; color: #64748b;",
-                span("Popular: "),
-                actionLink("map_chip_sped", "Special Ed", style = "margin-right: 8px; font-weight: 500;"),
-                actionLink("map_chip_math", "Mathematics", style = "margin-right: 8px; font-weight: 500;"),
-                actionLink("map_chip_elem", "Elementary", style = "margin-right: 8px; font-weight: 500;"),
-                actionLink("map_chip_science", "Science", style = "margin-right: 8px; font-weight: 500;"),
-                actionLink("map_chip_music", "Music / Art", style = "margin-right: 8px; font-weight: 500;"),
-                actionLink("map_chip_driver", "Bus Driver", style = "margin-right: 8px; font-weight: 500;"),
-                actionLink("map_chip_clear", "✕ Clear", style = "color: #d9534f; margin-left: 4px; font-weight: 600;")
-              )
-            ),
-            column(
-              3,
-              selectInput(
-                "map_county", "Filter by County:",
-                choices = map_county_choices,
-                selected = "all"
-              )
-            ),
-            column(
-              3,
-              checkboxGroupInput(
-                "map_types", "Employer Type:",
-                choices = c("K-12 Districts" = "K-12 District", "Higher Ed" = "Higher Ed Institution"),
-                selected = c("K-12 District", "Higher Ed Institution"),
-                inline = TRUE
-              )
-            )
-          ),
-          fluidRow(
-            column(
-              4,
-              selectInput(
-                "map_salary_tier", "Pay:",
-                # Built from PAY_BANDS. A posting counts by its posted pay,
-                # else its district/institution role figure, else the BLS
-                # estimate -- each in its own unit.
-                choices = c("All pay" = "all", setNames(names(PAY_BANDS), vapply(PAY_BANDS, function(b) {
-                  paste0(if (b$unit == "hour") "Hourly: " else "Annual: ", b$label)
-                }, character(1)))),
-                selected = "all"
-              )
-            ),
-            column(
-              4,
-              selectInput(
-                "map_urgency", "Posting Volume:",
-                choices = c(
-                  "All Active Locations" = "all",
-                  "High Volume (5+ openings)" = "5_plus",
-                  "Multiple Openings (2+)" = "2_plus",
-                  "New Postings This Week" = "has_new"
-                ),
-                selected = "all"
-              )
-            ),
-            column(
-              4,
-              div(
-                style = "padding-top: 25px;",
-                actionButton("map_filter_reset", "Reset All Filters", icon = icon("arrow-rotate-left"), class = "btn-sm btn-default btn-block")
-              )
-            )
-          ),
-          div(
-            style = "margin: 2px 0 12px 2px;",
-            uiOutput("map_filter_count")
-          ),
-          withSpinner(leafletOutput("combined_map", height = 650)),
-          helpText(paste0(
-            "Only this project's ", n_distinct(map_k12$Name), " directly tracked K-12 districts and ",
-            n_distinct(map_he$Name), " directly tracked Higher Ed institutions are shown here (with current openings). ",
-            "The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies; OPI-only source locations are not canonical district identifiers and cannot be mapped reliably. ",
-            "Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table. ",
-            "K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison. ",
-            "A red \"Partial\" badge means that district's postings come from an automated monitor of the district's own site rather than a structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-monitored district's count."
-          ))
-        )
-      ),
-
-      tabItem(
-        tabName = "data_tab",
-        h1("Data Sources & Open Research Downloads"),
-        p(class = "lead", "Transparent data provenance, methodology documentation, and downloadable datasets for researchers, policy analysts, school administrators, and the public."),
-        
-        fluidRow(
-          box(
-            width = 12, title = "Open Research Downloads", status = "primary", solidHeader = TRUE,
-            p("Every weekly snapshot is preserved. Download current or multi-year longitudinal datasets in standard CSV format:"),
-            fluidRow(
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("briefcase"), " Active K-12 Jobs", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "All current public school job openings in Montana with standardized titles, positions, locations, links, and district salary benchmarks."),
-                  downloadButton("download_active_k12", "Active Jobs (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              ),
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("clock-rotate-left"), " K-12 History Archive", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Historical record of weekly K-12 job postings across Montana (3,200+ records) for hiring seasonality and longitudinal teacher demand studies."),
-                  downloadButton("download_history_k12", "Historical K-12 (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              ),
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("stopwatch"), " K-12 Time-to-Fill", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Unique job postings tracking estimated days open (time-to-fill) and high-need subject areas (STEM, SPED, etc.) across weekly snapshots."),
-                  downloadButton("download_spells", "Job Duration Data (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              ),
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("school"), " District Profiles", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "District-level profiles: MT DLI salaries (10th/avg/90th), NCES teacher FTE & enrollment, student-to-teacher ratios, and Census poverty/rent."),
-                  downloadButton("download_district_benchmarks", "District Profiles (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              )
-            ),
-            fluidRow(
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("chart-line"), " K-12 Weekly Vacancies", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Weekly longitudinal vacancy totals across Montana school districts (3,700+ observations). Ideal for seasonal hiring cycles and supply/demand modeling."),
-                  downloadButton("download_weekly_totals", "Weekly Totals (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              ),
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("building-columns"), " Higher Ed Archive", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Longitudinal postings for instructional faculty, adjuncts, and staff across the Montana University System, tribal colleges, and community colleges."),
-                  downloadButton("download_history_he", "Higher Ed Archive (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              ),
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("stopwatch"), " Higher Ed Time-to-Fill", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Posting duration dataset tracking time-to-fill, active/closed search status, and discipline indicators for collegiate faculty."),
-                  downloadButton("download_he_spells", "Higher Ed Time-to-Fill (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              ),
-              column(3,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("graduation-cap"), " Higher Ed Profiles", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Institution-level profiles: IPEDS UNITID, instructional faculty salaries (all ranks and professor), enrollment, and federal Pell shares."),
-                  downloadButton("download_he_benchmarks", "Higher Ed Profiles (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              )
-            ),
-            fluidRow(
-              column(6,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("chart-line"), " Higher Ed Weekly Vacancies", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Weekly longitudinal vacancy totals across Montana colleges, universities, and tribal colleges. Ideal for tracking higher ed hiring seasonality."),
-                  downloadButton("download_he_weekly_totals", "Higher Ed Weekly Totals (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              ),
-              column(6,
-                div(style = "border: 1px solid #e0e0e0; border-radius: 6px; padding: 15px; margin-bottom: 15px; background: #fafafa;",
-                  h4(icon("book"), " Data Dictionary", style = "margin-top: 0; font-size: 15px; font-weight: 600;"),
-                  p(style = "font-size: 12px; color: #555; min-height: 48px;", "Comprehensive machine-readable codebook documenting variable names, data types, definitions, and source authorities across all datasets."),
-                  downloadButton("download_dictionary", "Codebook (CSV)", class = "btn-default btn-xs btn-block")
-                )
-              )
-            )
-          )
-        ),
-
-        fluidRow(
-          box(
-            width = 12, title = "Interactive Data Dictionary & Variable Codebook", status = "primary",
-            p("Search, sort, and filter variable definitions, data types, and primary source authorities across all datasets:"),
-            div(style = "overflow-x: auto;", withSpinner(DTOutput("data_dictionary_table")))
-          )
-        ),
-
-        fluidRow(
-          box(
-            width = 12, title = "Data Provenance & Source Transparency", status = "primary",
-            p("All datasets are compiled through automated, reproducible collection pipelines and federal/state data integration. Here is where every data point originates:"),
-            div(class = "table-responsive",
-              tags$table(
-                class = "table table-striped table-bordered table-hover",
-                tags$thead(
-                  tags$tr(
-                    tags$th("Dataset Layer"),
-                    tags$th("Primary Authority / Source"),
-                    tags$th("Refresh Frequency"),
-                    tags$th("Description & Research Utility")
-                  )
-                ),
-                tags$tbody(
-                  tags$tr(
-                    tags$td(strong("K-12 Active Vacancies")),
-                    tags$td("District Hiring Portals (Frontline/AppliTrack, SchoolSpring, TalentEd, Tyler Portico) + Montana OPI Jobs for Teachers"),
-                    tags$td(span(class = "label label-success", "Weekly")),
-                    tags$td("Standardized active postings across 180+ Montana school districts and regional education cooperatives, cleaned to remove duplicate listings and enriched with standardized job roles, categories, and direct application links.")
-                  ),
-                  tags$tr(
-                    tags$td(strong("K-12 Historical Archive")),
-                    tags$td("Historical Project Archive (2023-Present)"),
-                    tags$td(span(class = "label label-info", "Weekly Append")),
-                    tags$td("Multi-year archive of education postings used to model seasonal hiring waves, subject-area shortages (STEM, Special Education, CTE), and geographic vacancy patterns.")
-                  ),
-                  tags$tr(
-                    tags$td(strong("K-12 Teacher Compensation")),
-                    tags$td("Montana Dept of Labor & Industry (DLI) / OPI GEMS Certified Staff Collection"),
-                    tags$td(span(class = "label label-info", "Annual / Periodic")),
-                    tags$td("Published teacher compensation distributions (10th percentile, average, and 90th percentile) across 105+ Montana school districts. Sourced directly from official state regional wage reports.")
-                  ),
-                  tags$tr(
-                    tags$td(strong("District Staffing & Enrollment")),
-                    tags$td("NCES Common Core of Data (CCD) via Urban Institute"),
-                    tags$td(span(class = "label label-info", "Annual")),
-                    tags$td("Federal National Center for Education Statistics district-level teacher FTE and student enrollment counts. Powers vacancy-rate calculations and student-to-teacher ratios.")
-                  ),
-                  tags$tr(
-                    tags$td(strong("Higher Ed Faculty Compensation")),
-                    tags$td("NCES IPEDS Instructional Staff Salary Survey"),
-                    tags$td(span(class = "label label-info", "Annual")),
-                    tags$td("Average full-time instructional faculty salaries (all combined and full professor rank) for Montana University System campuses, tribal colleges, and community colleges.")
-                  ),
-                  tags$tr(
-                    tags$td(strong("County Economic Context")),
-                    tags$td("US Census Bureau (ACS 5-Year Estimates)"),
-                    tags$td(span(class = "label label-info", "Annual")),
-                    tags$td("County median household income, median gross rent, share of civilian labor force in agriculture/resource extraction, and 5-year population trajectory.")
-                  ),
-                  tags$tr(
-                    tags$td(strong("Student Need Context")),
-                    tags$td("Census SAIPE & US Dept of Education FSA"),
-                    tags$td(span(class = "label label-info", "Annual")),
-                    tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level child poverty rates for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
-                  )
-                )
-              )
-            )
-          )
-        ),
-        
-        fluidRow(
-          box(
-            width = 12, title = "Open Research Citation & Code", status = "primary",
-            p("This project is open-source and maintained to promote labor market transparency in public education. If you use these datasets in academic research, policy analysis, or journalism, please cite:"),
-            tags$blockquote(
-              style = "font-size: 13px; background: #f9f9f9; padding: 10px 15px; border-left: 4px solid #2a78d6;",
-              "Bostick, M. (2026). Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context. ",
-              tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard", target = "_blank", "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard")
-            ),
-            p(style = "margin-bottom: 0; font-size: 12px; color: #777;",
-              "To report discrepancies, missing districts, or data issues, please submit an issue on the ",
-              tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues", target = "_blank", "GitHub Issue Tracker"), ".")
-          )
-        )
-      ),
-
-      tabItem(
-        tabName = "k12_table",
+  # ------------------ K-12 ------------------
+  nav_menu(
+    "K-12", icon = icon("school"),
+    nav_panel(
+      "Jobs", value = "k12_table", icon = icon("table"),
+      div(
+        class = "table-toolbar",
         div(
-          class = "table-toolbar",
-          div(
-            style = "display: flex; align-items: center; gap: 8px; flex-wrap: wrap;",
-            span(style = "font-weight: 600; font-size: 13.5px; color: #334155;", "Filter Postings:"),
-            radioGroupButtons(
-              inputId = "k12_quick_filter",
-              label = NULL,
-              choices = c(
-                "All Active Postings" = "all",
-                "🟢 New This Week" = "new"
-              ),
-              selected = "all",
-              status = "primary",
-              size = "sm",
-              checkIcon = list(yes = icon("check"))
-            )
-          ),
-          uiOutput("k12_filter_status")
-        ),
-        p(class = "help-block", style = "margin-bottom: 8px;", paste0("Posted Pay is the pay the job posting itself states (hourly, daily, annual, or a season stipend, as written); blank where the posting gives no figure. ",
-          "Typical pay (BLS est.) fills in where the posting states none: the Bureau of Labor Statistics' ",
-          if (!is.na(oews_year)) paste0("May ", oews_year, " ") else "",
-          "median pay for that role in the posting's region (hover for the role and area; OEWS, all employers, not just schools), so treat it as a regional estimate, not this job's offer. "),
-          "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."),
-        DTOutput("k12_jobs")
-      ),
-      tabItem(
-        tabName = "k12_summary",
-        tabBox(
-          id = "k12_summary_tabs",
-          width = 12,
-          tabPanel(
-            title = tagList(icon("table-list"), " District Directory"),
-            value = "k12_summary_dir",
-            h4("One row per district -- current openings, teacher vacancy rate, and salary data"),
-            DTOutput("k12_summary_table"),
-            uiOutput("k12_summary_footnote")
-          ),
-          tabPanel(
-            title = tagList(icon("code-compare"), " Head-to-Head Comparator"),
-            value = "k12_summary_comp",
-            p(class = "help-block", style = "margin-top: 6px;",
-              "Select up to four school districts to evaluate staffing demand, DLI compensation benchmarks, and community demographics side-by-side."),
-            fluidRow(
-              column(
-                width = 8,
-                selectizeInput(
-                  "k12_compare_districts",
-                  label = "Select School Districts (up to 4):",
-                  choices = sort(unique(mapdata2_k12$Name)),
-                  selected = c("Billings Public Schools", "Kalispell Public Schools"),
-                  multiple = TRUE,
-                  options = list(maxItems = 4, placeholder = "Type or select up to 4 districts...")
-                )
-              ),
-              column(
-                width = 4,
-                tags$label("Quick Presets:", style = "display: block; margin-bottom: 5px;"),
-                div(
-                  class = "btn-group",
-                  actionButton("k12_comp_preset_top", "Top Hiring", class = "btn-sm btn-default", icon = icon("fire")),
-                  actionButton("k12_comp_preset_largest", "Largest", class = "btn-sm btn-default", icon = icon("users")),
-                  actionButton("k12_comp_preset_clear", "Clear", class = "btn-sm btn-default", icon = icon("xmark"))
-                )
-              )
+          style = "display: flex; align-items: center; gap: 8px; flex-wrap: wrap;",
+          span(style = "font-weight: 600; font-size: 13.5px; color: #334155;", "Filter Postings:"),
+          radioGroupButtons(
+            inputId = "k12_quick_filter",
+            label = NULL,
+            choices = c(
+              "All Active Postings" = "all",
+              "🟢 New This Week" = "new"
             ),
-            uiOutput("k12_compare_cards"),
-            fluidRow(
-              box(
-                width = 6, title = "Teacher Avg Salary & County Median Income", status = "primary", solidHeader = FALSE,
-                withSpinner(plotlyOutput("k12_compare_salary_plot", height = "360px"))
-              ),
-              box(
-                width = 6, title = "Student Enrollment & Active Openings", status = "primary", solidHeader = FALSE,
-                withSpinner(plotlyOutput("k12_compare_metrics_plot", height = "360px"))
-              )
-            ),
-            box(
-              width = 12, title = "Active Openings in Selected Districts", status = "info", solidHeader = FALSE,
-              DTOutput("k12_compare_jobs_table")
-            )
+            selected = "all",
+            status = "primary",
+            size = "sm",
+            checkIcon = list(yes = icon("check"))
           )
-        )
+        ),
+        uiOutput("k12_filter_status")
       ),
-
-      tabItem(
-        tabName = "k12_trends",
-        tabBox(
-          id = "k12_trends_tabs",
-          width = 12,
-          tabPanel(
-            title = tagList(icon("chart-column"), " Current Trends"),
-            value = "k12_trends_current",
-            p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
-              "Current subject distribution across active K-12 postings with 12-week vacancy sparklines."),
-            fluidRow(
-              column(
-                width = 6,
-                radioButtons("k12_detail_level_current", "View:",
-                             choices = c("Individual subjects" = "detail",
-                                         "Major subject groups" = "agg"),
-                             selected = "detail", inline = TRUE)
-              ),
-              column(
-                width = 6,
-                selectInput(
-                  "district_current",
-                  "Choose District:",
-                  choices = sort(unique(k12nowsum$District)),
-                  selected = "Total",
-                  width = "100%"
-                )
-              )
+      p(class = "text-muted small mb-2",
+        "Posted Pay is what the posting itself states; the other pay columns are labeled estimates, not this job's offer. ",
+        info_popover("About the pay columns",
+          p(class = "mb-0", paste0("Posted Pay is the pay the job posting itself states (hourly, daily, annual, or a season stipend, as written); blank where the posting gives no figure. ",
+        "Typical pay (BLS est.) fills in where the posting states none: the Bureau of Labor Statistics' ",
+        if (!is.na(oews_year)) paste0("May ", oews_year, " ") else "",
+        "median pay for that role in the posting's region (hover for the role and area; OEWS, all employers, not just schools), so treat it as a regional estimate, not this job's offer. "),
+        "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."))),
+      DTOutput("k12_jobs", fill = FALSE)
+    ),
+    nav_panel(
+      "Districts", value = "k12_summary", icon = icon("school"),
+      navset_card_tab(
+        id = "k12_summary_tabs",
+        nav_panel(
+          title = tagList(icon("table-list"), " District Directory"),
+          value = "k12_summary_dir",
+          h4("One row per district -- current openings, teacher vacancy rate, and salary data"),
+          DTOutput("k12_summary_table", fill = FALSE),
+          uiOutput("k12_summary_footnote")
+        ),
+        nav_panel(
+          title = tagList(icon("code-compare"), " Head-to-Head Comparator"),
+          value = "k12_summary_comp",
+          p(class = "text-muted small", style = "margin-top: 6px;",
+            "Select up to four school districts to evaluate staffing demand, DLI compensation benchmarks, and community demographics side-by-side."),
+          layout_columns(
+            col_widths = c(8, 4),
+            selectizeInput(
+              "k12_compare_districts",
+              label = "Select School Districts (up to 4):",
+              choices = sort(unique(mapdata2_k12$Name)),
+              selected = c("Billings Public Schools", "Kalispell Public Schools"),
+              multiple = TRUE,
+              width = "100%",
+              options = list(maxItems = 4, placeholder = "Type or select up to 4 districts...")
             ),
-            div(class = "trends-table-container",
-                withSpinner(tableOutput("k12_current_trends_table")))
-          ),
-          tabPanel(
-            title = tagList(icon("chart-line"), " Multi-Year Trends"),
-            value = "k12_trends_historical",
-            p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
-              "Multi-year vacancy volume time series tracking hiring trends across weekly snapshots."),
-            radioButtons("k12_detail_level_trends", "View:",
-                         choices = c("Individual subjects" = "detail",
-                                     "Major subject groups" = "agg"),
-                         selected = "detail", inline = TRUE),
-            fluidRow(
-              column(
-                width = 6,
-                pickerInput(
-                  "broad_category",
-                  "Choose Teacher Category:",
-                  choices  = sort(unique(k12sum$Broad_Category)),
-                  selected = sort(unique(k12sum$Broad_Category)),
-                  multiple = TRUE,
-                  width = "100%",
-                  options = pickerOptions(actionsBox = TRUE, liveSearch = TRUE, selectedTextFormat = "count > 3")
-                )
-              ),
-              column(
-                width = 6,
-                selectInput(
-                  "district_trend",
-                  "Choose District:",
-                  choices = sort(unique(k12sum$District)),
-                  selected = "Total",
-                  width = "100%"
-                )
+            div(
+              tags$label("Quick Presets:", style = "display: block; margin-bottom: 5px;"),
+              div(
+                class = "btn-group",
+                actionButton("k12_comp_preset_top", "Top Hiring", class = "btn-sm btn-outline-secondary", icon = icon("fire")),
+                actionButton("k12_comp_preset_largest", "Largest", class = "btn-sm btn-outline-secondary", icon = icon("users")),
+                actionButton("k12_comp_preset_clear", "Clear", class = "btn-sm btn-outline-secondary", icon = icon("xmark"))
               )
+            )
+          ),
+          uiOutput("k12_compare_cards"),
+          layout_columns(
+            col_widths = c(6, 6),
+            dash_card("Teacher Avg Salary & County Median Income",
+                      withSpinner(plotlyOutput("k12_compare_salary_plot", height = "360px"))),
+            dash_card("Student Enrollment & Active Openings",
+                      withSpinner(plotlyOutput("k12_compare_metrics_plot", height = "360px")))
+          ),
+          dash_card("Active Openings in Selected Districts",
+                    DTOutput("k12_compare_jobs_table", fill = FALSE))
+        )
+      )
+    ),
+    nav_panel(
+      "Trends", value = "k12_trends", icon = icon("chart-line"),
+      navset_card_tab(
+        id = "k12_trends_tabs",
+        nav_panel(
+          title = tagList(icon("chart-column"), " Current Trends"),
+          value = "k12_trends_current",
+          p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
+            "Current subject distribution across active K-12 postings with 12-week vacancy sparklines."),
+          layout_sidebar(
+            fillable = FALSE,
+            sidebar = sidebar(
+              width = 260,
+              selectInput(
+                "district_current",
+                "District:",
+                choices = sort(unique(k12nowsum$District)),
+                selected = "Total"
+              ),
+              radioButtons("k12_detail_level_current", "View:",
+                           choices = c("Individual subjects" = "detail",
+                                       "Major subject groups" = "agg"),
+                           selected = "detail")
+            ),
+            div(class = "trends-table-container mt-0",
+                withSpinner(tableOutput("k12_current_trends_table")))
+          )
+        ),
+        nav_panel(
+          title = tagList(icon("chart-line"), " Multi-Year Trends"),
+          value = "k12_trends_historical",
+          p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
+            "Multi-year vacancy volume time series tracking hiring trends across weekly snapshots."),
+          layout_sidebar(
+            fillable = FALSE,
+            sidebar = sidebar(
+              width = 260,
+              selectInput(
+                "district_trend",
+                "District:",
+                choices = sort(unique(k12sum$District)),
+                selected = "Total"
+              ),
+              pickerInput(
+                "broad_category",
+                "Teacher category:",
+                choices  = sort(unique(k12sum$Broad_Category)),
+                selected = sort(unique(k12sum$Broad_Category)),
+                multiple = TRUE,
+                width = "100%",
+                options = pickerOptions(actionsBox = TRUE, liveSearch = TRUE, selectedTextFormat = "count > 3")
+              ),
+              radioButtons("k12_detail_level_trends", "View:",
+                           choices = c("Individual subjects" = "detail",
+                                       "Major subject groups" = "agg"),
+                           selected = "detail")
             ),
             div(style = "color:#777; font-size:0.9em;", textOutput("k12_slider_label")),
             sliderInput(
@@ -1711,241 +1537,230 @@ ui <- dashboardPage(
             withSpinner(plotlyOutput("k12_longitudinal_plot"))
           )
         )
-      ),
-
-      tabItem(
-        tabName = "k12_spells",
-        h3(style = "margin-top: 5px; font-weight: 600;", tagList(icon("stopwatch"), " K-12 Job Duration & Time-to-Fill")),
-        p(class = "help-block",
-          "Weekly tracking of posting duration and hiring speed. Measures time-to-fill and persistent vacancies across Montana school districts."),
-        fluidRow(
-          valueBoxOutput("k12_spell_median_box", width = 3),
-          valueBoxOutput("k12_spell_active_box", width = 3),
-          valueBoxOutput("k12_spell_persistent_box", width = 3),
-          valueBoxOutput("k12_spell_hardest_box", width = 3)
+      )
+    ),
+    nav_panel(
+      "Time-to-Fill", value = "k12_spells", icon = icon("stopwatch"),
+      h3(class = "page-title", tagList(icon("stopwatch"), " K-12 Job Duration & Time-to-Fill")),
+      p(class = "text-muted small",
+        "Weekly tracking of posting duration and hiring speed. Measures time-to-fill and persistent vacancies across Montana school districts."),
+      layout_sidebar(
+        fillable = FALSE,
+        class = "page-sidebar",
+        sidebar = sidebar(
+          title = "Filters",
+          width = 260,
+          selectInput("k12_spell_status", "Vacancy status:",
+                      choices = c("All Postings" = "all",
+                                  "Still Active (Open)" = "Still Active",
+                                  "Filled / Closed" = "Closed / Filled"),
+                      selected = "all"),
+          selectInput("k12_spell_position", "Position group:",
+                      choices = c("All Roles" = "all",
+                                  "Teacher" = "Teacher",
+                                  "Administration" = "Administration",
+                                  "Support Staff / Classified" = "Support"),
+                      selected = "all"),
+          selectInput("k12_spell_discipline", "Discipline / shortage area:",
+                      choices = c("All Disciplines" = "all",
+                                  "STEM (Math & Science)" = "stem",
+                                  "Special Education" = "sped",
+                                  "Elementary Education" = "elementary",
+                                  "Secondary Education" = "secondary",
+                                  "Administration" = "admin",
+                                  "Support / Classified" = "support"),
+                      selected = "all"),
+          selectInput("k12_spell_district", "District:",
+                      choices = c("All Districts" = "all"),
+                      selected = "all")
         ),
-        box(
-          width = 12, status = "primary", solidHeader = FALSE,
-          fluidRow(
-            column(
-              width = 3,
-              selectInput("k12_spell_status", "Vacancy Status:",
-                          choices = c("All Postings" = "all",
-                                      "Still Active (Open)" = "Still Active",
-                                      "Filled / Closed" = "Closed / Filled"),
-                          selected = "all")
-            ),
-            column(
-              width = 3,
-              selectInput("k12_spell_position", "Position Group:",
-                          choices = c("All Roles" = "all",
-                                      "Teacher" = "Teacher",
-                                      "Administration" = "Administration",
-                                      "Support Staff / Classified" = "Support"),
-                          selected = "all")
-            ),
-            column(
-              width = 3,
-              selectInput("k12_spell_discipline", "Discipline / Shortage Area:",
-                          choices = c("All Disciplines" = "all",
-                                      "STEM (Math & Science)" = "stem",
-                                      "Special Education" = "sped",
-                                      "Elementary Education" = "elementary",
-                                      "Secondary Education" = "secondary",
-                                      "Administration" = "admin",
-                                      "Support / Classified" = "support"),
-                          selected = "all")
-            ),
-            column(
-              width = 3,
-              selectInput("k12_spell_district", "Filter District:",
-                          choices = c("All Districts" = "all"),
-                          selected = "all")
+        layout_columns(
+          col_widths = breakpoints(sm = c(6, 6, 6, 6), xl = c(3, 3, 3, 3)),
+          uiOutput("k12_spell_median_box", fill = TRUE),
+          uiOutput("k12_spell_active_box", fill = TRUE),
+          uiOutput("k12_spell_persistent_box", fill = TRUE),
+          uiOutput("k12_spell_hardest_box", fill = TRUE)
+        ),
+        layout_columns(
+          col_widths = breakpoints(sm = 12, lg = c(7, 5)),
+          dash_card("Median Days Open by Subject Category",
+                    withSpinner(plotlyOutput("k12_spell_duration_plot", height = "360px"))),
+          dash_card("Vacancy Duration Distribution",
+                    withSpinner(plotlyOutput("k12_spell_distrib_plot", height = "360px")))
+        ),
+        card(
+          card_header(
+            class = "d-flex justify-content-between align-items-center",
+            "Job Duration & Time-to-Fill Explorer",
+            info_popover(
+              "How days open is estimated",
+              p(class = "mb-0", "Estimated Days Open represents the calendar duration between when a posting was first captured and when it disappeared from weekly updates (or weeks observed × 7).")
             )
-          )
-        ),
-        fluidRow(
-          box(
-            width = 7, title = "Median Days Open by Subject Category", status = "info",
-            withSpinner(plotlyOutput("k12_spell_duration_plot", height = "360px"))
           ),
-          box(
-            width = 5, title = "Vacancy Duration Distribution", status = "info",
-            withSpinner(plotlyOutput("k12_spell_distrib_plot", height = "360px"))
+          card_body(
+            fillable = FALSE,
+            div(class = "trends-table-container mt-0",
+                withSpinner(DTOutput("k12_spell_table", fill = FALSE)))
           )
-        ),
-        box(
-          width = 12, title = "Job Duration & Time-to-Fill Explorer", status = "primary",
-          p(style = "font-size: 12px; color: #777; margin-bottom: 12px;",
-            "Estimated Days Open represents the calendar duration between when a posting was first captured and when it disappeared from weekly updates (or weeks observed × 7)."),
-          div(class = "trends-table-container",
-              withSpinner(DTOutput("k12_spell_table")))
         )
-      ),
+      )
+    )
+  ),
 
-      # ------------------ Higher Ed ------------------
-      tabItem(
-        tabName = "he_table",
+  # ------------------ Higher Ed ------------------
+  nav_menu(
+    "Higher Ed", icon = icon("building-columns"),
+    nav_panel(
+      "Jobs", value = "he_table", icon = icon("table"),
+      div(
+        class = "table-toolbar",
         div(
-          class = "table-toolbar",
-          div(
-            style = "display: flex; align-items: center; gap: 8px; flex-wrap: wrap;",
-            span(style = "font-weight: 600; font-size: 13.5px; color: #334155;", "Filter Postings:"),
-            radioGroupButtons(
-              inputId = "he_quick_filter",
-              label = NULL,
-              choices = c(
-                "All Active Postings" = "all",
-                "🟢 New This Week" = "new"
-              ),
-              selected = "all",
-              status = "primary",
-              size = "sm",
-              checkIcon = list(yes = icon("check"))
+          style = "display: flex; align-items: center; gap: 8px; flex-wrap: wrap;",
+          span(style = "font-weight: 600; font-size: 13.5px; color: #334155;", "Filter Postings:"),
+          radioGroupButtons(
+            inputId = "he_quick_filter",
+            label = NULL,
+            choices = c(
+              "All Active Postings" = "all",
+              "🟢 New This Week" = "new"
             ),
-            radioButtons(
-              "he_table_appointment", "Appointment:",
-              choices = c(
-                "All roles" = "all",
-                "Faculty/instructor (non-adjunct)" = "Faculty/instructor (non-adjunct)",
-                "Adjunct/part-time faculty" = "Adjunct/part-time faculty",
-                "Other / not faculty" = "Other / not faculty"
-              ),
-              selected = "all", inline = TRUE
-            )
+            selected = "all",
+            status = "primary",
+            size = "sm",
+            checkIcon = list(yes = icon("check"))
           ),
-          uiOutput("he_filter_status")
-        ),
-        p(class = "help-block", style = "margin-bottom: 8px;", "Posted Pay is the pay the job posting itself states (hourly, annual, or per credit hour, as written); blank where the posting gives no figure. Typical pay (IPEDS est.) fills in for staff postings that state none: the college's average pay for its full-time staff in that job category (IPEDS; hover for the category), not this job's offer. Avg Faculty Salary reflects full-time instructional staff compensation from IPEDS via Urban Institute."),
-        DTOutput("he_jobs")
-      ),
-      tabItem(
-        tabName = "he_summary",
-        tabBox(
-          id = "he_summary_tabs",
-          width = 12,
-          tabPanel(
-            title = tagList(icon("building-columns"), " Institution Directory"),
-            value = "he_summary_dir",
-            h4("One row per institution -- current openings, faculty vacancy rate, and salary data"),
-            DTOutput("he_summary_table"),
-            uiOutput("he_summary_footnote")
-          ),
-          tabPanel(
-            title = tagList(icon("code-compare"), " Head-to-Head Comparator"),
-            value = "he_summary_comp",
-            p(class = "help-block", style = "margin-top: 6px;",
-              "Select up to four higher education institutions to evaluate faculty demand, IPEDS salary benchmarks, and institutional enrollment side-by-side."),
-            fluidRow(
-              column(
-                width = 8,
-                selectizeInput(
-                  "he_compare_insts",
-                  label = "Select Institutions (up to 4):",
-                  choices = sort(unique(mapdata2_he$Name)),
-                  selected = c("Montana State University", "University of Montana"),
-                  multiple = TRUE,
-                  options = list(maxItems = 4, placeholder = "Type or select up to 4 institutions...")
-                )
-              ),
-              column(
-                width = 4,
-                tags$label("Quick Presets:", style = "display: block; margin-bottom: 5px;"),
-                div(
-                  class = "btn-group",
-                  actionButton("he_comp_preset_top", "Top Hiring", class = "btn-sm btn-default", icon = icon("fire")),
-                  actionButton("he_comp_preset_clear", "Clear", class = "btn-sm btn-default", icon = icon("xmark"))
-                )
-              )
+          radioButtons(
+            "he_table_appointment", "Appointment:",
+            choices = c(
+              "All roles" = "all",
+              "Faculty/instructor (non-adjunct)" = "Faculty/instructor (non-adjunct)",
+              "Adjunct/part-time faculty" = "Adjunct/part-time faculty",
+              "Other / not faculty" = "Other / not faculty"
             ),
-            uiOutput("he_compare_cards"),
-            fluidRow(
-              box(
-                width = 6, title = "Faculty Average Salary (IPEDS)", status = "primary", solidHeader = FALSE,
-                withSpinner(plotlyOutput("he_compare_salary_plot", height = "360px"))
-              ),
-              box(
-                width = 6, title = "Openings by Appointment Type", status = "primary", solidHeader = FALSE,
-                withSpinner(plotlyOutput("he_compare_openings_plot", height = "360px"))
-              )
-            ),
-            box(
-              width = 12, title = "Active Openings in Selected Institutions", status = "info", solidHeader = FALSE,
-              DTOutput("he_compare_jobs_table")
-            )
+            selected = "all", inline = TRUE
           )
-        )
+        ),
+        uiOutput("he_filter_status")
       ),
-
-      tabItem(
-        tabName = "he_trends",
-        tabBox(
-          id = "he_trends_tabs",
-          width = 12,
-          tabPanel(
-            title = tagList(icon("chart-column"), " Current Trends"),
-            value = "he_trends_current",
-            p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
-              "Current institution and discipline breakdown across active higher education postings with 12-week sparklines."),
-            fluidRow(
-              column(
-                width = 4,
-                radioButtons("he_detail_level_current", "View:",
-                             choices = c("Individual fields" = "detail", "Major academic areas" = "agg"),
-                             selected = "detail", inline = TRUE)
-              ),
-              column(
-                width = 4,
-                radioButtons("he_current_appointment", "Appointment:",
-                             choices = c(
-                               "All faculty postings" = "all",
-                               "Faculty/instructor (non-adjunct)" = "Instructor/Teacher/Faculty",
-                               "Adjunct/part-time faculty" = "Adjunct/Part-Time Faculty"
-                             ),
-                             selected = "all", inline = TRUE)
-              ),
-              column(
-                width = 4,
-                selectInput("inst_current", "Select Institution:",
-                            choices = sort(unique(henowsum_he$Institution)), selected = "Total", width = "100%")
-              )
+      p(class = "text-muted small mb-2",
+        "Posted Pay is what the posting itself states; the other pay columns are labeled estimates, not this job's offer. ",
+        info_popover("About the pay columns",
+          p(class = "mb-0", "Posted Pay is the pay the job posting itself states (hourly, annual, or per credit hour, as written); blank where the posting gives no figure. Typical pay (IPEDS est.) fills in for staff postings that state none: the college's average pay for its full-time staff in that job category (IPEDS; hover for the category), not this job's offer. Avg Faculty Salary reflects full-time instructional staff compensation from IPEDS via Urban Institute."))),
+      DTOutput("he_jobs", fill = FALSE)
+    ),
+    nav_panel(
+      "Colleges", value = "he_summary", icon = icon("building-columns"),
+      navset_card_tab(
+        id = "he_summary_tabs",
+        nav_panel(
+          title = tagList(icon("building-columns"), " Institution Directory"),
+          value = "he_summary_dir",
+          h4("One row per institution -- current openings, faculty vacancy rate, and salary data"),
+          DTOutput("he_summary_table", fill = FALSE),
+          uiOutput("he_summary_footnote")
+        ),
+        nav_panel(
+          title = tagList(icon("code-compare"), " Head-to-Head Comparator"),
+          value = "he_summary_comp",
+          p(class = "text-muted small", style = "margin-top: 6px;",
+            "Select up to four higher education institutions to evaluate faculty demand, IPEDS salary benchmarks, and institutional enrollment side-by-side."),
+          layout_columns(
+            col_widths = c(8, 4),
+            selectizeInput(
+              "he_compare_insts",
+              label = "Select Institutions (up to 4):",
+              choices = sort(unique(mapdata2_he$Name)),
+              selected = c("Montana State University", "University of Montana"),
+              multiple = TRUE,
+              width = "100%",
+              options = list(maxItems = 4, placeholder = "Type or select up to 4 institutions...")
             ),
-            div(class = "trends-table-container",
-                withSpinner(tableOutput("he_current_trends_table")))
+            div(
+              tags$label("Quick Presets:", style = "display: block; margin-bottom: 5px;"),
+              div(
+                class = "btn-group",
+                actionButton("he_comp_preset_top", "Top Hiring", class = "btn-sm btn-outline-secondary", icon = icon("fire")),
+                actionButton("he_comp_preset_clear", "Clear", class = "btn-sm btn-outline-secondary", icon = icon("xmark"))
+              )
+            )
           ),
-          tabPanel(
-            title = tagList(icon("chart-line"), " Multi-Year Trends"),
-            value = "he_trends_historical",
-            p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
-              "Multi-year vacancy volume time series tracking higher education hiring trends across weekly snapshots."),
-            radioButtons("he_detail_level_trends", "View:",
-                         choices = c("Individual fields" = "detail", "Major academic areas" = "agg"),
-                         selected = "detail", inline = TRUE),
-            fluidRow(
-              column(
-                width = 6,
-                pickerInput(
-                  "he_category",
-                  "Choose Category:",
-                  choices  = sort(unique(hesum_he$Category)),
-                  selected = sort(unique(hesum_he$Category)),
-                  multiple = TRUE,
-                  width = "100%",
-                  options = pickerOptions(actionsBox = TRUE, liveSearch = TRUE, selectedTextFormat = "count > 3")
-                )
-              ),
-              column(
-                width = 6,
-                selectInput(
-                  "inst_trend",
-                  "Select Institution:",
-                  choices = sort(unique(hesum_he$Institution)),
-                  selected = "Total",
-                  width = "100%"
-                )
-              )
+          uiOutput("he_compare_cards"),
+          layout_columns(
+            col_widths = c(6, 6),
+            dash_card("Faculty Average Salary (IPEDS)",
+                      withSpinner(plotlyOutput("he_compare_salary_plot", height = "360px"))),
+            dash_card("Openings by Appointment Type",
+                      withSpinner(plotlyOutput("he_compare_openings_plot", height = "360px")))
+          ),
+          dash_card("Active Openings in Selected Institutions",
+                    DTOutput("he_compare_jobs_table", fill = FALSE))
+        )
+      )
+    ),
+    nav_panel(
+      "Trends", value = "he_trends", icon = icon("chart-line"),
+      navset_card_tab(
+        id = "he_trends_tabs",
+        nav_panel(
+          title = tagList(icon("chart-column"), " Current Trends"),
+          value = "he_trends_current",
+          p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
+            "Current institution and discipline breakdown across active higher education postings with 12-week sparklines."),
+          layout_sidebar(
+            fillable = FALSE,
+            sidebar = sidebar(
+              width = 260,
+              selectInput("inst_current", "Institution:",
+                          choices = sort(unique(henowsum_he$Institution)), selected = "Total"),
+              radioButtons("he_current_appointment", "Appointment:",
+                           choices = c(
+                             "All faculty postings" = "all",
+                             "Faculty/instructor (non-adjunct)" = "Instructor/Teacher/Faculty",
+                             "Adjunct/part-time faculty" = "Adjunct/Part-Time Faculty"
+                           ),
+                           selected = "all"),
+              radioButtons("he_detail_level_current", "View:",
+                           choices = c("Individual fields" = "detail", "Major academic areas" = "agg"),
+                           selected = "detail")
             ),
-            textOutput("he_slider_label"),
+            div(class = "trends-table-container mt-0",
+                withSpinner(tableOutput("he_current_trends_table")))
+          )
+        ),
+        nav_panel(
+          title = tagList(icon("chart-line"), " Multi-Year Trends"),
+          value = "he_trends_historical",
+          p(class = "text-muted", style = "margin-top: 5px; margin-bottom: 12px;",
+            "Multi-year vacancy volume time series tracking higher education hiring trends across weekly snapshots."),
+          layout_sidebar(
+            fillable = FALSE,
+            sidebar = sidebar(
+              width = 260,
+              selectInput(
+                "inst_trend",
+                "Institution:",
+                choices = sort(unique(hesum_he$Institution)),
+                selected = "Total"
+              ),
+              pickerInput(
+                "he_category",
+                "Category:",
+                choices  = sort(unique(hesum_he$Category)),
+                selected = sort(unique(hesum_he$Category)),
+                multiple = TRUE,
+                width = "100%",
+                options = pickerOptions(actionsBox = TRUE, liveSearch = TRUE, selectedTextFormat = "count > 3")
+              ),
+              radioButtons("he_chart_type", "Jobs:", choices = c(
+                "All Jobs" = "all",
+                "Faculty/instructor (non-adjunct)" = "Instructor/Teacher/Faculty",
+                "Adjunct/part-time faculty" = "Adjunct/Part-Time Faculty"
+              ), selected = "all"),
+              radioButtons("he_detail_level_trends", "View:",
+                           choices = c("Individual fields" = "detail", "Major academic areas" = "agg"),
+                           selected = "detail")
+            ),
+            div(style = "color:#777; font-size:0.9em;", textOutput("he_slider_label")),
             sliderInput(
               "he_scroll",
               "Scroll timeline:",
@@ -1955,81 +1770,208 @@ ui <- dashboardPage(
               timeFormat = "%Y-%m-%d",
               width = "100%"
             ),
-            radioButtons("he_chart_type", NULL, choices = c(
-              "All Jobs" = "all",
-              "Faculty/instructor (non-adjunct)" = "Instructor/Teacher/Faculty",
-              "Adjunct/part-time faculty" = "Adjunct/Part-Time Faculty"
-            ), selected = "all", inline = TRUE),
             withSpinner(plotlyOutput("he_longitudinal_plot"))
           )
         )
-      ),
-
-      tabItem(
-        tabName = "he_spells",
-        h3(style = "margin-top: 5px; font-weight: 600;", tagList(icon("stopwatch"), " Higher Ed Job Duration & Time-to-Fill")),
-        p(class = "help-block",
-          "Weekly tracking of collegiate faculty vacancy duration across snapshots. Measures time-to-fill and search persistence across academic disciplines and institutions."),
-        fluidRow(
-          valueBoxOutput("he_spell_median_box", width = 3),
-          valueBoxOutput("he_spell_active_box", width = 3),
-          valueBoxOutput("he_spell_persistent_box", width = 3),
-          valueBoxOutput("he_spell_hardest_box", width = 3)
+      )
+    ),
+    nav_panel(
+      "Time-to-Fill", value = "he_spells", icon = icon("stopwatch"),
+      h3(class = "page-title", tagList(icon("stopwatch"), " Higher Ed Job Duration & Time-to-Fill")),
+      p(class = "text-muted small",
+        "Weekly tracking of collegiate faculty vacancy duration across snapshots. Measures time-to-fill and search persistence across academic disciplines and institutions."),
+      layout_sidebar(
+        fillable = FALSE,
+        class = "page-sidebar",
+        sidebar = sidebar(
+          title = "Filters",
+          width = 260,
+          selectInput("he_spell_status", "Vacancy status:",
+                      choices = c("All Postings" = "all",
+                                  "Still Active (Open)" = "Still Active",
+                                  "Filled / Closed" = "Closed / Filled"),
+                      selected = "all"),
+          selectInput("he_spell_job_type", "Appointment type:",
+                      choices = c("All Appointments" = "all",
+                                  "Full-Time / Regular Faculty" = "Instructor/Teacher/Faculty",
+                                  "Adjunct / Part-Time Faculty" = "Adjunct/Part-Time Faculty"),
+                      selected = "all"),
+          selectInput("he_spell_discipline", "Academic focus:",
+                      choices = c("All Disciplines" = "all",
+                                  "STEM Fields" = "stem",
+                                  "Health Sciences & Nursing" = "health",
+                                  "Career & Technical (CTE)" = "cte"),
+                      selected = "all"),
+          selectInput("he_spell_institution", "Institution:",
+                      choices = c("All Institutions" = "all"),
+                      selected = "all")
         ),
-        box(
-          width = 12, status = "primary", solidHeader = FALSE,
-          fluidRow(
-            column(
-              width = 3,
-              selectInput("he_spell_status", "Vacancy Status:",
-                          choices = c("All Postings" = "all",
-                                      "Still Active (Open)" = "Still Active",
-                                      "Filled / Closed" = "Closed / Filled"),
-                          selected = "all")
-            ),
-            column(
-              width = 3,
-              selectInput("he_spell_job_type", "Appointment Type:",
-                          choices = c("All Appointments" = "all",
-                                      "Full-Time / Regular Faculty" = "Instructor/Teacher/Faculty",
-                                      "Adjunct / Part-Time Faculty" = "Adjunct/Part-Time Faculty"),
-                          selected = "all")
-            ),
-            column(
-              width = 3,
-              selectInput("he_spell_discipline", "Academic Focus:",
-                          choices = c("All Disciplines" = "all",
-                                      "STEM Fields" = "stem",
-                                      "Health Sciences & Nursing" = "health",
-                                      "Career & Technical (CTE)" = "cte"),
-                          selected = "all")
-            ),
-            column(
-              width = 3,
-              selectInput("he_spell_institution", "Filter Institution:",
-                          choices = c("All Institutions" = "all"),
-                          selected = "all")
+        layout_columns(
+          col_widths = breakpoints(sm = c(6, 6, 6, 6), xl = c(3, 3, 3, 3)),
+          uiOutput("he_spell_median_box", fill = TRUE),
+          uiOutput("he_spell_active_box", fill = TRUE),
+          uiOutput("he_spell_persistent_box", fill = TRUE),
+          uiOutput("he_spell_hardest_box", fill = TRUE)
+        ),
+        layout_columns(
+          col_widths = breakpoints(sm = 12, lg = c(7, 5)),
+          dash_card("Median Days Open by Academic Discipline",
+                    withSpinner(plotlyOutput("he_spell_duration_plot", height = "360px"))),
+          dash_card("Collegiate Vacancy Duration Distribution",
+                    withSpinner(plotlyOutput("he_spell_distrib_plot", height = "360px")))
+        ),
+        card(
+          card_header(
+            class = "d-flex justify-content-between align-items-center",
+            "Collegiate Job Duration & Time-to-Fill Explorer",
+            info_popover(
+              "How days open is estimated",
+              p(class = "mb-0", "Estimated Days Open represents the calendar duration between when a posting was first captured and when it disappeared from weekly updates (or weeks observed × 7).")
             )
-          )
-        ),
-        fluidRow(
-          box(
-            width = 7, title = "Median Days Open by Academic Discipline", status = "info",
-            withSpinner(plotlyOutput("he_spell_duration_plot", height = "360px"))
           ),
-          box(
-            width = 5, title = "Collegiate Vacancy Duration Distribution", status = "info",
-            withSpinner(plotlyOutput("he_spell_distrib_plot", height = "360px"))
+          card_body(
+            fillable = FALSE,
+            div(class = "trends-table-container mt-0",
+                withSpinner(DTOutput("he_spell_table", fill = FALSE)))
           )
-        ),
-        box(
-          width = 12, title = "Collegiate Job Duration & Time-to-Fill Explorer", status = "primary",
-          p(style = "font-size: 12px; color: #777; margin-bottom: 12px;",
-            "Estimated Days Open represents the calendar duration between when a posting was first captured and when it disappeared from weekly updates (or weeks observed × 7)."),
-          div(class = "trends-table-container",
-              withSpinner(DTOutput("he_spell_table")))
         )
       )
+    )
+  ),
+
+  # ------------------ Data & community ------------------
+  nav_panel(
+    "Data", value = "data_tab", icon = icon("database"),
+    h1(class = "page-title", "Data Sources & Open Research Downloads"),
+    p(class = "lead", "Transparent data provenance, methodology documentation, and downloadable datasets for researchers, policy analysts, school administrators, and the public."),
+
+    dash_card(
+      "Open Research Downloads",
+      p("Every weekly snapshot is preserved. Download current or multi-year longitudinal datasets in standard CSV format:"),
+      layout_column_wrap(
+        width = "230px", fill = FALSE,
+        download_tile("briefcase", "Active K-12 Jobs",
+                      "All current public school job openings in Montana with standardized titles, positions, locations, links, and district salary benchmarks.",
+                      "download_active_k12", "Active Jobs (CSV)"),
+        download_tile("clock-rotate-left", "K-12 History Archive",
+                      "Historical record of weekly K-12 job postings across Montana (3,200+ records) for hiring seasonality and longitudinal teacher demand studies.",
+                      "download_history_k12", "Historical K-12 (CSV)"),
+        download_tile("stopwatch", "K-12 Time-to-Fill",
+                      "Unique job postings tracking estimated days open (time-to-fill) and high-need subject areas (STEM, SPED, etc.) across weekly snapshots.",
+                      "download_spells", "Job Duration Data (CSV)"),
+        download_tile("school", "District Profiles",
+                      "District-level profiles: MT DLI salaries (10th/avg/90th), NCES teacher FTE & enrollment, student-to-teacher ratios, and Census poverty/rent.",
+                      "download_district_benchmarks", "District Profiles (CSV)"),
+        download_tile("chart-line", "K-12 Weekly Vacancies",
+                      "Weekly longitudinal vacancy totals across Montana school districts (3,700+ observations). Ideal for seasonal hiring cycles and supply/demand modeling.",
+                      "download_weekly_totals", "Weekly Totals (CSV)"),
+        download_tile("building-columns", "Higher Ed Archive",
+                      "Longitudinal postings for instructional faculty, adjuncts, and staff across the Montana University System, tribal colleges, and community colleges.",
+                      "download_history_he", "Higher Ed Archive (CSV)"),
+        download_tile("stopwatch", "Higher Ed Time-to-Fill",
+                      "Posting duration dataset tracking time-to-fill, active/closed search status, and discipline indicators for collegiate faculty.",
+                      "download_he_spells", "Higher Ed Time-to-Fill (CSV)"),
+        download_tile("graduation-cap", "Higher Ed Profiles",
+                      "Institution-level profiles: IPEDS UNITID, instructional faculty salaries (all ranks and professor), enrollment, and federal Pell shares.",
+                      "download_he_benchmarks", "Higher Ed Profiles (CSV)"),
+        download_tile("chart-line", "Higher Ed Weekly Vacancies",
+                      "Weekly longitudinal vacancy totals across Montana colleges, universities, and tribal colleges. Ideal for tracking higher ed hiring seasonality.",
+                      "download_he_weekly_totals", "Higher Ed Weekly Totals (CSV)"),
+        download_tile("book", "Data Dictionary",
+                      "Comprehensive machine-readable codebook documenting variable names, data types, definitions, and source authorities across all datasets.",
+                      "download_dictionary", "Codebook (CSV)")
+      )
+    ),
+
+    dash_card(
+      "Interactive Data Dictionary & Variable Codebook",
+      p("Search, sort, and filter variable definitions, data types, and primary source authorities across all datasets:"),
+      div(style = "overflow-x: auto;", withSpinner(DTOutput("data_dictionary_table", fill = FALSE)))
+    ),
+
+    dash_card(
+      "Data Provenance & Source Transparency",
+      p("All datasets are compiled through automated, reproducible collection pipelines and federal/state data integration. Here is where every data point originates:"),
+      div(class = "table-responsive",
+        tags$table(
+          class = "table table-striped table-bordered table-hover",
+          tags$thead(
+            tags$tr(
+              tags$th("Dataset Layer"),
+              tags$th("Primary Authority / Source"),
+              tags$th("Refresh Frequency"),
+              tags$th("Description & Research Utility")
+            )
+          ),
+          tags$tbody(
+            tags$tr(
+              tags$td(strong("K-12 Active Vacancies")),
+              tags$td("District Hiring Portals (Frontline/AppliTrack, SchoolSpring, TalentEd, Tyler Portico) + Montana OPI Jobs for Teachers"),
+              tags$td(span(class = "badge text-bg-success", "Weekly")),
+              tags$td("Standardized active postings across 180+ Montana school districts and regional education cooperatives, cleaned to remove duplicate listings and enriched with standardized job roles, categories, and direct application links.")
+            ),
+            tags$tr(
+              tags$td(strong("K-12 Historical Archive")),
+              tags$td("Historical Project Archive (2023-Present)"),
+              tags$td(span(class = "badge text-bg-info", "Weekly Append")),
+              tags$td("Multi-year archive of education postings used to model seasonal hiring waves, subject-area shortages (STEM, Special Education, CTE), and geographic vacancy patterns.")
+            ),
+            tags$tr(
+              tags$td(strong("K-12 Teacher Compensation")),
+              tags$td("Montana Dept of Labor & Industry (DLI) / OPI GEMS Certified Staff Collection"),
+              tags$td(span(class = "badge text-bg-info", "Annual / Periodic")),
+              tags$td("Published teacher compensation distributions (10th percentile, average, and 90th percentile) across 105+ Montana school districts. Sourced directly from official state regional wage reports.")
+            ),
+            tags$tr(
+              tags$td(strong("District Staffing & Enrollment")),
+              tags$td("NCES Common Core of Data (CCD) via Urban Institute"),
+              tags$td(span(class = "badge text-bg-info", "Annual")),
+              tags$td("Federal National Center for Education Statistics district-level teacher FTE and student enrollment counts. Powers vacancy-rate calculations and student-to-teacher ratios.")
+            ),
+            tags$tr(
+              tags$td(strong("Higher Ed Faculty Compensation")),
+              tags$td("NCES IPEDS Instructional Staff Salary Survey"),
+              tags$td(span(class = "badge text-bg-info", "Annual")),
+              tags$td("Average full-time instructional faculty salaries (all combined and full professor rank) for Montana University System campuses, tribal colleges, and community colleges.")
+            ),
+            tags$tr(
+              tags$td(strong("County Economic Context")),
+              tags$td("US Census Bureau (ACS 5-Year Estimates)"),
+              tags$td(span(class = "badge text-bg-info", "Annual")),
+              tags$td("County median household income, median gross rent, share of civilian labor force in agriculture/resource extraction, and 5-year population trajectory.")
+            ),
+            tags$tr(
+              tags$td(strong("Student Need Context")),
+              tags$td("Census SAIPE & US Dept of Education FSA"),
+              tags$td(span(class = "badge text-bg-info", "Annual")),
+              tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level child poverty rates for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
+            )
+          )
+        )
+      )
+    ),
+
+    dash_card(
+      "Open Research Citation & Code",
+      p("This project is open-source and maintained to promote labor market transparency in public education. If you use these datasets in academic research, policy analysis, or journalism, please cite:"),
+      tags$blockquote(
+        style = "font-size: 13px; background: #f9f9f9; padding: 10px 15px; border-left: 4px solid #2a78d6;",
+        "Bostick, M. (2026). Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context. ",
+        tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard", target = "_blank", "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard")
+      ),
+      p(style = "margin-bottom: 0; font-size: 12px; color: #777;",
+        "To report discrepancies, missing districts, or data issues, please submit an issue on the ",
+        tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues", target = "_blank", "GitHub Issue Tracker"), ".")
+    )
+  ),
+
+  nav_spacer(),
+  nav_item(
+    tags$a(
+      class = "nav-link",
+      href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues/new?template=data_issue.yml",
+      target = "_blank", rel = "noopener",
+      icon("flag"), " Feedback"
     )
   )
 )
@@ -2051,9 +1993,11 @@ server <- function(input, output, session) {
 
   output$data_load_issues_banner <- renderUI({
     req(length(DATA_LOAD_ISSUES) > 0)
-    box(width = 12, status = "danger", title = "Data issue detected",
-        tags$ul(lapply(DATA_LOAD_ISSUES, tags$li)),
-        helpText("This is a schema problem in the underlying data pipeline, not something wrong with your view of the dashboard -- the missing field(s) above need a pipeline fix."))
+    card(class = "border-danger",
+         card_header(class = "bg-danger text-white", "Data issue detected"),
+         card_body(
+           tags$ul(lapply(DATA_LOAD_ISSUES, tags$li)),
+           helpText("This is a schema problem in the underlying data pipeline, not something wrong with your view of the dashboard -- the missing field(s) above need a pipeline fix.")))
   })
 
   # -------- Intro KPIs --------
@@ -2072,16 +2016,18 @@ server <- function(input, output, session) {
       pull(n)
   }
 
-  output$kpi_k12_total <- renderValueBox({
-    valueBox(format(nrow(combineddata), big.mark = ","),
-             tagList("Open K-12 Postings", wow_delta_ui(compute_wow_delta(k12_district_weekly_totals))),
-             icon = tags$i(HTML(make_sparkline_svg_light(statewide_weekly_series(k12_district_weekly_totals)))),
-             color = "blue")
+  output$kpi_k12_total <- renderUI({
+    kpi_value_box(format(nrow(combineddata), big.mark = ","),
+                  "Open K-12 Postings",
+                  icon = HTML(make_sparkline_svg_light(statewide_weekly_series(k12_district_weekly_totals))),
+                  color = "blue",
+                  wow_delta_ui(compute_wow_delta(k12_district_weekly_totals)))
   })
-  output$kpi_he_total <- renderValueBox({
-    valueBox(format(nrow(ccdata), big.mark = ","),
-             tagList(
-               "Open Higher Ed Postings",
+  output$kpi_he_total <- renderUI({
+    kpi_value_box(format(nrow(ccdata), big.mark = ","),
+             "Open Higher Ed Postings",
+             icon = HTML(make_sparkline_svg_light(statewide_weekly_series(he_institution_weekly_totals))),
+             color = "purple",
                tags$small(
                  style = "display: block; font-size: 11px; opacity: 0.85;",
                  sprintf(
@@ -2090,13 +2036,10 @@ server <- function(input, output, session) {
                    format(he_faculty_counts$adjunct_part_time, big.mark = ",")
                  )
                ),
-               wow_delta_ui(compute_wow_delta(he_institution_weekly_totals))
-             ),
-             icon = tags$i(HTML(make_sparkline_svg_light(statewide_weekly_series(he_institution_weekly_totals)))),
-             color = "purple")
+               wow_delta_ui(compute_wow_delta(he_institution_weekly_totals)))
   })
-  output$kpi_last_refreshed <- renderValueBox({
-    valueBox(last_refreshed_date, "Last Refreshed", icon = icon("calendar"), color = "green")
+  output$kpi_last_refreshed <- renderUI({
+    kpi_value_box(last_refreshed_date, "Last Refreshed", icon = icon("calendar"), color = "green")
   })
 
   output$k12_biggest_mover <- renderUI({
@@ -2287,7 +2230,7 @@ server <- function(input, output, session) {
       data_dictionary,
       filter = "top",
       escape = FALSE,
-      options = list(pageLength = 15, scrollX = TRUE, autoWidth = TRUE)
+      options = list(pageLength = 15, scrollX = TRUE)
     )
   })
 
@@ -2745,7 +2688,7 @@ server <- function(input, output, session) {
       } else {
         tags$span(
           class = "badge",
-          style = "background-color: #3c8dbc; font-size: 0.9em; padding: 6px 12px; font-weight: 500; border-radius: 4px;",
+          style = "background-color: #2a78d6; font-size: 0.9em; padding: 6px 12px; font-weight: 500; border-radius: 4px;",
           sprintf("Showing %d of %d active locations (%s current openings across filtered locations)",
                   filtered_n, total_active, format(total_postings, big.mark = ","))
         )
@@ -2961,17 +2904,17 @@ server <- function(input, output, session) {
     if (nrow(row) > 0) {
       if (row$Type[1] == "K-12 District") {
         selected_district(entity)
-        updateTabItems(session, "sidebar_tabs", "k12_table")
+        nav_select("sidebar_tabs", "k12_table", session = session)
       } else {
         selected_institution(entity)
-        updateTabItems(session, "sidebar_tabs", "he_table")
+        nav_select("sidebar_tabs", "he_table", session = session)
       }
     } else if (entity %in% combineddata$District) {
       selected_district(entity)
-      updateTabItems(session, "sidebar_tabs", "k12_table")
+      nav_select("sidebar_tabs", "k12_table", session = session)
     } else if (entity %in% ccdata$Institution) {
       selected_institution(entity)
-      updateTabItems(session, "sidebar_tabs", "he_table")
+      nav_select("sidebar_tabs", "he_table", session = session)
     }
   }
 
@@ -3523,10 +3466,10 @@ server <- function(input, output, session) {
     df
   })
 
-  output$k12_spell_median_box <- renderValueBox({
+  output$k12_spell_median_box <- renderUI({
     df <- filtered_spells()
     med <- if (nrow(df) > 0) round(median(df$Estimated_Days_Open, na.rm = TRUE)) else 0
-    valueBox(
+    kpi_value_box(
       paste0(med, " Days"),
       "Median Vacancy Duration",
       icon = icon("stopwatch"),
@@ -3534,10 +3477,10 @@ server <- function(input, output, session) {
     )
   })
 
-  output$k12_spell_active_box <- renderValueBox({
+  output$k12_spell_active_box <- renderUI({
     df <- filtered_spells()
     active_n <- if (nrow(df) > 0) sum(df$Status == "Still Active", na.rm = TRUE) else 0
-    valueBox(
+    kpi_value_box(
       scales::comma(active_n),
       "Currently Open Spells",
       icon = icon("door-open"),
@@ -3545,10 +3488,10 @@ server <- function(input, output, session) {
     )
   })
 
-  output$k12_spell_persistent_box <- renderValueBox({
+  output$k12_spell_persistent_box <- renderUI({
     df <- filtered_spells()
     persist_n <- if (nrow(df) > 0) sum(df$Status == "Still Active" & df$Estimated_Days_Open >= 60, na.rm = TRUE) else 0
-    valueBox(
+    kpi_value_box(
       scales::comma(persist_n),
       "Persistent Spells (≥60 Days)",
       icon = icon("triangle-exclamation"),
@@ -3556,7 +3499,7 @@ server <- function(input, output, session) {
     )
   })
 
-  output$k12_spell_hardest_box <- renderValueBox({
+  output$k12_spell_hardest_box <- renderUI({
     df <- filtered_spells()
     hardest <- "None"
     if (nrow(df) >= 1 && "Broad_Category" %in% names(df)) {
@@ -3567,7 +3510,7 @@ server <- function(input, output, session) {
         arrange(desc(med))
       if (nrow(cat_dur) > 0) hardest <- cat_dur$Broad_Category[1]
     }
-    valueBox(
+    kpi_value_box(
       hardest,
       "Longest Duration Category",
       icon = icon("graduation-cap"),
@@ -3721,10 +3664,10 @@ server <- function(input, output, session) {
     df
   })
 
-  output$he_spell_median_box <- renderValueBox({
+  output$he_spell_median_box <- renderUI({
     df <- filtered_he_spells()
     med <- if (nrow(df) > 0) round(median(df$Estimated_Days_Open, na.rm = TRUE)) else 0
-    valueBox(
+    kpi_value_box(
       paste0(med, " Days"),
       "Median Vacancy Duration",
       icon = icon("stopwatch"),
@@ -3732,10 +3675,10 @@ server <- function(input, output, session) {
     )
   })
 
-  output$he_spell_active_box <- renderValueBox({
+  output$he_spell_active_box <- renderUI({
     df <- filtered_he_spells()
     active_n <- if (nrow(df) > 0) sum(df$Status == "Still Active", na.rm = TRUE) else 0
-    valueBox(
+    kpi_value_box(
       scales::comma(active_n),
       "Currently Open Searches",
       icon = icon("door-open"),
@@ -3743,10 +3686,10 @@ server <- function(input, output, session) {
     )
   })
 
-  output$he_spell_persistent_box <- renderValueBox({
+  output$he_spell_persistent_box <- renderUI({
     df <- filtered_he_spells()
     persist_n <- if (nrow(df) > 0) sum(df$Status == "Still Active" & df$Estimated_Days_Open >= 90, na.rm = TRUE) else 0
-    valueBox(
+    kpi_value_box(
       scales::comma(persist_n),
       "Persistent Searches (≥90 Days)",
       icon = icon("triangle-exclamation"),
@@ -3754,7 +3697,7 @@ server <- function(input, output, session) {
     )
   })
 
-  output$he_spell_hardest_box <- renderValueBox({
+  output$he_spell_hardest_box <- renderUI({
     df <- filtered_he_spells()
     hardest <- "None"
     if (nrow(df) >= 1 && "Category" %in% names(df)) {
@@ -3765,7 +3708,7 @@ server <- function(input, output, session) {
         arrange(desc(med))
       if (nrow(cat_dur) > 0) hardest <- cat_dur$Category[1]
     }
-    valueBox(
+    kpi_value_box(
       hardest,
       "Longest Duration Discipline",
       icon = icon("building-columns"),

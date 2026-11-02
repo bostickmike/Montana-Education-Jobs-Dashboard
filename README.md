@@ -79,7 +79,7 @@ install.packages(c(
   "httr2", "lubridate", "chromote", "rsconnect", "testthat",
   "withr", "here", "pdftools", "tibble",
   # Dashboard (Mt_Ed_Jobs/app.R) dependencies
-  "shiny", "shinydashboard", "shinyWidgets", "DT", "data.table",
+  "shiny", "bslib", "shinyWidgets", "DT", "data.table",
   "leaflet", "plotly", "scales", "shinycssloaders"
 ))
 ```

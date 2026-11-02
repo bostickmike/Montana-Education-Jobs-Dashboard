@@ -51,7 +51,7 @@ jobs:
             # Cloud redeploy silently (manifest missing that package
             # entirely) -- a real incident already hit once in the sibling
             # Wyoming project, avoided here from the start.
-            "shiny", "shinydashboard", "shinyWidgets", "DT", "data.table",
+            "shiny", "bslib", "shinyWidgets", "DT", "data.table",
             "leaflet", "plotly", "scales", "shinycssloaders",
             # sf is not used directly by app.R, but leaflet >= 2.2.x Imports
             # it as a hard dependency, so writeManifest() cannot snapshot
@@ -253,7 +253,7 @@ jobs:
         run: |
           Rscript -e '
           m <- jsonlite::fromJSON("Mt_Ed_Jobs/manifest.json", simplifyVector = FALSE)
-          required <- c("shiny", "shinydashboard", "shinyWidgets", "DT", "data.table", "leaflet", "plotly", "scales", "shinycssloaders")
+          required <- c("shiny", "bslib", "shinyWidgets", "DT", "data.table", "leaflet", "plotly", "scales", "shinycssloaders")
           missing <- setdiff(required, names(m$packages))
           if (length(missing) > 0) {
             stop(sprintf(
