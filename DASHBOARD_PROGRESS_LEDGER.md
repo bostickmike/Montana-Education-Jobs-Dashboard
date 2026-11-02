@@ -407,4 +407,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the old file when a download is partial, mostly blank or out of range, and logs each refresh to `scrape_log.csv`;
     `check_salary_drift.R` reports failed, rejected, missing or stale refreshes. Schema check and the blocking
     data-quality sweep cover the new files and the Pay_*/Est_* columns.
+  * [x] Pay extractor fixes (2026-11-01, both states): a unit run into the next label ("$145/dayBENEFITS",
+    "$21.69/hrThe District") is read as day/hour, and an earlier amount's bonus wording no longer vetoes a salary
+    after it ("Signing bonus $1,000, $42,000 annual salary").
+  * [x] OPI district aliases (2026-11-01): `OPI_DISTRICT_ALIASES` gives five job-board names the finance file spells
+    differently (Broadview K-12, Ophir K-12, St. Ignatius HS, Phillipsburg HS, Sanders County Ed Services Coop) their
+    county, so their postings get a local OEWS area.
+  * [x] Ennis scraper (2026-11-01): a "Summary:" line between the title and "Reports to:" was taken as the title.
+    Checked and left alone: Swan Valley #3's long title is the district's own heading for its one posting; Swan River
+    #4's $16,900 10th-percentile teacher pay is DLI's published figure (9 teachers, NorthWest report).
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.

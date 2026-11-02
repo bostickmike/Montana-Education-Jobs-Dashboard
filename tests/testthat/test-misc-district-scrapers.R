@@ -1517,6 +1517,18 @@ test_that("parse_ennis_postings extracts all 5 real postings via the 'Reports to
   expect_true(all(result$Location == "Ennis"))
 })
 
+test_that("parse_ennis_postings takes the title, not the Summary line, when Summary comes before Reports to", {
+  # Real rendered text, 2026-11-01: "Virtual Programs Paraprofessional" is
+  # followed by its "Summary: ..." line and only then "Reports to:".
+  text <- paste(readLines(test_path("fixtures", "apptegy_ennis_rendered_2026-11-01.txt"), warn = FALSE), collapse = "\n")
+
+  result <- parse_ennis_postings(text, "url")
+
+  expect_equal(sort(result$Title), sort(c("Virtual Programs Paraprofessional", "Assistant Cook", "Custodian",
+                                          "High School Wrestling Head Coach")))
+  expect_false(any(grepl("^Summary", result$Title)))
+})
+
 test_that("parse_ennis_postings returns zero rows (not an error) when there's no real marker", {
   result <- parse_ennis_postings("Just some regular page text with no postings.", "url")
   expect_equal(nrow(result), 0)

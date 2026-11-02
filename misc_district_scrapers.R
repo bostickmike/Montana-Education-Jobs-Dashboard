@@ -4667,7 +4667,7 @@ parse_ennis_postings <- function(rendered_text, url) {
                        stringsAsFactors = FALSE)
 
   lines <- strsplit(rendered_text, "\n")[[1]]
-  lines <- trimws(lines)
+  lines <- trimws(lines, whitespace = "[\\h\\v]")   # the page pads some titles with a no-break space
   lines <- lines[nzchar(lines)]
 
   rows <- list()
@@ -4675,8 +4675,12 @@ parse_ennis_postings <- function(rendered_text, url) {
   reports_idx <- which(grepl("^Reports to:", lines))
   reports_idx <- reports_idx[reports_idx > 1]
   for (i in reports_idx) {
-    title <- lines[i - 1]
-    if (nzchar(title)) rows[[length(rows) + 1]] <- title
+    # Since 2026-11 some postings put their "Summary: ..." line between the
+    # title and "Reports to:", so step back past labeled field lines.
+    k <- i - 1
+    while (k > 1 && grepl("^[A-Z][A-Za-z /&]{2,30}:\\s", lines[k])) k <- k - 1
+    title <- lines[k]
+    if (nzchar(title) && !grepl("^[A-Z][A-Za-z /&]{2,30}:\\s", title)) rows[[length(rows) + 1]] <- title
   }
 
   coach_idx <- which(lines == "Various Coaching Positions Open")
