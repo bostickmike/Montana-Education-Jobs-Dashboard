@@ -3307,14 +3307,15 @@ write.csv(combined, file = file.path("Archivek12_Data", file_name), row.names = 
 source("bls_oews_scraper.R")
 oews_path <- file.path("Mt_Ed_Jobs", "oews_role_wages.csv")
 tryCatch(refresh_oews_wages("MT", oews_path),
-         error = function(e) message("OEWS refresh skipped: ", conditionMessage(e)))
+         error = function(e) log_reference_result(oews_path, "error", conditionMessage(e)))
 
 # BLS QCEW average pay of public school employees by county (all roles), the
 # map popup's county context (qcew_school_pay.R). A failed fetch keeps the
-# existing file.
+# existing file, and so does a partial or implausible one (write_reference_file()).
 source("qcew_school_pay.R")
-tryCatch(write.csv(fetch_qcew_school_pay("30"), file.path("Mt_Ed_Jobs", "qcew_county_school_pay.csv"), row.names = FALSE),
-         error = function(e) message("QCEW school pay skipped: ", conditionMessage(e)))
+qcew_path <- file.path("Mt_Ed_Jobs", "qcew_county_school_pay.csv")
+tryCatch(write_reference_file(fetch_qcew_school_pay("30"), qcew_path),
+         error = function(e) log_reference_result(qcew_path, "error", conditionMessage(e)))
 oews_wages <- read.csv(oews_path, stringsAsFactors = FALSE,
                        colClasses = c(Area_Code = "character", SOC = "character", Year = "character"))
 district_county <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)[, c("District", "County")]
@@ -3323,10 +3324,8 @@ source("opi_finance_scraper.R")
 # their district (OPI_District) get a local OEWS area rather than the
 # statewide one. A failed fetch keeps the committed file.
 opi_counties_path <- file.path("Mt_Ed_Jobs", "opi_district_counties.csv")
-tryCatch({
-  opi_counties <- fetch_opi_district_counties()
-  if (nrow(opi_counties) > 0) write.csv(opi_counties, opi_counties_path, row.names = FALSE)
-}, error = function(e) message("OPI district counties skipped: ", conditionMessage(e)))
+tryCatch(write_reference_file(fetch_opi_district_counties(), opi_counties_path),
+         error = function(e) log_reference_result(opi_counties_path, "error", conditionMessage(e)))
 opi_counties <- read.csv(opi_counties_path, stringsAsFactors = FALSE)
 
 combinedclean <- combined %>%
@@ -3336,8 +3335,10 @@ combinedclean <- combined %>%
   mutate(position = classify_k12_position(title),
          District = canonicalize_k12_district(District)) %>%
   # Pay_* is the pay the posting itself states (extract_posted_pay()); NA
-  # where the source states none.
+  # where the source states none or the amount is implausible for its unit
+  # (drop_implausible_pay(); the raw archive above keeps it as scraped).
   ensure_posted_pay_columns() %>%
+  drop_implausible_pay() %>%
   # Est_* is the BLS regional median for the posting's role, matched to its
   # district's county: the registry's, else (OPI rows) the county of the
   # district its detail page names; statewide where neither is known.
@@ -3863,7 +3864,8 @@ file_name <- paste0("hedata_", Sys.Date(), ".xlsx")
 write_xlsx(hedata, path = file.path("Archived_HE_Data", file_name))
 # Non-postings (a scraped "Job Title" header, "No Jobs" notices) stay in the
 # raw archive above but are dropped from everything shown or counted.
-hedata <- hedata %>% filter(!is_placeholder_posting(Title))
+# Implausible posted pay is blanked the same way (drop_implausible_pay()).
+hedata <- hedata %>% filter(!is_placeholder_posting(Title)) %>% drop_implausible_pay()
 # Est_* is the institution's IPEDS average for the posting's staff category
 # (ipeds_staff_salaries.csv from the previous run), the labeled fallback for
 # staff postings that state no pay. Added after the raw archive write, so
@@ -3955,13 +3957,9 @@ he_salary <- safe_scrape(
 source("ipeds_staff_salaries.R")
 local({
   unitids <- na.omit(read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"))$IPEDS_UNITID)
-  staff <- tryCatch(fetch_ipeds_staff_salaries(30, unitids), error = function(e) {
-    message("IPEDS staff salaries skipped: ", conditionMessage(e))
-    NULL
-  })
-  if (!is.null(staff) && nrow(staff) > 0) {
-    write.csv(staff, file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv"), row.names = FALSE)
-  }
+  staff_path <- file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv")
+  tryCatch(write_reference_file(fetch_ipeds_staff_salaries(30, unitids), staff_path),
+           error = function(e) log_reference_result(staff_path, "error", conditionMessage(e)))
 })
 
 he_enrollment <- safe_scrape(

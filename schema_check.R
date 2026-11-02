@@ -10,7 +10,9 @@
 # reads it yet (same as Wyoming's own equivalent file).
 REQUIRED_SCHEMAS <- list(
   "combinedclean.csv" = c("title", "date_posted", "position", "location", "url", "District",
-                          "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
+                          "Posting_Source", "Posting_Identity_Method", "Posting_ID",
+                          "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
+                          "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year"),
   "k12jobanalysis.csv" = c("title", "Archive_Date", "location", "District",
                             "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
   "allsum.csv" = c("Broad_Category", "Archive_Date", "District", "sum"),
@@ -38,11 +40,17 @@ REQUIRED_SCHEMAS <- list(
   "data_dictionary.csv" = c("Dataset", "File_Name", "Column_Name", "Data_Type", "Primary_Authority", "Definition"),
   "job_duration_spells.csv" = c("District", "Title", "Category", "Broad_Category", "Position", "First_Seen_Date", "Last_Seen_Date", "Weeks_Observed", "Estimated_Days_Open", "Status"),
   "he_job_duration_spells.csv" = c("Institution", "Title", "Category", "Job_Type", "First_Seen_Date", "Last_Seen_Date", "Weeks_Observed", "Estimated_Days_Open", "Status"),
-  "qcew_county_school_pay.csv" = c("County", "Avg_Annual_Pay", "Year")
+  "qcew_county_school_pay.csv" = c("County", "Avg_Annual_Pay", "Year"),
+  # Reference tables the pipeline reads to build the Est_* columns (kept
+  # between runs, refreshed through write_reference_file()).
+  "oews_role_wages.csv" = c("Area_Code", "Area_Name", "SOC", "Occupation", "Annual_Median", "Hourly_Median", "Year"),
+  "ipeds_staff_salaries.csv" = c("IPEDS_UNITID", "Staff_Category", "Category_Label", "Avg_Salary", "Year"),
+  "opi_district_counties.csv" = c("OPI_District", "County")
 )
 
 REQUIRED_SCHEMAS_XLSX <- list(
-  "hedata.xlsx" = c("Title", "Location", "Posted_Date", "Institution", "Link", "Archive_Date")
+  "hedata.xlsx" = c("Title", "Location", "Posted_Date", "Institution", "Link", "Archive_Date",
+                  "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")
 )
 
 # Pure function: given one file's actual column names, which of the
