@@ -166,8 +166,8 @@ test_that("extract_posted_pay skips application costs, money paid into benefits,
 })
 
 test_that("extract_posted_pay reads a unit run into the next label, and pay listed after a bonus", {
-  # Real AppliTrack text (Converse #1, Sweetwater #2, 2026-11-01 rehearsal)
-  # whose line breaks the board dropped.
+  # Real posting text whose line breaks the board dropped (2026-11-01
+  # rehearsals: WY Converse #1 and Sweetwater #2 AppliTrack, MT Harlem).
   p <- extract_posted_pay(c(
     "LOCATION: Various locationsPAY RATE: $145/dayBENEFITS: None As a substitute,",
     "requirements are listed on the certificate.Salary: $146.09 per dayIf you have any questions",
