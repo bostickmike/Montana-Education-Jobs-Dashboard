@@ -131,12 +131,29 @@ fetch_opi_district_expenditures <- function(url = OPI_FINANCE_CURRENT_YEAR_URL) 
 # name held by LEs in two counties ("Cottonwood Elem": Gallatin and Hill) is
 # left out rather than guessed. Private schools, Head Starts and other
 # employers outside public school finance aren't in the file at all.
+# OPI_DISTRICT_ALIASES covers public employers the job board's detail pages
+# name differently from the finance file: board name -> finance DistrictName,
+# whose county the alias takes.
+OPI_DISTRICT_ALIASES <- c(
+  "Broadview K-12" = "Broadview H S",
+  "Ophir K-12" = "Big Sky School K-12",   # Ophir School, Big Sky School District 72
+  "St. Ignatius HS" = "St Ignatius K-12 Schools",
+  "Phillipsburg HS" = "Philipsburg K-12 Schools",
+  # Sanders County's special-ed coop; Cabinet Mountain is the only Sanders
+  # County coop in the finance file.
+  "Sanders County Ed ServicesCoop" = "Cabinet Mountain Cooperative"
+)
+
 parse_opi_district_counties <- function(raw_df) {
   df <- unique(data.frame(OPI_District = trimws(raw_df$DistrictName),
                           County = paste(gsub(" & ", " and ", trimws(raw_df$CountyName)), "County"),
                           stringsAsFactors = FALSE))
   df <- df[!is.na(df$OPI_District) & nzchar(df$OPI_District), , drop = FALSE]
   df <- df[!df$OPI_District %in% df$OPI_District[duplicated(df$OPI_District)], , drop = FALSE]
+  aliases <- OPI_DISTRICT_ALIASES[OPI_DISTRICT_ALIASES %in% df$OPI_District]
+  df <- rbind(df, data.frame(OPI_District = names(aliases),
+                             County = df$County[match(aliases, df$OPI_District)],
+                             stringsAsFactors = FALSE))
   df <- df[order(df$OPI_District), , drop = FALSE]
   rownames(df) <- NULL
   df

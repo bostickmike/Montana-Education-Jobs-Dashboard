@@ -188,6 +188,11 @@ test_that("parse_opi_district_counties maps OPI district names to counties and d
   expect_equal(county_of(c("Absarokee Elem", "Absarokee H S")), rep("Stillwater County", 2))
   # "Cottonwood Elem" is an LE in both Gallatin and Hill counties.
   expect_true(is.na(county_of("Cottonwood Elem")))
+  # The job board's own names for public employers the finance file names
+  # differently (OPI_DISTRICT_ALIASES).
+  expect_equal(county_of(c("Broadview K-12", "Ophir K-12", "St. Ignatius HS", "Phillipsburg HS",
+                           "Sanders County Ed ServicesCoop")),
+               c("Yellowstone County", "Gallatin County", "Lake County", "Granite County", "Sanders County"))
   expect_false(any(duplicated(counties$OPI_District)))
   # Counties come out in the registry's form, so they join to OEWS areas
   # (OPI writes "Lewis & Clark").
