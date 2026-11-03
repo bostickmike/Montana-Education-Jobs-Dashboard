@@ -419,7 +419,7 @@ fetch_tylerportico_postings <- function(tenant_subdomain, institution_name) {
 # JS) and isn't derivable from the minified bundle by string search alone.
 parse_tylerportico_positions <- function(json_text, institution_name, base_url) {
   empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
+                       Posted_Date = character(0), Link = character(0), Job_Code = character(0),
                        stringsAsFactors = FALSE)
 
   positions <- jsonlite::fromJSON(json_text, simplifyVector = TRUE)
@@ -434,6 +434,9 @@ parse_tylerportico_positions <- function(json_text, institution_name, base_url) 
     Location = locations,
     Posted_Date = substr(positions$postingStartDate, 1, 10),
     Link = paste0(base_url, "/jobs/job-list/", positions$id),
+    # The district's own job code ("JP491280 - 1271"); OPI descriptions of the
+    # same job quote it ("JP054494"), an exact key for opi_matcher.R.
+    Job_Code = if ("code" %in% names(positions)) as.character(positions$code) else NA_character_,
     stringsAsFactors = FALSE
   )
 }
@@ -512,6 +515,28 @@ extract_aspnet_postback_fields <- function(html_text) {
 # a full week. A failed detail leaves only that posting's pay and district
 # NA, and detail fetching stops once detail_budget_secs is spent (the rest
 # keep NA), so it can't push the weekly run past its timeout.
+# apps.opi.mt.gov (since about 2026-11-03) serves a GoDaddy "R1" chain ending
+# in the self-signed "GoDaddy TLS Root CA - R1", which standard trust stores
+# don't include yet (Mozilla inclusion request bug 1996117), instead of the
+# R1 cross-sign to the trusted G2 root -- so every request failed TLS
+# verification and the weekly run would get no OPI postings. OPI requests
+# verify against certs/opi_godaddy_r1.pem: GoDaddy's own R1 root, its R1->G2
+# cross-sign and the DV R1v1 intermediate, from certs.godaddy.com/repository
+# (SHA-256 fingerprints in that file). Verification stays on; only this host
+# uses the bundle. Once OPI serves the cross-sign (or R1 is in the system
+# store) the bundle still verifies, and it can be dropped.
+opi_ca_bundle <- function() {
+  for (p in c("certs/opi_godaddy_r1.pem", "../certs/opi_godaddy_r1.pem")) if (file.exists(p)) return(normalizePath(p))
+  if (requireNamespace("here", quietly = TRUE) && file.exists(here::here("certs", "opi_godaddy_r1.pem"))) return(here::here("certs", "opi_godaddy_r1.pem"))
+  NULL
+}
+opi_request <- function(url) {
+  req <- request(url)
+  ca <- opi_ca_bundle()
+  if (!is.null(ca)) req <- req_options(req, cainfo = ca)
+  req
+}
+
 fetch_opi_statewide_postings <- function(
     url = "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx",
     page_size = 50, max_pages = 60, fetch_details = TRUE,
@@ -525,7 +550,7 @@ fetch_opi_statewide_postings <- function(
     cbind(rows, fetch_opi_page_details(html, url, jar, deadline, detail_delay))
   }
 
-  resp <- request(url) %>% req_cookie_preserve(jar) %>% perform_with_retry()
+  resp <- opi_request(url) %>% req_cookie_preserve(jar) %>% perform_with_retry()
   html <- resp_body_string(resp)
 
   all_pages <- list(read_page(html))
@@ -535,7 +560,7 @@ fetch_opi_statewide_postings <- function(
     fields[["__EVENTTARGET"]] <- "ctl00$ContentPlaceHolder1$grdJobListing"
     fields[["__EVENTARGUMENT"]] <- paste0("Page$", page_num)
 
-    resp <- do.call(req_body_form, c(list(request(url) %>% req_cookie_preserve(jar)), fields)) %>%
+    resp <- do.call(req_body_form, c(list(opi_request(url) %>% req_cookie_preserve(jar)), fields)) %>%
       perform_with_retry()
     html <- resp_body_string(resp)
     all_pages[[length(all_pages) + 1]] <- read_page(html)
@@ -574,7 +599,7 @@ fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
       f <- fields
       f[["__EVENTTARGET"]] <- target
       f[["__EVENTARGUMENT"]] <- ""
-      resp <- do.call(req_body_form, c(list(request(url) %>% req_cookie_preserve(jar)), f)) %>%
+      resp <- do.call(req_body_form, c(list(opi_request(url) %>% req_cookie_preserve(jar)), f)) %>%
         perform_with_retry()
       details <- parse_opi_job_details(resp_body_string(resp))
       # School and the description's opening let opi_matcher.R tell which

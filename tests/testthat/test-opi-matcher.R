@@ -1,8 +1,10 @@
-# opi_matcher.R against hand-labeled real postings (2026-11-03): 142 OPI
+# opi_matcher.R against hand-labeled real postings (2026-11-03): 148 OPI
 # postings at districts whose own board was scraped, each labeled with the
 # board posting that is the same opening, or none. Labels were made by reading
 # the OPI description against the district's full board; four sets (dev, then
-# three held-out sets labeled before the matcher saw them). The board fixture
+# three held-out sets labeled before the matcher saw them, then "fullsample":
+# the cases where the matcher and an LLM disagreed when both judged all 275 OPI
+# postings at scraped districts that week). The board fixture
 # is the whole state's direct postings that week, since word weights
 # (opi_title_idf) come from all of them, as in the pipeline.
 #
@@ -29,9 +31,9 @@ test_that("missed duplicates and false matches stay at or below the shipped leve
   got <- run_matcher(); e <- labels$Expected_Match
   missed <- nzchar(e) & !nzchar(got)
   false_match <- !nzchar(e) & nzchar(got)
-  expect_lte(sum(missed), 2)       # of 76 true duplicates (each miss double counts a job)
-  expect_lte(sum(false_match), 3)  # of 66 OPI-only postings (each hides a real opening)
-  expect_gte(sum(nzchar(e) & got == e), 74)
+  expect_lte(sum(missed), 1)       # of 78 true duplicates (each miss double counts a job)
+  expect_lte(sum(false_match), 2)  # of 70 OPI-only postings (each hides a real opening)
+  expect_gte(sum(nzchar(e) & got == e), 77)
 })
 
 test_that("the job phrase skips boilerplate and names the job", {
@@ -54,4 +56,19 @@ test_that("grade level, special education and coaching sport must agree", {
   expect_equal(opi_match_conflict("Coach", "Head Boys Soccer Coach and Head Girls Soccer Coach", "", "Head Softball Coach | Lockwood High School", ""), TRUE)
   # A related-service role under a SPED department prefix is still the same job (Kalispell).
   expect_gt(s("Physical Therapist", "Starting 2026-2027 FTE .60", "SE - PHYSICAL THERAPIST"), -Inf)
+})
+
+test_that("a district job code quoted on OPI matches the Tyler posting that carries it", {
+  # Real Kalispell Tyler feed and OPI description, both 2026-11-03.
+  tyler <- parse_tylerportico_positions(
+    paste(readLines(test_path("fixtures", "tylerportico_kalispell_2026-11-03.json"), warn = FALSE), collapse = "\n"),
+    "Kalispell Public Schools", "https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen")
+  expect_true(all(grepl("^JP[0-9]+", tyler$Job_Code)))
+  board <- data.frame(District = "Kalispell Public Schools", title = tyler$Title, location = tyler$Location,
+                      Job_Code = tyler$Job_Code, stringsAsFactors = FALSE)
+  opi <- data.frame(title = "Elementary Curriculum", OPI_School = "District Wide",
+                    OPI_Description = readLines(test_path("fixtures", "opi_description_kalispell_JP054494_2026-11-03.txt"), warn = FALSE))
+  m <- match_opi_postings(opi, "Kalispell Public Schools", board)
+  expect_equal(board$title[m], "LONG TERM SUBSTITUTE - ELEMENTARY")
+  expect_match(board$Job_Code[m], "^JP054494")
 })

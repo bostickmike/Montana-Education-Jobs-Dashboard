@@ -23,18 +23,26 @@ OPI_ROLE_LEXICON <- c(
   LIB = "librar|media specialist", COUNSEL = "counsel(or|ing)", PSYCH = "psycholog|\\bpsych\\b", SLP = "speech[- ]?(and )?language|\\bslp\\b|speech patholog",
   OT = "occupational therap", PT = "physical therap", DEAF = "deaf|hard of hearing", FCS = "family (and |& )?consumer|\\bfcs\\b",
   AG = "agricultur|vo-?ag|\\bffa\\b", BUSED = "business (ed|teacher|and marketing|education)", CTE = "industrial|technology education|tech ed|welding|\\bcte\\b|technical education",
-  APRIN = "assistant principal|vice principal", ADMIN = "^administrative -|\\bdean\\b|\\badministrator\\b", CURRIC = "curriculum director|curriculum coordinator|director of curriculum", ACTDIR = "activities director|athletic director|activities coordinator|athletics and activities", PRIN = "(?<!assistant )(?<!vice )principal", SUPT = "superintendent", DIRECTOR = "director|coordinator",
+  APRIN = "assistant principal|vice principal", ADMIN = "^administrative -|\\bdean\\b|\\badministrator\\b", BUSMGR = "business manager|business official|district clerk", CURRIC = "curriculum director|curriculum coordinator|director of curriculum", ACTDIR = "activities director|athletic director|activities coordinator|athletics and activities", PRIN = "(?<!assistant )(?<!vice )principal", SUPT = "superintendent", DIRECTOR = "director|coordinator",
   NURSE = "\\bnurse", SPED = "special ed|\\bsped\\b|^se - |life skills|resource teacher|behavior (teacher|specialist)", PARA = "para(professional|educator|-educator)?s?\\b|\\baide\\b",
   LTS = "long[- ]term sub|\\blts\\b|\\blta\\b|long[- ]term assignment|daily sub rate", SUB = "(?<!long-term )(?<!long term )\\bsubstitute", CLERK = "clerk|payroll|secretar|administrative assistant",
-  INTERV = "intervention|title i\\b|reading specialist", EC = "early childhood|pre-?k\\b|preschool|head start", DRED = "driver'?s'? ed|traffic ed",
+  INTERV = "intervention|title (i|1)\\b|reading specialist", EC = "early childhood|pre-?k\\b|pre-?school|head start", DRED = "driver'?s'? ed|traffic ed",
   COACH = "\\bcoach", CUST = "custod|janitor", COOK = "\\bcook|food service|kitchen", BUSDRV = "bus driver",
   ELEM = "elementary|kindergarten|\\bk-?[1-6]\\b|\\b[1-6](st|nd|rd|th)\\b.{0,12}grade|grade classroom|primary")
 OPI_SPORTS <- c(FOOTBALL = "football", BASKETBALL = "basketball", VOLLEYBALL = "volleyball", WRESTLING = "wrestling", TRACK = "\\btrack|cross country",
   SOCCER = "soccer", SOFTBALL = "softball", BASEBALL = "baseball", GOLF = "\\bgolf", TENNIS = "tennis", SWIM = "swim", CHEER = "cheer|spirit squad",
   SPEECH = "speech (and|&) debate|forensics|debate|drama")
+# Specific grades ("1st Grade", "5th grade", "Kindergarten"): when both sides
+# name grades, they must share one.
+opi_grades <- function(txt) {
+  t <- tolower(txt); g <- character(0)
+  if (grepl("kindergarten|\\bkdg\\b", t)) g <- "K"
+  m <- regmatches(t, gregexpr("\\b([1-8])(st|nd|rd|th)\\b(?=[^.]{0,15}grade)", t, perl = TRUE))[[1]]
+  unique(c(g, sub("(st|nd|rd|th)$", "", m)))
+}
 OPI_LEVELS <- c(JH = "junior high|middle school|\\bms\\b|\\bjh\\b|7-8|7th|8th|5-8|6-8", HS = "high school|\\bhs\\b|9-12|7-12|6-12|secondary")
 # Tokens that must agree: present on one side's job, absent on the other -> different job
-OPI_DECISIVE <- c("SPED", "PARA", "LTS", "SUB", "APRIN", "PRIN", "SUPT", "COUNSEL", "PSYCH", "SLP", "OT", "PT", "DEAF", "LIB", "NURSE", "CLERK", "EC", "COACH", "CURRIC", "ACTDIR", "INTERV", "ADMIN")
+OPI_DECISIVE <- c("SPED", "PARA", "LTS", "SUB", "APRIN", "PRIN", "SUPT", "COUNSEL", "PSYCH", "SLP", "OT", "PT", "DEAF", "LIB", "NURSE", "CLERK", "EC", "COACH", "CURRIC", "ACTDIR", "INTERV", "ADMIN", "BUSMGR", "DIRECTOR")
 opi_tokens <- function(txt, lex) { t <- tolower(txt); names(lex)[vapply(lex, function(r) grepl(r, t, perl = TRUE), logical(1))] }
 
 # The job the OPI posting is for, from its description: the words after
@@ -46,12 +54,12 @@ opi_job_phrase <- function(desc, title = rep("", length(desc))) {
   d <- gsub("\\s+", " ", as.character(desc)); d[is.na(d)] <- ""
   # Boilerplate first, so it can't become "the job" (Libby: "Coaching
   # Opportunities Available NATURE OF POSITION ...").
-  d <- trimws(gsub("(?i)^(coaching (opportunities|positions?) (may be |are )?available|announcement of vacancy[^:]*)\\s*", "", d, perl = TRUE))
+  d <- trimws(gsub("(?i)^(coaching (opportunities|positions?) (may be |are )?available|announcement of vacancy\\s*[-\u2013]?\\s*(certified|classified|administration)?)\\s*", "", d, perl = TRUE))
   cut <- function(x) sub("(?i)(\\s(for|beginning|starting|to join|who|that|at|location|salary)\\s|[!*;:]|\\.(?!\\d)|\\s20\\d\\d).*$", "", substr(x, 1, 90), perl = TRUE)
   has_role <- function(x) length(opi_tokens(x, c(OPI_ROLE_LEXICON, OPI_LEVELS))) > 0
   vapply(seq_along(d), function(i) {
     x <- d[i]
-    m <- regexpr("(?i)(job title|position|title)\\s*:\\s*(the position\\s*:\\s*)?|(?i)(seeking|looking for|hiring|accepting applications for|opening for|searching for|inviting)\\s+(applications for\\s+|qualified applicants for\\s+)?((a|an)\\s+)?((?!applications)\\w+,?\\s+){0,4}?(?=[A-Z0-9.])", x, perl = TRUE)
+    m <- regexpr("(?i)(job title|position|title)\\s*:\\s*(the position\\s*:\\s*)?|(?i)(seeking|looking for|hiring|accepting applications for|opening for|searching for|inviting|recruiting [a-z ]{0,20}?to serve as|to serve as)\\s+(applications for\\s+|qualified applicants for\\s+)?((a|an)\\s+)?((?!applications)\\w+,?\\s+){0,4}?(?=[A-Z0-9.])", x, perl = TRUE)
     cand <- if (m > 0) cut(substr(x, m + attr(m, "match.length"), nchar(x))) else ""
     if (has_role(cand)) return(trimws(cand))
     opening <- cut(x)
@@ -61,7 +69,7 @@ opi_job_phrase <- function(desc, title = rep("", length(desc))) {
 }
 opi_clean_desc <- function(desc) gsub("(?i)reports? to:?\\s*[^.:]{0,40}|video from [^.]{0,40}|coaching positions? (may be |are )?available[^.]*", " ", desc, perl = TRUE)
 
-opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc) {
+opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc, generic_para_ok = FALSE) {
   opi_title <- sub("(?i)^cte\\s*[-\u2013]\\s*", "", opi_title, perl = TRUE)
   focus <- if (nzchar(trimws(phrase))) phrase else opi_title
   ot <- opi_tokens(focus, OPI_ROLE_LEXICON)
@@ -79,14 +87,18 @@ opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc)
   # Grade level must agree both ways, elementary included.
   lo <- union(ol, intersect(ot, "ELEM")); ld <- union(dl, intersect(dt, "ELEM"))
   if (length(lo) && length(ld) && !length(intersect(lo, ld))) return(-Inf)
+  og <- opi_grades(paste(focus, substr(opi_full, 1, 300))); dg <- opi_grades(d_title)
+  if (length(og) && length(dg) && !length(intersect(og, dg))) return(-Inf)   # 5th grade isn't the 1st-grade opening
   if (length(dt) == 0) {                                   # role-less board title ("Junior High 7-8")
-    if (length(intersect(ot, OPI_DECISIVE)) == 0 && length(ol) && length(intersect(ol, dl))) return(0.5) else return(-Inf)
+    # ...only for an OPI job that names no subject or role of its own
+    # ("High School Math Teacher" isn't "PHS BPA Advisor", Livingston).
+    if (length(setdiff(ot, "ELEM")) == 0 && length(ol) && length(intersect(ol, dl))) return(0.5) else return(-Inf)
   }
   rel <- c("PT", "OT", "SLP", "PSYCH", "DEAF")
   dt_need <- if (any(rel %in% dt)) setdiff(dt, "SPED") else dt
   if (!all(dt_need %in% of)) return(-Inf)                  # every role the board names appears in the OPI posting
   if ("COACH" %in% dt) {                                   # coaches: the sport must agree
-    ds <- opi_tokens(d_title, OPI_SPORTS); os <- opi_tokens(paste(opi_title, phrase), OPI_SPORTS)
+    ds <- opi_tokens(d_title, OPI_SPORTS); os <- opi_tokens(paste(opi_title, phrase, substr(opi_full, 1, 200)), OPI_SPORTS)
     if (length(ds) && length(os) && !length(intersect(ds, os))) return(-Inf)
   }
   # Related services (therapists, psychologists, SLPs, deaf/HH) are special
@@ -94,8 +106,24 @@ opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc)
   # them a different job.
   dec_d <- intersect(dt, OPI_DECISIVE); dec_o <- intersect(ot, OPI_DECISIVE)
   if (any(rel %in% dt) || any(rel %in% ot)) { dec_d <- setdiff(dec_d, "SPED"); dec_o <- setdiff(dec_o, "SPED") }
+  # A SPED para posting and a board's generic "Paraprofessional": allowed
+  # only when it is the board's only para posting (match_opi_postings()
+  # passes generic_para_ok); small districts post one para opening generically.
+  if (generic_para_ok && "PARA" %in% dt && "PARA" %in% ot && !"SPED" %in% dt) dec_o <- setdiff(dec_o, "SPED")
+  if (any(c("BUSMGR", "CLERK") %in% dt)) dec_o <- setdiff(dec_o, c("BUSMGR", "CLERK", "ADMIN"))   # "Business Manager/Clerk" ~ "Clerk"
+  # A role the board posting names must be the OPI job's role (its phrase or
+  # category), not a word further down its description (Colstrip's K-8 opening
+  # mentions "Title I" duties; it isn't the board's Title I posting).
+  # (Long-term sub is a term of the job, not a role: its evidence -- "daily sub
+  # rate", dates -- may sit anywhere in the description's opening.)
+  ok_from <- union(union(ot, opi_tokens(opi_title, OPI_ROLE_LEXICON)), intersect("LTS", opi_tokens(substr(opi_full, 1, 300), OPI_ROLE_LEXICON)))
+  dec_d <- setdiff(intersect(dt, OPI_DECISIVE), ok_from)
+  if (any(rel %in% dt) || any(rel %in% ot)) dec_d <- setdiff(dec_d, "SPED")
+  if (generic_para_ok && "PARA" %in% dt) dec_d <- setdiff(dec_d, "SPED")
+  if (length(dec_d)) return(-Inf)
+  dec_d <- character(0)
   # OPI's "Administrative - ..." category is met by any administrative role.
-  if ("ADMIN" %in% dec_o && any(c("PRIN", "APRIN", "SUPT", "DIRECTOR", "CURRIC", "ACTDIR") %in% dt)) dec_o <- setdiff(dec_o, "ADMIN")
+  if ("ADMIN" %in% dec_o && any(c("PRIN", "APRIN", "SUPT", "DIRECTOR", "CURRIC", "ACTDIR", "BUSMGR") %in% dt)) dec_o <- setdiff(dec_o, "ADMIN")
   if (length(setdiff(dec_o, dt)) || length(setdiff(dec_d, of))) return(-Inf)
   if ("ELEM" %in% ot && !"ELEM" %in% dt && !length(intersect(dt, ot))) return(-Inf)
   s <- 2 * length(intersect(dt, ot)) + length(intersect(dt, setdiff(of, ot))) + length(intersect(ol, dl))
@@ -117,8 +145,10 @@ opi_norm_words <- function(x) {
 }
 opi_match_conflict <- function(opi_title, phrase, opi_full, d_title, d_loc) {
   opi_title <- sub("(?i)^cte\\s*[-\u2013]\\s*", "", opi_title, perl = TRUE)
-  ds <- opi_tokens(d_title, OPI_SPORTS); os <- opi_tokens(paste(opi_title, phrase), OPI_SPORTS)
+  ds <- opi_tokens(d_title, OPI_SPORTS); os <- opi_tokens(paste(opi_title, phrase, substr(opi_full, 1, 200)), OPI_SPORTS)
   if (length(ds) && length(os) && !length(intersect(ds, os))) return(TRUE)
+  og <- opi_grades(paste(phrase, substr(opi_full, 1, 300))); dg <- opi_grades(d_title)
+  if (length(og) && length(dg) && !length(intersect(og, dg))) return(TRUE)
   focus <- if (nzchar(trimws(phrase))) phrase else opi_title
   ot <- opi_tokens(focus, OPI_ROLE_LEXICON)
   if (!length(setdiff(ot, "ELEM"))) { tt <- opi_tokens(opi_title, OPI_ROLE_LEXICON); if (length(opi_tokens(focus, OPI_LEVELS))) tt <- setdiff(tt, "ELEM"); ot <- union(ot, tt) }
@@ -128,7 +158,7 @@ opi_match_conflict <- function(opi_title, phrase, opi_full, d_title, d_loc) {
   if (length(lo) && length(ld) && !length(intersect(lo, ld))) return(TRUE)
   rel <- c("PT", "OT", "SLP", "PSYCH", "DEAF"); dec_d <- intersect(dt, OPI_DECISIVE); dec_o <- intersect(ot, OPI_DECISIVE)
   if (any(rel %in% dt) || any(rel %in% ot)) { dec_d <- setdiff(dec_d, "SPED"); dec_o <- setdiff(dec_o, "SPED") }
-  if ("ADMIN" %in% dec_o && any(c("PRIN", "APRIN", "SUPT", "DIRECTOR", "CURRIC", "ACTDIR") %in% dt)) dec_o <- setdiff(dec_o, "ADMIN")
+  if ("ADMIN" %in% dec_o && any(c("PRIN", "APRIN", "SUPT", "DIRECTOR", "CURRIC", "ACTDIR", "BUSMGR") %in% dt)) dec_o <- setdiff(dec_o, "ADMIN")
   length(setdiff(dec_o, dt)) > 0 || length(setdiff(dec_d, of)) > 0
 }
 opi_title_idf <- function(titles) { w <- unlist(lapply(titles, opi_norm_words)); tb <- table(w); idf <- log(length(titles) / as.numeric(tb)); names(idf) <- names(tb); idf }
@@ -152,13 +182,25 @@ match_opi_postings <- function(opi_df, registry_district, direct_df, sim_thresho
   col <- function(nm) if (nm %in% names(opi_df)) { v <- as.character(opi_df[[nm]]); v[is.na(v)] <- ""; v } else rep("", nrow(opi_df))
   title <- col("title"); desc <- col("OPI_Description"); school <- col("OPI_School")
   dloc <- as.character(direct_df$location); dloc[is.na(dloc)] <- ""
+  # Exact key first: a district job code the OPI description quotes ("JP054494")
+  # and the board posting carries (Tyler Portico's `code`, "JP054494 - 1271").
+  dcode <- rep(NA_character_, nrow(direct_df))
+  if ("Job_Code" %in% names(direct_df)) {
+    x <- toupper(as.character(direct_df$Job_Code)); x[is.na(x)] <- ""
+    mm <- regexpr("JP[0-9]{4,}", x)
+    dcode[mm > 0] <- regmatches(x, mm)
+  }
   for (i in seq_len(nrow(opi_df))) {
     if (is.na(registry_district[i])) next
     cand <- which(direct_df$District == registry_district[i]); if (!length(cand)) next
+    oc <- regmatches(toupper(desc[i]), gregexpr("JP[0-9]{4,}", toupper(desc[i])))[[1]]
+    if (length(oc)) { hit <- cand[!is.na(dcode[cand]) & dcode[cand] %in% oc]; if (length(hit)) { out[i] <- hit[1]; next } }
     ph <- opi_job_phrase(desc[i], title[i])
-    sc <- vapply(cand, function(j) opi_match_score(title[i], ph, desc[i], school[i], direct_df$title[j], dloc[j]), numeric(1))
+    n_para <- sum(grepl("(?i)para(professional|educator)", direct_df$title[cand], perl = TRUE))
+    sc <- vapply(cand, function(j) opi_match_score(title[i], ph, desc[i], school[i], direct_df$title[j], dloc[j],
+                                                   generic_para_ok = n_para == 1), numeric(1))
     if (max(sc) > -Inf) { out[i] <- cand[which.max(sc)]; next }
-    pw <- opi_norm_words(paste(ph, title[i], substr(opi_clean_desc(desc[i]), 1, 200)))
+    pw <- opi_norm_words(paste(ph, title[i], school[i], substr(opi_clean_desc(desc[i]), 1, 200)))
     ws <- vapply(cand, function(j) if (opi_match_conflict(title[i], ph, desc[i], direct_df$title[j], dloc[j])) 0 else
                    opi_word_sim(pw, opi_norm_words(direct_df$title[j]), idf), numeric(1))
     if (max(ws) >= sim_threshold) out[i] <- cand[which.max(ws)]

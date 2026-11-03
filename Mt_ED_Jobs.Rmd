@@ -101,11 +101,12 @@ if (nrow(tylerportico_df) > 0) {
   tylerportico_df <- tylerportico_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
-              Posting_Source = "Tyler Portico (direct district board)")
+              Posting_Source = "Tyler Portico (direct district board)",
+              Job_Code = if ("Job_Code" %in% names(.)) Job_Code else NA_character_)   # OPI matching key (raw archive only)
 } else {
   tylerportico_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                                  location = character(0), url = character(0), District = character(0),
-                                 Posting_Source = character(0))
+                                 Posting_Source = character(0), Job_Code = character(0))
 }
 
 # TedK12 -- output columns (title/date_posted/position/location/url) already

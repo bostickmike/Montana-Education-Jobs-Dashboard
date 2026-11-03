@@ -16,6 +16,8 @@ check_endpoint <- function(name, url, validator, timeout_secs = 10) {
   t0 <- proc.time()
   res <- tryCatch({
     req <- request(url) %>% req_timeout(timeout_secs)
+    # apps.opi.mt.gov needs the GoDaddy R1 bundle (see opi_ca_bundle(), direct_api_scrapers.R).
+    if (grepl("apps\\.opi\\.mt\\.gov", url) && file.exists("certs/opi_godaddy_r1.pem")) req <- req_options(req, cainfo = normalizePath("certs/opi_godaddy_r1.pem"))
     resp <- req_perform(req)
     status <- resp_status(resp)
     if (status != 200) {

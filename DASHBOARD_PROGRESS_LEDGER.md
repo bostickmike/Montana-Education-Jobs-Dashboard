@@ -463,4 +463,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     OPI_Description (archive only). History rebuilt from the raw archives (`scripts/reconcile_opi_history.R`, now
     a rerunnable rebuild): totals ~170-210 higher per week since mid-September than the district rule; past weeks
     match on OPI subject titles only and may include ~30/week OPI repeat listings. Trends tab notes the method.
+  * [x] OPI matcher, full-sample round (2026-11-03): all 275 OPI postings at scraped districts judged by the
+    matcher and Gemini; agreements spot-checked, disagreements hand-judged. Eight general fixes (role-less board
+    titles, sport from description, "Title 1", business manager ~ clerk/administrative, school words, grade numbers,
+    "recruiting/serve as" cues, SPED para ~ single generic para, director/coordinator, "Pre-School", board-named roles
+    must be the OPI job's role). On the 13 confidently judged disagreements: 10 right (was 4; Gemini 9). Answer key
+    148 cases: 77/78 found, 0 wrong-posting, 2/70 false. Exact key: Tyler Portico `code` now kept (`Job_Code`, raw
+    archive only); an OPI description quoting it ("JP054494") matches that posting outright (Kalispell's long-term
+    elementary sub). Follow-up noted: ~3/week stale OPI listings (Froid "start July 1, 2023") now count.
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.

@@ -45,7 +45,7 @@ test_that("parse_tylerportico_positions returns zero rows (not an error) for an 
   )
 
   expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Job_Code"))   # Job_Code: OPI matching key
 })
 
 test_that("fetch_tylerportico_postings fetches and parses a live-shaped response", {

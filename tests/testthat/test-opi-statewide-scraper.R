@@ -214,3 +214,14 @@ test_that("the committed OPI district county file joins to OEWS areas", {
   expect_false(any(duplicated(counties$OPI_District)))
   expect_true(all(!is.na(oews_area_for_county(counties$County, "MT"))))
 })
+
+test_that("OPI requests verify TLS against the GoDaddy R1 bundle, and only OPI requests do", {
+  # apps.opi.mt.gov serves a chain ending in the GoDaddy R1 root, which standard
+  # trust stores lack (2026-11-03); see opi_ca_bundle().
+  ca <- opi_ca_bundle()
+  expect_false(is.null(ca))
+  pem <- readLines(ca, warn = FALSE)
+  expect_equal(sum(grepl("BEGIN CERTIFICATE", pem)), 3)
+  expect_equal(opi_request("https://apps.opi.mt.gov/x")$options$cainfo, ca)
+  expect_null(httr2::request("https://example.org")$options$cainfo)
+})
