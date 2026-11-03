@@ -50,32 +50,43 @@ reconcile_fixture <- function(direct = read.csv(test_path("fixtures", "direct_po
                                      today = today))
 }
 
-test_that("no OPI posting is counted at a district whose own scrape returned postings", {
+test_that("at a district we scrape, an OPI posting is dropped only when it matches a board posting", {
   f <- reconcile_fixture()
   active <- unique(f$direct$District)
-  expect_false(any(f$r$opi_keep$District %in% active))
   # Every OPI row is either counted or dropped, never both or neither.
   expect_equal(nrow(f$r$opi_keep) + nrow(f$r$opi_dropped), nrow(f$opi))
-  # Dropped rows are at districts we scrape: active ones, or (an empty
-  # scrape) only OPI listings too old to fill in with.
-  inactive <- !(f$r$opi_dropped$District %in% active)
-  expect_true(all(f$r$opi_dropped$District %in% read.csv(here::here("k12_district_registry.csv"))$District))
-  expect_true(all(opi_listing_is_stale(f$r$opi_dropped$date_posted[inactive], as.Date("2026-11-02"))))
-  expect_true(all(f$opi$OPI_District[f$opi$OPI_District %in% c("Bigfork H S", "Bigfork Elem", "Billings Elem",
-                                                              "Billings H S", "Custer County H S")] %in%
-                    f$r$opi_dropped$OPI_District))
+  # Each dropped row at an active district is a match, and flagged a board posting.
+  at_active <- f$r$opi_dropped$District %in% active
+  expect_true(all(f$r$opi_dropped$OPI_Drop_Reason[at_active] %in% c("same opening on district board", "OPI duplicate listing")))
+  expect_gt(sum(f$r$direct_df$Also_On_OPI), 0)
+  expect_lte(sum(f$r$direct_df$Also_On_OPI), sum(f$r$opi_dropped$OPI_Drop_Reason == "same opening on district board"))
+  # Unmatched OPI postings at active districts count, under the registry district, and are in the QC report.
+  kept_active <- f$r$opi_keep[f$r$opi_keep$District %in% active, ]
+  expect_gt(nrow(kept_active), 0)
+  expect_equal(sum(grepl("counted from OPI", f$r$qc$Discrepancy_Type)), nrow(kept_active))
+  # An empty board's old OPI listings stay out (stale, dropped).
+  inactive <- !at_active
+  expect_true(all(f$r$opi_dropped$OPI_Drop_Reason[inactive] == "stale OPI listing, district board empty"))
 })
 
-test_that("matched OPI postings flag the direct posting; unmatched ones go to the QC report", {
-  f <- reconcile_fixture()
-  n_also <- sum(f$r$direct_df$Also_On_OPI)
-  expect_gt(n_also, 0)
-  unmatched <- grepl("no matching posting|ghost", f$r$qc$Discrepancy_Type)
-  expect_equal(n_also + sum(unmatched), nrow(f$r$opi_dropped))
-  # Listed over 60 days before the run: flagged as a likely stale OPI listing.
-  expect_gt(sum(grepl("ghost", f$r$qc$Discrepancy_Type)), 0)
-  # One direct posting absorbs at most one OPI posting.
-  expect_lte(n_also, nrow(f$r$opi_dropped))
+test_that("OPI's repeat listings of one job count once", {
+  opi <- data.frame(title = c("Special Education", "Special Education", "Music"), date_posted = "10/25/2026", location = "Richey",
+                    District = "Richey", url = OPI_STATEWIDE_BOARD_URL, Posting_Source = "OPI Jobs for Teachers (statewide)",
+                    OPI_District = c("Richey Elem", "Richey H S", "Richey Elem"),
+                    OPI_Description = c(rep("Richey Public Schools is seeking a K-12 Special Education teacher for the 2026-27 school year.", 2),
+                                        "Richey Public Schools is seeking a K-12 Music teacher for the 2026-27 school year."),
+                    stringsAsFactors = FALSE)
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  dir <- data.frame(title = "2026-27 Assistant Cook / Custodian", date_posted = NA, location = "Richey", url = "https://example.org/a",
+                    District = "Richey Public Schools", Posting_Source = "Richey district site (direct board)", stringsAsFactors = FALSE)
+  xw <- data.frame(LEAID = c("1", "2"), OPI_District = c("Richey Elem", "Richey H S"), City = "Richey", County = "Dawson County",
+                   Latitude = 47.6, Longitude = -105.1, Registry_District = "Richey Public Schools", Match_Rule = "registry NCES id",
+                   Map_Entity = "Richey Public Schools", stringsAsFactors = FALSE)
+  r <- reconcile_opi_with_direct(opi, dir, xw, reg, today = as.Date("2026-11-03"))
+  # Richey's board lists only a cook/custodian: its two teaching jobs count, the repeat SPED listing doesn't.
+  expect_equal(sort(r$opi_keep$title), c("Music", "Special Education"))
+  expect_equal(r$opi_dropped$OPI_Drop_Reason, "OPI duplicate listing")
+  expect_true(all(r$opi_keep$District == "Richey Public Schools"))
 })
 
 test_that("districts we don't scrape count, under their map entity, and are listed for adoption", {
@@ -130,10 +141,12 @@ test_that("without OPI_District a posting falls back to its town, conservatively
   opi$OPI_District <- NA
   r <- reconcile_opi_with_direct(opi, f$direct, xw_fixture(),
                                  read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE))
-  # Blue Creek's Billings address now reads as Billings: not counted (no
-  # double count), rather than an extra dot.
-  expect_false(any(r$opi_keep$District %in% unique(f$direct$District)))
+  # Blue Creek's Billings address reads as Billings, not as an extra map dot;
+  # counted there only if no Billings board posting is the same opening.
   expect_false(any(r$opi_keep$District == "Blue Creek Elem"))
+  blue <- f$opi$OPI_District == "Blue Creek Elem"
+  expect_true(all(c(r$opi_keep$District, r$opi_dropped$District)[match(f$opi$title[blue], c(r$opi_keep$title, r$opi_dropped$title))] ==
+                  "Billings Public Schools"))
 })
 
 test_that("an archive written with OPI_Counted is taken as written", {

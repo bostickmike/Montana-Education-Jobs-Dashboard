@@ -546,7 +546,9 @@ fetch_opi_statewide_postings <- function(
   if (!fetch_details) return(out)
   out <- ensure_posted_pay_columns(out)
   if (!"OPI_District" %in% names(out)) out$OPI_District <- rep(NA_character_, nrow(out))
-  if (!"OPI_Website" %in% names(out)) out$OPI_Website <- rep(NA_character_, nrow(out))
+  for (col in c("OPI_Website", "OPI_School", "OPI_Description")) {
+    if (!col %in% names(out)) out[[col]] <- rep(NA_character_, nrow(out))
+  }
   out
 }
 
@@ -564,7 +566,7 @@ opi_detail_targets <- function(html_text) {
 fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
   fields <- extract_aspnet_postback_fields(html_text)
   none <- function() cbind(extract_posted_pay(NA_character_), OPI_District = NA_character_,
-                           OPI_Website = NA_character_)
+                           OPI_Website = NA_character_, OPI_School = NA_character_, OPI_Description = NA_character_)
   dplyr::bind_rows(lapply(opi_detail_targets(html_text), function(target) {
     if (Sys.time() > deadline) return(none())
     Sys.sleep(delay)
@@ -575,8 +577,11 @@ fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
       resp <- do.call(req_body_form, c(list(request(url) %>% req_cookie_preserve(jar)), f)) %>%
         perform_with_retry()
       details <- parse_opi_job_details(resp_body_string(resp))
+      # School and the description's opening let opi_matcher.R tell which
+      # board posting (if any) is the same opening.
       cbind(extract_posted_pay(details$Description), OPI_District = details$District_Name,
-            OPI_Website = details$Website)
+            OPI_Website = details$Website, OPI_School = details$School,
+            OPI_Description = substr(gsub("\\s+", " ", details$Description), 1, 600))
     }, error = function(e) none())
   }))
 }

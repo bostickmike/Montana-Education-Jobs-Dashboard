@@ -452,4 +452,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     manhattan_current-openings_2026-11-02.html. Same check of the other empty-on-10-27 districts: Bozeman,
     Columbia Falls, Townsend were already recovered 10-28/29 (50, 26, 4 live); Seeley Lake has no current openings
     (OPI's three are May-June listings).
+  * [x] OPI de-duplication moved to posting level (2026-11-03): the district-level rule dropped every OPI posting at
+    a district we scrape, but 37 districts post their teaching jobs only on OPI (~75 postings) and about half of
+    OPI's postings at districts whose board lists teaching jobs aren't on that board. Now an OPI posting is dropped
+    only when `match_opi_postings()` (new `opi_matcher.R`) finds the same opening on the district's board; OPI's
+    repeat listings (same district + description) count once. Matcher measured on 142 hand-labeled real postings
+    (`test-opi-matcher.R`): untouched held-out set 17/18 duplicates found, 0 wrong-posting matches, 2/15 false
+    matches; old matcher ~50% precision. Gemini scored 17/17, 0 false on the same set but was not adopted (user
+    preferred deterministic; GitHub Models, the Copilot route, is retired). OPI fetch now keeps OPI_School and
+    OPI_Description (archive only). History rebuilt from the raw archives (`scripts/reconcile_opi_history.R`, now
+    a rerunnable rebuild): totals ~170-210 higher per week since mid-September than the district rule; past weeks
+    match on OPI subject titles only and may include ~30/week OPI repeat listings. Trends tab notes the method.
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.

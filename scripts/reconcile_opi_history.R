@@ -1,28 +1,29 @@
 #!/usr/bin/env Rscript
 # scripts/reconcile_opi_history.R
 #
-# Applies the OPI-vs-direct rule (opi_reconcile.R) to the committed K-12
-# history, in place, so past weeks are counted the way the pipeline counts
-# from 2026-11-03 on: OPI postings at a district we scrape are not counted
-# (unless that district's scrape returned nothing that week), and counted OPI
-# postings carry their district label (registry district, OPI-only map
-# entity, or OPI's employer name).
+# Re-applies the current OPI rule (opi_reconcile.R: posting-level matching
+# against each district's own board) to the committed K-12 history, so past
+# weeks are counted the way the pipeline counts now. Rebuilds rather than
+# adjusts, so it can be rerun safely after any change to the rule:
 #
-# Per week, the rule is decided from that week's raw archive
-# (Archivek12_Data/combined_*.csv; by town for weeks before OPI_District),
-# then applied to the accumulated files by (Archive_Date, Posting_ID):
-#   k12jobanalysis.csv           rows dropped / District relabeled
-#   k12_district_weekly_totals   counts moved: minus each OPI row's old label,
-#                                plus its new label when it still counts
-#   allsum.csv / allnow.csv      recomputed from k12jobanalysis.csv (the same
-#                                summarize_k12_posting_counts() the pipeline
-#                                uses; verified identical before this change)
-#   combinedclean.csv            latest week: dropped / relabeled, plus
-#                                Also_On_OPI on the direct rows OPI also lists
-# Every other column is left as committed. Raw archives are not modified.
-# Rerunnable: once k12jobanalysis.csv has nothing left to drop, history is
-# taken as reconciled and the weekly totals (adjusted by difference, so not
-# safe to apply twice) are left alone; Also_On_OPI is recomputed either way.
+#   k12_district_weekly_totals.csv  recomputed from each raw archive: direct
+#                                   rows + the OPI rows the rule counts. (Checked
+#                                   2026-11-03: before any OPI change, the
+#                                   committed totals equalled the archives for
+#                                   all 3,739 district-weeks.)
+#   k12jobanalysis.csv              committed direct-board rows kept as they are;
+#                                   OPI teacher rows rebuilt from the archives
+#                                   with the current classifier
+#   allsum.csv / allnow.csv         recomputed from k12jobanalysis.csv
+#   combinedclean.csv               latest week: OPI rows rebuilt as the pipeline
+#                                   builds them; Also_On_OPI recomputed
+#
+# Archives before 2026-11-03 carry no OPI description, so their OPI postings are
+# matched on the OPI subject title alone (rougher; user's choice 2026-11-03), and
+# OPI's repeat listings of one job can't be recognized (a title+date proxy was
+# right only about half the time), so past weeks run ~30 postings/week high.
+# Archives written by the district-level rule (OPI_Counted, 2026-11-03 run) are
+# re-decided too (recompute = TRUE). Raw archives are never modified.
 # Afterwards run scripts/generate_job_duration_spells.R.
 #
 # Usage (repo root): Rscript scripts/reconcile_opi_history.R [--dry-run]
@@ -30,120 +31,108 @@
 suppressMessages(library(dplyr))
 source("k12_he_classification.R")
 source("opi_reconcile.R")
+source("bls_oews_scraper.R")
 
 dry_run <- "--dry-run" %in% commandArgs(trailingOnly = TRUE)
 app <- "Mt_Ed_Jobs"
-crosswalk <- read.csv(file.path(app, "mt_district_crosswalk.csv"), stringsAsFactors = FALSE,
-                      colClasses = c(LEAID = "character"))
+crosswalk <- read.csv(file.path(app, "mt_district_crosswalk.csv"), stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
 registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
 
 read_archive_week <- function(path) {
   read.csv(path, colClasses = c(Archive_Date = "character"), stringsAsFactors = FALSE) %>%
     select(-any_of("X")) %>%
     mutate(Archive_Date = as.character(as.Date(Archive_Date, tryFormats = c("%Y-%m-%d", "%m/%d/%Y")))) %>%
-    mutate(across(any_of(c("title", "position", "location", "url", "District", "Posting_Source")),
-                  normalize_posting_text)) %>%
+    mutate(across(any_of(c("title", "position", "location", "url", "District", "Posting_Source")), normalize_posting_text)) %>%
     add_k12_posting_identity() %>%
     distinct(Posting_ID, .keep_all = TRUE)
 }
+is_opi_row <- function(df) {
+  src <- if ("Posting_Source" %in% names(df)) df$Posting_Source else rep(NA_character_, nrow(df))
+  x <- grepl("^OPI ", src) | is_opi_statewide_posting(df$url)
+  x[is.na(x)] <- FALSE
+  x
+}
 
-# One row per OPI posting per archived week: old label (as combinedclean
-# carried it), Counted, new label.
-rules <- bind_rows(lapply(list.files("Archivek12_Data", pattern = "^combined_.*\\.csv$", full.names = TRUE), function(f) {
-  week <- read_archive_week(f)
-  r <- opi_rule_for_archive(week, crosswalk, registry)
-  data.frame(Archive_Date = week$Archive_Date, Posting_ID = r$Posting_ID,
-             Placeholder = is_placeholder_posting(week$title),
-             Old_District = canonicalize_k12_district(week$District),
-             Counted = r$Counted, New_District = canonicalize_k12_district(r$District),
-             stringsAsFactors = FALSE)[r$Is_OPI, , drop = FALSE]
-}))
-key <- function(d, id) paste(d, id)
-rules$key <- key(rules$Archive_Date, rules$Posting_ID)
+# ---- each archived week under the current rule ----
+files <- list.files("Archivek12_Data", pattern = "^combined_.*\\.csv$", full.names = TRUE)
+weeks <- lapply(files, function(f) {
+  w <- read_archive_week(f)
+  rule <- opi_rule_for_archive(w, crosswalk, registry, recompute = TRUE)
+  w$Is_OPI <- rule$Is_OPI
+  w$Counted <- rule$Counted
+  w$District <- canonicalize_k12_district(rule$District)
+  w[w$Counted & !is_placeholder_posting(w$title), , drop = FALSE]
+})
+names(weeks) <- vapply(weeks, function(w) w$Archive_Date[1], character(1))
 
-cat("OPI postings per week (archive): counted / not counted\n")
-print(rules %>% group_by(Archive_Date) %>% summarize(counted = sum(Counted), not_counted = sum(!Counted), .groups = "drop"),
-      n = Inf)
+totals <- bind_rows(lapply(weeks, function(w) w %>% group_by(District, Archive_Date) %>%
+                             summarize(n = n_distinct(Posting_ID), .groups = "drop"))) %>%
+  arrange(Archive_Date, District)
+old_totals <- read.csv(file.path(app, "k12_district_weekly_totals.csv"), stringsAsFactors = FALSE)
+cat("Weekly K-12 totals, committed -> rebuilt (direct + counted OPI):\n")
+print(full_join(old_totals %>% group_by(Archive_Date) %>% summarize(committed = sum(n), .groups = "drop"),
+                totals %>% group_by(Archive_Date) %>% summarize(rebuilt = sum(n), .groups = "drop"), by = "Archive_Date"), n = Inf)
 
-# ---- k12jobanalysis.csv ----
+# ---- k12jobanalysis.csv: direct rows kept, OPI teacher rows rebuilt ----
 k12 <- read.csv(file.path(app, "k12jobanalysis.csv"), stringsAsFactors = FALSE)
-k12_key <- key(k12$Archive_Date, k12$Posting_ID)
-hit <- match(k12_key, rules$key)
-drop_k12 <- !is.na(hit) & !rules$Counted[hit]
-relabel_k12 <- !is.na(hit) & rules$Counted[hit]
-cat(sprintf("\nk12jobanalysis.csv: %d rows, %d dropped, %d OPI rows relabeled (%d label changes)\n",
-            nrow(k12), sum(drop_k12), sum(relabel_k12),
-            sum(relabel_k12 & k12$District != rules$New_District[hit], na.rm = TRUE)))
-k12$District[relabel_k12] <- rules$New_District[hit[relabel_k12]]
-k12 <- k12[!drop_k12, , drop = FALSE]
+k12_direct <- k12[!is_opi_row(k12), , drop = FALSE]
+opi_teach <- bind_rows(lapply(weeks, function(w) w[w$Is_OPI, , drop = FALSE])) %>%
+  mutate(position = classify_k12_position(title)) %>%
+  filter(position == "Teacher") %>%
+  mutate(Category = classify_k12_subject(title), Broad_Category = classify_k12_broad_category(Category),
+         Posting_Source = "OPI Jobs for Teachers (statewide)") %>%
+  select(all_of(names(k12)))
+k12_new <- bind_rows(k12_direct, opi_teach) %>% arrange(Archive_Date)
+cat(sprintf("\nk12jobanalysis.csv: %d direct rows kept, OPI rows %d -> %d\n", nrow(k12_direct), sum(is_opi_row(k12)), nrow(opi_teach)))
 
-# ---- allsum.csv / allnow.csv ----
-k12sumdistrict <- summarize_k12_posting_counts(k12)
-k12sum <- k12sumdistrict %>%
-  group_by(Broad_Category, Archive_Date) %>%
-  summarize(sum = sum(sum), .groups = "drop") %>%
-  mutate(District = "Total") %>%
-  select(Broad_Category, Archive_Date, District, sum)
+k12sumdistrict <- summarize_k12_posting_counts(k12_new)
+k12sum <- k12sumdistrict %>% group_by(Broad_Category, Archive_Date) %>% summarize(sum = sum(sum), .groups = "drop") %>%
+  mutate(District = "Total") %>% select(Broad_Category, Archive_Date, District, sum)
 allsum <- bind_rows(k12sum, k12sumdistrict)
 latest <- k12sumdistrict %>% filter(Archive_Date == max(Archive_Date))
-allnow <- bind_rows(
-  latest %>% group_by(Broad_Category) %>% summarize(Sum = sum(sum), .groups = "drop") %>% mutate(District = "Total"),
-  latest %>% ungroup() %>% transmute(Broad_Category, Sum = sum, District)
-)
+allnow <- bind_rows(latest %>% group_by(Broad_Category) %>% summarize(Sum = sum(sum), .groups = "drop") %>% mutate(District = "Total"),
+                    latest %>% ungroup() %>% transmute(Broad_Category, Sum = sum, District))
 
-# ---- k12_district_weekly_totals.csv ----
-totals <- read.csv(file.path(app, "k12_district_weekly_totals.csv"), stringsAsFactors = FALSE)
-already_reconciled <- sum(drop_k12) == 0
-if (already_reconciled) cat("History already reconciled (nothing to drop): weekly totals left as they are.\n")
-moves <- if (already_reconciled) rules[0, ] else rules %>% filter(!Placeholder, !(Counted & Old_District == New_District))
-minus <- moves %>% count(District = Old_District, Archive_Date, name = "minus")
-plus <- moves %>% filter(Counted) %>% count(District = New_District, Archive_Date, name = "plus")
-totals_new <- totals %>%
-  full_join(minus, by = c("District", "Archive_Date")) %>%
-  full_join(plus, by = c("District", "Archive_Date")) %>%
-  mutate(n = coalesce(n, 0L) - coalesce(minus, 0L) + coalesce(plus, 0L))
-if (any(totals_new$n < 0)) {
-  print(totals_new[totals_new$n < 0, ])
-  stop("A weekly total would go negative: the archive and k12_district_weekly_totals.csv disagree. Nothing written.")
-}
-totals_new <- totals_new %>% filter(n > 0) %>% select(District, Archive_Date, n) %>% arrange(Archive_Date, District)
-cat(sprintf("k12_district_weekly_totals.csv: total postings by week, before -> after\n"))
-print(full_join(totals %>% group_by(Archive_Date) %>% summarize(before = sum(n)),
-                totals_new %>% group_by(Archive_Date) %>% summarize(after = sum(n)), by = "Archive_Date"), n = Inf)
-
-# ---- combinedclean.csv (latest week) ----
+# ---- combinedclean.csv: latest week's OPI rows rebuilt ----
 cc <- read.csv(file.path(app, "combinedclean.csv"), stringsAsFactors = FALSE)
-cc_hit <- match(key(cc$Archive_Date, cc$Posting_ID), rules$key)
-drop_cc <- !is.na(cc_hit) & !rules$Counted[cc_hit]
-relabel_cc <- !is.na(cc_hit) & rules$Counted[cc_hit]
-cc$District[relabel_cc] <- rules$New_District[cc_hit[relabel_cc]]
-# Also_On_OPI: rerun the week's match on its direct rows.
-latest_file <- file.path("Archivek12_Data", paste0("combined_", max(cc$Archive_Date), ".csv"))
-if (!"Also_On_OPI" %in% names(cc)) cc$Also_On_OPI <- FALSE
-if (file.exists(latest_file)) {
-  week <- read_archive_week(latest_file)
-  is_opi <- is_opi_statewide_posting(week$url) | grepl("^OPI ", week$Posting_Source)
-  direct <- week[!is_opi, , drop = FALSE]
-  direct$District <- canonicalize_k12_district(direct$District)
-  r <- reconcile_opi_with_direct(week[is_opi, , drop = FALSE], direct, crosswalk, registry,
-                                 today = as.Date(max(cc$Archive_Date)), stale_fallback = FALSE)
-  also <- r$direct_df$Posting_ID[r$direct_df$Also_On_OPI]
-  cc$Also_On_OPI <- cc$Posting_ID %in% also
+wk <- max(cc$Archive_Date)
+if (!wk %in% names(weeks)) stop("No archive for combinedclean's week ", wk, "; nothing written.")
+latest_week <- read_archive_week(files[names(weeks) == wk])
+opi_now <- weeks[[wk]][weeks[[wk]]$Is_OPI, , drop = FALSE]
+# Also_On_OPI: the direct postings an OPI posting matched this week.
+is_o <- is_opi_row(latest_week)
+dir_now <- latest_week[!is_o, , drop = FALSE]
+dir_now$District <- canonicalize_k12_district(dir_now$District)
+r <- reconcile_opi_with_direct(latest_week[is_o, , drop = FALSE], dir_now, crosswalk, registry, today = as.Date(wk), stale_fallback = FALSE)
+also <- r$direct_df$Posting_ID[r$direct_df$Also_On_OPI]
+
+oews <- read.csv(file.path(app, "oews_role_wages.csv"), stringsAsFactors = FALSE, colClasses = c(Area_Code = "character"))
+opi_counties <- read.csv(file.path(app, "opi_district_counties.csv"), stringsAsFactors = FALSE)
+if (!"OPI_District" %in% names(opi_now)) opi_now$OPI_District <- NA_character_
+opi_rows <- opi_now %>%
+  mutate(position = classify_k12_position(title), Also_On_OPI = FALSE) %>%
+  ensure_posted_pay_columns() %>%
+  drop_implausible_pay()
+opi_rows <- attach_oews_estimates(opi_rows, oews,
+                                  dplyr::coalesce(registry$County[match(opi_rows$District, registry$District)],
+                                                  opi_counties$County[match(opi_rows$OPI_District, opi_counties$OPI_District)]), "MT")
+cc_direct <- cc[!is_opi_row(cc), , drop = FALSE]
+cc_direct$Also_On_OPI <- cc_direct$Posting_ID %in% also
+opi_rows <- opi_rows[, intersect(names(cc), names(opi_rows)), drop = FALSE]
+for (col in names(opi_rows)) if (!identical(class(opi_rows[[col]]), class(cc_direct[[col]]))) {
+  opi_rows[[col]] <- methods::as(opi_rows[[col]], class(cc_direct[[col]])[1])     # e.g. Est_Year integer vs character
 }
-cc <- cc[!drop_cc, , drop = FALSE]
-cols <- names(cc)
-cols <- append(setdiff(cols, "Also_On_OPI"), "Also_On_OPI", after = match("OPI_District", setdiff(cols, "Also_On_OPI")))
-cc <- cc[, cols]
-cat(sprintf("combinedclean.csv: %d OPI rows dropped, %d relabeled, %d direct rows flagged Also_On_OPI; %d rows remain\n",
-            sum(drop_cc), sum(relabel_cc), sum(cc$Also_On_OPI), nrow(cc)))
+cc_new <- bind_rows(cc_direct, opi_rows)[, names(cc)]
+cat(sprintf("combinedclean.csv (%s): %d direct rows (%d Also_On_OPI), OPI rows %d -> %d; %d rows\n", wk, nrow(cc_direct),
+            sum(cc_direct$Also_On_OPI), sum(is_opi_row(cc)), nrow(opi_rows), nrow(cc_new)))
 
 if (dry_run) {
   cat("\n--dry-run: nothing written.\n")
 } else {
-  write.csv(k12, file.path(app, "k12jobanalysis.csv"), row.names = FALSE)
+  write.csv(k12_new, file.path(app, "k12jobanalysis.csv"), row.names = FALSE)
   write.csv(allsum, file.path(app, "allsum.csv"), row.names = FALSE)
   write.csv(allnow, file.path(app, "allnow.csv"), row.names = FALSE)
-  write.csv(totals_new, file.path(app, "k12_district_weekly_totals.csv"), row.names = FALSE)
-  write.csv(cc, file.path(app, "combinedclean.csv"), row.names = FALSE)
+  write.csv(totals, file.path(app, "k12_district_weekly_totals.csv"), row.names = FALSE)
+  write.csv(cc_new, file.path(app, "combinedclean.csv"), row.names = FALSE)
   cat("\nWritten. Next: Rscript scripts/generate_job_duration_spells.R\n")
 }

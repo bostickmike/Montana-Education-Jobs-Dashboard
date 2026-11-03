@@ -1,15 +1,21 @@
 # OPI Jobs for Teachers vs. this project's direct scrapes (Montana only).
 #
-# The rule (user's, 2026-11-02): the direct scrape is trusted; OPI fills gaps
-# and serves as quality control. Only one source ever counts a district in a
-# given week, so a posting can't be counted twice even when matching misses.
+# The rule (user's, 2026-11-02, refined 2026-11-03): the direct scrape is
+# trusted; OPI fills gaps and serves as quality control. De-duplication is
+# per posting, not per district: a district's board often lists only some of
+# its jobs (37 districts post their teaching jobs only on OPI), so an OPI
+# posting is dropped only when it is the same opening as a specific board
+# posting. A missed match double counts that job; the matcher is measured
+# against hand-labeled postings (test-opi-matcher.R).
 #
-#   1. OPI posting at a district we scrape, and the same job is on our board
-#      (same district + position + subject) -> not a separate row; the direct
-#      posting is flagged Also_On_OPI.
-#   2. OPI posting at a district we scrape, no matching direct posting ->
-#      not counted; listed in the weekly QC report (possible scraper miss,
-#      stale OPI listing, or the same job worded differently).
+#   1. OPI posting at a district we scrape that is the same opening as a
+#      specific posting on its board (match_opi_postings(), opi_matcher.R)
+#      -> not a separate row; the board posting is flagged Also_On_OPI.
+#   2. OPI posting at a district we scrape with no matching board posting ->
+#      counted (decided posting by posting, user's rule 2026-11-03: many
+#      districts post certified jobs only on OPI); listed in the QC report.
+#   OPI's own repeat listings of one job (same district, same description)
+#   count once.
 #   3. OPI posting at a real public district we don't scrape -> counted,
 #      labeled with that district (one map entity per town), and listed as an
 #      adoption candidate (a direct scrape to set up).
@@ -30,6 +36,10 @@
 suppressMessages({
   library(dplyr)
 })
+# The posting-level matcher (opi_matcher.R).
+if (!exists("match_opi_postings", mode = "function")) {
+  source(if (file.exists("opi_matcher.R")) "opi_matcher.R" else here::here("opi_matcher.R"))
+}
 
 # Data_Coverage label of the OPI-only map entities (app.R shows it as the
 # popup badge and in the District Summary's "Posting Data" column).
@@ -186,30 +196,22 @@ opi_listing_is_stale <- function(date_posted, today, days = 60) {
   !is.na(d) & d < (as.Date(today) - days)
 }
 
-# Pairs OPI rows with direct rows of the same district, position and subject
-# (one-to-one, in row order). Returns, for each OPI row, the index of its
-# direct match in direct_df or NA.
-match_opi_to_direct <- function(opi_df, registry_district, direct_df) {
-  opi_pos <- classify_k12_position(opi_df$title)
-  opi_subj <- classify_k12_subject(opi_df$title)
-  dir_pos <- classify_k12_position(direct_df$title)
-  dir_subj <- classify_k12_subject(direct_df$title)
-  used <- rep(FALSE, nrow(direct_df))
-  out <- rep(NA_integer_, nrow(opi_df))
-  for (i in seq_len(nrow(opi_df))) {
-    if (is.na(registry_district[i])) next
-    # "Other"/"Uncategorized" says nothing about the job, so it can't show
-    # two postings are the same one.
-    if (opi_pos[i] %in% c("Other", NA) && opi_subj[i] %in% c("Uncategorized", NA)) next
-    cand <- which(!used & direct_df$District == registry_district[i] &
-                    dir_pos == opi_pos[i] & dir_subj == opi_subj[i])
-    if (length(cand) > 0) {
-      out[i] <- cand[1]
-      used[cand[1]] <- TRUE
-    }
-  }
+# TRUE for an OPI row that repeats an earlier row's job: same entity (district /
+# map entity / employer) and the same description (first 300 characters of
+# its letters and digits). Rows without a description (archives before
+# 2026-11-03) are never collapsed, since two real openings can share a title
+# and date.
+opi_duplicate_listing <- function(opi_df, entity) {
+  d <- if ("OPI_Description" %in% names(opi_df)) as.character(opi_df$OPI_Description) else rep(NA_character_, nrow(opi_df))
+  # Letters and digits only: OPI's repeat listings differ in stray
+  # punctuation ("PE teacher. We may" vs "PE teacher We may", Richey).
+  key <- substr(gsub(" +", " ", trimws(gsub("[^a-z0-9]+", " ", tolower(d)))), 1, 300)
+  has <- !is.na(d) & nchar(key) >= 40
+  out <- rep(FALSE, nrow(opi_df))
+  out[has] <- duplicated(paste(entity, key)[has])
   out
 }
+
 
 # Applies the rule above to one week. Returns:
 #   opi_keep  -- OPI rows that count (cases 3, 4, non-district employers),
@@ -246,14 +248,29 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   # weeks (stale_fallback = FALSE, opi_rule_for_archive()): judged against
   # today's registry, an old week's "empty scrape" is mostly a district not
   # adopted yet, whose spring postings were still open in August.
-  fallback <- scraped & !(a$Registry_District %in% direct_active) & !(stale & stale_fallback)
-  covered <- scraped & !fallback
+  active <- scraped & a$Registry_District %in% direct_active
+  empty_board <- scraped & !active
+  # OPI lists one job more than once (elementary and high-school district,
+  # two schools): same district, same description -> one posting.
+  dup <- opi_duplicate_listing(opi_df, ifelse(!is.na(a$Map_Entity), a$Map_Entity, as.character(opi_df$District)))
 
+  # Posting by posting (user's rule, 2026-11-03): at a district whose board
+  # returned postings, an OPI posting is dropped only when it is the same
+  # opening as a specific board posting (match_opi_postings(),
+  # opi_matcher.R); every other OPI posting counts.
   m <- rep(NA_integer_, nrow(opi_df))
-  if (any(covered)) m[covered] <- match_opi_to_direct(opi_df[covered, , drop = FALSE], a$Registry_District[covered], direct_df)
+  if (any(active & !dup)) {
+    idx <- which(active & !dup)
+    m[idx] <- match_opi_postings(opi_df[idx, , drop = FALSE], a$Registry_District[idx], direct_df)
+  }
   direct_df$Also_On_OPI[m[!is.na(m)]] <- TRUE
+  matched <- !is.na(m)
+  stale_empty <- empty_board & stale & stale_fallback
+  covered <- dup | matched | stale_empty          # not counted
+  fallback <- empty_board & !covered               # counted: the board was empty
+  unmatched <- active & !covered                   # counted: not on the district's board
 
-  qc_rows <- (covered & is.na(m)) | fallback
+  qc_rows <- unmatched | fallback | stale_empty
   qc <- if (any(qc_rows)) {
     data.frame(District = a$Registry_District[qc_rows],
                OPI_District = if ("OPI_District" %in% names(opi_df)) as.character(opi_df$OPI_District[qc_rows]) else NA_character_,
@@ -262,21 +279,26 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
                Location = as.character(opi_df$location[qc_rows]),
                Discrepancy_Type = ifelse(fallback[qc_rows],
                                          "Direct scrape returned no postings; OPI used instead (check the scraper)",
-                                         ifelse(stale[qc_rows],
-                                                "Potential ghost posting on OPI (posted over 60 days ago)",
-                                                "On OPI, no matching posting on our scrape (scraper miss, stale OPI listing, or worded differently)")),
+                                         ifelse(stale_empty[qc_rows],
+                                                "Potential ghost posting on OPI (posted over 60 days ago; our scrape returned nothing, not used)",
+                                                ifelse(stale[qc_rows],
+                                                       "On OPI, not on our scrape, counted from OPI (posted over 60 days ago)",
+                                                       "On OPI, not on our scrape, counted from OPI (scraper miss or posted only on OPI)"))),
                Detected_Date = as.character(today), stringsAsFactors = FALSE)
   } else empty_qc
 
   keep <- !covered
   opi_dropped <- opi_df[covered, , drop = FALSE]
-  opi_dropped$District <- a$Registry_District[covered]
+  opi_dropped$District <- ifelse(!is.na(a$Registry_District), a$Registry_District,
+                                 ifelse(!is.na(a$Map_Entity), a$Map_Entity, as.character(opi_df$District)))[covered]
+  opi_dropped$OPI_Drop_Reason <- ifelse(dup, "OPI duplicate listing", ifelse(matched, "same opening on district board",
+                                        "stale OPI listing, district board empty"))[covered]
   opi_dropped$Also_On_OPI <- rep(FALSE, nrow(opi_dropped))
   opi_keep <- opi_df[keep, , drop = FALSE]
-  label <- ifelse(!is.na(a$Map_Entity), a$Map_Entity,
+  label <- ifelse(!is.na(a$Registry_District), a$Registry_District, ifelse(!is.na(a$Map_Entity), a$Map_Entity,
                   ifelse("OPI_District" %in% names(opi_df) & !is.na(a$Assign_Method) & a$Assign_Method == "OPI district (not a CCD district)",
                          if ("OPI_District" %in% names(opi_df)) trimws(as.character(opi_df$OPI_District)) else NA_character_,
-                         as.character(opi_df$District)))
+                         as.character(opi_df$District))))
   opi_keep$District <- label[keep]
   opi_keep$Also_On_OPI <- rep(FALSE, nrow(opi_keep))
 
@@ -305,7 +327,7 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
 # Archives written since this rule shipped carry OPI_Counted and their
 # Districts already; older ones are reconciled here (by town before
 # 2026-11-01, when OPI_District started).
-opi_rule_for_archive <- function(archive_df, crosswalk, registry) {
+opi_rule_for_archive <- function(archive_df, crosswalk, registry, recompute = FALSE) {
   is_opi <- if ("Posting_Source" %in% names(archive_df)) {
     grepl("^OPI ", archive_df$Posting_Source) | is_opi_statewide_posting(archive_df$url)
   } else {
@@ -314,7 +336,7 @@ opi_rule_for_archive <- function(archive_df, crosswalk, registry) {
   is_opi[is.na(is_opi)] <- FALSE
   out <- data.frame(Posting_ID = archive_df$Posting_ID, Is_OPI = is_opi, Counted = TRUE,
                     District = as.character(archive_df$District), stringsAsFactors = FALSE)
-  if ("OPI_Counted" %in% names(archive_df)) {
+  if ("OPI_Counted" %in% names(archive_df) && !recompute) {
     out$Counted <- !(archive_df$OPI_Counted %in% c(FALSE, "FALSE"))
     return(out)
   }
@@ -489,7 +511,7 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
   md <- character(0)
   if (!is.null(qc) && nrow(qc) > 0) {
     fallback <- qc[grepl("returned no postings", qc$Discrepancy_Type), , drop = FALSE]
-    unmatched <- qc[grepl("no matching posting", qc$Discrepancy_Type), , drop = FALSE]
+    unmatched <- qc[grepl("counted from OPI", qc$Discrepancy_Type) & !grepl("over 60 days", qc$Discrepancy_Type), , drop = FALSE]
     ghosts <- qc[grepl("ghost", qc$Discrepancy_Type), , drop = FALSE]
     if (nrow(fallback) > 0) {
       fb <- sort(table(fallback$District), decreasing = TRUE)
@@ -499,16 +521,19 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
     if (nrow(unmatched) > 0) {
       by_d <- sort(table(unmatched$District), decreasing = TRUE)
       shown <- head(by_d, max_districts)
-      md <- c(md, "#### On OPI but not found on our scrape (possible scraper misses)", "",
-              sprintf("%d OPI posting%s at %d district%s we scrape matched none of our postings (same position and subject). Not counted. Districts with the most:",
-                      nrow(unmatched), ifelse(nrow(unmatched) == 1, "", "s"), length(by_d), ifelse(length(by_d) == 1, "", "s")), "")
+      md <- c(md, "#### On OPI but not on our scrape (counted from OPI; possible scraper misses)", "",
+              sprintf("%d OPI posting%s at %d district%s we scrape matched no posting on that district's own board, so %s counted from OPI. A district that keeps appearing here either posts some jobs only on OPI or has a scraper missing postings. Districts with the most:",
+                      nrow(unmatched), ifelse(nrow(unmatched) == 1, "", "s"), length(by_d), ifelse(length(by_d) == 1, "", "s"),
+                      ifelse(nrow(unmatched) == 1, "it was", "they were")), "")
       for (d in names(shown)) {
         titles <- unique(unmatched$Title[unmatched$District == d])
         md <- c(md, sprintf("- **%s** (%d): %s%s", d, as.integer(shown[[d]]), paste(head(titles, 4), collapse = "; "),
                             if (length(titles) > 4) "; ..." else ""))
       }
       if (length(by_d) > max_districts) md <- c(md, sprintf("- ... and %d more districts", length(by_d) - max_districts))
-      if (nrow(ghosts) > 0) md <- c(md, "", sprintf("(%d more were posted over 60 days ago on OPI: likely stale listings, not listed.)", nrow(ghosts)))
+      old <- sum(grepl("counted from OPI", qc$Discrepancy_Type) & grepl("over 60 days", qc$Discrepancy_Type))
+      if (old > 0) md <- c(md, "", sprintf("(%d more, also counted, were posted on OPI over 60 days ago.)", old))
+      if (nrow(ghosts) > 0) md <- c(md, sprintf("(%d old OPI listings at districts whose board was empty were not used.)", nrow(ghosts)))
       md <- c(md, "")
     }
   }

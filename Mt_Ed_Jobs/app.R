@@ -1136,8 +1136,9 @@ ui <- page_navbar(
       tags$p(
         "The K-12 Jobs Table combines postings from ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE),
         " directly tracked district boards with Montana OPI's statewide Jobs for Teachers feed. ",
-        "Our own scrape of a district always wins: an OPI posting at a district we track is never counted next to it ",
-        "(one OPI also lists is marked \u201calso on OPI\u201d); OPI fills in for districts we don't track and for a week our scrape of a district comes back empty."
+        "A job on both counts once: an OPI posting is checked, posting by posting, against the district's own board, and one that is the same opening ",
+        "isn't counted again (the district's posting is marked \u201calso on OPI\u201d). OPI postings the district's board doesn't list count from OPI \u2014 ",
+        "many districts post their teaching jobs only there \u2014 as do OPI postings for districts we don't track."
       ),
       tags$p(
         "OPI is a valuable statewide source, but its publication rules and coverage have not been independently verified as a complete census of Montana vacancies. ",
@@ -1326,6 +1327,14 @@ ui <- page_navbar(
     ),
     nav_panel(
       "Trends", value = "k12_trends", icon = icon("chart-line"),
+      # Method note (2026-11-03): how OPI postings are de-duplicated against
+      # district boards (opi_reconcile.R, scripts/reconcile_opi_history.R).
+      div(class = "alert alert-info small mb-2", role = "note",
+          tags$strong("How postings are counted: "),
+          "a job listed on both a district's own board and Montana OPI's statewide board counts once. ",
+          "Since November 3, 2026 each OPI posting is checked against the district's board using its description; ",
+          "earlier weeks were recomputed the same way but from OPI's subject titles alone, so they may include roughly 30 ",
+          "postings a week that OPI listed twice."),
       navset_card_tab(
         id = "k12_trends_tabs",
         nav_panel(

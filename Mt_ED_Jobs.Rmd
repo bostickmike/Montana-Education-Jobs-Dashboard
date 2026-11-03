@@ -3056,7 +3056,9 @@ opi_raw <- safe_scrape(
 # fetch_opi_statewide_postings()); a failed scrape's placeholder has neither.
 opi_df <- ensure_posted_pay_columns(opi_raw)
 if (!"OPI_District" %in% names(opi_df)) opi_df$OPI_District <- rep(NA_character_, nrow(opi_df))
-if (!"OPI_Website" %in% names(opi_df)) opi_df$OPI_Website <- rep(NA_character_, nrow(opi_df))
+for (col in c("OPI_Website", "OPI_School", "OPI_Description")) {
+  if (!col %in% names(opi_df)) opi_df[[col]] <- rep(NA_character_, nrow(opi_df))
+}
 if (nrow(opi_df) > 0) {
   # District is NOT a canonical legal district name here -- OPI's feed only
   # exposes a City column, so District is that raw City value passed
@@ -3067,13 +3069,13 @@ if (nrow(opi_df) > 0) {
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District = Location,
               Posting_Source = "OPI Jobs for Teachers (statewide)",
-              Pay_Min, Pay_Max, Pay_Unit, Pay_Text, OPI_District, OPI_Website)
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text, OPI_District, OPI_Website, OPI_School, OPI_Description)
 } else {
   opi_df <- ensure_posted_pay_columns(
     data.frame(title = character(0), date_posted = character(0), position = character(0),
                location = character(0), url = character(0), District = character(0),
                Posting_Source = character(0), OPI_District = character(0),
-               OPI_Website = character(0)))
+               OPI_Website = character(0), OPI_School = character(0), OPI_Description = character(0)))
 }
 ```
 
@@ -3330,11 +3332,12 @@ direct_dfs <- list(
 )
 direct_dfs <- lapply(direct_dfs, standardize_df_date)
 direct_df <- bind_rows(direct_dfs)
-# OPI vs. our direct scrapes (opi_reconcile.R): the direct scrape wins.
-# OPI postings at a district we scrape are never counted next to it; those
-# that match a direct posting flag it Also_On_OPI, the rest go to the QC
-# report. OPI fills in for a district whose scrape returned nothing, and
-# for districts we don't scrape (adoption candidates).
+# OPI vs. our direct scrapes (opi_reconcile.R), posting by posting: an OPI
+# posting that is the same opening as a posting on its district's board isn't
+# counted (the board posting gets Also_On_OPI); every other OPI posting counts
+# and is listed in the QC report. OPI's repeat listings of one job count once.
+# The raw archive keeps every OPI row (OPI_Counted, OPI_Drop_Reason,
+# OPI_School, OPI_Description).
 opi_rec <- reconcile_opi_with_direct(opi_df, direct_df, district_crosswalk, registry)
 write.csv(opi_rec$qc, "mt_discrepancy_report.csv", row.names = FALSE)
 adoption <- opi_rec$adoption
