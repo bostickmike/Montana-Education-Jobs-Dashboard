@@ -10,6 +10,12 @@ on:
     - cron: '0 13 * * 2'
   workflow_dispatch: {}
 
+# One weekly run at a time: on 2026-11-03 a scheduled run that GitHub started
+# ~7 hours late overlapped a manual run. A second run waits for the first.
+concurrency:
+  group: weekly-scrape
+  cancel-in-progress: false
+
 permissions:
   contents: write
   issues: write
@@ -310,5 +316,15 @@ jobs:
             echo "No data changes this run -- nothing to commit."
           else
             git commit -m "Automated weekly data refresh ($(date -u +%Y-%m-%d))"
-            git push
+            # A code commit can land on main while the run works (2026-11-03: the
+            # finished run's push was rejected). Rebase this data commit onto it;
+            # a conflict (someone else changed the same data files) still fails
+            # the step, rather than merging data silently.
+            pushed=false
+            for attempt in 1 2 3; do
+              if git pull --rebase origin main && git push; then pushed=true; break; fi
+              git rebase --abort 2>/dev/null || true
+              sleep 15
+            done
+            if [ "$pushed" != "true" ]; then echo "Push failed after 3 attempts"; exit 1; fi
           fi
