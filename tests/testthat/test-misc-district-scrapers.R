@@ -4938,3 +4938,38 @@ test_that("k12_district_coverage_tiers against the real registry only ever retur
   expect_true(nrow(tiers) > 0)
   expect_true(nrow(tiers) < nrow(registry))
 })
+
+# Real fixture captured 2026-11-02 from rollontigers.org's Current Openings
+# page (Finalsite). Manhattan was registered as Tyler Portico, whose tenant
+# is only a staff self-service portal with an empty Positions list.
+manhattan_fixture <- function() {
+  paste(readLines(test_path("fixtures", "manhattan_current-openings_2026-11-02.html"), warn = FALSE, encoding = "UTF-8"),
+        collapse = "\n")
+}
+
+test_that("parse_manhattan_postings reads the 11 real postings, one PDF link each, without the application forms", {
+  url <- "https://www.rollontigers.org/district/employment/current-openings"
+  result <- parse_manhattan_postings(manhattan_fixture(), url)
+  expect_equal(nrow(result), 11)
+  expect_equal(result$Title, c(
+    "Long-Term Substitute Teacher: Elementary", "Swing Shift Custodian", "Part-time Swing Shift Custodian",
+    "Kitchen Aide-Cafeteria Assistant", "Part-Time Kitchen Aide", "SPED Paraprofessional MS- Part-Time",
+    "ASL Intervener", "ASL Interpreter", "SPED Paraprofessional Elementary",
+    "Weekend Events: Maintenance and Custodial", "HS Assistant Wrestling Coach"))
+  expect_false(any(grepl("Application Form|Substitute Teachers", result$Title)))
+  expect_true(all(grepl("^https://www\\.rollontigers\\.org/fs/resource-manager/view/[0-9a-f-]{36}$", result$Link)))
+  expect_false(any(duplicated(result$Link)))
+  expect_true(all(result$Location == "Manhattan"))
+})
+
+test_that("parse_manhattan_postings returns zero rows (not an error) on a page without the openings headings", {
+  expect_equal(nrow(parse_manhattan_postings("<html><body><p>No openings</p></body></html>", "url")), 0)
+})
+
+test_that("fetch_manhattan_postings fetches and parses a live-shaped response", {
+  fixture <- manhattan_fixture()
+  httr2::local_mocked_responses(
+    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
+  )
+  expect_equal(nrow(fetch_manhattan_postings()), 11)
+})

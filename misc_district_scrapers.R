@@ -4031,6 +4031,44 @@ fetch_thompsonfalls_postings <- function(url = "https://www.thompsonfalls.net/em
   parse_thompsonfalls_postings(resp_body_string(resp), url)
 }
 
+# Manhattan School District #3 (rollontigers.org) -- Finalsite, a plain
+# httr2 fetch. Was registered as Tyler Portico (manhattanpublicschoolsmt)
+# until 2026-11-02, but that tenant is only the staff self-service portal:
+# its Positions API answers 200 with an empty list, so every run since
+# August returned 0 while OPI listed Manhattan openings. The district posts
+# them on its own "Current Openings" page instead: one link per posting
+# (a PDF at /fs/resource-manager/view/<uuid>, a real per-posting URL)
+# under CERTIFIED / CLASSIFIED / COACHING POSITIONS headings, in the same
+# content blocks as the "Certified/Classified Application Form" links,
+# which are dropped. The standing "Always Accepting Applications For
+# Substitute..." list is plain text, not a posting, and isn't read.
+# Confirmed live 2026-11-02: 11 postings.
+parse_manhattan_postings <- function(html_text, url) {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  page <- rvest::read_html(html_text)
+  blocks <- rvest::html_elements(page, xpath = paste0(
+    "//div[contains(@class,'fsElementContent')]",
+    "[.//h3[contains(translate(normalize-space(.), 'positions', 'POSITIONS'), 'POSITIONS')]]"))
+  if (length(blocks) == 0) return(empty)
+  links <- rvest::html_elements(blocks, "a[href*='/fs/resource-manager/view/']")
+  titles <- trimws(gsub("\\s+", " ", rvest::html_text2(links)))
+  hrefs <- xml2::url_absolute(rvest::html_attr(links, "href"), url)
+  keep <- nzchar(titles) & !grepl("application form|^application$", titles, ignore.case = TRUE)
+  if (!any(keep)) return(empty)
+  out <- data.frame(Title = titles[keep], Location = "Manhattan", Posted_Date = NA_character_,
+                    Link = hrefs[keep], stringsAsFactors = FALSE)
+  out[!duplicated(out$Link), , drop = FALSE]
+}
+
+fetch_manhattan_postings <- function(url = "https://www.rollontigers.org/district/employment/current-openings") {
+  resp <- request(url) %>%
+    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    perform_with_retry()
+  parse_manhattan_postings(resp_body_string(resp), url)
+}
+
 # Centerville Public Schools (centerville.k12.mt.us, serving Sand Coulee)
 # -- found in the same follow-up pass. Older innerText-rendering Apptegy
 # template. Real postings are a genuinely flat, single-category list
