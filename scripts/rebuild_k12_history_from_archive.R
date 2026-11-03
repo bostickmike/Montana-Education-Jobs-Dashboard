@@ -25,7 +25,9 @@
 
 suppressMessages(library(dplyr))
 
-rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data") {
+rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
+                                             crosswalk_path = file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv"),
+                                             registry_path = "k12_district_registry.csv") {
   csv_files <- list.files(archive_dir, pattern = "\\.csv$", full.names = TRUE)
   if (length(csv_files) == 0) {
     stop("rebuild_k12_history_from_archive(): no archive files found in ", archive_dir)
@@ -46,6 +48,24 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data") {
                   normalize_posting_text)) %>%
     add_k12_posting_identity() %>%
     distinct(Posting_ID, Archive_Date, .keep_all = TRUE)
+
+  # OPI vs. direct scrapes (opi_reconcile.R): per week, OPI postings at a
+  # district we scrape aren't counted, and counted ones carry their district
+  # label -- what the pipeline does before writing combinedclean.csv.
+  if (!file.exists(crosswalk_path) || !file.exists(registry_path)) {
+    message("No district crosswalk/registry at ", crosswalk_path, " -- OPI rows rebuilt as archived, not reconciled.")
+  } else {
+  crosswalk <- read.csv(crosswalk_path, stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
+  registry <- read.csv(registry_path, stringsAsFactors = FALSE)
+  combined_k12_data <- combined_k12_data %>%
+    group_split(Archive_Date) %>%
+    lapply(function(week) {
+      rule <- opi_rule_for_archive(week, crosswalk, registry)
+      week$District <- rule$District
+      week[rule$Counted, , drop = FALSE]
+    }) %>%
+    bind_rows()
+  }
 
   combinedclean <- combined_k12_data %>%
     filter(!is_placeholder_posting(title)) %>%
@@ -102,6 +122,7 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data") {
 # top-level statements run at sys.nframe() == 0.
 if (sys.nframe() == 0) {
   source("k12_he_classification.R")
+  source("opi_reconcile.R")
   result <- rebuild_k12_history_from_archive()
 
   write.csv(result$combinedclean, file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)

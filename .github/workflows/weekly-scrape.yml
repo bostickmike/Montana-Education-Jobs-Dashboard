@@ -181,6 +181,14 @@ jobs:
         continue-on-error: true
         run: Rscript .github/scripts/check_pay_coverage.R
 
+      # OPI vs. our scrapes (opi_reconcile.R): districts where OPI lists jobs
+      # our scrape didn't find, scrapes that came back empty, and districts
+      # we don't scrape that posted on OPI. Same non-blocking shape.
+      - name: OPI cross-check (possible scraper misses, adoption candidates)
+        id: check_opi_crosscheck
+        continue-on-error: true
+        run: Rscript .github/scripts/check_opi_crosscheck.R
+
       # Closes the one real gap continue-on-error opens up: a bug that
       # CRASHES one of the three monitoring steps above is indistinguishable
       # from "ran fine, found nothing to report" unless something checks for
@@ -193,6 +201,7 @@ jobs:
           [ "${{ steps.check_salary_drift.outcome }}" = "failure" ] && FAILED="$FAILED check_salary_drift.R"
           [ "${{ steps.check_census_drift.outcome }}" = "failure" ] && FAILED="$FAILED check_census_drift.R"
           [ "${{ steps.check_pay_coverage.outcome }}" = "failure" ] && FAILED="$FAILED check_pay_coverage.R"
+          [ "${{ steps.check_opi_crosscheck.outcome }}" = "failure" ] && FAILED="$FAILED check_opi_crosscheck.R"
 
           if [ -z "$FAILED" ]; then
             echo "All monitoring steps ran without crashing."
@@ -274,6 +283,8 @@ jobs:
             Mt_Ed_Jobs/ipeds_staff_salaries.csv \
             Mt_Ed_Jobs/qcew_county_school_pay.csv \
             Mt_Ed_Jobs/opi_district_counties.csv \
+            Mt_Ed_Jobs/mt_district_crosswalk.csv \
+            Mt_Ed_Jobs/opi_only_districts.csv \
             Mt_Ed_Jobs/allsum.csv \
             Mt_Ed_Jobs/allnow.csv \
             Mt_Ed_Jobs/allsum_he.csv \

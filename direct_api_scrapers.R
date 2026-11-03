@@ -546,6 +546,7 @@ fetch_opi_statewide_postings <- function(
   if (!fetch_details) return(out)
   out <- ensure_posted_pay_columns(out)
   if (!"OPI_District" %in% names(out)) out$OPI_District <- rep(NA_character_, nrow(out))
+  if (!"OPI_Website" %in% names(out)) out$OPI_Website <- rep(NA_character_, nrow(out))
   out
 }
 
@@ -562,7 +563,8 @@ opi_detail_targets <- function(html_text) {
 # postback each.
 fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
   fields <- extract_aspnet_postback_fields(html_text)
-  none <- function() cbind(extract_posted_pay(NA_character_), OPI_District = NA_character_)
+  none <- function() cbind(extract_posted_pay(NA_character_), OPI_District = NA_character_,
+                           OPI_Website = NA_character_)
   dplyr::bind_rows(lapply(opi_detail_targets(html_text), function(target) {
     if (Sys.time() > deadline) return(none())
     Sys.sleep(delay)
@@ -573,7 +575,8 @@ fetch_opi_page_details <- function(html_text, url, jar, deadline, delay) {
       resp <- do.call(req_body_form, c(list(request(url) %>% req_cookie_preserve(jar)), f)) %>%
         perform_with_retry()
       details <- parse_opi_job_details(resp_body_string(resp))
-      cbind(extract_posted_pay(details$Description), OPI_District = details$District_Name)
+      cbind(extract_posted_pay(details$Description), OPI_District = details$District_Name,
+            OPI_Website = details$Website)
     }, error = function(e) none())
   }))
 }
@@ -593,9 +596,14 @@ parse_opi_job_details <- function(html_text) {
   raw <- text_of("#txtJobDescription")
   description <- if (is.na(raw) || !nzchar(raw)) NA_character_ else
     rvest::html_text2(rvest::read_html(paste0("<div>", raw, "</div>")))
+  # The employer's own website (lnkWebSite), shown as text; OPI's href
+  # prepends a second scheme to values that already have one, so the text
+  # is used.
+  website <- text_of("#ctl00_ContentPlaceHolder1_lnkWebSite")
+  if (!is.na(website) && !nzchar(website)) website <- NA_character_
   data.frame(District_Name = text_of("#ctl00_ContentPlaceHolder1_lblDistrict"),
              School = text_of("#ctl00_ContentPlaceHolder1_lblSchool"),
-             Description = description, stringsAsFactors = FALSE)
+             Description = description, Website = website, stringsAsFactors = FALSE)
 }
 
 # The grid has no District column (only City) despite a District filter

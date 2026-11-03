@@ -254,7 +254,11 @@ test_that("Data_Coverage is carried through to combined_map_data, Full for real-
   k12 <- env$combined_map_data[env$combined_map_data$Type == "K-12 District", ]
   skip_if(nrow(k12) == 0, "no K-12 rows in committed data -- skipping")
   expect_false(any(is.na(k12$Data_Coverage)))
-  expect_true(all(k12$Data_Coverage %in% c("Full", "Partial")))
+  # Districts we don't scrape that posted on OPI (opi_only_districts.csv)
+  # carry their own label instead.
+  expect_true(all(k12$Data_Coverage %in% c("Full", "Partial", env$OPI_ONLY_COVERAGE)))
+  opi_only <- k12[k12$Data_Coverage == env$OPI_ONLY_COVERAGE, ]
+  expect_false(any(opi_only$Name %in% read.csv(here::here("k12_district_registry.csv"))$District))
 
   he <- env$combined_map_data[env$combined_map_data$Type == "Higher Ed Institution", ]
   skip_if(nrow(he) == 0, "no HE rows in committed data -- skipping")
@@ -688,3 +692,4 @@ test_that("map popup 'View matching jobs' carries the map search to the Jobs tab
     expect_null(selected_k12_query())
   })
 })
+

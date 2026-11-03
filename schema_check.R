@@ -10,7 +10,7 @@
 # reads it yet (same as Wyoming's own equivalent file).
 REQUIRED_SCHEMAS <- list(
   "combinedclean.csv" = c("title", "date_posted", "position", "location", "url", "District",
-                          "Posting_Source", "Posting_Identity_Method", "Posting_ID",
+                          "Posting_Source", "Posting_Identity_Method", "Posting_ID", "Also_On_OPI",
                           "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
                           "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year"),
   "k12jobanalysis.csv" = c("title", "Archive_Date", "location", "District",
@@ -45,7 +45,13 @@ REQUIRED_SCHEMAS <- list(
   # between runs, refreshed through write_reference_file()).
   "oews_role_wages.csv" = c("Area_Code", "Area_Name", "SOC", "Occupation", "Annual_Median", "Hourly_Median", "Year"),
   "ipeds_staff_salaries.csv" = c("IPEDS_UNITID", "Staff_Category", "Category_Label", "Avg_Salary", "Year"),
-  "opi_district_counties.csv" = c("OPI_District", "County")
+  "opi_district_counties.csv" = c("OPI_District", "County"),
+  # opi_reconcile.R: every public district -> registry district / OPI-only
+  # map entity, and the OPI-only entities' map rows.
+  "mt_district_crosswalk.csv" = c("LEAID", "OPI_District", "City", "County", "Latitude", "Longitude",
+                                  "Registry_District", "Match_Rule", "Map_Entity", "CCD_Year"),
+  "opi_only_districts.csv" = c("District", "County", "Latitude", "Longitude", "Job_Link",
+                               "Teachers_Total_FTE", "Enrollment", "Data_Coverage")
 )
 
 REQUIRED_SCHEMAS_XLSX <- list(

@@ -104,6 +104,14 @@ test_that("parse_opi_job_details reads the district and the description's text",
   expect_equal(extract_posted_pay(d$Description)$Pay_Min, 39281)
 })
 
+test_that("parse_opi_job_details keeps the employer's website as OPI shows it", {
+  # OPI's href prepends a second scheme to values that already have one, so the text is used.
+  expect_equal(parse_opi_job_details(opi_fixture("opi_job_details_lockwood_2026-10-31.html"))$Website,
+               "www.lockwoodschool.org")
+  expect_equal(parse_opi_job_details(opi_fixture("opi_job_details_richey_2026-10-31.html"))$Website,
+               "https://www.richey.k12.mt.us/")
+})
+
 test_that("a district housing rent in an OPI description is not read as pay", {
   d <- parse_opi_job_details(opi_fixture("opi_job_details_richey_2026-10-31.html"))
   expect_match(d$Description, "$350 per month", fixed = TRUE)

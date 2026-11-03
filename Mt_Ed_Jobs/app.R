@@ -164,7 +164,7 @@ combineddata <- read.csv("combinedclean.csv", fileEncoding = "UTF-8")
 # pipeline captured pay) -- padded here rather than in validate_and_pad_schema(),
 # which would flag their absence as a schema problem on the Home tab.
 # The BLS estimate columns (Est_*) are optional the same way.
-for (col in c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
+for (col in c("OPI_District", "Also_On_OPI", "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
               "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")) {
   if (!col %in% names(combineddata)) combineddata[[col]] <- NA
 }
@@ -176,7 +176,9 @@ combineddata <- combineddata %>%
   mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit),
          `Typical pay (BLS est.)` = format_bls_estimate(Est_Pay, Est_Pay_Unit, Est_Occupation, Est_Area, !is.na(Pay_Min))) %>%
   select(District, title, position, location, `Posted Pay`, `Typical pay (BLS est.)`, date_posted, url,
-         Posting_Source, Posting_Identity_Method, Posting_ID, Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit) %>%
+         Posting_Source, Posting_Identity_Method, Posting_ID, Also_On_OPI, Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit) %>%
+  # A direct posting OPI also lists (counted once, from our scrape).
+  mutate(Posting_Source = ifelse(Also_On_OPI %in% c(TRUE, "TRUE"), paste0(Posting_Source, " \u00b7 also on OPI"), Posting_Source)) %>%
   distinct(Posting_ID, .keep_all = TRUE) %>%
   mutate(District = str_squish(as.character(District))) %>%
   mutate(date_posted = format_posted_or_listed_date(date_posted)) %>%
@@ -214,192 +216,25 @@ mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
   rename(Name = District) %>%
   mutate(Finance_FY = as.character(Finance_FY))
 
-# City / municipality crosswalk for OPI Jobs for Teachers feed:
-# Maps raw location strings to canonical district names so salary benchmarks
-# can be joined onto statewide postings.
-OPI_LOCATION_TO_DISTRICT_MAP <- c(
-  "10 miles north of troy" = "Troy Public Schools",
-  "4 miles north of harlem" = "Harlem Public Schools",
-  "5 miles west of stanford" = "Stanford Public Schools",
-  "841 bear canyon road" = "Bozeman Public Schools",
-  "absarokee" = "Absarokee Public Schools",
-  "amsterdam" = "Amsterdam Elementary",
-  "anaconda" = "Anaconda School District #10",
-  "arlee" = "Arlee Joint School District",
-  "ashland" = "Ashland Public School",
-  "baker" = "Baker Public Schools",
-  "belfry" = "Belfry Public Schools",
-  "belgrade" = "Belgrade School District 44",
-  "belt" = "Belt Public Schools",
-  "big sandy" = "Big Sandy Public Schools",
-  "big sky" = "Big Sky School District 72",
-  "big timber" = "Sweet Grass County High School",
-  "big timber- between bozeman and billings" = "Sweet Grass County High School",
-  "bigfork" = "Swan River School District #4",
-  "billings" = "Billings Public Schools",
-  "billings - billings christian school" = "Billings Public Schools",
-  "billings-sd3" = "Billings Public Schools",
-  "billings, shepherd, worden, custer, hysham" = "Billings Public Schools",
-  "bonner" = "Bonner School District #14",
-  "boulder" = "Boulder Elementary",
-  "box elder" = "Box Elder Public Schools",
-  "bozeman" = "Bozeman Public Schools",
-  "bozeman area" = "Bozeman Public Schools",
-  "broadus" = "Broadus Public Schools",
-  "broadview" = "Broadview School District",
-  "browning" = "Browning Public Schools",
-  "butte" = "Butte School District 1",
-  "cardwell" = "Cardwell Elementary School",
-  "cascade" = "Cascade Public Schools",
-  "charlo" = "Charlo School District 7J",
-  "chester" = "Chester-Joplin-Inverness Public Schools",
-  "chinook" = "Chinook Public Schools",
-  "choteau" = "Choteau School District",
-  "clancy" = "Montana City Elementary",
-  "clancy/mt city" = "Montana City Elementary",
-  "clyde park" = "Shields Valley Public Schools",
-  "colstrip" = "Colstrip Public Schools",
-  "columbia falls" = "Columbia Falls School District 6",
-  "columbus" = "Columbus Public Schools",
-  "condon" = "Swan Valley School District #3",
-  "conrad" = "Conrad Public Schools",
-  "corvallis" = "Corvallis School District #1",
-  "culbertson" = "Culbertson Public Schools",
-  "custer" = "Custer Public Schools",
-  "cut bank" = "Cut Bank School District #15",
-  "darby" = "Darby School District 9",
-  "deer lodge" = "Deer Lodge School District #1",
-  "dillon" = "Dillon Elementary",
-  "drummond" = "Drummond Public Schools",
-  "dutton" = "Dutton/Brady Public School District",
-  "east helena" = "East Helena Public Schools",
-  "east of kalispell" = "Kalispell Public Schools",
-  "ekalaka" = "Ekalaka Public Schools",
-  "ennis" = "Ennis K-12 Schools",
-  "eureka" = "Lincoln County High School",
-  "fairfield" = "Fairfield Public Schools",
-  "fairview" = "Fairview Public Schools",
-  "florence" = "Florence-Carlton School District 15-6",
-  "forsyth" = "Forsyth Public Schools",
-  "fort benton" = "Fort Benton Public Schools",
-  "frazer" = "Frazer Public Schools",
-  "frenchtown" = "Frenchtown School District",
-  "froid" = "Froid Public Schools",
-  "gallatin gateway" = "Gallatin Gateway School",
-  "gardiner" = "Gardiner Public Schools",
-  "geraldine" = "Geraldine Public Schools",
-  "geyser" = "Geyser Public Schools",
-  "glasgow" = "Glasgow K-12 Schools",
-  "glendive" = "Glendive Public Schools",
-  "great falls" = "Great Falls Public Schools",
-  "hamilton" = "Hamilton School District 3",
-  "hardin" = "Hardin Public Schools",
-  "harlem" = "Harlem Public Schools",
-  "harrison" = "Harrison K-12 Schools",
-  "havre" = "Havre Public Schools",
-  "hays" = "Hays-Lodge Pole School District",
-  "helena" = "Helena Public Schools",
-  "hinsdale" = "Hinsdale Public Schools",
-  "hobson" = "Hobson Public School",
-  "huntley project" = "Huntley Project K-12 Schools",
-  "hysham" = "Hysham K-12 Schools",
-  "independent school - billings" = "Independent School",
-  "joliet" = "Joliet Public Schools",
-  "jordan" = "Jordan Public Schools",
-  "judith gap" = "Judith Gap Schools",
-  "kalispell" = "Kalispell Public Schools",
-  "lambert" = "Lambert Public Schools",
-  "lame deer" = "Lame Deer Public Schools",
-  "laurel" = "Laurel Public Schools",
-  "lewistown" = "Lewistown Public Schools",
-  "libby" = "Libby Public Schools",
-  "lima" = "Lima K-12 Schools",
-  "lincoln" = "Lincoln School District #38",
-  "livingston" = "Livingston Public Schools",
-  "lockwood" = "Lockwood Schools",
-  "lodge grass" = "Lodge Grass Public Schools",
-  "lolo" = "Lolo School District 7",
-  "lustre" = "Lustre Christian High School",
-  "malta" = "Malta Public Schools",
-  "manhattan" = "Manhattan School District",
-  "manhattan (amsterdam)" = "Amsterdam Elementary",
-  "marion" = "Pleasant Valley School District #27",
-  "mcleod" = "Sweet Grass County High School",
-  "medicine lake" = "Medicine Lake K-12 Schools",
-  "melville" = "Sweet Grass County High School",
-  "miles city" = "Miles City Unified School District 1",
-  "missoula" = "Missoula County Public Schools",
-  "montana city" = "Montana City Elementary",
-  "mosby" = "Winnett Public Schools",
-  "nashua" = "Nashua Public Schools",
-  "philipsburg" = "Philipsburg School District",
-  "plentywood" = "Plentywood Public Schools",
-  "plevna" = "Plevna School District #55",
-  "polson" = "Polson School District",
-  "poplar" = "Poplar Public Schools",
-  "pryor" = "Pryor Public Schools",
-  "red lodge" = "Red Lodge Public Schools",
-  "rocky boy" = "Rocky Boy Public Schools",
-  "rocky boy agency" = "Rocky Boy Public Schools",
-  "ronan" = "Ronan Public Schools",
-  "rosebud" = "Rosebud Public Schools",
-  "roundup" = "Roundup Public Schools",
-  "rudyard" = "North Star Public Schools",
-  "rudyard/gildford" = "North Star Public Schools",
-  "rural havre" = "Havre Public Schools",
-  "ryegate" = "Ryegate Public Schools",
-  "saint ignatius" = "St. Ignatius Public Schools",
-  "saint ignatius- salish teacher" = "St. Ignatius Public Schools",
-  "sand coulee" = "Centerville Public Schools",
-  "scobey" = "Scobey K-12 Schools",
-  "seeley lake" = "Seeley Lake Elementary #34",
-  "shelby" = "Shelby School District",
-  "shepherd" = "Shepherd School District #37",
-  "sheridan" = "Sheridan Public Schools",
-  "sidney" = "Sidney Public Schools",
-  "simms" = "Sun River Valley School District #24",
-  "st. regis" = "Superior School District",
-  "stanford" = "Stanford Public Schools",
-  "stevensville" = "Stevensville Public Schools",
-  "sunburst" = "Sunburst Schools",
-  "superior" = "Superior School District",
-  "swan river in bigfork" = "Swan River School District #4",
-  "ten minutes from missoula" = "Missoula County Public Schools",
-  "terry" = "Terry Public Schools",
-  "thompson falls" = "Thompson Falls Public Schools",
-  "three forks" = "Three Forks Public Schools",
-  "townsend" = "Townsend School District",
-  "trego" = "Trego School District 53",
-  "troy" = "Troy Public Schools",
-  "turner" = "Turner Public Schools",
-  "ulm" = "Cascade Public Schools",
-  "valley view/polson" = "Polson School District",
-  "victor" = "Victor School District",
-  "vida" = "Circle Public Schools",
-  "west yellowstone" = "West Yellowstone School District 69",
-  "westby" = "Westby School District 3",
-  "white sulphur springs" = "White Sulphur Springs Schools",
-  "whitefish" = "Whitefish School District",
-  "whitehall" = "Whitehall Public Schools",
-  "whitewater" = "Whitewater Public Schools",
-  "wibaux" = "Wibaux Public Schools",
-  "wilsall" = "Shields Valley Public Schools",
-  "winifred" = "Winifred Public Schools",
-  "wolf point" = "Wolf Point Public Schools",
-  "wyola" = "Wyola Public School"
-)
-
-resolve_k12_district <- function(loc) {
-  cleaned <- tolower(trimws(as.character(loc)))
-  cleaned <- sub(",\\s*mt\\.?", "", cleaned, ignore.case = TRUE)
-  cleaned <- sub(",\\s*montana\\.?", "", cleaned, ignore.case = TRUE)
-  cleaned <- sub("\\s+mt$", "", cleaned, ignore.case = TRUE)
-  cleaned <- sub("\\s+montana$", "", cleaned, ignore.case = TRUE)
-  cleaned <- trimws(cleaned)
-
-  matched <- OPI_LOCATION_TO_DISTRICT_MAP[cleaned]
-  ifelse(!is.na(matched), unname(matched), as.character(loc))
+# Districts we don't scrape whose postings come from OPI's statewide board
+# this week (opi_only_districts.csv, opi_reconcile.R): same context columns
+# where a statewide source covers them, Data_Coverage = OPI_ONLY_COVERAGE
+# (shown as the popup badge). Optional: absent before the first run that
+# writes it.
+OPI_ONLY_COVERAGE <- "Postings via OPI's statewide board"
+if (file.exists("opi_only_districts.csv")) {
+  opi_only_k12 <- read.csv("opi_only_districts.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE)
+  if (nrow(opi_only_k12) > 0) {
+    mapdata2_k12 <- bind_rows(
+      mapdata2_k12,
+      opi_only_k12 %>%
+        rename(Name = District) %>%
+        mutate(Finance_FY = as.character(Finance_FY), Data_Coverage = OPI_ONLY_COVERAGE) %>%
+        select(any_of(names(mapdata2_k12)))
+    )
+  }
 }
+
 
 # District salary lookup for the Jobs Table
 k12_salary_lookup <- mapdata2_k12 %>%
@@ -418,12 +253,9 @@ k12_salary_lookup <- mapdata2_k12 %>%
   )
 
 combineddata <- combineddata %>%
-  mutate(.salary_district = ifelse(
-    District %in% k12_salary_lookup$Name,
-    District,
-    resolve_k12_district(District)
-  )) %>%
-  left_join(k12_salary_lookup, by = c(".salary_district" = "Name")) %>%
+  # District is the registry district, an OPI-only district (pipeline,
+  # opi_reconcile.R) or a non-district employer (no salary row).
+  left_join(k12_salary_lookup, by = c("District" = "Name")) %>%
   # MT DLI publishes teacher compensation only, so these columns describe
   # teaching postings and stay blank on paraprofessional, bus driver, coach,
   # etc. rows rather than implying those jobs pay the teacher average.
@@ -458,14 +290,37 @@ data_dictionary <- if (file.exists("data_dictionary.csv")) {
              Data_Type = character(0), Primary_Authority = character(0), Definition = character(0))
 }
 
+# Listing-duration ("spells") tabs: the duration KPIs and charts are paused
+# (2026-11-02 audit, claude-notes/2026-11-02_spells-trust-audit.md). A spell
+# is a District + title's first-to-last week on our weekly scrapes, and most
+# spell endings and starts come from our own coverage (scrapers added, broken
+# or switched) rather than from hiring, so they can't be read as
+# time-to-fill. The table stays, labeled for what it is.
+spells_paused_note <- function(what) {
+  div(class = "alert alert-warning mb-3", role = "note",
+      tags$strong("Time-to-fill estimates are paused while we rebuild them. "),
+      paste0("This table shows how long each ", what, " stayed listed on the boards we track, from the first to the last ",
+             "week we saw it. That is not the same as time-to-fill: a posting can drop off because it was filled, ",
+             "cancelled, moved to another board, or because our collection missed that week, and many were already ",
+             "listed before we started tracking their board. \u201cNo longer listed\u201d means only that it no longer appears."))
+}
+SPELL_STATUS_LABELS <- c("Closed / Filled" = "No longer listed")
+relabel_spell_status <- function(df) {
+  if (nrow(df) > 0 && "Status" %in% names(df)) {
+    hit <- df$Status %in% names(SPELL_STATUS_LABELS)
+    df$Status[hit] <- SPELL_STATUS_LABELS[df$Status[hit]]
+  }
+  df
+}
+
 job_duration_spells <- if (file.exists("job_duration_spells.csv")) {
-  read.csv("job_duration_spells.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE)
+  relabel_spell_status(read.csv("job_duration_spells.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE))
 } else {
   data.frame()
 }
 
 he_job_duration_spells <- if (file.exists("he_job_duration_spells.csv")) {
-  read.csv("he_job_duration_spells.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE)
+  relabel_spell_status(read.csv("he_job_duration_spells.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE))
 } else {
   data.frame()
 }
@@ -1279,8 +1134,10 @@ ui <- page_navbar(
     dash_card(
       "Montana K-12 coverage", class = "border-warning",
       tags$p(
-        "The K-12 Jobs Table combines postings from ", n_distinct(map_k12$Name),
-        " directly tracked district boards with Montana OPI's statewide Jobs for Teachers feed."
+        "The K-12 Jobs Table combines postings from ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE),
+        " directly tracked district boards with Montana OPI's statewide Jobs for Teachers feed. ",
+        "Our own scrape of a district always wins: an OPI posting at a district we track is never counted next to it ",
+        "(one OPI also lists is marked \u201calso on OPI\u201d); OPI fills in for districts we don't track and for a week our scrape of a district comes back empty."
       ),
       tags$p(
         "OPI is a valuable statewide source, but its publication rules and coverage have not been independently verified as a complete census of Montana vacancies. ",
@@ -1288,8 +1145,8 @@ ui <- page_navbar(
       ),
       tags$p(
         class = "mb-0",
-        "The Map and District Summary intentionally cover only directly monitored districts, where postings can be matched to verified district identities, coordinates, staffing, and salary data. ",
-        "OPI-only rows remain in the Jobs Table; their source location is an employer/location label, not necessarily a canonical district."
+        "Districts we don't track appear on the Map and District Summary when they post on OPI, marked \u201c", OPI_ONLY_COVERAGE, "\u201d, with NCES location and staffing and the same salary, finance and Census context where those sources cover them. ",
+        "Private and tribal schools, co-ops and other employers outside the public district list stay in the Jobs Table only."
       )
     ),
     div(style = "color:#999; font-size:0.8em; padding: 0 5px 5px;",
@@ -1311,7 +1168,7 @@ ui <- page_navbar(
           "About this map",
           p("Only this project's ", n_distinct(map_k12$Name), " directly tracked K-12 districts and ",
             n_distinct(map_he$Name), " directly tracked Higher Ed institutions are shown here (with current openings)."),
-          p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies; OPI-only source locations are not canonical district identifiers and cannot be mapped reliably."),
+          p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies. OPI postings are matched to districts through the district each posting's OPI page names; districts we don't track are mapped from those postings."),
           p("Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table."),
           p("K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison."),
           p(class = "mb-0", "A red \"Partial\" badge means that district's postings come from an automated monitor of the district's own site rather than a structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-monitored district's count.")
@@ -1376,7 +1233,7 @@ ui <- page_navbar(
         div(class = "mb-2", uiOutput("map_filter_count")),
         withSpinner(leafletOutput("combined_map", height = 650)),
         p(class = "text-muted small mt-2 mb-0",
-          "Shows only the directly tracked districts and colleges, not OPI-only postings. Circle size = current openings; color = vacancy rate. ",
+          "Shows the directly tracked districts and colleges, plus districts we don't track that post on OPI this week (marked in their popup). Circle size = current openings; color = vacancy rate. ",
           "Click a marker to see its jobs.")
       )
     )
@@ -1414,7 +1271,7 @@ ui <- page_navbar(
         "Typical pay (BLS est.) fills in where the posting states none: the Bureau of Labor Statistics' ",
         if (!is.na(oews_year)) paste0("May ", oews_year, " ") else "",
         "median pay for that role in the posting's region (hover for the role and area; OEWS, all employers, not just schools), so treat it as a regional estimate, not this job's offer. "),
-        "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows use OPI's raw employer/location label."))),
+        "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows show the district named on the posting's OPI page; Location keeps OPI's raw city."))),
       DTOutput("k12_jobs", fill = FALSE)
     ),
     nav_panel(
@@ -1540,20 +1397,21 @@ ui <- page_navbar(
       )
     ),
     nav_panel(
-      "Time-to-Fill", value = "k12_spells", icon = icon("stopwatch"),
-      h3(class = "page-title", tagList(icon("stopwatch"), " K-12 Job Duration & Time-to-Fill")),
+      "Listing Duration", value = "k12_spells", icon = icon("stopwatch"),
+      h3(class = "page-title", tagList(icon("stopwatch"), " K-12 Listing Duration")),
       p(class = "text-muted small",
-        "Weekly tracking of posting duration and hiring speed. Measures time-to-fill and persistent vacancies across Montana school districts."),
+        "How long each K-12 posting stayed listed on the job boards this dashboard tracks."),
+      spells_paused_note("posting"),
       layout_sidebar(
         fillable = FALSE,
         class = "page-sidebar",
         sidebar = sidebar(
           title = "Filters",
           width = 260,
-          selectInput("k12_spell_status", "Vacancy status:",
+          selectInput("k12_spell_status", "Listing status:",
                       choices = c("All Postings" = "all",
                                   "Still Active (Open)" = "Still Active",
-                                  "Filled / Closed" = "Closed / Filled"),
+                                  "No longer listed" = "No longer listed"),
                       selected = "all"),
           selectInput("k12_spell_position", "Position group:",
                       choices = c("All Roles" = "all",
@@ -1574,27 +1432,15 @@ ui <- page_navbar(
                       choices = c("All Districts" = "all"),
                       selected = "all")
         ),
-        layout_columns(
-          col_widths = breakpoints(sm = c(6, 6, 6, 6), xl = c(3, 3, 3, 3)),
-          uiOutput("k12_spell_median_box", fill = TRUE),
-          uiOutput("k12_spell_active_box", fill = TRUE),
-          uiOutput("k12_spell_persistent_box", fill = TRUE),
-          uiOutput("k12_spell_hardest_box", fill = TRUE)
-        ),
-        layout_columns(
-          col_widths = breakpoints(sm = 12, lg = c(7, 5)),
-          dash_card("Median Days Open by Subject Category",
-                    withSpinner(plotlyOutput("k12_spell_duration_plot", height = "360px"))),
-          dash_card("Vacancy Duration Distribution",
-                    withSpinner(plotlyOutput("k12_spell_distrib_plot", height = "360px")))
-        ),
+        # Duration KPI boxes and charts paused (spells_paused_note()); their
+        # server outputs are kept for when the rebuilt spells return.
         card(
           card_header(
             class = "d-flex justify-content-between align-items-center",
-            "Job Duration & Time-to-Fill Explorer",
+            "Postings and how long they stayed listed",
             info_popover(
-              "How days open is estimated",
-              p(class = "mb-0", "Estimated Days Open represents the calendar duration between when a posting was first captured and when it disappeared from weekly updates (or weeks observed × 7).")
+              "How days listed is counted",
+              p(class = "mb-0", "Days listed = the span from the first to the last weekly scrape that showed the posting, plus 7 days. It starts when we first saw the posting (often after it was posted) and ends when it stopped appearing, whatever the reason.")
             )
           ),
           card_body(
@@ -1776,20 +1622,21 @@ ui <- page_navbar(
       )
     ),
     nav_panel(
-      "Time-to-Fill", value = "he_spells", icon = icon("stopwatch"),
-      h3(class = "page-title", tagList(icon("stopwatch"), " Higher Ed Job Duration & Time-to-Fill")),
+      "Listing Duration", value = "he_spells", icon = icon("stopwatch"),
+      h3(class = "page-title", tagList(icon("stopwatch"), " Higher Ed Listing Duration")),
       p(class = "text-muted small",
-        "Weekly tracking of collegiate faculty vacancy duration across snapshots. Measures time-to-fill and search persistence across academic disciplines and institutions."),
+        "How long each higher ed posting stayed listed on the job boards this dashboard tracks."),
+      spells_paused_note("posting"),
       layout_sidebar(
         fillable = FALSE,
         class = "page-sidebar",
         sidebar = sidebar(
           title = "Filters",
           width = 260,
-          selectInput("he_spell_status", "Vacancy status:",
+          selectInput("he_spell_status", "Listing status:",
                       choices = c("All Postings" = "all",
                                   "Still Active (Open)" = "Still Active",
-                                  "Filled / Closed" = "Closed / Filled"),
+                                  "No longer listed" = "No longer listed"),
                       selected = "all"),
           selectInput("he_spell_job_type", "Appointment type:",
                       choices = c("All Appointments" = "all",
@@ -1806,27 +1653,14 @@ ui <- page_navbar(
                       choices = c("All Institutions" = "all"),
                       selected = "all")
         ),
-        layout_columns(
-          col_widths = breakpoints(sm = c(6, 6, 6, 6), xl = c(3, 3, 3, 3)),
-          uiOutput("he_spell_median_box", fill = TRUE),
-          uiOutput("he_spell_active_box", fill = TRUE),
-          uiOutput("he_spell_persistent_box", fill = TRUE),
-          uiOutput("he_spell_hardest_box", fill = TRUE)
-        ),
-        layout_columns(
-          col_widths = breakpoints(sm = 12, lg = c(7, 5)),
-          dash_card("Median Days Open by Academic Discipline",
-                    withSpinner(plotlyOutput("he_spell_duration_plot", height = "360px"))),
-          dash_card("Collegiate Vacancy Duration Distribution",
-                    withSpinner(plotlyOutput("he_spell_distrib_plot", height = "360px")))
-        ),
+        # Duration KPI boxes and charts paused (spells_paused_note()).
         card(
           card_header(
             class = "d-flex justify-content-between align-items-center",
-            "Collegiate Job Duration & Time-to-Fill Explorer",
+            "Postings and how long they stayed listed",
             info_popover(
-              "How days open is estimated",
-              p(class = "mb-0", "Estimated Days Open represents the calendar duration between when a posting was first captured and when it disappeared from weekly updates (or weeks observed × 7).")
+              "How days listed is counted",
+              p(class = "mb-0", "Days listed = the span from the first to the last weekly scrape that showed the posting, plus 7 days. It starts when we first saw the posting (often after it was posted) and ends when it stopped appearing, whatever the reason.")
             )
           ),
           card_body(
@@ -1856,9 +1690,9 @@ ui <- page_navbar(
         download_tile("clock-rotate-left", "K-12 History Archive",
                       "Historical record of weekly K-12 job postings across Montana (3,200+ records) for hiring seasonality and longitudinal teacher demand studies.",
                       "download_history_k12", "Historical K-12 (CSV)"),
-        download_tile("stopwatch", "K-12 Time-to-Fill",
-                      "Unique job postings tracking estimated days open (time-to-fill) and high-need subject areas (STEM, SPED, etc.) across weekly snapshots.",
-                      "download_spells", "Job Duration Data (CSV)"),
+        download_tile("stopwatch", "K-12 Listing Duration",
+                      "Each posting's first and last week on the boards we track, days listed, and subject flags (STEM, SPED, etc.). Not a time-to-fill measure: see the caveats on the Listing Duration tab.",
+                      "download_spells", "Listing Duration (CSV)"),
         download_tile("school", "District Profiles",
                       "District-level profiles: MT DLI salaries (10th/avg/90th), NCES teacher FTE & enrollment, student-to-teacher ratios, and Census poverty/rent.",
                       "download_district_benchmarks", "District Profiles (CSV)"),
@@ -1868,9 +1702,9 @@ ui <- page_navbar(
         download_tile("building-columns", "Higher Ed Archive",
                       "Longitudinal postings for instructional faculty, adjuncts, and staff across the Montana University System, tribal colleges, and community colleges.",
                       "download_history_he", "Higher Ed Archive (CSV)"),
-        download_tile("stopwatch", "Higher Ed Time-to-Fill",
-                      "Posting duration dataset tracking time-to-fill, active/closed search status, and discipline indicators for collegiate faculty.",
-                      "download_he_spells", "Higher Ed Time-to-Fill (CSV)"),
+        download_tile("stopwatch", "Higher Ed Listing Duration",
+                      "Each faculty/staff posting's first and last week on the boards we track, days listed, and discipline flags. Not a time-to-fill measure: see the caveats on the Listing Duration tab.",
+                      "download_he_spells", "Higher Ed Listing Duration (CSV)"),
         download_tile("graduation-cap", "Higher Ed Profiles",
                       "Institution-level profiles: IPEDS UNITID, instructional faculty salaries (all ranks and professor), enrollment, and federal Pell shares.",
                       "download_he_benchmarks", "Higher Ed Profiles (CSV)"),
@@ -3615,7 +3449,9 @@ server <- function(input, output, session) {
     }
 
     datatable(
-      df_display,
+      df_display %>% rename(any_of(c(`Days listed` = "Estimated_Days_Open", `First seen` = "First_Seen_Date",
+                                     `Last seen` = "Last_Seen_Date", Listing = "Status",
+                                     Category = "Broad_Category"))),
       options = list(
         pageLength = 15,
         lengthMenu = c(10, 15, 25, 50, 100),
@@ -3813,7 +3649,9 @@ server <- function(input, output, session) {
     }
 
     datatable(
-      df_display,
+      df_display %>% rename(any_of(c(`Days listed` = "Estimated_Days_Open", `First seen` = "First_Seen_Date",
+                                     `Last seen` = "Last_Seen_Date", Listing = "Status",
+                                     Category = "Broad_Category"))),
       options = list(
         pageLength = 15,
         lengthMenu = c(10, 15, 25, 50, 100),

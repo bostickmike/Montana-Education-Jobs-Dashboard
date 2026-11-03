@@ -431,4 +431,25 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Scrapers (2026-11-01): Florence-Carlton reads its new "Job Title:" line (it had emitted "FULL TIME. MON -
     FRI." and "YEAR-ROUND POSITION." as postings and missed the custodian job); Plevna's level-only coaching lines get
     the sport from their header ("Track Coach - High School - Head"). Real fixtures dated 2026-11-01.
+  * [x] OPI vs. direct scrapes (2026-11-02, MT): the direct scrape wins and only one source counts a district in a
+    week (`opi_reconcile.R`). `mt_district_crosswalk.csv` (NCES CCD, ~391 districts, refreshed each run) ties each
+    public district to the registry district whose board covers it (NCES id, same-town elementary/HS pair, or a
+    one-district town's high school) or to none. OPI postings at a district we scrape are dropped (a matching
+    direct posting -- same district, position, subject -- gets `Also_On_OPI`; the rest go to
+    `mt_discrepancy_report.csv`); OPI fills in for a registry district whose scrape returned nothing; postings at
+    districts we don't scrape count under one name per town and get a map dot with CCD/DLI/SAIPE/finance/ACS
+    context (`opi_only_districts.csv`). Raw archive keeps every OPI row (`OPI_Counted`). New weekly drift-issue
+    section "OPI cross-check" (`check_opi_crosscheck.R`): possible scraper misses by district, empty scrapes,
+    adoption candidates with OPI's website and DISTRICT_BACKLOG.md status. History recomputed in place
+    (`scripts/reconcile_opi_history.R`): K-12 totals ~1,466 -> ~1,148 for 10-27, ~250-330 less per week since
+    Aug 11. Replaces `remove_opi_direct_duplicates()` / `apply_opi_district_fallback()` and the app's town crosswalk
+    (which had shown e.g. Harlem's teacher salary on North Harlem Colony postings). Tests: test-opi-reconcile.R.
+  * [x] Manhattan School District (2026-11-02): registered as Tyler Portico (manhattanpublicschoolsmt), but that
+    tenant is only the staff self-service portal; its Positions API returns an empty list, so every run since
+    August returned 0 while OPI listed Manhattan openings (found by the new OPI cross-check). The district posts on
+    its own Finalsite page (rollontigers.org/district/employment/current-openings): new `ManhattanHeuristic`
+    scraper, one PDF link per posting, application forms dropped. 11 live postings. Fixture
+    manhattan_current-openings_2026-11-02.html. Same check of the other empty-on-10-27 districts: Bozeman,
+    Columbia Falls, Townsend were already recovered 10-28/29 (50, 26, 4 live); Seeley Lake has no current openings
+    (OPI's three are May-June listings).
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.

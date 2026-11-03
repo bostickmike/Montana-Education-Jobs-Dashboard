@@ -238,6 +238,31 @@ if (nrow(custer_df) > 0) {
                            Posting_Source = character(0))
 }
 
+# Manhattan (Finalsite, rollontigers.org; moved off its empty Tyler Portico
+# tenant 2026-11-02) -- a plain httr2 fetch, one PDF link per posting.
+manhattan_districts <- registry[registry$Platform == "ManhattanHeuristic", ]
+manhattan_results <- lapply(seq_len(nrow(manhattan_districts)), function(i) {
+  row <- manhattan_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_manhattan_postings(row$Job_Link),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
+  )
+  if (nrow(df) > 0) df$District <- row$District
+  df
+})
+manhattan_df <- bind_rows(manhattan_results)
+if (nrow(manhattan_df) > 0) {
+  manhattan_df <- manhattan_df %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Manhattan district site (direct board)")
+} else {
+  manhattan_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                             location = character(0), url = character(0), District = character(0),
+                             Posting_Source = character(0))
+}
+
 # Scobey (a Weebly site, found 2026-08-16 -- the single highest-volume
 # OPI-only location left) also has no structured ATS -- a plain httr2
 # fetch, no chromote needed, same pattern as Custer above.
@@ -3031,6 +3056,7 @@ opi_raw <- safe_scrape(
 # fetch_opi_statewide_postings()); a failed scrape's placeholder has neither.
 opi_df <- ensure_posted_pay_columns(opi_raw)
 if (!"OPI_District" %in% names(opi_df)) opi_df$OPI_District <- rep(NA_character_, nrow(opi_df))
+if (!"OPI_Website" %in% names(opi_df)) opi_df$OPI_Website <- rep(NA_character_, nrow(opi_df))
 if (nrow(opi_df) > 0) {
   # District is NOT a canonical legal district name here -- OPI's feed only
   # exposes a City column, so District is that raw City value passed
@@ -3041,12 +3067,13 @@ if (nrow(opi_df) > 0) {
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District = Location,
               Posting_Source = "OPI Jobs for Teachers (statewide)",
-              Pay_Min, Pay_Max, Pay_Unit, Pay_Text, OPI_District)
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text, OPI_District, OPI_Website)
 } else {
   opi_df <- ensure_posted_pay_columns(
     data.frame(title = character(0), date_posted = character(0), position = character(0),
                location = character(0), url = character(0), District = character(0),
-               Posting_Source = character(0), OPI_District = character(0)))
+               Posting_Source = character(0), OPI_District = character(0),
+               OPI_Website = character(0)))
 }
 ```
 
@@ -3095,6 +3122,27 @@ if (nrow(llm_shadow_raw) > 0) {
 ```
 
 ### Combine all K-12 data, classify, archive, and accumulate history
+```{r k12 district crosswalk, message=FALSE, warning=FALSE, echo=TRUE}
+# Every Montana public district (NCES CCD directory: name = OPI's naming,
+# coordinates, staffing), tied to the registry district whose job board
+# covers it, or to none (build_mt_district_crosswalk(), opi_reconcile.R).
+# The combine step below uses it to decide which OPI postings count. A
+# failed or implausible refresh keeps last run's file (write_reference_file()).
+source("scrape_helpers.R")
+source("ccd_staff_scraper.R")
+source("opi_reconcile.R")
+crosswalk_path <- file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv")
+tryCatch({
+  ccd_latest <- find_latest_ccd_directory_year()
+  xw_new <- build_mt_district_crosswalk(ccd_latest$data,
+                                        read.csv("k12_district_registry.csv", stringsAsFactors = FALSE),
+                                        MT_CCD_LEA_MAP)
+  xw_new$CCD_Year <- rep(as.character(ccd_latest$year), nrow(xw_new))
+  write_reference_file(xw_new, crosswalk_path)
+}, error = function(e) message("District crosswalk refresh failed: ", conditionMessage(e)))
+district_crosswalk <- read.csv(crosswalk_path, stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
+```
+
 ```{r combine k12 data, echo=TRUE, warning=FALSE, message=FALSE}
 library(stringr)
 library(dplyr)
@@ -3131,6 +3179,7 @@ livingston_df <- livingston_df %>% mutate(date_posted = standardize_date(date_po
 lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_posted))
 broadview_df <- broadview_df %>% mutate(date_posted = standardize_date(date_posted))
 custer_df <- custer_df %>% mutate(date_posted = standardize_date(date_posted))
+manhattan_df <- manhattan_df %>% mutate(date_posted = standardize_date(date_posted))
 scobey_df <- scobey_df %>% mutate(date_posted = standardize_date(date_posted))
 ramsay_df <- ramsay_df %>% mutate(date_posted = standardize_date(date_posted))
 roy_df <- roy_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -3239,7 +3288,7 @@ opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_dfs <- list(
   applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
-  livingston_df, lodgegrass_df, broadview_df, custer_df, scobey_df, ramsay_df,
+  livingston_df, lodgegrass_df, broadview_df, custer_df, manhattan_df, scobey_df, ramsay_df,
   roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
   lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
   roberts_df, winnett_df, milescity_df, augusta_df, brockton_df, culbertson_df, cottonwood57_df,
@@ -3281,25 +3330,43 @@ direct_dfs <- list(
 )
 direct_dfs <- lapply(direct_dfs, standardize_df_date)
 direct_df <- bind_rows(direct_dfs)
-opi_df <- remove_opi_direct_duplicates(
-  opi_df,
-  direct_df,
-  registry,
-  report_path = "mt_discrepancy_report.csv"
-)
-opi_df <- apply_opi_district_fallback(opi_df, registry, direct_df)
+# OPI vs. our direct scrapes (opi_reconcile.R): the direct scrape wins.
+# OPI postings at a district we scrape are never counted next to it; those
+# that match a direct posting flag it Also_On_OPI, the rest go to the QC
+# report. OPI fills in for a district whose scrape returned nothing, and
+# for districts we don't scrape (adoption candidates).
+opi_rec <- reconcile_opi_with_direct(opi_df, direct_df, district_crosswalk, registry)
+write.csv(opi_rec$qc, "mt_discrepancy_report.csv", row.names = FALSE)
+adoption <- opi_rec$adoption
+if (nrow(adoption) > 0) {
+  sites <- opi_rec$opi_keep %>%
+    filter(!is.na(OPI_Website), nzchar(OPI_Website)) %>%
+    distinct(District, OPI_Website) %>%
+    group_by(District) %>%
+    summarize(Website = paste(OPI_Website, collapse = " ; "), .groups = "drop")
+  adoption$Website <- sites$Website[match(adoption$Map_Entity, sites$District)]
+}
+write.csv(adoption, "opi_adoption_candidates.csv", row.names = FALSE)
+direct_df <- opi_rec$direct_df %>% mutate(OPI_Counted = TRUE)
+opi_df <- bind_rows(opi_rec$opi_keep %>% mutate(OPI_Counted = TRUE),
+                    opi_rec$opi_dropped %>% mutate(OPI_Counted = FALSE)) %>%
+  select(-any_of("OPI_Website"))
 
-combined <- bind_rows(direct_df, opi_df) %>%
+# The raw archive keeps every OPI posting (OPI_Counted = FALSE for those at a
+# district we scrape) so the drift check still sees OPI's whole feed and the
+# raw record stays complete; everything downstream counts OPI_Counted rows.
+combined_all <- bind_rows(direct_df, opi_df) %>%
   mutate(
     across(c(title, position, location, url, District, Posting_Source), normalize_posting_text),
     Archive_Date = Sys.Date()
   ) %>%
   add_k12_posting_identity() %>%
   distinct(Posting_ID, .keep_all = TRUE)
+combined <- combined_all %>% filter(OPI_Counted)
 
 if (!dir.exists("Archivek12_Data")) dir.create("Archivek12_Data")
 file_name <- paste0("combined_", Sys.Date(), ".csv")
-write.csv(combined, file = file.path("Archivek12_Data", file_name), row.names = FALSE)
+write.csv(combined_all, file = file.path("Archivek12_Data", file_name), row.names = FALSE)
 
 # BLS OEWS regional pay by role, the labeled fallback for postings that state
 # no pay (bls_oews_scraper.R). Refreshed only when BLS publishes a new year;
@@ -3347,8 +3414,8 @@ combinedclean <- combined %>%
                                         opi_counties$County[match(.$OPI_District, opi_counties$OPI_District)]),
                         "MT") %>%
   select(title, Archive_Date, date_posted, position, location, url, District,
-         Posting_Source, Posting_Identity_Method, Posting_ID, OPI_District, all_of(POSTED_PAY_COLUMNS),
-         all_of(OEWS_ESTIMATE_COLUMNS))
+         Posting_Source, Posting_Identity_Method, Posting_ID, OPI_District, Also_On_OPI,
+         all_of(POSTED_PAY_COLUMNS), all_of(OEWS_ESTIMATE_COLUMNS))
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)
@@ -3549,6 +3616,62 @@ if (nrow(district_finance) > 0) {
 } else {
   message("OPI district finance fetch failed -- leaving salarymap2.csv untouched this run.")
 }
+```
+
+### K-12 districts we don't scrape that post on OPI (map entities with context)
+```{r k12 opi-only districts, message=FALSE, warning=FALSE, echo=TRUE}
+# The districts this week's OPI postings filled in for (case 3 in
+# opi_reconcile.R) get a map dot with the same context as registry
+# districts where a statewide source covers them: CCD location/staffing
+# (crosswalk), DLI teacher pay (school system matched by name), SAIPE child
+# poverty (NCES id), OPI finance (OPI's naming), county ACS context (copied
+# from salarymap2.csv's registry districts in that county). A source whose
+# fetch fails keeps last run's values for that entity.
+source("opi_reconcile.R")
+opi_only_path <- file.path("Mt_Ed_Jobs", "opi_only_districts.csv")
+opi_only_entities <- unique(combinedclean$District[
+  combinedclean$District %in% district_crosswalk$Map_Entity[is.na(district_crosswalk$Registry_District)]])
+
+dli_systems <- safe_scrape("MT DLI teacher compensation (all school systems)", scrape_fn = fetch_dli_all_systems,
+                           expected_cols = c("DLI_Name", "Teacher_Avg_Salary"))
+saipe_leaid <- safe_scrape("Census SAIPE child poverty by NCES id (MT)", scrape_fn = fetch_saipe_by_leaid,
+                           expected_cols = c("LEAID", "Child_Poverty_Rate"))
+finance_by_name <- safe_scrape("OPI General Fund by district name (MT)",
+                               scrape_fn = function() opi_finance_by_district(fetch_opi_finance_workbook(OPI_FINANCE_CURRENT_YEAR_URL)),
+                               expected_cols = c("OPI_District", "Total_General_Fund_Expenditure"))
+acs_cols <- c("County", "Median_Household_Income", "Median_Gross_Rent", "Population", "ACS_Year",
+              "Mining_Employment_Share", "Population_Change_Pct")
+county_ctx <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>% select(any_of(acs_cols))
+
+opi_only <- build_opi_only_districts(district_crosswalk, opi_only_entities,
+                                     dli_systems = if (nrow(dli_systems) > 0) dli_systems,
+                                     saipe = if (nrow(saipe_leaid) > 0) saipe_leaid,
+                                     finance = if (nrow(finance_by_name) > 0) finance_by_name,
+                                     county_context = county_ctx)
+if (nrow(opi_only) > 0) {
+  opi_only$CCD_Year <- district_crosswalk$CCD_Year[1]
+  if (nrow(dli_systems) > 0) {
+    opi_only$Salary_Year <- dli_systems$Salary_Year[1]
+    opi_only$Salary_Source <- ifelse(is.na(opi_only$Teacher_Avg_Salary), NA_character_,
+      "MT Dept. of Labor & Industry Teacher Compensation Report (lmi.mt.gov/publications)")
+  }
+  if (nrow(finance_by_name) > 0) {
+    opi_only$Finance_Source <- "OPI School Finance Data Files (opi.mt.gov/Leadership/Finance-Grants/School-Finance/OPI-Financial-Data-Files)"
+  }
+  # A failed source this run: carry last run's values for the same entity.
+  if (file.exists(opi_only_path)) {
+    prev <- read.csv(opi_only_path, fileEncoding = "UTF-8", stringsAsFactors = FALSE)
+    carry <- list(dli = c("Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
+                          "Teacher_Salary_90th_Pctile", "DLI_Name", "Salary_Year", "Salary_Source"),
+                  saipe = c("Child_Poverty_Rate", "SAIPE_Year"),
+                  fin = c("Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"))
+    failed <- c(dli = nrow(dli_systems) == 0, saipe = nrow(saipe_leaid) == 0, fin = nrow(finance_by_name) == 0)
+    for (src in names(failed)[failed]) for (col in intersect(carry[[src]], names(prev))) {
+      opi_only[[col]] <- prev[[col]][match(opi_only$District, prev$District)]
+    }
+  }
+}
+write.csv(complete_opi_only_columns(opi_only), opi_only_path, row.names = FALSE)
 ```
 
 
