@@ -28,12 +28,22 @@ test_that("parse_opi_job_page extracts real statewide postings from page 1", {
   # frmJobDetailsPublic.aspx with no query string or job ID at all) -- every
   # row's Link is the shared statewide listing URL.
   expect_true(all(result$Link == "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx"))
+  # The grid's "Closing Date" column: "Open Until Filled" kept as written, a
+  # date ("08/17/2026", Frenchtown School Psychologist) as YYYY-MM-DD.
+  expect_equal(result$Close_Date[1], "Open Until Filled")
+  expect_equal(result$Close_Date[c(9, 14, 17)], c("2026-08-17", "2026-09-30", "2026-08-26"))
+  expect_equal(sum(result$Close_Date == "Open Until Filled"), 46)
+})
+
+test_that("opi_close_date converts dates and keeps other wording", {
+  expect_equal(opi_close_date(c("11/13/2026", " Open Until Filled ", "", NA, "13/45/2026")),
+               c("2026-11-13", "Open Until Filled", NA, NA, "13/45/2026"))
 })
 
 test_that("parse_opi_job_page returns zero rows (not an error) when the grid table is missing", {
   result <- parse_opi_job_page("<html><body><p>No grid here</p></body></html>", "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx")
   expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Close_Date"))
 })
 
 test_that("extract_aspnet_postback_fields reads hidden inputs and each select's selected/first option", {

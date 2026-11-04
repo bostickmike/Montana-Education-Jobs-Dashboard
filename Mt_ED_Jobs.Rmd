@@ -79,15 +79,26 @@ schoolspring_results <- lapply(seq_len(nrow(schoolspring_districts)), function(i
   df
 })
 schoolspring_df <- bind_rows(schoolspring_results)
+# Each posting's own record adds Close_Date (the deadline applicants see; NA
+# for "Posted until filled"), Job_Status (raw archive only) and posted pay
+# (add_schoolspring_details()). A failed detail request leaves only that
+# posting's fields NA.
+if (nrow(schoolspring_df) > 0 && "Link" %in% names(schoolspring_df)) {
+  schoolspring_df <- add_schoolspring_details(schoolspring_df)
+}
 if (nrow(schoolspring_df) > 0) {
   schoolspring_df <- schoolspring_df %>%
+    ensure_posted_pay_columns() %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
-              Posting_Source = "SchoolSpring (direct district board)")
+              Posting_Source = "SchoolSpring (direct district board)",
+              Close_Date = if ("Close_Date" %in% names(.)) Close_Date else NA_character_,
+              Job_Status = if ("Job_Status" %in% names(.)) Job_Status else NA_character_,
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
   schoolspring_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                                  location = character(0), url = character(0), District = character(0),
-                                 Posting_Source = character(0))
+                                 Posting_Source = character(0), Close_Date = character(0))
 }
 
 tylerportico_districts <- registry[registry$Platform == "TylerPortico", ]
@@ -3076,6 +3087,7 @@ if (nrow(opi_df) > 0) {
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District = Location,
               Posting_Source = "OPI Jobs for Teachers (statewide)",
+              Close_Date = if ("Close_Date" %in% names(.)) Close_Date else NA_character_,   # grid "Closing Date"
               Pay_Min, Pay_Max, Pay_Unit, Pay_Text, OPI_District, OPI_Website, OPI_School, OPI_Description)
 } else {
   opi_df <- ensure_posted_pay_columns(
@@ -3986,7 +3998,9 @@ library(writexl)
 # below.
 hedata <- hedata_raw %>%
   ensure_posted_pay_columns() %>%
-  select(Title, Location, Posted_Date, Institution, Link, all_of(POSTED_PAY_COLUMNS)) %>%
+  mutate(Close_Date = if ("Close_Date" %in% names(.)) as.character(Close_Date) else NA_character_) %>%
+  # Close_Date: PeopleAdmin's own close date (or "Open Until Filled"); NA for other HE sources.
+  select(Title, Location, Posted_Date, Institution, Link, Close_Date, all_of(POSTED_PAY_COLUMNS)) %>%
   mutate(Posted_Date = as.character(Posted_Date),
          Archive_Date = Sys.Date())
 
@@ -4020,12 +4034,12 @@ write_xlsx(hedata, path = file.path("Mt_Ed_Jobs", "hedata.xlsx"))
 hedata <- hedata %>% mutate(Institution = canonicalize_he_institution(Institution))
 
 this_week_he_cat <- hedata %>% mutate(Job_Type = classify_he_job_type(Title))
-# Pay_* and Est_* are left out of facultydata.csv: its accumulated history predates
-# pay capture, and append_weekly_rows() refuses a changed column set.
+# Pay_*, Est_* and Close_Date are left out of facultydata.csv: its accumulated
+# history predates them, and append_weekly_rows() refuses a changed column set.
 this_week_facultydata <- this_week_he_cat %>%
   filter(Job_Type %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")) %>%
   mutate(Category = classify_he_faculty_category(Title)) %>%
-  select(-all_of(POSTED_PAY_COLUMNS), -any_of(c("Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")))
+  select(-all_of(POSTED_PAY_COLUMNS), -any_of(c("Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year", "Close_Date")))
 
 source("history_accumulator.R")
 
