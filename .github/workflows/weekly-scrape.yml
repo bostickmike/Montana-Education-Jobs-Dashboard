@@ -128,10 +128,10 @@ jobs:
           Rscript scripts/generate_job_duration_spells.R
           Rscript scripts/generate_he_job_duration_spells.R
 
-      # Posting-level K-12 spells and Kaplan-Meier durations (research tables
+      # Posting-level K-12 and HE spells and Kaplan-Meier durations (research tables
       # at the repo root; the dashboard's duration tabs stay paused). Rebuilt
       # from the archives each week; a failure here doesn't stop the run.
-      - name: Rebuild posting-level K-12 spells
+      - name: Rebuild posting-level K-12 and HE spells
         id: build_posting_spells
         continue-on-error: true
         run: Rscript scripts/build_posting_spells.R
@@ -319,7 +319,7 @@ jobs:
             Archivek12_Data/*.csv
           [ -f schoolspring_endings.csv ] && git add schoolspring_endings.csv || true
           [ -f coverage_calendar.csv ] && git add coverage_calendar.csv || true
-          for f in posting_spells_k12.csv posting_durations_k12.csv; do [ -f $f ] && git add $f || true; done
+          for f in posting_spells_k12.csv posting_durations_k12.csv posting_spells_he.csv posting_durations_he.csv; do [ -f $f ] && git add $f || true; done
           # SHADOW-pilot review artifact -- only exists once the pilot has
           # produced at least one posting; staged separately so its absence
           # doesn't fail the git add above.

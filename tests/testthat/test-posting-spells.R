@@ -83,3 +83,61 @@ test_that("Kaplan-Meier medians use delayed entry and need enough endings", {
   expect_equal(d$Median_Days, 10)
   expect_true(is.na(summarize_posting_durations(s[1:5, ])$Median_Days))
 })
+
+# Higher ed (posting_spells.R, "Higher ed"): identity from the raw HE archive
+# columns, shaped like the real MT cases of 2026-11-04.
+he_raw <- function(run, title, inst, link, posted = NA_character_) {
+  data.frame(Title = title, Location = NA_character_, Posted_Date = posted, Institution = inst, Link = link,
+             Archive_Date = run, stringsAsFactors = FALSE)
+}
+
+test_that("HE per-posting links are IDs; one employment page for every posting is not", {
+  d <- rbind(he_raw("2026-10-27", "Program Coordinator", "Montana State University", "https://jobs.montana.edu/postings/53556"),
+             he_raw("2026-10-27", "Admissions Counselor", "Rocky Mountain College",
+                    "https://rocky.edu/employment/opportunities/admissions-counselor/"),
+             he_raw("2026-10-27", "Director", "Montana Tech", "https://montanatechuniversity.applytojob.com/apply/6BpCaPKxsi/Director"),
+             # Carroll: every opening links the same page.
+             he_raw("2026-10-27", "Chemistry Faculty", "Carroll College", "https://www.carroll.edu/faculty-staff-positions"),
+             he_raw("2026-10-27", "Head Coach", "Carroll College", "https://www.carroll.edu/faculty-staff-positions"),
+             # Miles: one opening this week, but the page also held two titles in another run.
+             he_raw("2026-10-20", "Nursing Instructor", "Miles Community College", "https://www.milescc.edu/employment/"),
+             he_raw("2026-10-20", "Custodian", "Miles Community College", "https://www.milescc.edu/employment/"),
+             he_raw("2026-10-27", "Custodian", "Miles Community College", "https://www.milescc.edu/employment/"))
+  x <- add_he_posting_identity(d)
+  m <- setNames(x$Posting_Identity_Method == "Stable per-posting URL", paste(x$Institution, x$Archive_Date, x$Title))
+  expect_true(all(m[1:3]))
+  expect_false(any(m[4:8]))
+  expect_equal(x$Posting_ID[7], x$Posting_ID[8])   # same title, same fallback ID across runs
+  expect_equal(x$Bridgeable, c(FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE))
+})
+
+test_that("a re-uploaded posting document is bridged; a new PeopleAdmin number is not", {
+  p <- rbind(ps_row("2026-09-29", "url:old.pdf", "NACTEP Project Assistant", district = "Aaniiih Nakoda College",
+                    posted = NA, method = "Stable per-posting URL"),
+             ps_row("2026-10-06", "url:new.pdf", "NACTEP Project Assistant", district = "Aaniiih Nakoda College",
+                    posted = NA, method = "Stable per-posting URL"),
+             ps_row("2026-09-29", "url:postings/1", "Adjunct Instructor", district = "Montana State University",
+                    posted = NA, method = "Stable per-posting URL"),
+             ps_row("2026-10-06", "url:postings/2", "Adjunct Instructor", district = "Montana State University",
+                    posted = NA, method = "Stable per-posting URL"))
+  p$Bridgeable <- c(TRUE, TRUE, FALSE, FALSE)
+  b <- bridge_posting_ids(p)
+  expect_equal(unique(b$Posting_ID[b$District == "Aaniiih Nakoda College"]), "url:new.pdf")
+  expect_equal(sort(unique(b$Posting_ID[b$District == "Montana State University"])), c("url:postings/1", "url:postings/2"))
+})
+
+test_that("HE start is the earliest posted date shown, and shared titles count only for title IDs", {
+  # Great Falls: the feed date moved forward when the posting was re-published.
+  p <- rbind(ps_row("2026-10-20", "url:gf/1", "Adjunct Instructor", district = "Great Falls College MSU",
+                    posted = "2026-10-01", method = "Stable per-posting URL"),
+             ps_row("2026-10-27", "url:gf/1", "Adjunct Instructor", district = "Great Falls College MSU",
+                    posted = "2026-10-25", method = "Stable per-posting URL"),
+             ps_row("2026-10-27", "url:gf/2", "Adjunct Instructor", district = "Great Falls College MSU",
+                    posted = "2026-10-26", method = "Stable per-posting URL"),
+             ps_row("2026-10-27", "fb-1", "Instructor", district = "Carroll College", posted = NA),
+             ps_row("2026-10-27", "fb-2", "Instructor", district = "Carroll College", posted = NA))
+  p <- use_earliest_posted_date(p)
+  expect_equal(p$date_posted[p$Posting_ID == "url:gf/1"], c("2026-10-01", "2026-10-01"))
+  sp <- build_posting_spells(p, shared_titles = "fallback only")
+  expect_equal(sp$Shared_Title[order(sp$Posting_ID)], c(TRUE, TRUE, FALSE, FALSE))
+})

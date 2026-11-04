@@ -64,6 +64,84 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
                      position = classify_k12_position(title))
 }
 
+# ---------------------------------------------------------------------------
+# Higher ed. The raw HE archives (Archived_HE_Data/hedata_<date>.xlsx) carry no
+# Posting_ID, so identity is set here:
+# - A per-posting link is the ID: PeopleAdmin /postings/<n>, schooljobs,
+#   Paycom, isolved, ADP (is_stable_posting_url()), applytojob /apply/<key>/,
+#   Rocky's /employment/opportunities/<slug>/, and posting documents (PDF, DOCX,
+#   Dawson's file_download, Aaniiih Nakoda's _files/ugd). A link held by two
+#   titles in one run is a board page, never an ID.
+# - Otherwise (Carroll, Miles, Salish Kootenai, Stone Child post every opening
+#   on one employment page) institution + title, with an occurrence suffix.
+# Only document links and title fallbacks may be bridged across consecutive
+# runs: a college re-uploading the same PDF under a new name (Aaniiih Nakoda,
+# 09-29/10-06) is the same posting, but a new PeopleAdmin or schooljobs number
+# is a new requisition.
+# ---------------------------------------------------------------------------
+HE_POSTING_URL_PATTERN <- paste0(
+  "/postings/\\d+|/apply/[A-Za-z0-9]+/|/employment/opportunities/[^/]+/?$|",
+  "\\.(pdf|docx?)$|/file_download/|/_files/ugd/")
+HE_DOCUMENT_URL_PATTERN <- "\\.(pdf|docx?)$|/file_download/|/_files/ugd/|/uploads/|/files/"
+
+add_he_posting_identity <- function(d) {
+  url <- normalize_posting_text(d$Link)
+  inst <- normalize_posting_identity_component(d$Institution)
+  title <- normalize_posting_identity_component(d$Title)
+  shaped <- !is.na(url) & nzchar(url) &
+    (is_stable_posting_url(url) | grepl(HE_POSTING_URL_PATTERN, url, ignore.case = TRUE, perl = TRUE))
+  # A link shared by different titles in any run is a board page.
+  shared <- stats::ave(title, inst, d$Archive_Date, tolower(url), FUN = function(x) length(unique(x)) > 1) == "TRUE"
+  board_link <- tolower(url) %in% unique(tolower(url[shared]))
+  stable <- shaped & !board_link
+  base <- paste("he-fallback", inst, title, sep = "\u001f")
+  occ <- stats::ave(seq_along(base), base, d$Archive_Date, FUN = seq_along)
+  d$Posting_ID <- ifelse(stable, paste0("url:", tolower(url)), paste0("fallback:", base, "#", occ))
+  d$Posting_Identity_Method <- ifelse(stable, "Stable per-posting URL",
+                                      "Source fallback: institution + title (no stable posting URL)")
+  d$Bridgeable <- !stable | grepl(HE_DOCUMENT_URL_PATTERN, url, ignore.case = TRUE, perl = TRUE)
+  d
+}
+
+# Every HE archive from `from` on (2026-08-11 is the first run that covers
+# every institution; 08-06/08-07 ran only a few), one row per Posting_ID per
+# run, in the shape build_posting_spells() takes (District = Institution,
+# position = HE job type, Posting_Source = Institution: each college is its own
+# source in the coverage calendar).
+he_posting_panel <- function(archive_dir = "Archived_HE_Data", from = as.Date("2026-08-11")) {
+  files <- list.files(archive_dir, "^hedata_\\d{4}-\\d{2}-\\d{2}\\.xlsx$", full.names = TRUE)
+  files <- files[as.Date(sub("^hedata_(.*)\\.xlsx$", "\\1", basename(files))) >= from]
+  d <- dplyr::bind_rows(lapply(files, function(f) {
+    x <- as.data.frame(readxl::read_excel(f, col_types = "text"))
+    x$Archive_Date <- sub("^hedata_(.*)\\.xlsx$", "\\1", basename(f))
+    x[, intersect(c("Title", "Location", "Posted_Date", "Institution", "Link", "Close_Date", "Archive_Date"), names(x))]
+  }))
+  # Zero-width characters (Aaniiih Nakoda's "Facilities Manager\u200b") would split one posting in two.
+  d$Title <- trimws(gsub("[\u200b-\u200d\ufeff]", "", normalize_posting_text(d$Title), perl = TRUE))
+  d$Institution <- canonicalize_he_institution(normalize_posting_text(d$Institution))
+  d <- d[!is.na(d$Title) & nzchar(d$Title) & !is_placeholder_posting(d$Title), , drop = FALSE]
+  d <- add_he_posting_identity(d)
+  d %>%
+    dplyr::mutate(Run_Date = as.Date(Archive_Date)) %>%
+    dplyr::distinct(Posting_ID, Run_Date, .keep_all = TRUE) %>%
+    dplyr::transmute(Run_Date, Posting_ID, Posting_Identity_Method, District = Institution, title = Title,
+                     date_posted = substr(Posted_Date, 1, 10), url = Link, Posting_Source = Institution,
+                     Is_OPI = FALSE, position = classify_he_job_type(Title), Bridgeable)
+}
+
+# A posting's start is the earliest plausible posted date it ever showed:
+# PeopleAdmin's feed date moves forward when a posting is re-published (one
+# Great Falls pool by two years), and from 2026-11-04 the page's own open date
+# replaces it (earlier). Applied after bridging, per posting.
+use_earliest_posted_date <- function(panel) {
+  posted <- suppressWarnings(as.Date(panel$date_posted))
+  ok <- !is.na(posted) & posted <= panel$Run_Date
+  earliest <- stats::ave(ifelse(ok, as.numeric(posted), NA_real_), panel$Posting_ID,
+                         FUN = function(x) if (all(is.na(x))) NA_real_ else min(x, na.rm = TRUE))
+  panel$date_posted <- ifelse(is.na(earliest), NA_character_, format(as.Date(earliest, origin = "1970-01-01")))
+  panel
+}
+
 # Earlier title-identified rows of a posting that later carries a stable ID:
 # same source, district, title (case-insensitive) and posted date, the key
 # unique on both sides, and the two never listed in the same run.
@@ -107,6 +185,8 @@ bridge_adjacent_runs <- function(panel) {
                        District = dplyr::last(District), t = tolower(dplyr::last(title)),
                        posted = dplyr::last(date_posted), .groups = "drop")
     old <- span[span$last == runs[k], ]
+    # HE: only document links and title fallbacks may change ID (Bridgeable).
+    if (!is.null(panel$Bridgeable)) old <- old[old$Posting_ID %in% panel$Posting_ID[panel$Bridgeable], ]
     new <- span[span$first == runs[k + 1], ]
     keyf <- function(x) paste(x$Posting_Source, x$District, x$t, sep = "\u001f")
     old <- old[!keyf(old) %in% keyf(old)[duplicated(keyf(old))], ]
@@ -136,7 +216,11 @@ source_health <- function(panel, calendar, district, source, is_opi, run) {
   if (any(panel$Run_Date == run & panel$District == district & panel$Posting_Source == source)) "ok_proxy" else "no_rows"
 }
 
-build_posting_spells <- function(panel, calendar = NULL, endings = NULL) {
+# `shared_titles = "fallback only"` (HE) flags a shared title only on postings
+# identified by title: two "Adjunct Instructor" postings with their own
+# PeopleAdmin numbers can be told apart.
+build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_titles = c("all", "fallback only")) {
+  shared_titles <- match.arg(shared_titles)
   runs <- sort(unique(panel$Run_Date))
   latest <- max(runs)
   # Titles held by more than one posting in a district in any run.
@@ -159,6 +243,7 @@ build_posting_spells <- function(panel, calendar = NULL, endings = NULL) {
                      Runs_Seen = dplyr::n_distinct(Run_Date), .groups = "drop") %>%
     dplyr::left_join(first_source_run, by = c("District", "Posting_Source"))
   sp$Shared_Title <- sp$Posting_ID %in% dup$Posting_ID
+  if (shared_titles == "fallback only") sp$Shared_Title <- sp$Shared_Title & !grepl("^Stable", sp$Identity)
   sp$Runs_Spanned <- match(sp$Last_Seen, runs) - match(sp$First_Seen, runs) + 1L
   sp$Next_Run <- runs[match(sp$Last_Seen, runs) + 1L]
 
