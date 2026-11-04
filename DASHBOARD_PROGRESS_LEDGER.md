@@ -529,9 +529,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [ ] Gallatin Gateway: employment page returns "not found" (likely moved; scraper fix). Roberts: "site under
   maintenance" (recheck; the scraper passes that page text to the HTML reader as a file path,
   so a maintenance page logs as an error, not empty).
-- [ ] Arrowhead Elementary #75: HTTP 403 on every weekly CI run since 2026-09-07 (`coverage_calendar.csv`), also after
-  the 2026-10-29 "recovered" fix, which works from the Mac only; likely Cloudflare blocking GitHub runner IPs. Its
-  postings have never reached the weekly data.
+- [ ] Arrowhead Elementary #75 (decision needed): HTTP 403 on every weekly CI run since 2026-09-07
+  (`coverage_calendar.csv`); the 2026-10-29 "recovered" entry only held from the Mac. The site is behind Cloudflare,
+  which turns away GitHub's servers; the page itself is fine (8 openings on 2026-11-04, none on OPI), so none of its
+  postings reach the data. Not worked around on purpose: trying user agents or other endpoints to get past the
+  block is circumventing the site's bot protection. Options: ask the district/web host to allow the scraper, run
+  this one source from the Mac, or retire it from the registry and say so.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
   Also: drift issue "Central Safety Net" (`summarize_central_safety_net()`) still calls counted OPI postings
