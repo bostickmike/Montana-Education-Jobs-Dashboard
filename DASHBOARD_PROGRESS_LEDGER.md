@@ -262,7 +262,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
    * `Mt_Ed_Jobs/app.R` is the Shiny dashboard reading committed CSVs. It **never** scrapes live pages.
 2. **Posting Identity Contract (`Posting_ID`):**
    * Assigned once prior to deduplication, longitudinal accumulation, or spell calculations.
-   * Uses real per-posting URLs when available; falls back to `title + location + date_posted` with an occurrence suffix.
+   * Uses real per-posting URLs when available (AppliTrack via its job ID since 2026-11-03); falls back to `title + location + date_posted` with an occurrence suffix.
 3. **Schema Integrity:**
    * Every CSV consumed by `app.R` must be registered in `REQUIRED_SCHEMAS` inside `schema_check.R` and tested in `test-schema-check.R`.
 4. **Posit Connect Cloud Manifest Safety:**
@@ -471,4 +471,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     148 cases: 77/78 found, 0 wrong-posting, 2/70 false. Exact key: Tyler Portico `code` now kept (`Job_Code`, raw
     archive only); an OPI description quoting it ("JP054494") matches that posting outright (Kalispell's long-term
     elementary sub). Follow-up noted: ~3/week stale OPI listings (Froid "start July 1, 2023") now count.
+  * [x] Real posting dates, step 1 (2026-11-03, both states; ff92dc0): AppliTrack postings carry the board's own job
+    ID (`parse_applitrack_output()` `job_id`); `url` is the posting's own page (`applitrack_posting_url()`), so
+    AppliTrack rows use the stable per-posting URL identity instead of the title fallback and postings sharing a title
+    stay apart. Parser fix: fields are read per `<li>`; a one-value "Position Type" used to swallow the next field and
+    shift every later one (52 of 343 rows on 11-03 had no posted date and a "Date Available" text as location; earlier
+    archives keep the shifted values). New `Close_Date` (combinedclean + raw archive, as written): AppliTrack
+    "Closing Date"; Tyler `postingEndDate` only when real (Tyler fills open-ended postings with the fetch date plus a
+    year; Bozeman sets its own school-year default, 2027-06-11, kept as written). The 11-03 week was moved onto the
+    job-ID links and corrected from the live boards (342/343), so New This Week doesn't flag them. Fixture
+    `applitrack_output_wy_teton_single_position_type.bin`. Full weekly rehearsal passed. Next: SchoolSpring
+    posted/closing dates and filled/canceled status, OPI closing dates, PeopleAdmin open/close dates, then the
+    coverage calendar and the spells rebuild (`claude-notes/2026-11-03_posting-dates-plan.md`).
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
