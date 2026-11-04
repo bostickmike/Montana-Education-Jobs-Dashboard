@@ -518,10 +518,21 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     parse, so rows after such a message were lost (MT 11-03: all 23 HE sources), including in the drift checks; it
     now doubles quotes and `read_scrape_log()` repairs older logs. Tests `test-coverage-calendar.R`. Full weekly
     rehearsal passed (`claude-notes/2026-11-03_posting-dates-plan.md`, "Step 2 findings").
+  * [x] Real posting dates, step 5, K-12 data layer (2026-11-04; 20d91b9): `posting_spells.R` +
+    `scripts/build_posting_spells.R` (weekly, non-blocking) write `posting_spells_k12.csv` (one row per posting:
+    start basis, first/last seen, how it ended, flags) and `posting_durations_k12.csv` (Kaplan-Meier, medians only
+    with >= 20 endings) at the repo root. Built from the archives from 2026-08-18 on `Posting_ID`, with bridges for
+    identity changes (AppliTrack's 11-03 job-ID move: false 10-27 endings 103 -> 56); start = board posted date when
+    plausible; an ending counts only when the source was healthy the next run (`coverage_calendar.csv`), SchoolSpring
+    endings from `schoolspring_endings.csv`, else censored; OPI subject rows, standing ads/pools, shared titles and
+    left-censored starts are left out of durations. Delayed entry matters: plain KM 74.5 days, with entry at the age
+    first seen 25.5 days (95% CI 23.5-30.5; 938 postings, 489 endings; Teacher 30.5). Read as "days listed", not
+    time-to-fill. Full weekly rehearsal passed (`claude-notes/2026-11-03_posting-dates-plan.md`, "Step 5 findings").
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Real posting dates, steps 3 and 5: daily presence check (42 structured-platform districts + OPI grid,
+- [ ] Real posting dates, rest of step 5: HE and WY spells on the same design; decide what (if anything) the
+  Listing Duration tabs show from `posting_durations_k12.csv`, and when. Step 3 (optional): daily presence check (42 structured-platform districts + OPI grid,
   ~50 requests/day); rebuild spells on posting identity with Kaplan-Meier (SchoolSpring endings from
   `schoolspring_endings.csv`; treat a board-wide default end date such
   as Bozeman's 2027-06-11 as no deadline); then un-pause the Listing Duration tabs (paused 2026-11-02,
@@ -531,7 +542,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   so a maintenance page logs as an error, not empty).
 - [ ] Arrowhead Elementary #75 (decision needed): HTTP 403 on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the 2026-10-29 "recovered" entry only held from the Mac. The site is behind Cloudflare,
-  which turns away GitHub's servers; the page itself is fine (8 openings on 2026-11-04, none on OPI), so none of its
+  which turns away GitHub's servers; the page itself is fine (at least 8 openings on 2026-11-04, none on OPI), so none of its
   postings reach the data. Not worked around on purpose: trying user agents or other endpoints to get past the
   block is circumventing the site's bot protection. Options: ask the district/web host to allow the scraper, run
   this one source from the Mac, or retire it from the registry and say so.
