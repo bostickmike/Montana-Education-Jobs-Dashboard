@@ -507,17 +507,31 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     canceled vs 8 filled), so a pooled filled share is not a calibration constant
     (`claude-notes/2026-11-03_posting-dates-plan.md`, "Step 4 findings"). Tests in
     `test-schoolspring-scraper.R`. Full weekly rehearsal passed.
+  * [x] Real posting dates, step 2 (2026-11-04, both states; b9650e4): coverage calendar. `coverage_calendar.R` writes
+    `coverage_calendar.csv` (repo root, committed by the weekly workflow) after the HE archive: one row per run per
+    entity (registry districts/institutions, feeds, off-registry districts that log under their own name, anything
+    tracked before) with ok / empty / error / not_logged, row count and error, so a posting that stops appearing
+    counts as ended only when its source was healthy. Shared-board colleges take the parent board's row; postings
+    that come only via a statewide feed take the feed's row; a run with no log leaves the calendar untouched. MT backfilled 2026-09-07 to 11-03 from the workflow's
+    scrape-log artifacts (last run per date). It shows Arrowhead #75 at HTTP 403 on every CI run since 09-07.
+    Bug fixed on the way: `log_scrape_result()` backslash-escaped quotes in error messages, which `read.csv` can't
+    parse, so rows after such a message were lost (MT 11-03: all 23 HE sources), including in the drift checks; it
+    now doubles quotes and `read_scrape_log()` repairs older logs. Tests `test-coverage-calendar.R`. Full weekly
+    rehearsal passed (`claude-notes/2026-11-03_posting-dates-plan.md`, "Step 2 findings").
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Real posting dates, steps 2, 3, 5: coverage calendar per source per run (ok/empty/error) so a missing posting only
-  counts as ended when its source was healthy; daily presence check (42 structured-platform districts + OPI grid,
+- [ ] Real posting dates, steps 3 and 5: daily presence check (42 structured-platform districts + OPI grid,
   ~50 requests/day); rebuild spells on posting identity with Kaplan-Meier (SchoolSpring endings from
   `schoolspring_endings.csv`; treat a board-wide default end date such
   as Bozeman's 2027-06-11 as no deadline); then un-pause the Listing Duration tabs (paused 2026-11-02,
   `claude-notes/2026-11-02_spells-trust-audit.md`).
 - [ ] Gallatin Gateway: employment page returns "not found" (likely moved; scraper fix). Roberts: "site under
-  maintenance" (recheck).
+  maintenance" (recheck; the scraper passes that page text to the HTML reader as a file path,
+  so a maintenance page logs as an error, not empty).
+- [ ] Arrowhead Elementary #75: HTTP 403 on every weekly CI run since 2026-09-07 (`coverage_calendar.csv`), also after
+  the 2026-10-29 "recovered" fix, which works from the Mac only; likely Cloudflare blocking GitHub runner IPs. Its
+  postings have never reached the weekly data.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
   Also: drift issue "Central Safety Net" (`summarize_central_safety_net()`) still calls counted OPI postings
