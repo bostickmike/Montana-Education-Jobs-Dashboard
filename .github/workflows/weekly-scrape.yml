@@ -308,6 +308,7 @@ jobs:
             Mt_Ed_Jobs/manifest.json \
             Archived_HE_Data/*.xlsx \
             Archivek12_Data/*.csv
+          [ -f schoolspring_endings.csv ] && git add schoolspring_endings.csv || true
           # SHADOW-pilot review artifact -- only exists once the pilot has
           # produced at least one posting; staged separately so its absence
           # doesn't fail the git add above.
