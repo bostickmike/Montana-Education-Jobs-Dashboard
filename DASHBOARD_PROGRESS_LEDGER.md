@@ -484,7 +484,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     posted/closing dates and filled/canceled status, OPI closing dates, PeopleAdmin open/close dates, then the
     coverage calendar and the spells rebuild (`claude-notes/2026-11-03_posting-dates-plan.md`).
   * [x] Real posting dates, rest of step 1 (2026-11-04, SchoolSpring + PeopleAdmin in both states, OPI MT only;
-    commit pending): SchoolSpring reads each posting's own record (`api.schoolspring.com/api/Jobs/<jobId>`, no
+    e66ec72): SchoolSpring reads each posting's own record (`api.schoolspring.com/api/Jobs/<jobId>`, no
     login; `add_schoolspring_details()`): `Close_Date` is the deadline applicants see (the raw `closeDate` is UTC and
     "Posted until filled" is stored as 2050-01-01, so NA), `Job_Status` (posted/review/filled/canceled; raw archive
     only, always "posted" on the live board, for step 4) and posted pay from the board's own pay fields (none before;
