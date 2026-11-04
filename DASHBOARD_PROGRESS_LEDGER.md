@@ -483,12 +483,26 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `applitrack_output_wy_teton_single_position_type.bin`. Full weekly rehearsal passed. Next: SchoolSpring
     posted/closing dates and filled/canceled status, OPI closing dates, PeopleAdmin open/close dates, then the
     coverage calendar and the spells rebuild (`claude-notes/2026-11-03_posting-dates-plan.md`).
+  * [x] Real posting dates, rest of step 1 (2026-11-04, SchoolSpring + PeopleAdmin in both states, OPI MT only;
+    commit pending): SchoolSpring reads each posting's own record (`api.schoolspring.com/api/Jobs/<jobId>`, no
+    login; `add_schoolspring_details()`): `Close_Date` is the deadline applicants see (the raw `closeDate` is UTC and
+    "Posted until filled" is stored as 2050-01-01, so NA), `Job_Status` (posted/review/filled/canceled; raw archive
+    only, always "posted" on the live board, for step 4) and posted pay from the board's own pay fields (none before;
+    93 of 114 MT rows, 0 implausible; "Per Year" under $10k is a stipend, "Hourly and Certified Pay" read by amount,
+    "Substitute" left without pay). `displayDate` stays the posted date (`postDate` is record creation). OPI: the
+    grid's "Closing Date" (`opi_close_date()`; 362 of 366 "Open Until Filled" on 11-04). PeopleAdmin: the posting
+    page's open date replaces the feed's `<published>` where filled in (it moves on re-publish; a Great Falls pool
+    open since 2024-06-26 showed 2026-08-13), and new HE `Close_Date` in `hedata.xlsx` and the raw archive (not
+    `facultydata.csv`; rebuild script and accumulator test drop it too). MSU Bozeman and Northern leave both date
+    fields blank. Fixtures `schoolspring_job_*.json`; tests `test-peopleadmin-dates.R`. Full weekly rehearsal passed
+    (first run caught the HE `Close_Date` reaching `facultydata.csv`). Next: SchoolSpring ending reasons for postings
+    that left the board (step 4), coverage calendar, spells rebuild.
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Real posting dates, rest of step 1 (`claude-notes/2026-11-03_posting-dates-plan.md`): SchoolSpring detail
-  `postDate`/`closeDate` and `jobStatusID` (30 Posted, 40 Review, 50 Filled, 60 Canceled; survives after a posting
-  leaves the board), OPI grid "Closing Date", PeopleAdmin open/close dates.
+- [ ] Real posting dates, step 4: each week, read `Job_Status` (`fetch_schoolspring_details()`) for SchoolSpring
+  postings that left the board since the last run (filled / canceled / review), to label how they ended and
+  calibrate "filled" for other sources.
 - [ ] Real posting dates, steps 2-5: coverage calendar per source per run (ok/empty/error) so a missing posting only
   counts as ended when its source was healthy; daily presence check (42 structured-platform districts + OPI grid,
   ~50 requests/day); rebuild spells on posting identity with Kaplan-Meier (treat a board-wide default end date such
