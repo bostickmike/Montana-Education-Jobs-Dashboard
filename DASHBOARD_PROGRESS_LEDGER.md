@@ -484,3 +484,32 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     posted/closing dates and filled/canceled status, OPI closing dates, PeopleAdmin open/close dates, then the
     coverage calendar and the spells rebuild (`claude-notes/2026-11-03_posting-dates-plan.md`).
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
+
+**Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] Real posting dates, rest of step 1 (`claude-notes/2026-11-03_posting-dates-plan.md`): SchoolSpring detail
+  `postDate`/`closeDate` and `jobStatusID` (30 Posted, 40 Review, 50 Filled, 60 Canceled; survives after a posting
+  leaves the board), OPI grid "Closing Date", PeopleAdmin open/close dates.
+- [ ] Real posting dates, steps 2-5: coverage calendar per source per run (ok/empty/error) so a missing posting only
+  counts as ended when its source was healthy; daily presence check (42 structured-platform districts + OPI grid,
+  ~50 requests/day); rebuild spells on posting identity with Kaplan-Meier (treat a board-wide default end date such
+  as Bozeman's 2027-06-11 as no deadline); then un-pause the Listing Duration tabs (paused 2026-11-02,
+  `claude-notes/2026-11-02_spells-trust-audit.md`).
+- [ ] Gallatin Gateway: employment page returns "not found" (likely moved; scraper fix). Roberts: "site under
+  maintenance" (recheck).
+- [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
+  (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
+  Also: drift issue "Central Safety Net" (`summarize_central_safety_net()`) still calls counted OPI postings
+  "fallback"; ~3/week stale OPI listings (descriptions naming only past school years, e.g. Froid 2023) count.
+- [ ] Districts whose real board is OPI (19 checked 2026-11-03): mark "OPI is primary" so the adoption list only
+  flags new ones.
+- [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`; suggested order:
+  items 7, 8, 10, 13, then 5, 6, then 3). Confirm "Activities/Extracurricular" shows in the weekly data.
+- [ ] Title-shape bugs: Huntley Project "Bus Drivers- Must have a CDL...", Turner "Secretary - $14 per hour...",
+  "Dish_Server_Cashiers 26".
+- [ ] Rebuild scripts drift from the pipeline (they drop Est_*/OPI_District/Close_Date from combinedclean; don't run
+  them straight into the repo; proposal item 12). Weekly-totals downloads: keep one snapshot per week (decided
+  2026-11-02, latest snapshot wins; not built).
+- [ ] `scripts/repro_scraper.R "Columbia Falls School District 6"` aborts in its fixture step (scraper itself works).
+- [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
+- [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com.
+
