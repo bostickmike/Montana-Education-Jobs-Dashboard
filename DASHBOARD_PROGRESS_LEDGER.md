@@ -528,12 +528,25 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     left-censored starts are left out of durations. Delayed entry matters: plain KM 74.5 days, with entry at the age
     first seen 25.5 days (95% CI 23.5-30.5; 938 postings, 489 endings; Teacher 30.5). Read as "days listed", not
     time-to-fill. Full weekly rehearsal passed (`claude-notes/2026-11-03_posting-dates-plan.md`, "Step 5 findings").
+  * [x] Real posting dates, step 5, HE data layer (2026-11-04; b0cd82e): `scripts/build_posting_spells.R` also writes
+    `posting_spells_he.csv` and `posting_durations_he.csv` (all, all except MSU, by HE job type, by institution) from
+    `Archived_HE_Data` from 2026-08-11 (the first run covering every institution). HE archives have no `Posting_ID`,
+    so `add_he_posting_identity()` sets one: the per-posting link (PeopleAdmin, schooljobs, Paycom, isolved, ADP,
+    applytojob, Rocky's opportunity pages, posting PDFs/DOCX), otherwise institution + title for the four colleges
+    that link one employment page for every opening (Carroll, Miles, Salish Kootenai, Stone Child). Only posting
+    documents and title IDs are bridged across runs (Aaniiih Nakoda re-uploads PDFs under new names); a new
+    PeopleAdmin/schooljobs number is a new posting. Start = earliest plausible posted date (PeopleAdmin's feed date
+    moves forward on re-publish); shared titles excluded only for title IDs; endings from the calendar's HE rows.
+    Result: 879 postings, 605 in durations, 373 endings, median 21.5 days listed (95% CI 17.5-24.5); MSU is 360 of
+    the 605 at 15.5 days, all others 30.5 (25.5-37.5); Faculty 31.5. The curve is flat across 50% (17.5-21.5 days),
+    so quote the CI, not the point. Tests in `test-posting-spells.R`; full weekly rehearsal passed.
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Real posting dates, rest of step 5: HE spells on the same design (WY: K-12 and HE, once its coverage calendar
+- [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
-  `claude-notes/2026-11-02_spells-trust-audit.md`) show from `posting_durations_k12.csv`, and when. Treat a
+  `claude-notes/2026-11-02_spells-trust-audit.md`) show from `posting_durations_k12.csv` / `posting_durations_he.csv`,
+  and when. Treat a
   board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
   (42 structured-platform districts + OPI grid, ~50 requests/day) for day-precision ends.
 - [ ] Gallatin Gateway: employment page returns "not found" (likely moved; scraper fix). Roberts: "site under
