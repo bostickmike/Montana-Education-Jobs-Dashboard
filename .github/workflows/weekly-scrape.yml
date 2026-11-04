@@ -128,6 +128,14 @@ jobs:
           Rscript scripts/generate_job_duration_spells.R
           Rscript scripts/generate_he_job_duration_spells.R
 
+      # Posting-level K-12 spells and Kaplan-Meier durations (research tables
+      # at the repo root; the dashboard's duration tabs stay paused). Rebuilt
+      # from the archives each week; a failure here doesn't stop the run.
+      - name: Rebuild posting-level K-12 spells
+        id: build_posting_spells
+        continue-on-error: true
+        run: Rscript scripts/build_posting_spells.R
+
       - name: Sanity-check the new data before committing anything
         run: Rscript .github/scripts/sanity_check.R
 
@@ -208,6 +216,7 @@ jobs:
           [ "${{ steps.check_census_drift.outcome }}" = "failure" ] && FAILED="$FAILED check_census_drift.R"
           [ "${{ steps.check_pay_coverage.outcome }}" = "failure" ] && FAILED="$FAILED check_pay_coverage.R"
           [ "${{ steps.check_opi_crosscheck.outcome }}" = "failure" ] && FAILED="$FAILED check_opi_crosscheck.R"
+          [ "${{ steps.build_posting_spells.outcome }}" = "failure" ] && FAILED="$FAILED build_posting_spells.R"
 
           if [ -z "$FAILED" ]; then
             echo "All monitoring steps ran without crashing."
@@ -310,6 +319,7 @@ jobs:
             Archivek12_Data/*.csv
           [ -f schoolspring_endings.csv ] && git add schoolspring_endings.csv || true
           [ -f coverage_calendar.csv ] && git add coverage_calendar.csv || true
+          for f in posting_spells_k12.csv posting_durations_k12.csv; do [ -f $f ] && git add $f || true; done
           # SHADOW-pilot review artifact -- only exists once the pilot has
           # produced at least one posting; staged separately so its absence
           # doesn't fail the git add above.
