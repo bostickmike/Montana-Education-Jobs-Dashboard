@@ -39,23 +39,28 @@ applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
   if (nrow(df) > 0) df$District <- row$District
   df
 })
-# url comes from a join back to the registry (one job-board URL per
-# district, matching every other source's convention -- not a per-posting
-# deep link) since AppliTrack's own fetch doesn't carry the district's URL
-# through per-row.
+# url is the posting's own AppliTrack page, built from its job ID
+# (applitrack_posting_url()), so each posting is identified by it rather than
+# by its title; the district's board URL only when no job ID was read.
+# Close_Date is the board's "Closing Date" as written ("open until filled"
+# or a date; raw archive and combinedclean).
 applitrack_raw <- bind_rows(applitrack_results)
 if (nrow(applitrack_raw) > 0) {
   applitrack_df <- applitrack_raw %>%
     # A failed scrape's safe_scrape() placeholder has no Pay_* columns.
     ensure_posted_pay_columns() %>%
-    left_join(select(applitrack_districts, District, Job_Link), by = "District") %>%
-    transmute(title, date_posted, position = NA_character_, location, url = Job_Link, District,
+    mutate(job_id = if ("job_id" %in% names(.)) job_id else NA_character_,
+           closing_date = if ("closing_date" %in% names(.)) closing_date else NA_character_) %>%
+    left_join(select(applitrack_districts, District, Slug, Job_Link), by = "District") %>%
+    transmute(title, date_posted, position = NA_character_, location,
+              url = coalesce(applitrack_posting_url(Slug, job_id), Job_Link), District,
               Posting_Source = "AppliTrack (direct district board)",
+              Close_Date = closing_date,
               Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
   applitrack_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                               location = character(0), url = character(0), District = character(0),
-                              Posting_Source = character(0))
+                              Posting_Source = character(0), Close_Date = character(0))
 }
 
 # SchoolSpring / Tyler Portico -- same output shape (Title/Location/
@@ -102,6 +107,7 @@ if (nrow(tylerportico_df) > 0) {
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
               Posting_Source = "Tyler Portico (direct district board)",
+              Close_Date = if ("Close_Date" %in% names(.)) Close_Date else NA_character_,   # real end dates only
               Job_Code = if ("Job_Code" %in% names(.)) Job_Code else NA_character_)   # OPI matching key (raw archive only)
 } else {
   tylerportico_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
@@ -3360,7 +3366,7 @@ opi_df <- bind_rows(opi_rec$opi_keep %>% mutate(OPI_Counted = TRUE),
 # district we scrape) so the drift check still sees OPI's whole feed and the
 # raw record stays complete; everything downstream counts OPI_Counted rows.
 combined_all <- bind_rows(direct_df, opi_df) %>%
-  mutate(
+  mutate(Close_Date = if ("Close_Date" %in% names(.)) as.character(Close_Date) else NA_character_,
     across(c(title, position, location, url, District, Posting_Source), normalize_posting_text),
     Archive_Date = Sys.Date()
   ) %>%
@@ -3419,7 +3425,7 @@ combinedclean <- combined %>%
                         "MT") %>%
   select(title, Archive_Date, date_posted, position, location, url, District,
          Posting_Source, Posting_Identity_Method, Posting_ID, OPI_District, Also_On_OPI,
-         all_of(POSTED_PAY_COLUMNS), all_of(OEWS_ESTIMATE_COLUMNS))
+         Close_Date, all_of(POSTED_PAY_COLUMNS), all_of(OEWS_ESTIMATE_COLUMNS))
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)

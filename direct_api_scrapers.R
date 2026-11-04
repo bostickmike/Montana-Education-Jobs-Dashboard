@@ -62,6 +62,14 @@ fetch_applitrack_postings <- function(tenant_path) {
   parse_applitrack_output(resp_body_string(resp, encoding = "Windows-1252"))
 }
 
+# The posting's own page on the district's AppliTrack board (the link the
+# board's "Email To A Friend" button shares). NA without a job ID.
+applitrack_posting_url <- function(tenant_path, job_id) {
+  ifelse(is.na(job_id) | !nzchar(job_id), NA_character_,
+         paste0("https://www.applitrack.com/", tenant_path,
+                "/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=", job_id))
+}
+
 # extract_posted_pay() lives in k12_he_classification.R; standalone scripts
 # (repro_scraper.R, live_check_autofix.R) source this file on its own.
 if (!exists("extract_posted_pay", mode = "function")) source("k12_he_classification.R")
@@ -78,6 +86,7 @@ parse_applitrack_output <- function(js_text) {
   if (!nzchar(html)) {
     return(data.frame(title = character(0), position = character(0), position2 = character(0),
                        date_posted = character(0), location = character(0), closing_date = character(0),
+                       job_id = character(0),
                        Pay_Min = numeric(0), Pay_Max = numeric(0), Pay_Unit = character(0),
                        Pay_Text = character(0), stringsAsFactors = FALSE))
   }
@@ -88,40 +97,37 @@ parse_applitrack_output <- function(js_text) {
   if (length(postings) == 0) {
     return(data.frame(title = character(0), position = character(0), position2 = character(0),
                        date_posted = character(0), location = character(0), closing_date = character(0),
+                       job_id = character(0),
                        Pay_Min = numeric(0), Pay_Max = numeric(0), Pay_Unit = character(0),
                        Pay_Text = character(0), stringsAsFactors = FALSE))
   }
 
   rows <- lapply(postings, function(p) {
     title <- rvest::html_text2(rvest::html_element(p, "table.title td#wrapword"))
-    labels <- rvest::html_text2(rvest::html_elements(p, "li span.label"))
-    values <- rvest::html_text2(rvest::html_elements(p, "li span.normal"))
-
-    # "Position Type:" can consume TWO consecutive values (category +
-    # subcategory, e.g. "Support Staff/" and "Para-Educator Special
-    # Services") when the next value isn't itself another label's value
-    # (heuristic: doesn't contain ":"). Getting this wrong shifts every
-    # subsequent field by one position, corrupting date_posted/location/
-    # closing_date even though position2 itself is discarded downstream
-    # (combinedclean only keeps title/date_posted/position/location/url/
-    # District).
+    # Each field is its own <li>: one span.label and its span.normal
+    # value(s). "Position Type:" has one value or two (category +
+    # subcategory, e.g. "Support Staff/" + "Para-Educator Special
+    # Services"). Values are read per <li>, never by a running position
+    # across the posting: guessing whether a second Position Type value
+    # existed (from whether the next value had a ":") swallowed the next
+    # field's value when it didn't, e.g. a "Date Posted" date, and shifted
+    # every later field by one (WY Teton #1 and Carbon #1, 2026-11-03).
+    # Description <li>s carry no span.label and are skipped.
     field <- setNames(as.list(rep(NA_character_, 5)), c("position", "position2", "date_posted", "location", "closing_date"))
-    j <- 1
-    for (label in labels) {
+    for (li in rvest::html_elements(p, xpath = ".//li[span[contains(concat(' ', normalize-space(@class), ' '), ' label ')]]")) {
+      label <- trimws(rvest::html_text2(rvest::html_element(li, "span.label")))
+      values <- rvest::html_text2(rvest::html_elements(li, "span.normal"))
+      if (length(values) == 0) next
       if (label == "Position Type:") {
-        field$position <- values[j]
-        if (j + 1 <= length(values) && !grepl(":", values[j + 1])) {
-          field$position2 <- values[j + 1]
-          j <- j + 1
-        }
+        field$position <- values[1]
+        if (length(values) >= 2) field$position2 <- values[2]
       } else if (label == "Date Posted:") {
-        field$date_posted <- values[j]
+        field$date_posted <- values[1]
       } else if (label == "Location:") {
-        field$location <- values[j]
+        field$location <- values[1]
       } else if (label == "Closing Date:") {
-        field$closing_date <- values[j]
+        field$closing_date <- values[1]
       }
-      j <- j + 1
     }
 
     # Most AppliTrack postings state their pay in the body ("SALARY:
@@ -129,9 +135,17 @@ parse_applitrack_output <- function(js_text) {
     # all=1 listing already includes -- no extra request needed.
     pay <- extract_posted_pay(rvest::html_text2(p))
 
+    # AppliTrack's own per-posting ID: the block's id ("p2138_") and the
+    # "JobID: 2138" beside its title. It makes a stable per-posting link
+    # (applitrack_posting_url()), so postings sharing a title stay apart.
+    job_id <- sub("^p(\\d+)_?$", "\\1", rvest::html_attr(p, "id"))
+    if (is.na(job_id) || !grepl("^\\d+$", job_id)) {
+      job_id <- stringr::str_match(rvest::html_text2(rvest::html_element(p, "table.title")), "JobID:\\s*(\\d+)")[, 2]
+    }
+
     data.frame(title = title, position = field$position, position2 = field$position2,
                date_posted = field$date_posted, location = field$location,
-               closing_date = field$closing_date, pay, stringsAsFactors = FALSE)
+               closing_date = field$closing_date, job_id = job_id, pay, stringsAsFactors = FALSE)
   })
 
   do.call(rbind, rows)
@@ -417,10 +431,15 @@ fetch_tylerportico_postings <- function(tenant_subdomain, institution_name) {
 # posting, and reading window.location.href, since this route isn't a plain
 # <a href> in the markup (Tyler's Forge/Material components bind clicks in
 # JS) and isn't derivable from the minified bundle by string search alone.
-parse_tylerportico_positions <- function(json_text, institution_name, base_url) {
+#
+# Close_Date is postingEndDate only when it is a real end date: Tyler fills an
+# open-ended posting's end with the day it is fetched plus one year (37 of 39
+# Kalispell postings fetched 2026-11-03 "end" 2027-11-03; 44 of 49 fetched
+# 2026-08-06 "end" 2027-08-06), so that value (+/- a day for time zones) is NA.
+parse_tylerportico_positions <- function(json_text, institution_name, base_url, fetched = Sys.Date()) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0), Job_Code = character(0),
-                       stringsAsFactors = FALSE)
+                       Close_Date = character(0), stringsAsFactors = FALSE)
 
   positions <- jsonlite::fromJSON(json_text, simplifyVector = TRUE)
   if (length(positions) == 0 || nrow(positions) == 0) return(empty)
@@ -437,8 +456,15 @@ parse_tylerportico_positions <- function(json_text, institution_name, base_url) 
     # The district's own job code ("JP491280 - 1271"); OPI descriptions of the
     # same job quote it ("JP054494"), an exact key for opi_matcher.R.
     Job_Code = if ("code" %in% names(positions)) as.character(positions$code) else NA_character_,
+    Close_Date = tylerportico_close_date(positions$postingEndDate, fetched),
     stringsAsFactors = FALSE
   )
+}
+
+tylerportico_close_date <- function(end_date, fetched = Sys.Date()) {
+  end <- as.Date(substr(as.character(end_date), 1, 10))
+  placeholder <- seq(as.Date(fetched), by = "1 year", length.out = 2)[2]
+  ifelse(is.na(end) | abs(as.numeric(end - placeholder)) <= 1, NA_character_, format(end))
 }
 
 # ---------------------------------------------------------------------------

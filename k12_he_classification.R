@@ -73,7 +73,7 @@ is_opi_statewide_posting <- function(url) {
 # board can host many simultaneous postings.
 is_stable_posting_url <- function(url) {
   grepl(
-    "(/jobs?/[^/?#]+|/job-list/[^/?#]+|ViewJob\\.aspx\\?JobID=|[?&](jobId|jobID|id)=|\\.pdf(?:[?#]|$))",
+    "(/jobs?/[^/?#]+|/job-list/[^/?#]+|ViewJob\\.aspx\\?JobID=|[?&](jobId|jobID|id|AppliTrackJobId)=|\\.pdf(?:[?#]|$))",
     normalize_posting_text(url),
     perl = TRUE
   )

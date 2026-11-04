@@ -45,7 +45,7 @@ test_that("parse_tylerportico_positions returns zero rows (not an error) for an 
   )
 
   expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Job_Code"))   # Job_Code: OPI matching key
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Job_Code", "Close_Date"))   # Job_Code: OPI matching key
 })
 
 test_that("fetch_tylerportico_postings fetches and parses a live-shaped response", {
@@ -78,4 +78,19 @@ test_that("fetch_tylerportico_postings works for migrated districts (Bozeman, Po
   expect_equal(nrow(res_polson), 1)
   expect_equal(res_polson$Title, "Teacher")
   expect_equal(res_polson$Link, "https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/pos-1")
+})
+
+test_that("Tyler Portico Close_Date keeps real end dates, not the fetch-date-plus-a-year placeholder", {
+  # Real fixture captured 2026-11-03 from Kalispell's api/Positions: 37 of 39
+  # postings "end" 2027-11-03 (open-ended), one 2027-06-05, one 2026-05-20.
+  fixture <- paste(readLines(test_path("fixtures", "tylerportico_kalispell_2026-11-03.json"), warn = FALSE), collapse = "\n")
+  result <- parse_tylerportico_positions(fixture, "Kalispell Public Schools",
+                                         "https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen",
+                                         fetched = as.Date("2026-11-03"))
+  expect_equal(sort(result$Close_Date[!is.na(result$Close_Date)]), c("2026-05-20", "2027-06-05"))
+  expect_equal(sum(is.na(result$Close_Date)), nrow(result) - 2)
+  # A fetch a day off (UTC vs local date) still reads the placeholder as none.
+  expect_true(is.na(tylerportico_close_date("2027-11-03T00:00:00", as.Date("2026-11-02"))))
+  expect_equal(tylerportico_close_date("2026-12-15T00:00:00", as.Date("2026-11-03")), "2026-12-15")
+  expect_true("Close_Date" %in% names(parse_tylerportico_positions("[]", "x", "y")))
 })

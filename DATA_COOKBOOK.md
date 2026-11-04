@@ -28,6 +28,7 @@ One row per open K-12 posting, all position types (not just teachers). Rebuilt f
 | `Posting_ID` | text | Internal key used consistently for current counts, vacancy numerators, trends, and New This Week. See "Posting identity" below. |
 | `OPI_District` | text | OPI rows only: the employer's district named on the posting's detail page (`parse_opi_job_details()`), in OPI's own naming ("Lockwood K-12"). NA for direct-board rows, and for OPI rows whose detail page failed or fell past the time budget. It is NCES CCD's district name, so it decides (through `mt_district_crosswalk.csv`) whether the posting counts and which `District` it carries, and gives its county for `Est_Area`. `Posting_ID` is unchanged. |
 | `Also_On_OPI` | logical | TRUE for a direct-board posting that OPI also lists (the same opening, decided by `match_opi_postings()` in `opi_matcher.R`). Shown in the Jobs Table as "· also on OPI" after the source. |
+| `Close_Date` | text | The posting's closing date as its board states it, unparsed: a date, or "Open Until Filled" / "When filled" / "TBD" and similar. AppliTrack (from 2026-11-03) and Tyler Portico rows with a real end date (Tyler fills open-ended postings with the fetch date plus a year, which is left NA); NA where the board gives none and for other sources. |
 
 **Sources combined into this file**: AppliTrack, SchoolSpring, Tyler Portico, and TedK12 direct-district scrapes (`k12_district_registry.csv`'s directly-scraped districts), plus OPI's "Jobs for Teachers" statewide feed, de-duplicated **posting by posting** (`opi_reconcile.R`; user's rule, 2026-11-03): an OPI posting at a district we scrape is dropped only when it is the same opening as a specific posting on that district's own board (`match_opi_postings()`, `opi_matcher.R`: the job named in the OPI description vs. the board title, with role/grade-level/SPED/sub agreement and weighted word overlap; measured against 142 hand-labeled postings, `test-opi-matcher.R`). The matched board posting gets `Also_On_OPI`. Every other OPI posting counts, labeled with the registry district, and is listed in the weekly QC report (`mt_discrepancy_report.csv`, the drift issue's "OPI cross-check"): 37 districts post their teaching jobs only on OPI, and about half of OPI's postings at districts whose board does list teaching jobs aren't on that board. OPI's own repeat listings of one job (same district, same description) count once. When a district's board returned nothing, OPI postings over 60 days old aren't used (from 2026-11-03 on). OPI postings for districts we don't scrape count too (adoption candidates, on the map from `opi_only_districts.csv`). The raw archive keeps every OPI posting with `OPI_Counted`, `OPI_Drop_Reason`, `OPI_School` and `OPI_Description`; this file holds the counted ones. History before 2026-11-03 was recomputed the same way from OPI subject titles alone (no descriptions archived), so past weeks may include ~30 postings/week that OPI listed twice (`scripts/reconcile_opi_history.R`).
 
@@ -166,8 +167,11 @@ One current row per this project's **128 directly-scraped K-12 districts** (`k12
 The pipeline assigns one `Posting_ID` before any K-12 current count, vacancy
 numerator, weekly total, `allnow.csv`/`allsum.csv` aggregate, trend, or New
 This Week comparison is made. A direct structured source uses its stable
-per-posting URL when one is available (SchoolSpring, Tyler Portico, TedK12,
-and direct PDF links are current examples). A listing/board URL is **not**
+per-posting URL when one is available (AppliTrack, SchoolSpring, Tyler Portico,
+TedK12, and direct PDF links are current examples). AppliTrack's is built from
+the board's own job ID (`applitrack_posting_url()`, from 2026-11-03; before
+that AppliTrack rows used the title fallback, and the 2026-11-03 week was moved
+onto the job-ID links by matching the live boards). A listing/board URL is **not**
 mistaken for an ID because one board can hold many posts.
 
 Some direct sites expose no stable per-posting URL; their fallback combines
