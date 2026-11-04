@@ -497,15 +497,23 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     fields blank. Fixtures `schoolspring_job_*.json`; tests `test-peopleadmin-dates.R`. Full weekly rehearsal passed
     (first run caught the HE `Close_Date` reaching `facultydata.csv`). Next: SchoolSpring ending reasons for postings
     that left the board (step 4), coverage calendar, spells rebuild.
+  * [x] Real posting dates, step 4 (2026-11-04, both states; 0c8b4c7): `refresh_schoolspring_endings()`
+    (`direct_api_scrapers.R`) runs after the raw archive is written: every SchoolSpring job ID listed in the past
+    year but not today is looked up (`fetch_schoolspring_details()`), and `schoolspring_endings.csv` (repo root,
+    committed by the weekly workflow) keeps one row per ended posting: District, Title, board posted date,
+    First_Seen/Last_Seen, `Job_Status`, Status_Since, Last_Checked. Filled/canceled are final, review is rechecked
+    weekly, and a lookup still saying "posted" (our scrape missed a live posting) records nothing. First lookup:
+    MT 99 postings that left Aug-Oct (62 filled, 17 canceled, 20 review), WY 504 (294 / 119 / 91). Districts use the statuses differently (MT Libby leaves all at review; WY Campbell County 1 closes 79 as
+    canceled vs 8 filled), so a pooled filled share is not a calibration constant
+    (`claude-notes/2026-11-03_posting-dates-plan.md`, "Step 4 findings"). Tests in
+    `test-schoolspring-scraper.R`. Full weekly rehearsal passed.
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Real posting dates, step 4: each week, read `Job_Status` (`fetch_schoolspring_details()`) for SchoolSpring
-  postings that left the board since the last run (filled / canceled / review), to label how they ended and
-  calibrate "filled" for other sources.
-- [ ] Real posting dates, steps 2-5: coverage calendar per source per run (ok/empty/error) so a missing posting only
+- [ ] Real posting dates, steps 2, 3, 5: coverage calendar per source per run (ok/empty/error) so a missing posting only
   counts as ended when its source was healthy; daily presence check (42 structured-platform districts + OPI grid,
-  ~50 requests/day); rebuild spells on posting identity with Kaplan-Meier (treat a board-wide default end date such
+  ~50 requests/day); rebuild spells on posting identity with Kaplan-Meier (SchoolSpring endings from
+  `schoolspring_endings.csv`; treat a board-wide default end date such
   as Bozeman's 2027-06-11 as no deadline); then un-pause the Listing Duration tabs (paused 2026-11-02,
   `claude-notes/2026-11-02_spells-trust-audit.md`).
 - [ ] Gallatin Gateway: employment page returns "not found" (likely moved; scraper fix). Roberts: "site under
