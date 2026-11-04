@@ -531,12 +531,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Real posting dates, rest of step 5: HE and WY spells on the same design; decide what (if anything) the
-  Listing Duration tabs show from `posting_durations_k12.csv`, and when. Step 3 (optional): daily presence check (42 structured-platform districts + OPI grid,
-  ~50 requests/day); rebuild spells on posting identity with Kaplan-Meier (SchoolSpring endings from
-  `schoolspring_endings.csv`; treat a board-wide default end date such
-  as Bozeman's 2027-06-11 as no deadline); then un-pause the Listing Duration tabs (paused 2026-11-02,
-  `claude-notes/2026-11-02_spells-trust-audit.md`).
+- [ ] Real posting dates, rest of step 5: HE spells on the same design (WY: K-12 and HE, once its coverage calendar
+  has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
+  `claude-notes/2026-11-02_spells-trust-audit.md`) show from `posting_durations_k12.csv`, and when. Treat a
+  board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
+  (42 structured-platform districts + OPI grid, ~50 requests/day) for day-precision ends.
 - [ ] Gallatin Gateway: employment page returns "not found" (likely moved; scraper fix). Roberts: "site under
   maintenance" (recheck; the scraper passes that page text to the HTML reader as a file path,
   so a maintenance page logs as an error, not empty).
