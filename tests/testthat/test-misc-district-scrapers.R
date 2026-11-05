@@ -1927,6 +1927,12 @@ test_that("fetch_roberts_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 3)
 })
 
+test_that("a maintenance page with no HTML is a clear error, not a file-path error", {
+  # Real body captured 2026-11-04 (HTTP 200).
+  body <- paste(readLines(test_path("fixtures", "roberts_maintenance.txt"), warn = FALSE), collapse = "\n")
+  expect_error(parse_roberts_postings(body, "url"), "no HTML: \"site under maintenance\"")
+})
+
 # Real fixture captured 2026-08-24 from winnettschool.org's Employment
 # page (Squarespace, same platform as Terry above).
 
@@ -2279,8 +2285,8 @@ test_that("fetch_terry_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 14)
 })
 
-# Real fixture captured 2026-08-24 from gallatingatewayschool.com's
-# Employment page (CatapultCMS, a new platform for this project).
+# Real fixture from gallatingatewayschool.com's Employment page (CatapultCMS),
+# recaptured 2026-11-04 at its new address, About-Us/Employment/.
 
 test_that("parse_gallatingateway_postings extracts the 3 real 'always hiring' postings", {
   html <- paste(readLines(test_path("fixtures", "gallatingateway_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")

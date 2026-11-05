@@ -823,6 +823,10 @@ parse_valier_postings <- function(html_text, url) {
 # postings (Full Time Custodian, Substitute Teachers Needed, Classroom
 # Aide). Its Cloudflare front intermittently answers 502/520 to CI
 # runners, so it retries those too, with a longer budget (~1 min).
+# From 2026-11-03 the site answers HTTP 200 with the bare text " site under
+# maintenance " (no HTML); read_html() took that for a file path. A body with
+# no markup now fails with that text as the error, so the run logs an error
+# (the source wasn't healthy) that says what happened.
 fetch_roberts_postings <- function(url = "https://www.robertsrockets.org/index.php/district-information/district-employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
@@ -835,6 +839,9 @@ parse_roberts_postings <- function(html_text, url) {
                        Posted_Date = character(0), Link = character(0),
                        stringsAsFactors = FALSE)
 
+  if (!grepl("<", html_text, fixed = TRUE)) {
+    stop("Roberts returned a page with no HTML: \"", substr(trimws(html_text), 1, 80), "\"", call. = FALSE)
+  }
   page <- rvest::read_html(html_text)
   titles <- rvest::html_text2(rvest::html_elements(page, "table.uk-table tbody tr .el-title"))
   titles <- trimws(titles)
@@ -2908,8 +2915,9 @@ parse_terry_postings <- function(html_text, url) {
 # boilerplate to exclude. Confirmed live 2026-08-24, 3 real postings
 # (Substitute Teacher, Athletic Director, Business Manager). Stops at
 # "EMPLOYMENT APPLICATION", the real, stable boundary before the
-# application-form links.
-fetch_gallatingateway_postings <- function(url = "https://www.gallatingatewayschool.com/Employment/") {
+# application-form links. The page moved to About-Us/Employment/ by
+# 2026-11-03 (old /Employment/ returns 404); same content and layout.
+fetch_gallatingateway_postings <- function(url = "https://www.gallatingatewayschool.com/About-Us/Employment/") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
     perform_with_retry()
