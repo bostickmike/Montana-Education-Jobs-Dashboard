@@ -559,3 +559,27 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
   if (length(md) == 0) return(character(0))
   c("", "---", "", "### OPI cross-check", "", md)
 }
+
+# One raw archive file's counted K-12 rows under the current rule, as the
+# pipeline counted them that week: identity added, the OPI rule applied
+# (opi_rule_for_archive(): the archive's own OPI_Counted where it has one,
+# reconciled here where it doesn't), District as counted and canonicalized,
+# placeholders out; Is_OPI marks OPI rows. Always one file at a time: after
+# bind_rows() of several archives, older weeks carry an all-NA OPI_Counted
+# column, which reads as "counted" and skips their reconciliation (the
+# rebuild and the posting panel both did this until 2026-11-04).
+read_counted_archive_week <- function(path, crosswalk, registry, recompute = FALSE) {
+  w <- utils::read.csv(path, colClasses = c(Archive_Date = "character"), stringsAsFactors = FALSE,
+                       check.names = FALSE)
+  w <- w[, setdiff(names(w), c("X", "Posting_ID", "Posting_Identity_Method")), drop = FALSE]
+  w$Archive_Date <- as.character(as.Date(w$Archive_Date, tryFormats = c("%Y-%m-%d", "%m/%d/%Y")))
+  for (col in intersect(c("title", "position", "location", "url", "District", "Posting_Source"), names(w))) {
+    w[[col]] <- normalize_posting_text(w[[col]])
+  }
+  w <- add_k12_posting_identity(w)
+  w <- w[!duplicated(w$Posting_ID), , drop = FALSE]
+  rule <- opi_rule_for_archive(w, crosswalk, registry, recompute = recompute)
+  w$Is_OPI <- rule$Is_OPI
+  w$District <- canonicalize_k12_district(rule$District)
+  w[rule$Counted & !is_placeholder_posting(w$title), , drop = FALSE]
+}

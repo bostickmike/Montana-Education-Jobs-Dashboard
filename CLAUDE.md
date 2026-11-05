@@ -52,6 +52,8 @@ Rscript scripts/rebuild_k12_history_from_archive.R
 Rscript scripts/rebuild_he_history_from_archive.R
 ```
 
+The rebuild reproduces the committed files exactly (`Rscript .github/scripts/check_rebuild_parity.R`, also a non-blocking weekly step): K-12 rows go through the same `read_counted_archive_week()` (`opi_reconcile.R`, one archive file at a time) and `build_k12_combinedclean()` / `build_k12_teacher_rows()` (`history_accumulator.R`) as the pipeline. After changing `k12_he_classification.R`, reclassify the committed data with `Rscript scripts/reclassify_committed_data.R` (dry run; `--apply` writes): `test-weekly-data-quality.R` fails until every committed bucket equals what the classifier gives its title.
+
 ## Architecture
 
 **Pipeline vs. dashboard are separate R programs sharing derived CSVs.** `Mt_ED_Jobs.Rmd` is the single pipeline entry point — it scrapes every source, classifies/cleans postings, and appends this week's newly derived rows onto the accumulated datasets in `Mt_Ed_Jobs/`. `Mt_Ed_Jobs/app.R` is the Shiny dashboard that reads those same committed CSVs; it never scrapes anything itself. The weekly GitHub Actions workflow (`.github/workflows/weekly-scrape.yml`) runs the pipeline, and a commit+push of the changed CSVs is what triggers the Posit Connect Cloud redeploy of the dashboard — there is no build step connecting the two beyond that shared data.

@@ -26,62 +26,40 @@
 suppressMessages(library(dplyr))
 
 rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
-                                             crosswalk_path = file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv"),
-                                             registry_path = "k12_district_registry.csv") {
-  csv_files <- list.files(archive_dir, pattern = "\\.csv$", full.names = TRUE)
+                                             crosswalk_path = here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"),
+                                             registry_path = here::here("k12_district_registry.csv"),
+                                             reference_dir = here::here("Mt_Ed_Jobs")) {
+  csv_files <- list.files(archive_dir, pattern = "^combined_.*\\.csv$", full.names = TRUE)
   if (length(csv_files) == 0) {
     stop("rebuild_k12_history_from_archive(): no archive files found in ", archive_dir)
   }
-
-  combined_k12_data <- csv_files %>%
-    lapply(function(file) read.csv(file, colClasses = c("Archive_Date" = "character"))) %>%
-    bind_rows() %>%
-    select(-any_of("X"))
-
-  combined_k12_data <- combined_k12_data %>%
-    mutate(Archive_Date = case_when(
-      grepl("/", Archive_Date) ~ as.Date(Archive_Date, format = "%m/%d/%Y"),
-      grepl("-", Archive_Date) ~ as.Date(Archive_Date, format = "%Y-%m-%d"),
-      TRUE ~ as.Date(NA)
-    )) %>%
-    mutate(across(any_of(c("title", "position", "location", "url", "District", "Posting_Source")),
-                  normalize_posting_text)) %>%
-    add_k12_posting_identity() %>%
-    distinct(Posting_ID, Archive_Date, .keep_all = TRUE)
-
-  # OPI vs. direct scrapes (opi_reconcile.R): per week, OPI postings at a
-  # district we scrape aren't counted, and counted ones carry their district
-  # label -- what the pipeline does before writing combinedclean.csv.
-  if (!file.exists(crosswalk_path) || !file.exists(registry_path)) {
-    message("No district crosswalk/registry at ", crosswalk_path, " -- OPI rows rebuilt as archived, not reconciled.")
-  } else {
   crosswalk <- read.csv(crosswalk_path, stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
   registry <- read.csv(registry_path, stringsAsFactors = FALSE)
-  combined_k12_data <- combined_k12_data %>%
-    group_split(Archive_Date) %>%
-    lapply(function(week) {
-      rule <- opi_rule_for_archive(week, crosswalk, registry)
-      week$District <- rule$District
-      week[rule$Counted, , drop = FALSE]
+
+  # Each week under the OPI rule on its own (read_counted_archive_week(),
+  # opi_reconcile.R): bind_rows() first gave old weeks an all-NA OPI_Counted
+  # column, which skipped their reconciliation (old OPI rows kept their raw
+  # town as District and were all counted). Columns are bound as character,
+  # since a column can be all-NA logical in one week and text in another.
+  counted <- csv_files %>%
+    lapply(function(f) {
+      w <- read_counted_archive_week(f, crosswalk, registry)
+      w[] <- lapply(w, function(x) if (is.logical(x) && all(is.na(x))) as.character(x) else x)
+      w
     }) %>%
-    bind_rows()
-  }
+    bind_rows() %>%
+    mutate(Archive_Date = as.Date(Archive_Date))
 
-  combinedclean <- combined_k12_data %>%
-    filter(!is_placeholder_posting(title)) %>%
-    mutate(position = classify_k12_position(title),
-           District = canonicalize_k12_district(District)) %>%
-    ensure_posted_pay_columns() %>%
-    drop_implausible_pay() %>%
-    dplyr::select(title, Archive_Date, date_posted, position, location, url, District,
-                  Posting_Source, Posting_Identity_Method, Posting_ID, all_of(POSTED_PAY_COLUMNS))
+  # Pay columns and Also_On_OPI back to the types the pipeline writes.
+  for (col in intersect(c("Pay_Min", "Pay_Max"), names(counted))) counted[[col]] <- suppressWarnings(as.numeric(counted[[col]]))
+  if ("Also_On_OPI" %in% names(counted)) counted$Also_On_OPI <- as.logical(counted$Also_On_OPI)
 
-  k12jobs <- combinedclean %>%
-    filter(position == "Teacher") %>%
-    mutate(Category = classify_k12_subject(title),
-           Broad_Category = classify_k12_broad_category(Category)) %>%
-    select(title, Archive_Date, position, location, url, District,
-           Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
+  oews_wages <- read.csv(file.path(reference_dir, "oews_role_wages.csv"), stringsAsFactors = FALSE,
+                         colClasses = c(Area_Code = "character", SOC = "character", Year = "character"))
+  district_county <- registry[, c("District", "County")]
+  opi_counties <- read.csv(file.path(reference_dir, "opi_district_counties.csv"), stringsAsFactors = FALSE)
+  combinedclean <- build_k12_combinedclean(counted, oews_wages, district_county, opi_counties, "MT")
+  k12jobs <- build_k12_teacher_rows(combinedclean)
 
   k12_district_weekly_totals <- combinedclean %>%
     group_by(District, Archive_Date) %>%
@@ -123,6 +101,8 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
 if (sys.nframe() == 0) {
   source("k12_he_classification.R")
   source("opi_reconcile.R")
+  source("bls_oews_scraper.R")
+  source("history_accumulator.R")
   result <- rebuild_k12_history_from_archive()
 
   write.csv(result$combinedclean, file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)

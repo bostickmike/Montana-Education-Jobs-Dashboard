@@ -101,3 +101,83 @@ check_total_matches_parts <- function(total_rows, part_rows, group_cols, value_c
   }
   invisible(TRUE)
 }
+
+# ---------------------------------------------------------------------------
+# The K-12 derived rows, built one way for the weekly pipeline
+# (Mt_ED_Jobs.Rmd) and for the from-archive rebuild
+# (scripts/rebuild_k12_history_from_archive.R), so the two can't drift apart
+# (classification safeguards proposal, item 12: the rebuild had dropped
+# OPI_District, Also_On_OPI, Close_Date and Est_*).
+# ---------------------------------------------------------------------------
+
+# combinedclean.csv's rows from counted K-12 postings (direct rows plus the OPI
+# rows the rule counts): placeholders out, current classifier, posted pay
+# guarded (drop_implausible_pay()), and the OEWS pay estimate for the
+# posting's role in its district's county -- the registry's, else (OPI rows)
+# the county of the district its detail page names; statewide where neither
+# is known. Needs bls_oews_scraper.R sourced.
+build_k12_combinedclean <- function(counted, oews_wages, district_county, opi_counties, state = "MT") {
+  for (col in c("OPI_District", "Close_Date")) {
+    if (!col %in% names(counted)) counted[[col]] <- NA_character_
+  }
+  if (!"Also_On_OPI" %in% names(counted)) counted$Also_On_OPI <- NA
+  counted$Close_Date <- as.character(counted$Close_Date)
+  out <- counted %>%
+    filter(!is_placeholder_posting(title)) %>%
+    mutate(position = classify_k12_position(title),
+           District = canonicalize_k12_district(District)) %>%
+    ensure_posted_pay_columns() %>%
+    drop_implausible_pay()
+  out <- attach_oews_estimates(out, oews_wages,
+                               dplyr::coalesce(district_county$County[match(out$District, district_county$District)],
+                                               opi_counties$County[match(out$OPI_District, opi_counties$OPI_District)]),
+                               state)
+  out %>%
+    select(title, Archive_Date, date_posted, position, location, url, District,
+           Posting_Source, Posting_Identity_Method, Posting_ID, OPI_District, Also_On_OPI,
+           Close_Date, all_of(POSTED_PAY_COLUMNS), all_of(OEWS_ESTIMATE_COLUMNS))
+}
+
+# k12jobanalysis.csv's rows: the Teacher postings, with subject and broad
+# category.
+build_k12_teacher_rows <- function(combinedclean) {
+  combinedclean %>%
+    filter(position == "Teacher") %>%
+    mutate(Category = classify_k12_subject(title),
+           Broad_Category = classify_k12_broad_category(Category)) %>%
+    select(title, Archive_Date, position, location, url, District,
+           Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
+}
+
+# Rebuild parity (classification safeguards, item 12): how one rebuilt file
+# differs from the committed one, ignoring row order, NA vs "" and \r\n vs \n (CSV
+# round-trips blur them). Both sides compared as text. Returns one row:
+# File, Committed_Rows, Rebuilt_Rows, Missing_Cols (in committed, not rebuilt),
+# Extra_Cols, Only_Committed / Only_Rebuilt (row counts on the shared columns)
+# and Example (one differing row from each side).
+rebuild_parity_row <- function(file, committed, rebuilt) {
+  as_text <- function(d) {
+    d <- as.data.frame(d, stringsAsFactors = FALSE)
+    d[] <- lapply(d, function(x) {
+      x <- gsub("\r\n", "\n", as.character(x), fixed = TRUE)   # read.csv() turns a quoted \r\n into \n
+      x[is.na(x) | x == ""] <- "<NA>"
+      x
+    })
+    d
+  }
+  committed <- as_text(committed); rebuilt <- as_text(rebuilt)
+  common <- intersect(names(committed), names(rebuilt))
+  key <- function(d) if (length(common)) do.call(paste, c(unname(d[common]), sep = " | ")) else character(nrow(d))
+  a <- key(committed); b <- key(rebuilt)
+  # Multiset difference: a row twice in one file and once in the other differs.
+  tab <- function(x) table(factor(x, levels = unique(c(a, b))))
+  diff_count <- tab(a) - tab(b)
+  only_c <- names(diff_count)[diff_count > 0]; only_r <- names(diff_count)[diff_count < 0]
+  data.frame(File = file, Committed_Rows = nrow(committed), Rebuilt_Rows = nrow(rebuilt),
+             Missing_Cols = paste(setdiff(names(committed), names(rebuilt)), collapse = ", "),
+             Extra_Cols = paste(setdiff(names(rebuilt), names(committed)), collapse = ", "),
+             Only_Committed = sum(diff_count[diff_count > 0]), Only_Rebuilt = -sum(diff_count[diff_count < 0]),
+             Example = paste(c(if (length(only_c)) paste("committed:", only_c[1]), if (length(only_r)) paste("rebuilt:", only_r[1])),
+                             collapse = " // "),
+             stringsAsFactors = FALSE)
+}

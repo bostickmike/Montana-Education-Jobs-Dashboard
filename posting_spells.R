@@ -39,28 +39,21 @@ EVERGREEN_TITLE_PATTERN <- paste0(
 k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, registry, from = as.Date("2026-08-18")) {
   files <- list.files(archive_dir, "^combined_\\d{4}-\\d{2}-\\d{2}\\.csv$", full.names = TRUE)
   files <- files[as.Date(sub("^combined_(.*)\\.csv$", "\\1", basename(files))) >= from]
+  # One file at a time (read_counted_archive_week(), opi_reconcile.R): binding
+  # the archives first left older weeks with an all-NA OPI_Counted column, so
+  # their OPI rows skipped reconciliation (all counted, under their raw town).
   d <- dplyr::bind_rows(lapply(files, function(f) {
-    x <- utils::read.csv(f, colClasses = "character", check.names = FALSE)
-    x$Archive_Date <- sub("^combined_(.*)\\.csv$", "\\1", basename(f))
-    x
+    w <- read_counted_archive_week(f, crosswalk, registry)
+    w[] <- lapply(w, as.character)
+    w
   })) %>%
-    dplyr::select(-dplyr::any_of(c("X", "Posting_ID", "Posting_Identity_Method"))) %>%
-    dplyr::mutate(Archive_Date = as.Date(Archive_Date),
-                  dplyr::across(dplyr::any_of(c("title", "position", "location", "url", "District", "Posting_Source")),
-                                normalize_posting_text)) %>%
-    add_k12_posting_identity() %>%
-    dplyr::distinct(Posting_ID, Archive_Date, .keep_all = TRUE)
-  d <- dplyr::bind_rows(lapply(split(d, d$Archive_Date), function(week) {
-    rule <- opi_rule_for_archive(week, crosswalk, registry)
-    week$District <- rule$District
-    week[rule$Counted, , drop = FALSE]
-  }))
+    dplyr::mutate(Archive_Date = as.Date(Archive_Date))
   d %>%
     dplyr::filter(!is_placeholder_posting(title)) %>%
     dplyr::transmute(Run_Date = Archive_Date, Posting_ID, Posting_Identity_Method,
-                     District = canonicalize_k12_district(District), title, date_posted, url,
+                     District, title, date_posted, url,
                      Posting_Source = dplyr::coalesce(Posting_Source, ""),
-                     Is_OPI = is_opi_statewide_posting(url) | Posting_Source == "OPI Jobs for Teachers (statewide)",
+                     Is_OPI = Is_OPI == "TRUE",
                      position = classify_k12_position(title))
 }
 

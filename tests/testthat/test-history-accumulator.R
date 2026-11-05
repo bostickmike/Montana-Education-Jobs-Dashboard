@@ -128,28 +128,17 @@ test_that("incrementally appending the latest week reproduces a full rebuild thr
 
   # This week's newly classified rows, built the same way the Rmd's
   # incremental path builds them -- directly from the latest raw archive
-  # file, not from re-reading everything.
-  raw_latest <- read.csv(latest$file, colClasses = c("Archive_Date" = "character"))
-  raw_latest <- raw_latest[, setdiff(names(raw_latest), "X"), drop = FALSE]
-  raw_latest$Archive_Date <- as.character(as.Date(raw_latest$Archive_Date))
-
-  this_week_combinedclean <- raw_latest %>%
-    mutate(across(any_of(c("title", "position", "location", "url", "District", "Posting_Source")),
-                  normalize_posting_text)) %>%
-    add_k12_posting_identity() %>%
-    distinct(Posting_ID, Archive_Date, .keep_all = TRUE) %>%
-    filter(!is_placeholder_posting(title)) %>%
-    mutate(position = classify_k12_position(title),
-           District = canonicalize_k12_district(District)) %>%
-    select(title, Archive_Date, position, location, url, District,
-           Posting_Source, Posting_Identity_Method, Posting_ID)
-
-  this_week_k12jobs <- this_week_combinedclean %>%
-    filter(position == "Teacher") %>%
-    mutate(Category = classify_k12_subject(title),
-           Broad_Category = classify_k12_broad_category(Category)) %>%
-    select(title, Archive_Date, position, location, url, District,
-           Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
+  # file, not from re-reading everything: its counted rows under the OPI rule,
+  # then the shared builders the pipeline calls.
+  crosswalk <- read.csv(here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE,
+                        colClasses = c(LEAID = "character"))
+  registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  oews <- read.csv(here::here("Mt_Ed_Jobs", "oews_role_wages.csv"), stringsAsFactors = FALSE,
+                   colClasses = c(Area_Code = "character", SOC = "character", Year = "character"))
+  opi_counties <- read.csv(here::here("Mt_Ed_Jobs", "opi_district_counties.csv"), stringsAsFactors = FALSE)
+  this_week_combinedclean <- build_k12_combinedclean(read_counted_archive_week(latest$file, crosswalk, registry),
+                                                     oews, registry[, c("District", "County")], opi_counties, "MT")
+  this_week_k12jobs <- build_k12_teacher_rows(this_week_combinedclean)
 
   this_week_weekly_totals <- this_week_combinedclean %>%
     group_by(District, Archive_Date) %>%
@@ -265,4 +254,18 @@ test_that("incrementally appending the latest week reproduces a full rebuild thr
   expect_equal(norm(incremental_facultydata), norm(as.data.frame(full_state$facultydata)), ignore_attr = TRUE)
   expect_equal(norm(incremental_allsum_he), norm(as.data.frame(full_state$allsum_he)), ignore_attr = TRUE)
   expect_equal(norm(incremental_weekly_totals), norm(as.data.frame(full_state$he_institution_weekly_totals)), ignore_attr = TRUE)
+})
+
+test_that("rebuild_parity_row ignores row order and NA vs blank, and counts real differences", {
+  committed <- data.frame(a = c("x", "y", "y"), b = c("1", "", "2"), c = "k", stringsAsFactors = FALSE)
+  same <- committed[c(3, 1, 2), c("a", "b", "c")]
+  same$b[same$b == ""] <- NA
+  r <- rebuild_parity_row("f.csv", committed, same)
+  expect_equal(c(r$Only_Committed, r$Only_Rebuilt), c(0, 0))
+  expect_equal(r$Missing_Cols, "")
+  # A dropped column and a duplicated / missing row both show.
+  r2 <- rebuild_parity_row("f.csv", committed, rbind(committed[c(1, 1, 3), c("a", "b")]))
+  expect_equal(r2$Missing_Cols, "c")
+  expect_equal(c(r2$Only_Committed, r2$Only_Rebuilt), c(1, 1))
+  expect_match(r2$Example, "committed: y \\| <NA>")
 })

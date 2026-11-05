@@ -3423,39 +3423,25 @@ tryCatch(write_reference_file(fetch_opi_district_counties(), opi_counties_path),
          error = function(e) log_reference_result(opi_counties_path, "error", conditionMessage(e)))
 opi_counties <- read.csv(opi_counties_path, stringsAsFactors = FALSE)
 
-combinedclean <- combined %>%
-  # Placeholder board entries ("Sample Certified Position", account-creation
-  # templates) are kept in the raw archive above but never counted as jobs.
-  filter(!is_placeholder_posting(title)) %>%
-  mutate(position = classify_k12_position(title),
-         District = canonicalize_k12_district(District)) %>%
-  # Pay_* is the pay the posting itself states (extract_posted_pay()); NA
-  # where the source states none or the amount is implausible for its unit
-  # (drop_implausible_pay(); the raw archive above keeps it as scraped).
-  ensure_posted_pay_columns() %>%
-  drop_implausible_pay() %>%
-  # Est_* is the BLS regional median for the posting's role, matched to its
-  # district's county: the registry's, else (OPI rows) the county of the
-  # district its detail page names; statewide where neither is known.
-  attach_oews_estimates(oews_wages,
-                        dplyr::coalesce(district_county$County[match(.$District, district_county$District)],
-                                        opi_counties$County[match(.$OPI_District, opi_counties$OPI_District)]),
-                        "MT") %>%
-  select(title, Archive_Date, date_posted, position, location, url, District,
-         Posting_Source, Posting_Identity_Method, Posting_ID, OPI_District, Also_On_OPI,
-         Close_Date, all_of(POSTED_PAY_COLUMNS), all_of(OEWS_ESTIMATE_COLUMNS))
+# Placeholder board entries ("Sample Certified Position", account-creation
+# templates) are kept in the raw archive above but never counted as jobs.
+# Pay_* is the pay the posting itself states (extract_posted_pay()); NA where
+# the source states none or the amount is implausible for its unit
+# (drop_implausible_pay(); the raw archive above keeps it as scraped). Est_* is
+# the BLS regional median for the posting's role, matched to its district's
+# county: the registry's, else (OPI rows) the county of the district its
+# detail page names; statewide where neither is known.
+# build_k12_combinedclean() (history_accumulator.R) is shared with
+# scripts/rebuild_k12_history_from_archive.R, so a rebuild reproduces this.
+source("history_accumulator.R")
+combinedclean <- build_k12_combinedclean(combined, oews_wages, district_county, opi_counties, "MT")
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)
 
 source("history_accumulator.R")
 
-this_week_k12jobs <- combinedclean %>%
-  filter(position == "Teacher") %>%
-  mutate(Category = classify_k12_subject(title),
-         Broad_Category = classify_k12_broad_category(Category)) %>%
-  select(title, Archive_Date, position, location, url, District,
-         Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
+this_week_k12jobs <- build_k12_teacher_rows(combinedclean)
 
 k12jobs <- append_weekly_rows(file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), this_week_k12jobs)
 write.csv(k12jobs, file = file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), row.names = FALSE)
