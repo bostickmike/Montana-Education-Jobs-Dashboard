@@ -540,6 +540,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Result: 879 postings, 605 in durations, 373 endings, median 21.5 days listed (95% CI 17.5-24.5); MSU is 360 of
     the 605 at 15.5 days, all others 30.5 (25.5-37.5); Faculty 31.5. The curve is flat across 50% (17.5-21.5 days),
     so quote the CI, not the point. Tests in `test-posting-spells.R`; full weekly rehearsal passed.
+  * [x] Gallatin Gateway and Roberts (2026-11-04; 0314e56): Gallatin Gateway's page moved to `About-Us/Employment/`
+    (old `/Employment/` 404 on the 11-03 run); registry and scraper default updated, fixture recaptured, live fetch
+    returns its 3 postings. Roberts answers HTTP 200 with the bare text "site under maintenance", which `read_html()`
+    took for a file path; `parse_roberts_postings()` now stops with that text, so the log says what happened (still
+    an error: the source wasn't healthy, and its endings stay censored). Real body as fixture `roberts_maintenance.txt`. Full weekly rehearsal passed.
+  * [x] Classification safeguards, items 7, 8, 10 (2026-11-04, both states; MT 410ac15): blocking checks in
+    `test-weekly-data-quality.R`: every committed position / Category / Broad_Category (combinedclean,
+    k12jobanalysis) and Job_Type / Category (facultydata) equals what today's classifier gives its title (so a
+    classifier change must ship with reclassified data; 0 differences in MT or WY today); k12jobanalysis holds only
+    Teacher rows, facultydata only the two faculty types (the old check allowed stale values); no placeholder title
+    in combinedclean, k12jobanalysis, facultydata or hedata.xlsx; spell dummies agree with the position they encode.
+    "Activities/Extracurricular" confirmed in the weekly data.
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
@@ -549,9 +561,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   and when. Treat a
   board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
   (42 structured-platform districts + OPI grid, ~50 requests/day) for day-precision ends.
-- [ ] Gallatin Gateway: employment page returns "not found" (likely moved; scraper fix). Roberts: "site under
-  maintenance" (recheck; the scraper passes that page text to the HTML reader as a file path,
-  so a maintenance page logs as an error, not empty).
+- [ ] Roberts: site still "under maintenance" on 2026-11-04 (recheck after the 11-10 run; it now logs
+  `Roberts returned a page with no HTML: "site under maintenance"`).
 - [ ] Arrowhead Elementary #75 (decision needed): HTTP 403 on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the 2026-10-29 "recovered" entry only held from the Mac. The site is behind Cloudflare,
   which turns away GitHub's servers; the page itself is fine (at least 8 openings on 2026-11-04, none on OPI), so none of its
@@ -564,8 +575,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   "fallback"; ~3/week stale OPI listings (descriptions naming only past school years, e.g. Froid 2023) count.
 - [ ] Districts whose real board is OPI (19 checked 2026-11-03): mark "OPI is primary" so the adoption list only
   flags new ones.
-- [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`; suggested order:
-  items 7, 8, 10, 13, then 5, 6, then 3). Confirm "Activities/Extracurricular" shows in the weekly data.
+- [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 7, 8, 10 done;
+  next 13 (reclassify script, now needed: item 8 fails the suite on any classifier change until the committed data
+  is reclassified), then 5, 6, then 3.
 - [ ] Title-shape bugs: Huntley Project "Bus Drivers- Must have a CDL...", Turner "Secretary - $14 per hour...",
   "Dish_Server_Cashiers 26".
 - [ ] Rebuild scripts drift from the pipeline (they drop Est_*/OPI_District/Close_Date from combinedclean; don't run
