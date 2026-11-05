@@ -566,6 +566,21 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     formats, and refreshes the spells. Tested on a scratch copy with a planted rule change (one Sidney posting
     Teacher -> Paraprofessional): diff = that row, its 18 history rows and their counts; data-quality sweep green.
     Full weekly rehearsal passed, and parity held on its fresh output (the appended week matched the rebuild).
+  * [x] Classification safeguards, items 5, 6 and 3 (2026-11-05, both states; MT COMMIT): title monitoring and a golden
+    labeled set. `.github/scripts/check_title_quality.R` (weekly, non-blocking, into the drift issue; functions in
+    `drift_check.R`): (5) title-shape lint of this run's postings per source -- level and rank with no role, schedule
+    or detail sentences, field labels, markup, file names, blank or "Other" titles, over 200 characters, and pay
+    stated in the title while Posted Pay is blank (`extract_posted_pay()` on the title; hiring incentives ignored);
+    (6) a source whose Other share jumped against its last 8 archived weeks (today's classifier on both sides).
+    Rules and thresholds measured on every archived week in both states: the lint hits the 2026-11-01 audit's
+    misreads and no real title (long real titles reach ~190 characters); the Other-share replay flags 2 MT
+    (Florence-Carlton schedule lines) and 2 WY (Albany 2024-09 section headings) source-weeks, all real. First
+    run: MT 9 postings at 5 sources (Huntley Project, Livingston, OPI "Other", Turner, Ulm), WY 1 (Fremont #21).
+    (3) `tests/testthat/fixtures/classification_golden_set.csv` (identical in both repos): 528 real titles (285
+    K-12, 243 HE, both states, sampled across every bucket) with checked buckets, 50 judgment calls left out;
+    27 `known_miss` rows the classifier still gets wrong (e.g. Administrative Assistant -> Administration, GEAR UP
+    success coaches -> Coaching or Athletics, Laborer -> Support Services). `test-classification-golden-set.R`
+    fails on any other disagreement and when a known miss starts agreeing (clear its flag).
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
@@ -589,8 +604,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   "fallback"; ~3/week stale OPI listings (descriptions naming only past school years, e.g. Froid 2023) count.
 - [ ] Districts whose real board is OPI (19 checked 2026-11-03): mark "OPI is primary" so the adoption list only
   flags new ones.
-- [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 7, 8, 10, 12, 13
-  done; next 5, 6 (title-shape lint, per-source Other share), then 3 (golden labeled set).
+- [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
+  10, 12, 13 done; next 1, 2 (source category, title normalization), then the 27 golden-set known misses, 4.
 - [ ] Title-shape bugs: Huntley Project "Bus Drivers- Must have a CDL...", Turner "Secretary - $14 per hour...",
   "Dish_Server_Cashiers 26".
 - [ ] Weekly-totals downloads: keep one snapshot per week (decided 2026-11-02, latest snapshot wins; not built).
