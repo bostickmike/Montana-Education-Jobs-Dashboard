@@ -220,12 +220,76 @@ test_that("Posting_Identity_Method values all describe a known method", {
                                        paste(m[!known], collapse = " | ")))
 })
 
-test_that("facultydata.csv Job_Type is always one of the classifier's outputs", {
+test_that("facultydata.csv holds only the two faculty Job_Types the pipeline keeps", {
+  # Classification safeguards, item 10: the pipeline filters facultydata to
+  # these two; any other value means a row came from somewhere else.
   jt <- unique(read_mt("facultydata.csv")$Job_Type)
-  jt <- jt[!is.na(jt)]
-  expect_true(all(jt %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty",
-                            "Staff/Administration", "Coach", "Other")),
+  expect_true(all(!is.na(jt) & jt %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")),
               info = paste("unexpected Job_Type:", paste(jt, collapse = ", ")))
+})
+
+test_that("k12jobanalysis.csv holds only Teacher rows", {
+  pos <- unique(read_mt("k12jobanalysis.csv")$position)
+  expect_identical(pos, "Teacher", info = paste("unexpected position:", paste(pos, collapse = ", ")))
+})
+
+# Classification safeguards (claude-notes 2026-11-01 proposal), items 7 and 8:
+# every committed bucket equals what today's classifier gives its title. A
+# classifier change must ship with its reclassified data; otherwise history
+# silently mixes old and new buckets (the 2026-11-01 audit found ~400 misrouted
+# titles that no check caught). Also catches a K-12 position value the
+# classifier can't produce (item 7). Fix by reclassifying the committed files.
+classification_mismatches <- function(got, want, title) {
+  same <- (is.na(got) & is.na(want)) | (!is.na(got) & !is.na(want) & got == want)
+  bad <- !same
+  if (!any(bad)) return("")
+  x <- unique(data.frame(title = title[bad], committed = got[bad], classifier = want[bad]))
+  paste(sum(bad), "rows differ, e.g.:", paste(utils::head(sprintf("'%s': %s -> %s", x$title, x$committed, x$classifier), 8),
+                                         collapse = " | "))
+}
+
+test_that("committed K-12 position / Category / Broad_Category equal the current classifier", {
+  cc <- read_mt("combinedclean.csv")
+  k <- read_mt("k12jobanalysis.csv")
+  expect_identical(classification_mismatches(cc$position, classify_k12_position(cc$title), cc$title), "",
+                   label = "combinedclean.csv position")
+  expect_identical(classification_mismatches(k$position, classify_k12_position(k$title), k$title), "",
+                   label = "k12jobanalysis.csv position")
+  expect_identical(classification_mismatches(k$Category, classify_k12_subject(k$title), k$title), "",
+                   label = "k12jobanalysis.csv Category")
+  expect_identical(classification_mismatches(k$Broad_Category, classify_k12_broad_category(k$Category), k$title), "",
+                   label = "k12jobanalysis.csv Broad_Category")
+})
+
+test_that("committed HE Job_Type / Category equal the current classifier", {
+  fd <- read_mt("facultydata.csv")
+  expect_identical(classification_mismatches(fd$Job_Type, classify_he_job_type(fd$Title), fd$Title), "",
+                   label = "facultydata.csv Job_Type")
+  expect_identical(classification_mismatches(fd$Category, classify_he_faculty_category(fd$Title), fd$Title), "",
+                   label = "facultydata.csv Category")
+})
+
+test_that("no placeholder board entry ships in any posting-level output (item 10)", {
+  titles <- list(combinedclean = read_mt("combinedclean.csv")$title,
+                 k12jobanalysis = read_mt("k12jobanalysis.csv")$title,
+                 facultydata = read_mt("facultydata.csv")$Title)
+  if (file.exists(MT("hedata.xlsx"))) titles$hedata <- readxl::read_excel(MT("hedata.xlsx"))$Title
+  for (n in names(titles)) {
+    hit <- unique(titles[[n]][is_placeholder_posting(titles[[n]])])
+    expect(length(hit) == 0, paste(n, "ships placeholder titles:", paste(head(hit, 5), collapse = " | ")))
+  }
+})
+
+test_that("duration-spell dummies agree with the position / job type they encode (item 10)", {
+  # The 2026-11-01 audit found is_support_staff never set for Transportation
+  # and Food Services.
+  s <- read_mt("job_duration_spells.csv")
+  support <- c("Support Services", "Paraprofessional", "Custodial/Maintenance", "Transportation", "Food Services")
+  expect_equal(s$is_support_staff, as.integer(s$Position %in% support))
+  expect_equal(s$is_admin, as.integer(s$Position == "Administration"))
+  h <- read_mt("he_job_duration_spells.csv")
+  expect_equal(h$is_faculty, as.integer(h$Job_Type == "Instructor/Teacher/Faculty"))
+  expect_equal(h$is_adjunct, as.integer(h$Job_Type == "Adjunct/Part-Time Faculty"))
 })
 
 test_that("every Broad_Category / Category in the summary data has a color AND a collapse-map entry in app.R", {
