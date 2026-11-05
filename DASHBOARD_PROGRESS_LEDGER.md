@@ -552,6 +552,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Teacher rows, facultydata only the two faculty types (the old check allowed stale values); no placeholder title
     in combinedclean, k12jobanalysis, facultydata or hedata.xlsx; spell dummies agree with the position they encode.
     "Activities/Extracurricular" confirmed in the weekly data.
+  * [x] Classification safeguards, items 12 and 13 (2026-11-04, both states; MT 42ecd88): rebuild parity and a
+    reclassify script. The K-12 rebuild bound every archive before applying the OPI rule per week, so older weeks
+    got an all-NA `OPI_Counted` column, read as "counted": their OPI rows skipped reconciliation (all counted, under
+    the raw town as District). Now `read_counted_archive_week()` (`opi_reconcile.R`) applies the rule one file at a
+    time, and `build_k12_combinedclean()` / `build_k12_teacher_rows()` (`history_accumulator.R`) are shared by
+    `Mt_ED_Jobs.Rmd` and the rebuild, which therefore carries OPI_District, Also_On_OPI, Close_Date and Est_*. The
+    rebuild reproduces all nine committed K-12/HE files exactly; `.github/scripts/check_rebuild_parity.R` checks
+    that weekly (non-blocking, into the drift issue). `k12_posting_panel()` had the same OPI bug: its OPI rows are
+    now 811 (was 1,019) under real districts; non-OPI spells and the durations unchanged. `scripts/reclassify_committed_data.R`
+    (dry run; `--apply`) rebuilds with the working-tree classifier after a guard that the HEAD classifier reproduces
+    the committed data, reports every bucket move, writes the changed files in their committed row order and
+    formats, and refreshes the spells. Tested on a scratch copy with a planted rule change (one Sidney posting
+    Teacher -> Paraprofessional): diff = that row, its 18 history rows and their counts; data-quality sweep green.
+    Full weekly rehearsal passed, and parity held on its fresh output (the appended week matched the rebuild).
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
@@ -575,14 +589,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   "fallback"; ~3/week stale OPI listings (descriptions naming only past school years, e.g. Froid 2023) count.
 - [ ] Districts whose real board is OPI (19 checked 2026-11-03): mark "OPI is primary" so the adoption list only
   flags new ones.
-- [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 7, 8, 10 done;
-  next 13 (reclassify script, now needed: item 8 fails the suite on any classifier change until the committed data
-  is reclassified), then 5, 6, then 3.
+- [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 7, 8, 10, 12, 13
+  done; next 5, 6 (title-shape lint, per-source Other share), then 3 (golden labeled set).
 - [ ] Title-shape bugs: Huntley Project "Bus Drivers- Must have a CDL...", Turner "Secretary - $14 per hour...",
   "Dish_Server_Cashiers 26".
-- [ ] Rebuild scripts drift from the pipeline (they drop Est_*/OPI_District/Close_Date from combinedclean; don't run
-  them straight into the repo; proposal item 12). Weekly-totals downloads: keep one snapshot per week (decided
-  2026-11-02, latest snapshot wins; not built).
+- [ ] Weekly-totals downloads: keep one snapshot per week (decided 2026-11-02, latest snapshot wins; not built).
 - [ ] `scripts/repro_scraper.R "Columbia Falls School District 6"` aborts in its fixture step (scraper itself works).
 - [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
 - [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com.
