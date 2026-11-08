@@ -2934,7 +2934,12 @@ cji_results <- lapply(seq_len(nrow(cji_districts)), function(i) {
   row <- cji_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_cji_postings(row$Job_Link),
+    # Its own browser session: the employment page renders only in a browser.
+    scrape_fn = function() {
+      session <- ChromoteSession$new()
+      on.exit(session$close(), add = TRUE)
+      fetch_cji_postings(session, row$Job_Link)
+    },
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -3382,6 +3387,11 @@ combined_all <- bind_rows(direct_df, opi_df) %>%
     across(c(title, position, location, url, District, Posting_Source), normalize_posting_text),
     Archive_Date = Sys.Date()
   ) %>%
+  # Detail a board put in the title (a requirement, the pay, "Open Until
+  # Filled", a file name) is cut off, and fills Posted Pay where the row has
+  # none (k12_he_classification.R); before the identity, so it's built from
+  # the cleaned title.
+  move_title_detail() %>%
   add_k12_posting_identity() %>%
   distinct(Posting_ID, .keep_all = TRUE)
 combined <- combined_all %>% filter(OPI_Counted)
@@ -4001,6 +4011,16 @@ if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 
 file_name <- paste0("hedata_", Sys.Date(), ".xlsx")
 write_xlsx(hedata, path = file.path("Archived_HE_Data", file_name))
+
+# Posting status (posting_status.R; closing-date audit 2026-11-05): every
+# posting with a checkable page (AppliTrack, TalentEd, Red Rover, NEOGOV,
+# JazzHR, Paycom) that dropped off its board since the last run, K-12 and
+# higher ed, recorded in posting_status.csv: whether the platform says it
+# closed, and the closing date it states. A failure here never stops the run.
+source("posting_status.R")
+tryCatch(refresh_posting_status("Archivek12_Data", "Archived_HE_Data", "posting_status.csv",
+                                session_factory = function() chromote::ChromoteSession$new()),
+         error = function(e) message("Posting status not updated: ", conditionMessage(e)))
 
 # Coverage calendar (posting-dates plan step 2): every source's outcome this
 # run (ok / empty / error / not_logged), so a posting that stops appearing is

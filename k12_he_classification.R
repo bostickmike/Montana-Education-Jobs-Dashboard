@@ -73,7 +73,7 @@ is_opi_statewide_posting <- function(url) {
 # board can host many simultaneous postings.
 is_stable_posting_url <- function(url) {
   grepl(
-    "(/jobs?/[^/?#]+|/job-list/[^/?#]+|ViewJob\\.aspx\\?JobID=|[?&](jobId|jobID|id|AppliTrackJobId)=|\\.pdf(?:[?#]|$))",
+    "(/jobs?/[^/?#]+|/job-list/[^/?#]+|/opening/\\d+|ViewJob\\.aspx\\?JobID=|[?&](jobId|jobID|id|AppliTrackJobId)=|\\.pdf(?:[?#]|$))",
     normalize_posting_text(url),
     perl = TRUE
   )
@@ -246,8 +246,9 @@ classify_k12_position <- function(title) {
     grepl("Counselor|Psychologist|Therapist|Pathologist|Occupational|Alternative Behavior Program|Audiologist|Lifeguard|Interpreter|Translator|Monitor|Safety Patrol|Social Worker|Technology Intern|Tutor|Instructional Facilitator|Resource Officer|Behavior|Occupational|Aide|\\bAids?\\b|Support|\\bLPN\\b|Mental Health (Specialist|Clinician|Therapist)|\\bIntern(ship)?s?\\b|Crossing Guard|Crosswalk Guard|Noon Duty|Recess|Lunchroom Supervis|General Duty Assistant|\\bGDA\\b|Liaison|Advocate|Ambassador|Orientation and Mobility|\\bSLP|Speech[- ]Language|Physical Therapy|Accompanist|\\bPsych\\b|Security|Assistive Technolog",
           title, ignore.case = TRUE) ~ "Support Services",
 
-    # Staff-related positions (checked before Teacher so clerical titles like "General Secretary - Library" land here)
-    grepl("Secretary|Clerk|Office Manager|Clerical|Registrar|Payroll|Human Resources|Bookkeeper|Receptionist|Accounts (Payable|Receivable)|Purchasing|Accountant|Accounting|Benefits Specialist|Business (Services|Office) Specialist", title, ignore.case = TRUE) ~ "Staff",
+    # Staff-related positions (checked before Teacher so clerical titles like "General Secretary - Library" land here).
+    # "Administrative Assistant" is clerical, not Administration (golden set, 2026-11-07).
+    grepl("Administrative (Assistant|Secretary|Clerk)|Admin\\.? Asst|Secretary|Clerk|Office Manager|Clerical|Registrar|Payroll|Human Resources|Bookkeeper|Receptionist|Accounts (Payable|Receivable)|Purchasing|Accountant|Accounting|Benefits Specialist|Business (Services|Office) Specialist", title, ignore.case = TRUE) ~ "Staff",
 
     # Custodial/Maintenance-related positions
     grepl("Custodian|Custodial|Janitor|Maintenance|Cleaner|Snow Removal|Facility|Electrician|HVAC|Grounds|Lawn|Housekeep|Carpenter|Painter|Plumber|Laborer|Sweeper|Warehouse|Field Crew",
@@ -718,7 +719,10 @@ classify_he_job_type_rules <- function(title) {
           title, ignore.case = TRUE) ~ "Staff",
 
     # Advising
-    grepl("Advisor|Advising|Enrollment Counselor|Financial Aid|Tutor|Career Peer|Tribal Education Assistant|Night ESL Class Aide|Writing Consultant|Learning Commons|Testing Center|Camp Counselor", title, ignore.case = TRUE) ~ "Advising and Student Services",
+    # Academic, success and retention coaches advise students; they aren't
+    # athletics (golden set, 2026-11-07: "Student Success Coach", "GEAR UP
+    # Success Coach", "Academic Coach Talent Search").
+    grepl("(Academic|Success|Retention|Career|Completion|Enrollment|College|Life|Navigation)\\s+Coach|GEAR UP|Advisor|Advising|Enrollment Counselor|Financial Aid|Tutor|Career Peer|Tribal Education Assistant|Night ESL Class Aide|Writing Consultant|Learning Commons|Testing Center|Camp Counselor", title, ignore.case = TRUE) ~ "Advising and Student Services",
 
     # Culinary -- checked before Maintenance & Service so "Cook"/"Baker"
     # land here instead of being swallowed by Maintenance & Service's own
@@ -849,4 +853,69 @@ classify_he_faculty_category <- function(title) {
 # canonicalize_k12_district() above.
 canonicalize_he_institution <- function(institution) {
   institution
+}
+
+# ---------------------------------------------------------------------------
+# Detail riding in a title (classification safeguards item 5, the title-shape
+# lint's findings of 2026-11-05). Some boards put more than the job's name in
+# the title: a requirement ("Bus Drivers- Must have a CDL with a school bus
+# passenger endorsement.", Huntley Project), the pay ("Secretary - $14 per
+# hour, up to 32 hours per week", Turner), a status note ("Special Education
+# Teachers - Open Until Filled.", Fremont #21), or an uploaded file's name
+# ("Dish_Server_Cashier 26 - Copy", Livingston). split_title_detail() cuts the
+# title at the first separator (" - ", "- ", " (", ", ") whose remainder opens
+# with such detail and returns the job's name and the detail. Titles with no
+# such remainder come back unchanged.
+# ---------------------------------------------------------------------------
+TITLE_DETAIL_OPENING <- paste0(
+  "^(?i)(must\\b|required\\b|requires\\b|requirements?\\b|open until filled|until filled|ouf\\b|",
+  "\\$\\s?\\d)")
+
+split_title_detail <- function(title) {
+  t <- as.character(title)
+  detail <- rep(NA_character_, length(t))
+  ok <- !is.na(t)
+  # An uploaded file's name: underscores for spaces, a trailing " - Copy" and
+  # a school year ("Dish_Server_Cashier 26 - Copy", "Baker_Cook 2026 27").
+  year_suffix <- "\\s+(\\d{4}([ -]\\d{2,4})?|\\d{2})$"
+  bare <- sub(year_suffix, "", sub("\\s-\\sCopy$", "", t))
+  file_name <- ok & grepl("[A-Za-z]{2,}_[A-Za-z]{2,}", t) & !grepl("\\s", bare)
+  t[file_name] <- trimws(gsub("_", " ", bare[file_name]))
+  t[ok] <- sub("\\s-\\sCopy$", "", t[ok])
+  sep <- "(\\s[-–—]\\s|[-–—]\\s|\\s\\(|,\\s)"
+  for (i in which(ok)) {
+    hits <- gregexpr(sep, t[i], perl = TRUE)[[1]]
+    if (hits[1] == -1) next
+    lens <- attr(hits, "match.length")
+    for (k in seq_along(hits)) {
+      head <- trimws(substr(t[i], 1, hits[k] - 1))
+      tail <- trimws(substr(t[i], hits[k] + lens[k], nchar(t[i])))
+      if (nchar(head) >= 3 && grepl(TITLE_DETAIL_OPENING, tail, perl = TRUE)) {
+        detail[i] <- sub("\\)$", "", sub("\\.$", "", tail))
+        t[i] <- sub("[-–—,\\s]+$", "", head, perl = TRUE)
+        break
+      }
+    }
+  }
+  data.frame(title = t, detail = detail, stringsAsFactors = FALSE)
+}
+
+# Applies split_title_detail() to a K-12 frame's `title`, and fills Posted Pay
+# from the detail where the row carries none ("$14 per hour" in Turner's
+# title). Run at ingestion, before the raw archive is written, so archives
+# keep the cleaned title and a rebuild of older archives is unchanged.
+move_title_detail <- function(df) {
+  if (nrow(df) == 0) return(df)
+  s <- split_title_detail(df$title)
+  df$title <- s$title
+  # Pay columns are added only when a title carried pay: WY's archives have
+  # none when no source stated pay that week.
+  need <- !is.na(s$detail) & grepl("\\$\\s?\\d", s$detail) &
+    (if ("Pay_Min" %in% names(df)) is.na(df$Pay_Min) else TRUE)
+  if (any(need)) {
+    df <- ensure_posted_pay_columns(df)
+    pay <- extract_posted_pay(s$detail[need])
+    for (col in POSTED_PAY_COLUMNS) df[[col]][need] <- pay[[col]]
+  }
+  df
 }

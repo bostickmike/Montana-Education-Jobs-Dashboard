@@ -207,3 +207,15 @@ test_that("archived weeks keep their old OPI fill-ins: the 60-day limit applies 
   expect_true(all(r$Counted[cw]))
   expect_true(all(r$District[cw] == "Cottonwood School District #57"))
 })
+
+test_that("districts already checked as OPI-only are one summary line, not adoption candidates", {
+  adoption <- data.frame(Map_Entity = c("Rau Elem", "Wyola Elem"), OPI_Districts = c("Rau Elem", "Wyola Elem"),
+                         City = c("Sidney", "Wyola"), County = c("Richland", "Big Horn"), Postings = c(3, 1),
+                         stringsAsFactors = FALSE)
+  known <- data.frame(Map_Entity = "Rau Elem", Checked = "2026-11-03", Evidence = "no jobs page", stringsAsFactors = FALSE)
+  md <- paste(build_opi_crosscheck_markdown(NULL, adoption, character(0), opi_primary = known), collapse = "\n")
+  expect_match(md, "**Wyola Elem**", fixed = TRUE)
+  expect_false(grepl("**Rau Elem**", md, fixed = TRUE))
+  expect_match(md, "3 postings at 1 district whose only board is OPI", fixed = TRUE)
+  expect_match(md, "Rau Elem", fixed = TRUE)
+})

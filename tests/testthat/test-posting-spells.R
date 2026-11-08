@@ -141,3 +141,20 @@ test_that("HE start is the earliest posted date shown, and shared titles count o
   sp <- build_posting_spells(p, shared_titles = "fallback only")
   expect_equal(sp$Shared_Title[order(sp$Posting_ID)], c(TRUE, TRUE, FALSE, FALSE))
 })
+
+test_that("a posting's own page confirms or overrules its ending, and dates it by a stated closing date", {
+  source(here::here("posting_status.R"))
+  at <- function(id) paste0("https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=", id)
+  p <- rbind(ps_row("2026-10-27", "url-1", "Cook", method = "Stable per-posting URL", url = at(1), posted = "2026-10-01"),
+             ps_row("2026-10-27", "url-2", "Aide", method = "Stable per-posting URL", url = at(2), posted = "2026-10-01"),
+             ps_row("2026-11-03", "url-4", "Nurse", method = "Stable per-posting URL", url = at(4)))
+  p$Close_Date <- c("2026-10-30", NA, NA)
+  cal <- rbind(ps_cal("2026-10-27", "Billings Public Schools", "ok"), ps_cal("2026-11-03", "Billings Public Schools", "ok"))
+  st <- data.frame(Check_URL = posting_status_check_url(at(1:2)), Status = c("closed", "open"), Stated_Close_Date = NA,
+                   Last_Checked = "2026-11-03", stringsAsFactors = FALSE)
+  sp <- build_posting_spells(p, cal, statuses = st)
+  r <- function(id, col) sp[[col]][sp$Posting_ID == id]
+  expect_equal(r("url-1", "Ending"), "closed (confirmed)")
+  expect_equal(r("url-1", "End_Date"), "2026-10-30"); expect_equal(r("url-1", "Advertised_Days"), 29)
+  expect_equal(r("url-2", "Ending"), "censored: still open on its page")
+})

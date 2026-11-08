@@ -479,23 +479,25 @@ summarize_central_safety_net <- function(
 
   # 4. Generate Markdown
   md <- c(
-    "### Central Safety Net Status Summary",
+    sprintf("### %s postings at districts we scrape directly", feed_short_name),
     "",
-    "The Central Safety Net (statewide vacancy feed fallback) provides continuity when directly-scraped district job boards encounter outages, platform migrations, or parser drift.",
+    paste("Openings the statewide feed lists for a district we scrape directly, counted because the district's own",
+          "board doesn't list them: the district posts some jobs only on the feed, or our scrape misses them.",
+          "A district with many is worth a look."),
     "",
     sprintf("- **Statewide Feed (%s)**: %d active vacancies captured.", feed_short_name, feed_total)
   )
 
   if (length(fallback_districts) == 0) {
-    md <- c(md, "- **Active Fallback Districts**: 0 registered districts currently require Central Safety Net fallback (all direct-scraped districts reporting normally).")
+    md <- c(md, sprintf("- **Counted from %s at directly scraped districts**: none (every %s opening at those districts is also on the district's own board).", feed_short_name, feed_short_name))
   } else {
     md <- c(
       md,
-      sprintf("- **Active Fallback Districts**: %d registered district(s) currently protected by Central Safety Net fallback (%d total vacancies preserved):",
-              length(fallback_districts), total_fallback_vacancies)
+      sprintf("- **Counted from %s at directly scraped districts**: %d posting(s) at %d district(s), not on the district's own board:",
+              feed_short_name, total_fallback_vacancies, length(fallback_districts))
     )
     for (d_name in names(fallback_districts)) {
-      md <- c(md, sprintf("  - **%s**: %d vacancy/vacancies preserved via fallback", d_name, fallback_districts[[d_name]]))
+      md <- c(md, sprintf("  - **%s**: %d", d_name, fallback_districts[[d_name]]))
     }
   }
 
@@ -580,10 +582,10 @@ build_drift_report_markdown <- function(
         }
 
         if (sn_count > 0) {
-          lines <- c(lines, sprintf("  - **Central Safety Net**: Active (%d fallback %s preserved via %s)",
-                                    sn_count, if (sn_count == 1) "vacancy" else "vacancies", feed_short_name))
+          lines <- c(lines, sprintf("  - **On %s**: %d posting%s for this district that its own board doesn't list (counted from %s)",
+                                    feed_short_name, sn_count, if (sn_count == 1) "" else "s", feed_short_name))
         } else {
-          lines <- c(lines, sprintf("  - **Central Safety Net**: Inactive (0 fallback vacancies on %s)", feed_short_name))
+          lines <- c(lines, sprintf("  - **On %s**: nothing for this district beyond what its own board lists", feed_short_name))
         }
       }
     }
@@ -662,6 +664,8 @@ SCRAPER_CALL_SPECS <- list(
   TylerPortico = list(fn = "fetch_tylerportico_postings", args = c("Slug", "District")),
   TedK12       = list(fn = "fetch_tedk12_postings",       args = "Slug"),
   BroadviewHeuristic = list(fn = "fetch_broadview_postings", args = character(0)),
+  # Reads its openings-PDF link from the rendered page (2026-11-05).
+  CJIHeuristic = list(fn = "fetch_cji_postings", args = "Job_Link", session = TRUE),
   PeopleAdmin  = list(fn = "fetch_peopleadmin_atom",      args = c("Feed_URL", "Institution")),
   JazzHR       = list(fn = "fetch_jazzhr_postings",       args = c("Feed_URL", "Institution")),
   Paycom       = list(fn = "fetch_paycom_postings",       args = c("Feed_URL", "Institution")),
@@ -745,7 +749,14 @@ scraper_fetch_fn <- function(call, scraper_lines) {
   if (is.null(call)) return(NA_character_)
   if (!identical(call$fn, APPTEGY_DISPATCH_FN)) return(call$fn)
   hit <- grep(sprintf('"%s" = fetch_', call$args[[1]]), scraper_lines, fixed = TRUE, value = TRUE)
-  if (length(hit) == 0) NA_character_ else sub('.*= (fetch_[A-Za-z0-9_]+).*', "\\1", hit[1])
+  if (length(hit) > 0) return(sub('.*= (fetch_[A-Za-z0-9_]+).*', "\\1", hit[1]))
+  # A wrapper entry ("<district>" = function(session) { fetch_redrover_postings(session, ...) },
+  # every Red Rover district): the first fetch_ call in its body.
+  start <- grep(sprintf('"%s" = function(', call$args[[1]]), scraper_lines, fixed = TRUE)
+  if (length(start) == 0) return(NA_character_)
+  body <- scraper_lines[start[1]:min(length(scraper_lines), start[1] + 5)]
+  call_line <- grep("fetch_[A-Za-z0-9_]+\\(", body, value = TRUE)
+  if (length(call_line) == 0) NA_character_ else sub('.*?(fetch_[A-Za-z0-9_]+)\\(.*', "\\1", call_line[1], perl = TRUE)
 }
 
 # Whether fetch_fn's parser consumes document.body.innerText -- the form the

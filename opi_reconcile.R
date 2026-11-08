@@ -506,8 +506,12 @@ opi_finance_by_district <- function(raw_df) {
 # ---- Weekly OPI cross-check section of the drift issue ----
 # qc: mt_discrepancy_report.csv; adoption: opi_adoption_candidates.csv;
 # backlog_text: DISTRICT_BACKLOG.md (an adoption candidate already there was
-# checked before, and the line says what was found). Empty when nothing to say.
-build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character(0), max_districts = 15) {
+# checked before, and the line says what was found). opi_primary:
+# opi_primary_districts.csv, districts checked and found to have no board of
+# their own (OPI is where they post): summarized in one line, so the list
+# shows only districts nobody has looked at. Empty when nothing to say.
+build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character(0), max_districts = 15,
+                                          opi_primary = NULL) {
   md <- character(0)
   if (!is.null(qc) && nrow(qc) > 0) {
     fallback <- qc[grepl("returned no postings", qc$Discrepancy_Type), , drop = FALSE]
@@ -537,6 +541,12 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
       md <- c(md, "")
     }
   }
+  known <- NULL
+  if (!is.null(adoption) && nrow(adoption) > 0 && !is.null(opi_primary) && nrow(opi_primary) > 0) {
+    is_known <- adoption$Map_Entity %in% opi_primary$Map_Entity
+    known <- adoption[is_known, , drop = FALSE]
+    adoption <- adoption[!is_known, , drop = FALSE]
+  }
   if (!is.null(adoption) && nrow(adoption) > 0) {
     in_backlog <- vapply(adoption$Map_Entity, function(e) {
       stem <- mt_district_stem(strsplit(e, " / ", fixed = TRUE)[[1]][1])
@@ -555,6 +565,11 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
             "Counted from OPI and on the map; a direct scrape would make them first-class.", "",
             sprintf("- **%s** (%s, %d posting%s) -- %s -- %s", adoption$Map_Entity, adoption$County,
                     as.integer(adoption$Postings), ifelse(adoption$Postings == 1, "", "s"), site, in_backlog), "")
+  }
+  if (!is.null(known) && nrow(known) > 0) {
+    md <- c(md, sprintf("Also counted from OPI: %d posting%s at %d district%s whose only board is OPI (checked; `opi_primary_districts.csv`): %s.",
+                        sum(as.integer(known$Postings)), ifelse(sum(as.integer(known$Postings)) == 1, "", "s"),
+                        nrow(known), ifelse(nrow(known) == 1, "", "s"), paste(known$Map_Entity, collapse = ", ")), "")
   }
   if (length(md) == 0) return(character(0))
   c("", "---", "", "### OPI cross-check", "", md)

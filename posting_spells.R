@@ -26,10 +26,20 @@
 # Durations are summarized with Kaplan-Meier (open and censored postings count
 # as censored), and a median is reported only with at least `min_events`
 # endings.
-POSTING_SPELL_EVENTS <- c("no longer listed", "filled", "canceled", "review")
+POSTING_SPELL_EVENTS <- c("no longer listed", "closed (confirmed)", "filled", "canceled", "review")
 EVERGREEN_TITLE_PATTERN <- paste0(
   "\\bsub(stitute)?s?\\b|substitute|\\bpool\\b|on[- ]call|always accepting|accepting applications|",
   "ongoing|continuous|general application|interest (form|list)|^copy of\\b")
+
+# A stated closing date (Close_Date): 2026-11-09, 11/9/2026, "Nov 9, 2026";
+# "open until filled" and the like give none.
+parse_stated_close_date <- function(x) {
+  x <- trimws(as.character(x))
+  d <- suppressWarnings(as.Date(substr(x, 1, 10), format = "%Y-%m-%d"))
+  d[is.na(d)] <- suppressWarnings(as.Date(sub("^(\\d{1,2}/\\d{1,2}/\\d{4}).*$", "\\1", x[is.na(d)]), format = "%m/%d/%Y"))
+  d[is.na(d)] <- suppressWarnings(as.Date(x[is.na(d)], format = "%b %d, %Y"))
+  ifelse(is.na(d), NA_character_, format(d))
+}
 
 # Counted K-12 rows of every archive from `from` on, one per Posting_ID per
 # run, under the current identity and OPI rules (as
@@ -48,10 +58,11 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
     w
   })) %>%
     dplyr::mutate(Archive_Date = as.Date(Archive_Date))
+  if (!"Close_Date" %in% names(d)) d$Close_Date <- NA_character_
   d %>%
     dplyr::filter(!is_placeholder_posting(title)) %>%
     dplyr::transmute(Run_Date = Archive_Date, Posting_ID, Posting_Identity_Method,
-                     District, title, date_posted, url,
+                     District, title, date_posted, Close_Date = parse_stated_close_date(Close_Date), url,
                      Posting_Source = dplyr::coalesce(Posting_Source, ""),
                      Is_OPI = Is_OPI == "TRUE",
                      position = classify_k12_position(title))
@@ -118,7 +129,9 @@ he_posting_panel <- function(archive_dir = "Archived_HE_Data", from = as.Date("2
     dplyr::mutate(Run_Date = as.Date(Archive_Date)) %>%
     dplyr::distinct(Posting_ID, Run_Date, .keep_all = TRUE) %>%
     dplyr::transmute(Run_Date, Posting_ID, Posting_Identity_Method, District = Institution, title = Title,
-                     date_posted = substr(Posted_Date, 1, 10), url = Link, Posting_Source = Institution,
+                     date_posted = substr(Posted_Date, 1, 10),
+                     Close_Date = if ("Close_Date" %in% names(d)) parse_stated_close_date(Close_Date) else NA_character_,
+                     url = Link, Posting_Source = Institution,
                      Is_OPI = FALSE, position = classify_he_job_type(Title), Bridgeable)
 }
 
@@ -212,8 +225,12 @@ source_health <- function(panel, calendar, district, source, is_opi, run) {
 # `shared_titles = "fallback only"` (HE) flags a shared title only on postings
 # identified by title: two "Adjunct Instructor" postings with their own
 # PeopleAdmin numbers can be told apart.
-build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_titles = c("all", "fallback only")) {
+# `statuses`: posting_status.csv (posting_status.R), what each posting's own
+# page said after it dropped off its board (from 2026-11-10).
+build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_titles = c("all", "fallback only"),
+                                 statuses = NULL) {
   shared_titles <- match.arg(shared_titles)
+  if (is.null(panel$Close_Date)) panel$Close_Date <- NA_character_
   runs <- sort(unique(panel$Run_Date))
   latest <- max(runs)
   # Titles held by more than one posting in a district in any run.
@@ -233,6 +250,7 @@ build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_
                      Identity = dplyr::last(Posting_Identity_Method), Is_OPI = any(Is_OPI),
                      Posted_Date = dplyr::first(date_posted[!is.na(date_posted) & nzchar(date_posted)], default = NA_character_),
                      URL = dplyr::last(url), First_Seen = min(Run_Date), Last_Seen = max(Run_Date),
+                     Stated_Close_Date = dplyr::last(Close_Date[!is.na(Close_Date)], default = NA_character_),
                      Runs_Seen = dplyr::n_distinct(Run_Date), .groups = "drop") %>%
     dplyr::left_join(first_source_run, by = c("District", "Posting_Source"))
   sp$Shared_Title <- sp$Posting_ID %in% dup$Posting_ID
@@ -247,9 +265,23 @@ build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_
     id <- ifelse(grepl("schoolspring\\.com/jobs/\\d+$", sp$URL), sub("^.*/jobs/", "", sp$URL), NA_character_)
     ss_status <- endings$Job_Status[match(id, endings$job_id)]
   }
+  # The posting's own page, checked after it dropped off: closed is a
+  # confirmed ending; still open means the scrape missed it (censored).
+  page <- data.frame(Status = rep(NA_character_, nrow(sp)), Close = NA_character_, Checked = NA_character_,
+                     stringsAsFactors = FALSE)
+  if (!is.null(statuses) && nrow(statuses) > 0 && exists("posting_status_check_url")) {
+    hit <- match(posting_status_check_url(sp$URL), statuses$Check_URL)
+    page <- data.frame(Status = statuses$Status[hit], Close = statuses$Stated_Close_Date[hit],
+                       Checked = statuses$Last_Checked[hit], stringsAsFactors = FALSE)
+    page$Status[is.na(page$Checked) | page$Checked <= format(sp$Last_Seen)] <- NA_character_
+  }
+  sp$Page_Status <- page$Status
+  sp$Stated_Close_Date <- dplyr::coalesce(sp$Stated_Close_Date, page$Close)
   sp$Ending <- dplyr::case_when(
     sp$Last_Seen == latest ~ "still listed",
     !is.na(ss_status) ~ ss_status,
+    sp$Page_Status %in% "closed" ~ "closed (confirmed)",
+    sp$Page_Status %in% "open" ~ "censored: still open on its page",
     sp$Next_Run_Source_Status %in% c("ok", "ok_proxy") ~ "no longer listed",
     TRUE ~ paste0("censored: source ", sp$Next_Run_Source_Status))
   sp$Event <- sp$Ending %in% POSTING_SPELL_EVENTS
@@ -260,9 +292,19 @@ build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_
   sp$Start_Date <- as.Date(ifelse(sp$Start_Basis == "board posted date", posted, sp$First_Seen), origin = "1970-01-01")
   sp$Left_Censored <- sp$Start_Basis == "first sighting" & sp$First_Seen == sp$Source_First_Run
   sp$Evergreen <- grepl(EVERGREEN_TITLE_PATTERN, sp$Title, ignore.case = TRUE) | (!is.na(lag) & lag > 365)
-  sp$End_Date <- as.Date(ifelse(sp$Event, sp$Last_Seen + as.numeric(sp$Next_Run - sp$Last_Seen) / 2, sp$Last_Seen),
+  # The stated closing date when the posting closed on it (after the last
+  # sighting, by the next run); otherwise the midpoint to the next run.
+  close <- suppressWarnings(as.Date(sp$Stated_Close_Date))
+  on_close <- sp$Event & !is.na(close) & !is.na(sp$Next_Run) & close >= sp$Last_Seen & close <= sp$Next_Run
+  sp$End_Basis <- ifelse(on_close, "stated closing date", ifelse(sp$Event, "midpoint to next run", "censored"))
+  sp$End_Date <- as.Date(ifelse(on_close, close,
+                                ifelse(sp$Event, sp$Last_Seen + as.numeric(sp$Next_Run - sp$Last_Seen) / 2, sp$Last_Seen)),
                          origin = "1970-01-01")
   sp$Days_Listed <- as.numeric(sp$End_Date - sp$Start_Date)
+  # Advertised application window: start to the stated closing date (needs no
+  # ending); a date a year or more out is a board default, not a deadline.
+  sp$Advertised_Days <- as.numeric(close - sp$Start_Date)
+  sp$Advertised_Days[is.na(sp$Advertised_Days) | sp$Advertised_Days < 0 | sp$Advertised_Days > 365] <- NA
   # Age when we first saw it: a posting up since April that we first saw in
   # August is only at risk of "ending under our eyes" from then on (delayed
   # entry). Without this, long-lived postings are over-represented.
@@ -271,8 +313,9 @@ build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_
   sp %>%
     dplyr::mutate(dplyr::across(c(First_Seen, Last_Seen, Next_Run, Source_First_Run, Start_Date, End_Date), format)) %>%
     dplyr::select(Posting_ID, District, Title, Position, Posting_Source, Identity, Is_OPI, URL, Posted_Date,
-                  First_Seen, Last_Seen, Runs_Seen, Runs_Spanned, Next_Run, Next_Run_Source_Status, Ending, Event,
-                  Start_Basis, Start_Date, Left_Censored, Days_Before_First_Seen, End_Date, Days_Listed, Evergreen, Shared_Title, In_Durations) %>%
+                  First_Seen, Last_Seen, Runs_Seen, Runs_Spanned, Next_Run, Next_Run_Source_Status, Page_Status, Ending, Event,
+                  Start_Basis, Start_Date, Left_Censored, Days_Before_First_Seen, Stated_Close_Date, End_Basis, End_Date,
+                  Days_Listed, Advertised_Days, Evergreen, Shared_Title, In_Durations) %>%
     dplyr::arrange(District, First_Seen, Title)
 }
 

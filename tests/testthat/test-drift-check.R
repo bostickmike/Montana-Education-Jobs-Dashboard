@@ -597,7 +597,7 @@ test_that("summarize_central_safety_net handles empty or NULL inputs gracefully"
   expect_equal(summary$total_fallback_vacancies, 0L)
   expect_equal(length(summary$fallback_districts), 0)
   expect_equal(nrow(summary$discrepancies), 0)
-  expect_true(any(grepl("0 registered districts currently require Central Safety Net fallback", summary$markdown, fixed = TRUE)))
+  expect_true(any(grepl("Counted from OPI at directly scraped districts**: none", summary$markdown, fixed = TRUE)))
 })
 
 test_that("summarize_central_safety_net identifies active fallback districts and counts", {
@@ -631,9 +631,9 @@ test_that("summarize_central_safety_net identifies active fallback districts and
   expect_null(summary$fallback_districts[["Billings Public Schools"]])
 
   md <- paste(summary$markdown, collapse = "\n")
-  expect_match(md, "2 registered district(s) currently protected by Central Safety Net fallback", fixed = TRUE)
-  expect_match(md, "Bozeman Public Schools**: 2 vacancy/vacancies preserved", fixed = TRUE)
-  expect_match(md, "Polson School District**: 1 vacancy/vacancies preserved", fixed = TRUE)
+  expect_match(md, "3 posting(s) at 2 district(s), not on the district's own board", fixed = TRUE)
+  expect_match(md, "Bozeman Public Schools**: 2", fixed = TRUE)
+  expect_match(md, "Polson School District**: 1", fixed = TRUE)
 })
 
 test_that("summarize_central_safety_net reads discrepancy report for unmatched postings", {
@@ -677,11 +677,11 @@ test_that("build_drift_report_markdown includes Central Safety Net status annota
     fallback_districts = list("Bozeman Public Schools" = 5L),
     total_fallback_vacancies = 5L,
     markdown = c(
-      "### Central Safety Net Status Summary",
+      "### OPI postings at districts we scrape directly",
       "",
       "- **Statewide Feed (OPI)**: 350 active vacancies captured.",
-      "- **Active Fallback Districts**: 1 registered district(s) currently protected by Central Safety Net fallback (5 total vacancies preserved):",
-      "  - **Bozeman Public Schools**: 5 vacancy/vacancies preserved via fallback",
+      "- **Counted from OPI at directly scraped districts**: 5 posting(s) at 1 district(s), not on the district's own board:",
+      "  - **Bozeman Public Schools**: 5",
       "- **Central Feed Discrepancies**: 0 unmatched vacancies detected for active direct scrapers.",
       ""
     )
@@ -697,15 +697,15 @@ test_that("build_drift_report_markdown includes Central Safety Net status annota
   report <- paste(lines, collapse = "\n")
   # Bozeman: active fallback
   expect_match(report, "Bozeman Public Schools", fixed = TRUE)
-  expect_match(report, "Central Safety Net**: Active (5 fallback vacancies preserved via OPI)", fixed = TRUE)
+  expect_match(report, "On OPI**: 5 postings for this district that its own board doesn't list (counted from OPI)", fixed = TRUE)
   # Havre: inactive fallback
   expect_match(report, "Havre Public Schools", fixed = TRUE)
-  expect_match(report, "Central Safety Net**: Inactive (0 fallback vacancies on OPI)", fixed = TRUE)
+  expect_match(report, "On OPI**: nothing for this district beyond what its own board lists", fixed = TRUE)
   # Higher Ed: no Central Safety Net bullet under its entry
   expect_match(report, "Montana State University", fixed = TRUE)
-  expect_false(grepl("Montana State University.*\\n\\s+- \\*\\*Central Safety Net", report))
+  expect_false(grepl("Montana State University.*\\n\\s+- \\*\\*On OPI", report))
   # Bottom summary block included
-  expect_match(report, "### Central Safety Net Status Summary", fixed = TRUE)
+  expect_match(report, "### OPI postings at districts we scrape directly", fixed = TRUE)
   expect_match(report, "Statewide Feed (OPI)**: 350 active vacancies captured", fixed = TRUE)
 })
 
@@ -846,4 +846,16 @@ test_that("other_share_counts and build_other_share_report_markdown", {
   md <- build_other_share_report_markdown(flagged, date = "2026-11-05")
   expect_true(any(grepl("**Florence** (K-12): usually 0% Other, now 2 of 10", md, fixed = TRUE)))
   expect_length(build_other_share_report_markdown(flagged[0, ]), 0)
+})
+
+test_that("a wrapper dispatch entry still names its fetch_ function (Red Rover districts)", {
+  lines <- c('  "Columbia Falls School District 6" = function(session) {',
+             '    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/sd659912",',
+             '                            default_location = "Columbia Falls")',
+             '  },',
+             '  "Huntley Project School District" = fetch_huntley_postings,')
+  call <- function(d) list(fn = APPTEGY_DISPATCH_FN, args = list(d))
+  expect_equal(scraper_fetch_fn(call("Columbia Falls School District 6"), lines), "fetch_redrover_postings")
+  expect_equal(scraper_fetch_fn(call("Huntley Project School District"), lines), "fetch_huntley_postings")
+  expect_true(is.na(scraper_fetch_fn(call("Nowhere School District"), lines)))
 })

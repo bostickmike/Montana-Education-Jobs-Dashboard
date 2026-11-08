@@ -4341,12 +4341,18 @@ REDROVER_PLACEHOLDER_TITLES <- c("Classified Application", "Certified Applicatio
 # direct_api_scrapers.R's.
 if (!exists("extract_posted_pay", mode = "function")) source("k12_he_classification.R")
 
-parse_redrover_postings <- function(rendered_text, url, default_location = NA_character_) {
+# opening_links: the page's links to each opening (href, text), in page order.
+# Each posting takes the first unused link whose text is its title, so a row
+# carries its own page (jobs.redroverk12.com/org/<org>/opening/<n>: a stable
+# ID, and a page that shows when the opening closed, 2026-11-06); the board URL
+# where none matches.
+parse_redrover_postings <- function(rendered_text, url, default_location = NA_character_, opening_links = NULL) {
   empty <- data.frame(Title = character(0), Location = character(0),
                        Posted_Date = character(0), Link = character(0),
                        Pay_Min = numeric(0), Pay_Max = numeric(0), Pay_Unit = character(0),
                        Pay_Text = character(0), stringsAsFactors = FALSE)
 
+  if (!is.null(opening_links)) opening_links$used <- rep(FALSE, nrow(opening_links))
   lines <- strsplit(rendered_text, "\n")[[1]]
   lines <- trimws(lines)
   lines <- lines[nzchar(lines)]
@@ -4372,9 +4378,15 @@ parse_redrover_postings <- function(rendered_text, url, default_location = NA_ch
           pay_line <- block[-(1:2)][grepl("^\\$", block[-(1:2)])][1]
           pay <- extract_posted_pay(pay_line)
           if (!is.na(pay$Pay_Min)) pay$Pay_Text <- pay_line
+          link <- url
+          if (!is.null(opening_links) && nrow(opening_links) > 0) {
+            j <- which(!opening_links$used & trimws(opening_links$text) == substr(title, 1, nchar(trimws(opening_links$text))) &
+                         nzchar(trimws(opening_links$text)))[1]
+            if (!is.na(j)) { link <- opening_links$href[j]; opening_links$used[j] <- TRUE }
+          }
           rows[[length(rows) + 1]] <- cbind(
             data.frame(Title = title, Location = location,
-                       Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE),
+                       Posted_Date = NA_character_, Link = link, stringsAsFactors = FALSE),
             pay
           )
         }
@@ -4400,7 +4412,11 @@ fetch_redrover_postings <- function(chromote_session, url, default_location = NA
   chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
   Sys.sleep(5)
   text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
-  parse_redrover_postings(text, url, default_location = default_location)
+  links <- tryCatch(as.data.frame(jsonlite::fromJSON(chromote_session$Runtime$evaluate(paste0(
+    "JSON.stringify(Array.from(document.querySelectorAll('a[href*=\"/opening/\"]'))",
+    ".map(a => ({href: a.href, text: a.innerText.trim().slice(0, 60)})))"))$result$value)),
+    error = function(e) NULL)
+  parse_redrover_postings(text, url, default_location = default_location, opening_links = links)
 }
 
 # Stanford Public Schools (stanfordmtschool.com) -- found 2026-08-24 while
@@ -7984,18 +8000,41 @@ parse_bainville_postings <- function(html_cert, html_class, url = "https://www.b
 # ---------------------------------------------------------------------------
 # Chester-Joplin-Inverness Public Schools (Batch 23)
 # ---------------------------------------------------------------------------
-fetch_cji_postings <- function(url = "https://www.cji.k12.mt.us/page/employmentcji") {
-  pdf_url <- "https://aptg.co/c5tzQ5"
-  text <- tryCatch({
-    tmp <- tempfile(fileext = ".pdf")
-    on.exit(unlink(tmp), add = TRUE)
-    resp <- request(pdf_url) %>%
-      req_headers("User-Agent" = "Mozilla/5.0") %>%
-      perform_with_retry()
-    writeBin(resp_body_raw(resp), tmp)
-    paste(pdftools::pdf_text(tmp), collapse = "\n")
-  }, error = function(e) "")
-  parse_cji_postings(text, url)
+# The openings are one PDF linked from the employment page ("Click Here to
+# view current open positions at CJI!"). The district replaces the PDF and its
+# aptg.co short link from time to time: the link hard-coded until 2026-11-05
+# (aptg.co/c5tzQ5, "Current Open Positions 7_13_26.pdf") went 404 and every run
+# logged "empty". The page renders only in a browser (a plain request gets a
+# bot-challenge shell), so the link is read from the rendered page each run.
+# A missing link or failed download is an error, not an empty board.
+find_cji_positions_link <- function(links) {
+  # links: data frame of the page's anchors: text, href, context (the
+  # enclosing block's text).
+  if (is.null(links) || nrow(links) == 0) return(NA_character_)
+  open <- grepl("open positions", links$context, ignore.case = TRUE)
+  here <- open & grepl("^(click )?here!?$", trimws(links$text), ignore.case = TRUE)
+  named <- grepl("open positions", links$text, ignore.case = TRUE)
+  hit <- which(here | named)
+  if (length(hit) == 0) return(NA_character_)
+  links$href[hit[1]]
+}
+
+fetch_cji_postings <- function(chromote_session, url = "https://www.cji.k12.mt.us/page/employmentcji") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  js <- paste0("JSON.stringify(Array.from(document.querySelectorAll('a')).map(a => ({text: a.innerText.trim(), ",
+               "href: a.href, context: (a.closest('p,div,li') || a).innerText.slice(0, 300)})))")
+  links <- jsonlite::fromJSON(chromote_session$Runtime$evaluate(js)$result$value)
+  pdf_url <- find_cji_positions_link(as.data.frame(links))
+  if (is.na(pdf_url)) stop("CJI: no 'current open positions' link on the employment page")
+  tmp <- tempfile(fileext = ".pdf")
+  on.exit(unlink(tmp), add = TRUE)
+  resp <- request(pdf_url) %>%
+    req_headers("User-Agent" = "Mozilla/5.0") %>%
+    perform_with_retry()
+  writeBin(resp_body_raw(resp), tmp)
+  parse_cji_postings(paste(pdftools::pdf_text(tmp), collapse = "\n"), url)
 }
 
 parse_cji_postings <- function(text, url = "https://www.cji.k12.mt.us/page/employmentcji") {

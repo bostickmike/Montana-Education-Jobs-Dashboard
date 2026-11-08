@@ -53,7 +53,9 @@ cat("Fixtures:     ", if (length(evidence$fixtures)) paste(evidence$fixtures, co
 
 # ---- fixture tests --------------------------------------------------------
 fns <- c(evidence$fetch_fn, sub("^fetch_", "parse_", evidence$fetch_fn))
-for (f in list.files("tests/testthat", pattern = "^test-.*[.]R$", full.names = TRUE)) {
+fns <- fns[!is.na(fns)]
+if (length(fns) == 0) cat("No fetch_* function found for this source, so no fixture tests to run.\n")
+for (f in if (length(fns) == 0) character(0) else list.files("tests/testthat", pattern = "^test-.*[.]R$", full.names = TRUE)) {
   lines <- readLines(f, warn = FALSE)
   descs <- sub('^\\s*test_that\\("(.*?)",.*$', "\\1", grep("^\\s*test_that\\(", lines, value = TRUE), perl = TRUE)
   descs <- descs[vapply(descs, function(d) any(vapply(fns, grepl, logical(1), x = d, fixed = TRUE)), logical(1))]

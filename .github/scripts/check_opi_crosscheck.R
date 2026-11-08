@@ -12,7 +12,8 @@ qc <- read_if("mt_discrepancy_report.csv")
 adoption <- read_if("opi_adoption_candidates.csv")
 backlog <- if (file.exists("DISTRICT_BACKLOG.md")) readLines("DISTRICT_BACKLOG.md", warn = FALSE) else character(0)
 
-md <- build_opi_crosscheck_markdown(qc, adoption, backlog)
+opi_primary <- read_if("opi_primary_districts.csv")
+md <- build_opi_crosscheck_markdown(qc, adoption, backlog, opi_primary = opi_primary)
 cat(sprintf("OPI cross-check: %d QC rows, %d adoption candidates.\n",
             if (is.null(qc)) 0L else nrow(qc), if (is.null(adoption)) 0L else nrow(adoption)))
 if (length(md) > 0) {

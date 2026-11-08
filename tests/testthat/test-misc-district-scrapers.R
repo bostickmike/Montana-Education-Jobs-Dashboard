@@ -1238,6 +1238,19 @@ test_that("parse_redrover_postings extracts the 6 real postings, excluding the 2
   expect_false(any(result$Title %in% c("Classified Application", "Certified Application", "Volunteer Application")))
 })
 
+test_that("each Red Rover posting carries its own opening link when the page's links are passed", {
+  text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
+  # The page's opening links as St. Ignatius's board showed them on 2026-11-06 (placeholders included).
+  links <- data.frame(href = paste0("https://jobs.redroverk12.com/org/2261/opening/", c(206045, 181322, 120681, 114712, 102415)),
+                      text = c("Substitute Teacher", "Salish Teacher", "Classified Application", "Special Ed K-12",
+                               "Volunteer Application"), stringsAsFactors = FALSE)
+  result <- parse_redrover_postings(text, "https://jobs.redroverk12.com/org/2261", opening_links = links)
+  expect_equal(result$Link[result$Title == "Salish Teacher"], "https://jobs.redroverk12.com/org/2261/opening/181322")
+  expect_equal(result$Link[result$Title == "Special Ed K-12"], "https://jobs.redroverk12.com/org/2261/opening/114712")
+  # A posting with no matching link keeps the board URL.
+  expect_equal(result$Link[result$Title == "Title I"], "https://jobs.redroverk12.com/org/2261")
+})
+
 test_that("parse_redrover_postings returns zero rows (not an error) when there's no 'Found N job openings' header", {
   result <- parse_redrover_postings("Just some regular page text with no postings.", "url")
   expect_equal(nrow(result), 0)
@@ -4764,6 +4777,25 @@ test_that("parse_cji_postings extracts vacancies from PDF text fixture", {
                      "Custodial Subs", "Substitute Teachers") %in% result$Title))
   expect_true(all(result$Location == "Chester"))
   expect_true(all(result$Link == url))
+})
+
+test_that("the CJI openings PDF link is read from the rendered employment page", {
+  # Anchors as the rendered page showed them on 2026-11-05.
+  links <- data.frame(
+    text = c("26-27 Student/Parent Handbook", "SIGN IN", "EMPLOYMENT OPPORTUNITIES", "Here"),
+    href = c("https://aptg.co/bQp9pN", "https://cjihawks.id.thrillshare.com/",
+             "https://www.cji.k12.mt.us/page/employmentcji", "https://aptg.co/YnhnDQ"),
+    context = c("26-27 Student/Parent Handbook", "SIGN IN", "EMPLOYMENT OPPORTUNITIES",
+                "Click Here to view current open positions at CJI!"),
+    stringsAsFactors = FALSE)
+  expect_equal(find_cji_positions_link(links), "https://aptg.co/YnhnDQ")
+  expect_true(is.na(find_cji_positions_link(links[1:3, ])))
+  # The live check runs it with a browser session.
+  call <- resolve_scraper_call(data.frame(District = "Chester-Joplin-Inverness Public Schools",
+                                          Platform = "CJIHeuristic",
+                                          Job_Link = "https://www.cji.k12.mt.us/page/employmentcji"))
+  expect_equal(call$fn, "fetch_cji_postings")
+  expect_true(call$session)
 })
 
 test_that("parse_cji_postings returns zero rows on empty text", {
