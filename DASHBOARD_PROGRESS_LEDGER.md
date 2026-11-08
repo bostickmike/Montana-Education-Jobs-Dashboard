@@ -566,7 +566,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     formats, and refreshes the spells. Tested on a scratch copy with a planted rule change (one Sidney posting
     Teacher -> Paraprofessional): diff = that row, its 18 history rows and their counts; data-quality sweep green.
     Full weekly rehearsal passed, and parity held on its fresh output (the appended week matched the rebuild).
-  * [x] Classification safeguards, items 5, 6 and 3 (2026-11-05, both states; MT COMMIT): title monitoring and a golden
+  * [x] Classification safeguards, items 5, 6 and 3 (2026-11-05, both states; MT b45d465): title monitoring and a golden
     labeled set. `.github/scripts/check_title_quality.R` (weekly, non-blocking, into the drift issue; functions in
     `drift_check.R`): (5) title-shape lint of this run's postings per source -- level and rank with no role, schedule
     or detail sentences, field labels, markup, file names, blank or "Other" titles, over 200 characters, and pay
@@ -583,6 +583,34 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     fails on any other disagreement and when a known miss starts agreeing (clear its flag).
   * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
 
+  * [x] Confirmed closings from each posting's page (2026-11-06/07; 3d741ab, data 57989e8): `posting_status.R`
+    checks the page of every posting that dropped off its board since the last run (AppliTrack, TalentEd, Red Rover,
+    NEOGOV, JazzHR, Paycom; a browser only for Red Rover and Paycom) and records in `posting_status.csv` (committed
+    weekly) whether the platform says it closed, when, and any closing date it states. A failed check is "unknown".
+    Trial on 11-03 -> 11-05: 15 of 15 dropped postings confirmed closed. Posting spells use it: "closed (confirmed)"
+    endings, "censored: still open on its page" for scraper misses, the stated closing date as the end date when it
+    falls in the gap, and an advertised-window measure (`advertised_windows.csv`). Platform audit:
+    `claude-notes/2026-11-05_closing-date-audit.md` (54% of MT K-12 rows outside OPI and 76% of HE can be confirmed;
+    the Apptegy/district-site scrapers and OPI can't).
+  * [x] Title-shape fixes (2026-11-05; 3d741ab): `split_title_detail()` / `move_title_detail()` cut requirements,
+    pay, "Open Until Filled" and file names from titles at ingestion, before the archive and the ID; pay found there
+    fills Posted Pay (Turner "Secretary" $14/hour, Huntley Project "Bus Drivers", Livingston "Dish Server Cashier").
+  * [x] CJI (2026-11-05; 3d741ab): the hard-coded openings-PDF short link went 404 and every run logged "empty";
+    the link is now read from the rendered page, and a missing link or failed download is an error.
+  * [x] Red Rover opening links (2026-11-06; 3d741ab): Columbia Falls, Hamilton and St. Ignatius rows carry
+    `/org/<org>/opening/<n>`, now a stable posting ID (about 41 postings got new IDs once).
+  * [x] `repro_scraper.R` for wrapper dispatch entries (2026-11-06; 3d741ab): `scraper_fetch_fn()` reads a wrapper's
+    body, so the Red Rover districts name `fetch_redrover_postings` (repro and auto-fix evidence had NA).
+  * [x] Drift-issue OPI wording (2026-11-06; 3d741ab): "N postings at M districts, not on the district's own board"
+    instead of "protected by Central Safety Net fallback ... vacancies preserved" (the numbers were right).
+  * [x] OPI-primary districts (2026-11-06; 3d741ab): `opi_primary_districts.csv`, 15 districts checked and found to
+    post only on OPI (13 from 2026-11-03, Eureka and Geraldine from the backlog), summed in one line of the OPI
+    cross-check so the adoption list shows only unchecked districts.
+  * [x] Weekly-totals downloads (2026-11-06; 3d741ab): both download buttons keep the latest snapshot in each ISO week.
+  * [x] Golden-set fixes (2026-11-07; 3d741ab, data 57989e8): "Administrative Assistant/Secretary/Clerk" -> Staff;
+    academic/success/retention/GEAR UP coaches -> Advising. Golden set 501 -> 508 of 528, 7 known misses cleared,
+    none broken; committed data reclassified (4 combinedclean rows).
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
@@ -592,7 +620,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   (42 structured-platform districts + OPI grid, ~50 requests/day) for day-precision ends.
 - [ ] Roberts: site still "under maintenance" on 2026-11-04 (recheck after the 11-10 run; it now logs
   `Roberts returned a page with no HTML: "site under maintenance"`).
-- [ ] Arrowhead Elementary #75 (decision needed): HTTP 403 on every weekly CI run since 2026-09-07
+- [ ] Arrowhead Elementary #75 (decision needed; checked 2026-11-05 for another source: none current -- OPI none,
+  the Lee Enterprises job boards say "not hiring", no Wayback copies, PDFs on the same blocked host): HTTP 403 on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the 2026-10-29 "recovered" entry only held from the Mac. The site is behind Cloudflare,
   which turns away GitHub's servers; the page itself is fine (at least 8 openings on 2026-11-04, none on OPI), so none of its
   postings reach the data. Not worked around on purpose: trying user agents or other endpoints to get past the
@@ -600,16 +629,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   this one source from the Mac, or retire it from the registry and say so.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
-  Also: drift issue "Central Safety Net" (`summarize_central_safety_net()`) still calls counted OPI postings
-  "fallback"; ~3/week stale OPI listings (descriptions naming only past school years, e.g. Froid 2023) count.
-- [ ] Districts whose real board is OPI (19 checked 2026-11-03): mark "OPI is primary" so the adoption list only
-  flags new ones.
+  Decision needed: ~4/week counted OPI postings name only past school years (11-03: North Star, Broadview, Ryegate,
+  Cut Bank, all 2025-26); not counting them is a small rule (`claude-notes/2026-11-06_ledger-investigations.md`, 4).
+- [ ] OPI adoption candidates not yet checked (2026-11-06): Golden Ridge, Olney-Bissell, Ross, Valley View, Wyola;
+  add each to `opi_primary_districts.csv` or the backlog.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
-  10, 12, 13 done; next 1, 2 (source category, title normalization), then the 27 golden-set known misses, 4.
-- [ ] Title-shape bugs: Huntley Project "Bus Drivers- Must have a CDL...", Turner "Secretary - $14 per hour...",
-  "Dish_Server_Cashiers 26".
-- [ ] Weekly-totals downloads: keep one snapshot per week (decided 2026-11-02, latest snapshot wins; not built).
-- [ ] `scripts/repro_scraper.R "Columbia Falls School District 6"` aborts in its fixture step (scraper itself works).
+  10, 12, 13 done; next 1, 2 (source category, title normalization), then the 20 golden-set known misses left, 4.
 - [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
 - [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com.
 
