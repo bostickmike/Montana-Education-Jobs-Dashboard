@@ -658,6 +658,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `opi_primary_districts.csv` (no website, or none that is public or confirmed; evidence in the file), so the
     drift issue counts them on the "only board is OPI" line. Olney-Bissell has its own posting: moved to an
     adoption item below.
+  * [x] Olney-Bissell School District adopted (2026-11-09; registry 201 districts): Apptegy behind Fastly, read
+    through the shared chromote session; `parse_olneybissell_postings()` takes the bold title of each page-builder
+    text block (instructions and the "Certified Application" link are plain text). Live 11-09: 1 posting, "Long Term
+    Substitute - Kindergarten" (start about 2027-05-01), not on OPI. Fixture
+    `apptegy_olneybissell_pagedata_2026-11-09.html`; no DLI salary mapping yet.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -676,23 +681,25 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [ ] Arrowhead Elementary #75 (decision needed; checked 2026-11-05 for another source: none current -- OPI none,
   the Lee Enterprises job boards say "not hiring", no Wayback copies, PDFs on the same blocked host): HTTP 403 on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the 2026-10-29 "recovered" entry only held from the Mac. The site is behind Cloudflare,
-  which turns away GitHub's servers; the page itself is fine (at least 8 openings on 2026-11-04, none on OPI), so none of its
-  postings reach the data. Not worked around on purpose: trying user agents or other endpoints to get past the
+  which turns away GitHub's servers. Rechecked 2026-11-09 from the Mac (plain request, 200; the scraper parses it): the
+  page lists 3 postings, the same 3 the last good CI run (09-01) captured -- Substitute Employment (standing pool,
+  $120/day), Special Education Paraprofessional (full time), Certified Teachers ("various grades"); the earlier "at
+  least 8 openings" isn't supported. None on OPI now (OPI carried its Elementary teacher and SPED para from 04-07 to
+  08-25). So 3 postings, 2 of them standing pools, are missing each week. Not worked around on purpose: trying user agents or other endpoints to get past the
   block is circumventing the site's bot protection. Options: ask the district/web host to allow the scraper, run
-  this one source from the Mac, or retire it from the registry and say so.
+  this one source from the Mac, or retire it from the registry and say so. Suggested (11-09): ask the district (the
+  page names its contact) and keep the source meanwhile, so the 403 stays visible in `coverage_calendar.csv`.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
   still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
-  text, up since May-June) still count as open. Open: whether to flag spring postings, and whether to check the 7
-  job-specific links weekly as with WSBA.
-- [ ] Adopt Olney-Bissell (Apptegy, `olneybissellschool.com/o/obs/page/employment`): 1 real posting on 2026-11-09 that
-  OPI doesn't carry (`DISTRICT_BACKLOG.md`).
+  text, up since May-June) still count as open. Open: whether to flag spring postings. (A weekly check of the 7
+  job-specific links: measured 11-09 and not built; it would mostly flag outages and email links.)
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 3 golden-set known misses (2 file-name
   titles; "COMMUNICATIONS COORD." labeled Staff though every Coordinator is Administration), 4.
 - [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
-- [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com.
+- [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com, olneybissellschool.com.
 

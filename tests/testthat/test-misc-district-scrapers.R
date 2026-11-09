@@ -2417,6 +2417,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
   hotsprings_text <- paste(readLines(test_path("fixtures", "apptegy_hotsprings_rendered_2026-10-21.txt"), warn = FALSE), collapse = "\n")
   frenchtown_text <- paste(readLines(test_path("fixtures", "frenchtown_employment_rendered.txt"), warn = FALSE), collapse = "\n")
   savage_html <- paste(readLines(test_path("fixtures", "savage_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  olneybissell_html <- paste(readLines(test_path("fixtures", "apptegy_olneybissell_pagedata_2026-11-09.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
 
   # Same fake session serves every district's fetch, real URL routing comes
   # from each fetch_*_postings()'s own default url= argument -- this fake
@@ -2480,6 +2481,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
           else if (grepl("hssdmt", navigated_url)) hotsprings_text
           else if (grepl("ftsd", navigated_url)) frenchtown_text
           else if (grepl("savage", navigated_url)) savage_html
+          else if (grepl("olneybissell", navigated_url)) olneybissell_html
           else ""
           list(result = list(value = value))
         }
@@ -2490,7 +2492,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 25 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8 + 6 + 8)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 25 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8 + 6 + 8 + 1)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -2539,6 +2541,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
   expect_equal(sum(result$District == "Hot Springs School District"), 8)
   expect_equal(sum(result$District == "Frenchtown K-12 Schools"), 6)
   expect_equal(sum(result$District == "Savage Public Schools"), 8)
+  expect_equal(sum(result$District == "Olney-Bissell School District"), 1)
 })
 
 # Real fixture captured 2026-08-24 from Miles City's Google Sheets CSV
@@ -5010,4 +5013,35 @@ test_that("fetch_manhattan_postings fetches and parses a live-shaped response", 
     list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
   )
   expect_equal(nrow(fetch_manhattan_postings()), 11)
+})
+
+# Real fixture: document.documentElement.outerHTML captured via a live
+# chromote session 2026-11-09 from olneybissellschool.com's Employment page
+# (Apptegy; the posting lives in the page-builder JSON embedded in the page).
+
+test_that("parse_olneybissell_postings takes the bold title of each text block, not the instructions or the application link", {
+  html <- paste(readLines(test_path("fixtures", "apptegy_olneybissell_pagedata_2026-11-09.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+
+  result <- parse_olneybissell_postings(html, "url")
+
+  expect_equal(nrow(result), 1)
+  expect_equal(result$Title, "Long Term Substitute - Kindergarten")
+  expect_equal(result$Location, "Olney-Bissell")
+  expect_false(any(grepl("Application|Please|Letter of Interest", result$Title)))
+})
+
+test_that("parse_olneybissell_postings returns zero rows (not an error) for a page with no page-builder data", {
+  result <- parse_olneybissell_postings("<html><body>Nothing here</body></html>", "url")
+  expect_equal(nrow(result), 0)
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(nrow(parse_olneybissell_postings("", "url")), 0)
+})
+
+test_that("fetch_olneybissell_postings drives a chromote session and parses its real rendered HTML", {
+  html <- paste(readLines(test_path("fixtures", "apptegy_olneybissell_pagedata_2026-11-09.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  session <- fake_chromote_session(html)
+
+  result <- fetch_olneybissell_postings(session)
+
+  expect_equal(nrow(result), 1)
 })

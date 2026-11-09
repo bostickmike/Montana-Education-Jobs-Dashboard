@@ -5189,6 +5189,54 @@ fetch_savage_postings <- function(chromote_session, url = "https://www.savagepub
   parse_savage_postings(html, url)
 }
 
+# Olney-Bissell School (olneybissellschool.com, Flathead County, adopted 2026-11-09).
+# Apptegy CMS behind Fastly (a plain request gets the "Client Challenge"
+# page, so it rides the shared chromote session like the others). The
+# Employment page is one page-builder text block per posting: the title is
+# the block's bold (<strong>) text, followed by plain paragraphs of
+# instructions ("Please complete...", "Letter of Interest, ..."), and a
+# separate centered block holds the generic "Certified Application" link.
+# Titles are therefore the <strong> runs inside CONTENT_NODE_TEXT nodes,
+# minus any that are an application-form label or an instruction. The
+# trailing parenthetical on the same line (a start date) is not bold and
+# is not part of the title. Confirmed live 2026-11-09: 1 posting,
+# "Long Term Substitute - Kindergarten" (a real long-term position, not a
+# standing substitute list).
+parse_olneybissell_postings <- function(html_text, url = "https://www.olneybissellschool.com/o/obs/page/employment") {
+  empty <- data.frame(Title = character(0), Location = character(0),
+                       Posted_Date = character(0), Link = character(0),
+                       stringsAsFactors = FALSE)
+  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
+
+  nodes <- decode_apptegy_pagebuilder_nodes(html_text)
+  if (is.null(nodes)) return(empty)
+
+  text_nodes <- find_all_apptegy_nodes(nodes, function(n) {
+    !is.null(n$type) && n$type == "CONTENT_NODE_TEXT" && !is.null(n$content$html)
+  })
+  titles <- unlist(lapply(text_nodes, function(n) {
+    frag <- n$content$html
+    if (!nzchar(frag)) return(character(0))
+    rvest::html_text2(rvest::html_elements(xml2::read_html(paste0("<div>", frag, "</div>")), "strong"))
+  }), use.names = FALSE)
+  titles <- trimws(gsub("[[:space:]]+", " ", titles))
+  titles <- titles[nzchar(titles)]
+  titles <- titles[!grepl("application$|^please\\b|^apply\\b", titles, ignore.case = TRUE)]
+  titles <- unique(titles)
+  if (length(titles) == 0) return(empty)
+
+  data.frame(Title = titles, Location = "Olney-Bissell", Posted_Date = NA_character_,
+             Link = url, stringsAsFactors = FALSE)
+}
+
+fetch_olneybissell_postings <- function(chromote_session, url = "https://www.olneybissellschool.com/o/obs/page/employment") {
+  chromote_session$Page$navigate(url)
+  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
+  Sys.sleep(4)
+  html <- chromote_session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+  parse_olneybissell_postings(html, url)
+}
+
 # Fetches all 43 districts (40 Apptegy + Geyser's CyberSchool + St.
 # Ignatius's and Hamilton's Red Rover Hiring) sharing one chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
@@ -5267,7 +5315,8 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
   "Sweet Grass County High School" = fetch_bigtimber_postings,
   "Hot Springs School District" = fetch_hotsprings_postings,
   "Frenchtown K-12 Schools" = fetch_frenchtown_postings,
-  "Savage Public Schools" = fetch_savage_postings
+  "Savage Public Schools" = fetch_savage_postings,
+  "Olney-Bissell School District" = fetch_olneybissell_postings
 )
 
 fetch_apptegy_k12_postings <- function(chromote_session_factory = NULL,

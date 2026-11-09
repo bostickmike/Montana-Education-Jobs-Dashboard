@@ -139,7 +139,8 @@ test_that("MT_DLI_DISTRICT_MAP covers a real subset of the registered districts,
                      "Marion School District #54",
                      "Frenchtown K-12 Schools",
                      "Lima School District #12",
-                     "Savage Public Schools"))
+                     "Savage Public Schools",
+                     "Olney-Bissell School District"))
 })
 
 # ---------------------------------------------------------------------------
