@@ -654,6 +654,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     still give a way to apply (Colstrip: a working email beside a dead short link; Poplar: its site was briefly down,
     200 on recheck). A weekly link check would mostly flag outages and email links; not built. College side: MSU's
     90 applicant pools already land in Adjunct/Part-Time Faculty; 8 non-pool postings over 180 days, all still open.
+  * [x] OPI adoption candidates checked (2026-11-09): Golden Ridge, Ross, Valley View and Wyola added to
+    `opi_primary_districts.csv` (no website, or none that is public or confirmed; evidence in the file), so the
+    drift issue counts them on the "only board is OPI" line. Olney-Bissell has its own posting: moved to an
+    adoption item below.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -683,8 +687,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
   text, up since May-June) still count as open. Open: whether to flag spring postings, and whether to check the 7
   job-specific links weekly as with WSBA.
-- [ ] OPI adoption candidates not yet checked (2026-11-06): Golden Ridge, Olney-Bissell, Ross, Valley View, Wyola;
-  add each to `opi_primary_districts.csv` or the backlog.
+- [ ] Adopt Olney-Bissell (Apptegy, `olneybissellschool.com/o/obs/page/employment`): 1 real posting on 2026-11-09 that
+  OPI doesn't carry (`DISTRICT_BACKLOG.md`).
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 3 golden-set known misses (2 file-name

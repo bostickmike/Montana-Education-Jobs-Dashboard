@@ -111,7 +111,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Seeley Lake Elementary #34 | Missoula | `sleonline.org/page/join-our-team` | Apptegy site; 1 active position (Substitute (All Areas)); checked 2026-10-21 | ✅ **Adopted** (2026-10-21, Batch 12) |
 | Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site; links to generic blank application PDFs only (`5il.co/1dfyi`); checked 2026-10-21 | TODO |
 | Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |
-| Olney-Bissell School | Flathead | `olneybissellschool.com/o/obs/page/employment` | Apptegy; generic "Certified Application" link only | TODO |
+| Olney-Bissell School | Flathead | `olneybissellschool.com/o/obs/page/employment` | Apptegy; rechecked 2026-11-09 (headless Chrome, as the pipeline renders Apptegy): 1 real posting, "Long Term Substitute - Kindergarten (Approximate start date is May 1st, 2027)", plus the generic "Certified Application" link; not on OPI that week. Adoption candidate | TODO |
 | East Glacier Park Grade School | Glacier | `eastglacierschool.com/employment` | CyberSchool CMS; 1 active position (Licensed Teachers); checked 2026-10-21 | ✅ **Adopted** (2026-10-21, Batch 12) |
 | Kila School District #20 | Flathead | `docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/` | Google Sites with live Google Doc HTML table; 4 active positions | ✅ **Adopted** (2026-10-22, Batch 17) |
 | DeSmet School District #20 | Missoula | employment page | generic Certified/Classified application-form links | TODO |
