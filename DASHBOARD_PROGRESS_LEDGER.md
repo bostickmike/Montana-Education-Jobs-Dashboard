@@ -621,6 +621,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Service. `reclassify_committed_data.R` now refreshes the posting spells even when the history files don't
     change (they come from the raw archives; the morning's fixes had left MT's "Little Raiders" spell stale).
 
+  * [x] Eleven HE golden-set known misses (2026-11-09; d862c49): laborers, stationary engineer, lab/husbandry/
+    paleontology, "(Student)" titles, counselor/financial assistance, classroom support, night watch, enterprise
+    architect. Archive diff: 21 HE titles move, all intended; golden set 548 of 551; HE posting spells refreshed.
+    Review tools added 11-08 (archive diff, spells invariant, guard rows; toolkit footgun 16, `sibling_sync.R`).
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
@@ -645,7 +650,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   add each to `opi_primary_districts.csv` or the backlog.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
-  parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 14 golden-set known misses (3 K-12), 4.
+  parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 3 golden-set known misses (2 file-name
+  titles; "COMMUNICATIONS COORD." labeled Staff though every Coordinator is Administration), 4.
 - [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
 - [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com.
 
