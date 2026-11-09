@@ -639,6 +639,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Built instead (Mike, option 1): those endings are "outcome unknown" (censored) in the duration estimates
     (7b75e29): K-12 median 25.5 -> 28.5 days, college 21.5 -> 31.5 (MSU reissues posting numbers; 142 of 156 relistings). A platform-reported "filled" keeps its ending.
 
+  * [x] OPI descriptions refine the position bucket (2026-11-09; 178fc31): OPI's title is only its subject field. A
+    `Role_Hint` from the description's opening (long-term substitute, part-time / under 1.0 FTE, or the role named
+    first) moves 21 of 215 counted OPI postings on 11-03 (9 part-time teachers and 4 long-term substitutes out of
+    Teacher, 2 paras out of "Elementary Curriculum", 5 teachers and a counselor out of Administration/Other), each
+    confirmed by reading it; on the live board 11-09, 38 moves, all read (one false positive found and fixed:
+    "paraprofessional support in the classroom"). Never moves a posting to Administration. History before 11-03
+    keeps title-only buckets (no OPI descriptions archived). Rehearsal: all steps passed, but OPI hit a DNS timeout
+    (0 OPI rows), so the fresh-data path was checked separately on the live board.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
