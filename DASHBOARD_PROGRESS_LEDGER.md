@@ -614,6 +614,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     coach aides, bare "Aide" matching inside "Little Raiders Daycare", Office/Records Assistant, Mower. 17 of 8,066
     archived titles move, all intended; golden set 517 of 531; committed data unchanged (titles only in 2024-25
     archives). Items 1 and 2 measured first (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`).
+  * [x] Classification safeguards 9 and 11 (2026-11-08; 40e4365): keyword-conflict report in the drift issue
+    (`find_keyword_conflicts()`, title words naming another bucket; tuned on all archived titles since 2025-10-01,
+    0 false alarms left) and a blocking 8% ceiling on this week's Other share (record week 3.4%). Two misroutes it
+    found: "Support Clerk"/"Building Secretary Support" -> Staff, HE "Custodian - Dining Center" -> Maintenance &
+    Service. `reclassify_committed_data.R` now refreshes the posting spells even when the history files don't
+    change (they come from the raw archives; the morning's fixes had left MT's "Little Raiders" spell stale).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -638,7 +644,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [ ] OPI adoption candidates not yet checked (2026-11-06): Golden Ridge, Olney-Bissell, Ross, Valley View, Wyola;
   add each to `opi_primary_districts.csv` or the backlog.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
-  10, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
+  9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 14 golden-set known misses (3 K-12), 4.
 - [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
 - [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com.
