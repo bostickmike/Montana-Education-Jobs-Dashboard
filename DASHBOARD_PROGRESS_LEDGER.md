@@ -610,6 +610,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Golden-set fixes (2026-11-07; 3d741ab, data 57989e8): "Administrative Assistant/Secretary/Clerk" -> Staff;
     academic/success/retention/GEAR UP coaches -> Advising. Golden set 501 -> 508 of 528, 7 known misses cleared,
     none broken; committed data reclassified (4 combinedclean rows).
+  * [x] Six more golden-set misroutes (2026-11-08; 1f261c8): Sub-Varsity coach, Bus Paraprofessional, cross-country
+    coach aides, bare "Aide" matching inside "Little Raiders Daycare", Office/Records Assistant, Mower. 17 of 8,066
+    archived titles move, all intended; golden set 517 of 531; committed data unchanged (titles only in 2024-25
+    archives). Items 1 and 2 measured first (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -634,7 +638,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [ ] OPI adoption candidates not yet checked (2026-11-06): Golden Ridge, Olney-Bissell, Ross, Valley View, Wyola;
   add each to `opi_primary_districts.csv` or the backlog.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
-  10, 12, 13 done; next 1, 2 (source category, title normalization), then the 20 golden-set known misses left, 4.
+  10, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
+  parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 14 golden-set known misses (3 K-12), 4.
 - [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
 - [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com.
 
