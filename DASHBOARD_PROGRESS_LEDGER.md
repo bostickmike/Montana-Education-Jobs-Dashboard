@@ -636,7 +636,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Reposts (2026-11-09; not built, measured): a listing that ends and reappears next week under a new ID with
     the same title looks like an ending plus a new posting (MT 101 / WY 358 strict pairs). Not linked: of the 23 WY
     SchoolSpring pairs whose old record has a final status, 8 were "filled", i.e. a new vacancy, not the same job.
-    Proposed instead (awaiting Mike): count those endings as "outcome unknown" (censored) in the duration estimates.
+    Built instead (Mike, option 1): those endings are "outcome unknown" (censored) in the duration estimates
+    (7b75e29): K-12 median 25.5 -> 28.5 days, college 21.5 -> 31.5 (MSU reissues posting numbers; 142 of 156 relistings). A platform-reported "filled" keeps its ending.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
