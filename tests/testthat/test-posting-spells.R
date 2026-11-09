@@ -158,3 +158,36 @@ test_that("a posting's own page confirms or overrules its ending, and dates it b
   expect_equal(r("url-1", "End_Date"), "2026-10-30"); expect_equal(r("url-1", "Advertised_Days"), 29)
   expect_equal(r("url-2", "Ending"), "censored: still open on its page")
 })
+
+test_that("a posting relisted under a new ID the next run is 'outcome unknown', not an ending", {
+  # 2026-11-09: of 23 WY SchoolSpring relistings whose old record has a final
+  # status, 8 were "filled" (a new vacancy with the same title), so relistings
+  # are neither linked nor counted as endings.
+  d <- c("Albany County School District 1", "Albany County School District 1", "Albany County School District 1",
+         "Albany County School District 1", "Laramie County School District 1")
+  src <- c("acsd1", "acsd1", "acsd1", "other board", "acsd1")
+  title <- c("Mechanic", " mechanic ", "Elementary Teacher", "Mechanic", "Mechanic")
+  first <- as.Date(c("2026-03-06", "2026-04-17", "2026-04-17", "2026-04-17", "2026-04-17"))
+  nxt <- as.Date(c("2026-04-17", NA, NA, NA, NA))
+  # Same district, source and title (case and spacing aside), first seen the old one's next run.
+  expect_equal(relisted_next_run(d, src, title, first, nxt), c(TRUE, FALSE, FALSE, FALSE, FALSE))
+  # A different title, source or district, or a later run, is not a relisting.
+  expect_equal(relisted_next_run(d[c(1, 3)], src[c(1, 3)], c("Custodian", "Elementary Teacher"), first[c(1, 3)],
+                                 as.Date(c("2026-04-17", NA))), c(FALSE, FALSE))
+  expect_false(relisted_next_run(d[1], src[1], title[1], first[1], as.Date("2026-04-24")))
+  expect_false(relisted_next_run(d[1], src[1], title[1], first[1], NA))
+})
+
+test_that("the committed spells mark relistings unknown but keep platform-reported fills", {
+  p <- here::here("posting_spells_k12.csv")
+  skip_if_not(file.exists(p), "posting_spells_k12.csv not built")
+  s <- utils::read.csv(p, colClasses = "character")
+  r <- s$Ending == "censored: relisted next run"
+  expect_true(all(s$Event[r] == "FALSE"))
+  expect_true(all(s$End_Basis[r] == "censored"))
+  # Every relisting is either marked unknown or kept as the platform's "filled";
+  # no relisting is still counted as a plain ending.
+  rel <- relisted_next_run(s$District, s$Posting_Source, s$Title, as.Date(s$First_Seen), as.Date(s$Next_Run))
+  expect_false(any(rel & s$Ending %in% setdiff(POSTING_SPELL_EVENTS, "filled")))
+  expect_true(all(r <= rel))
+})
