@@ -59,6 +59,7 @@ REQUIRED_SCHEMAS <- list(
 
 REQUIRED_SCHEMAS_XLSX <- list(
   "hedata.xlsx" = c("Title", "Location", "Posted_Date", "Institution", "Link", "Archive_Date",
+                  "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
                   "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")
 )
 

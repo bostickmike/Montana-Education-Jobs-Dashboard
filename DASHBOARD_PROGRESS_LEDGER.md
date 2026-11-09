@@ -581,7 +581,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     27 `known_miss` rows the classifier still gets wrong (e.g. Administrative Assistant -> Administration, GEAR UP
     success coaches -> Coaching or Athletics, Laborer -> Support Services). `test-classification-golden-set.R`
     fails on any other disagreement and when a known miss starts agreeing (clear its flag).
-  * [ ] Add `Pay_*` to `hedata.xlsx` in `REQUIRED_SCHEMAS_XLSX` once the first weekly run writes it.
+  * [x] `Pay_Min`/`Pay_Max`/`Pay_Unit`/`Pay_Text` required in `hedata.xlsx` (`REQUIRED_SCHEMAS_XLSX`, 2026-11-09):
+    the weekly runs already write them; `app.R` pads a missing pay column with NA, so before this a dropped column
+    would have shown no posted pay without failing the schema step.
 
   * [x] Confirmed closings from each posting's page (2026-11-06/07; 3d741ab, data 57989e8): `posting_status.R`
     checks the page of every posting that dropped off its board since the last run (AppliTrack, TalentEd, Red Rover,
