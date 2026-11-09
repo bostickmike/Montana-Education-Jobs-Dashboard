@@ -626,6 +626,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     architect. Archive diff: 21 HE titles move, all intended; golden set 548 of 551; HE posting spells refreshed.
     Review tools added 11-08 (archive diff, spells invariant, guard rows; toolkit footgun 16, `sibling_sync.R`).
 
+  * [x] "Coord" abbreviation -> Administration (2026-11-09; 3389731): "COMMUNICATIONS COORD." relabeled Administration
+    (Mike); 3 archived titles move; golden set 549 of 551 (2 known misses, both file-name titles).
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
@@ -644,8 +647,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   this one source from the Mac, or retire it from the registry and say so.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
-  Decision needed: ~4/week counted OPI postings name only past school years (11-03: North Star, Broadview, Ryegate,
-  Cut Bank, all 2025-26); not counting them is a small rule (`claude-notes/2026-11-06_ledger-investigations.md`, 4).
+- [ ] Old OPI postings (decision needed; `claude-notes/2026-11-09_opi-old-postings.md`): the 4 "2025-26" postings are
+  reused ad text from May-June spring hiring, Open Until Filled, up 5-6 months; whether filled can't be told (those
+  districts' own boards never carry teaching jobs). Half the counted OPI postings (107 of 215 on 11-03) were posted
+  before July 1. Options: flag them (recommended), stop counting after N days, or ask a sample of districts.
 - [ ] OPI adoption candidates not yet checked (2026-11-06): Golden Ridge, Olney-Bissell, Ross, Valley View, Wyola;
   add each to `opi_primary_districts.csv` or the backlog.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
