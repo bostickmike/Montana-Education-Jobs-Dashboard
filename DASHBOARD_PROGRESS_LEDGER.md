@@ -629,6 +629,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] "Coord" abbreviation -> Administration (2026-11-09; 3389731): "COMMUNICATIONS COORD." relabeled Administration
     (Mike); 3 archived titles move; golden set 549 of 551 (2 known misses, both file-name titles).
 
+  * [x] "Posted / listed" first-seen fallback (2026-11-09; 391800f): 546 of 1,380 K-12 and 149 of 379 college postings had no date; they now show "First seen <date>" or
+    "On the board since at least <date>" (already up when we first scraped that board), from the posting spells
+    (`posting_first_seen.csv` in the app folder, committed weekly). Mike: first-seen dates will match posted dates
+    more closely the longer the dashboards run. Checked in the rendered app.
+  * [x] Reposts (2026-11-09; not built, measured): a listing that ends and reappears next week under a new ID with
+    the same title looks like an ending plus a new posting (MT 101 / WY 358 strict pairs). Not linked: of the 23 WY
+    SchoolSpring pairs whose old record has a final status, 8 were "filled", i.e. a new vacancy, not the same job.
+    Proposed instead (awaiting Mike): count those endings as "outcome unknown" (censored) in the duration estimates.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
