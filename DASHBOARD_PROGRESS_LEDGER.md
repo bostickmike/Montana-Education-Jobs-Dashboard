@@ -648,6 +648,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     keeps title-only buckets (no OPI descriptions archived). Rehearsal: all steps passed, but OPI hit a DNS timeout
     (0 OPI rows), so the fresh-data path was checked separately on the live board.
 
+  * [x] OPI dead application links (2026-11-09; measured, nothing to drop): the 2 postings whose links all failed both
+    still give a way to apply (Colstrip: a working email beside a dead short link; Poplar: its site was briefly down,
+    200 on recheck). A weekly link check would mostly flag outages and email links; not built. College side: MSU's
+    90 applicant pools already land in Adjunct/Part-Time Faculty; 8 non-pool postings over 180 days, all still open.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
