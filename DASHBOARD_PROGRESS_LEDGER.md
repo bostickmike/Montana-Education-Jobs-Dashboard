@@ -647,10 +647,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   this one source from the Mac, or retire it from the registry and say so.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
-- [ ] Old OPI postings (decision needed; `claude-notes/2026-11-09_opi-old-postings.md`): the 4 "2025-26" postings are
-  reused ad text from May-June spring hiring, Open Until Filled, up 5-6 months; whether filled can't be told (those
-  districts' own boards never carry teaching jobs). Half the counted OPI postings (107 of 215 on 11-03) were posted
-  before July 1. Options: flag them (recommended), stop counting after N days, or ask a sample of districts.
+- [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
+  still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
+  162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
+  text, up since May-June) still count as open. Open: whether to flag spring postings, and whether to check the 7
+  job-specific links weekly as with WSBA.
 - [ ] OPI adoption candidates not yet checked (2026-11-06): Golden Ridge, Olney-Bissell, Ross, Valley View, Wyola;
   add each to `opi_primary_districts.csv` or the backlog.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
