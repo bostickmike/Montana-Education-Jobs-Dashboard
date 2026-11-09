@@ -3,8 +3,7 @@
 "841 Bear Canyon Road",,"Library","Library Media","Library Media","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,0,0,0,0
 "Absarokee Elem / Absarokee H S",,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",1,0,0,0,0,0
 "Absarokee Elem / Absarokee H S",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,1,0,0,0
-"Absarokee Elem / Absarokee H S",,"Music","Music Education","Music","Teacher","2026-08-06","2026-11-03",14,96,"Still Active",0,0,0,0,0,0
-"Amsterdam Elem",,"Physical Ed","Physical Education","Physical Education","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
+"Absarokee Elem / Absarokee H S",,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,0,0,0,0
 "Anaconda School District #10",3002010,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,1,0,0,0
 "Anaconda School District #10",3002010,"Elementary Special Education Teacher (2 positions)","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-10-27",10,70,"Closed / Filled",0,1,0,0,0,0
 "Anaconda School District #10",3002010,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,1,0,0,0,0
@@ -42,7 +41,7 @@
 "Belgrade School District 44",3003290,"Math Teacher  MS2627_24 .5 FTE","Mathematics Education","Math","Teacher","2026-09-15","2026-11-03",8,56,"Still Active",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Math Teacher HS2627_15 .5 FTE","Mathematics Education","Math","Teacher","2026-09-07","2026-09-08",1,8,"Closed / Filled",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-01",4,28,"Closed / Filled",1,0,0,0,0,0
-"Belgrade School District 44",3003290,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-11-03",13,91,"Still Active",1,0,0,0,0,0
+"Belgrade School District 44",3003290,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Closed / Filled",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Spanish Teacher HS2627_38","Language Education","Language","Teacher","2026-09-29","2026-11-03",6,42,"Still Active",0,0,0,0,0,0
 "Belgrade School District 44",3003290,"Special Education Resource Teacher SP2627_31","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-09-07","2026-11-03",9,64,"Still Active",0,1,0,0,0,0
 "Belgrade School District 44",3003290,"World Languages","Language Education","Language","Teacher","2026-08-11","2026-09-22",7,49,"Closed / Filled",0,0,0,0,0,0
@@ -384,10 +383,10 @@
 "Kalispell Public Schools",3015450,"TEACHER - FAMILY CONSUMER SCIENCE","Science Education","Science","Teacher","2026-08-18","2026-09-22",6,42,"Closed / Filled",1,0,0,0,0,0
 "Kalispell Public Schools",3015450,"TEACHER - PHYSICAL EDUCATION","Physical Education","Physical Education","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,0,0,0
 "Kalispell Public Schools",3015450,"TEACHER - SOCIAL STUDIES","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-09-22",8,54,"Closed / Filled",0,0,0,1,0,0
-"LaMotte Elem",,"Library","Library Media","Library Media","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "Lambert Public Schools",3015990,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
 "Lambert Public Schools",3015990,"Music","Music Education","Music","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,0,0,0,0
 "Lambert Public Schools",3015990,"Music K-12","Music Education","Music","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",0,0,0,0,0,0
+"Lame Deer Public Schools",3016050,"Administrative - Other","Uncategorized","Other","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "Lame Deer Public Schools",3016050,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",1,0,0,0,0,0
 "Lame Deer Public Schools",3016050,"Copy Of Copy Of Middle School Classroom Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-11-03",14,95,"Still Active",0,0,1,0,0,0
 "Lame Deer Public Schools",3016050,"Copy Of Middle School Classroom Teacher","Elementary Education","Elementary","Teacher","2026-08-07","2026-11-03",14,95,"Still Active",0,0,1,0,0,0
@@ -463,9 +462,8 @@
 "Lodge Grass Public Schools",3017010,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,1,0,0,0,0
 "Lolo School District 7",3017130,"Foreign Language Teacher (.33)","Language Education","Language","Teacher","2026-09-01","2026-11-03",10,70,"Still Active",0,0,0,0,0,0
 "Lolo School District 7",3017130,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,0,0,0,0
-"Lolo School District 7",3017130,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",0,1,0,0,0,0
+"Lolo School District 7",3017130,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-10-27",1,7,"Closed / Filled",0,1,0,0,0,0
 "Loring Colony",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,1,0,0,0
-"Loyola-Sacred Heart H S",,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,1,0,0
 "Loyola-Sacred Heart H S",,"Mathematics","Mathematics Education","Math","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",1,0,0,0,0,0
 "Luther School",3017370,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-09-01",3,33,"Closed / Filled",0,0,1,0,0,0
 "Malta Public Schools",3017580,"Agricultural Education - FFA","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-09-01","2026-11-03",10,70,"Still Active",0,0,0,0,0,0
@@ -475,13 +473,11 @@
 "Malta Public Schools",3017580,"Music - Vocal","Music Education","Music","Teacher","2026-09-01","2026-11-03",10,70,"Still Active",0,0,0,0,0,0
 "Malta Public Schools",3017580,"Social Studies (Broadfield)","Social Studies Education","Secondary Social Studies","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,1,0,0
 "Malta Public Schools",3017580,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-10-06",10,68,"Closed / Filled",0,1,0,0,0,0
-"Manhattan Christian",,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,1,0,0
 "Manhattan School District",3017610,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-18","2026-08-18",1,7,"Closed / Filled",0,0,1,0,0,0
 "Manhattan School District",3017610,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-27","2026-10-27",1,7,"Closed / Filled",0,0,1,0,0,0
 "Manhattan School District",3017610,"Mathematics","Mathematics Education","Math","Teacher","2026-08-06","2026-09-08",6,40,"Closed / Filled",1,0,0,0,0,0
 "Manhattan School District",3017610,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-25","2026-10-27",10,70,"Closed / Filled",0,0,0,0,0,0
 "Manhattan School District",3017610,"Special Education","Special Education - General","Special Education - General","Teacher","2026-09-15","2026-10-13",5,35,"Closed / Filled",0,1,0,0,0,0
-"Marion School District #54",3017700,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,1,0,0,0
 "McCormick Elem",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,1,0,0,0
 "McLeod Elem",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
 "Medicine Lake K-12 Schools",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-20",12,82,"Closed / Filled",0,0,1,0,0,0
@@ -526,6 +522,7 @@
 "Nashua Public Schools",3019170,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-11",2,12,"Closed / Filled",0,1,0,0,0,0
 "Nashua Public Schools",3019170,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",0,1,0,0,0,0
 "North Cheyenne Trib Elem",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,1,0,0,0
+"North Cheyenne Trib Elem",,"Other","Uncategorized","Other","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "North Cheyenne Trib Elem",,"Special Education","Special Education - General","Special Education - General","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,1,0,0,0,0
 "North Harlem Colony Elem",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,1,0,0,0
 "North Star Public Schools",3000096,"CTE – Family and Consumer Sciences","Family and Consumer Science","CTE - Business & Family Sciences","Teacher","2026-08-06","2026-11-03",14,96,"Still Active",1,0,0,0,0,0
@@ -536,7 +533,6 @@
 "Northern Cheyenne Trib HS",,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",1,0,0,0,0,0
 "Northern Cheyenne Trib HS",,"History","Social Studies Education","Secondary Social Studies","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,1,0,0
 "Northern Cheyenne Trib HS",,"Library","Library Media","Library Media","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
-"Northern Cheyenne Trib HS",,"Mathematics","Mathematics Education","Math","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",1,0,0,0,0,0
 "Opheim Public Schools",3019740,"Music Teacher","Music Education","Music","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",0,0,0,0,0,0
 "Opheim Public Schools",3019740,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,0,0,0,0,0
 "Opheim Public Schools",3019740,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,1,0,0,0,0
@@ -584,8 +580,8 @@
 "Rau Elem",,"Music","Music Education","Music","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "Reed Point School District",3022230,"CTE – Agricultural Education","Agriculture Education","CTE - Trades, Ag & Technical","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,0,0,0,0,0
 "Reed Point School District",3022230,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-08-07",1,8,"Closed / Filled",0,0,1,0,0,0
-"Richey Public Schools",3022370,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",1,0,0,0,0,0
-"Richey Public Schools",3022370,"Music","Music Education","Music","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",0,0,0,0,0,0
+"Richey Public Schools",3022370,"CTE – Business and Marketing Education","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-10-27","2026-10-27",1,7,"Closed / Filled",1,0,0,0,0,0
+"Richey Public Schools",3022370,"Music","Music Education","Music","Teacher","2026-10-27","2026-10-27",1,7,"Closed / Filled",0,0,0,0,0,0
 "Richey Public Schools",3022370,"Physical Ed","Physical Education","Physical Education","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",0,0,0,0,0,0
 "Richey Public Schools",3022370,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-25",4,26,"Closed / Filled",0,1,0,0,0,0
 "Richey Public Schools",3022370,"Special Education","Special Education - General","Special Education - General","Teacher","2026-10-27","2026-11-03",2,14,"Still Active",0,1,0,0,0,0
@@ -682,9 +678,9 @@
 "St Josephs School",,"Physical Ed","Physical Education","Physical Education","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "St Jude Thaddeus School",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,1,0,0,0
 "St Jude Thaddeus School",,"Physical Ed","Physical Education","Physical Education","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
+"St Labre Indian H S",,"Administrative - Other","Uncategorized","Other","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "St Labre Indian H S",,"Art","Art Teacher","Art","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "St Labre Indian H S",,"Mathematics","Mathematics Education","Math","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",1,0,0,0,0,0
-"St Mary's School",,"Music","Music Education","Music","Teacher","2026-11-03","2026-11-03",1,7,"Still Active",0,0,0,0,0,0
 "St Regis School District",3024930,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-10-20","2026-11-03",3,21,"Still Active",0,0,1,0,0,0
 "St Regis School District",3024930,"History","Social Studies Education","Secondary Social Studies","Teacher","2026-10-20","2026-11-03",3,21,"Still Active",0,0,0,1,0,0
 "St. Ignatius School District",3006110,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-11","2026-09-22",7,49,"Closed / Filled",0,0,1,0,0,0

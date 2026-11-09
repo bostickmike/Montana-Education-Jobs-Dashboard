@@ -72,13 +72,17 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
   })) %>%
     dplyr::mutate(Archive_Date = as.Date(Archive_Date))
   if (!"Close_Date" %in% names(d)) d$Close_Date <- NA_character_
+  if (!"OPI_Description" %in% names(d)) d$OPI_Description <- NA_character_
   d %>%
     dplyr::filter(!is_placeholder_posting(title)) %>%
+    # Same bucket as combinedclean.csv: OPI rows' descriptions refine it (build_k12_combinedclean()).
+    dplyr::mutate(Role_Hint = ifelse(Is_OPI == "TRUE" & !is.na(OPI_Description) & nzchar(OPI_Description),
+                                     k12_role_hint(OPI_Description), NA_character_)) %>%
     dplyr::transmute(Run_Date = Archive_Date, Posting_ID, Posting_Identity_Method,
                      District, title, date_posted, Close_Date = parse_stated_close_date(Close_Date), url,
                      Posting_Source = dplyr::coalesce(Posting_Source, ""),
-                     Is_OPI = Is_OPI == "TRUE",
-                     position = classify_k12_position(title))
+                     Is_OPI = Is_OPI == "TRUE", Role_Hint,
+                     position = classify_k12_position(title, Role_Hint))
 }
 
 # ---------------------------------------------------------------------------
@@ -255,11 +259,13 @@ build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_
     dplyr::group_by(District, Posting_Source) %>%
     dplyr::summarize(Source_First_Run = min(Run_Date), .groups = "drop")
 
+  if (!"Role_Hint" %in% names(panel)) panel$Role_Hint <- NA_character_
   sp <- panel %>%
     dplyr::arrange(Run_Date) %>%
     dplyr::group_by(Posting_ID) %>%
     dplyr::summarize(District = dplyr::last(District), Title = dplyr::last(title),
-                     Position = dplyr::last(position), Posting_Source = dplyr::last(Posting_Source),
+                     Position = dplyr::last(position), Role_Hint = dplyr::last(Role_Hint),
+                     Posting_Source = dplyr::last(Posting_Source),
                      Identity = dplyr::last(Posting_Identity_Method), Is_OPI = any(Is_OPI),
                      Posted_Date = dplyr::first(date_posted[!is.na(date_posted) & nzchar(date_posted)], default = NA_character_),
                      URL = dplyr::last(url), First_Seen = min(Run_Date), Last_Seen = max(Run_Date),
@@ -327,7 +333,7 @@ build_posting_spells <- function(panel, calendar = NULL, endings = NULL, shared_
   sp$In_Durations <- !sp$Is_OPI & !sp$Evergreen & !sp$Shared_Title & !sp$Left_Censored
   sp %>%
     dplyr::mutate(dplyr::across(c(First_Seen, Last_Seen, Next_Run, Source_First_Run, Start_Date, End_Date), format)) %>%
-    dplyr::select(Posting_ID, District, Title, Position, Posting_Source, Identity, Is_OPI, URL, Posted_Date,
+    dplyr::select(Posting_ID, District, Title, Position, Role_Hint, Posting_Source, Identity, Is_OPI, URL, Posted_Date,
                   First_Seen, Last_Seen, Runs_Seen, Runs_Spanned, Next_Run, Next_Run_Source_Status, Page_Status, Ending, Event,
                   Start_Basis, Start_Date, Left_Censored, Days_Before_First_Seen, Stated_Close_Date, End_Basis, End_Date,
                   Days_Listed, Advertised_Days, Evergreen, Shared_Title, In_Durations) %>%

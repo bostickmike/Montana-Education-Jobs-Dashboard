@@ -77,7 +77,7 @@ print(full_join(old_totals %>% group_by(Archive_Date) %>% summarize(committed = 
 k12 <- read.csv(file.path(app, "k12jobanalysis.csv"), stringsAsFactors = FALSE)
 k12_direct <- k12[!is_opi_row(k12), , drop = FALSE]
 opi_teach <- bind_rows(lapply(weeks, function(w) w[w$Is_OPI, , drop = FALSE])) %>%
-  mutate(position = classify_k12_position(title)) %>%
+  mutate(position = classify_k12_position(title, if ("OPI_Description" %in% names(.)) k12_role_hint(OPI_Description) else NULL)) %>%
   filter(position == "Teacher") %>%
   mutate(Category = classify_k12_subject(title), Broad_Category = classify_k12_broad_category(Category),
          Posting_Source = "OPI Jobs for Teachers (statewide)") %>%
@@ -110,7 +110,8 @@ oews <- read.csv(file.path(app, "oews_role_wages.csv"), stringsAsFactors = FALSE
 opi_counties <- read.csv(file.path(app, "opi_district_counties.csv"), stringsAsFactors = FALSE)
 if (!"OPI_District" %in% names(opi_now)) opi_now$OPI_District <- NA_character_
 opi_rows <- opi_now %>%
-  mutate(position = classify_k12_position(title), Also_On_OPI = FALSE) %>%
+  mutate(position = classify_k12_position(title, if ("OPI_Description" %in% names(.)) k12_role_hint(OPI_Description) else NULL),
+         Also_On_OPI = FALSE) %>%
   ensure_posted_pay_columns() %>%
   drop_implausible_pay()
 opi_rows <- attach_oews_estimates(opi_rows, oews,

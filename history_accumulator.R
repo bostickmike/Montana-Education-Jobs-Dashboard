@@ -117,14 +117,18 @@ check_total_matches_parts <- function(total_rows, part_rows, group_cols, value_c
 # the county of the district its detail page names; statewide where neither
 # is known. Needs bls_oews_scraper.R sourced.
 build_k12_combinedclean <- function(counted, oews_wages, district_county, opi_counties, state = "MT") {
-  for (col in c("OPI_District", "Close_Date")) {
+  for (col in c("OPI_District", "Close_Date", "OPI_Description")) {
     if (!col %in% names(counted)) counted[[col]] <- NA_character_
   }
   if (!"Also_On_OPI" %in% names(counted)) counted$Also_On_OPI <- NA
   counted$Close_Date <- as.character(counted$Close_Date)
   out <- counted %>%
     filter(!is_placeholder_posting(title)) %>%
-    mutate(position = classify_k12_position(title),
+    # OPI's title is its subject field; the description's opening refines the
+    # bucket (k12_role_hint(); OPI descriptions are archived from 2026-11-03).
+    mutate(Role_Hint = ifelse(grepl("OPI", Posting_Source) & !is.na(OPI_Description) & nzchar(OPI_Description),
+                              k12_role_hint(OPI_Description), NA_character_),
+           position = classify_k12_position(title, Role_Hint),
            District = canonicalize_k12_district(District)) %>%
     ensure_posted_pay_columns() %>%
     drop_implausible_pay()
@@ -135,7 +139,7 @@ build_k12_combinedclean <- function(counted, oews_wages, district_county, opi_co
   out %>%
     select(title, Archive_Date, date_posted, position, location, url, District,
            Posting_Source, Posting_Identity_Method, Posting_ID, OPI_District, Also_On_OPI,
-           Close_Date, all_of(POSTED_PAY_COLUMNS), all_of(OEWS_ESTIMATE_COLUMNS))
+           Close_Date, all_of(POSTED_PAY_COLUMNS), all_of(OEWS_ESTIMATE_COLUMNS), Role_Hint)
 }
 
 # k12jobanalysis.csv's rows: the Teacher postings, with subject and broad
@@ -146,7 +150,8 @@ build_k12_teacher_rows <- function(combinedclean) {
     mutate(Category = classify_k12_subject(title),
            Broad_Category = classify_k12_broad_category(Category)) %>%
     select(title, Archive_Date, position, location, url, District,
-           Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category)
+           Posting_Source, Posting_Identity_Method, Posting_ID, Category, Broad_Category,
+           any_of("Role_Hint"))
 }
 
 # Rebuild parity (classification safeguards, item 12): how one rebuilt file
