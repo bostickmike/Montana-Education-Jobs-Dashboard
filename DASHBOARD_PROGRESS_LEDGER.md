@@ -655,10 +655,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
-  has a few weeks). Decide what, if anything, the Listing Duration tabs (paused 2026-11-02,
-  `claude-notes/2026-11-02_spells-trust-audit.md`) show from `posting_durations_k12.csv` / `posting_durations_he.csv`,
-  and when. Treat a
-  board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
+  has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
+  `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.
+  Decision (Mike, 2026-11-09): the tabs stay paused until we are sure the data is accurate. Proposed checks
+  (not yet agreed): (a) about 4 weekly runs after the 11-09/10 pushes (relistings censored, first-seen fallback,
+  page-confirmed closings) with no processing change that moves the medians by more than a few days (the OPI
+  dedup alone moved MT K-12 from 63 to 28 days; censoring relistings moved MT HE from 21.5 to 31.5); (b) the spells
+  trust audit (`claude-notes/2026-11-02_spells-trust-audit.md`) re-run on that data, with few endings left that a
+  known data artifact explains (68% on 11-02); (c) the OPI matcher check against fresh OPI data done.
+  Treat a board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
   (42 structured-platform districts + OPI grid, ~50 requests/day) for day-precision ends.
 - [ ] Roberts: site still "under maintenance" on 2026-11-04 (recheck after the 11-10 run; it now logs
   `Roberts returned a page with no HTML: "site under maintenance"`).
