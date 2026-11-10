@@ -45,6 +45,16 @@ You only get here once you've seen real current postings on the live page and kn
 
 7. **Commit per batch** of 2–4 districts.
 
+## Apptegy (Montana; no scaffold mode yet)
+
+Apptegy sites sit behind a Fastly "Client Challenge" that a plain request can't pass, so they ride the pipeline's shared headless-Chrome session (`fetch_apptegy_k12_postings()`). Olney-Bissell (2026-11-09) is the worked example:
+
+1. **Read the rendered page** with chromote, the way the pipeline does (`Page$navigate`, wait, `document.documentElement.outerHTML`). Find the posting's structural marker. Apptegy pages carry their content as page-builder JSON in the HTML; `decode_apptegy_pagebuilder_nodes()` + `find_all_apptegy_nodes(..., type == "CONTENT_NODE_TEXT")` give each text block's HTML. Olney-Bissell's titles are the block's `<strong>` text; Savage's are accordion panels (`CONTENT_NODE_PANEL`).
+2. **Fixture:** the outerHTML, dated (`apptegy_<slug>_pagedata_YYYY-MM-DD.html`), with any `AIza...` key redacted. About 1.2 MB, like Savage's.
+3. **Code:** `parse_<slug>_postings(html_text, url)` and `fetch_<slug>_postings(chromote_session, url)` in `misc_district_scrapers.R`, and an entry in `APPTEGY_DISTRICT_SCRAPERS` keyed by the exact registry `District`. Registry `Platform` is `Apptegy`. Add the district's name to the Apptegy `safe_scrape()` label in `Mt_ED_Jobs.Rmd` (only its prefix is matched).
+4. **Tests:** unit tests on the fixture (exact titles; no instructions or "Application" links; zero rows on a page without page-builder data), a `fetch_*` test with `fake_chromote_session()`, and the district added to the big `fetch_apptegy_k12_postings` dispatcher test (fixture, URL match, total count, per-district count).
+5. Then the usual: allowlist, DLI, counts, backlog; `scripts/repro_scraper.R "<District>"` for the live run.
+
 ## Sanity checks that have caught real mistakes
 
 - The live count you report in the commit is what the scraper returned, not what you eyeballed.

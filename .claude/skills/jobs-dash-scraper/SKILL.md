@@ -28,6 +28,8 @@ So everything below serves one rule: **nothing gets written into a parser, a fix
 
 ## Automated CLI Toolset (Token-Saving Workflow)
 
+**Montana only:** these scripts live in the Montana repo's `scripts/`. Wyoming has none of them yet; adopt by hand there (`references/wyoming.md`).
+
 To minimize LLM token usage and prevent manual editing errors across coupled files, use the repo's CLI scripts:
 
 1. **Scan candidates in bulk**:
@@ -107,7 +109,8 @@ Build one only when the live page has a **structural marker** that separates pos
 - openings are only in free prose (that's the LLM-extract shadow pilot in Montana, not a scraper; see the state reference)
 - the page only offers generic "apply here" / application-form links, with no titles
 - postings sit behind a login, a Google Drive folder, or a scanned PDF
-- the page is stale, contradictory, or belongs to a same-named district in another state
+- the page is stale, contradictory, or belongs to a same-named district in another state (search results mix them: `valleyviewschools.net` is Valley View, Arkansas, not Polson's)
+- the site blocks GitHub's servers (`references/fix-broken-scraper.md` §6): never work around bot protection
 
 One confirmed case isn't worth a whole new extraction technique (the Box Elder precedent). But when a real page has real postings and the existing approach demonstrably returns 0, build the new technique properly. Apptegy's embedded-JSON decoder came about that way. In local sessions, ask the user if the right investment level isn't clear.
 
