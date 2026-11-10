@@ -701,7 +701,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     sorted as text, server-side); one wording for "every student counted (likely free meals for all)". Rehearsal
     (`claude-notes/2026-11-09_rehearsal-mt-review-fixes.log`): all steps passed; app tests and boot smoke pass on its
     output; full suite 965.
-  * [x] Apptegy adoption tooling (2026-11-10): `scripts/capture_fixture.R --apptegy` renders the page in headless Chrome
+  * [x] Apptegy adoption tooling (2026-11-10, cbbf0eb): `scripts/capture_fixture.R --apptegy` renders the page in headless Chrome
     (as the pipeline does), redacts `AIza...` keys, refuses a page without page-builder data, and saves
     `apptegy_<slug>_pagedata_<date>.html`; `scripts/scaffold_district.R` gets an apptegy mode (auto-picked from that
     fixture; `--node text|panel`): registry row with Platform `Apptegy`, parser + chromote fetch before the dispatcher,
@@ -713,7 +713,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Savage's own parser) scaffolded together, then misc-district, salary, allowlist, drift-check and coverage-calendar
     tests: 0 failures; rerun changed nothing; a live capture of Olney-Bissell's page scaffolded to its 1 posting.
     Recipe in the jobs-dash-scraper skill (`adopt-new-source.md` § Apptegy), synced from the toolkit.
-  * [x] Two spell artifacts from WY's 11-10 audit (2026-11-10; same code in both states, WY d0de23d):
+  * [x] Two spell artifacts from WY's 11-10 audit (2026-11-10, 6f52b4a; same code in both states, WY d0de23d):
     `normalize_posting_text()` decodes every numeric HTML entity (`decode_numeric_entities()`; the hex `&#x27;` was
     missed: 4 MT K-12 archive files carry one, none in current data), and `relisted_next_run()` ignores punctuation.
     MT committed data unchanged (reclassify dry run); classifier archive diff over both states: no bucket moves; full
@@ -729,7 +729,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     salarymap2 `Child_Poverty_Basis` row removed (a WY row: MT's salarymap2 holds only public districts, which always
     have their own SAIPE rate; `opi_only_districts.csv` keeps the column). Lone Rock's auto-fix issue #13 is a false
     positive (its 2 real openings came down; the LLM hint read the standing substitute list as 6 postings).
-  * [x] Data-integrity batch (2026-11-10; `claude-notes/2026-11-10_data-integrity-sweep.md`): (1) pay units, same code as
+  * [x] Data-integrity batch (2026-11-10, 775ff7b; `claude-notes/2026-11-10_data-integrity-sweep.md`): (1) pay units, same code as
     WY df9bc07 (bare $7.25-$60 beside a pay word is hourly; NEOGOV card falls back to its description when the field's
     unit is rejected); (2) OPI postings with no detail-page district get the one employer their location names
     (`OPI_LEGACY_LOCATIONS`: Busby, Vida, "841 Bear Canyon Road", "10 miles North of Troy", Wilsall, Montana City;
