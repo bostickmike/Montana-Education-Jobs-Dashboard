@@ -246,3 +246,44 @@ test_that("crosswalk_counties gives each registry district's county", {
   xw <- xw_fixture()
   expect_equal(crosswalk_counties(xw)[["Bigfork School District 38"]], "Flathead County")
 })
+
+# build_other_employer_rows() / unmapped_employers(): employers that aren't
+# public districts get a map row each from other_employers.csv (2026-11-09).
+test_that("other employers get one map row each, with two posting names merged into one school", {
+  spec <- read.csv(here::here("other_employers.csv"), stringsAsFactors = FALSE, colClasses = c(Source_ID = "character"))
+  saipe <- data.frame(LEAID = c("3014430", "3014460"), Child_Poverty_Rate = c(0.20, 0.10), SAIPE_Year = 2024)
+  geo <- function(lat, lon) c("3014430", "3014460")   # stands in for the Census geocoder
+  rows <- build_other_employer_rows(spec, c("Northern Cheyenne Trib HS", "North Cheyenne Trib Elem",
+                                            "St Jude Thaddeus School", "Flathead Special Ed. Coop.", "Some District"),
+                                    saipe = saipe, geocode = geo,
+                                    district_names = c("3014430" = "Elem A", "3014460" = "H S A"))
+  expect_equal(names(rows), OPI_ONLY_DISTRICT_COLUMNS)
+  expect_equal(sort(rows$District), c("Flathead Special Ed. Coop.", "Northern Cheyenne Tribal School", "St Jude Thaddeus School"))
+  nc <- rows[rows$District == "Northern Cheyenne Tribal School", ]
+  expect_equal(nc$Posting_Names, "North Cheyenne Trib Elem / Northern Cheyenne Trib HS")
+  expect_equal(nc$Teachers_Total_FTE, 18)          # CCD's BIE directory, 2024
+  expect_equal(nc$Child_Poverty_Rate, 0.15)        # an Elem + H S split, averaged
+  expect_equal(nc$Child_Poverty_Basis, "Surrounding district: Elem A / H S A")
+  expect_equal(rows$CCD_Year[rows$District == "St Jude Thaddeus School"], "2023-24")  # private school survey
+  # A co-op serves many districts: no surrounding-district stand-in.
+  expect_true(is.na(rows$Child_Poverty_Rate[rows$District == "Flathead Special Ed. Coop."]))
+})
+
+test_that("unmapped_employers lists posting names with no map row of any kind", {
+  spec <- data.frame(Posting_District = "Known Employer")
+  expect_equal(unmapped_employers(c("A District", "Known Employer", "OPI Town", "New Employer", "New Employer"),
+                                  "A District", "OPI Town", spec), "New Employer")
+})
+
+test_that("a geocoder failure keeps last run's surrounding-district rate and is reported", {
+  spec <- read.csv(here::here("other_employers.csv"), stringsAsFactors = FALSE, colClasses = c(Source_ID = "character"))
+  saipe <- data.frame(LEAID = "3014430", Child_Poverty_Rate = 0.2, SAIPE_Year = 2024)
+  prev <- data.frame(District = "St Jude Thaddeus School", Child_Poverty_Rate = 0.152, SAIPE_Year = 2024,
+                     Child_Poverty_Basis = "Surrounding district: Havre Public Schools")
+  rows <- expect_message(build_other_employer_rows(spec, "St Jude Thaddeus School", saipe = saipe,
+                                                   geocode = function(lat, lon) stop("HTTP 502"), previous = prev),
+                         "geocoder failed")
+  expect_equal(rows$Child_Poverty_Rate, 0.152)
+  expect_equal(rows$Child_Poverty_Basis, "Surrounding district: Havre Public Schools")
+  expect_equal(attr(rows, "geocode_failed"), "St Jude Thaddeus School")
+})

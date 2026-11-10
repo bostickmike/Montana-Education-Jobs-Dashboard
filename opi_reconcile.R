@@ -435,11 +435,80 @@ OPI_ONLY_DISTRICT_COLUMNS <- c(
   "DLI_Name", "Salary_Year", "Salary_Source", "Child_Poverty_Rate", "SAIPE_Year",
   "Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source",
   "Median_Household_Income", "Median_Gross_Rent", "Population", "ACS_Year",
-  "Mining_Employment_Share", "Population_Change_Pct", "CCD_Year")
+  "Mining_Employment_Share", "Population_Change_Pct", "CCD_Year",
+  "Child_Poverty_Basis", "Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year", "Posting_Names")
 
 # The same columns every week, whichever sources answered (NA where one
 # didn't), in OPI_ONLY_DISTRICT_COLUMNS order; zero rows when no OPI-only
 # district posted.
+# Employers with postings that aren't public school districts: special-ed
+# co-ops, a hospital school, the Northern Cheyenne Tribal School (BIE) and
+# private schools (Mike, 2026-11-09: every posting on the map, treated like a
+# district). other_employers.csv (repo root, hand-kept) ties each posting name
+# (OPI's) to one map entity with its NCES record: CCD or CCD's BIE directory,
+# or the 2023-24 Private School Universe Survey, with that record's location,
+# teachers and students (Data_Year). A private or tribal school has no SAIPE
+# rate of its own: its surrounding district's stands in (geocode(), the Census
+# geocoder), named in Child_Poverty_Basis. Co-ops and the hospital school
+# serve students from many districts, so they get none. No salary or finance
+# source covers these employers. Posting_Names lists the posting names a row
+# covers; the app relabels those postings with the row's name.
+OTHER_EMPLOYER_KINDS_WITH_POVERTY <- c("private school", "tribal school (BIE)")
+
+build_other_employer_rows <- function(spec, posting_districts, saipe = NULL, county_context = NULL,
+                                      district_names = NULL, geocode = geocode_school_district,
+                                      previous = NULL) {
+  spec <- spec[spec$Posting_District %in% posting_districts, , drop = FALSE]
+  if (nrow(spec) == 0) return(complete_opi_only_columns(NULL))
+  out <- spec %>%
+    group_by(Map_Entity) %>%
+    summarize(Posting_Names = paste(sort(unique(Posting_District)), collapse = " / "),
+              Kind = first(Kind), County = first(County), City = first(City),
+              Latitude = first(Latitude), Longitude = first(Longitude),
+              Teachers_Total_FTE = first(Teachers_Total_FTE), Enrollment = first(Enrollment),
+              CCD_Year = as.character(first(Data_Year)), .groups = "drop") %>%
+    rename(District = Map_Entity) %>%
+    mutate(Data_Coverage = OPI_ONLY_COVERAGE, Job_Link = OPI_STATEWIDE_BOARD_URL)
+  out <- as.data.frame(out)
+  out$Child_Poverty_Rate <- NA_real_; out$SAIPE_Year <- NA; out$Child_Poverty_Basis <- NA_character_
+  # A geocoder failure keeps last run's rate (`previous`, last week's
+  # opi_only_districts.csv) and is reported, not silently blanked.
+  failed <- character(0)
+  if (!is.null(saipe) && nrow(saipe) > 0) {
+    for (i in which(out$Kind %in% OTHER_EMPLOYER_KINDS_WITH_POVERTY)) {
+      p <- surrounding_district_poverty(out$Latitude[i], out$Longitude[i], saipe, district_names, geocode)
+      if (p$status == "ok") {
+        out$Child_Poverty_Rate[i] <- p$rate; out$SAIPE_Year[i] <- p$year; out$Child_Poverty_Basis[i] <- p$basis
+      } else if (p$status == "failed") {
+        failed <- c(failed, out$District[i])
+        k <- if (!is.null(previous)) match(out$District[i], previous$District) else NA
+        if (!is.na(k)) {
+          out$Child_Poverty_Rate[i] <- previous$Child_Poverty_Rate[k]
+          out$SAIPE_Year[i] <- previous$SAIPE_Year[k]
+          out$Child_Poverty_Basis[i] <- previous$Child_Poverty_Basis[k]
+        }
+      }
+    }
+  }
+  if (length(failed)) message("build_other_employer_rows(): the Census geocoder failed for ", length(failed),
+                              " employer(s); kept last run's poverty rate where there was one: ",
+                              paste(failed, collapse = ", "))
+  if (!is.null(county_context) && nrow(county_context) > 0) {
+    cc <- county_context[!duplicated(county_context$County), , drop = FALSE]
+    out <- dplyr::left_join(out, cc, by = "County", relationship = "many-to-one")
+  }
+  out <- complete_opi_only_columns(out)
+  attr(out, "geocode_failed") <- failed
+  out
+}
+
+# Posting names (not registry districts, OPI-only districts or
+# other_employers.csv rows) that would have no map dot: listed in the weekly
+# drift issue so they get a row.
+unmapped_employers <- function(posting_districts, registry_districts, opi_only_entities, spec) {
+  sort(setdiff(unique(posting_districts), c(registry_districts, opi_only_entities, spec$Posting_District)))
+}
+
 complete_opi_only_columns <- function(df) {
   if (is.null(df) || ncol(df) == 0) df <- data.frame(District = character(0), stringsAsFactors = FALSE)
   for (col in setdiff(OPI_ONLY_DISTRICT_COLUMNS, names(df))) df[[col]] <- rep(NA, nrow(df))
@@ -550,7 +619,7 @@ opi_finance_by_district <- function(raw_df) {
 # their own (OPI is where they post): summarized in one line, so the list
 # shows only districts nobody has looked at. Empty when nothing to say.
 build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character(0), max_districts = 15,
-                                          opi_primary = NULL) {
+                                          opi_primary = NULL, unmapped = NULL) {
   md <- character(0)
   if (!is.null(qc) && nrow(qc) > 0) {
     fallback <- qc[grepl("returned no postings", qc$Discrepancy_Type), , drop = FALSE]
@@ -609,6 +678,13 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
     md <- c(md, sprintf("Also counted from OPI: %d posting%s at %d district%s whose only board is OPI (checked; `opi_primary_districts.csv`): %s.",
                         sum(as.integer(known$Postings)), ifelse(sum(as.integer(known$Postings)) == 1, "", "s"),
                         nrow(known), ifelse(nrow(known) == 1, "", "s"), paste(known$Map_Entity, collapse = ", ")), "")
+  }
+  # unmapped_employers.csv: posting names with no map dot (not a registry or
+  # OPI-only district, not in other_employers.csv). Add a row there.
+  if (!is.null(unmapped) && nrow(unmapped) > 0) {
+    md <- c(md, "#### Employers with postings but no map dot (add them to other_employers.csv)", "",
+            sprintf("- **%s**: %d posting%s", unmapped$District, as.integer(unmapped$Postings),
+                    ifelse(as.integer(unmapped$Postings) == 1, "", "s")), "")
   }
   if (length(md) == 0) return(character(0))
   c("", "---", "", "### OPI cross-check", "", md)

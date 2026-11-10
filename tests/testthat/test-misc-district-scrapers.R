@@ -5045,3 +5045,12 @@ test_that("fetch_olneybissell_postings drives a chromote session and parses its 
 
   expect_equal(nrow(result), 1)
 })
+
+test_that("parse_olneybissell_postings takes no posting from a bold \"no openings\" notice or instruction", {
+  html <- paste(readLines(test_path("fixtures", "apptegy_olneybissell_pagedata_2026-11-09.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  # The real page with its one bold title swapped for notices the page might show instead.
+  for (notice in c("No positions are open at this time", "Deadline: May 1", "Questions? Call the office")) {
+    swapped <- gsub("Long Term Substitute - Kindergarten ", notice, html, fixed = TRUE)
+    expect_equal(nrow(parse_olneybissell_postings(swapped, "url")), 0, info = notice)
+  }
+})

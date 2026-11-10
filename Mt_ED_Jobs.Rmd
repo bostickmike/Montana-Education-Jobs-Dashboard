@@ -3645,6 +3645,32 @@ if (nrow(district_finance) > 0) {
 } else {
   message("OPI district finance fetch failed -- leaving salarymap2.csv untouched this run.")
 }
+
+# Free/reduced-price lunch share beside SAIPE's child poverty rate, for every
+# map entity at once: registry districts (crosswalk LEAIDs; a district the
+# crosswalk doesn't tie yet uses its registry NCES id) and the OPI-only
+# districts below (fetch_ccd_frl_share(), ccd_staff_scraper.R; each entity's
+# newest reporting year). salarymap2.csv keeps last run's values on a failure.
+frl_registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
+frl_ids <- crosswalk_leaids(district_crosswalk)
+untied <- setdiff(frl_registry$District, names(frl_ids))
+frl_ids[untied] <- as.list(as.character(frl_registry$NCES_LEAID[match(untied, frl_registry$District)]))
+opi_only_xw <- district_crosswalk[is.na(district_crosswalk$Registry_District), , drop = FALSE]
+frl_ids <- c(frl_ids, lapply(split(as.character(opi_only_xw$LEAID), opi_only_xw$Map_Entity), unique))
+frl_ids <- frl_ids[!vapply(frl_ids, function(x) all(is.na(x)), logical(1))]
+frl_all <- safe_scrape(
+  "CCD free/reduced-price lunch share (MT)",
+  scrape_fn = function() fetch_ccd_frl_share(30, frl_ids),
+  expected_cols = c("District", "Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year")
+)
+if (nrow(frl_all) > 0) {
+  salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
+    select(-any_of(c("Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year"))) %>%
+    left_join(frl_all, by = "District", relationship = "many-to-one")
+  write.csv(salarymap2, salarymap2_path, row.names = FALSE)
+} else {
+  message("CCD free/reduced lunch fetch failed -- leaving salarymap2.csv's lunch columns untouched this run.")
+}
 ```
 
 ### K-12 districts we don't scrape that post on OPI (map entities with context)
@@ -3687,19 +3713,50 @@ if (nrow(opi_only) > 0) {
   if (nrow(finance_by_name) > 0) {
     opi_only$Finance_Source <- "OPI School Finance Data Files (opi.mt.gov/Leadership/Finance-Grants/School-Finance/OPI-Financial-Data-Files)"
   }
+  if (exists("frl_all") && nrow(frl_all) > 0) {
+    opi_only <- opi_only %>%
+      select(-any_of(c("Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year"))) %>%
+      left_join(frl_all, by = "District", relationship = "many-to-one")
+  }
   # A failed source this run: carry last run's values for the same entity.
   if (file.exists(opi_only_path)) {
     prev <- read.csv(opi_only_path, fileEncoding = "UTF-8", stringsAsFactors = FALSE)
     carry <- list(dli = c("Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
                           "Teacher_Salary_90th_Pctile", "DLI_Name", "Salary_Year", "Salary_Source"),
                   saipe = c("Child_Poverty_Rate", "SAIPE_Year"),
-                  fin = c("Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"))
-    failed <- c(dli = nrow(dli_systems) == 0, saipe = nrow(saipe_leaid) == 0, fin = nrow(finance_by_name) == 0)
+                  fin = c("Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"),
+                  frl = c("Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year"))
+    failed <- c(dli = nrow(dli_systems) == 0, saipe = nrow(saipe_leaid) == 0, fin = nrow(finance_by_name) == 0,
+                frl = !exists("frl_all") || nrow(frl_all) == 0)
     for (src in names(failed)[failed]) for (col in intersect(carry[[src]], names(prev))) {
       opi_only[[col]] <- prev[[col]][match(opi_only$District, prev$District)]
     }
   }
 }
+# Employers that aren't public districts (co-ops, a hospital school, the
+# Northern Cheyenne Tribal School, private schools): one map row each from
+# other_employers.csv (build_other_employer_rows(), opi_reconcile.R).
+other_spec <- read.csv("other_employers.csv", stringsAsFactors = FALSE, colClasses = c(Source_ID = "character"))
+others <- build_other_employer_rows(other_spec, unique(combinedclean$District),
+                                    saipe = if (nrow(saipe_leaid) > 0) saipe_leaid,
+                                    county_context = county_ctx,
+                                    district_names = setNames(district_crosswalk$Map_Entity, district_crosswalk$LEAID),
+                                    previous = if (file.exists(opi_only_path)) read.csv(opi_only_path, stringsAsFactors = FALSE))
+# The surrounding-district lookups go in scrape_log.csv: an error when the
+# Census geocoder failed for any employer (last run's rate kept for those).
+geo_failed <- attr(others, "geocode_failed")
+log_scrape_result("Census geocoder (surrounding-district poverty, other employers)",
+                  status = if (length(geo_failed)) "error" else "ok",
+                  n_rows = sum(!is.na(others$Child_Poverty_Basis)),
+                  error_message = if (length(geo_failed)) paste("geocoder failed for:", paste(geo_failed, collapse = "; ")) else NA_character_)
+# CCD_Year is text: a private school's record year is "2023-24" (PSS).
+opi_only <- dplyr::bind_rows(dplyr::mutate(complete_opi_only_columns(opi_only), CCD_Year = as.character(CCD_Year)),
+                             dplyr::mutate(others, CCD_Year = as.character(CCD_Year)))
+# Any other employer with postings and no map row goes to the weekly drift issue.
+unmapped <- unmapped_employers(combinedclean$District, registry$District, opi_only_entities, other_spec)
+write.csv(data.frame(District = unmapped,
+                     Postings = as.integer(table(combinedclean$District)[unmapped]), stringsAsFactors = FALSE),
+          "unmapped_employers.csv", row.names = FALSE)
 write.csv(complete_opi_only_columns(opi_only), opi_only_path, row.names = FALSE)
 ```
 

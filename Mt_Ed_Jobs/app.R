@@ -187,6 +187,22 @@ posting_pay_value <- function(pay_min, pay_max, pay_unit, fallback_value, fallba
 # Load K-12 data
 #--------------------------------------------------
 combineddata <- read.csv("combinedclean.csv", fileEncoding = "UTF-8")
+# An employer's map row can cover several posting names (opi_only_districts.csv
+# Posting_Names: "Northern Cheyenne Trib HS / North Cheyenne Trib Elem" are the
+# Northern Cheyenne Tribal School). Its postings carry the row's name, so the
+# map dot, the Jobs table and "View matching jobs" agree. Display only: the
+# data files keep OPI's names.
+employer_names <- character(0)
+if (file.exists("opi_only_districts.csv")) {
+  .oo <- read.csv("opi_only_districts.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE)
+  if ("Posting_Names" %in% names(.oo)) {
+    .oo <- .oo[!is.na(.oo$Posting_Names) & nzchar(.oo$Posting_Names), , drop = FALSE]
+    .parts <- strsplit(.oo$Posting_Names, " / ", fixed = TRUE)
+    employer_names <- setNames(rep(.oo$District, lengths(.parts)), unlist(.parts))
+  }
+}
+relabel_employer <- function(d) ifelse(d %in% names(employer_names), unname(employer_names[d]), d)
+combineddata$District <- relabel_employer(combineddata$District)
 # Posted-pay columns are optional (absent from files written before the
 # pipeline captured pay) -- padded here rather than in validate_and_pad_schema(),
 # which would flag their absence as a schema problem on the Home tab.
@@ -231,7 +247,14 @@ qcew_school_pay <- if (file.exists("qcew_county_school_pay.csv")) {
   data.frame(County = character(0), Avg_Annual_Pay = numeric(0), Year = character(0))
 }
 
-mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
+mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8")
+# Optional columns (absent before the first run that writes them, 2026-11-09):
+# padded here rather than in validate_and_pad_schema(), which would flag their
+# absence as a data problem on the Home tab.
+for (col in c("Child_Poverty_Basis", "Free_Reduced_Lunch_Share", "FRL_Year")) {
+  if (!col %in% names(mapdata2_k12)) mapdata2_k12[[col]] <- NA
+}
+mapdata2_k12 <- mapdata2_k12 %>%
   validate_and_pad_schema(c("District", "County", "Latitude", "Longitude", "Job_Link",
                              "Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
                              "Teacher_Salary_90th_Pctile", "Salary_Year", "Salary_Source",
@@ -242,7 +265,8 @@ mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8") %>%
                              "Data_Coverage"),
                            "salarymap2.csv") %>%
   rename(Name = District) %>%
-  mutate(Finance_FY = as.character(Finance_FY))
+  # CCD_Year is text: other employers' private-school rows carry "2023-24".
+  mutate(Finance_FY = as.character(Finance_FY), CCD_Year = as.character(CCD_Year))
 
 # Districts we don't scrape whose postings come from OPI's statewide board
 # this week (opi_only_districts.csv, opi_reconcile.R): same context columns
@@ -257,7 +281,7 @@ if (file.exists("opi_only_districts.csv")) {
       mapdata2_k12,
       opi_only_k12 %>%
         rename(Name = District) %>%
-        mutate(Finance_FY = as.character(Finance_FY), Data_Coverage = OPI_ONLY_COVERAGE) %>%
+        mutate(Finance_FY = as.character(Finance_FY), CCD_Year = as.character(CCD_Year), Data_Coverage = OPI_ONLY_COVERAGE) %>%
         select(any_of(names(mapdata2_k12)))
     )
   }
@@ -306,7 +330,10 @@ combineddata <- combineddata %>%
 # sparkline trend next to each entity's raw count on the Top Hiring tables.
 k12_district_weekly_totals <- read.csv("k12_district_weekly_totals.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("District", "Archive_Date", "n"), "k12_district_weekly_totals.csv") %>%
-  mutate(Archive_Date = as.Date(Archive_Date))
+  # An employer whose map row covers several posting names counts once.
+  mutate(Archive_Date = as.Date(Archive_Date), District = relabel_employer(District)) %>%
+  group_by(District, Archive_Date) %>%
+  summarise(n = sum(n), .groups = "drop")
 he_institution_weekly_totals <- read.csv("he_institution_weekly_totals.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("Institution", "Archive_Date", "n"), "he_institution_weekly_totals.csv") %>%
   mutate(Archive_Date = as.Date(Archive_Date))
@@ -342,7 +369,8 @@ relabel_spell_status <- function(df) {
 }
 
 job_duration_spells <- if (file.exists("job_duration_spells.csv")) {
-  relabel_spell_status(read.csv("job_duration_spells.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE))
+  relabel_spell_status(read.csv("job_duration_spells.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE)) %>%
+    mutate(District = relabel_employer(District))
 } else {
   data.frame()
 }
@@ -537,7 +565,10 @@ kpi_value_box <- function(value, subtitle, icon = NULL, color = "blue", ...) {
 
 k12sum <- read.csv("allsum.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("Broad_Category", "Archive_Date", "District", "sum"), "allsum.csv") %>%
-  mutate(District = str_squish(as.character(District)),
+  mutate(District = relabel_employer(str_squish(as.character(District)))) %>%
+  group_by(Broad_Category, Archive_Date, District) %>%
+  summarise(sum = sum(sum), .groups = "drop") %>%
+  mutate(
          Broad_Category = dplyr::recode(Broad_Category,
                                         "English Language Arts Secondary" = "Engl. LA",
                                         "Secondary Social Studies" = "Soc. St.",
@@ -558,6 +589,9 @@ k12sum <- k12sum %>%
 
 k12nowsum <- read.csv("allnow.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("Broad_Category", "Sum", "District"), "allnow.csv") %>%
+  mutate(District = relabel_employer(District)) %>%
+  group_by(Broad_Category, District) %>%
+  summarise(Sum = sum(Sum), .groups = "drop") %>%
   mutate(Broad_Category = dplyr::recode(Broad_Category,
                                         "English Language Arts Secondary" = "Engl. LA",
                                         "Secondary Social Studies" = "Soc. St.",
@@ -776,7 +810,7 @@ HE_JOB_TYPE_COLORS <- c(
 k12_history <- read.csv("k12jobanalysis.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("title", "Archive_Date", "location", "District", "Posting_ID"),
                           "k12jobanalysis.csv") %>%
-  mutate(Archive_Date = as.Date(Archive_Date))
+  mutate(Archive_Date = as.Date(Archive_Date), District = relabel_employer(District))
 
 k12_new_this_week <- find_k12_new_postings(k12_history)
 
@@ -843,6 +877,7 @@ map_k12 <- mapdata2_k12 %>%
     WeeklyNew = coalesce(WeeklyNew, 0L),
     SampleTitles = coalesce(SampleTitles, ""),
     Type = "K-12 District",
+    FRL_Year = as.character(FRL_Year),  # read back as a number; HE rows carry text NA
     TeacherCurrentCount = coalesce(TeacherCurrentCount, 0L),
     Vacancy_Rate = ifelse(!is.na(Teachers_Total_FTE) & Teachers_Total_FTE >= VACANCY_RATE_MIN_FTE,
                            TeacherCurrentCount / Teachers_Total_FTE, NA_real_),
@@ -862,7 +897,7 @@ map_k12 <- mapdata2_k12 %>%
          Vacancy_Rate, Vacancy_Numerator, Vacancy_Denominator, Salary_Source, County,
          Enrollment, Students_Per_Teacher, Enrollment_Change_Pct, Pell_Recipient_Share, Pell_Year,
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
-         Child_Poverty_Rate, SAIPE_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source,
+         Child_Poverty_Rate, SAIPE_Year, Child_Poverty_Basis, Free_Reduced_Lunch_Share, FRL_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source,
          Data_Coverage)
 
 he_current_counts <- ccdata %>% count(Institution, name = "CurrentCount")
@@ -903,6 +938,7 @@ map_he <- mapdata2_he %>%
     Students_Per_Teacher = ifelse(!is.na(Faculty_Count) & Faculty_Count > 0,
                                    Enrollment / Faculty_Count, NA_real_),
     Child_Poverty_Rate = NA_real_, SAIPE_Year = NA_integer_,
+    Child_Poverty_Basis = NA_character_, Free_Reduced_Lunch_Share = NA_real_, FRL_Year = NA_character_,
     Total_General_Fund_Expenditure = NA_real_, Finance_FY = NA_character_,
     Finance_Source = NA_character_,
     # Unlike Wyoming (where every HE institution is on a genuine structured
@@ -925,7 +961,7 @@ map_he <- mapdata2_he %>%
          Vacancy_Rate, Vacancy_Numerator, Vacancy_Denominator, Salary_Source, County,
          Enrollment, Students_Per_Teacher, Enrollment_Change_Pct, Pell_Recipient_Share, Pell_Year,
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
-         Child_Poverty_Rate, SAIPE_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source)
+         Child_Poverty_Rate, SAIPE_Year, Child_Poverty_Basis, Free_Reduced_Lunch_Share, FRL_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source)
 
 combined_map_data <- bind_rows(map_k12, map_he)
 
@@ -2171,30 +2207,44 @@ server <- function(input, output, session) {
         # platform); see the Map tab's helpText for what "Partial" means.
         `Posting Data` = Data_Coverage,
         `New This Week` = WeeklyNew,
-        `Teacher Vacancy Rate` = ifelse(is.na(Vacancy_Rate), NA_character_, scales::percent(Vacancy_Rate, accuracy = 0.1)),
+        `Teacher Vacancy Rate` = Vacancy_Rate,
         Enrollment,
-        `Students per Teacher` = ifelse(is.na(Students_Per_Teacher), NA_character_, sprintf("%.1f", Students_Per_Teacher)),
-        `Teacher Avg Salary` = ifelse(is.na(Teacher_Avg_Salary), NA_character_, scales::dollar(Teacher_Avg_Salary)),
+        `Students per Teacher` = round(Students_Per_Teacher, 1),
+        `Teacher Avg Salary` = Teacher_Avg_Salary,
         `Teacher Salary Range (10th-90th %ile)` = ifelse(
           is.na(Teacher_Salary_10th_Pctile) | is.na(Teacher_Salary_90th_Pctile), NA_character_,
           paste0(scales::dollar(Teacher_Salary_10th_Pctile), " - ", scales::dollar(Teacher_Salary_90th_Pctile))
         ),
-        `Annual General Fund Budget` = ifelse(
-          is.na(Total_General_Fund_Expenditure), NA_character_,
-          scales::dollar(Total_General_Fund_Expenditure)
-        ),
-        `County Median Income` = ifelse(is.na(Median_Household_Income), NA_character_, scales::dollar(Median_Household_Income)),
-        `County Median Rent` = ifelse(is.na(Median_Gross_Rent), NA_character_, paste0(scales::dollar(Median_Gross_Rent), "/mo")),
-        `County Mining/Energy Jobs` = ifelse(is.na(Mining_Employment_Share), NA_character_, scales::percent(Mining_Employment_Share, accuracy = 0.1)),
-        `County Population Trend (5yr)` = ifelse(is.na(Population_Change_Pct), NA_character_,
-                                                   paste0(ifelse(Population_Change_Pct >= 0, "+", ""), scales::percent(Population_Change_Pct, accuracy = 0.1))),
-        `District Child Poverty Rate` = ifelse(is.na(Child_Poverty_Rate), NA_character_, scales::percent(Child_Poverty_Rate, accuracy = 0.1))
+        `Annual General Fund Budget` = Total_General_Fund_Expenditure,
+        `County Median Income` = Median_Household_Income,
+        `County Median Rent (per month)` = Median_Gross_Rent,
+        `County Mining/Energy Jobs` = Mining_Employment_Share,
+        `County Population Trend (5yr)` = Population_Change_Pct,
+        # Numbers, formatted by DT below, so the column sorts as numbers (the
+        # table sorts on the server, in R, by the underlying value); where the rate is a
+        # stand-in (a school with no SAIPE geography of its own) the next
+        # column says so.
+        `District Child Poverty Rate` = Child_Poverty_Rate,
+        `Poverty Rate Basis` = ifelse(is.na(Child_Poverty_Rate), NA_character_,
+                                      ifelse(is.na(Child_Poverty_Basis), "District", "Surrounding district")),
+        # School-based count beside the Census estimate (CCD school directory):
+        # share of students eligible for free or reduced-price lunch, and its year.
+        `Free/Reduced Lunch` = Free_Reduced_Lunch_Share,
+        `Lunch Data Year` = ifelse(is.na(Free_Reduced_Lunch_Share), NA_character_, FRL_Year)
       )
     names(df)[names(df) == "Teacher Avg Salary"] <- paste0("Teacher Avg Salary (", salary_year_label, ")")
     names(df)[names(df) == "Annual General Fund Budget"] <- paste0("Annual General Fund Budget (FY", finance_year_label, ")")
 
+    # Numeric columns stay numbers so the server-side sort is numeric
+    # (2026-11-09 review: "9%" sorted after "92%", "100%" first or last);
+    # DT formats them for display. Matched by prefix: some headers get a year.
+    cols_like <- function(prefixes) names(df)[vapply(names(df), function(n) any(startsWith(n, prefixes)), logical(1))]
     datatable(df, filter = "top", extensions = "Buttons",
-              options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 18))
+              options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 18)) %>%
+      formatPercentage(cols_like(c("Teacher Vacancy Rate", "County Mining/Energy Jobs", "District Child Poverty Rate", "County Population Trend (5yr)")), digits = 1) %>%
+      formatPercentage(cols_like(c("Free/Reduced Lunch")), digits = 0) %>%
+      formatCurrency(cols_like(c("Teacher Avg Salary", "County Median Income", "Annual General Fund Budget", "County Median Rent (per month)")), digits = 0) %>%
+      formatRound("Students per Teacher", digits = 1)
   })
 
   output$k12_summary_footnote <- renderUI({
@@ -2225,12 +2275,29 @@ server <- function(input, output, session) {
           ". County-level, not district-level -- sibling districts in the same county share the same figures."
         )
       },
+      helpText(
+        "Free/reduced lunch: share of students eligible for free or reduced-price lunch, NCES Common Core of Data",
+        "school directory (Lunch Data Year: that district's newest reporting year) --",
+        tags$a(href = "https://educationdata.urban.org/documentation/", target = "_blank", "educationdata.urban.org"),
+        ". A school-based count, not a poverty estimate: schools serving free meals to all (community eligibility)",
+        "may count every student; a share of 100% is marked \"every student counted (likely free meals for all)\".",
+        "Left blank where schools holding under 80% of a district's students reported."
+      ),
+      helpText(
+        "Employers that aren't public school districts are on the map too: special-education cooperatives and a",
+        "hospital school (NCES Common Core of Data), the Northern Cheyenne Tribal School (CCD's Bureau of Indian",
+        "Education schools) and private schools, whose teacher and student counts come from the NCES Private School",
+        "Universe Survey, 2023-24 -- the newest edition, older than the public-district figures. No public source",
+        "reports their teacher pay or budgets, so those stay blank.",
+        tags$a(href = "https://nces.ed.gov/surveys/pss/", target = "_blank", "nces.ed.gov/surveys/pss")
+      ),
       if (length(saipe_year) > 0) {
         helpText(
           "District child poverty rate: US Census Bureau, Small Area Income and Poverty Estimates (SAIPE)",
           paste0("(", saipe_year[1], ")"), "—",
           tags$a(href = "https://www.census.gov/programs-surveys/saipe/data/datasets.html", target = "_blank", "census.gov/saipe"),
-          ". District-level. For districts split between an elementary and a high-school district, this is an unweighted average of the two rates -- see DATA_COOKBOOK.md."
+          ". District-level. For districts split between an elementary and a high-school district, this is an unweighted average of the two rates -- see DATA_COOKBOOK.md.",
+          "A private or tribal school has no Census poverty estimate of its own; it shows its surrounding district's rate (marked \"Surrounding district\")."
         )
       }
     )
@@ -2292,6 +2359,9 @@ server <- function(input, output, session) {
       spt <- if (!is.na(row$Students_Per_Teacher[1])) sprintf("%.1f", row$Students_Per_Teacher[1]) else "N/A"
       rent <- if (!is.na(row$Median_Gross_Rent[1])) paste0(scales::dollar(row$Median_Gross_Rent[1]), "/mo") else "N/A"
       poverty <- if (!is.na(row$Child_Poverty_Rate[1])) scales::percent(row$Child_Poverty_Rate[1], accuracy = 0.1) else "N/A"
+      if (!is.na(row$Child_Poverty_Rate[1]) && !is.na(row$Child_Poverty_Basis[1])) poverty <- paste(poverty, "(surrounding district)")
+      frl <- if (!is.na(row$Free_Reduced_Lunch_Share[1])) paste0(scales::percent(row$Free_Reduced_Lunch_Share[1], accuracy = 1), " (", row$FRL_Year[1], ")") else "N/A"
+      if (!is.na(row$Free_Reduced_Lunch_Share[1]) && row$Free_Reduced_Lunch_Share[1] >= 0.995) frl <- paste(frl, "-- every student counted (likely free meals for all)")
 
       column(
         width = col_width,
@@ -2322,7 +2392,8 @@ server <- function(input, output, session) {
               tags$tr(tags$td(class = "text-muted", "Students / Teacher:"), tags$td(style = "text-align: right; font-weight: 600;", spt)),
               tags$tr(tags$td(class = "text-muted", "General Fund Budget:"), tags$td(style = "text-align: right; font-weight: 600;", gen_fund)),
               tags$tr(tags$td(class = "text-muted", "County Median Rent:"), tags$td(style = "text-align: right; font-weight: 600;", rent)),
-              tags$tr(tags$td(class = "text-muted", "Child Poverty Rate:"), tags$td(style = "text-align: right; font-weight: 600;", poverty))
+              tags$tr(tags$td(class = "text-muted", "Child Poverty Rate:"), tags$td(style = "text-align: right; font-weight: 600;", poverty)),
+              tags$tr(tags$td(class = "text-muted", "Free/Reduced Lunch:"), tags$td(style = "text-align: right; font-weight: 600;", frl))
             )
           )
         )
@@ -2721,8 +2792,18 @@ server <- function(input, output, session) {
                     "</div>"),
              ""),
       ifelse(!is.na(Child_Poverty_Rate),
-             paste0("<div style='font-size:0.85em;color:#666;'>District: ",
-                    scales::percent(Child_Poverty_Rate, accuracy = 0.1), " child poverty rate</div>"),
+             paste0("<div style='font-size:0.85em;color:#666;'>",
+                    ifelse(is.na(Child_Poverty_Basis), "District: ", ""),
+                    scales::percent(Child_Poverty_Rate, accuracy = 0.1), " child poverty rate",
+                    ifelse(is.na(Child_Poverty_Basis), "", paste0(" (", sub("^Surrounding", "surrounding", Child_Poverty_Basis), ")")),
+                    "</div>"),
+             ""),
+      ifelse(!is.na(Free_Reduced_Lunch_Share),
+             paste0("<div style='font-size:0.85em;color:#666;'>",
+                    scales::percent(Free_Reduced_Lunch_Share, accuracy = 1),
+                    " of students eligible for free/reduced-price lunch (", FRL_Year, ")",
+                    ifelse(Free_Reduced_Lunch_Share >= 0.995, " -- every student counted (likely free meals for all)", ""),
+                    "</div>"),
              ""),
       ifelse(!is.na(School_Pay_County),
              paste0("<div style='font-size:0.85em;color:#666;'>", sub(",.*$", "", County),

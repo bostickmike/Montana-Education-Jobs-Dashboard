@@ -686,8 +686,26 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     NCES id (3007500 -> 3014150) and DLI region (4Rivers -> HiLine, $32,200); two districts are both
     "Cottonwood Elem", and `build_mt_district_crosswalk()` claimed the registry's CCD row by name, so it now
     claims by LEAID (crosswalk diff: only Cottonwood's and Olney-Bissell's rows change).
+  * [x] Free/reduced lunch share and every posting on the map (2026-11-09/10): `Free_Reduced_Lunch_Share` (+
+    `FRL_Year`) from CCD's school directory beside SAIPE child poverty for every map entity (rehearsal: 192 of 201
+    registry districts); 18 employers that aren't public districts get map rows from `other_employers.csv`
+    (`build_other_employer_rows()`: co-ops and Shodair from CCD, the Northern Cheyenne Tribal School from CCD's BIE
+    directory, 11 private schools from the 2023-24 Private School Universe Survey; private/tribal schools get their
+    surrounding district's SAIPE rate via the Census geocoder; `Posting_Names` puts Northern Cheyenne's two OPI names on
+    one dot, relabeled in `app.R` for the map, Jobs, trends, weekly totals and spells). New employers without a row are
+    listed in the drift issue (`unmapped_employers.csv`). Seven registry dots moved to their CCD school sites (Circle,
+    Zurich, Lustre, Pleasant Valley, Miami, Big Sky, Cottonwood). From the full review: a CCD outage now logs an error
+    and keeps last run's lunch values (it had logged "ok" and blanked them); a geocoder failure keeps last run's rate
+    and is logged; the app read CCD_Year as both number and text and would not have started after the next run;
+    Olney-Bissell's parser skips bold notices; the District Summary's numeric columns sort as numbers (every one had
+    sorted as text, server-side); one wording for "every student counted (likely free meals for all)". Rehearsal
+    (`claude-notes/2026-11-09_rehearsal-mt-review-fixes.log`): all steps passed; app tests and boot smoke pass on its
+    output; full suite 965.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] After the 2026-11-10 run writes them: remove `pending` in `tests/testthat/test-data-dictionary.R`
+  (salarymap2.csv and opi_only_districts.csv's lunch-share, poverty-basis and Posting_Names columns), which keep the
+  blocking pre-run suite from failing on columns no run has written yet.
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.

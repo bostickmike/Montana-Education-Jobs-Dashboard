@@ -5221,7 +5221,10 @@ parse_olneybissell_postings <- function(html_text, url = "https://www.olneybisse
   }), use.names = FALSE)
   titles <- trimws(gsub("[[:space:]]+", " ", titles))
   titles <- titles[nzchar(titles)]
-  titles <- titles[!grepl("application$|^please\\b|^apply\\b", titles, ignore.case = TRUE)]
+  # Not postings: application-form labels, instructions, and bold notices a
+  # page shows when nothing is open ("No positions are open at this time").
+  titles <- titles[!grepl(paste0("application$|^please\\b|^apply\\b|\\bno (current |open )?(openings|positions|vacancies|jobs)\\b|",
+                                 "^(deadline|questions|contact|note|closing date)\\b"), titles, ignore.case = TRUE)]
   titles <- unique(titles)
   if (length(titles) == 0) return(empty)
 

@@ -57,7 +57,7 @@ Roy School District 74,3023160,Roy,Fergus County,47.3314,-108.9599,RoyHeuristic,
 Arrowhead Elementary School District #75,3002300,Pray,Park County,45.3802,-110.6816,ArrowheadHeuristic,,https://arrowheadk8.com/careers/
 North Star Public Schools,3000096,Rudyard,Hill County,48.5600,-110.5541,NorthStarHeuristic,,https://sites.google.com/nsschools.org/home/employment
 Belt Public Schools,3003420,Belt,Cascade County,47.3861,-110.9255,Apptegy,,https://www.beltschool.com/page/employment-opportunities
-Big Sky School District 72,3000654,Big Sky,Gallatin County,45.2846,-111.3683,Apptegy,,https://www.bssd72.org/page/employment-opportunities
+Big Sky School District 72,3000654,Big Sky,Gallatin County,45.229,-111.2519,Apptegy,,https://www.bssd72.org/page/employment-opportunities
 Melstone Public Schools,3018240,Melstone,Musselshell County,46.5986,-107.8720,Apptegy,,https://www.melstonepublicschools.org/page/employment-opportunities
 Shields Valley Public Schools,3000932,Clyde Park,Park County,45.8869,-110.6038,ShieldsValleyHeuristic,,https://svalleyk12.org/district/employment
 Manhattan School District,3017610,Manhattan,Gallatin County,45.8566,-111.3325,ManhattanHeuristic,,https://www.rollontigers.org/district/employment/current-openings
@@ -112,7 +112,7 @@ West Yellowstone School District,3027630,West Yellowstone,Gallatin County,44.662
 Augusta School District #45,3002430,Augusta,Lewis and Clark County,47.4972,-112.4136,AugustaHeuristic,,https://www.augustaschool.org/job-openings
 Brockton School District,3005010,Brockton,Roosevelt County,48.2244,-104.9591,BrocktonHeuristic,,https://www.brockton.k12.mt.us/employment
 Culbertson School District 17-C,3007830,Culbertson,Roosevelt County,48.1483,-104.5147,CulbertsonHeuristic,,https://www.culbertsonschool.com/about-us/employment
-Cottonwood School District #57,3014150,Havre,Hill County,48.6474,-109.9410,Cottonwood57Heuristic,,https://www.cottonwood57.org/job-openings
+Cottonwood School District #57,3014150,Havre,Hill County,48.7798,-109.9884,Cottonwood57Heuristic,,https://www.cottonwood57.org/job-openings
 Bonner School District #14,3004260,Bonner,Missoula County,46.8724,-113.8574,Apptegy,,https://www.bonner.k12.mt.us/o/bonner-school-district-14/page/employment
 Creston School District,3007710,Kalispell,Flathead County,48.1897,-114.1913,CrestonHeuristic,,https://docs.google.com/document/d/1BxeYApkcuS092nu5a1iRHAeg35jcUxjVPWnTCXEsThU/export?format=txt
 Clinton School District #32,3006870,Clinton,Missoula County,46.8560,-113.7274,ClintonHeuristic,,https://clintoncougars.com/employment
@@ -122,10 +122,10 @@ Elysian School District #23,3009840,Billings,Yellowstone County,45.7833,-108.616
 Evergreen School District #50,3010920,Kalispell,Flathead County,48.2166,-114.2385,Apptegy,,https://www.evergreensd50.com/page/employment-opportunities
 Fair-Mont-Egan Schools,3010230,Kalispell,Flathead County,48.1600,-114.2800,FairMontEganHeuristic,,https://www.fmemontana.net/human-resources/employment
 Lone Rock School District,3017190,Stevensville,Ravalli County,46.5397,-114.0925,Apptegy,,https://www.lonerockschool.org/page/employment
-Lustre District 23,3017340,Lustre,Valley County,48.5794,-106.2957,LustreHeuristic,,https://www.lustregradeschool.com/employment
-Miami Elementary School District #31,3021150,Conrad,Pondera County,48.1758,-111.9930,MiamiHeuristic,,https://www.miamielementary.com/employment
+Lustre District 23,3017340,Lustre,Valley County,48.4079,-105.9395,LustreHeuristic,,https://www.lustregradeschool.com/employment
+Miami Elementary School District #31,3021150,Conrad,Pondera County,48.191,-112.2821,MiamiHeuristic,,https://www.miamielementary.com/employment
 Target Range School District,3025890,Missoula,Missoula County,46.8393,-114.0708,SchoolSpring,target.schoolspring.com,https://target.schoolspring.com/
-Zurich Elementary School District #17,3028910,Zurich,Blaine County,48.5919,-109.5433,ZurichHeuristic,,https://www.zurichelementary17.org/employment
+Zurich Elementary School District #17,3028910,Zurich,Blaine County,48.586,-109.0305,ZurichHeuristic,,https://www.zurichelementary17.org/employment
 Upper West Shore School District #33,3015900,Dayton,Lake County,47.8681,-114.2453,DaytonHeuristic,,https://daytonschool.net/employment/
 Sweet Grass County High School,3025560,Big Timber,Sweet Grass County,45.8350,-109.9547,Apptegy,,https://www.sgchs.com/page/employment
 Harlem Public Schools,3013395,Harlem,Blaine County,48.5311,-108.7838,AppliTrack,harlemhs,https://www.applitrack.com/harlemhs/onlineapp/
@@ -179,9 +179,9 @@ Power Public Schools,3021510,Power,Teton County,47.7122,-111.6844,PowerHeuristic
 Kila School District #20,3015570,Kila,Flathead County,48.1158,-114.4533,KilaHeuristic,,https://docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/export?format=html
 Lavina Public Schools,3016290,Lavina,Golden Valley County,46.2941,-108.9390,LavinaHeuristic,,https://www.lavinapublicschools.com/District/2269-Untitled.html
 Fromberg Public Schools,3011650,Fromberg,Carbon County,45.3883,-108.9052,FrombergHeuristic,,https://www.frombergpublicschools.com/district-info/employment
-Pleasant Valley School District #27,3020880,Marion,Flathead County,48.1056,-114.6633,PleasantValleyHeuristic,,https://www.pvsmt.org/employment-opportunities.html
+Pleasant Valley School District #27,3020880,Marion,Flathead County,48.1496,-114.9567,PleasantValleyHeuristic,,https://www.pvsmt.org/employment-opportunities.html
 Sun River Valley School District #24,3024300,Simms,Cascade County,47.5014,-111.9611,SunRiverValleyHeuristic,,https://srvs.k12.mt.us/apps/jobs/
-Circle Public Schools,3006790,Circle,McCone County,47.4172,-106.1264,CircleHeuristic,,https://www.circleschools.org/employment-opportunities.html
+Circle Public Schools,3006790,Circle,McCone County,47.4169,-105.5918,CircleHeuristic,,https://www.circleschools.org/employment-opportunities.html
 Forsyth Public Schools,3011160,Forsyth,Rosebud County,46.2664,-106.6778,ForsythHeuristic,,https://forsythpublicschools.org/bus-drivers-wanted/
 DeSmet Public School,3008880,Missoula,Missoula County,46.9238,-114.1017,DeSmetHeuristic,,https://desmetschool.org/available-employment-opportunities/
 Fishtail School District #13,3010800,Fishtail,Stillwater County,45.4795,-109.5085,FishtailHeuristic,,https://fishtailschool.org/job-openings/
