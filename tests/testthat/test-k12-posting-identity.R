@@ -82,3 +82,15 @@ test_that("K-12 aggregates and New This Week use posting identity", {
   expect_equal(nrow(new_rows), 1)
   expect_equal(new_rows$Posting_ID, current$Posting_ID[2])
 })
+
+test_that("numeric HTML entities in titles are decoded, hex forms included", {
+  # Albany's board switched from "Girls'" to "Girls&#x27;" in 2026, which broke
+  # the posting's identity across runs (an ending plus a new start) and showed
+  # the raw entity on the dashboard (WY spells audit, 2026-11-10).
+  expect_equal(normalize_posting_text("Middle School Girls&#x27; Basketball Coach"), "Middle School Girls' Basketball Coach")
+  expect_equal(normalize_posting_text("Teacher&#x2019;s Aide &#39;26"), "Teacher\u2019s Aide '26")
+  expect_equal(normalize_posting_text("Para &#8211; SPED"), "Para \u2013 SPED")
+  # Not a valid code point: left as written. Named entities still work.
+  expect_equal(normalize_posting_text("Coach &#xD800; &amp; Aide"), "Coach &#xD800; & Aide")
+  expect_equal(normalize_posting_text(c(NA, "Plain Title")), c(NA, "Plain Title"))
+})

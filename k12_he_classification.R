@@ -20,6 +20,26 @@
 
 suppressMessages(library(dplyr))
 
+# Numeric character references (&#39;, and the hex forms &#x27; / &#x2019; that
+# some boards emit) to the characters they name. The title normalizer below
+# handles the named entities one by one; this covers every numeric one. A reference to an
+# invalid code point is left as written.
+decode_numeric_entities <- function(x) {
+  has <- !is.na(x) & grepl("&#(x[0-9a-fA-F]+|[0-9]+);", x, perl = TRUE)
+  x[has] <- vapply(x[has], function(s) {
+    m <- gregexpr("&#(x[0-9a-fA-F]+|[0-9]+);", s, perl = TRUE)
+    regmatches(s, m) <- lapply(regmatches(s, m), function(e) {
+      v <- gsub("^&#|;$", "", e)
+      cp <- ifelse(grepl("^x", v), strtoi(substring(v, 2), 16L), strtoi(v, 10L))
+      ok <- !is.na(cp) & cp > 0 & cp <= 0x10FFFF & !(cp >= 0xD800 & cp <= 0xDFFF)
+      e[ok] <- vapply(cp[ok], intToUtf8, character(1))
+      e
+    })
+    s
+  }, character(1), USE.NAMES = FALSE)
+  x
+}
+
 # Normalize scraped text without corrupting text that is already valid UTF-8.
 # Some legacy listings really do contain raw Windows-1252 bytes, but treating
 # every string as Windows-1252 turns valid characters such as “é” into
@@ -42,6 +62,7 @@ normalize_posting_text <- function(x) {
   out <- gsub("&amp;", "&", out, fixed = TRUE)
   out <- gsub("&quot;", "\"", out, fixed = TRUE)
   out <- gsub("&#39;|&apos;", "'", out, perl = TRUE)
+  out <- decode_numeric_entities(out)
   out <- gsub("&lt;", "<", out, fixed = TRUE)
   out <- gsub("&gt;", ">", out, fixed = TRUE)
   out <- gsub("&nbsp;|\u00a0", " ", out, perl = TRUE)

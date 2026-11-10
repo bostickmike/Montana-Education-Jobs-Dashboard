@@ -713,6 +713,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Savage's own parser) scaffolded together, then misc-district, salary, allowlist, drift-check and coverage-calendar
     tests: 0 failures; rerun changed nothing; a live capture of Olney-Bissell's page scaffolded to its 1 posting.
     Recipe in the jobs-dash-scraper skill (`adopt-new-source.md` § Apptegy), synced from the toolkit.
+  * [x] Two spell artifacts from WY's 11-10 audit (2026-11-10; same code in both states, WY d0de23d):
+    `normalize_posting_text()` decodes every numeric HTML entity (`decode_numeric_entities()`; the hex `&#x27;` was
+    missed: 4 MT K-12 archive files carry one, none in current data), and `relisted_next_run()` ignores punctuation.
+    MT committed data unchanged (reclassify dry run); classifier archive diff over both states: no bucket moves; full
+    suite 4,099 pass. MT's spells pick up the new relist rule when the weekly run rebuilds them. Pushed before the
+    2026-11-10 run by Mike's call, without a full MT rehearsal (WY's passed with the same change).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] After the 2026-11-10 run writes them: remove `pending` in `tests/testthat/test-data-dictionary.R`
