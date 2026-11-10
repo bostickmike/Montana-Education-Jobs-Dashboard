@@ -97,22 +97,37 @@ fetch_opi_finance_workbook <- function(url = OPI_FINANCE_CURRENT_YEAR_URL) {
 # yet observed) still gets a real partial sum rather than NA for the whole
 # district, same "don't propagate NA from one missing part" behavior as
 # ccd_staff_scraper.R's parse_ccd_teacher_fte().
-parse_opi_district_expenditures <- function(raw_df) {
+# `lea_map`: registry district -> OPI DistrictNames (CCD's naming); the
+# pipeline passes crosswalk_lea_names(district_crosswalk, MT_OPI_FINANCE_LEA_MAP).
+# `county_map` (optional, crosswalk_counties()): a DistrictName held in two
+# counties ("Cottonwood Elem": Gallatin and Hill) counts only the district's
+# own county; with no county to tell them apart the district gets NA, not both.
+norm_county <- function(x) trimws(sub("\\s+County$", "", gsub("&", "and", x)))
+
+parse_opi_district_expenditures <- function(raw_df, lea_map = MT_OPI_FINANCE_LEA_MAP, county_map = NULL) {
   empty <- data.frame(District = character(0), Total_General_Fund_Expenditure = numeric(0),
                        Finance_FY = character(0), stringsAsFactors = FALSE)
   if (nrow(raw_df) == 0) return(empty)
 
   by_le <- raw_df %>%
     filter(FundCode == OPI_FINANCE_GENERAL_FUND_CODE) %>%
-    mutate(DistrictName = trimws(DistrictName), SumOfAmount = suppressWarnings(as.numeric(SumOfAmount))) %>%
-    group_by(DistrictName) %>%
+    mutate(DistrictName = trimws(DistrictName), SumOfAmount = suppressWarnings(as.numeric(SumOfAmount)),
+           County = if ("CountyName" %in% names(raw_df)) norm_county(CountyName) else NA_character_) %>%
+    group_by(DistrictName, County) %>%
     summarise(le_total = sum(SumOfAmount, na.rm = TRUE), .groups = "drop")
+  shared <- unique(by_le$DistrictName[duplicated(by_le$DistrictName)])
 
   finance_fy <- if ("StateFY" %in% names(raw_df)) as.character(raw_df$StateFY[1]) else NA_character_
 
-  rows <- lapply(names(MT_OPI_FINANCE_LEA_MAP), function(district) {
-    le_names <- MT_OPI_FINANCE_LEA_MAP[[district]]
+  rows <- lapply(names(lea_map), function(district) {
+    le_names <- lea_map[[district]]
     matched <- by_le[by_le$DistrictName %in% le_names, ]
+    if (any(matched$DistrictName %in% shared)) {
+      own <- norm_county(county_map[[district]] %||% character(0))
+      if (length(own) == 0) return(data.frame(District = district, Total_General_Fund_Expenditure = NA_real_,
+                                              Finance_FY = finance_fy, stringsAsFactors = FALSE))
+      matched <- matched[!(matched$DistrictName %in% shared) | matched$County %in% own, ]
+    }
     total <- if (nrow(matched) == 0) NA_real_ else sum(matched$le_total)
     data.frame(District = district, Total_General_Fund_Expenditure = total,
                Finance_FY = finance_fy, stringsAsFactors = FALSE)
@@ -121,9 +136,10 @@ parse_opi_district_expenditures <- function(raw_df) {
   dplyr::bind_rows(rows)
 }
 
-fetch_opi_district_expenditures <- function(url = OPI_FINANCE_CURRENT_YEAR_URL) {
+fetch_opi_district_expenditures <- function(url = OPI_FINANCE_CURRENT_YEAR_URL, lea_map = MT_OPI_FINANCE_LEA_MAP,
+                                            county_map = NULL) {
   raw_df <- fetch_opi_finance_workbook(url)
-  parse_opi_district_expenditures(raw_df)
+  parse_opi_district_expenditures(raw_df, lea_map, county_map)
 }
 
 # Each OPI district's county, from the same workbook: DistrictName (OPI's own

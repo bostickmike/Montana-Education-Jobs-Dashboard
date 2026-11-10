@@ -108,12 +108,12 @@ fetch_saipe_geography <- function(geocat, year, api_key) {
   parse_saipe_json(resp_body_string(resp))
 }
 
-fetch_census_saipe_child_poverty <- function(year = NULL, api_key = census_api_key()) {
+fetch_census_saipe_child_poverty <- function(year = NULL, api_key = census_api_key(), leaid_map = NULL) {
   year <- year %||% latest_saipe_year(api_key = api_key)
   unified <- fetch_saipe_geography("unified", year, api_key)
   elementary <- fetch_saipe_geography("elementary", year, api_key)
   secondary <- fetch_saipe_geography("secondary", year, api_key)
-  parse_census_saipe_child_poverty(unified, elementary, secondary, year)
+  parse_census_saipe_child_poverty(unified, elementary, secondary, year, leaid_map)
 }
 
 # Looks up each of MT_SAIPE_DISTRICT_MAP's 18 districts in whichever of the
@@ -121,15 +121,24 @@ fetch_census_saipe_child_poverty <- function(year = NULL, api_key = census_api_k
 # elementary+HS pair's rates (see this file's header for why an average,
 # not a sum). A district whose matching row(s) are entirely absent from
 # this run's response gets real NA, not zero.
-parse_census_saipe_child_poverty <- function(unified_df, elementary_df, secondary_df, year) {
+# `leaid_map` (optional): registry district -> NCES LEAIDs for districts not in
+# MT_SAIPE_DISTRICT_MAP (crosswalk_leaids(), opi_reconcile.R). SAIPE's names
+# differ from CCD's, so those match by code: a SAIPE school-district code is
+# the LEAID without its 2-digit state prefix (3010950 -> 10950). A pair's
+# rates are averaged, as for the hand-mapped districts.
+parse_census_saipe_child_poverty <- function(unified_df, elementary_df, secondary_df, year, leaid_map = NULL) {
   empty <- data.frame(District = character(0), Child_Poverty_Rate = numeric(0),
                        SAIPE_Year = integer(0), stringsAsFactors = FALSE)
 
   all_rows <- dplyr::bind_rows(unified_df, elementary_df, secondary_df)
   if (nrow(all_rows) == 0) return(empty)
 
+  code_cols <- grep("^school district \\(", names(all_rows), value = TRUE)
+  all_rows$sd_code <- if (length(code_cols) > 0) {
+    do.call(dplyr::coalesce, lapply(code_cols, function(cc) as.character(all_rows[[cc]])))
+  } else NA_character_
   rates_by_name <- all_rows %>%
-    transmute(SD_NAME = trimws(SD_NAME),
+    transmute(SD_NAME = trimws(SD_NAME), sd_code = sd_code,
               rate = clean_acs_value(suppressWarnings(as.numeric(SAEPOVRAT5_17RV_PT))) / 100)
 
   rows <- lapply(names(MT_SAIPE_DISTRICT_MAP), function(district) {
@@ -142,6 +151,14 @@ parse_census_saipe_child_poverty <- function(unified_df, elementary_df, secondar
     }
     data.frame(District = district, Child_Poverty_Rate = rate, stringsAsFactors = FALSE)
   })
+
+  extra <- leaid_map[setdiff(names(leaid_map), names(MT_SAIPE_DISTRICT_MAP))]
+  rows <- c(rows, lapply(names(extra), function(district) {
+    codes <- substr(as.character(extra[[district]]), 3, 7)
+    matched <- rates_by_name %>% filter(sd_code %in% codes)
+    rate <- if (nrow(matched) == 0 || all(is.na(matched$rate))) NA_real_ else mean(matched$rate, na.rm = TRUE)
+    data.frame(District = district, Child_Poverty_Rate = rate, stringsAsFactors = FALSE)
+  }))
 
   result <- dplyr::bind_rows(rows)
   result$SAIPE_Year <- year

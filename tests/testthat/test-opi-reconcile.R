@@ -219,3 +219,30 @@ test_that("districts already checked as OPI-only are one summary line, not adopt
   expect_match(md, "3 postings at 1 district whose only board is OPI", fixed = TRUE)
   expect_match(md, "Rau Elem", fixed = TRUE)
 })
+
+# crosswalk_lea_names() / crosswalk_leaids(): each registry district's CCD
+# districts for the map context sources (CCD staffing, OPI finance, SAIPE).
+test_that("crosswalk_lea_names covers the crosswalk's registry districts, hand entries winning", {
+  xw <- xw_fixture()
+  m <- crosswalk_lea_names(xw)
+  expect_equal(m[["Bigfork School District 38"]], c("Bigfork Elem", "Bigfork H S"))
+  expect_equal(m[["Billings Public Schools"]], c("Billings Elem", "Billings H S"))
+  # A separate district in the same town that we don't scrape stays out.
+  expect_false("Blue Creek Elem" %in% unlist(m))
+  hand <- crosswalk_lea_names(xw, list("Bigfork School District 38" = "Hand Value", "Only In Hand Map" = "X"))
+  expect_equal(hand[["Bigfork School District 38"]], "Hand Value")
+  expect_equal(hand[["Only In Hand Map"]], "X")
+  expect_equal(sum(names(hand) == "Bigfork School District 38"), 1)
+})
+
+test_that("crosswalk_leaids gives each district's LEAIDs and leaves out excluded ones", {
+  xw <- xw_fixture()
+  ids <- crosswalk_leaids(xw)
+  expect_equal(ids[["Bigfork School District 38"]], c("3003820", "3003840"))
+  expect_false("Billings Public Schools" %in% names(crosswalk_leaids(xw, exclude = "Billings Public Schools")))
+})
+
+test_that("crosswalk_counties gives each registry district's county", {
+  xw <- xw_fixture()
+  expect_equal(crosswalk_counties(xw)[["Bigfork School District 38"]], "Flathead County")
+})

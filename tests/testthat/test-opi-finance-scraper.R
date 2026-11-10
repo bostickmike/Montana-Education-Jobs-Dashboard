@@ -93,3 +93,16 @@ test_that("fetch_opi_district_expenditures downloads the workbook and parses it"
   expect_equal(nrow(result), 33)
   expect_equal(result$Total_General_Fund_Expenditure[result$District == "Billings Public Schools"], 134234664)
 })
+
+test_that("a DistrictName held in two counties counts only the district's own county", {
+  # OPI's FY2025 file has "Cottonwood Elem" twice: CO 16 Gallatin (LE 0359) and CO 21 Hill (LE 0445).
+  # Same columns as the real sheet; the amounts here are only to tell the two apart.
+  raw <- data.frame(CO = c("16", "21", "21"), CountyName = c("Gallatin", "Hill", "Hill"),
+                    LE = c("0359", "0445", "0445"), DistrictName = "Cottonwood Elem", StateFY = "2025",
+                    FundCode = "01", SumOfAmount = c(100, 30, 12), stringsAsFactors = FALSE)
+  lea <- list("Cottonwood School District #57" = "Cottonwood Elem")
+  hill <- parse_opi_district_expenditures(raw, lea, county_map = list("Cottonwood School District #57" = "Hill County"))
+  expect_equal(hill$Total_General_Fund_Expenditure, 42)
+  # No county to tell them apart: NA, never the two summed.
+  expect_true(is.na(parse_opi_district_expenditures(raw, lea)$Total_General_Fund_Expenditure))
+})

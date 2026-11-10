@@ -91,3 +91,20 @@ test_that("parse_ccd_teacher_fte returns an empty, correctly-shaped frame when g
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("District", "Teachers_Total_FTE", "Enrollment"))
 })
+
+test_that("parse_ccd_teacher_fte sums whatever lea_map it is given (the pipeline passes the crosswalk's)", {
+  df <- read.csv(test_path("fixtures", "ccd_mt_directory_2022.csv"))
+  result <- parse_ccd_teacher_fte(df, list("Billings, from the crosswalk" = c("Billings Elem", "Billings H S"),
+                                           "Not In CCD" = "No Such District"))
+  expect_equal(result$Teachers_Total_FTE[1], 729 + 323)
+  expect_true(is.na(result$Teachers_Total_FTE[2]))
+})
+
+test_that("districts outside the hand map match CCD by LEAID, so a shared name can't merge two districts", {
+  # Real 2024 rows: two districts named "Cottonwood Elem" (Gallatin 3007500: 2 FTE, 16 students;
+  # Hill 3014150: 2 FTE, 20 students). Matching by name summed both (2026-11-09 rehearsal).
+  df <- read.csv(test_path("fixtures", "ccd_mt_directory_2024_crosswalk_towns.csv"))
+  result <- parse_ccd_teacher_fte(df, lea_map = list(), leaid_map = list("Cottonwood School District #57" = "3014150"))
+  expect_equal(result$Teachers_Total_FTE, 2)
+  expect_equal(result$Enrollment, 20)
+})

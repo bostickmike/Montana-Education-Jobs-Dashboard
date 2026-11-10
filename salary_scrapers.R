@@ -102,7 +102,9 @@ MT_DLI_DISTRICT_MAP <- list(
   "Columbus Public Schools" = list(region = "SouthCentral", report_name = "Columbus Public Schools"),
   "Conrad Public Schools" = list(region = "NorthCentral", report_name = "Conrad Public Schools"),
   "Corvallis School District #1" = list(region = "Western", report_name = "Corvallis K-12 Schools"),
-  "Cottonwood School District #57" = list(region = "4Rivers", report_name = "Cottonwood Elementary"),
+  # Havre's Cottonwood (Hill County) is in HiLine; 4Rivers' "Cottonwood Elementary" is
+  # Gallatin County's, a different district (fixed 2026-11-09).
+  "Cottonwood School District #57" = list(region = "HiLine", report_name = "Cottonwood Elementary"),
   "Creston School District" = list(region = "NorthWest", report_name = "Creston Elementary"),
   "Culbertson School District 17-C" = list(region = "NorthEast", report_name = "Culbertson Public Schools"),
   "Custer Public Schools" = list(region = "SouthCentral", report_name = "Custer K-12 Schools"),

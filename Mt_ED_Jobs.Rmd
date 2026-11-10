@@ -3511,7 +3511,9 @@ teacher_salary <- safe_scrape(
 
 teacher_fte <- safe_scrape(
   "CCD district teacher FTE (MT)",
-  scrape_fn = fetch_ccd_teacher_fte,
+  # Every district the crosswalk ties to CCD, hand map entries first.
+  scrape_fn = function() fetch_ccd_teacher_fte(
+    MT_CCD_LEA_MAP, leaid_map = crosswalk_leaids(district_crosswalk, exclude = names(MT_CCD_LEA_MAP))),
   expected_cols = c("District", "Teachers_Total_FTE", "Enrollment", "CCD_Year")
 )
 
@@ -3612,7 +3614,8 @@ if (nrow(county_context) > 0) {
 
 child_poverty <- safe_scrape(
   "Census SAIPE district child poverty rate (MT)",
-  scrape_fn = fetch_census_saipe_child_poverty,
+  scrape_fn = function() fetch_census_saipe_child_poverty(
+    leaid_map = crosswalk_leaids(district_crosswalk, exclude = names(MT_SAIPE_DISTRICT_MAP))),
   expected_cols = c("District", "Child_Poverty_Rate", "SAIPE_Year")
 )
 
@@ -3627,7 +3630,9 @@ if (nrow(child_poverty) > 0) {
 
 district_finance <- safe_scrape(
   "OPI per-district General Fund expenditures (MT)",
-  scrape_fn = fetch_opi_district_expenditures,
+  scrape_fn = function() fetch_opi_district_expenditures(
+    lea_map = crosswalk_lea_names(district_crosswalk, MT_OPI_FINANCE_LEA_MAP),
+    county_map = crosswalk_counties(district_crosswalk)),
   expected_cols = c("District", "Total_General_Fund_Expenditure", "Finance_FY")
 )
 

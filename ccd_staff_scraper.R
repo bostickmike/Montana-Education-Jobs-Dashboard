@@ -99,7 +99,12 @@ find_latest_ccd_directory_year <- function(start_year = as.integer(format(Sys.Da
 # that record out of the sum rather than propagating NA to the whole
 # District -- e.g. if only Fergus H S is temporarily missing, Lewistown
 # still gets Lewistown Elem's real FTE rather than NA for both.
-parse_ccd_teacher_fte <- function(df) {
+# `lea_map`: registry district -> CCD lea_names (the hand map). `leaid_map`
+# (optional): registry district -> NCES LEAIDs for every other district; the
+# pipeline passes crosswalk_leaids(district_crosswalk, exclude = names(MT_CCD_LEA_MAP))
+# (opi_reconcile.R). By LEAID, not name: CCD names two districts "Cottonwood
+# Elem" (Gallatin and Hill), and a name match summed both (2026-11-09 rehearsal).
+parse_ccd_teacher_fte <- function(df, lea_map = MT_CCD_LEA_MAP, leaid_map = NULL) {
   if (nrow(df) == 0) {
     return(data.frame(District = character(0), Teachers_Total_FTE = numeric(0),
                        Enrollment = numeric(0), stringsAsFactors = FALSE))
@@ -108,13 +113,14 @@ parse_ccd_teacher_fte <- function(df) {
   by_lea <- df %>%
     filter(agency_type == 1, !is.na(number_of_schools), number_of_schools >= 1) %>%
     transmute(
+      leaid = if ("leaid" %in% names(df)) as.character(leaid) else NA_character_,
       lea_name = trimws(lea_name),
       Teachers_Total_FTE = ifelse(is.na(teachers_total_fte) | teachers_total_fte < 0, NA_real_, teachers_total_fte),
       Enrollment = ifelse(is.na(enrollment) | enrollment < 0, NA_real_, enrollment)
     )
 
-  rows <- lapply(names(MT_CCD_LEA_MAP), function(district) {
-    lea_names <- MT_CCD_LEA_MAP[[district]]
+  rows <- lapply(names(lea_map), function(district) {
+    lea_names <- lea_map[[district]]
     matched <- by_lea %>% filter(lea_name %in% lea_names)
     if (nrow(matched) == 0) {
       return(data.frame(District = district, Teachers_Total_FTE = NA_real_,
@@ -128,12 +134,24 @@ parse_ccd_teacher_fte <- function(df) {
     )
   })
 
+  extra <- leaid_map[setdiff(names(leaid_map), names(lea_map))]
+  rows <- c(rows, lapply(names(extra), function(district) {
+    matched <- by_lea %>% filter(leaid %in% as.character(extra[[district]]))
+    if (nrow(matched) == 0) {
+      return(data.frame(District = district, Teachers_Total_FTE = NA_real_,
+                         Enrollment = NA_real_, stringsAsFactors = FALSE))
+    }
+    data.frame(District = district,
+               Teachers_Total_FTE = sum(matched$Teachers_Total_FTE, na.rm = TRUE),
+               Enrollment = sum(matched$Enrollment, na.rm = TRUE), stringsAsFactors = FALSE)
+  }))
+
   dplyr::bind_rows(rows)
 }
 
-fetch_ccd_teacher_fte <- function() {
+fetch_ccd_teacher_fte <- function(lea_map = MT_CCD_LEA_MAP, leaid_map = NULL) {
   latest <- find_latest_ccd_directory_year()
-  result <- parse_ccd_teacher_fte(latest$data)
+  result <- parse_ccd_teacher_fte(latest$data, lea_map, leaid_map)
   if (nrow(result) > 0) result$CCD_Year <- as.character(latest$year)
   result
 }

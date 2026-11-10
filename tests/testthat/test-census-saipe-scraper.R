@@ -88,3 +88,22 @@ test_that("parse_census_saipe_child_poverty returns an empty, correctly-shaped f
 test_that("parse_saipe_json returns an empty data frame for a header-only response", {
   expect_equal(nrow(parse_saipe_json('[["SD_NAME","SAEPOVRAT5_17RV_PT"]]')), 0)
 })
+
+test_that("parse_census_saipe_child_poverty matches districts outside the hand map by LEAID code", {
+  unified <- parse_saipe_json(paste(readLines(test_path("fixtures", "saipe_mt_unified_2022.json"), warn = FALSE), collapse = "\n"))
+  elem <- parse_saipe_json(paste(readLines(test_path("fixtures", "saipe_mt_elementary_2022.json"), warn = FALSE), collapse = "\n"))
+  sec <- parse_saipe_json(paste(readLines(test_path("fixtures", "saipe_mt_secondary_2022.json"), warn = FALSE), collapse = "\n"))
+
+  ids <- list("Bigfork School District 38" = c("3003820", "3003840"),       # crosswalk LEAIDs
+              "Billings, by LEAID" = c("3003870", "3003900"),
+              "Billings Public Schools" = "9999999")                      # hand-mapped: ignored here
+  result <- parse_census_saipe_child_poverty(unified, elem, sec, 2022, leaid_map = ids)
+
+  expect_equal(nrow(result), length(MT_SAIPE_DISTRICT_MAP) + 2)
+  # Real 2022 rates: Bigfork Elementary 14.3%, Bigfork High School District 10.4%.
+  expect_equal(result$Child_Poverty_Rate[result$District == "Bigfork School District 38"], mean(c(14.3, 10.4)) / 100)
+  # Matching by code gives the same rate as the hand map's names.
+  by_name <- result$Child_Poverty_Rate[result$District == "Billings Public Schools"]
+  expect_equal(result$Child_Poverty_Rate[result$District == "Billings, by LEAID"], by_name)
+  expect_equal(by_name, mean(c(10.6, 7.5)) / 100)
+})

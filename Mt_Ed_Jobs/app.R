@@ -819,9 +819,10 @@ k12_sample_titles <- combineddata %>%
   summarize(SampleTitles = paste(head(Title, 3), collapse = "; "), .groups = "drop")
 k12_weekly_new <- k12_new_this_week %>% count(District, name = "WeeklyNew")
 
-# Vacancy rate needs a minimum FTE to be a meaningful comparison -- a
-# no-op against Montana's real data (every registered district has 50+
-# FTE) but keeps a future small entity from producing a noisy rate.
+# Vacancy rate needs a minimum FTE to be a meaningful comparison. Since
+# staffing comes from the crosswalk for every district (2026-11-09), 34 small
+# districts (under 10 FTE) show no rate, and a district with 10-20 FTE can show
+# a high one from a handful of postings (Frazer: 10 of 15).
 VACANCY_RATE_MIN_FTE <- 10
 
 DLI_SALARY_SOURCE_URL <- "https://lmi.mt.gov/Publications/index"

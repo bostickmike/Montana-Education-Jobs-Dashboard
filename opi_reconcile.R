@@ -91,7 +91,15 @@ build_mt_district_crosswalk <- function(ccd_df, registry, split_map) {
   claim$City <- tolower(ccd$City[match(claim$OPI_District, ccd$OPI_District)])
   claim$Stem <- mt_district_stem(claim$OPI_District)
 
-  ccd$Registry_District <- claim$Registry_District[match(ccd$OPI_District, claim$OPI_District)]
+  # The registry's NCES id claims its own CCD row by LEAID, not by that row's
+  # name: two districts are "Cottonwood Elem" (Gallatin and Hill), and a name
+  # match let the registry's Hill County board claim Gallatin's (2026-11-09).
+  # The hand split maps (names only) claim the rest by name.
+  by_id <- registry$District[match(ccd$LEAID, as.character(registry$NCES_LEAID))]
+  split_claim <- data.frame(OPI_District = unlist(split_map, use.names = FALSE),
+                            Registry_District = rep(names(split_map), lengths(split_map)), stringsAsFactors = FALSE)
+  by_name <- split_claim$Registry_District[match(ccd$OPI_District, split_claim$OPI_District)]
+  ccd$Registry_District <- dplyr::coalesce(by_id, by_name)
   ccd$Match_Rule <- ifelse(is.na(ccd$Registry_District), NA_character_, "registry NCES id")
   for (i in which(is.na(ccd$Registry_District))) {
     same_city <- claim[claim$City %in% tolower(ccd$City[i]), , drop = FALSE]
@@ -132,6 +140,37 @@ build_mt_district_crosswalk <- function(ccd_df, registry, split_map) {
   ccd <- ccd[!ambiguous | keep_claimed, , drop = FALSE]
   ccd <- ccd[!duplicated(ccd$OPI_District), , drop = FALSE]
   ccd[order(ccd$OPI_District), , drop = FALSE]
+}
+
+# Each registry district's CCD districts, from the crosswalk, for the map
+# context sources that join by district (CCD staffing, OPI finance, SAIPE).
+# The hand maps (MT_CCD_LEA_MAP etc.) were confirmed one district at a time but
+# stopped at 33; the crosswalk covers every registry district it can tie to
+# CCD (2026-11-09: 200 of 201, 110 with one district and 90 with an Elem + H S
+# pair) and reproduces the hand maps exactly where both exist (FTE,
+# enrollment, poverty rate and finance totals, 32 of 32). Hand entries win.
+# crosswalk_lea_names(): CCD lea_names, which OPI's finance file uses too.
+crosswalk_lea_names <- function(crosswalk, hand_map = list()) {
+  r <- crosswalk[!is.na(crosswalk$Registry_District) & !is.na(crosswalk$OPI_District), , drop = FALSE]
+  from_xw <- lapply(split(r$OPI_District, r$Registry_District), function(x) sort(unique(x)))
+  c(hand_map, from_xw[setdiff(names(from_xw), names(hand_map))])
+}
+
+# crosswalk_counties(): each registry district's counties (normally one), for
+# a source with no LEAID that names two districts alike ("Cottonwood Elem",
+# Gallatin and Hill): OPI finance.
+crosswalk_counties <- function(crosswalk) {
+  r <- crosswalk[!is.na(crosswalk$Registry_District) & !is.na(crosswalk$County), , drop = FALSE]
+  lapply(split(r$County, r$Registry_District), function(x) sort(unique(x)))
+}
+
+# crosswalk_leaids(): the same districts' NCES LEAIDs, for sources whose
+# names differ from CCD's (SAIPE); districts in `exclude` are left out (the
+# source's own hand map covers them).
+crosswalk_leaids <- function(crosswalk, exclude = character(0)) {
+  r <- crosswalk[!is.na(crosswalk$Registry_District) & !is.na(crosswalk$LEAID), , drop = FALSE]
+  r <- r[!(r$Registry_District %in% exclude), , drop = FALSE]
+  lapply(split(as.character(r$LEAID), r$Registry_District), function(x) sort(unique(x)))
 }
 
 # The crosswalk row for each OPI posting: by its detail page's district

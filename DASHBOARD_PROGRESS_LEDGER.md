@@ -676,6 +676,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     "Cashier" (not bare "Server", which can be IT). Archive diff over both states (7,825 K-12 titles): only those 2
     titles move, Other -> Food Services; committed data unchanged, MT posting spells refreshed (Food Services 49 -> 50
     postings). Golden set 551 of 551.
+  * [x] Map context for every district (2026-11-09): CCD staffing, SAIPE child poverty and OPI finance came only
+    from the 33 hand maps, so 168 scraped districts had no vacancy rate or students per teacher. Each now takes its
+    CCD districts from `mt_district_crosswalk.csv` (`crosswalk_lea_names()` / `crosswalk_leaids()` /
+    `crosswalk_counties()`, `opi_reconcile.R`; hand maps still win): CCD and SAIPE by LEAID, finance by name with
+    the county where a name is shared. Rehearsal (`claude-notes/2026-11-09_rehearsal-mt-mapping-2.log`): all steps
+    passed, salarymap2 201 of 201 for FTE, poverty and finance; the 32 previously mapped districts unchanged; 167
+    reach the 10-FTE vacancy-rate floor. Found on the way: Cottonwood #57 (Havre, Hill County) carried Gallatin's
+    NCES id (3007500 -> 3014150) and DLI region (4Rivers -> HiLine, $32,200); two districts are both
+    "Cottonwood Elem", and `build_mt_district_crosswalk()` claimed the registry's CCD row by name, so it now
+    claims by LEAID (crosswalk diff: only Cottonwood's and Olney-Bissell's rows change).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -706,14 +716,6 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
   text, up since May-June) still count as open. Open: whether to flag spring postings. (A weekly check of the 7
   job-specific links: measured 11-09 and not built; it would mostly flag outages and email links.)
-- [ ] Map context covers few districts: `salarymap2.csv` has CCD staffing/enrollment, SAIPE child poverty and OPI
-  finance only for the 33 districts in the hand maps (`MT_CCD_LEA_MAP`, `MT_SAIPE_DISTRICT_MAP`,
-  `MT_OPI_FINANCE_LEA_MAP`), so 168 scraped districts show no vacancy rate or students per teacher, while OPI-only
-  map dots do (their figures come from the crosswalk). Measured 2026-11-09: `mt_district_crosswalk.csv` ties 200 of
-  201 registry districts to 290 CCD districts (110 one, 90 an Elem + H S pair); all 290 are found in live SAIPE 2024
-  (by LEAID) and OPI finance FY2025 (by name); for the 32 hand-mapped districts it can see, the crosswalk route gives
-  exactly today's FTE, enrollment, poverty rate and finance totals (32 of 32 each). 166 districts would reach the
-  10-FTE vacancy-rate floor. Proposed: build each district's CCD list from the crosswalk, hand maps still winning.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Golden set 551 of 551, no known misses (2026-11-09:
