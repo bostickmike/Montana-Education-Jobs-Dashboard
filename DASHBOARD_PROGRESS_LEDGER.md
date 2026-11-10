@@ -663,6 +663,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     text block (instructions and the "Certified Application" link are plain text). Live 11-09: 1 posting, "Long Term
     Substitute - Kindergarten" (start about 2027-05-01), not on OPI. Fixture
     `apptegy_olneybissell_pagedata_2026-11-09.html`; no DLI salary mapping yet.
+  * [x] Copilot Internet access (repo Settings, Mike, 2026-11-09): rollontigers.org, schooljobs.com, olneybissellschool.com and bls.gov (in the allowlist file since 10-31 but never on
+    this list); gojhawks.com, jolietschools.org and savagepublicschool.com (10-29 batch) confirmed. The setting now matches
+    `.github/copilot-allowlist.txt`.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -701,5 +704,4 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 3 golden-set known misses (2 file-name
   titles; "COMMUNICATIONS COORD." labeled Staff though every Coordinator is Administration), 4.
 - [ ] Optional: Gemini as a shadow second opinion on OPI matches (QC report only; Mac key is free tier).
-- [ ] Manual (repo Settings -> Copilot -> Internet access): rollontigers.org, schooljobs.com, olneybissellschool.com.
 
