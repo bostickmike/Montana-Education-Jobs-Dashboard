@@ -666,15 +666,6 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Copilot Internet access (repo Settings, Mike, 2026-11-09): rollontigers.org, schooljobs.com, olneybissellschool.com and bls.gov (in the allowlist file since 10-31 but never on
     this list); gojhawks.com, jolietschools.org and savagepublicschool.com (10-29 batch) confirmed. The setting now matches
     `.github/copilot-allowlist.txt`.
-  * [x] Arrowhead #75 runs from the Mac (Mike's decision, 2026-11-09): Cloudflare has answered every CI run with
-    HTTP 403 since 09-07, while the page serves an ordinary request from home (rechecked 11-09: 3 postings, the same
-    3 the 09-01 run captured; the earlier "at least 8" wasn't supported; none on OPI). A daily launchd job on the Mac
-    (`scripts/mac_sources/`, 05:00 and 18:00) runs the same `fetch_arrowhead_postings()` and pushes the rows to the
-    `mac-sources` branch (never main, so no redeploy). The weekly workflow copies that branch into `mac_sources/`;
-    `scrape_with_mac_fallback()` (`scrape_helpers.R`) tries the live site first and uses the Mac copy only on an
-    error and only when it is at most 4 days old, logging "ok" with a note naming the copy (or "error" saying why it
-    wasn't used). Same rows and posting identity as the live parser (tested against the real first copy,
-    `fixtures/mac_sources_2026-11-10/`). The Mac must be on (or wake) at least once in the 4 days before Tuesday.
   * [x] Olney-Bissell context data (2026-11-09): DLI (`MT_DLI_DISTRICT_MAP`, NorthWest "Olney-Bissell Elementary": 6
     teachers, pay "ND" so the salary columns stay NA), CCD (`MT_CCD_LEA_MAP`, "Olney-Bissell Elem": live 2024 10 FTE,
     95 students), SAIPE (`MT_SAIPE_DISTRICT_MAP`, 2024 child poverty 11.2%) and OPI finance (`MT_OPI_FINANCE_LEA_MAP`,
@@ -701,6 +692,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   districts on 40 boards, 54% of direct postings; OPI left out), waiting on Mike's go-ahead.
 - [ ] Roberts: site still "under maintenance" on 2026-11-04 (recheck after the 11-10 run; it now logs
   `Roberts returned a page with no HTML: "site under maintenance"`).
+- [ ] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
+  (`coverage_calendar.csv`); the page serves an ordinary request from home. Rechecked 2026-11-09: 3 postings, the same
+  3 the last good CI run (09-01) captured -- Substitute Employment (standing pool, $120/day), Special Education
+  Paraprofessional (full time), Certified Teachers ("various grades"); none on OPI now (OPI carried two of them
+  04-07 to 08-25). Not worked around on purpose: user agents, proxies or other routes past the block circumvent the
+  site's bot protection. Running it from the Mac: built and withdrawn the same day (Mike: no jobs on his computer).
+  Left: ask the district / its web host to let the weekly request through, or retire the source and say so.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
