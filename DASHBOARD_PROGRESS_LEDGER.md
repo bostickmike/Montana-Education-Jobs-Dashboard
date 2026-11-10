@@ -697,7 +697,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   trust audit (`claude-notes/2026-11-02_spells-trust-audit.md`) re-run on that data, with few endings left that a
   known data artifact explains (68% on 11-02); (c) the OPI matcher check against fresh OPI data done.
   Treat a board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
-  (42 structured-platform districts + OPI grid, ~50 requests/day) for day-precision ends.
+  for day-precision ends: plan written 2026-11-09 (`claude-notes/2026-11-09_daily-presence-check-plan.md`; 42
+  districts on 40 boards, 54% of direct postings; OPI left out), waiting on Mike's go-ahead.
 - [ ] Roberts: site still "under maintenance" on 2026-11-04 (recheck after the 11-10 run; it now logs
   `Roberts returned a page with no HTML: "site under maintenance"`).
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
