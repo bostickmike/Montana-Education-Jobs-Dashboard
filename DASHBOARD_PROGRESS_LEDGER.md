@@ -707,10 +707,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   text, up since May-June) still count as open. Open: whether to flag spring postings. (A weekly check of the 7
   job-specific links: measured 11-09 and not built; it would mostly flag outages and email links.)
 - [ ] Map context covers few districts: `salarymap2.csv` has CCD staffing/enrollment, SAIPE child poverty and OPI
-  finance for 33 of 201 districts (the hand maps `MT_CCD_LEA_MAP`, `MT_SAIPE_DISTRICT_MAP`, `MT_OPI_FINANCE_LEA_MAP`
-  cover only those), while `mt_district_crosswalk.csv` already ties 200 of 201 registry districts to their CCD LEAs
-  with FTE and enrollment (2026-11-09). Filling the rest from the crosswalk (and its LEAIDs for SAIPE/finance) would
-  give most map dots staffing context; check against the hand maps for the 33 first.
+  finance only for the 33 districts in the hand maps (`MT_CCD_LEA_MAP`, `MT_SAIPE_DISTRICT_MAP`,
+  `MT_OPI_FINANCE_LEA_MAP`), so 168 scraped districts show no vacancy rate or students per teacher, while OPI-only
+  map dots do (their figures come from the crosswalk). Measured 2026-11-09: `mt_district_crosswalk.csv` ties 200 of
+  201 registry districts to 290 CCD districts (110 one, 90 an Elem + H S pair); all 290 are found in live SAIPE 2024
+  (by LEAID) and OPI finance FY2025 (by name); for the 32 hand-mapped districts it can see, the crosswalk route gives
+  exactly today's FTE, enrollment, poverty rate and finance totals (32 of 32 each). 166 districts would reach the
+  10-FTE vacancy-rate floor. Proposed: build each district's CCD list from the crosswalk, hand maps still winning.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Golden set 551 of 551, no known misses (2026-11-09:
