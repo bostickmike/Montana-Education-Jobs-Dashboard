@@ -675,6 +675,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     error and only when it is at most 4 days old, logging "ok" with a note naming the copy (or "error" saying why it
     wasn't used). Same rows and posting identity as the live parser (tested against the real first copy,
     `fixtures/mac_sources_2026-11-10/`). The Mac must be on (or wake) at least once in the 4 days before Tuesday.
+  * [x] Olney-Bissell context data (2026-11-09): DLI (`MT_DLI_DISTRICT_MAP`, NorthWest "Olney-Bissell Elementary": 6
+    teachers, pay "ND" so the salary columns stay NA), CCD (`MT_CCD_LEA_MAP`, "Olney-Bissell Elem": live 2024 10 FTE,
+    95 students), SAIPE (`MT_SAIPE_DISTRICT_MAP`, 2024 child poverty 11.2%) and OPI finance (`MT_OPI_FINANCE_LEA_MAP`,
+    FY2025 General Fund $857,304). Each live fetch checked by hand; fixtures got its real rows (CCD 2022 row, FY2025
+    finance rows). `salarymap2.csv` gets its row from the registry on the next run.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -697,6 +702,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
   text, up since May-June) still count as open. Open: whether to flag spring postings. (A weekly check of the 7
   job-specific links: measured 11-09 and not built; it would mostly flag outages and email links.)
+- [ ] Map context covers few districts: `salarymap2.csv` has CCD staffing/enrollment, SAIPE child poverty and OPI
+  finance for 33 of 201 districts (the hand maps `MT_CCD_LEA_MAP`, `MT_SAIPE_DISTRICT_MAP`, `MT_OPI_FINANCE_LEA_MAP`
+  cover only those), while `mt_district_crosswalk.csv` already ties 200 of 201 registry districts to their CCD LEAs
+  with FTE and enrollment (2026-11-09). Filling the rest from the crosswalk (and its LEAIDs for SAIPE/finance) would
+  give most map dots staffing context; check against the hand maps for the 33 first.
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Left: 3 golden-set known misses (2 file-name

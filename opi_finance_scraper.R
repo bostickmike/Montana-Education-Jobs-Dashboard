@@ -59,7 +59,9 @@ MT_OPI_FINANCE_LEA_MAP <- list(
   "Livingston Public Schools" = c("Livingston Elem", "Park H S"),
   "Lodge Grass Public Schools" = c("Lodge Grass Elem", "Lodge Grass H S"),
   "Wolf Point Public Schools" = c("Wolf Point Elem", "Wolf Point H S"),
-  "Plentywood Public Schools" = c("Plentywood K-12 Schools")
+  "Plentywood Public Schools" = c("Plentywood K-12 Schools"),
+  # Elementary-only district, adopted 2026-11-09.
+  "Olney-Bissell School District" = c("Olney-Bissell Elem")
 )
 
 suppressMessages({

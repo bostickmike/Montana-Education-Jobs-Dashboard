@@ -6,6 +6,9 @@
 # then real column names) so it round-trips through the same skip=1 read
 # path the live fetch uses. Wolf Point/Plentywood's real GF rows were
 # appended 2026-08-07 when MT_OPI_FINANCE_LEA_MAP's gap for them closed.
+# Olney-Bissell Elem's real FY2025 General Fund rows appended 2026-11-09
+# (district adopted; total $857,304.1). Cells are stored as text since then;
+# the parser converts them, as it does the live file's.
 
 test_that("parse_opi_district_expenditures computes real General Fund totals for split and unified districts", {
   raw <- readxl::read_excel(test_path("fixtures", "opi_finance_fy2025_trimmed.xlsx"),
@@ -13,7 +16,7 @@ test_that("parse_opi_district_expenditures computes real General Fund totals for
 
   result <- parse_opi_district_expenditures(raw)
 
-  expect_equal(nrow(result), 32)
+  expect_equal(nrow(result), 33)
 
   # Billings Elem + Billings H S summed -- a real split district.
   billings <- result[result$District == "Billings Public Schools", ]
@@ -87,6 +90,6 @@ test_that("fetch_opi_district_expenditures downloads the workbook and parses it"
 
   result <- fetch_opi_district_expenditures()
 
-  expect_equal(nrow(result), 32)
+  expect_equal(nrow(result), 33)
   expect_equal(result$Total_General_Fund_Expenditure[result$District == "Billings Public Schools"], 134234664)
 })

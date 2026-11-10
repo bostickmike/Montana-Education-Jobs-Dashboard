@@ -60,7 +60,9 @@ MT_CCD_LEA_MAP <- list(
   "Livingston Public Schools" = c("Livingston Elem", "Park H S"),
   "Lodge Grass Public Schools" = c("Lodge Grass Elem", "Lodge Grass H S"),
   "Wolf Point Public Schools" = c("Wolf Point Elem", "Wolf Point H S"),
-  "Plentywood Public Schools" = c("Plentywood K-12 Schools")
+  "Plentywood Public Schools" = c("Plentywood K-12 Schools"),
+  # Elementary-only district (its high schoolers attend Whitefish H S, a separate board).
+  "Olney-Bissell School District" = c("Olney-Bissell Elem")
 )
 
 suppressMessages({

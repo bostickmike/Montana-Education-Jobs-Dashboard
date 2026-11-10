@@ -73,7 +73,9 @@ MT_SAIPE_DISTRICT_MAP <- list(
   "Livingston Public Schools" = c("Livingston Elementary School District", "Park High School District"),
   "Lodge Grass Public Schools" = c("Lodge Grass Elementary School District", "Lodge Grass High School District"),
   "Wolf Point Public Schools" = c("Wolf Point Elementary School District", "Wolf Point High School District"),
-  "Plentywood Public Schools" = c("Plentywood K-12 Schools")
+  "Plentywood Public Schools" = c("Plentywood K-12 Schools"),
+  # Elementary-only; confirmed in SAIPE's 2024 elementary geography (11.2%), 2026-11-09.
+  "Olney-Bissell School District" = c("Olney-Bissell Elementary School District")
 )
 
 # Pure transformation: SAIPE's array-of-arrays JSON shape has different

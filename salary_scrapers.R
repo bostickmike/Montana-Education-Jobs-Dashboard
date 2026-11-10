@@ -110,6 +110,8 @@ MT_DLI_DISTRICT_MAP <- list(
   "Darby School District 9" = list(region = "Western", report_name = "Darby K-12 Schools"),
   "Deer Lodge School District #1" = list(region = "Western", report_name = "Deer Lodge Elementary"),
   "Deer Park School District" = list(region = "NorthWest", report_name = "Deer Park Elementary"),
+  # 6 teachers; DLI suppresses its pay ("ND"), so the salary columns stay NA (2026-11-09).
+  "Olney-Bissell School District" = list(region = "NorthWest", report_name = "Olney-Bissell Elementary"),
   "DeSmet Public School" = list(region = "Western", report_name = "DeSmet Elementary"),
   "Dillon School District 10" = list(region = "4Rivers", report_name = "Dillon Elementary"),
   "Dixon School District #9" = list(region = "Western", report_name = "Dixon Elementary"),
