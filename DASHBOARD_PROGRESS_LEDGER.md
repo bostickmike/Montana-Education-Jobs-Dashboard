@@ -701,6 +701,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     sorted as text, server-side); one wording for "every student counted (likely free meals for all)". Rehearsal
     (`claude-notes/2026-11-09_rehearsal-mt-review-fixes.log`): all steps passed; app tests and boot smoke pass on its
     output; full suite 965.
+  * [x] Apptegy adoption tooling (2026-11-10): `scripts/capture_fixture.R --apptegy` renders the page in headless Chrome
+    (as the pipeline does), redacts `AIza...` keys, refuses a page without page-builder data, and saves
+    `apptegy_<slug>_pagedata_<date>.html`; `scripts/scaffold_district.R` gets an apptegy mode (auto-picked from that
+    fixture; `--node text|panel`): registry row with Platform `Apptegy`, parser + chromote fetch before the dispatcher,
+    the `APPTEGY_DISTRICT_SCRAPERS` entry, the Rmd label, unit tests asserting the titles the parser returns on the
+    fixture, and the dispatcher test's fixture/routing/counts (warns when an existing routing pattern already matches
+    the URL). Also: an unknown `--cms` is an error (it fell through to the generic template), and the allowlist step
+    inserts the host in place instead of re-sorting the file (it moved 3 hosts it didn't touch). Checked in a scratch
+    worktree: a text-block district (Olney-Bissell fixture, 1 posting) and a panel district (Savage fixture, 8, as
+    Savage's own parser) scaffolded together, then misc-district, salary, allowlist, drift-check and coverage-calendar
+    tests: 0 failures; rerun changed nothing; a live capture of Olney-Bissell's page scaffolded to its 1 posting.
+    Recipe in the jobs-dash-scraper skill (`adopt-new-source.md` § Apptegy), synced from the toolkit.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] After the 2026-11-10 run writes them: remove `pending` in `tests/testthat/test-data-dictionary.R`
