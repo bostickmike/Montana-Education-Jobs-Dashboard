@@ -149,6 +149,27 @@ test_that("without OPI_District a posting falls back to its town, conservatively
                   "Billings Public Schools"))
 })
 
+test_that("old OPI postings with no detail-page district get the one employer their location names", {
+  # Locations as OPI wrote them in archives before 2026-11-01 (the 10-27 archive);
+  # the 11-03 archive gives the same postings' districts. Places with two or more
+  # employers (Box Elder, Eureka, Troy, Itinerant) stay unresolved.
+  xw <- read.csv(here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE)
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  loc <- c("Busby, Mt.", "Vida", "841 Bear Canyon Road", "10 miles North of Troy, MT", "Wilsall", "Montana City",
+           "Saint Ignatius- Salish Teacher", "Box Elder", "Eureka", "Troy", "Itinerant")
+  a <- assign_opi_districts(data.frame(location = loc, District = loc, stringsAsFactors = FALSE), xw, reg)
+  expect_equal(a$OPI_District_Used[1:6], c("Northern Cheyenne Trib HS", "Vida Elem", "LaMotte Elem", "McCormick Elem",
+                                           "Shields Valley Elem", "Montana City Elem"))
+  expect_equal(a$Map_Entity[2:4], c("Vida Elem", "LaMotte Elem", "McCormick Elem"))
+  expect_equal(a$Registry_District[5:7], c("Shields Valley Public Schools", "Montana City Elementary School District #27",
+                                           "St. Ignatius School District"))
+  expect_true(all(is.na(a$Map_Entity[8:11]) & is.na(a$OPI_District_Used[8:11])))
+  # A detail-page district always wins over the location.
+  b <- assign_opi_districts(data.frame(location = "Vida", District = "Vida", OPI_District = "Circle Elem",
+                                       stringsAsFactors = FALSE), xw, reg)
+  expect_equal(b$OPI_District_Used, "Circle Elem")
+})
+
 test_that("an archive written with OPI_Counted is taken as written", {
   xw <- xw_fixture()
   reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)

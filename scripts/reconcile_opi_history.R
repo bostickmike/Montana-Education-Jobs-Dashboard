@@ -80,7 +80,10 @@ opi_teach <- bind_rows(lapply(weeks, function(w) w[w$Is_OPI, , drop = FALSE])) %
   mutate(position = classify_k12_position(title, if ("OPI_Description" %in% names(.)) k12_role_hint(OPI_Description) else NULL)) %>%
   filter(position == "Teacher") %>%
   mutate(Category = classify_k12_subject(title), Broad_Category = classify_k12_broad_category(Category),
-         Posting_Source = "OPI Jobs for Teachers (statewide)") %>%
+         Posting_Source = "OPI Jobs for Teachers (statewide)",
+         # k12jobanalysis.csv gained Role_Hint on 2026-11-09; archives before
+         # 2026-11-03 have no OPI_Description, so theirs is NA.
+         Role_Hint = if ("OPI_Description" %in% names(.)) k12_role_hint(OPI_Description) else NA_character_) %>%
   select(all_of(names(k12)))
 k12_new <- bind_rows(k12_direct, opi_teach) %>% arrange(Archive_Date)
 cat(sprintf("\nk12jobanalysis.csv: %d direct rows kept, OPI rows %d -> %d\n", nrow(k12_direct), sum(is_opi_row(k12)), nrow(opi_teach)))

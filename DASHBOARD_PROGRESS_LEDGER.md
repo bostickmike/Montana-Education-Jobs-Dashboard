@@ -719,11 +719,30 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     MT committed data unchanged (reclassify dry run); classifier archive diff over both states: no bucket moves; full
     suite 4,099 pass. MT's spells pick up the new relist rule when the weekly run rebuilds them. Pushed before the
     2026-11-10 run by Mike's call, without a full MT rehearsal (WY's passed with the same change).
+  * [x] 2026-11-10 weekly run checked (manual dispatch 42889397879, all steps green; the late scheduled run 42891770941
+    then failed only at its push, conflicting with the manual run's same-day files, so nothing of it landed):
+    salarymap2 201/201 staffing, SAIPE and finance, lunch share 192; 17 non-district employers with Posting_Names; the
+    7 moved dots on the map; CCD lunch share (296) and Census geocoder (12) logged ok; Olney-Bissell 1 posting; CJI 3;
+    AppliTrack job-ID links 342/342; Turner "Secretary" $14/hour; posting_status.csv 30 checked (all closed);
+    keyword conflicts 0, Other 1.8% K-12 / 2.1% HE; rebuild parity exact. Roberts back (2 postings: custodian,
+    substitutes), so that item is closed. `pending` in `test-data-dictionary.R` emptied; the dictionary's
+    salarymap2 `Child_Poverty_Basis` row removed (a WY row: MT's salarymap2 holds only public districts, which always
+    have their own SAIPE rate; `opi_only_districts.csv` keeps the column). Lone Rock's auto-fix issue #13 is a false
+    positive (its 2 real openings came down; the LLM hint read the standing substitute list as 6 postings).
+  * [x] Data-integrity batch (2026-11-10; `claude-notes/2026-11-10_data-integrity-sweep.md`): (1) pay units, same code as
+    WY df9bc07 (bare $7.25-$60 beside a pay word is hourly; NEOGOV card falls back to its description when the field's
+    unit is rejected); (2) OPI postings with no detail-page district get the one employer their location names
+    (`OPI_LEGACY_LOCATIONS`: Busby, Vida, "841 Bear Canyon Road", "10 miles North of Troy", Wilsall, Montana City;
+    "Saint" = "St." in town matching; Box Elder, Eureka, Troy, Itinerant, Fairfield stay unresolved), so the trend
+    lines before and after 11-03 join; history rebuilt from the archives (`rebuild_k12_history_from_archive.R`, parity
+    exact): current week unchanged, older weeks renamed, about 10 OPI teacher postings over 16 weeks now matched to
+    the district's board; (3) no advertised window for a posting listed more than a week past its stated date;
+    (4) Deer Park (was on Columbia Falls's dot, 8.9 km off), Swan River and Bigfork (one shared dot) moved to their CCD
+    schools; toolkit `reference_audit.R` check 2b (9a2ef47) flags two districts within 300 m. Also
+    `scripts/reconcile_opi_history.R` runs again (Role_Hint); do not run it as is: with `recompute = TRUE` it re-decides
+    11-03 and 11-10 without the live 60-day rule (+14-15 OPI rows) and would break parity; use the parity rebuild.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] After the 2026-11-10 run writes them: remove `pending` in `tests/testthat/test-data-dictionary.R`
-  (salarymap2.csv and opi_only_districts.csv's lunch-share, poverty-basis and Posting_Names columns), which keep the
-  blocking pre-run suite from failing on columns no run has written yet.
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.
@@ -736,8 +755,6 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   Treat a board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
   for day-precision ends: plan written 2026-11-09 (`claude-notes/2026-11-09_daily-presence-check-plan.md`; 42
   districts on 40 boards, 54% of direct postings; OPI left out), waiting on Mike's go-ahead.
-- [ ] Roberts: site still "under maintenance" on 2026-11-04 (recheck after the 11-10 run; it now logs
-  `Roberts returned a page with no HTML: "site under maintenance"`).
 - [ ] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the page serves an ordinary request from home. Rechecked 2026-11-09: 3 postings, the same
   3 the last good CI run (09-01) captured -- Substitute Employment (standing pool, $120/day), Special Education

@@ -56,6 +56,22 @@ OPI_CCD_ALIASES <- c(
   "Phillipsburg HS" = "Philipsburg K-12 Schools"
 )
 
+# OPI locations that name exactly one employer, for postings with no detail-page
+# district (every archive before 2026-11-01, and a failed detail fetch since).
+# Taken from the 2026-11-03 archive, where the same postings carry both OPI's
+# location and its district; only places with one possible employer are listed
+# (Box Elder, Eureka, Troy, Fairfield and "Itinerant" each have two or more, so
+# they stay with the town rule). Keys are the location before any comma, in
+# lower case with punctuation as spaces; values are OPI district names.
+OPI_LEGACY_LOCATIONS <- c(
+  "busby" = "Northern Cheyenne Trib HS",
+  "vida" = "Vida Elem",
+  "841 bear canyon road" = "LaMotte Elem",
+  "10 miles north of troy" = "McCormick Elem",
+  "wilsall" = "Shields Valley Elem",
+  "montana city" = "Montana City Elem"
+)
+
 # District names reduced to the town/name part: "Bigfork H S", "Bigfork Elem"
 # and "Bigfork School District 38" all -> "bigfork".
 mt_district_stem <- function(x) {
@@ -180,6 +196,10 @@ assign_opi_districts <- function(opi_df, crosswalk, registry) {
   n <- nrow(opi_df)
   name <- if ("OPI_District" %in% names(opi_df)) trimws(as.character(opi_df$OPI_District)) else rep(NA_character_, n)
   name[!is.na(name) & !nzchar(name)] <- NA_character_
+  norm <- function(x) trimws(gsub("[^a-z0-9]+", " ", gsub("\\bsaint\\b", "st", tolower(as.character(x)))))
+  loc_key <- norm(sub(",.*$", "", if ("location" %in% names(opi_df)) opi_df$location else rep(NA_character_, n)))
+  legacy <- is.na(name) & loc_key %in% names(OPI_LEGACY_LOCATIONS)
+  name[legacy] <- unname(OPI_LEGACY_LOCATIONS[loc_key[legacy]])
   aliased <- ifelse(!is.na(name) & name %in% names(OPI_CCD_ALIASES), OPI_CCD_ALIASES[name], name)
   hit <- match(aliased, crosswalk$OPI_District)
 
@@ -188,7 +208,9 @@ assign_opi_districts <- function(opi_df, crosswalk, registry) {
                     In_CCD = !is.na(hit),
                     Assign_Method = ifelse(!is.na(hit), "OPI district",
                                            ifelse(!is.na(name), "OPI district (not a CCD district)", NA_character_)),
+                    OPI_District_Used = name,
                     stringsAsFactors = FALSE)
+  out$Assign_Method[legacy] <- paste(out$Assign_Method[legacy], "(from OPI location)")
 
   # No detail-page district: fall back to the town. Conservative on purpose:
   # a town with any registry district counts as that district's (so an OPI
@@ -196,7 +218,7 @@ assign_opi_districts <- function(opi_df, crosswalk, registry) {
   # to the most specific registry City match.
   town_rows <- which(is.na(name))
   if (length(town_rows) > 0) {
-    norm <- function(x) trimws(gsub("[^a-z0-9]+", " ", tolower(as.character(x))))
+    # "Saint Ignatius" in OPI's location, "St. Ignatius" in the registry.
     reg_city <- norm(registry$City)
     xw_city <- norm(crosswalk$City)
     for (i in town_rows) {
@@ -335,9 +357,8 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   opi_dropped$Also_On_OPI <- rep(FALSE, nrow(opi_dropped))
   opi_keep <- opi_df[keep, , drop = FALSE]
   label <- ifelse(!is.na(a$Registry_District), a$Registry_District, ifelse(!is.na(a$Map_Entity), a$Map_Entity,
-                  ifelse("OPI_District" %in% names(opi_df) & !is.na(a$Assign_Method) & a$Assign_Method == "OPI district (not a CCD district)",
-                         if ("OPI_District" %in% names(opi_df)) trimws(as.character(opi_df$OPI_District)) else NA_character_,
-                         as.character(opi_df$District))))
+                  ifelse(!is.na(a$Assign_Method) & startsWith(a$Assign_Method, "OPI district (not a CCD district)"),
+                         a$OPI_District_Used, as.character(opi_df$District))))
   opi_keep$District <- label[keep]
   opi_keep$Also_On_OPI <- rep(FALSE, nrow(opi_keep))
 
