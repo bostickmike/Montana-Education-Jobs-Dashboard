@@ -1661,3 +1661,229 @@
 "2026-11-03","K-12","Wolf Point Public Schools","Apptegy/chromote: Wolf Point Public Schools","ok",13,NA
 "2026-11-03","K-12","Woodman Elementary School District #3","Woodman Elementary School District #3","ok",1,NA
 "2026-11-03","K-12","Zurich Elementary School District #17","Zurich Elementary School District #17","empty",0,NA
+"2026-11-10","Feed","Apptegy browser session (all Apptegy districts)","Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge,","ok",252,NA
+"2026-11-10","Feed","OPI statewide feed","OPI Jobs for Teachers (statewide)","ok",354,NA
+"2026-11-10","HE","Aaniiih Nakoda College","Aaniiih Nakoda College","ok",7,NA
+"2026-11-10","HE","Blackfeet Community College","Blackfeet Community College","ok",6,NA
+"2026-11-10","HE","Carroll College","Carroll College","ok",13,NA
+"2026-11-10","HE","Chief Dull Knife College","Chief Dull Knife College","ok",2,NA
+"2026-11-10","HE","Dawson Community College","Dawson Community College","ok",4,NA
+"2026-11-10","HE","Flathead Valley Community College","Flathead Valley Community College","ok",32,NA
+"2026-11-10","HE","Fort Peck Community College","Fort Peck Community College","ok",1,NA
+"2026-11-10","HE","Great Falls College MSU","Great Falls College MSU","ok",8,NA
+"2026-11-10","HE","Helena College","University of Montana","ok",58,NA
+"2026-11-10","HE","Highlands College","Montana Tech","ok",17,NA
+"2026-11-10","HE","Little Big Horn College","Little Big Horn College","ok",4,NA
+"2026-11-10","HE","Miles Community College","Miles Community College","ok",3,NA
+"2026-11-10","HE","Missoula College","University of Montana","ok",58,NA
+"2026-11-10","HE","Montana State University","Montana State University","ok",197,NA
+"2026-11-10","HE","Montana State University Billings","Montana State University Billings","ok",12,NA
+"2026-11-10","HE","Montana State University-Northern","Montana State University-Northern","ok",6,NA
+"2026-11-10","HE","Montana Tech","Montana Tech","ok",17,NA
+"2026-11-10","HE","Rocky Mountain College","Rocky Mountain College","ok",10,NA
+"2026-11-10","HE","Salish Kootenai College","Salish Kootenai College","error",0,"Failed to perform HTTP request. Caused by error in `curl::curl_fetch_memory()`: ! Timeout was reached [www.skc.edu]: Connection timed out after 10002 milliseconds"
+"2026-11-10","HE","Stone Child College","Stone Child College","ok",1,NA
+"2026-11-10","HE","University of Montana","University of Montana","ok",58,NA
+"2026-11-10","HE","University of Montana Western","University of Montana","ok",58,NA
+"2026-11-10","HE","University of Providence","University of Providence","empty",0,NA
+"2026-11-10","K-12","Alberton School District","Apptegy/chromote: Alberton School District","ok",2,NA
+"2026-11-10","K-12","Anaconda School District #10","Anaconda School District #10","ok",9,NA
+"2026-11-10","K-12","Arlee Joint School District","Apptegy/chromote: Arlee Joint School District","ok",4,NA
+"2026-11-10","K-12","Arrowhead Elementary School District #75","Arrowhead Elementary School District #75","error",0,"HTTP 403 Forbidden."
+"2026-11-10","K-12","Ashland Public School","Ashland Public School","ok",7,NA
+"2026-11-10","K-12","Augusta School District #45","Augusta School District #45","ok",3,NA
+"2026-11-10","K-12","Bainville K-12 Schools","Bainville K-12 Schools","ok",7,NA
+"2026-11-10","K-12","Baker Public Schools","Baker Public Schools","ok",2,NA
+"2026-11-10","K-12","Belfry Public Schools","Belfry Public Schools","ok",2,NA
+"2026-11-10","K-12","Belgrade School District 44","Belgrade School District 44","ok",37,NA
+"2026-11-10","K-12","Belt Public Schools","Apptegy/chromote: Belt Public Schools","ok",3,NA
+"2026-11-10","K-12","Big Sandy Public Schools","Big Sandy Public Schools","ok",11,NA
+"2026-11-10","K-12","Big Sky School District 72","Apptegy/chromote: Big Sky School District 72","ok",5,NA
+"2026-11-10","K-12","Big Timber Grade School","Big Timber Grade School","ok",3,NA
+"2026-11-10","K-12","Bigfork School District 38","Bigfork School District 38","ok",9,NA
+"2026-11-10","K-12","Billings Public Schools","Billings Public Schools","ok",53,NA
+"2026-11-10","K-12","Bonner School District #14","Apptegy/chromote: Bonner School District #14","ok",1,NA
+"2026-11-10","K-12","Boulder Elementary","Boulder Elementary","ok",2,NA
+"2026-11-10","K-12","Bozeman Public Schools","Bozeman Public Schools","ok",48,NA
+"2026-11-10","K-12","Bridger School District 2","Bridger School District 2","ok",7,NA
+"2026-11-10","K-12","Broadus Public Schools","Broadus Public Schools","ok",4,NA
+"2026-11-10","K-12","Broadview School District","Broadview School District","ok",7,NA
+"2026-11-10","K-12","Brockton School District","Brockton School District","ok",3,NA
+"2026-11-10","K-12","Browning Public Schools","Browning Public Schools","ok",10,NA
+"2026-11-10","K-12","Butte School District 1","Butte School District 1","ok",15,NA
+"2026-11-10","K-12","Canyon Creek School District","Canyon Creek School District","ok",1,NA
+"2026-11-10","K-12","Cardwell Elementary School","Cardwell Elementary School","ok",1,NA
+"2026-11-10","K-12","Cascade Public Schools","Cascade Public Schools","ok",13,NA
+"2026-11-10","K-12","Cayuse Prairie School District #10","Cayuse Prairie School District #10","ok",2,NA
+"2026-11-10","K-12","Centerville Public Schools","Apptegy/chromote: Centerville Public Schools","ok",6,NA
+"2026-11-10","K-12","Charlo School District 7J","Charlo School District 7J","ok",2,NA
+"2026-11-10","K-12","Chester-Joplin-Inverness Public Schools","Chester-Joplin-Inverness Public Schools","ok",3,NA
+"2026-11-10","K-12","Chinook Public Schools","Apptegy/chromote: Chinook Public Schools","ok",6,NA
+"2026-11-10","K-12","Choteau School District","Apptegy/chromote: Choteau School District","ok",4,NA
+"2026-11-10","K-12","Circle Public Schools","Circle Public Schools","empty",0,NA
+"2026-11-10","K-12","Clancy Elementary School District #1","Clancy Elementary School District #1","empty",0,NA
+"2026-11-10","K-12","Clinton School District #32","Clinton School District #32","ok",1,NA
+"2026-11-10","K-12","Colstrip Public Schools","Colstrip Public Schools","ok",22,NA
+"2026-11-10","K-12","Columbia Falls School District 6","Apptegy/chromote: Columbia Falls School District 6","ok",23,NA
+"2026-11-10","K-12","Columbus Public Schools","Apptegy/chromote: Columbus Public Schools","ok",4,NA
+"2026-11-10","K-12","Conrad Public Schools","Apptegy/chromote: Conrad Public Schools","ok",2,NA
+"2026-11-10","K-12","Corvallis School District #1","Corvallis School District #1","ok",19,NA
+"2026-11-10","K-12","Cottonwood School District #57","Cottonwood School District #57","empty",0,NA
+"2026-11-10","K-12","Creston School District","Creston School District","ok",1,NA
+"2026-11-10","K-12","Culbertson School District 17-C","Culbertson School District 17-C","ok",2,NA
+"2026-11-10","K-12","Custer Public Schools","Custer Public Schools","ok",5,NA
+"2026-11-10","K-12","Cut Bank School District #15","Cut Bank School District #15","ok",6,NA
+"2026-11-10","K-12","Darby School District 9","Apptegy/chromote: Darby School District 9","ok",4,NA
+"2026-11-10","K-12","Deer Lodge School District #1","Apptegy/chromote: Deer Lodge School District #1","ok",7,NA
+"2026-11-10","K-12","Deer Park School District","Apptegy/chromote: Deer Park School District","ok",1,NA
+"2026-11-10","K-12","Denton Public Schools","Denton Public Schools","empty",0,NA
+"2026-11-10","K-12","DeSmet Public School","DeSmet Public School","empty",0,NA
+"2026-11-10","K-12","Dillon School District 10","Apptegy/chromote: Dillon School District 10","ok",2,NA
+"2026-11-10","K-12","Dixon School District #9","Dixon School District #9","ok",2,NA
+"2026-11-10","K-12","Drummond Public Schools","Apptegy/chromote: Drummond Public Schools","ok",8,NA
+"2026-11-10","K-12","Dutton/Brady Public School District","Apptegy/chromote: Dutton/Brady Public School District","ok",2,NA
+"2026-11-10","K-12","East Glacier Park Grade School","East Glacier Park Grade School","ok",1,NA
+"2026-11-10","K-12","East Helena Public Schools","East Helena Public Schools","ok",9,NA
+"2026-11-10","K-12","Ekalaka Public Schools","Ekalaka Public Schools","ok",3,NA
+"2026-11-10","K-12","Elder Grove School District","Elder Grove School District","ok",1,NA
+"2026-11-10","K-12","Elysian School District #23","Elysian School District #23","ok",1,NA
+"2026-11-10","K-12","Ennis Schools","Apptegy/chromote: Ennis Schools","ok",4,NA
+"2026-11-10","K-12","Evergreen School District #50","Apptegy/chromote: Evergreen School District #50","ok",3,NA
+"2026-11-10","K-12","Fair-Mont-Egan Schools","Fair-Mont-Egan Schools","ok",6,NA
+"2026-11-10","K-12","Fairview Public Schools","Fairview Public Schools","ok",3,NA
+"2026-11-10","K-12","Fishtail School District #13","Fishtail School District #13","empty",0,NA
+"2026-11-10","K-12","Florence-Carlton School District 15-6","Apptegy/chromote: Florence-Carlton School District 15-6","ok",6,NA
+"2026-11-10","K-12","Forsyth Public Schools","Forsyth Public Schools","empty",0,NA
+"2026-11-10","K-12","Fort Benton School District 1","Fort Benton School District 1","ok",1,NA
+"2026-11-10","K-12","Frazer Public Schools","Frazer Public Schools","ok",26,NA
+"2026-11-10","K-12","Frenchtown K-12 Schools","Apptegy/chromote: Frenchtown K-12 Schools","ok",6,NA
+"2026-11-10","K-12","Froid Public Schools","Apptegy/chromote: Froid Public Schools","ok",3,NA
+"2026-11-10","K-12","Fromberg Public Schools","Fromberg Public Schools","ok",1,NA
+"2026-11-10","K-12","Frontier Elementary School","Frontier Elementary School","empty",0,NA
+"2026-11-10","K-12","Gallatin Gateway School","Gallatin Gateway School","ok",3,NA
+"2026-11-10","K-12","Gardiner Public Schools","Apptegy/chromote: Gardiner Public Schools","ok",5,NA
+"2026-11-10","K-12","Geyser Public Schools","Apptegy/chromote: Geyser Public Schools","ok",5,NA
+"2026-11-10","K-12","Glasgow School District 1-A","Glasgow School District 1-A","ok",9,NA
+"2026-11-10","K-12","Glendive Public Schools","Glendive Public Schools","ok",14,NA
+"2026-11-10","K-12","Grass Range Public Schools","Grass Range Public Schools","ok",2,NA
+"2026-11-10","K-12","Great Falls Public Schools","Great Falls Public Schools","ok",30,NA
+"2026-11-10","K-12","Hamilton School District 3","Apptegy/chromote: Hamilton School District 3","ok",16,NA
+"2026-11-10","K-12","Hardin Public Schools","Hardin Public Schools","ok",3,NA
+"2026-11-10","K-12","Harlem Public Schools","Harlem Public Schools","ok",8,NA
+"2026-11-10","K-12","Havre Public Schools","Havre Public Schools","ok",8,NA
+"2026-11-10","K-12","Hays-Lodge Pole School District","Apptegy/chromote: Hays-Lodge Pole School District","ok",8,NA
+"2026-11-10","K-12","Heart Butte K-12 Schools","Heart Butte K-12 Schools","ok",8,NA
+"2026-11-10","K-12","Helena Flats School District #15","Helena Flats School District #15","empty",0,NA
+"2026-11-10","K-12","Helena Public Schools","Helena Public Schools","ok",23,NA
+"2026-11-10","K-12","Hellgate Elementary School District","Hellgate Elementary School District","ok",2,NA
+"2026-11-10","K-12","Highwood Public Schools","Highwood Public Schools","ok",4,NA
+"2026-11-10","K-12","Hinsdale Public Schools","Hinsdale Public Schools","ok",1,NA
+"2026-11-10","K-12","Hobson Public School","Hobson Public School","ok",3,NA
+"2026-11-10","K-12","Hot Springs School District","Apptegy/chromote: Hot Springs School District","ok",8,NA
+"2026-11-10","K-12","Huntley Project School District","Apptegy/chromote: Huntley Project School District","ok",4,NA
+"2026-11-10","K-12","Hysham Public Schools","Hysham Public Schools","ok",2,NA
+"2026-11-10","K-12","Independent School","Independent School","ok",1,NA
+"2026-11-10","K-12","Jefferson High School","Jefferson High School","ok",6,NA
+"2026-11-10","K-12","Joliet Public School District 86","Joliet Public School District 86","ok",4,NA
+"2026-11-10","K-12","Jordan Public Schools","Jordan Public Schools","ok",1,NA
+"2026-11-10","K-12","Judith Gap Schools","Judith Gap Schools","ok",2,NA
+"2026-11-10","K-12","Kalispell Public Schools","Kalispell Public Schools","ok",38,NA
+"2026-11-10","K-12","Kila School District #20","Kila School District #20","ok",4,NA
+"2026-11-10","K-12","Lambert Public Schools","Lambert Public Schools","ok",1,NA
+"2026-11-10","K-12","Lame Deer Public Schools","Lame Deer Public Schools","ok",30,NA
+"2026-11-10","K-12","Laurel Public Schools","Laurel Public Schools","ok",20,NA
+"2026-11-10","K-12","Lavina Public Schools","Lavina Public Schools","ok",2,NA
+"2026-11-10","K-12","Lewistown Public Schools","Lewistown Public Schools","ok",3,NA
+"2026-11-10","K-12","Libby Public Schools","Libby Public Schools","ok",13,NA
+"2026-11-10","K-12","Lima School District #12","Lima School District #12","ok",3,NA
+"2026-11-10","K-12","Lincoln School District #38","Lincoln School District #38","ok",2,NA
+"2026-11-10","K-12","Livingston Public Schools","Livingston Public Schools","ok",14,NA
+"2026-11-10","K-12","Lockwood Schools","Lockwood Schools","ok",15,NA
+"2026-11-10","K-12","Lodge Grass Public Schools","Lodge Grass Public Schools","ok",15,NA
+"2026-11-10","K-12","Lolo School District 7","Apptegy/chromote: Lolo School District 7","ok",4,NA
+"2026-11-10","K-12","Lone Rock School District","Apptegy/chromote: Lone Rock School District","empty",0,NA
+"2026-11-10","K-12","Lustre District 23","Lustre District 23","ok",3,NA
+"2026-11-10","K-12","Luther School","Luther School","ok",2,NA
+"2026-11-10","K-12","Malta Public Schools","Apptegy/chromote: Malta Public Schools","ok",9,NA
+"2026-11-10","K-12","Manhattan School District","Manhattan School District","ok",10,NA
+"2026-11-10","K-12","Marion School District #54","Marion School District #54","ok",1,NA
+"2026-11-10","K-12","Melstone Public Schools","Apptegy/chromote: Melstone Public Schools","ok",3,NA
+"2026-11-10","K-12","Miami Elementary School District #31","Miami Elementary School District #31","ok",1,NA
+"2026-11-10","K-12","Miles City Unified School District 1","Miles City Unified School District 1","ok",17,NA
+"2026-11-10","K-12","Missoula County Public Schools","Missoula County Public Schools","ok",18,NA
+"2026-11-10","K-12","Monforton School District #27","Monforton School District #27","ok",2,NA
+"2026-11-10","K-12","Montana City Elementary School District #27","Montana City Elementary School District #27","empty",0,NA
+"2026-11-10","K-12","Moore Public Schools","Moore Public Schools","ok",1,NA
+"2026-11-10","K-12","Nashua Public Schools","Nashua Public Schools","ok",5,NA
+"2026-11-10","K-12","North Star Public Schools","North Star Public Schools","ok",2,NA
+"2026-11-10","K-12","Noxon Public Schools","Noxon Public Schools","empty",0,NA
+"2026-11-10","K-12","Nye School District #31","Nye School District #31","empty",0,NA
+"2026-11-10","K-12","Olney-Bissell School District","Apptegy/chromote: Olney-Bissell School District","ok",1,NA
+"2026-11-10","K-12","Opheim Public Schools","Opheim Public Schools","ok",3,NA
+"2026-11-10","K-12","Park City Schools","Apptegy/chromote: Park City Schools","ok",2,NA
+"2026-11-10","K-12","Philipsburg School District","Philipsburg School District","ok",5,NA
+"2026-11-10","K-12","Pioneer Elementary School District #41","Pioneer Elementary School District #41","ok",1,NA
+"2026-11-10","K-12","Pleasant Valley School District #27","Pleasant Valley School District #27","empty",0,NA
+"2026-11-10","K-12","Plentywood Public Schools","Apptegy/chromote: Plentywood Public Schools","ok",4,NA
+"2026-11-10","K-12","Plevna School District #55","Apptegy/chromote: Plevna School District #55","ok",8,NA
+"2026-11-10","K-12","Polson School District","Polson School District","ok",2,NA
+"2026-11-10","K-12","Poplar Public Schools","Poplar Public Schools","ok",11,NA
+"2026-11-10","K-12","Potomac Elementary School District #11","Potomac Elementary School District #11","empty",0,NA
+"2026-11-10","K-12","Power Public Schools","Power Public Schools","ok",3,NA
+"2026-11-10","K-12","Pryor Public Schools","Pryor Public Schools","ok",2,NA
+"2026-11-10","K-12","Ramsay School District #3","Ramsay School District #3","ok",2,NA
+"2026-11-10","K-12","Rapelje School District","Rapelje School District","ok",3,NA
+"2026-11-10","K-12","Red Lodge School District 1","Red Lodge School District 1","ok",4,NA
+"2026-11-10","K-12","Reed Point School District","Reed Point School District","ok",2,NA
+"2026-11-10","K-12","Richey Public Schools","Richey Public Schools","ok",1,NA
+"2026-11-10","K-12","Roberts Public School","Roberts Public School","ok",2,NA
+"2026-11-10","K-12","Rocky Boy Public Schools","Rocky Boy Public Schools","ok",14,NA
+"2026-11-10","K-12","Ronan Public Schools","Ronan Public Schools","ok",14,NA
+"2026-11-10","K-12","Roundup School District","Apptegy/chromote: Roundup School District","ok",9,NA
+"2026-11-10","K-12","Roy School District 74","Roy School District 74","ok",3,NA
+"2026-11-10","K-12","Saco Public Schools","Saco Public Schools","empty",0,NA
+"2026-11-10","K-12","Savage Public Schools","Apptegy/chromote: Savage Public Schools","ok",8,NA
+"2026-11-10","K-12","Scobey Schools","Scobey Schools","ok",13,NA
+"2026-11-10","K-12","Seeley Lake Elementary #34","Seeley Lake Elementary #34","empty",0,NA
+"2026-11-10","K-12","Shelby School District","Apptegy/chromote: Shelby School District","ok",5,NA
+"2026-11-10","K-12","Shepherd School District #37","Shepherd School District #37","ok",17,NA
+"2026-11-10","K-12","Sheridan Public Schools","Sheridan Public Schools","ok",4,NA
+"2026-11-10","K-12","Shields Valley Public Schools","Shields Valley Public Schools","ok",5,NA
+"2026-11-10","K-12","Sidney Public Schools","Sidney Public Schools","ok",8,NA
+"2026-11-10","K-12","Smith Valley School District #8","Smith Valley School District #8","ok",2,NA
+"2026-11-10","K-12","St Regis School District","Apptegy/chromote: St Regis School District","ok",12,NA
+"2026-11-10","K-12","St. Ignatius School District","Apptegy/chromote: St. Ignatius School District","ok",3,NA
+"2026-11-10","K-12","Stanford Public Schools","Apptegy/chromote: Stanford Public Schools","ok",1,NA
+"2026-11-10","K-12","Stevensville Public Schools","Stevensville Public Schools","ok",15,NA
+"2026-11-10","K-12","Sun River Valley School District #24","Sun River Valley School District #24","empty",0,NA
+"2026-11-10","K-12","Sunburst Schools","Apptegy/chromote: Sunburst Schools","ok",2,NA
+"2026-11-10","K-12","Superior School District","Superior School District","ok",3,NA
+"2026-11-10","K-12","Swan River School District #4","Swan River School District #4","ok",5,NA
+"2026-11-10","K-12","Swan Valley School District #3","Swan Valley School District #3","ok",1,NA
+"2026-11-10","K-12","Sweet Grass County High School","Apptegy/chromote: Sweet Grass County High School","ok",4,NA
+"2026-11-10","K-12","Target Range School District","Target Range School District","ok",6,NA
+"2026-11-10","K-12","Terry Public Schools","Terry Public Schools","ok",8,NA
+"2026-11-10","K-12","Thompson Falls Public Schools","Thompson Falls Public Schools","ok",3,NA
+"2026-11-10","K-12","Three Forks Public Schools","Three Forks Public Schools","ok",6,NA
+"2026-11-10","K-12","Townsend School District","Apptegy/chromote: Townsend School District","ok",2,NA
+"2026-11-10","K-12","Trego School District 53","Trego School District 53","ok",1,NA
+"2026-11-10","K-12","Trout Creek School District #6","Trout Creek School District #6","ok",3,NA
+"2026-11-10","K-12","Turner Public Schools","Turner Public Schools","ok",3,NA
+"2026-11-10","K-12","Ulm Public Schools","Ulm Public Schools","ok",1,NA
+"2026-11-10","K-12","Upper West Shore School District #33","Upper West Shore School District #33","ok",2,NA
+"2026-11-10","K-12","Valier School District #18","Valier School District #18","ok",2,NA
+"2026-11-10","K-12","Vaughn Elementary School District #74","Vaughn Elementary School District #74","ok",1,NA
+"2026-11-10","K-12","Victor School District","Victor School District","ok",4,NA
+"2026-11-10","K-12","West Glacier Elementary School District #8","West Glacier Elementary School District #8","ok",1,NA
+"2026-11-10","K-12","West Valley School District #1","West Valley School District #1","ok",1,NA
+"2026-11-10","K-12","West Yellowstone School District","Apptegy/chromote: West Yellowstone School District","ok",4,NA
+"2026-11-10","K-12","Westby School District 3","Apptegy/chromote: Westby School District 3","ok",1,NA
+"2026-11-10","K-12","White Sulphur Springs Schools","Apptegy/chromote: White Sulphur Springs Schools","ok",5,NA
+"2026-11-10","K-12","Whitefish School District","Whitefish School District","ok",12,NA
+"2026-11-10","K-12","Whitehall Public Schools","Whitehall Public Schools","ok",3,NA
+"2026-11-10","K-12","Whitewater Public Schools","Whitewater Public Schools","ok",3,NA
+"2026-11-10","K-12","Wibaux Public Schools","Wibaux Public Schools","ok",1,NA
+"2026-11-10","K-12","Winnett Public Schools","Winnett Public Schools","ok",4,NA
+"2026-11-10","K-12","Wolf Point Public Schools","Apptegy/chromote: Wolf Point Public Schools","ok",13,NA
+"2026-11-10","K-12","Woodman Elementary School District #3","Woodman Elementary School District #3","ok",1,NA
+"2026-11-10","K-12","Zurich Elementary School District #17","Zurich Elementary School District #17","empty",0,NA
