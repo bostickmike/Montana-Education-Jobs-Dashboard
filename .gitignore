@@ -13,4 +13,4 @@ scrape_log.csv
 .claude/worktrees/
 
 # Mac-run source copies, fetched from the mac-sources branch in CI (scrape_helpers.R)
-mac_sources/
+/mac_sources/

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Install: cp to ~/Library/LaunchAgents/ and `launchctl bootstrap gui/$(id -u) <that path>`.
+     Runs daily at 05:00 and 18:00 local time; a time missed while the Mac sleeps runs on wake.
+     The weekly MT run (Tue 13:00 UTC) uses a copy at most 4 days old. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>edu.montana.jobsdash.mac-sources</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>"$HOME/repos/Jobs_Dash_repos/Montana-Education-Jobs-Dashboard/scripts/mac_sources/run_mac_sources.sh"</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Hour</key><integer>5</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>18</integer><key>Minute</key><integer>0</integer></dict>
+  </array>
+  <key>StandardOutPath</key><string>/Users/mikebostick/Library/Logs/jobs-dash-mac-sources.log</string>
+  <key>StandardErrorPath</key><string>/Users/mikebostick/Library/Logs/jobs-dash-mac-sources.log</string>
+</dict>
+</plist>
