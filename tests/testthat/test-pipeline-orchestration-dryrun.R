@@ -67,6 +67,11 @@ test_that("Mt_ED_Jobs.Rmd K-12 scraping and combination chunks execute cleanly w
     df
   }
 
+  # The Mac-copy wrapper (Arrowhead) goes through the same stub, never the network.
+  env$scrape_with_mac_fallback <- function(source_name, scrape_fn, key, expected_cols = NULL, ...) {
+    env$safe_scrape(source_name, scrape_fn, expected_cols)
+  }
+
   withr::with_dir(here::here(), {
     expect_no_error(eval(parse(text = k12_scrape_code), envir = env))
     expect_no_error(eval(parse(text = combine_code), envir = env))
@@ -109,6 +114,11 @@ test_that("Mt_ED_Jobs.Rmd K-12 pipeline handles all-empty scraper responses grac
     df <- as.data.frame(mat, stringsAsFactors = FALSE)
     names(df) <- expected_cols
     df
+  }
+
+  # The Mac-copy wrapper (Arrowhead) goes through the same stub, never the network.
+  env$scrape_with_mac_fallback <- function(source_name, scrape_fn, key, expected_cols = NULL, ...) {
+    env$safe_scrape(source_name, scrape_fn, expected_cols)
   }
 
   withr::with_dir(here::here(), {

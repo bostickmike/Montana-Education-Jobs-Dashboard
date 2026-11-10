@@ -153,6 +153,78 @@ safe_scrape <- function(source_name, scrape_fn, expected_cols, log_path = "scrap
 }
 
 # ---------------------------------------------------------------------------
+# Sources fetched from the Mac (Mike, 2026-11-09)
+# ---------------------------------------------------------------------------
+# Some district sites turn away GitHub's servers (Arrowhead #75: HTTP 403 from
+# Cloudflare on every CI run since 2026-09-07) but serve the same page to an
+# ordinary request from home. For those, a daily job on Mike's Mac
+# (scripts/mac_sources/) runs the same scraper and pushes the rows to the
+# `mac-sources` branch: <key>.csv (Title, Location, Posted_Date, Link) and
+# manifest.csv (Source, Fetched_At UTC, N_Rows). The weekly workflow copies
+# that branch into mac_sources/ before the pipeline runs. It is a separate
+# branch so the Mac never pushes to main (a push to main redeploys the app).
+#
+# The live fetch is always tried first. Only when it errors does the Mac
+# copy stand in, and only when it is at most MAC_SNAPSHOT_MAX_AGE_DAYS old,
+# so a stale copy can't keep a filled job listed. Either way it's one log
+# entry: "ok" with a note naming the Mac copy and the live error, or "error"
+# saying why the Mac copy couldn't be used.
+MAC_SNAPSHOT_MAX_AGE_DAYS <- 4
+
+read_mac_snapshot <- function(key, snapshot_dir = "mac_sources", now = Sys.time(),
+                              max_age_days = MAC_SNAPSHOT_MAX_AGE_DAYS) {
+  fail <- function(problem) list(df = NULL, fetched_at = NA_character_, problem = problem)
+  manifest_path <- file.path(snapshot_dir, "manifest.csv")
+  rows_path <- file.path(snapshot_dir, paste0(key, ".csv"))
+  if (!file.exists(manifest_path) || !file.exists(rows_path)) return(fail("no Mac copy"))
+  manifest <- utils::read.csv(manifest_path, stringsAsFactors = FALSE, colClasses = "character")
+  hit <- manifest[manifest$Source == key, , drop = FALSE]
+  if (nrow(hit) != 1) return(fail("no Mac copy"))
+  fetched <- as.POSIXct(hit$Fetched_At, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+  if (is.na(fetched)) return(fail(sprintf("Mac copy has an unreadable time (%s)", hit$Fetched_At)))
+  age_days <- as.numeric(difftime(as.POSIXct(now, tz = "UTC"), fetched, units = "days"))
+  if (age_days > max_age_days) {
+    return(list(df = NULL, fetched_at = hit$Fetched_At,
+                problem = sprintf("Mac copy too old (fetched %s, %.1f days before this run)", hit$Fetched_At, age_days)))
+  }
+  # A blank cell is NA, as the live parser returns it (Posted_Date is part of
+  # the fallback posting identity, so "" would make a new posting).
+  df <- utils::read.csv(rows_path, stringsAsFactors = FALSE, colClasses = "character", na.strings = c("", "NA"))
+  if (nrow(df) != as.integer(hit$N_Rows)) {
+    return(fail(sprintf("Mac copy incomplete (%d rows, manifest says %s)", nrow(df), hit$N_Rows)))
+  }
+  list(df = df, fetched_at = hit$Fetched_At, problem = NA_character_)
+}
+
+scrape_with_mac_fallback <- function(source_name, scrape_fn, key, expected_cols,
+                                     snapshot_dir = "mac_sources", log_path = "scrape_log.csv",
+                                     now = Sys.time()) {
+  live <- tryCatch(list(df = scrape_fn(), error = NULL),
+                   error = function(e) list(df = NULL, error = conditionMessage(e)))
+  if (is.null(live$error)) {
+    return(safe_scrape(source_name, function() live$df, expected_cols, log_path = log_path))
+  }
+
+  snap <- read_mac_snapshot(key, snapshot_dir, now = now)
+  if (!is.na(snap$problem)) {
+    msg <- sprintf("%s; %s", live$error, snap$problem)
+    log_scrape_result(source_name, status = "error", n_rows = 0L, error_message = msg, log_path = log_path)
+    message("scrape_with_mac_fallback: ", source_name, " failed: ", msg)
+    return(empty_df(expected_cols))
+  }
+
+  note <- sprintf("Live fetch failed (%s); used the Mac copy fetched %s", live$error, snap$fetched_at)
+  df <- snap$df
+  if (nrow(df) == 0) {
+    log_scrape_result(source_name, status = "empty", n_rows = 0L, error_message = note, log_path = log_path)
+    return(empty_df(expected_cols))
+  }
+  log_scrape_result(source_name, status = "ok", n_rows = nrow(df), error_message = note, log_path = log_path)
+  message("scrape_with_mac_fallback: ", source_name, ": ", note)
+  df[, expected_cols, drop = FALSE]
+}
+
+# ---------------------------------------------------------------------------
 # Reference tables
 # ---------------------------------------------------------------------------
 

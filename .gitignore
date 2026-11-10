@@ -11,3 +11,6 @@ scrape_log.csv
 # Scratch dir for the Claude auto-fix workflow (issue text, PR body, report)
 .autofix/
 .claude/worktrees/
+
+# Mac-run source copies, fetched from the mac-sources branch in CI (scrape_helpers.R)
+mac_sources/

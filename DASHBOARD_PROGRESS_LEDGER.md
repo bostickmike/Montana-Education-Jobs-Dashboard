@@ -666,6 +666,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Copilot Internet access (repo Settings, Mike, 2026-11-09): rollontigers.org, schooljobs.com, olneybissellschool.com and bls.gov (in the allowlist file since 10-31 but never on
     this list); gojhawks.com, jolietschools.org and savagepublicschool.com (10-29 batch) confirmed. The setting now matches
     `.github/copilot-allowlist.txt`.
+  * [x] Arrowhead #75 runs from the Mac (Mike's decision, 2026-11-09): Cloudflare has answered every CI run with
+    HTTP 403 since 09-07, while the page serves an ordinary request from home (rechecked 11-09: 3 postings, the same
+    3 the 09-01 run captured; the earlier "at least 8" wasn't supported; none on OPI). A daily launchd job on the Mac
+    (`scripts/mac_sources/`, 05:00 and 18:00) runs the same `fetch_arrowhead_postings()` and pushes the rows to the
+    `mac-sources` branch (never main, so no redeploy). The weekly workflow copies that branch into `mac_sources/`;
+    `scrape_with_mac_fallback()` (`scrape_helpers.R`) tries the live site first and uses the Mac copy only on an
+    error and only when it is at most 4 days old, logging "ok" with a note naming the copy (or "error" saying why it
+    wasn't used). Same rows and posting identity as the live parser (tested against the real first copy,
+    `fixtures/mac_sources_2026-11-10/`). The Mac must be on (or wake) at least once in the 4 days before Tuesday.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -681,17 +690,6 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   (42 structured-platform districts + OPI grid, ~50 requests/day) for day-precision ends.
 - [ ] Roberts: site still "under maintenance" on 2026-11-04 (recheck after the 11-10 run; it now logs
   `Roberts returned a page with no HTML: "site under maintenance"`).
-- [ ] Arrowhead Elementary #75 (decision needed; checked 2026-11-05 for another source: none current -- OPI none,
-  the Lee Enterprises job boards say "not hiring", no Wayback copies, PDFs on the same blocked host): HTTP 403 on every weekly CI run since 2026-09-07
-  (`coverage_calendar.csv`); the 2026-10-29 "recovered" entry only held from the Mac. The site is behind Cloudflare,
-  which turns away GitHub's servers. Rechecked 2026-11-09 from the Mac (plain request, 200; the scraper parses it): the
-  page lists 3 postings, the same 3 the last good CI run (09-01) captured -- Substitute Employment (standing pool,
-  $120/day), Special Education Paraprofessional (full time), Certified Teachers ("various grades"); the earlier "at
-  least 8 openings" isn't supported. None on OPI now (OPI carried its Elementary teacher and SPED para from 04-07 to
-  08-25). So 3 postings, 2 of them standing pools, are missing each week. Not worked around on purpose: trying user agents or other endpoints to get past the
-  block is circumventing the site's bot protection. Options: ask the district/web host to allow the scraper, run
-  this one source from the Mac, or retire it from the registry and say so. Suggested (11-09): ask the district (the
-  page names its contact) and keep the source meanwhile, so the 403 stays visible in `coverage_calendar.csv`.
 - [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
   (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can

@@ -367,9 +367,13 @@ if (nrow(roy_df) > 0) {
 arrowhead_districts <- registry[registry$Platform == "ArrowheadHeuristic", ]
 arrowhead_results <- lapply(seq_len(nrow(arrowhead_districts)), function(i) {
   row <- arrowhead_districts[i, ]
-  df <- safe_scrape(
+  # Cloudflare turns away GitHub's servers (403 every CI run since
+  # 2026-09-07); when the live fetch fails, the Mac's copy from the
+  # mac-sources branch stands in if it's fresh (scrape_with_mac_fallback()).
+  df <- scrape_with_mac_fallback(
     row$District,
     scrape_fn = function() fetch_arrowhead_postings(row$Job_Link),
+    key = "arrowhead",
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District

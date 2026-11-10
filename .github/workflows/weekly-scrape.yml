@@ -91,6 +91,22 @@ jobs:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
         run: Rscript .github/scripts/canary_api_check.R
 
+      # Sites that turn away GitHub's servers (Arrowhead #75) are fetched daily
+      # from Mike's Mac and pushed to the mac-sources branch; the pipeline uses
+      # that copy only when the live fetch fails and the copy is at most 4 days
+      # old (scrape_with_mac_fallback() in scrape_helpers.R). A missing branch
+      # just means no fallback.
+      - name: Fetch the Mac-run source copies
+        continue-on-error: true
+        run: |
+          mkdir -p mac_sources
+          if git fetch -q --depth=1 origin mac-sources; then
+            git archive FETCH_HEAD | tar -x -C mac_sources
+            cat mac_sources/manifest.csv
+          else
+            echo "No mac-sources branch; Mac-run sources get no fallback this run."
+          fi
+
       - name: Run the scrape pipeline
         env:
           CHROMOTE_CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
