@@ -101,7 +101,8 @@ for (i in seq_len(nrow(flagged))) {
     # into "the scraper returned ~0 but these titles are on the page".
     llm_titles <- tryCatch(llm_titles_from_page_text(text, url = url),
                            error = function(e) character(0))
-    combined <- combine_verdict_with_llm(verdict, llm_titles)
+    combined <- combine_verdict_with_llm(verdict, llm_titles,
+                                         tryCatch(recent_source_titles(row$name, row$type), error = function(e) NULL))
     verdict <- combined$verdict
     llm_note <- combined$note
   }

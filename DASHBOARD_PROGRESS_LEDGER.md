@@ -763,6 +763,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     unchanged, one decision per week changes (Manhattan). Full rehearsal (`claude-notes/2026-11-10_rehearsal-mt-opi-twins.log`):
     all steps passed, 228 sources ok, 0 errors, the 5 closed, rebuild parity all 9 files, post-run suite 4,139.
 
+  * [x] Standing substitute lists in the drift check (2026-11-10; same change in WY; MT issue #13, Lone Rock): an
+    LLM-read list of substitute pools no longer makes a source likely_broken unless the source's own titles over its
+    last 8 archived runs include a substitute posting (127 of 183 direct sources here do). `drop_standing_pool_titles()`,
+    `recent_source_titles()` (drift_check.R); `corroborate_drift.R` passes the history. Live run of `corroborate_drift.R` on the 11-10 flags: Lone Rock -> looks_genuinely_empty ("an LLM read only a
+    standing substitute list (6 line(s))"), University of Providence unchanged. Suite 4,154 (0 failed).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
