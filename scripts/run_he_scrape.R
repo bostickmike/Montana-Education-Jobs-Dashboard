@@ -12,7 +12,7 @@ suppressMessages({
   library(here)
 })
 
-source(here::here("scrape_helpers.R"))
+library(edjobs)
 source(here::here("direct_api_scrapers.R"))
 source(here::here("k12_he_classification.R"))
 

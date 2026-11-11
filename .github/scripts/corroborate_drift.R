@@ -23,8 +23,8 @@
 # key -> this step is a no-op and the behaviour is unchanged.
 
 source("drift_check.R")
-source("scrape_helpers.R")
-source("llm_extract_scraper.R")
+library(edjobs)
+library(edjobs)
 library(chromote)
 
 flagged <- read.csv("/tmp/drift_flagged.csv", stringsAsFactors = FALSE)

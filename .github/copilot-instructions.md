@@ -39,4 +39,4 @@ The fixture tests only show that the parser handles the fixture. The PR's live c
 - Scraper tiers: `direct_api_scrapers.R` (real ATS APIs), `misc_district_scrapers.R` / `misc_college_scrapers.R` (heuristic HTML/chromote scrapers). `APPTEGY_DISTRICT_SCRAPERS` in `misc_district_scrapers.R` maps each Apptegy/Red Rover district to its scraper.
 - `Mt_ED_Jobs.Rmd` shows how each scraper is called from its registry row.
 - Every scraper returns a data frame with columns `Title`, `Location`, `Posted_Date`, `Link`.
-- HTTP goes through `perform_with_retry()` in `scrape_helpers.R`, not bare `req_perform()`.
+- HTTP goes through `perform_with_retry()` (from the shared `edjobs` package; don't redefine it here), not bare `req_perform()`.

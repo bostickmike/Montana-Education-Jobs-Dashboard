@@ -19,7 +19,7 @@ source("k12_he_classification.R")
 library(dplyr)
 library(readr)
 library(chromote)
-source("scrape_helpers.R")
+library(edjobs)
 source("direct_api_scrapers.R")
 source("misc_district_scrapers.R")
 
@@ -3058,7 +3058,7 @@ if (nrow(apptegy_raw) > 0) {
 ### OPI "Jobs for Teachers" statewide fallback feed
 ```{r k12 opi statewide feed, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
-source("scrape_helpers.R")
+library(edjobs)
 source("direct_api_scrapers.R")
 
 # Montana's analog of Wyoming's WSBA vacancies page. OPI is a statewide
@@ -3107,9 +3107,9 @@ if (nrow(opi_df) > 0) {
 ```{r k12 llm-extract shadow pilot, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
 library(chromote)
-source("scrape_helpers.R")
+library(edjobs)
 source("history_accumulator.R")
-source("llm_extract_scraper.R")
+library(edjobs)
 
 # SHADOW PILOT -- see LLM_EXTRACT.md. Districts listed in
 # llm_extract_targets.csv have their free-text-prose employment pages read
@@ -3154,7 +3154,7 @@ if (nrow(llm_shadow_raw) > 0) {
 # covers it, or to none (build_mt_district_crosswalk(), opi_reconcile.R).
 # The combine step below uses it to decide which OPI postings count. A
 # failed or implausible refresh keeps last run's file (write_reference_file()).
-source("scrape_helpers.R")
+library(edjobs)
 source("ccd_staff_scraper.R")
 source("opi_reconcile.R")
 crosswalk_path <- file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv")
@@ -3435,7 +3435,7 @@ tryCatch(refresh_schoolspring_endings("Archivek12_Data", "schoolspring_endings.c
 # BLS OEWS regional pay by role, the labeled fallback for postings that state
 # no pay (bls_oews_scraper.R). Refreshed only when BLS publishes a new year;
 # a failed check keeps the committed file.
-source("bls_oews_scraper.R")
+library(edjobs)
 oews_path <- file.path("Mt_Ed_Jobs", "oews_role_wages.csv")
 tryCatch(refresh_oews_wages("MT", oews_path),
          error = function(e) log_reference_result(oews_path, "error", conditionMessage(e)))
@@ -3443,7 +3443,7 @@ tryCatch(refresh_oews_wages("MT", oews_path),
 # BLS QCEW average pay of public school employees by county (all roles), the
 # map popup's county context (qcew_school_pay.R). A failed fetch keeps the
 # existing file, and so does a partial or implausible one (write_reference_file()).
-source("qcew_school_pay.R")
+library(edjobs)
 qcew_path <- file.path("Mt_Ed_Jobs", "qcew_county_school_pay.csv")
 tryCatch(write_reference_file(fetch_qcew_school_pay("30"), qcew_path),
          error = function(e) log_reference_result(qcew_path, "error", conditionMessage(e)))
@@ -3524,7 +3524,7 @@ write.csv(Allnow, file = file.path("Mt_Ed_Jobs", "allnow.csv"), row.names = FALS
 ### K-12 teacher salary (MT DLI Teacher Compensation Report) and staffing (CCD teacher FTE via Urban Institute)
 ```{r k12 salary and staffing data, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
-source("scrape_helpers.R")
+library(edjobs)
 source("salary_scrapers.R")
 source("ccd_staff_scraper.R")
 
@@ -3612,7 +3612,7 @@ write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 ### K-12 county-level context (income, rent, mining/energy employment share, population trend) and district-level child poverty rate, from the Census Bureau
 ```{r k12 census county and district context, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
-source("scrape_helpers.R")
+library(edjobs)
 source("census_acs_scraper.R")
 source("census_saipe_scraper.R")
 source("opi_finance_scraper.R")
@@ -3793,7 +3793,7 @@ write.csv(complete_opi_only_columns(opi_only), opi_only_path, row.names = FALSE)
 ```{r he direct-platform institutions, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
 library(chromote)
-source("scrape_helpers.R")
+library(edjobs)
 source("direct_api_scrapers.R")
 source("misc_college_scrapers.R")
 
@@ -4105,7 +4105,7 @@ write_xlsx(hedata, path = file.path("Archived_HE_Data", file_name))
 # JazzHR, Paycom) that dropped off its board since the last run, K-12 and
 # higher ed, recorded in posting_status.csv: whether the platform says it
 # closed, and the closing date it states. A failure here never stops the run.
-source("posting_status.R")
+library(edjobs)
 tryCatch(refresh_posting_status("Archivek12_Data", "Archived_HE_Data", "posting_status.csv",
                                 session_factory = function() chromote::ChromoteSession$new()),
          error = function(e) message("Posting status not updated: ", conditionMessage(e)))
@@ -4114,7 +4114,7 @@ tryCatch(refresh_posting_status("Archivek12_Data", "Archived_HE_Data", "posting_
 # run (ok / empty / error / not_logged), so a posting that stops appearing is
 # read as ended only when its source was healthy. Every source has been
 # scraped by now; a failure here never stops the run.
-source("coverage_calendar.R")
+library(edjobs)
 tryCatch(refresh_coverage_calendar(
   "coverage_calendar.csv", "scrape_log.csv",
   k12_entities = read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)$District,
@@ -4204,7 +4204,7 @@ write.csv(Allnow_he, file = file.path("Mt_Ed_Jobs", "allnow_he.csv"), row.names 
 ### HE faculty salary, enrollment, and Pell Grant recipient share (IPEDS via Urban Institute)
 ```{r he salary enrollment pell data, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
-source("scrape_helpers.R")
+library(edjobs)
 source("ipeds_salary_scraper.R")
 source("ipeds_enrollment_scraper.R")
 source("fsa_pell_scraper.R")
@@ -4325,7 +4325,7 @@ write.csv(salarymap, salarymap_path, row.names = FALSE)
 ### HE institution county-level context (income, rent, mining/energy employment share, population trend), from the Census Bureau
 ```{r he census county context, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
-source("scrape_helpers.R")
+library(edjobs)
 source("census_acs_scraper.R")
 
 # Reuses the exact same fetch_census_county_context() pipeline as the K-12

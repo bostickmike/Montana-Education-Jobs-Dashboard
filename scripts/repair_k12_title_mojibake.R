@@ -151,7 +151,7 @@ repair_k12_title_mojibake <- function(archive_dir = "Archivek12_Data", write = F
 if (sys.nframe() == 0) {
   source("k12_he_classification.R")
   source("opi_reconcile.R")
-  source("bls_oews_scraper.R")
+  library(edjobs)
   source("history_accumulator.R")
   source(file.path("scripts", "rebuild_k12_history_from_archive.R"))
 
