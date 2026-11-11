@@ -768,6 +768,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     last 8 archived runs include a substitute posting (127 of 183 direct sources here do). `drop_standing_pool_titles()`,
     `recent_source_titles()` (drift_check.R); `corroborate_drift.R` passes the history. Live run of `corroborate_drift.R` on the 11-10 flags: Lone Rock -> looks_genuinely_empty ("an LLM read only a
     standing substitute list (6 line(s))"), University of Providence unchanged. Suite 4,154 (0 failed).
+  * [x] apt mirror fallback in CI (2026-11-11; same change in WY and in edjobs' package CI): from ~15:20 UTC 11-11
+    hosted runners could not resolve *.ubuntu.com (probe on ubuntu-22.04/24.04/26.04; Microsoft and CRAN hosts
+    resolved), so every `apt-get update` hung until the job timed out. New `.github/actions/apt-mirror-fallback`, run
+    before R setup in `setup-r-env` (PR checks, Copilot, autofix) and in `weekly-scrape.yml`: apt timeouts always,
+    and `mirrors.edge.kernel.org` when azure.archive.ubuntu.com does not resolve (probe: apt-get update 5.6 s).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
