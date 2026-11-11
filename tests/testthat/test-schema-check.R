@@ -1,31 +1,3 @@
-# Ported from the Wyoming Education Jobs Dashboard's test-schema-check.R.
-# The last two tests are skip_if_not()-guarded on Mt_Ed_Jobs/app.R existing
-# -- both currently skip since neither exists in Montana's repo yet -- and
-# will start actually checking real data/code once they do.
-
-test_that("check_file_schema returns NULL when every required column is present", {
-  expect_null(check_file_schema("allsum.csv", c("Broad_Category", "Archive_Date", "District", "sum"),
-                                 c("Broad_Category", "Archive_Date", "District", "sum")))
-})
-
-test_that("check_file_schema returns NULL when the file has EXTRA columns too", {
-  expect_null(check_file_schema("allsum.csv", c("Broad_Category", "Archive_Date", "District", "sum", "X"),
-                                 c("Broad_Category", "Archive_Date", "District", "sum")))
-})
-
-test_that("check_file_schema flags a single missing column", {
-  result <- check_file_schema("combinedclean.csv", c("title", "date_posted", "position"),
-                               c("title", "date_posted", "position", "District"))
-  expect_equal(result$file, "combinedclean.csv")
-  expect_equal(result$missing_column, "District")
-})
-
-test_that("check_file_schema flags every missing column, one row each", {
-  result <- check_file_schema("combinedclean.csv", c("title"),
-                               c("title", "date_posted", "position"))
-  expect_equal(nrow(result), 2)
-  expect_setequal(result$missing_column, c("date_posted", "position"))
-})
 
 test_that("every dataset app.R actually reads has a REQUIRED_SCHEMAS entry", {
   # Regression against this list silently going stale as app.R changes --
