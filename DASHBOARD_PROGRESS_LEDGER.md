@@ -797,8 +797,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   41 shared drift/data-quality/auto-fix definitions, `check_file_schema()`, `check_total_matches_parts()`,
   `rebuild_parity_row()`; this repo keeps its name corrections, posting identity, dispatch, baselines and schemas.
   Suites on 0.4.0: MT 3,555 passed, 0 failed; full rehearsal passed every step, rebuild parity 9/9
-  (`claude-notes/2026-11-11_rehearsal-mt-edjobs-phase2.log`). Next: phase 3, the shared platform scrapers, with the
-  Claude auto-fix able to open its PR on edjobs (Mike, 11-11).
+  (`claude-notes/2026-11-11_rehearsal-mt-edjobs-phase2.log`). Phase 2 merged 11-11 (MT PR #20 -> 5e1677c).
+  Phase 3 on branch `edjobs-phase3` (11-11, edjobs v0.5.0): the shared platform scrapers (AppliTrack fetch/parse,
+  SchoolSpring details and ending reasons, PeopleAdmin page pay and dates, NEOGOV card pay). Auto-fix for a scraper
+  that lives in edjobs: Copilot first on a companion edjobs issue, then the Claude fallback, which checks edjobs out
+  in `.edjobs/` and opens its PR there. Suite on 0.5.0: MT 3,450 passed, 0 failed; full rehearsal passed every
+  step, rebuild parity 9/9 (`claude-notes/2026-11-11_rehearsal-mt-edjobs-phase3.log`). Design rule from 11-11: build
+  for N states and one stackable schema (plan section 2a).
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.
