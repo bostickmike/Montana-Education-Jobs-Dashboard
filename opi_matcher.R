@@ -86,6 +86,10 @@ opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc,
   ol <- opi_tokens(paste(focus), OPI_LEVELS); dl <- opi_tokens(paste(d_title, d_loc), OPI_LEVELS)
   # Grade level must agree both ways, elementary included.
   lo <- union(ol, intersect(ot, "ELEM")); ld <- union(dl, intersect(dt, "ELEM"))
+  # A phrase that names no level takes it from OPI's school field ("Manhattan
+  # Elem"): Manhattan's elementary ASL intervener isn't the board's "SPED
+  # Paraprofessional MS- Part-Time" (2026-11-10 check; answer key unchanged).
+  if (!length(lo)) lo <- union(opi_tokens(school, OPI_LEVELS), if (grepl("(?i)\\belem", school, perl = TRUE)) "ELEM")
   if (length(lo) && length(ld) && !length(intersect(lo, ld))) return(-Inf)
   og <- opi_grades(paste(focus, substr(opi_full, 1, 300))); dg <- opi_grades(d_title)
   if (length(og) && length(dg) && !length(intersect(og, dg))) return(-Inf)   # 5th grade isn't the 1st-grade opening

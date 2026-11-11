@@ -3393,7 +3393,33 @@ combined_all <- bind_rows(direct_df, opi_df) %>%
   # the cleaned title.
   move_title_detail() %>%
   add_k12_posting_identity() %>%
-  distinct(Posting_ID, .keep_all = TRUE)
+  distinct(Posting_ID, .keep_all = TRUE) %>%
+  attach_opi_matched_ids()
+# An OPI posting whose twin on the district's own board was taken down since
+# the previous run is closed (opi_reconcile.R, close_opi_lost_twins(); Mike,
+# 2026-11-10: a candidate can't apply through the district any more). The
+# link comes from the previous archive (recomputed for one written before
+# OPI_Matched_Posting_ID existed). A failure leaves this run as matched.
+combined_all <- tryCatch({
+  prev_files <- sort(list.files("Archivek12_Data", pattern = "^combined_\\d{4}-\\d{2}-\\d{2}\\.csv$"))
+  prev_files <- prev_files[prev_files < paste0("combined_", Sys.Date(), ".csv")]
+  if (length(prev_files) == 0) combined_all else {
+    prev <- read.csv(file.path("Archivek12_Data", utils::tail(prev_files, 1)), colClasses = "character")
+    if (!"OPI_Matched_Posting_ID" %in% names(prev)) prev$OPI_Matched_Posting_ID <- opi_matched_board_ids(prev, district_crosswalk, registry)
+    out <- close_opi_lost_twins(combined_all, prev)
+    n_closed <- attr(out, "opi_twins_closed"); if (is.null(n_closed)) n_closed <- 0L
+    message(sprintf("OPI twins closed: %d OPI posting(s) whose board posting (matched in %s) is gone are not counted.",
+                    n_closed, sub("^combined_(.*)\\.csv$", "\\1", utils::tail(prev_files, 1))))
+    # The QC report listed them as counted OPI postings; they aren't now.
+    gone <- out[out$OPI_Drop_Reason %in% OPI_TWIN_CLOSED_REASON, , drop = FALSE]
+    if (nrow(gone) > 0 && nrow(opi_rec$qc) > 0) {
+      qkey <- paste(opi_rec$qc$District, opi_rec$qc$Title, opi_rec$qc$Date_Posted)
+      write.csv(opi_rec$qc[!qkey %in% paste(gone$District, gone$title, gone$date_posted), , drop = FALSE],
+                "mt_discrepancy_report.csv", row.names = FALSE)
+    }
+    out
+  }
+}, error = function(e) { message("OPI twin check failed, nothing closed: ", conditionMessage(e)); combined_all })
 combined <- combined_all %>% filter(OPI_Counted)
 
 if (!dir.exists("Archivek12_Data")) dir.create("Archivek12_Data")

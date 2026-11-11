@@ -325,6 +325,10 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
     m[idx] <- match_opi_postings(opi_df[idx, , drop = FALSE], a$Registry_District[idx], direct_df)
   }
   direct_df$Also_On_OPI[m[!is.na(m)]] <- TRUE
+  # Which board row each OPI posting matched (.opi_matched_row -> the board
+  # row's .board_row); attach_opi_matched_ids() turns it into the board
+  # posting's Posting_ID once identities exist, for close_opi_lost_twins().
+  direct_df$.board_row <- seq_len(nrow(direct_df))
   matched <- !is.na(m)
   stale_empty <- empty_board & stale & stale_fallback
   covered <- dup | matched | stale_empty          # not counted
@@ -355,6 +359,7 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   opi_dropped$OPI_Drop_Reason <- ifelse(dup, "OPI duplicate listing", ifelse(matched, "same opening on district board",
                                         "stale OPI listing, district board empty"))[covered]
   opi_dropped$Also_On_OPI <- rep(FALSE, nrow(opi_dropped))
+  opi_dropped$.opi_matched_row <- m[covered]
   opi_keep <- opi_df[keep, , drop = FALSE]
   label <- ifelse(!is.na(a$Registry_District), a$Registry_District, ifelse(!is.na(a$Map_Entity), a$Map_Entity,
                   ifelse(!is.na(a$Assign_Method) & startsWith(a$Assign_Method, "OPI district (not a CCD district)"),
@@ -380,14 +385,83 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   list(opi_keep = opi_keep, opi_dropped = opi_dropped, direct_df = direct_df, qc = qc, adoption = adoption)
 }
 
+# ---- OPI postings whose board twin closed (Mike, 2026-11-10) ----
+# Standard (11-09): a posting is open while a candidate can still apply. Every
+# OPI apply route goes through the district (its board, its website, its
+# office), so once the district takes down its own posting of the job, the
+# OPI copy is closed too: 5 of 5 such postings checked live on 2026-11-10
+# (claude-notes/2026-11-10_opi-matcher-11-10-check.md). The link is the one
+# the matcher made in an earlier run; it is kept in the raw archive as
+# OPI_Matched_Posting_ID and carried forward once the posting is closed.
+OPI_TWIN_CLOSED_REASON <- "board posting closed (matched earlier)"
+
+# After add_k12_posting_identity(): each OPI row the reconcile matched gets the
+# Posting_ID of the board posting it matched; the helper columns go.
+attach_opi_matched_ids <- function(df) {
+  row_of <- if (".opi_matched_row" %in% names(df)) df$.opi_matched_row else rep(NA_integer_, nrow(df))
+  board <- if (".board_row" %in% names(df)) df$.board_row else rep(NA_integer_, nrow(df))
+  df$OPI_Matched_Posting_ID <- df$Posting_ID[match(row_of, board, incomparables = NA)]
+  df$.opi_matched_row <- NULL
+  df$.board_row <- NULL
+  df
+}
+
+# For an archive written before OPI_Matched_Posting_ID existed: the matched
+# board Posting_ID of each OPI row the archive itself dropped as "same opening
+# on district board", recomputed with the current matcher (NA elsewhere).
+# Needs the archive's OPI_Description (archives from 2026-11-03 on).
+opi_matched_board_ids <- function(archive_df, crosswalk, registry) {
+  out <- rep(NA_character_, nrow(archive_df))
+  is_opi <- grepl("^OPI ", archive_df$Posting_Source) | is_opi_statewide_posting(archive_df$url)
+  is_opi[is.na(is_opi)] <- FALSE
+  if (!any(is_opi) || !"OPI_Description" %in% names(archive_df)) return(out)
+  direct <- archive_df[!is_opi, , drop = FALSE]
+  direct$District <- canonicalize_k12_district(direct$District)
+  r <- reconcile_opi_with_direct(archive_df[is_opi, , drop = FALSE], direct, crosswalk, registry, stale_fallback = FALSE)
+  ids <- r$direct_df$Posting_ID[match(r$opi_dropped$.opi_matched_row, r$direct_df$.board_row, incomparables = NA)]
+  hit <- match(archive_df$Posting_ID, r$opi_dropped$Posting_ID)
+  keep <- is_opi & !is.na(hit)
+  if ("OPI_Drop_Reason" %in% names(archive_df)) keep <- keep & archive_df$OPI_Drop_Reason %in% "same opening on district board"
+  out[keep] <- ids[hit[keep]]
+  out
+}
+
+# current: this run's rows after identity (Posting_ID, Posting_Source, url,
+# District, OPI_Counted, OPI_Drop_Reason, OPI_Matched_Posting_ID). previous:
+# the previous run's archive rows (Posting_ID, OPI_Matched_Posting_ID). An OPI
+# posting counted this run whose previous-run link names a board posting that
+# is no longer on its board, at a district whose board returned postings this
+# run (an empty or failed scrape is no evidence), stops counting. Rows the
+# matcher links again this run are untouched (they are dropped as matched).
+close_opi_lost_twins <- function(current, previous) {
+  if (is.null(previous) || nrow(previous) == 0 || !"OPI_Matched_Posting_ID" %in% names(previous)) return(current)
+  is_opi <- grepl("^OPI ", current$Posting_Source) | is_opi_statewide_posting(current$url)
+  is_opi[is.na(is_opi)] <- FALSE
+  prev_link <- previous$OPI_Matched_Posting_ID[match(current$Posting_ID, previous$Posting_ID)]
+  prev_link[!is.na(prev_link) & !nzchar(prev_link)] <- NA_character_
+  board_ids <- current$Posting_ID[!is_opi]
+  active <- unique(current$District[!is_opi])
+  counted <- current$OPI_Counted %in% c(TRUE, "TRUE")
+  closed <- is_opi & counted & !is.na(prev_link) & !prev_link %in% board_ids & current$District %in% active
+  current$OPI_Counted[closed] <- FALSE
+  current$OPI_Drop_Reason[closed] <- OPI_TWIN_CLOSED_REASON
+  current$OPI_Matched_Posting_ID[closed] <- prev_link[closed]
+  attr(current, "opi_twins_closed") <- sum(closed)
+  current
+}
+
 # The same rule for one raw archive week (Archivek12_Data/combined_*.csv,
 # identity fields already added by add_k12_posting_identity()): returns
 # Posting_ID, Is_OPI, Counted and District (the label a counted row carries;
 # the registry district for an uncounted OPI row), one row per archive row.
 # Archives written since this rule shipped carry OPI_Counted and their
 # Districts already; older ones are reconciled here (by town before
-# 2026-11-01, when OPI_District started).
-opi_rule_for_archive <- function(archive_df, crosswalk, registry, recompute = FALSE) {
+# 2026-11-01, when OPI_District started). Also returns Matched_Posting_ID (the
+# board posting an OPI row is linked to, archived or recomputed). With
+# recompute and `previous` (the previous week's result of this function), OPI
+# postings whose board twin closed stop counting, as in the pipeline
+# (close_opi_lost_twins()); process weeks in order to carry the links.
+opi_rule_for_archive <- function(archive_df, crosswalk, registry, recompute = FALSE, previous = NULL) {
   is_opi <- if ("Posting_Source" %in% names(archive_df)) {
     grepl("^OPI ", archive_df$Posting_Source) | is_opi_statewide_posting(archive_df$url)
   } else {
@@ -396,6 +470,7 @@ opi_rule_for_archive <- function(archive_df, crosswalk, registry, recompute = FA
   is_opi[is.na(is_opi)] <- FALSE
   out <- data.frame(Posting_ID = archive_df$Posting_ID, Is_OPI = is_opi, Counted = TRUE,
                     District = as.character(archive_df$District), stringsAsFactors = FALSE)
+  out$Matched_Posting_ID <- if ("OPI_Matched_Posting_ID" %in% names(archive_df)) as.character(archive_df$OPI_Matched_Posting_ID) else NA_character_
   if ("OPI_Counted" %in% names(archive_df) && !recompute) {
     out$Counted <- !(archive_df$OPI_Counted %in% c(FALSE, "FALSE"))
     return(out)
@@ -415,6 +490,18 @@ opi_rule_for_archive <- function(archive_df, crosswalk, registry, recompute = FA
   out$District[opi_idx[dropped]] <- r$opi_dropped$District[match(opi$Posting_ID[dropped], r$opi_dropped$Posting_ID)]
   kept <- !dropped
   out$District[opi_idx[kept]] <- r$opi_keep$District[match(opi$Posting_ID[kept], r$opi_keep$Posting_ID)]
+  board_ids <- r$direct_df$Posting_ID[match(r$opi_dropped$.opi_matched_row, r$direct_df$.board_row, incomparables = NA)]
+  out$Matched_Posting_ID <- NA_character_
+  out$Matched_Posting_ID[opi_idx[dropped]] <- board_ids[match(opi$Posting_ID[dropped], r$opi_dropped$Posting_ID)]
+  if (!is.null(previous)) {
+    cur <- data.frame(Posting_ID = out$Posting_ID, Posting_Source = ifelse(is_opi, "OPI Jobs for Teachers (statewide)", "board"),
+                      url = as.character(archive_df$url), District = canonicalize_k12_district(out$District), OPI_Counted = out$Counted,
+                      OPI_Drop_Reason = NA_character_, OPI_Matched_Posting_ID = out$Matched_Posting_ID, stringsAsFactors = FALSE)
+    cur <- close_opi_lost_twins(cur, data.frame(Posting_ID = previous$Posting_ID,
+                                                OPI_Matched_Posting_ID = previous$Matched_Posting_ID, stringsAsFactors = FALSE))
+    out$Counted <- cur$OPI_Counted
+    out$Matched_Posting_ID <- cur$OPI_Matched_Posting_ID
+  }
   out
 }
 

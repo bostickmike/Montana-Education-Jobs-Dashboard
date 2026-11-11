@@ -308,3 +308,72 @@ test_that("a geocoder failure keeps last run's surrounding-district rate and is 
   expect_equal(rows$Child_Poverty_Basis, "Surrounding district: Havre Public Schools")
   expect_equal(attr(rows, "geocode_failed"), "St Jude Thaddeus School")
 })
+
+# close_opi_lost_twins() (Mike, 2026-11-10: an OPI posting is open while a
+# candidate can apply; every OPI apply route goes through the district, so a
+# job the district took off its own board is closed). Edge cases on small
+# frames, then the real 11-03 -> 11-10 archives: the five postings checked
+# live that day (claude-notes/2026-11-10_opi-matcher-11-10-check.md).
+twin_frame <- function(id, src, district, counted = TRUE, link = NA_character_) {
+  data.frame(Posting_ID = id, Posting_Source = src, url = ifelse(grepl("^OPI", src), OPI_STATEWIDE_BOARD_URL, "https://example.org/x"),
+             District = district, OPI_Counted = counted, OPI_Drop_Reason = NA_character_, OPI_Matched_Posting_ID = link,
+             stringsAsFactors = FALSE)
+}
+opi_src <- "OPI Jobs for Teachers (statewide)"
+
+test_that("an OPI posting whose earlier board twin is gone stops counting, and keeps its link", {
+  prev <- twin_frame(c("o1", "b1"), c(opi_src, "AppliTrack"), "D", c(FALSE, TRUE), c("b1", NA))
+  cur <- twin_frame(c("o1", "b2"), c(opi_src, "AppliTrack"), "D")
+  out <- close_opi_lost_twins(cur, prev)
+  expect_equal(out$OPI_Counted, c(FALSE, TRUE))
+  expect_equal(out$OPI_Drop_Reason[1], OPI_TWIN_CLOSED_REASON)
+  expect_equal(out$OPI_Matched_Posting_ID[1], "b1")
+  expect_equal(attr(out, "opi_twins_closed"), 1)
+  # next week: the carried link keeps it closed while b1 stays gone
+  again <- close_opi_lost_twins(twin_frame(c("o1", "b2"), c(opi_src, "AppliTrack"), "D"), out)
+  expect_false(again$OPI_Counted[1])
+})
+
+test_that("no evidence, no closing: twin still listed, board empty or failed, no earlier link", {
+  prev <- twin_frame(c("o1", "b1"), c(opi_src, "AppliTrack"), "D", c(FALSE, TRUE), c("b1", NA))
+  # twin still on the board (the matcher missed it this week): not closed here
+  still <- close_opi_lost_twins(twin_frame(c("o1", "b1"), c(opi_src, "AppliTrack"), "D"), prev)
+  expect_true(still$OPI_Counted[1])
+  # the district's board returned nothing this run: not evidence the job closed
+  empty <- close_opi_lost_twins(twin_frame(c("o1", "x9"), c(opi_src, "AppliTrack"), c("D", "Other District")), prev)
+  expect_true(empty$OPI_Counted[1])
+  # never matched before
+  fresh <- close_opi_lost_twins(twin_frame(c("o2", "b2"), c(opi_src, "AppliTrack"), "D"), prev)
+  expect_true(fresh$OPI_Counted[1])
+  # no previous archive, or one without the column
+  expect_identical(close_opi_lost_twins(fresh, NULL), fresh)
+  expect_identical(close_opi_lost_twins(fresh, prev[, c("Posting_ID", "District")]), fresh)
+})
+
+test_that("attach_opi_matched_ids gives each matched OPI row its board posting's Posting_ID", {
+  df <- data.frame(Posting_ID = c("b1", "b2", "o1", "o2"), .board_row = c(1L, 2L, NA, NA), .opi_matched_row = c(NA, NA, 2L, NA))
+  out <- attach_opi_matched_ids(df)
+  expect_equal(out$OPI_Matched_Posting_ID, c(NA, NA, "b2", NA))
+  expect_false(any(c(".board_row", ".opi_matched_row") %in% names(out)))
+})
+
+test_that("replayed on the real 11-03 and 11-10 archives, the five postings checked live close, and only they", {
+  xw <- read.csv(here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  prev <- read.csv(here::here("Archivek12_Data", "combined_2026-11-03.csv"), colClasses = "character")
+  cur <- read.csv(here::here("Archivek12_Data", "combined_2026-11-10.csv"), colClasses = "character")
+  prev$OPI_Matched_Posting_ID <- opi_matched_board_ids(prev, xw, reg)
+  cur$OPI_Matched_Posting_ID <- opi_matched_board_ids(cur, xw, reg)
+  cur$OPI_Counted <- cur$OPI_Counted == "TRUE"
+  out <- close_opi_lost_twins(cur, prev)
+  closed <- out[out$OPI_Drop_Reason %in% OPI_TWIN_CLOSED_REASON, ]
+  expect_setequal(closed$District, c("Stevensville Public Schools", "Glendive Public Schools", "Manhattan School District",
+                                     "Whitefish School District", "Lolo School District 7"))
+  expect_equal(nrow(closed), 5)
+  # the history path (opi_rule_for_archive with the previous week) agrees
+  add_id <- function(x) x   # archives already carry Posting_ID
+  r_prev <- opi_rule_for_archive(add_id(prev), xw, reg, recompute = TRUE)
+  r_cur <- opi_rule_for_archive(add_id(cur), xw, reg, recompute = TRUE, previous = r_prev)
+  r_cur_alone <- opi_rule_for_archive(add_id(cur), xw, reg, recompute = TRUE)
+  expect_equal(sum(r_cur_alone$Counted) - sum(r_cur$Counted), 5)
+})

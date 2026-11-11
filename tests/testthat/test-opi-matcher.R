@@ -72,3 +72,12 @@ test_that("a district job code quoted on OPI matches the Tyler posting that carr
   expect_equal(board$title[m], "LONG TERM SUBSTITUTE - ELEMENTARY")
   expect_match(board$Job_Code[m], "^JP054494")
 })
+
+test_that("a phrase with no grade level takes it from OPI's school field (Manhattan, 2026-11-10)", {
+  desc <- "MANHATTAN PUBLIC SCHOOLS VACANCY ANNOUNCEMENT JOB TITLE: Specialized Paraprofessional - ASL Fluent Intervener COMPENSATION: $26.85 hourly. Will work with special education students."
+  s <- function(board, school) opi_match_score("Paraprofessional - Special Education", opi_job_phrase(desc, "Paraprofessional - Special Education"),
+                                               desc, school, board, "Manhattan")
+  expect_equal(s("SPED Paraprofessional MS- Part-Time", "Manhattan Elem"), -Inf)        # elementary job, middle-school posting
+  expect_gt(s("SPED Paraprofessional", "Manhattan Elem"), -Inf)                         # a posting naming no level still matches
+  expect_gt(s("SPED Paraprofessional MS- Part-Time", "District Wide"), -Inf)            # no level anywhere: unchanged
+})

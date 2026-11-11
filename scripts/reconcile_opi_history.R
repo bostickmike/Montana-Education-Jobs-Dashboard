@@ -55,14 +55,19 @@ is_opi_row <- function(df) {
 
 # ---- each archived week under the current rule ----
 files <- list.files("Archivek12_Data", pattern = "^combined_.*\\.csv$", full.names = TRUE)
-weeks <- lapply(files, function(f) {
-  w <- read_archive_week(f)
-  rule <- opi_rule_for_archive(w, crosswalk, registry, recompute = TRUE)
+# In date order, each week's rule result passed to the next: an OPI posting
+# whose board twin closed since the previous week stops counting
+# (close_opi_lost_twins(), as in the pipeline from 2026-11-17).
+weeks <- vector("list", length(files)); previous <- NULL
+for (i in seq_along(files)) {
+  w <- read_archive_week(files[i])
+  rule <- opi_rule_for_archive(w, crosswalk, registry, recompute = TRUE, previous = previous)
+  previous <- rule
   w$Is_OPI <- rule$Is_OPI
   w$Counted <- rule$Counted
   w$District <- canonicalize_k12_district(rule$District)
-  w[w$Counted & !is_placeholder_posting(w$title), , drop = FALSE]
-})
+  weeks[[i]] <- w[w$Counted & !is_placeholder_posting(w$title), , drop = FALSE]
+}
 names(weeks) <- vapply(weeks, function(w) w$Archive_Date[1], character(1))
 
 totals <- bind_rows(lapply(weeks, function(w) w %>% group_by(District, Archive_Date) %>%
