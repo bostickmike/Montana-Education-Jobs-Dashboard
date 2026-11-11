@@ -143,7 +143,7 @@ test_that("HE start is the earliest posted date shown, and shared titles count o
 })
 
 test_that("a posting's own page confirms or overrules its ending, and dates it by a stated closing date", {
-  source(here::here("posting_status.R"))
+  library(edjobs)
   at <- function(id) paste0("https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=", id)
   p <- rbind(ps_row("2026-10-27", "url-1", "Cook", method = "Stable per-posting URL", url = at(1), posted = "2026-10-01"),
              ps_row("2026-10-27", "url-2", "Aide", method = "Stable per-posting URL", url = at(2), posted = "2026-10-01"),

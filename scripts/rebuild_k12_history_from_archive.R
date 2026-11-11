@@ -101,7 +101,7 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
 if (sys.nframe() == 0) {
   source("k12_he_classification.R")
   source("opi_reconcile.R")
-  source("bls_oews_scraper.R")
+  library(edjobs)
   source("history_accumulator.R")
   result <- rebuild_k12_history_from_archive()
 

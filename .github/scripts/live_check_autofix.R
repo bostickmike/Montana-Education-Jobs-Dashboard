@@ -12,7 +12,7 @@
 suppressMessages({
   library(httr2); library(rvest); library(dplyr); library(chromote)
 })
-source("scrape_helpers.R")
+library(edjobs)
 source("direct_api_scrapers.R")
 source("misc_district_scrapers.R")
 source("misc_college_scrapers.R")

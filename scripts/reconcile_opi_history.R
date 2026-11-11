@@ -31,7 +31,7 @@
 suppressMessages(library(dplyr))
 source("k12_he_classification.R")
 source("opi_reconcile.R")
-source("bls_oews_scraper.R")
+library(edjobs)
 
 dry_run <- "--dry-run" %in% commandArgs(trailingOnly = TRUE)
 app <- "Mt_Ed_Jobs"

@@ -18,7 +18,7 @@ suppressPackageStartupMessages({ library(dplyr); library(readxl) })
 source("k12_he_classification.R")
 source("opi_reconcile.R")
 source("posting_spells.R")
-source("posting_status.R")
+library(edjobs)
 
 crosswalk <- read.csv(file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE,
                       colClasses = c(LEAID = "character"))
