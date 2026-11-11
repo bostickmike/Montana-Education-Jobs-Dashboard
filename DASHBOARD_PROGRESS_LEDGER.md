@@ -741,6 +741,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     schools; toolkit `reference_audit.R` check 2b (9a2ef47) flags two districts within 300 m. Also
     `scripts/reconcile_opi_history.R` runs again (Role_Hint); do not run it as is: with `recompute = TRUE` it re-decides
     11-03 and 11-10 without the live 60-day rule (+14-15 OPI rows) and would break parity; use the parity rebuild.
+  * [x] Run expectations and the scheduled-run guard (2026-11-10, d1f3879; WY eade3b4; workflow plan
+    `claude-notes/2026-11-10_workflow-review-and-plans.md` items 2.1-2.2, approved by Mike): `run_expectations.csv`
+    (6 rows, from the 11-17 watch-list) is checked by the new non-blocking step `check_run_expectations.R`
+    (`run_expectations.R`, same file in both repos): summary on the run page, failures in the drift issue. On the
+    committed 11-10 data, as of 11-17: 5 pass, 1 fails (6 K-12 posted pays without a unit; 775ff7b should leave at
+    most 1). A `guard` job skips a scheduled run when main already has that day's data commit; checked against
+    history (skips 11-10, runs 11-17). Live run of the step, suite 4,113 (0 failed).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
