@@ -3389,7 +3389,7 @@ combined_all <- bind_rows(direct_df, opi_df) %>%
   ) %>%
   # Detail a board put in the title (a requirement, the pay, "Open Until
   # Filled", a file name) is cut off, and fills Posted Pay where the row has
-  # none (k12_he_classification.R); before the identity, so it's built from
+  # none (edjobs); before the identity, so it's built from
   # the cleaned title.
   move_title_detail() %>%
   add_k12_posting_identity() %>%
@@ -4135,7 +4135,7 @@ hedata <- hedata %>% filter(!is_placeholder_posting(Title)) %>% drop_implausible
 # (ipeds_staff_salaries.csv from the previous run), the labeled fallback for
 # staff postings that state no pay. Added after the raw archive write, so
 # the archive stays as scraped.
-source("ipeds_staff_salaries.R")
+library(edjobs)
 staff_path <- file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv")
 if (file.exists(staff_path)) {
   he_unitids <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"))[, c("Name", "IPEDS_UNITID")]
@@ -4219,7 +4219,7 @@ he_salary <- safe_scrape(
 # IPEDS non-instructional staff pay by category (ipeds_staff_salaries.R), the
 # labeled fallback for HE staff postings that state no pay. The HE munge
 # step reads it on the next run; a failed fetch keeps the existing file.
-source("ipeds_staff_salaries.R")
+library(edjobs)
 local({
   unitids <- na.omit(read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"))$IPEDS_UNITID)
   staff_path <- file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv")

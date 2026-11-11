@@ -4337,7 +4337,7 @@ REDROVER_PLACEHOLDER_TITLES <- c("Classified Application", "Certified Applicatio
 # always block[2] and location always block[4] of each "... APPLY NOW"
 # block. See the section comment above for the block shape and the
 # per-board "posted"-stamp difference this handles.
-# extract_posted_pay() lives in k12_he_classification.R, same guard as
+# extract_posted_pay() is in edjobs, attached by k12_he_classification.R; same guard as
 # direct_api_scrapers.R's.
 if (!exists("extract_posted_pay", mode = "function")) source("k12_he_classification.R")
 
