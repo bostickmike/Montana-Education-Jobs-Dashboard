@@ -748,6 +748,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     committed 11-10 data, as of 11-17: 5 pass, 1 fails (6 K-12 posted pays without a unit; 775ff7b should leave at
     most 1). A `guard` job skips a scheduled run when main already has that day's data commit; checked against
     history (skips 11-10, runs 11-17). Live run of the step, suite 4,113 (0 failed).
+    Review fixes before push (jobs-dashboard reviewer): the committed-file test no longer requires a row's file to
+    exist (WY's posting_status.csv rows would have stopped the 11-13 pre-run suite); the guard fetches main's live tip
+    (a queued run's checkout is main as of its creation: MT 11-10 started at 6f52b4a, 9 s after c2dec92 landed);
+    .xlsx columns are typed like .csv; rows that passed on zero matched rows now count what must be there (6 rows).
+    Suite 4,119 (0 failed).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
