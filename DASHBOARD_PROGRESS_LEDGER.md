@@ -793,7 +793,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
   (run expectations; edjobs 0.0.1). Phase 1 merged 11-11 (edjobs v0.2.0: scrape helpers, posting status, coverage
   calendar, BLS OEWS, BLS QCEW, LLM extraction; MT PR #16, WY PR #8; full rehearsal in both states, WY test dispatch
-  on the branch passed). Next: phase 2 (the classifier, with `ipeds_staff_salaries.R`).
+  on the branch passed). Phase 2 on branch `edjobs-phase2` (11-11, edjobs v0.4.0): the classifier and posted pay, IPEDS staff salaries,
+  41 shared drift/data-quality/auto-fix definitions, `check_file_schema()`, `check_total_matches_parts()`,
+  `rebuild_parity_row()`; this repo keeps its name corrections, posting identity, dispatch, baselines and schemas.
+  Suites on 0.4.0: MT 3,555 passed, 0 failed; full rehearsal passed every step, rebuild parity 9/9
+  (`claude-notes/2026-11-11_rehearsal-mt-edjobs-phase2.log`). Next: phase 3, the shared platform scrapers, with the
+  Claude auto-fix able to open its PR on edjobs (Mike, 11-11).
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.

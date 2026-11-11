@@ -15,6 +15,10 @@
 # snapshots are still written every run as the durable source of truth /
 # disaster-recovery path -- they're just not read back every run.
 
+# check_total_matches_parts() and rebuild_parity_row() moved to the edjobs package in phase 2 (2026-11-11); attached here so
+# every script that sources this file still has them.
+suppressMessages(library(edjobs))
+
 suppressMessages(library(dplyr))
 
 # Appends new_rows (expected to be exactly one Archive_Date's worth of
@@ -73,34 +77,6 @@ append_weekly_rows <- function(existing_path, new_rows, date_col = "Archive_Date
   dplyr::bind_rows(existing, new_rows[names(existing)])
 }
 
-# Consistency check for the incremental-append mechanism itself -- verifies
-# this week's freshly computed "Total" rows actually equal the sum of this
-# week's own per-district/per-institution "parts" rows, run proactively
-# BEFORE anything is written to the growing accumulated history. A mismatch
-# means a bug in this week's summary computation -- stop() rather than
-# silently appending a corrupted week onto otherwise-good history.
-check_total_matches_parts <- function(total_rows, part_rows, group_cols, value_col = "sum") {
-  parts_agg <- part_rows %>%
-    dplyr::group_by(dplyr::across(dplyr::all_of(group_cols))) %>%
-    dplyr::summarize(parts_sum = sum(.data[[value_col]]), .groups = "drop")
-
-  merged <- total_rows %>%
-    dplyr::select(dplyr::all_of(group_cols), total_value = dplyr::all_of(value_col)) %>%
-    dplyr::full_join(parts_agg, by = group_cols)
-
-  mismatches <- merged %>%
-    dplyr::filter(is.na(total_value) | is.na(parts_sum) | total_value != parts_sum)
-
-  if (nrow(mismatches) > 0) {
-    stop(
-      "check_total_matches_parts(): this week's Total row(s) don't equal the sum of their ",
-      "own parts -- a bug in this week's summary computation, not a data-source problem. ",
-      "Refusing to append a corrupted week onto the accumulated history.\n",
-      paste(utils::capture.output(print(mismatches)), collapse = "\n")
-    )
-  }
-  invisible(TRUE)
-}
 
 # ---------------------------------------------------------------------------
 # The K-12 derived rows, built one way for the weekly pipeline
@@ -154,35 +130,3 @@ build_k12_teacher_rows <- function(combinedclean) {
            any_of("Role_Hint"))
 }
 
-# Rebuild parity (classification safeguards, item 12): how one rebuilt file
-# differs from the committed one, ignoring row order, NA vs "" and \r\n vs \n (CSV
-# round-trips blur them). Both sides compared as text. Returns one row:
-# File, Committed_Rows, Rebuilt_Rows, Missing_Cols (in committed, not rebuilt),
-# Extra_Cols, Only_Committed / Only_Rebuilt (row counts on the shared columns)
-# and Example (one differing row from each side).
-rebuild_parity_row <- function(file, committed, rebuilt) {
-  as_text <- function(d) {
-    d <- as.data.frame(d, stringsAsFactors = FALSE)
-    d[] <- lapply(d, function(x) {
-      x <- gsub("\r\n", "\n", as.character(x), fixed = TRUE)   # read.csv() turns a quoted \r\n into \n
-      x[is.na(x) | x == ""] <- "<NA>"
-      x
-    })
-    d
-  }
-  committed <- as_text(committed); rebuilt <- as_text(rebuilt)
-  common <- intersect(names(committed), names(rebuilt))
-  key <- function(d) if (length(common)) do.call(paste, c(unname(d[common]), sep = " | ")) else character(nrow(d))
-  a <- key(committed); b <- key(rebuilt)
-  # Multiset difference: a row twice in one file and once in the other differs.
-  tab <- function(x) table(factor(x, levels = unique(c(a, b))))
-  diff_count <- tab(a) - tab(b)
-  only_c <- names(diff_count)[diff_count > 0]; only_r <- names(diff_count)[diff_count < 0]
-  data.frame(File = file, Committed_Rows = nrow(committed), Rebuilt_Rows = nrow(rebuilt),
-             Missing_Cols = paste(setdiff(names(committed), names(rebuilt)), collapse = ", "),
-             Extra_Cols = paste(setdiff(names(rebuilt), names(committed)), collapse = ", "),
-             Only_Committed = sum(diff_count[diff_count > 0]), Only_Rebuilt = -sum(diff_count[diff_count < 0]),
-             Example = paste(c(if (length(only_c)) paste("committed:", only_c[1]), if (length(only_r)) paste("rebuilt:", only_r[1])),
-                             collapse = " // "),
-             stringsAsFactors = FALSE)
-}
