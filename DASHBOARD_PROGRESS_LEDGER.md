@@ -753,6 +753,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (a queued run's checkout is main as of its creation: MT 11-10 started at 6f52b4a, 9 s after c2dec92 landed);
     .xlsx columns are typed like .csv; rows that passed on zero matched rows now count what must be there (6 rows).
     Suite 4,119 (0 failed).
+  * [x] OPI matcher on the 11-10 run, and two rule changes (2026-11-10, 0911e70; `claude-notes/2026-11-10_opi-matcher-11-10-check.md`):
+    345 of the 11-10 run's 354 OPI postings were already judged on 11-03; of the 17 new decisions, 11 right, 1 doubtful
+    (Anaconda), 5 whose board twin had gone. A sample of 12 drops: 10 right, 1 wrong (Manhattan's ASL intervener), 1
+    unsure. Mike's rule (open = a candidate can apply): all 5 lost twins still on OPI, every apply route through the
+    district, none on its board (read live), so closed. `close_opi_lost_twins()` stops counting an OPI posting whose
+    earlier twin is gone from a board that returned postings (`OPI_Matched_Posting_ID` new in the raw archive; history
+    not restated, from 11-17). Matcher: no level in the job phrase -> OPI's school field ("Manhattan Elem"); answer key
+    unchanged, one decision per week changes (Manhattan). Full rehearsal (`claude-notes/2026-11-10_rehearsal-mt-opi-twins.log`):
+    all steps passed, 228 sources ok, 0 errors, the 5 closed, rebuild parity all 9 files, post-run suite 4,139.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
@@ -774,8 +783,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   04-07 to 08-25). Not worked around on purpose: user agents, proxies or other routes past the block circumvent the
   site's bot protection. Running it from the Mac: built and withdrawn the same day (Mike: no jobs on his computer).
   Left: ask the district / its web host to let the weekly request through, or retire the source and say so.
-- [ ] OPI matcher against the 2026-11-10 run's fresh OPI data: sample matched/unmatched, extend the answer key
-  (`tests/testthat/fixtures/opi_match_labels_2026-11-03.csv`; notes in `claude-notes/2026-11-03_posting-level-dedup.md`).
+- [ ] OPI answer key: add the 2026-11-10 cases as a `week1110` set (Anaconda's doubtful match, Manhattan's ASL intervener,
+  the 9 new postings, the 3 new matches; `claude-notes/2026-11-10_opi-matcher-11-10-check.md`). Anaconda (OPI SPED at
+  Lincoln School, July, matched to a Fred Moodry posting from 11-04) is still matched: decide its label first.
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
   still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
