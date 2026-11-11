@@ -1,0 +1,7 @@
+"id","applies_from","expires","file","filter","measure","min","max","note"
+"dots_apart","2026-11-17","2026-12-01","Mt_Ed_Jobs/salarymap2.csv","District %in% c(""Deer Park School District"", ""Swan River School District #4"", ""Bigfork School District 38"")","nrow(unique(d[c(""Latitude"", ""Longitude"")]))","3","3","Deer Park, Swan River and Bigfork dots apart on the map (775ff7b)"
+"no_busby_weekly_total","2026-11-17","2026-12-01","Mt_Ed_Jobs/k12_district_weekly_totals.csv","Archive_Date == max(Archive_Date) & grepl(""Busby"", District)","","","0","OPI place names like Busby not in the new weekly totals (OPI_LEGACY_LOCATIONS, 775ff7b)"
+"no_hex_entities_k12","2026-11-17","2027-01-15","Mt_Ed_Jobs/combinedclean.csv","","sum(grepl(""&#x"", title, fixed = TRUE))","","0","no hex HTML entities in K-12 titles"
+"no_hex_entities_he","2026-11-17","2027-01-15","Mt_Ed_Jobs/hedata.xlsx","","sum(grepl(""&#x"", Title, fixed = TRUE))","","0","no hex HTML entities in HE titles"
+"k12_pay_has_unit","2026-11-17","2027-01-15","Mt_Ed_Jobs/combinedclean.csv","","sum(!is.na(Pay_Min) & is.na(Pay_Unit))","","1","no posted pay without a unit except a rare one (Browning bus driver is the known case; 775ff7b)"
+"he_pay_has_unit","2026-11-17","2027-01-15","Mt_Ed_Jobs/hedata.xlsx","","sum(!is.na(Pay_Min) & is.na(Pay_Unit))","","1","no HE posted pay without a unit except a rare one (775ff7b)"
