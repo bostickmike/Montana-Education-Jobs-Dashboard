@@ -207,7 +207,7 @@ combineddata$District <- relabel_employer(combineddata$District)
 # pipeline captured pay) -- padded here rather than in validate_and_pad_schema(),
 # which would flag their absence as a schema problem on the Home tab.
 # The BLS estimate columns (Est_*) are optional the same way.
-for (col in c("OPI_District", "Also_On_OPI", "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
+for (col in c("Feed_District", "Also_On_Feed", "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
               "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")) {
   if (!col %in% names(combineddata)) combineddata[[col]] <- NA
 }
@@ -219,9 +219,9 @@ combineddata <- combineddata %>%
   mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit),
          `Typical pay (BLS est.)` = format_bls_estimate(Est_Pay, Est_Pay_Unit, Est_Occupation, Est_Area, !is.na(Pay_Min))) %>%
   select(District, title, position, location, `Posted Pay`, `Typical pay (BLS est.)`, date_posted, url,
-         Posting_Source, Posting_Identity_Method, Posting_ID, Also_On_OPI, Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit) %>%
+         Posting_Source, Posting_Identity_Method, Posting_ID, Also_On_Feed, Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit) %>%
   # A direct posting OPI also lists (counted once, from our scrape).
-  mutate(Posting_Source = ifelse(Also_On_OPI %in% c(TRUE, "TRUE"), paste0(Posting_Source, " \u00b7 also on OPI"), Posting_Source)) %>%
+  mutate(Posting_Source = ifelse(Also_On_Feed %in% c(TRUE, "TRUE"), paste0(Posting_Source, " \u00b7 also on OPI"), Posting_Source)) %>%
   distinct(Posting_ID, .keep_all = TRUE) %>%
   mutate(District = str_squish(as.character(District))) %>%
   mutate(date_posted = format_posted_or_listed_date(date_posted)) %>%

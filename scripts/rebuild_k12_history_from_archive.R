@@ -58,7 +58,7 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
                          colClasses = c(Area_Code = "character", SOC = "character", Year = "character"))
   district_county <- registry[, c("District", "County")]
   opi_counties <- read.csv(file.path(reference_dir, "opi_district_counties.csv"), stringsAsFactors = FALSE)
-  combinedclean <- build_k12_combinedclean(counted, oews_wages, district_county, opi_counties, "MT")
+  combinedclean <- mt_k12_combinedclean(counted, oews_wages, district_county, opi_counties)
   k12jobs <- build_k12_teacher_rows(combinedclean)
 
   k12_district_weekly_totals <- combinedclean %>%

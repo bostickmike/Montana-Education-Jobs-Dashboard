@@ -3468,10 +3468,10 @@ opi_counties <- read.csv(opi_counties_path, stringsAsFactors = FALSE)
 # the BLS regional median for the posting's role, matched to its district's
 # county: the registry's, else (OPI rows) the county of the district its
 # detail page names; statewide where neither is known.
-# build_k12_combinedclean() (history_accumulator.R) is shared with
+# mt_k12_combinedclean() (history_accumulator.R; edjobs::build_k12_combinedclean()) is shared with
 # scripts/rebuild_k12_history_from_archive.R, so a rebuild reproduces this.
 source("history_accumulator.R")
-combinedclean <- build_k12_combinedclean(combined, oews_wages, district_county, opi_counties, "MT")
+combinedclean <- mt_k12_combinedclean(combined, oews_wages, district_county, opi_counties)
 
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 write.csv(combinedclean, file = file.path("Mt_Ed_Jobs", "combinedclean.csv"), row.names = FALSE)

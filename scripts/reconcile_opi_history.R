@@ -126,14 +126,16 @@ opi_rows <- attach_oews_estimates(opi_rows, oews,
                                   dplyr::coalesce(registry$County[match(opi_rows$District, registry$District)],
                                                   opi_counties$County[match(opi_rows$OPI_District, opi_counties$OPI_District)]), "MT")
 cc_direct <- cc[!is_opi_row(cc), , drop = FALSE]
-cc_direct$Also_On_OPI <- cc_direct$Posting_ID %in% also
+cc_direct$Also_On_Feed <- cc_direct$Posting_ID %in% also
+# combinedclean.csv names the feed columns Feed_District / Also_On_Feed (edjobs::K12_POSTING_COLUMNS).
+opi_rows <- dplyr::rename(opi_rows, Feed_District = OPI_District, Also_On_Feed = Also_On_OPI)
 opi_rows <- opi_rows[, intersect(names(cc), names(opi_rows)), drop = FALSE]
 for (col in names(opi_rows)) if (!identical(class(opi_rows[[col]]), class(cc_direct[[col]]))) {
   opi_rows[[col]] <- methods::as(opi_rows[[col]], class(cc_direct[[col]])[1])     # e.g. Est_Year integer vs character
 }
 cc_new <- bind_rows(cc_direct, opi_rows)[, names(cc)]
-cat(sprintf("combinedclean.csv (%s): %d direct rows (%d Also_On_OPI), OPI rows %d -> %d; %d rows\n", wk, nrow(cc_direct),
-            sum(cc_direct$Also_On_OPI), sum(is_opi_row(cc)), nrow(opi_rows), nrow(cc_new)))
+cat(sprintf("combinedclean.csv (%s): %d direct rows (%d Also_On_Feed), OPI rows %d -> %d; %d rows\n", wk, nrow(cc_direct),
+            sum(cc_direct$Also_On_Feed), sum(is_opi_row(cc)), nrow(opi_rows), nrow(cc_new)))
 
 if (dry_run) {
   cat("\n--dry-run: nothing written.\n")

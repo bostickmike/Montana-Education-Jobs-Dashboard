@@ -132,11 +132,7 @@ add_k12_posting_identity <- function(df) {
   df
 }
 
-summarize_k12_posting_counts <- function(k12jobs) {
-  k12jobs %>%
-    group_by(Broad_Category, Archive_Date, District) %>%
-    summarize(sum = n_distinct(Posting_ID), .groups = "drop")
-}
+# summarize_k12_posting_counts() is in edjobs since 0.10.0.
 
 find_k12_new_postings <- function(k12_history) {
   dates <- sort(unique(as.Date(k12_history$Archive_Date)))

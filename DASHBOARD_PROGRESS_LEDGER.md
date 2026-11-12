@@ -829,6 +829,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   Suite on 0.9.0: MT 3,792 passed, 0 failed (3,796 after the rehearsal's run); full rehearsal passed every step,
   rebuild parity 9/9 (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.9.0.log`). Not exercised by a rehearsal:
   `file_autofix_issues.R` and `live_check_autofix.R` (GitHub-only steps); `scripts/repro_scraper.R` was run live.
+  Slice 4 merged 11-12. Slice 5 (edjobs v0.10.0): the accumulated K-12 history comes from the package
+  (`build_k12_combinedclean()`, `build_k12_teacher_rows()`, `append_weekly_rows()`,
+  `summarize_k12_posting_counts()`), with one output schema for every state (`edjobs::K12_POSTING_COLUMNS`).
+  `combinedclean.csv`'s `OPI_District` / `Also_On_OPI` are now `Feed_District` / `Also_On_Feed` (header line only; `app.R`, schema check, dictionary and cookbook follow).
+  Raw rows and the weekly archives keep their column names; posting id values are untouched. Suite on 0.10.0:
+  MT 3,780 passed, 0 failed (3,783 after the rehearsal's run); full rehearsal passed every step, rebuild parity 9/9
+  (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.10.0.log`). Design and open items:
+  `claude-notes/2026-11-12_phase4-k12-output-schema.md`.
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.
