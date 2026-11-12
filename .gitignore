@@ -11,3 +11,4 @@ scrape_log.csv
 # Scratch dir for the Claude auto-fix workflow (issue text, PR body, report)
 .autofix/
 .claude/worktrees/
+.edjobs/
