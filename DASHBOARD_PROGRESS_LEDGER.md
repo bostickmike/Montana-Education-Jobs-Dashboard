@@ -815,6 +815,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   tables, which left the package's `REFERENCE_TABLE_RULES`); OEWS areas are a FIPS-keyed CSV in the package.
   Suite on 0.7.0: MT 3,401 passed, 0 failed; full rehearsal passed every step, rebuild parity 9/9
   (`claude-notes/2026-11-11_rehearsal-mt-edjobs-phase4.log`).
+  Slice 2 merged 11-11 (MT PR #23 -> b0405d6). Slice 3 (edjobs v0.8.0): the drift-check functions MT and WY held
+  differently, except dispatch and the auto-fix issue body, come from the package (`flag_drift`,
+  `build_historical_counts`, the drift report, the live-check summary); `state_config.R` gains the OPI feed's
+  labels and the drift baseline date. `check_drift.R` output on committed data is identical. Suite on 0.8.0:
+  MT 3,387 passed, 0 failed (3,390 after the rehearsal's run); full rehearsal passed every step, rebuild parity 9/9
+  (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.8.0.log`).
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.

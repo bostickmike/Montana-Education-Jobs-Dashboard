@@ -56,8 +56,10 @@ tag_type <- function(df, label) {
   df
 }
 
-flagged_k12 <- tag_type(flag_drift(current_k12, k12_baseline), "K-12")
-flagged_he <- tag_type(flag_drift(current_he, he_baseline), "Higher Ed")
+# min_mean_count = 0: MT flags any source averaging above 0 (WY and the edjobs
+# default skip sources averaging under 3; decision for Mike, claude-notes/2026-11-11_phase4-dispatch-design.md).
+flagged_k12 <- tag_type(flag_drift(current_k12, k12_baseline, min_mean_count = 0), "K-12")
+flagged_he <- tag_type(flag_drift(current_he, he_baseline, min_mean_count = 0), "Higher Ed")
 
 flagged <- if (nrow(flagged_k12) == 0 && nrow(flagged_he) == 0) {
   data.frame(name = character(0), mean_count = numeric(0), n_weeks = integer(0), count = numeric(0), type = character(0))

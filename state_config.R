@@ -7,6 +7,12 @@ library(edjobs)
 
 set_state_config(state_config(
   state = "Montana", fips = "30", app_dir = "Mt_Ed_Jobs",
+  feed = list(short_name = "OPI", label = "OPI Jobs for Teachers (statewide)",
+              url = "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx",
+              discrepancy_file = "mt_discrepancy_report.csv"),
+  # The first archive that counts toward the drift check's per-source
+  # baselines: earlier runs predate fixes that changed the counts.
+  drift_baseline_from = "2026-08-06",
   # MT's own reference tables (the shared ones are edjobs::REFERENCE_TABLE_RULES).
   reference_tables = list(
     opi_district_counties = list(name = "OPI district counties", required = c("OPI_District", "County"),
