@@ -50,8 +50,7 @@ safety_net_summary <- summarize_central_safety_net(
   discrepancy_path = "mt_discrepancy_report.csv"
 )
 
-# Montana's own two registries already have a real Job_Link per source --
-# unlike Wyoming, there's no separate misc-district registry to fold in.
+# Both registries' Job_Link per source, plus the OPI feed's page (state_config.R).
 url_lookup <- build_source_url_lookup()
 
 b <- NULL
