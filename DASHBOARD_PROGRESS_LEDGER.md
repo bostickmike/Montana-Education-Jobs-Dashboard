@@ -810,6 +810,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   pre-existing column of the committed spells is unchanged (2,852 K-12 + 927 HE postings); the files gain the shared
   36-column schema (`POSTING_SPELL_COLUMNS`, `Is_OPI` renamed `Is_Feed`). Suite on 0.6.0: MT 3,396 passed, 0 failed.
   MT's five remaining rule differences, measured: `claude-notes/2026-11-11_spells-convergence.md` (decision for Mike).
+  Phase 4 slice 1 merged 11-11 (MT PR #22 -> 02c1e45). Slice 2 on branch `edjobs-phase4-state-config` (edjobs
+  v0.7.0): `state_config.R` sets `edjobs::state_config()` (name, FIPS, app folder, this state's own reference
+  tables, which left the package's `REFERENCE_TABLE_RULES`); OEWS areas are a FIPS-keyed CSV in the package.
+  Suite on 0.7.0: MT 3,401 passed, 0 failed; full rehearsal passed every step, rebuild parity 9/9
+  (`claude-notes/2026-11-11_rehearsal-mt-edjobs-phase4.log`).
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.

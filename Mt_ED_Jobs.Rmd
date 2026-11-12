@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+source("state_config.R")   # edjobs::state_config(): this state, as data
 source("k12_he_classification.R")
 ```
 # Scrapes Montana's K-12 and higher-ed job postings, salary, and staffing data and combines them into the datasets
