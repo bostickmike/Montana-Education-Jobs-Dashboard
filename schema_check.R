@@ -17,7 +17,7 @@ REQUIRED_SCHEMAS <- list(
   # app.R, which shows the column as before without it.
   "posting_first_seen.csv" = c("Segment", "Key", "First_Seen", "Left_Censored"),
   "combinedclean.csv" = c("title", "date_posted", "position", "location", "url", "District",
-                          "Posting_Source", "Posting_Identity_Method", "Posting_ID", "Also_On_OPI", "Close_Date",
+                          "Posting_Source", "Posting_Identity_Method", "Posting_ID", "Also_On_Feed", "Close_Date",
                           "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
                           "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year"),
   "k12jobanalysis.csv" = c("title", "Archive_Date", "location", "District",

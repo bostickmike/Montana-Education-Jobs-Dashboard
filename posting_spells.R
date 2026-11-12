@@ -49,7 +49,7 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
   if (!"OPI_Description" %in% names(d)) d$OPI_Description <- NA_character_
   d %>%
     dplyr::filter(!is_placeholder_posting(title)) %>%
-    # Same bucket as combinedclean.csv: OPI rows' descriptions refine it (build_k12_combinedclean()).
+    # Same bucket as combinedclean.csv: OPI rows' descriptions refine it (edjobs::build_k12_combinedclean()).
     dplyr::mutate(Role_Hint = ifelse(Is_OPI == "TRUE" & !is.na(OPI_Description) & nzchar(OPI_Description),
                                      k12_role_hint(OPI_Description), NA_character_)) %>%
     dplyr::transmute(Run_Date = Archive_Date, Posting_ID, Posting_Identity_Method,
