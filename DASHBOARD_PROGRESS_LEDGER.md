@@ -804,6 +804,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   in `.edjobs/` and opens its PR there. Suite on 0.5.0: MT 3,450 passed, 0 failed; full rehearsal passed every
   step, rebuild parity 9/9 (`claude-notes/2026-11-11_rehearsal-mt-edjobs-phase3.log`). Design rule from 11-11: build
   for N states and one stackable schema (plan section 2a).
+  Phase 4, first slice, on branch `edjobs-phase4-spells` (11-11, edjobs v0.6.0): the posting-spells engine
+  (bridging, endings, starts, flags, durations, first-seen lookup) moved to edjobs; this repo keeps its panels
+  and its rules (`MT_K12_SPELL_RULES / MT_HE_SPELL_RULES` in `posting_spells.R`, a `spell_rules()` object). Rebuilt from the archives, every
+  pre-existing column of the committed spells is unchanged (2,852 K-12 + 927 HE postings); the files gain the shared
+  36-column schema (`POSTING_SPELL_COLUMNS`, `Is_OPI` renamed `Is_Feed`). Suite on 0.6.0: MT 3,396 passed, 0 failed.
+  MT's five remaining rule differences, measured: `claude-notes/2026-11-11_spells-convergence.md` (decision for Mike).
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.
