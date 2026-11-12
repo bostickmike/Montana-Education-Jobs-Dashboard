@@ -1,7 +1,8 @@
 #!/usr/bin/env Rscript
 # scripts/build_posting_spells.R
 #
-# Rebuilds the posting-level spells (posting_spells.R) from the raw archives,
+# Rebuilds the posting-level spells (edjobs::build_posting_spells() over the
+# panels in posting_spells.R, under MT_K12_SPELL_RULES / MT_HE_SPELL_RULES) from the raw archives,
 # coverage_calendar.csv and schoolspring_endings.csv, and writes
 #   posting_spells_k12.csv     one row per K-12 posting: start, end, how it ended
 #   posting_durations_k12.csv  Kaplan-Meier median days listed, all and by
@@ -18,7 +19,6 @@ suppressPackageStartupMessages({ library(dplyr); library(readxl) })
 source("k12_he_classification.R")
 source("opi_reconcile.R")
 source("posting_spells.R")
-library(edjobs)
 
 crosswalk <- read.csv(file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE,
                       colClasses = c(LEAID = "character"))
@@ -27,8 +27,8 @@ calendar <- if (file.exists("coverage_calendar.csv")) read.csv("coverage_calenda
 endings <- if (file.exists("schoolspring_endings.csv")) read.csv("schoolspring_endings.csv", colClasses = "character") else NULL
 statuses <- if (file.exists("posting_status.csv")) read.csv("posting_status.csv", colClasses = "character") else NULL
 
-panel <- bridge_posting_ids(k12_posting_panel("Archivek12_Data", crosswalk, registry))
-spells <- build_posting_spells(panel, calendar, endings, statuses = statuses)
+panel <- bridge_posting_ids(k12_posting_panel("Archivek12_Data", crosswalk, registry), MT_K12_SPELL_RULES)
+spells <- build_posting_spells(panel, calendar, endings, statuses = statuses, rules = MT_K12_SPELL_RULES)
 durations <- bind_rows(summarize_posting_durations(spells),
                        summarize_posting_durations(spells, "Position")) %>%
   mutate(As_Of = max(spells$Last_Seen))
@@ -41,8 +41,8 @@ cat("posting_spells_k12.csv:", nrow(spells), "postings,", sum(spells$In_Duration
 
 # Higher ed: each institution is its own source in the calendar's HE rows.
 he_calendar <- if (is.null(calendar)) NULL else calendar[calendar$Segment == "HE", , drop = FALSE]
-he_panel <- use_earliest_posted_date(bridge_posting_ids(he_posting_panel("Archived_HE_Data")))
-he_spells <- build_posting_spells(he_panel, he_calendar, shared_titles = "fallback only", statuses = statuses)
+he_panel <- use_earliest_posted_date(bridge_posting_ids(he_posting_panel("Archived_HE_Data"), MT_HE_SPELL_RULES))
+he_spells <- build_posting_spells(he_panel, he_calendar, statuses = statuses, rules = MT_HE_SPELL_RULES)
 he_durations <- bind_rows(summarize_posting_durations(he_spells),
                           summarize_posting_durations(he_spells[he_spells$District != "Montana State University", ]) %>%
                             mutate(Group = "All except Montana State University"),
@@ -51,7 +51,7 @@ he_durations <- bind_rows(summarize_posting_durations(he_spells),
   mutate(As_Of = max(he_spells$Last_Seen))
 write.csv(he_spells, "posting_spells_he.csv", row.names = FALSE)
 # "Posted / listed" falls back to the first run that found a posting when its
-# board gives no date (first_seen_lookup(), posting_spells.R).
+# board gives no date (edjobs::first_seen_lookup()).
 first_seen <- rbind(first_seen_lookup(panel, spells, "K-12"), first_seen_lookup(he_panel, he_spells, "HE"))
 write.csv(first_seen, file.path("Mt_Ed_Jobs", "posting_first_seen.csv"), row.names = FALSE)
 cat("Mt_Ed_Jobs/posting_first_seen.csv:", nrow(first_seen), "current postings\n")
