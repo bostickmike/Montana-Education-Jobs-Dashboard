@@ -46,11 +46,7 @@ if (is.na(source_name)) {
   quit(status = 0)
 }
 
-k12 <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
-he <- read.csv("he_institution_registry.csv", stringsAsFactors = FALSE)
-registry_row <- if (source_name %in% k12$District) k12[k12$District == source_name, ][1, ] else
-                if (source_name %in% he$Institution) he[he$Institution == source_name, ][1, ] else NULL
-call <- if (is.null(registry_row)) NULL else resolve_scraper_call(registry_row)
+call <- resolve_scraper_call(source_name)
 
 if (is.null(call)) {
   writeLines(c(sprintf("### Live scraper check: %s", source_name), "",

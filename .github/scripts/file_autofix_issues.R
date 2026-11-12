@@ -169,12 +169,6 @@ maybe_escalate <- function(number, created_at, src) {
                               "handed to Claude (", AUTOFIX_CLAUDE_WORKFLOW, "), once. ", AUTOFIX_ESCALATION_MARKER))
   }
 }
-he <- read.csv("he_institution_registry.csv", stringsAsFactors = FALSE)
-registry_row_for <- function(name) {
-  if (name %in% k12$District) return(k12[k12$District == name, ][1, ])
-  if (name %in% he$Institution) return(he[he$Institution == name, ][1, ])
-  NULL
-}
 
 # ---- new / still-flagged sources ------------------------------------------
 created <- 0
@@ -195,13 +189,12 @@ for (i in seq_len(nrow(eligible))) {
     next
   }
 
-  reg_row <- registry_row_for(row$name)
-  call <- if (is.null(reg_row)) NULL else resolve_scraper_call(reg_row)
+  call <- resolve_scraper_call(row$name)
   page_text <- if ("page_text" %in% names(row)) row$page_text else NA_character_
-  evidence <- tryCatch(gather_autofix_evidence(call, page_text),
+  evidence <- tryCatch(gather_autofix_evidence(call, row$name, page_text),
                        error = function(e) { cat("  Couldn't gather evidence:", conditionMessage(e), "\n"); NULL })
   body_file <- tempfile(fileext = ".md")
-  writeLines(build_autofix_issue_body(row, reg_row, run_url, evidence), body_file, useBytes = TRUE)
+  writeLines(build_autofix_issue_body(row, call, run_url, evidence), body_file, useBytes = TRUE)
   made <- gh(c("issue", "create", "--title", autofix_issue_title(row$name),
                "--label", AUTOFIX_LABEL, "--body-file", body_file))
   if (!made$ok) { cat("Failed to create issue for", row$name, ":", made$out, "\n"); next }

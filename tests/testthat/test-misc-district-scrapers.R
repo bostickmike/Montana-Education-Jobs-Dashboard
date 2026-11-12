@@ -4794,9 +4794,7 @@ test_that("the CJI openings PDF link is read from the rendered employment page",
   expect_equal(find_cji_positions_link(links), "https://aptg.co/YnhnDQ")
   expect_true(is.na(find_cji_positions_link(links[1:3, ])))
   # The live check runs it with a browser session.
-  call <- resolve_scraper_call(data.frame(District = "Chester-Joplin-Inverness Public Schools",
-                                          Platform = "CJIHeuristic",
-                                          Job_Link = "https://www.cji.k12.mt.us/page/employmentcji"))
+  call <- resolve_scraper_call("Chester-Joplin-Inverness Public Schools")
   expect_equal(call$fn, "fetch_cji_postings")
   expect_true(call$session)
 })
