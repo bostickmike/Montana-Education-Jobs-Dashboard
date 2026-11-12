@@ -135,7 +135,7 @@ plausibility_lines <- if (length(plausibility_flags) == 0) {
 # (write_reference_file()), so without this a broken download would only
 # show up as an ever-older file. See reference_table_status().
 # --------------------------------------------------------------------------
-library(edjobs)
+source("state_config.R")   # the state's own reference tables (reference_table_rules())
 scrape_log <- if (file.exists("scrape_log.csv")) read.csv("scrape_log.csv", stringsAsFactors = FALSE) else
   data.frame(timestamp = character(0), source = character(0), status = character(0), error_message = character(0))
 reference_flags <- reference_table_status("Mt_Ed_Jobs", scrape_log)

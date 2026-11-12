@@ -5,6 +5,7 @@
 # helper-setup.R.
 suppressMessages(library(here))
 suppressMessages(library(dplyr))
+source(here::here("state_config.R"))
 source(here::here("k12_he_classification.R"))
 library(edjobs)
 source(here::here("direct_api_scrapers.R"))
