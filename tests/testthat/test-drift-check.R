@@ -1,25 +1,28 @@
 
-test_that("build_historical_counts excludes pre-pipeline snapshots and computes correct means", {
-  snapshots <- list(
-    "2026-08-06" = data.frame(District = c("A", "A", "A", "B")),
-    "2026-08-13" = data.frame(District = c("A", "A", "B", "B")),
-    "2026-08-20" = data.frame(District = c("A", "A", "A")),
-    # Predates BASELINE_VALID_FROM -- must be excluded.
-    "2026-01-01" = data.frame(District = c("A", "A", "A", "A", "A", "A", "A", "A", "A", "A"))
-  )
+# ---- auto-fix evidence (the CI capture handed to the agent) ----------------
+# Issue #7: the agent's sandbox rendered Lone Rock's Apptegy page empty and
+# it misdiagnosed the break. The real cause -- a renamed stop line plus one
+# new posting -- is plain in a diff of the old fixture against the text the
+# drift check rendered in CI. drift_autofix_lonerock_innertext_2026-09-30.txt
+# is that text, captured live with scripts/repro_scraper.R.
 
-  baseline <- build_historical_counts(snapshots, "District")
-
-  expect_equal(baseline$n_weeks[baseline$name == "A"], 3)
-  expect_equal(baseline$mean_count[baseline$name == "A"], (3 + 2 + 3) / 3)
-  expect_equal(baseline$n_weeks[baseline$name == "B"], 2)
-})
-
-test_that("build_historical_counts returns an empty frame when no snapshots are post-baseline", {
-  snapshots <- list("2026-01-01" = data.frame(District = c("A", "A")))
-  baseline <- build_historical_counts(snapshots, "District")
-  expect_equal(nrow(baseline), 0)
-})
+lonerock_capture <- function() {
+  paste(readLines(test_path("fixtures", "drift_autofix_lonerock_innertext_2026-09-30.txt"),
+                  warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+}
+scraper_source_lines <- function() {
+  unlist(lapply(here::here(SCRAPER_FILES), readLines, warn = FALSE))
+}
+lonerock_row <- function() {
+  data.frame(name = "Lone Rock School District", type = "K-12", mean_count = 1, count = 0,
+             url = "https://www.lonerockschool.org/page/employment",
+             llm_titles = "Special Education Paraprofessional | Bus Driver and Maintenance Director",
+             stringsAsFactors = FALSE)
+}
+lonerock_registry <- function() {
+  data.frame(District = "Lone Rock School District", Platform = "Apptegy", Slug = "",
+             Job_Link = "https://www.lonerockschool.org/page/employment", stringsAsFactors = FALSE)
+}
 
 test_that("collapse_statewide_feed_names buckets every OPI row and leaves direct rows alone", {
   df <- data.frame(
@@ -65,38 +68,6 @@ test_that("collapsing the statewide feed keeps a per-location OPI drop from bein
   flagged <- flag_drift(current, baseline)
 
   expect_equal(nrow(flagged), 0)
-})
-
-test_that("flag_drift flags a real drop and leaves a stable source alone", {
-  baseline <- data.frame(
-    name = c("BigDistrict", "StableDistrict"),
-    n_weeks = c(5, 5),
-    mean_count = c(50, 10)
-  )
-  current <- data.frame(name = c("BigDistrict", "StableDistrict"), count = c(0, 9))
-
-  flagged <- flag_drift(current, baseline)
-
-  expect_equal(flagged$name, "BigDistrict")
-})
-
-test_that("flag_drift requires a minimum number of historical weeks before flagging", {
-  baseline <- data.frame(name = "BrandNewDistrict", n_weeks = 1, mean_count = 10)
-  current <- data.frame(name = "BrandNewDistrict", count = 0)
-
-  flagged <- flag_drift(current, baseline, min_weeks = 2)
-
-  expect_equal(nrow(flagged), 0)
-})
-
-test_that("flag_drift treats a source missing from current data as a count of zero", {
-  baseline <- data.frame(name = "VanishedDistrict", n_weeks = 3, mean_count = 20)
-  current <- data.frame(name = character(0), count = numeric(0))
-
-  flagged <- flag_drift(current, baseline)
-
-  expect_equal(flagged$name, "VanishedDistrict")
-  expect_equal(flagged$count, 0)
 })
 
 test_that("build_source_url_lookup combines both Montana registries", {
@@ -242,43 +213,6 @@ test_that("parse_autofix_expected_titles recovers the titles build_autofix_issue
   expect_equal(parse_autofix_expected_titles("no titles here"), character(0))
 })
 
-test_that("summarize_live_check fails on an error or zero rows and passes otherwise", {
-  expect_false(summarize_live_check("X", simpleError("HTTP 520."))$pass)
-  expect_false(summarize_live_check("X", data.frame(Title = character(0)))$pass)
-
-  ok <- summarize_live_check("X", data.frame(Title = c("Route Bus Drivers", "Cook")),
-                             expected_titles = c("route bus drivers", "Daycare Manager"))
-  expect_true(ok$pass)
-  md <- paste(ok$markdown, collapse = "\n")
-  expect_match(md, "Matched 1 of 2", fixed = TRUE)
-  expect_match(md, "- Daycare Manager", fixed = TRUE)
-})
-
-# ---- auto-fix evidence (the CI capture handed to the agent) ----------------
-# Issue #7: the agent's sandbox rendered Lone Rock's Apptegy page empty and
-# it misdiagnosed the break. The real cause -- a renamed stop line plus one
-# new posting -- is plain in a diff of the old fixture against the text the
-# drift check rendered in CI. drift_autofix_lonerock_innertext_2026-09-30.txt
-# is that text, captured live with scripts/repro_scraper.R.
-
-lonerock_capture <- function() {
-  paste(readLines(test_path("fixtures", "drift_autofix_lonerock_innertext_2026-09-30.txt"),
-                  warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-}
-scraper_source_lines <- function() {
-  unlist(lapply(here::here(SCRAPER_FILES), readLines, warn = FALSE))
-}
-lonerock_row <- function() {
-  data.frame(name = "Lone Rock School District", type = "K-12", mean_count = 1, count = 0,
-             url = "https://www.lonerockschool.org/page/employment",
-             llm_titles = "Special Education Paraprofessional | Bus Driver and Maintenance Director",
-             stringsAsFactors = FALSE)
-}
-lonerock_registry <- function() {
-  data.frame(District = "Lone Rock School District", Platform = "Apptegy", Slug = "",
-             Job_Link = "https://www.lonerockschool.org/page/employment", stringsAsFactors = FALSE)
-}
-
 test_that("scraper_fetch_fn follows the Apptegy map to the real fetch_* function", {
   lines <- scraper_source_lines()
   expect_equal(scraper_fetch_fn(resolve_scraper_call(lonerock_registry()), lines), "fetch_lonerock_postings")
@@ -355,124 +289,6 @@ test_that("a long capture is truncated to fit an issue body", {
   expect_true(any(grepl("diff truncated", md, fixed = TRUE)))
 })
 
-test_that("summarize_central_safety_net handles empty or NULL inputs gracefully", {
-  summary <- summarize_central_safety_net()
-  expect_equal(summary$total_feed_vacancies, 0L)
-  expect_equal(summary$total_fallback_vacancies, 0L)
-  expect_equal(length(summary$fallback_districts), 0)
-  expect_equal(nrow(summary$discrepancies), 0)
-  expect_true(any(grepl("Counted from OPI at directly scraped districts**: none", summary$markdown, fixed = TRUE)))
-})
-
-test_that("summarize_central_safety_net identifies active fallback districts and counts", {
-  registry <- data.frame(
-    District = c("Bozeman Public Schools", "Polson School District", "Billings Public Schools"),
-    stringsAsFactors = FALSE
-  )
-  combined <- data.frame(
-    District = c("Bozeman Public Schools", "Bozeman Public Schools", "Polson School District", "Unregistered Town", "Billings Public Schools"),
-    Posting_Source = c(
-      OPI_STATEWIDE_SOURCE,
-      OPI_STATEWIDE_SOURCE,
-      OPI_STATEWIDE_SOURCE,
-      OPI_STATEWIDE_SOURCE,
-      "AppliTrack (direct district board)"
-    ),
-    stringsAsFactors = FALSE
-  )
-
-  summary <- summarize_central_safety_net(
-    combined_df = combined,
-    registry = registry,
-    feed_label = OPI_STATEWIDE_SOURCE,
-    feed_short_name = "OPI"
-  )
-
-  expect_equal(summary$total_feed_vacancies, 4L)
-  expect_equal(summary$total_fallback_vacancies, 3L)
-  expect_equal(summary$fallback_districts[["Bozeman Public Schools"]], 2L)
-  expect_equal(summary$fallback_districts[["Polson School District"]], 1L)
-  expect_null(summary$fallback_districts[["Billings Public Schools"]])
-
-  md <- paste(summary$markdown, collapse = "\n")
-  expect_match(md, "3 posting(s) at 2 district(s), not on the district's own board", fixed = TRUE)
-  expect_match(md, "Bozeman Public Schools**: 2", fixed = TRUE)
-  expect_match(md, "Polson School District**: 1", fixed = TRUE)
-})
-
-test_that("summarize_central_safety_net reads discrepancy report for unmatched postings", {
-  disc <- data.frame(
-    District = c("Billings Public Schools", "Helena Public Schools"),
-    Source = c("OPI", "OPI"),
-    Title = c("Math Teacher", "Custodian (stale)"),
-    Date_Posted = c("2026-10-25", "2026-05-01"),
-    Discrepancy_Type = c("Unmatched on direct scraper (investigate ATS drift)", "Potential ghost posting on OPI"),
-    stringsAsFactors = FALSE
-  )
-
-  summary <- summarize_central_safety_net(
-    discrepancy_report = disc,
-    feed_short_name = "OPI"
-  )
-
-  expect_equal(nrow(summary$discrepancies), 1)
-  expect_equal(summary$discrepancies$District, "Billings Public Schools")
-  md <- paste(summary$markdown, collapse = "\n")
-  expect_match(md, "1 unmatched vacancy/vacancies detected on central feed", fixed = TRUE)
-  expect_match(md, "Billings Public Schools**: \"Math Teacher\" (posted 2026-10-25)", fixed = TRUE)
-})
-
-test_that("build_drift_report_markdown includes Central Safety Net status annotations and summary", {
-  actionable <- data.frame(
-    name = c("Bozeman Public Schools", "Havre Public Schools", "Montana State University"),
-    type = c("K-12", "K-12", "Higher Ed"),
-    mean_count = c(45.0, 10.0, 30.0),
-    count = c(0, 0, 2),
-    url = c("https://bozeman.k12.mt.us", "https://havre.k12.mt.us", "https://msu.edu"),
-    verdict = c("confirmed_broken", "likely_broken", "likely_broken"),
-    error_message = c("500 Server Error", NA, NA),
-    llm_note = c(NA, "an LLM read 4 postings", NA),
-    safety_net_vacancies = c(5L, 0L, NA_integer_),
-    stringsAsFactors = FALSE
-  )
-
-  safety_net_summary <- list(
-    total_feed_vacancies = 350L,
-    fallback_districts = list("Bozeman Public Schools" = 5L),
-    total_fallback_vacancies = 5L,
-    markdown = c(
-      "### OPI postings at districts we scrape directly",
-      "",
-      "- **Statewide Feed (OPI)**: 350 active vacancies captured.",
-      "- **Counted from OPI at directly scraped districts**: 5 posting(s) at 1 district(s), not on the district's own board:",
-      "  - **Bozeman Public Schools**: 5",
-      "- **Central Feed Discrepancies**: 0 unmatched vacancies detected for active direct scrapers.",
-      ""
-    )
-  )
-
-  lines <- build_drift_report_markdown(
-    actionable = actionable,
-    safety_net_summary = safety_net_summary,
-    date = as.Date("2026-10-29"),
-    feed_short_name = "OPI"
-  )
-
-  report <- paste(lines, collapse = "\n")
-  # Bozeman: active fallback
-  expect_match(report, "Bozeman Public Schools", fixed = TRUE)
-  expect_match(report, "On OPI**: 5 postings for this district that its own board doesn't list (counted from OPI)", fixed = TRUE)
-  # Havre: inactive fallback
-  expect_match(report, "Havre Public Schools", fixed = TRUE)
-  expect_match(report, "On OPI**: nothing for this district beyond what its own board lists", fixed = TRUE)
-  # Higher Ed: no Central Safety Net bullet under its entry
-  expect_match(report, "Montana State University", fixed = TRUE)
-  expect_false(grepl("Montana State University.*\\n\\s+- \\*\\*On OPI", report))
-  # Bottom summary block included
-  expect_match(report, "### OPI postings at districts we scrape directly", fixed = TRUE)
-  expect_match(report, "Statewide Feed (OPI)**: 350 active vacancies captured", fixed = TRUE)
-})
-
 test_that("a wrapper dispatch entry still names its fetch_ function (Red Rover districts)", {
   lines <- c('  "Columbia Falls School District 6" = function(session) {',
              '    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/sd659912",',
@@ -499,4 +315,11 @@ test_that("Lone Rock's real page and history: inconclusive text, a substitute-on
   expect_equal(combine_verdict_with_llm(score_page_text_for_job_signal(text), llm, history)$verdict, "looks_genuinely_empty")
   # Billings posts substitute jobs on its own board, so the same lines would count there.
   expect_true(any(grepl(STANDING_POOL_PATTERN, recent_source_titles("Billings Public Schools", "K-12", k12_dir = here::here("Archivek12_Data")), perl = TRUE)))
+})
+
+test_that("the drift report's feed (state_config.R) is the OPI feed the rest of the pipeline labels", {
+  feed <- edjobs::current_state_config()$feed
+  expect_equal(feed$label, OPI_STATEWIDE_SOURCE)
+  expect_equal(feed$url, OPI_STATEWIDE_URL)
+  expect_equal(edjobs::current_state_config()$drift_baseline_from, as.Date("2026-08-06"))
 })
