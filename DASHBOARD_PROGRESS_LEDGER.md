@@ -812,6 +812,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Self-sustaining checks 1 and 2 of `claude-notes/2026-11-12_twice-weekly-and-daily-presence-scope.md`; check 5
     waits for the daily presence check. Tested from this branch on a temporary push trigger: dry run with a 400-day
     window, then a real run (all workflows still `active`, `dynamic/` Copilot workflows skipped).
+  * [x] Daily presence check, phase 0 (2026-11-13; same change in WY; edjobs 0.13.0): new
+    `.github/workflows/presence.yml` (daily, 13:17 UTC) calls edjobs' reusable `presence.yml`, which reads each
+    AppliTrack, SchoolSpring, TedK12 and Tyler Portico board once (list pages only, each district's own
+    `resolve_scraper_call()`) and commits `presence_checks.csv` (one row per board per day) and
+    `presence_sightings.csv` (one row per unbroken stretch of sightings, keyed by `edjobs::k12_link_posting_id()`,
+    which now reads Tyler Portico's GUID links) to the `presence` branch, never main. Red Rover (3 districts, read
+    with Chrome) joins after phase 0; OPI left out (plan, 11-09). First live run from the Mac (11-13): 39 boards,
+    all answered, 594 postings, all keyed, 64 s.
+    Phase 0 (shadow, 2 weeks): nothing reads the files yet. Measured at the end, in a dated claude-notes audit:
+    agreement with the weekly run on its run days, flapping (missing one day, back the next), errors per board,
+    runtime and cron lateness. Then phase 1: the spells read the sightings for day-precision endings.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
@@ -890,9 +901,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   dedup alone moved MT K-12 from 63 to 28 days; censoring relistings moved MT HE from 21.5 to 31.5); (b) the spells
   trust audit (`claude-notes/2026-11-02_spells-trust-audit.md`) re-run on that data, with few endings left that a
   known data artifact explains (68% on 11-02); (c) the OPI matcher check against fresh OPI data done.
-  Treat a board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Optional step 3: daily presence check
-  for day-precision ends: plan written 2026-11-09 (`claude-notes/2026-11-09_daily-presence-check-plan.md`; 42
-  districts on 40 boards, 54% of direct postings; OPI left out), waiting on Mike's go-ahead.
+  Treat a board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Step 3: daily presence check
+  for day-precision ends (`claude-notes/2026-11-09_daily-presence-check-plan.md`; OPI left out): phase 0 running from
+  2026-11-13 (39 districts; Red Rover's 3 after phase 0); the audit after two weeks, then phase 1 (the spells read
+  the sightings).
 - [ ] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the page serves an ordinary request from home. Rechecked 2026-11-09: 3 postings, the same
   3 the last good CI run (09-01) captured -- Substitute Employment (standing pool, $120/day), Special Education
