@@ -850,8 +850,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   lists none of them. Five `run_expectations.csv` rows for the 11-17 run. Suite on 0.11.0: 3,717 passed, 0 failed
   (3,720 after the rehearsal's run); full rehearsal passed every step, rebuild parity 9/9
   (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.11.0.log`): 45 UM-board rows, 45 exact posted dates, 20
-  closing dates, posted pay on 41; Helena College 5, UM Western 2, no Attract links left. PR checks pass once
-  edjobs v0.11.0 is tagged.
+  closing dates, posted pay on 41; Helena College 5, UM Western 2, no Attract links left. Review fixes before
+  release (edjobs 579d632, `claude-notes/2026-11-12_review-edjobs-0.11.0.md`): NEOGOV cards' Location and date
+  read per card (one card without its meta block had blanked every Location on the page, filing Helena College and
+  UM Western under UM), a warning when a board returns no Locations, and a JSON-LD reader that takes schema.org's
+  text forms and catches errors per page. Re-rehearsed: every step passed, parity 9/9, suite 3,717/0
+  (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.11.0-fixes.log`); UM 38, Helena College 5, UM Western 2.
+  PR checks pass once edjobs v0.11.0 is tagged.
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.
