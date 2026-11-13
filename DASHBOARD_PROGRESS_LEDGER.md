@@ -803,6 +803,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     rehearsal on 0.12.0 passed every step (`claude-notes/2026-11-13_rehearsal-mt-edjobs-0.12.0.log`, post-run suite
     3,728); `check_drift.R` with the floor and calendar weeks run live on the rehearsal output. To land: edjobs #10
     merged and tagged v0.12.0, then this branch's PR.
+  * [x] Upkeep workflow: keepalive and token expiry (2026-11-13; same change in WY; edjobs 0.12.1, bostickmike/edjobs#11): new
+    `.github/workflows/upkeep.yml` (Wednesdays, a day with no weekly run now or on the planned twice-weekly days) calls
+    edjobs' reusable `upkeep.yml`. It re-enables every active workflow through the API, so GitHub's 60-day inactivity
+    rule can't silently stop the weekly schedule (a disabled schedule sends no failure email), and opens one issue per
+    secret 30 days before its date in the new `.github/token-expiry.csv` (`COPILOT_TOKEN` 2027-02-09, read from
+    GitHub itself on each run; `CLAUDE_CODE_OAUTH_TOKEN` 2027-11-11, approximate: set 11-11, about a year).
+    Self-sustaining checks 1 and 2 of `claude-notes/2026-11-12_twice-weekly-and-daily-presence-scope.md`; check 5
+    waits for the daily presence check. Tested from this branch on a temporary push trigger: dry run with a 400-day
+    window, then a real run (all workflows still `active`, `dynamic/` Copilot workflows skipped).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
