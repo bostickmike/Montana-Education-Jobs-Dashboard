@@ -96,8 +96,8 @@ MT_IPEDS_UNITID_MAP <- tibble::tribble(
   180081L, "Highlands College",
   # Helena College and University of Montana Western (180276, 180692) --
   # added 2026-08-07 once their postings were split out from University
-  # of Montana's on the NEOGOV side (see neogov_location_to_institution()
-  # in direct_api_scrapers.R). Unlike Highlands College above, both
+  # of Montana's on the NEOGOV side (now the SharesBoard rows of
+  # he_institution_registry.csv, applied by edjobs::assign_shared_board_institutions()). Unlike Highlands College above, both
   # report salary/enrollment/Pell data normally under their own real
   # unitids -- confirmed live (48 and 120 salary rows, 5 Pell grant rows
   # each for 2024/2021 respectively).

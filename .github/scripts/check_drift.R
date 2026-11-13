@@ -40,8 +40,12 @@ date_regex <- "[0-9]{4}-[0-9]{2}-[0-9]{2}"
 k12_snapshots <- load_snapshots("Archivek12_Data", "^combined_.*\\.csv$", date_regex, read_k12_archive, today)
 he_snapshots <- load_snapshots("Archived_HE_Data", "^hedata_.*\\.xlsx$", date_regex, read_he_archive, today)
 
-k12_baseline <- build_historical_counts(k12_snapshots, "name")
-he_baseline <- build_historical_counts(he_snapshots, "name")
+# Weeks a source's scrape errored or wasn't logged (coverage calendar) say
+# nothing about its posting count: left out of its baseline, not counted as 0
+# (edjobs 0.12.0; Mike, 2026-11-13).
+failed_weeks <- failed_source_weeks(if (file.exists("coverage_calendar.csv")) read.csv("coverage_calendar.csv", stringsAsFactors = FALSE))
+k12_baseline <- build_historical_counts(k12_snapshots, "name", failed = failed_weeks)
+he_baseline <- build_historical_counts(he_snapshots, "name", failed = failed_weeks)
 
 combined_raw <- read.csv("Mt_Ed_Jobs/combinedclean.csv", stringsAsFactors = FALSE)
 registry <- if (file.exists("k12_district_registry.csv")) read.csv("k12_district_registry.csv", stringsAsFactors = FALSE) else NULL
@@ -56,10 +60,13 @@ tag_type <- function(df, label) {
   df
 }
 
-# min_mean_count = 0: MT flags any source averaging above 0 (WY and the edjobs
-# default skip sources averaging under 3; decision for Mike, claude-notes/2026-11-11_phase4-dispatch-design.md).
-flagged_k12 <- tag_type(flag_drift(current_k12, k12_baseline, min_mean_count = 0), "K-12")
-flagged_he <- tag_type(flag_drift(current_he, he_baseline, min_mean_count = 0), "Higher Ed")
+# min_mean_count = 2 (Mike, 2026-11-13): sources averaging under 2 postings a
+# week aren't judged on a quiet week. MT had 0: since 09-01, 5 of its 24 flags
+# came from sources averaging under 3 (Lone Rock 4, all false alarms; Alberton 1).
+# WY and the edjobs default use 3.
+MT_DRIFT_MIN_MEAN <- 2
+flagged_k12 <- tag_type(flag_drift(current_k12, k12_baseline, min_mean_count = MT_DRIFT_MIN_MEAN), "K-12")
+flagged_he <- tag_type(flag_drift(current_he, he_baseline, min_mean_count = MT_DRIFT_MIN_MEAN), "Higher Ed")
 
 flagged <- if (nrow(flagged_k12) == 0 && nrow(flagged_he) == 0) {
   data.frame(name = character(0), mean_count = numeric(0), n_weeks = integer(0), count = numeric(0), type = character(0))
