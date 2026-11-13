@@ -145,7 +145,25 @@ jobs:
           # unset (logs "skipped_no_key") or llm_extract_targets.csv is empty.
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          Rscript -e 'rmarkdown::render("Mt_ED_Jobs.Rmd")'
+          # Interrupted at 40 minutes (normally 10-25), leaving the job time to
+          # print where R was stuck (render_with_stack.R) and upload what the
+          # run had written so far (the step below).
+          timeout -s INT -k 120 40m Rscript .github/scripts/render_with_stack.R Mt_ED_Jobs.Rmd
+
+      # A failed or cancelled run commits nothing, so keep what it wrote
+      # (archives, scrape_log.csv, posting_status.csv, ...) for 30 days.
+      - name: Upload this run's partial outputs if it failed
+        if: failure() || cancelled()
+        run: |
+          mkdir -p /tmp/partial-outputs
+          find . -path ./.git -prune -o -type f -mmin -90 -size -20M -print | cpio -pdm /tmp/partial-outputs 2>/dev/null || true
+      - if: failure() || cancelled()
+        uses: actions/upload-artifact@v4
+        with:
+          name: partial-outputs-${{ github.run_id }}
+          path: /tmp/partial-outputs
+          retention-days: 30
+          if-no-files-found: warn
 
       # scrape_log.csv (per-source ok/empty/error + row count, written by
       # safe_scrape() -- see scrape_helpers.R) is .gitignore'd on purpose,

@@ -88,8 +88,8 @@ format_posted_or_listed_date <- function(dates, stale_after_days = 180) {
 
 # "Posted / listed" for a board that gives no posted date: the first weekly
 # run that found the posting (posting_first_seen.csv, written by
-# scripts/build_posting_spells.R; the key must match first_seen_key() in
-# posting_spells.R). "On the board since at least" when the posting was
+# scripts/build_posting_spells.R; the key must match edjobs::first_seen_key(),
+# copied here because the app doesn't attach edjobs; test-first-seen.R checks the two agree). "On the board since at least" when the posting was
 # already up the first time that board was scraped. Without the file (a
 # deploy before the weekly run first writes it) the column is as before.
 first_seen_key <- function(district, title, url) {

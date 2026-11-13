@@ -116,11 +116,16 @@ he_posting_panel <- function(archive_dir = "Archived_HE_Data", from = as.Date("2
   d$Institution <- canonicalize_he_institution(normalize_posting_text(d$Institution))
   d <- d[!is.na(d$Title) & nzchar(d$Title) & !is_placeholder_posting(d$Title), , drop = FALSE]
   d <- add_he_posting_identity(d)
-  d %>%
+  d <- d %>%
     dplyr::mutate(Run_Date = as.Date(Archive_Date)) %>%
-    dplyr::distinct(Posting_ID, Run_Date, .keep_all = TRUE) %>%
+    dplyr::distinct(Posting_ID, Run_Date, .keep_all = TRUE)
+  # Parsed as WY does: a NEOGOV posting whose page couldn't be read keeps its
+  # card text ("Posted 3 weeks ago"), which cutting to 10 characters made
+  # "Posted 3 w" (2026-11-13 review).
+  pd <- parse_board_posted_date(d$Posted_Date, d$Run_Date)
+  d %>%
     dplyr::transmute(Run_Date, Posting_ID, Posting_Identity_Method, District = Institution, title = Title,
-                     date_posted = substr(Posted_Date, 1, 10),
+                     date_posted = pd$date, Posted_Approx = pd$approx,
                      Close_Date = if ("Close_Date" %in% names(d)) parse_stated_close_date(Close_Date) else NA_character_,
                      url = Link, Posting_Source = Institution,
                      Is_Feed = FALSE, position = classify_he_job_type(Title), Bridgeable)
