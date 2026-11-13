@@ -788,6 +788,21 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Merged 11-11 (PR #18 -> 67d2caa). Re-test from main (WY run 43086225793): ran end to end, the guard passed and
     Claude posted a "needs a human" report on WY #7. But every Bash call failed ("Sandbox dependencies not available:
     socat not installed"), so the workflow now apt-installs `socat` and `bubblewrap` before Claude runs.
+  * [x] Phase 4 close-out review and its fixes (2026-11-13; `claude-notes/2026-11-13_phase4-full-review.md`, outcome
+    at its end). `/full-review` of edjobs v0.5.0..v0.11.0 and both states' phase 4: nothing blocking. edjobs 0.12.0
+    (PR bostickmike/edjobs#10, branch `phase4-review-fixes`; 1,386 tests, check clean): two latent spells/history bugs,
+    ISO-only date parsing, page caps, JSON-LD dates in Mountain time, per-page posting-status log lines, tests for six
+    untested exports. Drift baselines (Mike): zero weeks count between a source's first and last weeks with rows;
+    trailing zero weeks and calendar-failed weeks (`failed_source_weeks()`) are left out (replayed since 09-01: WY 9
+    flags either way, MT 20 -> 19). Run logging in both states: every message/warning to the run log, render
+    interrupted at 40 min with R's call stack (`.github/scripts/render_with_stack.R`), partial-outputs artifact on
+    failure. EDJOBS_VERSION 0.12.0. Decided by Mike: keep the TedK12 board-URL rule (0 rows affected since 08-11).
+    MT: `he_posting_panel()` parses posted dates with `parse_board_posted_date()` (same dates on all 5,353 HE archive
+    rows); `test-he-shared-board.R` (UM board split); drift floor `min_mean_count = 2` (Mike; was 0: 5 of 24 flags
+    since 09-01 came from sources averaging under 3, Lone Rock 4 false alarms); stale comments. Suite 3,704 passed;
+    rehearsal on 0.12.0 passed every step (`claude-notes/2026-11-13_rehearsal-mt-edjobs-0.12.0.log`, post-run suite
+    3,728); `check_drift.R` with the floor and calendar weeks run live on the rehearsal output. To land: edjobs #10
+    merged and tagged v0.12.0, then this branch's PR.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
