@@ -837,6 +837,26 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   MT 3,780 passed, 0 failed (3,783 after the rehearsal's run); full rehearsal passed every step, rebuild parity 9/9
   (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.10.0.log`). Design and open items:
   `claude-notes/2026-11-12_phase4-k12-output-schema.md`.
+  Slice 5 merged 11-12. Slice 6 (edjobs 0.11.0, PR #9 there; branch `edjobs-platform-fetchers`, 11-12): the
+  platform fetchers come from the package (`fetch_neogov_postings()`, `fetch_peopleadmin_atom()`,
+  `fetch_schoolspring_postings()`, `fetch_tedk12_postings()`, `parse_jobposting_jsonld()`,
+  `assign_shared_board_institutions()`); local copies, tests and fixtures deleted. NEOGOV is one platform keyed by
+  the agency slug, read from the classic careers page (Mike's decision after the 11-12 measurement,
+  `claude-notes/2026-11-12_neogov-decision-research.md`). UM's board moves to it, and the Attract code and fixtures
+  go. Helena College, Missoula College and UM Western get their postings by a `Location_Pattern` column in
+  `he_institution_registry.csv` (SharesBoard rows). Each posting's page gives its exact posted date and closing
+  date. **Closes the open item "UM NEOGOV board counts 11 expired postings as open" (found 11-12):** the Attract
+  site still listed 11 Helena College / UM Western postings closed between 2024-12 and 2026-05; the classic page
+  lists none of them. Five `run_expectations.csv` rows for the 11-17 run. Suite on 0.11.0: 3,717 passed, 0 failed
+  (3,720 after the rehearsal's run); full rehearsal passed every step, rebuild parity 9/9
+  (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.11.0.log`): 45 UM-board rows, 45 exact posted dates, 20
+  closing dates, posted pay on 41; Helena College 5, UM Western 2, no Attract links left. Review fixes before
+  release (edjobs 579d632, `claude-notes/2026-11-12_review-edjobs-0.11.0.md`): NEOGOV cards' Location and date
+  read per card (one card without its meta block had blanked every Location on the page, filing Helena College and
+  UM Western under UM), a warning when a board returns no Locations, and a JSON-LD reader that takes schema.org's
+  text forms and catches errors per page. Re-rehearsed: every step passed, parity 9/9, suite 3,717/0
+  (`claude-notes/2026-11-12_rehearsal-mt-edjobs-0.11.0-fixes.log`); UM 38, Helena College 5, UM Western 2.
+  PR checks pass once edjobs v0.11.0 is tagged.
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.

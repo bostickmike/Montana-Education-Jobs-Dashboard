@@ -3894,26 +3894,28 @@ isolvedhire_results <- lapply(seq_len(nrow(isolvedhire_institutions)), function(
 })
 isolvedhire_df <- bind_rows(isolvedhire_results)
 
-# University of Montana's NEOGOV Attract board also covers three branch/
-# affiliate campuses under the same feed -- real street addresses
-# confirmed live: Missoula College, Helena College, and University of
-# Montana Western (Dillon), so none of the three get their own registry
-# row, same "check the parent board before assuming a gap" logic as
-# Highlands College under Montana Tech.
-# Institution is NOT overwritten from the registry row here (unlike every
-# other platform below) -- parse_neogov_postings() already attributes
-# each posting to its real institution (University of Montana vs. Helena
-# College/Missoula College/UM Western, 2026-08-07) via
-# neogov_location_to_institution(), and blindly reassigning row$Institution
-# here would silently erase that split.
+# University of Montana's NEOGOV board (agency "ummissoula", read from the
+# classic careers page since edjobs 0.11.0; its Attract site kept listing
+# postings that had closed a year earlier, 2026-11-12) also carries Helena
+# College, Missoula College and University of Montana Western, so none of
+# the three gets its own scrape: each has a SharesBoard registry row whose
+# Location_Pattern names its campus as the board prints it, and
+# assign_shared_board_institutions() gives those postings their own
+# institution. Each posting's page supplies its exact posted date and
+# closing date (Close_Date).
 neogov_institutions <- he_registry[he_registry$Platform == "Neogov", ]
 neogov_results <- lapply(seq_len(nrow(neogov_institutions)), function(i) {
   row <- neogov_institutions[i, ]
-  safe_scrape(
+  df <- safe_scrape(
     row$Institution,
-    scrape_fn = function() fetch_neogov_postings(row$Feed_URL, row$Institution),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link", "Institution")
+    scrape_fn = function() fetch_neogov_postings(row$Feed_URL),
+    expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
+  if (nrow(df) > 0) {
+    df$Institution <- row$Institution
+    df <- assign_shared_board_institutions(df, row$Feed_URL, he_registry)
+  }
+  df
 })
 neogov_df <- bind_rows(neogov_results)
 
@@ -4090,7 +4092,8 @@ library(writexl)
 hedata <- hedata_raw %>%
   ensure_posted_pay_columns() %>%
   mutate(Close_Date = if ("Close_Date" %in% names(.)) as.character(Close_Date) else NA_character_) %>%
-  # Close_Date: PeopleAdmin's own close date (or "Open Until Filled"); NA for other HE sources.
+  # Close_Date: PeopleAdmin's own close date (or "Open Until Filled") and NEOGOV's stated closing
+  # date (each posting's page; edjobs 0.11.0); NA for other HE sources.
   select(Title, Location, Posted_Date, Institution, Link, Close_Date, all_of(POSTED_PAY_COLUMNS)) %>%
   mutate(Posted_Date = as.character(Posted_Date),
          Archive_Date = Sys.Date())

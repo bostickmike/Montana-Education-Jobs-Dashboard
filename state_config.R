@@ -24,7 +24,8 @@ MT_SCRAPER_SPECS <- list(
   PeopleAdmin  = scraper_spec("fetch_peopleadmin_atom",      c("Feed_URL", "Institution")),
   JazzHR       = scraper_spec("fetch_jazzhr_postings",       c("Feed_URL", "Institution")),
   Paycom       = scraper_spec("fetch_paycom_postings",       c("Feed_URL", "Institution")),
-  Neogov       = scraper_spec("fetch_neogov_postings",       c("Feed_URL", "Institution")),
+  # The agency slug; NEOGOV redirects to the agency's own domain (edjobs 0.11.0).
+  Neogov       = scraper_spec("fetch_neogov_postings",       "Feed_URL"),
   MilesCCHeuristic   = scraper_spec("fetch_miles_cc_postings",   "Feed_URL"),
   DawsonCCHeuristic  = scraper_spec("fetch_dawson_cc_postings",  "Feed_URL"),
   CarrollCollegeHeuristic = scraper_spec("fetch_carroll_college_postings", "Feed_URL"),
