@@ -1496,26 +1496,6 @@ test_that("parse_kila_postings returns zero rows on empty or non-matching HTML",
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_fromberg_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "fromberg_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.frombergpublicschools.com/district-info/employment"
-
-  result <- parse_fromberg_postings(fixture, url)
-
-  expect_equal(nrow(result), 1)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_equal(result$Title, "Subs Music Teaching Position")
-  expect_true(all(result$Location == "Fromberg"))
-  expect_true(all(is.na(result$Posted_Date)))
-  expect_equal(result$Link, "https://resources.finalsite.net/images/v1788191968/frombergpublicschoolscom/ubmikbqkr9khjuq2znyw/SubsMusicTeachingPosition.pdf")
-})
-
-test_that("parse_fromberg_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_fromberg_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
 test_that("parse_pleasantvalley_postings returns zero rows when no openings", {
   fixture <- paste(readLines(test_path("fixtures", "pleasantvalley_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   url <- "https://www.pvsmt.org/employment-opportunities.html"

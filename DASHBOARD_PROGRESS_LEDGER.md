@@ -929,6 +929,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     posted pay. Same titles as the four old parsers on fixtures and live pages (live: 1, 5, 26, 2 postings); Hinsdale's
     older fixture gains 2 per-posting document links. Old functions, Rmd blocks and tests deleted; the drift tests'
     HTTP-scraper example is now Richey. Suite 3,320 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
+  * [x] Fromberg on the Finalsite family (2026-11-14; edjobs 0.24.0). Same title and link as its old parser on the
+    fixture and the live page; Posting_Source unchanged. Old function, Rmd block and tests deleted.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11

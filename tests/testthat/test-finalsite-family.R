@@ -128,3 +128,11 @@ test_that("every Finalsite registry row resolves to the family routine", {
   for (d in reg$District[reg$Platform == "Finalsite"]) expect_equal(edjobs::resolve_scraper_call(d)$fn, "fetch_finalsite_postings", info = d)
   expect_equal(edjobs::resolve_scraper_call("Manhattan School District")$fn, "fetch_finalsite_postings")
 })
+
+# Fromberg joined 2026-11-14 (edjobs 0.24.0: camel-case file names read as words; claude-notes/2026-11-14_mt-leftovers/).
+# Same title and link as its old parser.
+test_that("parse_finalsite_postings: Fromberg Public Schools", {
+  r <- finalsite_parse("Fromberg Public Schools", test_path("fixtures", "fromberg_jobs.html"))
+  expect_equal(r$Title, "Subs Music Teaching Position")
+  expect_equal(r$Link, "https://resources.finalsite.net/images/v1788191968/frombergpublicschoolscom/ubmikbqkr9khjuq2znyw/SubsMusicTeachingPosition.pdf")
+})
