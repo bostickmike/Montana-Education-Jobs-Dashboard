@@ -817,9 +817,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     AppliTrack, SchoolSpring, TedK12 and Tyler Portico board once (list pages only, each district's own
     `resolve_scraper_call()`) and commits `presence_checks.csv` (one row per board per day) and
     `presence_sightings.csv` (one row per unbroken stretch of sightings, keyed by `edjobs::k12_link_posting_id()`,
-    which now reads Tyler Portico's GUID links) to the `presence` branch, never main. Red Rover (3 districts, read
-    with Chrome) joins after phase 0; OPI left out (plan, 11-09). First live run from the Mac (11-13): 39 boards,
-    all answered, 594 postings, all keyed, 64 s.
+    which now reads Tyler Portico's GUID links) to the `presence` branch, never main. First live run from the Mac
+    (11-13): 39 boards, all answered, 594 postings, all keyed, 64 s. Red Rover's 3 boards added the same day,
+    through the API (entry below). OPI fingerprints measured for a later step
+    (`claude-notes/2026-11-13_presence-redrover-opi-wsba.md`).
+  * [x] Red Rover through its API (2026-11-13; edjobs 0.14.0, same change in WY; Mike: "can't you do MT red rover
+    like WY"): St. Ignatius, Hamilton and Columbia Falls are read with `edjobs::fetch_redrover_postings()` (the
+    GraphQL API Red Rover's own board calls; WY's fetcher), no longer rendered with Chrome in the Apptegy batch.
+    Registry `Slug` is the org ID (2261, 2362, 4161; Columbia Falls's link slug stays `sd659912`). The Chrome scrape
+    gave a per-posting link to only 8 of Columbia Falls's 23 postings on 11-10; the API gives every posting its
+    `/opening/<n>` link, plus pay; postings matched the 11-10 weekly rows apart from 1-2 posted since. Rows are
+    labelled "Red Rover (direct district board)"; the spells panel gives every redroverk12.com row that label,
+    archived ones included, so postings spanning the switch aren't censored as having moved boards. The three
+    districts' coverage tier becomes Full (`MT_DIRECT_API_PLATFORMS`). The Chrome parser, its three map entries and
+    its fixtures are gone.
     Phase 0 (shadow, 2 weeks): nothing reads the files yet. Measured at the end, in a dated claude-notes audit:
     agreement with the weekly run on its run days, flapping (missing one day, back the next), errors per board,
     runtime and cron lateness. Then phase 1: the spells read the sightings for day-precision endings.
@@ -903,8 +914,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   known data artifact explains (68% on 11-02); (c) the OPI matcher check against fresh OPI data done.
   Treat a board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Step 3: daily presence check
   for day-precision ends (`claude-notes/2026-11-09_daily-presence-check-plan.md`; OPI left out): phase 0 running from
-  2026-11-13 (39 districts; Red Rover's 3 after phase 0); the audit after two weeks, then phase 1 (the spells read
-  the sightings).
+  2026-11-13 (42 districts, Red Rover included); the audit after two weeks, then phase 1 (the spells read the
+  sightings). OPI in the daily check, keyed by a detail-page fingerprint, is measured and proposed
+  (`claude-notes/2026-11-13_presence-redrover-opi-wsba.md`).
 - [ ] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the page serves an ordinary request from home. Rechecked 2026-11-09: 3 postings, the same
   3 the last good CI run (09-01) captured -- Substitute Employment (standing pool, $120/day), Special Education

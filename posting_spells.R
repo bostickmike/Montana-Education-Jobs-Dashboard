@@ -54,7 +54,12 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
                                      k12_role_hint(OPI_Description), NA_character_)) %>%
     dplyr::transmute(Run_Date = Archive_Date, Posting_ID, Posting_Identity_Method,
                      District, title, date_posted, Close_Date = parse_stated_close_date(Close_Date), url,
-                     Posting_Source = dplyr::coalesce(Posting_Source, ""),
+                     # Red Rover's boards were read inside the Apptegy batch (labelled
+                     # "Apptegy district site") until edjobs 0.14.0 moved them to Red Rover's
+                     # API: same board either way, so a posting that spans the switch isn't
+                     # censored as having moved boards.
+                     Posting_Source = ifelse(grepl("redroverk12\\.com", url, ignore.case = TRUE),
+                                             "Red Rover (direct district board)", dplyr::coalesce(Posting_Source, "")),
                      Is_Feed = Is_OPI == "TRUE", Role_Hint, Bridgeable = TRUE,
                      position = classify_k12_position(title, Role_Hint))
 }

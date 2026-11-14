@@ -4302,122 +4302,15 @@ fetch_dutton_postings <- function(chromote_session, url = "https://dbps.k12.mt.u
   parse_dutton_postings(text, url)
 }
 
-# Red Rover Hiring (jobs.redroverk12.com/org/<id>) -- first found 2026-08-24
-# for St. Ignatius School District (org/2261, while re-checking the OPI-gap
-# candidate list -- "SAINT IGNATIUS" and "SAINT IGNATIUS- SALISH TEACHER"
-# are the same district, both collapsing into one registry row); Hamilton
-# School District 3 (org/2362) joined 2026-09 after its AppliTrack tenant
-# started returning a persistent HTTP 500. A client-side-rendered Next.js
-# app, no API endpoint findable in the static HTML, needs a real browser
-# like Apptegy, folded into the same shared chromote session below for that
-# reason even though it isn't Apptegy itself (same precedent as Geyser's
-# CyberSchool 2.0). Some boards carry generic evergreen application-form
-# placeholders ("Classified Application", "Volunteer Application") rather
-# than real openings -- the same class of noise Arlee's own "Classified
-# Application"/"Certified Application" exclusion handles. Each real posting
-# is a repeating block of [employment type, title, category, location,
-# (salary, optional), ("Internal applicants only", optional)] followed by an
-# "APPLY NOW" button line -- parsed by matching "^apply now" as the
-# reliable per-posting boundary (the salary line's presence varies, so a
-# fixed stride doesn't work). Some boards show a relative-date stamp on the
-# following line ("27 days ago"), others go straight to the next block, and
-# newer Next.js layouts concatenate the button and relative stamp into the
-# same line ("Apply Now3 days ago" / "Apply Nowabout 1 month ago").
-# The date isn't carried through -- standardize_date() only handles
-# absolute dates anyway. "No location specified" is the board's own literal
-# placeholder for a real missing value; rows carrying it fall back to
-# `default_location` (the district's city) rather than keeping the prose.
-# The salary line, when present, is the board's own rendering of the
-# posting's pay ("$13.50 - $14.65 per hour", "$518.00 per unit" -- "per
-# unit" is how RedRover shows a STIPEND) and becomes Pay_* via
-# extract_posted_pay(), with the line itself kept as Pay_Text.
-REDROVER_PLACEHOLDER_TITLES <- c("Classified Application", "Certified Application", "Volunteer Application")
+# Red Rover Hiring (St. Ignatius, Hamilton, Columbia Falls): read through Red
+# Rover's GraphQL API since edjobs 0.14.0 (fetch_redrover_postings(org_id,
+# org_slug), Mt_ED_Jobs.Rmd's "k12 redrover" block), no longer rendered here.
+# The Chrome render gave a per-posting link to only some postings (Columbia
+# Falls: 8 of 23 on 2026-11-10); the API gives every one, and its pay.
 
-# Parser for any Red Rover Hiring board's rendered innerText -- title is
-# always block[2] and location always block[4] of each "... APPLY NOW"
-# block. See the section comment above for the block shape and the
-# per-board "posted"-stamp difference this handles.
 # extract_posted_pay() is in edjobs, attached by k12_he_classification.R; same guard as
 # direct_api_scrapers.R's.
 if (!exists("extract_posted_pay", mode = "function")) source("k12_he_classification.R")
-
-# opening_links: the page's links to each opening (href, text), in page order.
-# Each posting takes the first unused link whose text is its title, so a row
-# carries its own page (jobs.redroverk12.com/org/<org>/opening/<n>: a stable
-# ID, and a page that shows when the opening closed, 2026-11-06); the board URL
-# where none matches.
-parse_redrover_postings <- function(rendered_text, url, default_location = NA_character_, opening_links = NULL) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       Pay_Min = numeric(0), Pay_Max = numeric(0), Pay_Unit = character(0),
-                       Pay_Text = character(0), stringsAsFactors = FALSE)
-
-  if (!is.null(opening_links)) opening_links$used <- rep(FALSE, nrow(opening_links))
-  lines <- strsplit(rendered_text, "\n")[[1]]
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  start_idx <- which(grepl("^Found [0-9]+ job openings?$", lines))
-  if (length(start_idx) == 0) return(empty)
-  lines <- lines[(start_idx[1] + 1):length(lines)]
-
-  stop_idx <- which(lines == "Powered By")
-  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
-
-  rows <- list()
-  block <- character(0)
-  i <- 1
-  while (i <= length(lines)) {
-    line <- lines[i]
-    if (grepl("^apply now", line, ignore.case = TRUE)) {
-      if (length(block) >= 2) {
-        title <- block[2]
-        location <- if (length(block) >= 4) block[4] else NA_character_
-        if (!is.na(location) && location == "No location specified") location <- default_location
-        if (!(title %in% REDROVER_PLACEHOLDER_TITLES)) {
-          pay_line <- block[-(1:2)][grepl("^\\$", block[-(1:2)])][1]
-          pay <- extract_posted_pay(pay_line)
-          if (!is.na(pay$Pay_Min)) pay$Pay_Text <- pay_line
-          link <- url
-          if (!is.null(opening_links) && nrow(opening_links) > 0) {
-            j <- which(!opening_links$used & trimws(opening_links$text) == substr(title, 1, nchar(trimws(opening_links$text))) &
-                         nzchar(trimws(opening_links$text)))[1]
-            if (!is.na(j)) { link <- opening_links$href[j]; opening_links$used[j] <- TRUE }
-          }
-          rows[[length(rows) + 1]] <- cbind(
-            data.frame(Title = title, Location = location,
-                       Posted_Date = NA_character_, Link = link, stringsAsFactors = FALSE),
-            pay
-          )
-        }
-      }
-      is_exact_apply_now <- grepl("^apply now$", line, ignore.case = TRUE)
-      block <- character(0)
-      i <- i + 1  # consume "APPLY NOW" (or "Apply Now<timestamp>")
-      if (is_exact_apply_now && i <= length(lines) &&
-          grepl("\\bago$|^(just posted|today|yesterday)$", lines[i], ignore.case = TRUE)) {
-        i <- i + 1  # ... and the relative "posted" stamp, when on separate line
-      }
-      next
-    }
-    block <- c(block, line)
-    i <- i + 1
-  }
-  if (length(rows) == 0) return(empty)
-  do.call(rbind, rows)
-}
-
-fetch_redrover_postings <- function(chromote_session, url, default_location = NA_character_) {
-  chromote_session$Page$navigate(url)
-  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
-  Sys.sleep(5)
-  text <- chromote_session$Runtime$evaluate("document.body.innerText")$result$value
-  links <- tryCatch(as.data.frame(jsonlite::fromJSON(chromote_session$Runtime$evaluate(paste0(
-    "JSON.stringify(Array.from(document.querySelectorAll('a[href*=\"/opening/\"]'))",
-    ".map(a => ({href: a.href, text: a.innerText.trim().slice(0, 60)})))"))$result$value)),
-    error = function(e) NULL)
-  parse_redrover_postings(text, url, default_location = default_location, opening_links = links)
-}
 
 # Stanford Public Schools (stanfordmtschool.com) -- found 2026-08-24 while
 # re-checking the OPI-gap candidate list. Apptegy, same platform as most
@@ -5240,8 +5133,8 @@ fetch_olneybissell_postings <- function(chromote_session, url = "https://www.oln
   parse_olneybissell_postings(html, url)
 }
 
-# Fetches all 43 districts (40 Apptegy + Geyser's CyberSchool + St.
-# Ignatius's and Hamilton's Red Rover Hiring) sharing one chromote session (created
+# Fetches every Apptegy district (plus Geyser's CyberSchool) sharing one
+# chromote session (created
 # once here, closed at the end) -- mirrors Wyoming's
 # fetch_all_misc_district_postings()'s chromote_session_factory pattern,
 # just scoped to only the districts that need it instead of being
@@ -5255,7 +5148,7 @@ fetch_olneybissell_postings <- function(chromote_session, url = "https://www.oln
 # out to a top-level constant (rather than a literal inside the function)
 # specifically so test-misc-district-scrapers.R's own cross-check test can
 # assert names(APPTEGY_DISTRICT_SCRAPERS) exactly matches
-# k12_district_registry.csv's Apptegy/RedRoverK12 rows, in both directions.
+# k12_district_registry.csv's Apptegy rows, in both directions.
 # That test exists because this list and the registry are NOT the same
 # data (one's a District -> fetch-function map, the other's the Map/District
 # Summary join target) and nothing else keeps them in sync -- a registry row
@@ -5288,17 +5181,6 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
   "Chinook Public Schools" = fetch_chinook_postings,
   "Darby School District 9" = fetch_darby_postings,
   "Dutton/Brady Public School District" = fetch_dutton_postings,
-  "St. Ignatius School District" = function(session) {
-    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2261")
-  },
-  "Hamilton School District 3" = function(session) {
-    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2362",
-                            default_location = "Hamilton")
-  },
-  "Columbia Falls School District 6" = function(session) {
-    fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/sd659912",
-                            default_location = "Columbia Falls")
-  },
   "Stanford Public Schools" = fetch_stanford_postings,
   "Lolo School District 7" = fetch_lolo_postings,
   "Froid Public Schools" = fetch_froid_postings,
@@ -8339,16 +8221,17 @@ fetch_joliet_postings <- function(url = "https://www.jolietschools.org/district-
 # by K-12/HE"), and OPI-direct dedup already applies uniformly to every
 # registered district's rows, not just a heuristic subset -- so there's no
 # Wyoming-style two-sub-tier split here, just one "Partial" tier for every
-# district whose Platform isn't one of the four real ATS platforms this
-# project scrapes via a documented API (direct_api_scrapers.R). Every other
-# Platform value (Apptegy, RedRoverK12, and every single-district
+# district whose Platform isn't one of the real ATS platforms this project
+# scrapes through an API (direct_api_scrapers.R; Red Rover's in edjobs since
+# 0.14.0). Every other
+# Platform value (Apptegy and every single-district
 # `*Heuristic` platform) is scraped via this file -- misc_district_scrapers.R's
 # own header comment already calls this whole file "a real but
 # acknowledged-less-reliable source" relative to direct_api_scrapers.R's
 # real platform APIs, so this function just makes that existing,
 # already-true distinction visible on the dashboard instead of leaving it
 # sitting only in code comments.
-MT_DIRECT_API_PLATFORMS <- c("AppliTrack", "SchoolSpring", "TedK12", "TylerPortico")
+MT_DIRECT_API_PLATFORMS <- c("AppliTrack", "SchoolSpring", "TedK12", "TylerPortico", "RedRoverK12")
 
 # registry_csv is a parameter (not a hardcoded read) so this stays testable
 # against a synthetic registry without touching the real committed file.
