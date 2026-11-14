@@ -522,3 +522,21 @@ test_that("fetch_apptegy_k12_postings runs the family through one session, each 
   expect_true(all(r$Location[r$District == "Deer Lodge School District #1"] == "Deer Lodge"))
   expect_true(all(c("Pay_Min", "Pay_Text") %in% names(r)))
 })
+
+# Noxon, Seeley Lake and Helena Flats joined the family 2026-11-14 (edjobs 0.24.0;
+# claude-notes/2026-11-14_mt-leftovers/README.md). Their old scrapers fetched with a plain request, which has
+# answered with Apptegy's 3 KB bot-challenge page since ~11-03 (0 rows each week); the family renders the page.
+test_that("parse_apptegy_postings: Noxon Public Schools", {
+  r <- apptegy_parse("Noxon Public Schools", test_path("fixtures", "apptegy_noxon_rendered_2026-11-14.txt"))
+  expect_equal(r$Title, "7–12 Science Teacher")
+})
+
+test_that("parse_apptegy_postings: Seeley Lake Elementary #34", {
+  r <- apptegy_parse("Seeley Lake Elementary #34", test_path("fixtures", "apptegy_seeleylake_rendered_2026-11-14.txt"))
+  expect_equal(r$Title, "Substitute (All Areas)")
+})
+
+test_that("parse_apptegy_postings: Helena Flats School District #15", {
+  r <- apptegy_parse("Helena Flats School District #15", test_path("fixtures", "apptegy_helenaflats_rendered_2026-11-14.txt"))
+  expect_equal(r$Title, c("Maintenance/Custodial Supervisor", "Special Education Paraprofessional", "Substitutes Needed"))
+})

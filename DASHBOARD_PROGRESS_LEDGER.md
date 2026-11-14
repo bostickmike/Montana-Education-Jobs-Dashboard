@@ -918,6 +918,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.23.0.log`; post-run suite 3,360 passed): 14 rows, all 14 with a
     district + title (any case) already in the committed data; no NA Posting_Source in the three families' rows.
     Notes: `claude-notes/2026-11-14_small-families/README.md`.
+  * [x] Noxon, Seeley Lake and Helena Flats back on the board (2026-11-14; edjobs 0.24.0, waits on the stack). All three
+    returned 0 rows every week since ~11-03: their scrapers fetched with a plain request, which Apptegy answers with its
+    3 KB bot-challenge page. Moved to the Apptegy family (text mode, rendered with the shared chromote session); Noxon
+    has a stop rule for its marketing headings. Old functions, Rmd blocks, tests and fixtures deleted; rendered 11-14
+    pages are the family test's fixtures. Live run of the step: 5 postings (Noxon 1, Seeley Lake 1, Helena Flats 3).
+    Suite 3,324 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
