@@ -937,6 +937,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     "Substitute" -> "Substitutes", Bainville "Paraprofessional- small intervention group" -> "Paraprofessional". Old
     functions, the preview helper, Rmd blocks and tests deleted. Full suite 3,322 passed, 1 failed (the rules-file test
     allowed only Apptegy/Google Sites rows; widened, that file then 287 passed, 0 failed).
+  * [x] Full rehearsal of the `apptegy-leftovers` branch on edjobs 0.24.0 (2026-11-14): every step passed, rebuild
+    parity 9/9, post-run suite 3,355 passed, 0 failed (`claude-notes/2026-11-14_rehearsal-mt-apptegy-leftovers-0.24.0.log`).
+    combinedclean 1,369 -> 1,399 rows. Own-page rows: Helena Flats 3, Seeley Lake 3, Noxon 1 (0 in the 11-10 data);
+    the other 9 moved districts the same counts as 11-10 (Frazer 26, Bainville 7, Victor 6, Nashua 5, Superior 4,
+    Lavina 2, Creston 1, Fromberg 1, Hinsdale 1). The other 9 districts with no own-page rows in 3 weeks are
+    genuinely quiet (no openings, application forms only, or an empty page; `claude-notes/2026-11-14_mt-leftovers/README.md`).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
