@@ -924,6 +924,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     has a stop rule for its marketing headings. Old functions, Rmd blocks, tests and fixtures deleted; rendered 11-14
     pages are the family test's fixtures. Live run of the step: 5 postings (Noxon 1, Seeley Lake 1, Helena Flats 3).
     Suite 3,324 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
+  * [x] Nashua, Frazer, Lavina, Hinsdale on the CyberSchool routine, mode "text" (2026-11-14; edjobs 0.24.0, waits on
+    the stack). Registry Platform `CyberSchoolText`; each keeps its Posting_Source; the CyberSchool block now carries
+    posted pay. Same titles as the four old parsers on fixtures and live pages (live: 1, 5, 26, 2 postings); Hinsdale's
+    older fixture gains 2 per-posting document links. Old functions, Rmd blocks and tests deleted; the drift tests'
+    HTTP-scraper example is now Richey. Suite 3,320 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11

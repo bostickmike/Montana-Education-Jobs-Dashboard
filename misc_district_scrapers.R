@@ -307,64 +307,6 @@ parse_arrowhead_postings <- function(html_text, url) {
 }
 
 
-# Hinsdale Public Schools (hinsdale.k12.mt.us, found 2026-08-24) --
-# named "HINSDALE PUBLIC SCHOOLS" in its own page title but branded
-# "sp-page-builder"/CMS chrome that doesn't match any platform this
-# project already tracks (an unbranded CMS, same effort-level decline
-# as declaring it "no recognized platform" rather than forcing a fit).
-# The real employment content sits at a URL ending in "-Untitled.html"
-# (a naming red flag that has meant "no real content" before -- Lavina's
-# own decline this session used the same naming pattern) but this one
-# genuinely does have real content, confirmed live: a plain httr2 fetch
-# (no chromote needed). Real postings are a numbered list, 2 of the 3
-# titles literally being ".docx" filenames -- stripped along with the
-# leading "N. " list marker. Confirmed live 2026-08-24, 3 real postings.
-# Starts after the real intro sentence (matched by regex since it's
-# realistically stable phrasing, not likely to be re-authored casually),
-# stops at "Please contact:", the real, stable boundary before contact
-# info.
-HINSDALE_START_PATTERN <- "^The Hinsdale School District is currently looking for the following positions:"
-
-fetch_hinsdale_postings <- function(url = "https://hinsdale.k12.mt.us/District/1557-Untitled.html") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_hinsdale_postings(resp_body_string(resp), url)
-}
-
-parse_hinsdale_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  start_idx <- which(grepl(HINSDALE_START_PATTERN, lines))
-  if (length(start_idx) == 0) return(empty)
-  lines <- lines[(start_idx[1] + 1):length(lines)]
-
-  stop_idx <- which(lines == "Please contact:")
-  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
-
-  # The "N. " marker is hand-typed text, not an <ol>, and the district
-  # dropped it once the list shrank to a single posting (2026-09-22:
-  # just "Route Bus Drivers", unnumbered) -- so every line in the block
-  # is a candidate, with the marker stripped if present. The "*Pay is
-  # dependent on experience..." footnote is the only non-posting line
-  # between the intro and "Please contact:".
-  titles <- lines[!startsWith(lines, "*")]
-  titles <- sub("^[0-9]+\\.\\s*", "", titles)
-  titles <- sub("\\.(docx|pdf|doc)$", "", titles, ignore.case = TRUE)
-  titles <- titles[nzchar(titles)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Hinsdale", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
 # Winnett Public Schools (winnettschool.org, found 2026-08-24) --
 # Squarespace, same platform as Terry above, plain httr2 fetch. 3 real
 # category headers (Certified/Classified/Coaching Positions Open:),
@@ -450,64 +392,6 @@ parse_zurich_postings <- function(html_text, url) {
   if (length(titles) == 0) return(empty)
 
   data.frame(Title = titles, Location = "Zurich", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
-# Nashua Public Schools (nashua.k12.mt.us, found 2026-10-20) -- Valley County
-# district on CyberSchool CMS (same family as Hinsdale). Real open positions are
-# listed under category headers (Classified Positions, Certified Positions,
-# Extracurricular Positions, Substitute Positions) within .listItem_bodyContent.
-# Confirmed live 2026-10-20: 7 real active postings (Part-Time Custodian,
-# K-12 Librarian, Music, Special Education, Concessions, Substitute Teacher,
-# Substitute Bus Driver/Activity Bus Driver).
-fetch_nashua_postings <- function(url = "https://www.nashua.k12.mt.us/District/Jobs/") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_nashua_postings(resp_body_string(resp), url)
-}
-
-parse_nashua_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  container <- rvest::html_element(page, ".listItem_bodyContent")
-  if (is.null(container)) return(empty)
-
-  nodes <- rvest::html_elements(container, "p, li")
-  raw_texts <- rvest::html_text(nodes, trim = TRUE)
-  raw_texts <- raw_texts[nzchar(raw_texts)]
-  if (length(raw_texts) == 0) return(empty)
-
-  ignore_patterns <- c(
-    "Employment Opportunities",
-    "If you have questions",
-    "To apply, please submit",
-    "Coaches and volunteers are required",
-    "course$",
-    "Clinic",
-    "certification$",
-    "Positions:",
-    "^[[:space:]]*$"
-  )
-
-  is_ignored <- sapply(raw_texts, function(t) {
-    any(sapply(ignore_patterns, function(p) grepl(p, t, ignore.case = TRUE)))
-  })
-
-  titles <- raw_texts[!is_ignored]
-  titles <- unique(titles)
-  if (length(titles) == 0) return(empty)
-
-  data.frame(
-    Title = titles,
-    Location = "Nashua",
-    Posted_Date = NA_character_,
-    Link = url,
-    stringsAsFactors = FALSE
-  )
 }
 
 
@@ -1463,44 +1347,6 @@ parse_lockwood_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Lockwood", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
-# Frazer Public Schools (Valley County) -- CyberSchool CMS,
-# plain httr2 fetch, no chromote needed. 26 active positions listed
-# directly in .listItem_bodyContent li.
-fetch_frazer_postings <- function(url = "https://www.frazer.k12.mt.us/District/Jobs/") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_frazer_postings(resp_body_string(resp), url)
-}
-
-parse_frazer_postings <- function(html_text, url = "https://www.frazer.k12.mt.us/District/Jobs/") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  page <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(page)) return(empty)
-  container <- rvest::html_elements(page, ".listItem_bodyContent")
-  if (length(container) == 0) return(empty)
-
-  lis <- rvest::html_elements(container, "li")
-  if (length(lis) == 0) lis <- rvest::html_elements(container, "p")
-  raw_titles <- rvest::html_text(lis, trim = TRUE)
-  raw_titles <- raw_titles[nzchar(raw_titles)]
-
-  exclude_patterns <- "^Applications?|Click Here|Download|None|Equal Opportunity|Back to"
-  titles <- raw_titles[!grepl(exclude_patterns, raw_titles, ignore.case = TRUE)]
-  titles <- titles[nchar(titles) < 90]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(
-    Title = titles,
-    Location = "Frazer",
-    Posted_Date = NA_character_,
-    Link = url,
-    stringsAsFactors = FALSE
-  )
-}
-
 
 # Richey Public Schools (Dawson County) -- CyberSchool CMS,
 # plain httr2 fetch, no chromote needed. Active positions listed
@@ -2376,55 +2222,6 @@ parse_kila_postings <- function(html, url) {
     Title = titles,
     Location = rep("Kila", length(titles)),
     Posted_Date = dates,
-    Link = rep(url, length(titles)),
-    stringsAsFactors = FALSE
-  )
-  unique(df)
-}
-
-# ---------------------------------------------------------------------------
-# Lavina Public Schools
-# ---------------------------------------------------------------------------
-fetch_lavina_postings <- function(url) {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  html <- resp_body_string(resp)
-  parse_lavina_postings(html, url)
-}
-
-parse_lavina_postings <- function(html, url) {
-  empty <- data.frame(
-    Title = character(0),
-    Location = character(0),
-    Posted_Date = character(0),
-    Link = character(0),
-    stringsAsFactors = FALSE
-  )
-  if (!nzchar(html)) return(empty)
-
-  doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  ps <- html_elements(doc, ".pageData p, #content p, .maincontent p")
-  texts <- trimws(html_text2(ps))
-
-  start_idx <- which(grepl("accepting applications for the following positions", texts, ignore.case = TRUE))
-  end_idx <- which(grepl("pending the number of participants|Open Until Filled", texts, ignore.case = TRUE))
-
-  if (length(start_idx) == 0 || length(end_idx) == 0 || end_idx[1] <= start_idx[1] + 1) {
-    return(empty)
-  }
-
-  titles <- texts[(start_idx[1] + 1):(end_idx[1] - 1)]
-  titles <- titles[nzchar(titles)]
-
-  if (length(titles) == 0) return(empty)
-
-  df <- data.frame(
-    Title = titles,
-    Location = rep("Lavina", length(titles)),
-    Posted_Date = rep(NA_character_, length(titles)),
     Link = rep(url, length(titles)),
     stringsAsFactors = FALSE
   )
