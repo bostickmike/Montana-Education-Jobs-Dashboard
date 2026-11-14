@@ -894,6 +894,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     lines kept (Manhattan's as one run-together line), Shields Valley's co-op heading gone. Suite on 0.20.0: 3,374
     passed, 0 failed; full rehearsal passed every step (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.20.0.log`;
     suites 3,395 / 3,402): 46 rows, 41 of 46 spells continue. Notes: `claude-notes/2026-11-14_finalsite-family/README.md`.
+  * [x] WordPress family routine (2026-11-14; edjobs 0.21.0, stacked on Finalsite). 7 districts read through
+    `edjobs::fetch_wordpress_postings()` (Platform `WordPress`); one Rmd block replaces 7; 14 fetch/parse functions
+    and their helpers (350 lines) and 21 test blocks deleted; `test-wordpress-family.R`. Differences: Turner's
+    "Secretary – $14 per hour, ..." -> "Secretary" with Pay_Min 14/hour; Upper West Shore adds "Teachers" (a standing
+    invitation). Bigfork and Pryor stay bespoke. Rehearsed together with Edlio and Joomla on 0.23.0 (see the Joomla
+    entry): 12 rows vs 11 in the committed data, the one new row Upper West Shore's "Teachers". Notes:
+    `claude-notes/2026-11-14_wordpress-family/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
