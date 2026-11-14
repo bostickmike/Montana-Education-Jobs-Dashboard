@@ -3335,42 +3335,6 @@ test_that("parse_hotsprings_postings returns zero rows on empty or non-matching 
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_highwood_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "highwood_cyberschool_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.highwood.k12.mt.us/District/Jobs/"
-
-  result <- parse_highwood_postings(fixture, url)
-
-  expect_equal(nrow(result), 4)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_equal(result$Title, c(
-    "Route or Substitute Expedition Driver",
-    "Route, Activity or Substitute Bus Drivers",
-    "Janitorial",
-    "Substitute Teachers"
-  ))
-  expect_true(all(result$Location == "Highwood"))
-  expect_equal(result$Posted_Date, c("Aug 14, 2026", "Aug 14, 2026", "Apr 23, 2026", "Aug 18, 2025"))
-  expect_true(all(grepl("^https://www.highwood.k12.mt.us/District/Jobs/", result$Link)))
-})
-
-test_that("parse_highwood_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_highwood_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("fetch_highwood_postings fetches and parses a live-shaped response", {
-  fixture <- paste(readLines(test_path("fixtures", "highwood_cyberschool_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  httr2::local_mocked_responses(
-    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
-  )
-
-  result <- fetch_highwood_postings()
-
-  expect_equal(nrow(result), 4)
-})
-
 test_that("parse_smithvalley_postings extracts real positions from captured fixture", {
   fixture <- paste(readLines(test_path("fixtures", "smithvalley_googlesites_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   url <- "https://www.smithvalleyschool.org/employment-opportunities"
@@ -4090,26 +4054,6 @@ test_that("parse_woodman_postings returns zero rows on empty or non-matching HTM
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_vaughn_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "vaughn_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.vaughnschool.com/District/Jobs/"
-
-  result <- parse_vaughn_postings(fixture, url)
-
-  expect_equal(nrow(result), 1)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_equal(result$Title, "Substitutes Needed")
-  expect_equal(result$Location, "Vaughn")
-  expect_equal(result$Link, "https://www.vaughnschool.com/District/Jobs/497-Substitutes-Needed.html")
-  expect_true(all(is.na(result$Posted_Date)))
-})
-
-test_that("parse_vaughn_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_vaughn_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
 test_that("parse_jordan_postings extracts real positions from captured fixture", {
   fixture <- paste(readLines(test_path("fixtures", "jordan_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   url <- "https://www.jordanpublicschools.org"
@@ -4226,25 +4170,6 @@ test_that("parse_troutcreek_postings extracts real positions from captured fixtu
 
 test_that("parse_troutcreek_postings returns zero rows on empty or non-matching HTML", {
   result <- parse_troutcreek_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("parse_power_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "power_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://power.k12.mt.us/District/Jobs/"
-
-  result <- parse_power_postings(fixture, url)
-
-  expect_equal(nrow(result), 3)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_setequal(result$Title, c("Substitute Teachers", "Substitute After-School Custodians", "Substitute Kitchen Aides"))
-  expect_true(all(result$Location == "Power"))
-  expect_true(all(is.na(result$Posted_Date)))
-})
-
-test_that("parse_power_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_power_postings("<html><body><p>No jobs</p></body></html>", "url")
   expect_equal(nrow(result), 0)
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })

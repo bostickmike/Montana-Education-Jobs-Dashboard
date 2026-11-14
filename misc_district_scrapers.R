@@ -1909,45 +1909,6 @@ parse_frenchtown_postings <- function(rendered_text, url = "https://www.ftsd.org
   )
 }
 
-# Highwood Public Schools (highwood.k12.mt.us, found 2026-10-21 via OPI Directory) --
-# Chouteau County rural district on CyberSchool CMS. Positions sit within
-# .listItem_holder with clean .listItem_heading, .listItem_metaPostedDate, and
-# .listItem_headingLink. Confirmed live 2026-10-21: 4 active postings (Route or
-# Substitute Expedition Driver, Route Activity or Substitute Bus Drivers,
-# Janitorial, Substitute Teachers). Plain httr2 fetch, no chromote needed.
-fetch_highwood_postings <- function(url = "https://www.highwood.k12.mt.us/District/Jobs/") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_highwood_postings(resp_body_string(resp), url)
-}
-
-parse_highwood_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  page <- rvest::read_html(html_text)
-  holders <- rvest::html_elements(page, ".listItem_holder")
-  if (length(holders) == 0) return(empty)
-
-  titles <- trimws(rvest::html_text(rvest::html_element(holders, ".listItem_heading")))
-  raw_dates <- trimws(rvest::html_text(rvest::html_element(holders, ".listItem_metaPostedDate")))
-  clean_dates <- sub(" 12:00:00 AM", "", raw_dates)
-  clean_dates <- sub("^[A-Za-z]+, ", "", clean_dates)
-  clean_dates[!nzchar(clean_dates)] <- NA_character_
-
-  hrefs <- rvest::html_attr(rvest::html_element(holders, ".listItem_headingLink"), "href")
-  valid <- nzchar(titles) & !is.na(titles)
-  if (!any(valid)) return(empty)
-
-  titles <- titles[valid]
-  clean_dates <- clean_dates[valid]
-  hrefs <- hrefs[valid]
-  links <- vapply(hrefs, function(h) xml2::url_absolute(h, url), character(1), USE.NAMES = FALSE)
-
-  data.frame(Title = titles, Location = "Highwood", Posted_Date = clean_dates, Link = links, stringsAsFactors = FALSE)
-}
-
 # Smith Valley School District #8 (smithvalleyschool.org, found 2026-10-21 via OPI Directory) --
 # Flathead County K-8 district west of Kalispell on Published Google Sites.
 # Openings sit under "Positions Available:" in h2 elements.
@@ -6579,52 +6540,6 @@ parse_woodman_postings <- function(html_text, url = "http://www.woodmanschool.or
 }
 
 # ---------------------------------------------------------------------------
-# Vaughn Elementary School District #74 (CyberSchool CMS)
-# ---------------------------------------------------------------------------
-fetch_vaughn_postings <- function(url = "https://www.vaughnschool.com/District/Jobs/") {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  parse_vaughn_postings(resp_body_string(resp), url = url)
-}
-
-parse_vaughn_postings <- function(html_text, url = "https://www.vaughnschool.com/District/Jobs/") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  nodes <- rvest::html_elements(doc, ".listItem_headingLink, .data_headingLink")
-  if (length(nodes) == 0) return(empty)
-
-  titles <- character(0)
-  links_out <- character(0)
-  for (n in nodes) {
-    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(n)))
-    href <- rvest::html_attr(n, "href")
-    if (nzchar(txt) && !grepl("^(?:Title|Jobs)$", txt, ignore.case = TRUE)) {
-      full_link <- if (!is.na(href) && nzchar(href)) xml2::url_absolute(href, url) else url
-      titles <- c(titles, txt)
-      links_out <- c(links_out, full_link)
-    }
-  }
-
-  if (length(titles) == 0) return(empty)
-
-  df <- data.frame(
-    Title = titles,
-    Location = "Vaughn",
-    Posted_Date = NA_character_,
-    Link = links_out,
-    stringsAsFactors = FALSE
-  )
-  unique(df)
-}
-
-# ---------------------------------------------------------------------------
 # Jordan Public Schools (SchoolInSites CMS / homepage announcements)
 # ---------------------------------------------------------------------------
 fetch_jordan_postings <- function(url = "https://www.jordanpublicschools.org") {
@@ -6938,55 +6853,6 @@ parse_troutcreek_postings <- function(html_text, url = "https://www.troutcreekea
     Link = links_out,
     stringsAsFactors = FALSE
   )
-}
-
-# ---------------------------------------------------------------------------
-# Power Public Schools
-# ---------------------------------------------------------------------------
-fetch_power_postings <- function(url) {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  html <- resp_body_string(resp)
-  parse_power_postings(html, url)
-}
-
-parse_power_postings <- function(html, url) {
-  empty <- data.frame(
-    Title = character(0),
-    Location = character(0),
-    Posted_Date = character(0),
-    Link = character(0),
-    stringsAsFactors = FALSE
-  )
-  if (!nzchar(html)) return(empty)
-
-  doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  links <- html_elements(doc, "a[href*=\"/District/Jobs/\"], a[href*=\"Jobs/\"]")
-  titles <- character(0)
-  links_out <- character(0)
-
-  for (a in links) {
-    href <- html_attr(a, "href")
-    txt <- trimws(html_text2(a))
-    if (grepl("[0-9]+-[A-Za-z0-9_-]+[.]html$", href) && nzchar(txt)) {
-      titles <- c(titles, txt)
-      links_out <- c(links_out, xml2::url_absolute(href, url))
-    }
-  }
-
-  if (length(titles) == 0) return(empty)
-
-  df <- data.frame(
-    Title = titles,
-    Location = rep("Power", length(titles)),
-    Posted_Date = rep(NA_character_, length(titles)),
-    Link = links_out,
-    stringsAsFactors = FALSE
-  )
-  unique(df)
 }
 
 # ---------------------------------------------------------------------------

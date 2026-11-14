@@ -851,6 +851,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     main (branch test dispatches had been handing issues to Copilot). A new issue Copilot can't be assigned, or
     opens no PR for within 5 minutes, is unassigned and dispatched to `claude-autofix.yml` at once. MT's ruleset no
     longer requests Copilot reviews on every push (15 "insufficient remaining quota" reviews on MT PRs since 11-12).
+  * [x] CyberSchool family routine (2026-11-14; edjobs 0.17.0, WY pin bump only; Mike: grouping the district
+    scrapers by site family "asap"): Highwood, Power and Vaughn get `Platform = "CyberSchool"` and one Rmd block
+    calling `edjobs::fetch_cyberschool_postings(Job_Link, City)`; their three scrapers, three blocks and seven tests
+    are deleted (`test-cyberschool-family.R` runs each registry row against its fixture). Vaughn moved to IES's newer
+    platform this week (`/District/Jobs/` -> `/jobs`, job pages on `vaughn.l.iescentral.com`), where the old scraper
+    read nothing; the routine reads both. Same titles, links and locations as the old parsers on their fixtures and
+    the 11-14 live pages; Power and Vaughn gain posted dates. Each district keeps its old `Posting_Source` text.
+    Posting_IDs: Highwood unchanged; Power's 3 (posted date NA -> 2023-03-01) and Vaughn's 1 (now a stable URL)
+    change once; spells bridge them (one spell each in the rehearsal), New This Week will list them on 11-17.
+    `iescentral.com` in the Copilot allowlist (also needed in repo Settings). Rehearsal passed every step
+    (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.17.0.log`; suites 3,678 / 3,684, 0 failed); two
+    `run_expectations.csv` rows for 11-17. Notes: `claude-notes/2026-11-14_cyberschool-family/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11

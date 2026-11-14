@@ -18,6 +18,8 @@ MT_SCRAPER_SPECS <- list(
   SchoolSpring = scraper_spec("fetch_schoolspring_postings", "Slug"),
   TylerPortico = scraper_spec("fetch_tylerportico_postings", c("Slug", "District")),
   TedK12       = scraper_spec("fetch_tedk12_postings",       "Slug"),
+  # The CyberSchool (IES) family routine, edjobs 0.17.0: one function for every row.
+  CyberSchool  = scraper_spec("fetch_cyberschool_postings",  c("Job_Link", "City")),
   # Red Rover's API (edjobs 0.14.0): Slug is the board's numeric org ID, the
   # link slug comes from Job_Link (Columbia Falls: org 4161, slug sd659912).
   RedRoverK12  = scraper_spec("fetch_redrover_postings", list("Slug", function(row) redrover_org_slug(row$Job_Link))),
