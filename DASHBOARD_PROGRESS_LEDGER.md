@@ -821,6 +821,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (11-13): 39 boards, all answered, 594 postings, all keyed, 64 s. Red Rover's 3 boards added the same day,
     through the API (entry below). OPI fingerprints measured for a later step
     (`claude-notes/2026-11-13_presence-redrover-opi-wsba.md`).
+    Phase 0 (shadow, 2 weeks): nothing reads the files yet. Measured at the end, in a dated claude-notes audit:
+    agreement with the weekly run on its run days, flapping (missing one day, back the next), errors per board,
+    runtime and cron lateness. Then phase 1: the spells read the sightings for day-precision endings.
   * [x] Red Rover through its API (2026-11-13; edjobs 0.14.0, same change in WY; Mike: "can't you do MT red rover
     like WY"): St. Ignatius, Hamilton and Columbia Falls are read with `edjobs::fetch_redrover_postings()` (the
     GraphQL API Red Rover's own board calls; WY's fetcher), no longer rendered with Chrome in the Apptegy batch.
@@ -831,9 +834,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     archived ones included, so postings spanning the switch aren't censored as having moved boards. The three
     districts' coverage tier becomes Full (`MT_DIRECT_API_PLATFORMS`). The Chrome parser, its three map entries and
     its fixtures are gone.
-    Phase 0 (shadow, 2 weeks): nothing reads the files yet. Measured at the end, in a dated claude-notes audit:
-    agreement with the weekly run on its run days, flapping (missing one day, back the next), errors per board,
-    runtime and cron lateness. Then phase 1: the spells read the sightings for day-precision endings.
+  * [x] OPI in the daily presence check (2026-11-13; edjobs 0.15.0; Mike: "look a bit harder at OPI and WSBA"):
+    `presence_feeds.R` defines OPI as a statewide feed, keyed by `edjobs::opi_posting_key()` (the detail page's
+    district and school, title, posted date and description excerpt; OPI links carry no posting ID). A detail page is
+    read only for a posting not seen before (first day ~350 pages, ~340 s; later days a handful). Workflow pins
+    v0.15.0 and sources `state_config.R direct_api_scrapers.R presence_feeds.R`. Tested on GitHub from a throwaway
+    branch (run 43538158652): 43 boards, all ok; OPI 354 postings, all keyed. Not pipeline code: suite only.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
@@ -913,10 +919,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   trust audit (`claude-notes/2026-11-02_spells-trust-audit.md`) re-run on that data, with few endings left that a
   known data artifact explains (68% on 11-02); (c) the OPI matcher check against fresh OPI data done.
   Treat a board-wide default end date such as Bozeman's 2027-06-11 as no deadline. Step 3: daily presence check
-  for day-precision ends (`claude-notes/2026-11-09_daily-presence-check-plan.md`; OPI left out): phase 0 running from
-  2026-11-13 (42 districts, Red Rover included); the audit after two weeks, then phase 1 (the spells read the
-  sightings). OPI in the daily check, keyed by a detail-page fingerprint, is measured and proposed
-  (`claude-notes/2026-11-13_presence-redrover-opi-wsba.md`).
+  for day-precision ends (`claude-notes/2026-11-09_daily-presence-check-plan.md`): phase 0 built 2026-11-13 (42 districts, Red
+  Rover included, plus OPI's statewide list keyed by a detail-page fingerprint, edjobs 0.15.0; runs daily once the
+  PR merges); the audit after two weeks, then phase 1 (the spells read the sightings).
 - [ ] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the page serves an ordinary request from home. Rechecked 2026-11-09: 3 postings, the same
   3 the last good CI run (09-01) captured -- Substitute Employment (standing pool, $120/day), Special Education
