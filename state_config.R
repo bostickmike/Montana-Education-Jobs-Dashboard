@@ -30,6 +30,9 @@ MT_SCRAPER_SPECS <- list(
   TedK12       = scraper_spec("fetch_tedk12_postings",       "Slug"),
   # The CyberSchool (IES) family routine, edjobs 0.17.0: one function for every row.
   CyberSchool  = scraper_spec("fetch_cyberschool_postings",  c("Job_Link", "City")),
+  # Google Doc job lists, edjobs 0.24.0: the doc ids are in Slug.
+  GoogleDoc    = scraper_spec("fetch_googledoc_postings", list("Slug", "City", "Job_Link", mt_list_rule("List_Start"),
+                              mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
   CyberSchoolText = scraper_spec("fetch_cyberschool_postings", list("Job_Link", "City", function(row) "text",
                                  mt_list_rule("List_Start"), mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
   # The Apptegy family routine, edjobs 0.18.0: the rendered text or the

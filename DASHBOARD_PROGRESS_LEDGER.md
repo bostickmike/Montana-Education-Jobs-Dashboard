@@ -931,6 +931,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     HTTP-scraper example is now Richey. Suite 3,320 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
   * [x] Fromberg on the Finalsite family (2026-11-14; edjobs 0.24.0). Same title and link as its old parser on the
     fixture and the live page; Posting_Source unchanged. Old function, Rmd block and tests deleted.
+  * [x] Victor, Superior, Bainville, Creston on the Google Doc routine (2026-11-14; edjobs 0.24.0
+    `fetch_googledoc_postings()`). Registry Platform `GoogleDoc`, doc ids in `Slug`; Bainville has list rules. Live
+    11-14: 4, 3, 7, 1 postings, the 11-10 counts; Victor keeps the doc's "updated" date. Title changes once: Victor
+    "Substitute" -> "Substitutes", Bainville "Paraprofessional- small intervention group" -> "Paraprofessional". Old
+    functions, the preview helper, Rmd blocks and tests deleted. Full suite 3,322 passed, 1 failed (the rules-file test
+    allowed only Apptegy/Google Sites rows; widened, that file then 287 passed, 0 failed).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
