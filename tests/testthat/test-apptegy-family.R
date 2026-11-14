@@ -493,7 +493,8 @@ test_that("k12_list_rules.csv: one row per family district, each rule a valid pe
   rules <- read_k12_list_rules(here::here("k12_list_rules.csv"))
   expect_equal(names(rules), c("District", "List_Start", "List_Stop", "Skip_Section"))
   expect_false(anyDuplicated(rules$District) > 0)
-  expect_true(all(rules$District %in% reg$District[reg$Platform %in% names(APPTEGY_FAMILY_MODES)]))
+  # Rules are read by the Apptegy and Google Sites family routines.
+  expect_true(all(rules$District %in% reg$District[reg$Platform %in% c(names(APPTEGY_FAMILY_MODES), "GoogleSites")]))
   for (col in c("List_Start", "List_Stop", "Skip_Section")) for (rx in stats::na.omit(rules[[col]])) {
     expect_silent(grepl(rx, "x", perl = TRUE))
   }
