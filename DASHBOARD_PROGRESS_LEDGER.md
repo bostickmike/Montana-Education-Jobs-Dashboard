@@ -909,6 +909,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     fixed in 0.23.0). Rehearsed on 0.23.0: 26 rows vs 27 in the committed data; the change is Whitehall's own page
     (adds Agricultural Education Teacher, no longer lists School Custodian). Notes:
     `claude-notes/2026-11-14_small-families/README.md`.
+  * [x] Joomla family routine (2026-11-14; edjobs 0.23.0, stacked on Edlio). 5 districts (Roy, Roberts, Belfry,
+    Luther, Joliet) read through `edjobs::fetch_joomla_postings()` (Platform `Joomla`); one Rmd block replaces 5;
+    10 fetch/parse functions (217 lines) and 15 test blocks deleted; `test-joomla-family.R`. Roberts's
+    maintenance-page error and longer retry budget now apply to the family. Difference: Roy "Bus Driver" ->
+    "BUS DRIVER" (its heading's case). Grass Range stays bespoke (jobs named in a sentence). Suite on 0.23.0: 3,332
+    passed, 0 failed; full rehearsal (WordPress + Edlio + Joomla) passed every step
+    (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.23.0.log`; post-run suite 3,360 passed): 14 rows, all 14 with a
+    district + title (any case) already in the committed data; no NA Posting_Source in the three families' rows.
+    Notes: `claude-notes/2026-11-14_small-families/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
