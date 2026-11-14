@@ -20,25 +20,18 @@
 #     --slug "districtslug" \
 #     [--platform "CustomHeuristic"]
 #
-# Apptegy districts (--cms apptegy, or auto-detected when
-# tests/testthat/fixtures/apptegy_<slug>_pagedata_YYYY-MM-DD.html exists) are
-# wired differently: they ride the shared chromote session, so instead of an
-# Rmd scrape block and a heuristic fetch, this mode writes
-#   - registry Platform "Apptegy";
-#   - parse_<slug>_postings()/fetch_<slug>_postings(chromote_session, url)
-#     before the shared dispatcher, plus the APPTEGY_DISTRICT_SCRAPERS entry;
-#   - the district's name in Mt_ED_Jobs.Rmd's Apptegy safe_scrape() label;
-#   - unit tests on the fixture (exact titles the new parser returns), a
-#     fake-chromote fetch test, and the district in the
-#     fetch_apptegy_k12_postings dispatcher test (fixture, URL routing,
-#     total and per-district counts).
-# The fixture must be captured first (the rendered outerHTML, AIza keys
-# redacted; see the jobs-dash-scraper skill's adopt-new-source.md).
-#   --node text   (default) title = bold text of each CONTENT_NODE_TEXT block
-#   --node panel  titles = lines of the text block inside each
-#                 CONTENT_NODE_PANEL whose heading matches --panel-match
-#                 (default "Positions")
-#   --label "..." name added to the Rmd's Apptegy label (default --district)
+# Apptegy districts (--cms apptegy, or auto-detected from an
+# apptegy_<slug>_rendered_YYYY-MM-DD.txt or apptegy_<slug>_pagedata_YYYY-MM-DD.html
+# fixture) go through the edjobs family routine (edjobs::fetch_apptegy_postings(),
+# 0.18.0), so no code is written; this mode adds
+#   - the registry row: Platform "Apptegy" (--node text, the rendered innerText;
+#     fixture apptegy_<slug>_rendered_<date>.txt) or "ApptegyPageBuilder"
+#     (--node pagebuilder, the page-builder JSON; fixture
+#     apptegy_<slug>_pagedata_<date>.html, AIza keys redacted);
+#   - a k12_list_rules.csv row when --start / --stop / --skip are given (perl
+#     regexes: where the list starts, where it stops, a section to skip);
+#   - a test-apptegy-family.R block asserting the titles the routine returns.
+# It prints those titles: check them against the live page.
 
 suppressMessages({
   library(here)
@@ -74,7 +67,7 @@ if (is.null(district) || is.null(city) || is.null(county) || is.null(lat) || is.
   cat("    --slug \"<slug>\" \\\n")
   cat("    [--platform \"<Slug>Heuristic\"] \\\n")
   cat("    [--cms \"<weebly|wordpress|edlio|google_sites|cyberschool|apptegy|generic>\"] \\\n")
-  cat("    [--node text|panel] [--panel-match \"Positions\"] [--label \"<name>\"]   (apptegy only)\n")
+  cat("    [--node text|pagebuilder] [--start \"<regex>\"] [--stop \"<regex>\"] [--skip \"<regex>\"]   (apptegy only)\n")
   quit(status = 1)
 }
 
@@ -84,7 +77,7 @@ slug <- tolower(gsub("[^a-zA-Z0-9_]", "", slug))
 # Determine CMS template
 fixture_file <- here::here("tests", "testthat", "fixtures", paste0(slug, "_jobs.html"))
 apptegy_fixtures <- sort(Sys.glob(here::here("tests", "testthat", "fixtures",
-                                             paste0("apptegy_", slug, "_pagedata_*.html"))))
+                                             paste0("apptegy_", slug, c("_rendered_*.txt", "_pagedata_*.html")))))
 if (is.null(cms)) {
   if (length(apptegy_fixtures) > 0) {
     cms <- "apptegy"
@@ -123,7 +116,8 @@ apptegy_mode <- identical(cms, "apptegy")
 # Default platform name if not provided
 if (is.null(platform)) {
   if (apptegy_mode) {
-    platform <- "Apptegy"
+    pagebuilder <- identical(tolower(get_arg("node", if (any(grepl("_rendered_", apptegy_fixtures))) "text" else "pagebuilder")), "pagebuilder")
+    platform <- if (pagebuilder) "ApptegyPageBuilder" else "Apptegy"
   } else {
     cap_slug <- paste0(toupper(substr(slug, 1, 1)), substr(slug, 2, nchar(slug)))
     platform <- paste0(cap_slug, "Heuristic")
@@ -131,24 +125,21 @@ if (is.null(platform)) {
 }
 
 # ---------------------------------------------------------------------------
-# Apptegy mode: checks (before any file is touched) and the code templates
+# Apptegy mode: checks (before any file is touched)
 # ---------------------------------------------------------------------------
 if (apptegy_mode) {
-  if (platform != "Apptegy") {
-    cat("Error: --cms apptegy needs registry Platform \"Apptegy\" (the dispatcher cross-check test requires it).\n")
+  if (!platform %in% c("Apptegy", "ApptegyPageBuilder")) {
+    cat("Error: --cms apptegy needs registry Platform \"Apptegy\" or \"ApptegyPageBuilder\" (the family routine reads those).\n")
     quit(status = 1)
   }
-  apptegy_node <- tolower(get_arg("node", "text"))
-  apptegy_panel_match <- get_arg("panel-match", "Positions")
-  apptegy_label <- get_arg("label", district)
-  if (!apptegy_node %in% c("text", "panel")) {
-    cat("Error: --node must be \"text\" or \"panel\".\n")
-    quit(status = 1)
-  }
+  apptegy_mode_name <- if (platform == "ApptegyPageBuilder") "pagebuilder" else "text"
+  want <- if (apptegy_mode_name == "pagebuilder") "_pagedata_" else "_rendered_"
+  apptegy_fixtures <- apptegy_fixtures[grepl(want, basename(apptegy_fixtures), fixed = TRUE)]
   if (length(apptegy_fixtures) == 0) {
-    cat(sprintf("Error: no fixture tests/testthat/fixtures/apptegy_%s_pagedata_YYYY-MM-DD.html.\n", slug))
-    cat("Capture the rendered page first (chromote: Page$navigate, wait, document.documentElement.outerHTML),\n")
-    cat("redact any AIza... key, and save it under that name.\n")
+    cat(sprintf("Error: no fixture tests/testthat/fixtures/apptegy_%s%sYYYY-MM-DD.%s.\n", slug, want,
+                if (apptegy_mode_name == "pagebuilder") "html" else "txt"))
+    cat("Capture the rendered page first (chromote: Page$navigate, wait 4 s, then document.body.innerText for\n")
+    cat("--node text or document.documentElement.outerHTML for --node pagebuilder) and save it under that name.\n")
     quit(status = 1)
   }
   apptegy_fixture <- basename(tail(apptegy_fixtures, 1))
@@ -157,136 +148,15 @@ if (apptegy_mode) {
     cat(sprintf("Error: %s still holds an AIza... API key; redact it before committing the fixture.\n", apptegy_fixture))
     quit(status = 1)
   }
-  cat(sprintf("Node:     %s%s\n", apptegy_node,
-              if (apptegy_node == "panel") sprintf(" (panels matching \"%s\")", apptegy_panel_match) else ""))
-  cat(sprintf("Fixture:  %s\n", apptegy_fixture))
-
-  # Literal splice: sub()/gsub() would eat the backslashes in the inserted
-  # code (its regexes carry \\b), even with fixed = TRUE.
-  replace_first <- function(x, old, new) {
-    pos <- regexpr(old, x, fixed = TRUE)
-    if (pos < 0) return(x)
-    paste0(substr(x, 1, pos - 1), new, substr(x, pos + attr(pos, "match.length"), nchar(x)))
-  }
-  # Fill {{key}} placeholders; values are inserted as written, so string
-  # values are passed through dq() first (a deparsed R string literal).
-  fill <- function(template, ...) {
-    vals <- list(...)
-    for (k in names(vals)) {
-      key <- paste0("{{", k, "}}")
-      while (grepl(key, template, fixed = TRUE)) template <- replace_first(template, key, vals[[k]])
+  apptegy_rule <- c(List_Start = get_arg("start", ""), List_Stop = get_arg("stop", ""), Skip_Section = get_arg("skip", ""))
+  for (rx in apptegy_rule[nzchar(apptegy_rule)]) {
+    if (inherits(try(grepl(rx, "x", perl = TRUE), silent = TRUE), "try-error")) {
+      cat(sprintf("Error: \"%s\" is not a valid perl regex.\n", rx)); quit(status = 1)
     }
-    template
   }
-  dq <- function(x) deparse(x)
-  url_key <- sub("\\..*$", "", sub("^www\\.", "", tolower(sub("^https?://([^/:?#]+).*$", "\\1", url))))
-
-  apptegy_text_parser <- r"(parse_{{slug}}_postings <- function(html_text, url = {{url}}) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  nodes <- decode_apptegy_pagebuilder_nodes(html_text)
-  if (is.null(nodes)) return(empty)
-
-  text_nodes <- find_all_apptegy_nodes(nodes, function(n) {
-    !is.null(n$type) && n$type == "CONTENT_NODE_TEXT" && !is.null(n$content$html)
-  })
-  titles <- unlist(lapply(text_nodes, function(n) {
-    frag <- n$content$html
-    if (!nzchar(frag)) return(character(0))
-    rvest::html_text2(rvest::html_elements(xml2::read_html(paste0("<div>", frag, "</div>")), "strong"))
-  }), use.names = FALSE)
-  titles <- trimws(gsub("[[:space:]]+", " ", titles))
-  titles <- titles[nzchar(titles)]
-  # Not postings: application-form labels, instructions, and bold notices a
-  # page shows when nothing is open ("No positions are open at this time").
-  titles <- titles[!grepl(paste0("application$|^please\\b|^apply\\b|\\bno (current |open )?(openings|positions|vacancies|jobs)\\b|",
-                                 "^(deadline|questions|contact|note|closing date)\\b"), titles, ignore.case = TRUE)]
-  titles <- unique(titles)
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = {{city}}, Posted_Date = NA_character_,
-             Link = url, stringsAsFactors = FALSE)
-})"
-
-  apptegy_panel_parser <- r"(parse_{{slug}}_postings <- function(html_text, url = {{url}}) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  nodes <- decode_apptegy_pagebuilder_nodes(html_text)
-  if (is.null(nodes)) return(empty)
-
-  panels <- find_all_apptegy_nodes(nodes, function(n) {
-    !is.null(n$type) && n$type == "CONTENT_NODE_PANEL" &&
-      !is.null(n$properties$text) && grepl({{panel_match}}, n$properties$text, ignore.case = TRUE)
-  })
-  if (length(panels) == 0) return(empty)
-
-  titles <- unlist(lapply(panels, function(panel) {
-    text_node <- find_apptegy_node(panel$nodes, function(n) !is.null(n$type) && n$type == "CONTENT_NODE_TEXT")
-    if (is.null(text_node)) return(character(0))
-    apptegy_html_fragment_to_lines(text_node$content$html)
-  }), use.names = FALSE)
-  titles <- trimws(gsub("[[:space:]]+", " ", titles))
-  titles <- titles[nzchar(titles)]
-  titles <- titles[!grepl(paste0("application$|^please\\b|^apply\\b|\\bno (current |open )?(openings|positions|vacancies|jobs)\\b|",
-                                 "^(deadline|questions|contact|note|closing date)\\b"), titles, ignore.case = TRUE)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = {{city}}, Posted_Date = NA_character_,
-             Link = url, stringsAsFactors = FALSE)
-})"
-
-  apptegy_scraper_block <- r"(# {{district_comment}} ({{host}}, {{county}}, scaffolded {{date}}).
-# Apptegy CMS behind Fastly (a plain request gets the "Client Challenge"
-# page), read through the shared chromote session.
-# {{node_note}}
-# TODO: say what the page holds and how the titles were confirmed live.
-{{parser}}
-
-fetch_{{slug}}_postings <- function(chromote_session, url = {{url}}) {
-  chromote_session$Page$navigate(url)
-  chromote_session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
-  Sys.sleep(4)
-  html <- chromote_session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
-  parse_{{slug}}_postings(html, url)
-})"
-
-  apptegy_unit_tests <- r"(# Real fixture: document.documentElement.outerHTML captured via a live
-# chromote session from {{host}} (Apptegy; postings live in the page-builder
-# JSON embedded in the page). Titles below are what the scaffolded parser
-# returned on {{date}}; check them against the live page.
-
-test_that("parse_{{slug}}_postings returns the fixture's real postings, not instructions or application links", {
-  html <- paste(readLines(test_path("fixtures", {{fixture}}), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-
-  result <- parse_{{slug}}_postings(html, "url")
-
-  expect_equal(nrow(result), {{n}})
-  expect_equal(result$Title, {{titles}})
-  expect_true(all(result$Location == {{city}}))
-  expect_false(any(grepl("Application$|^Please|^Apply", result$Title)))
-})
-
-test_that("parse_{{slug}}_postings returns zero rows (not an error) for a page with no page-builder data", {
-  result <- parse_{{slug}}_postings("<html><body>Nothing here</body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_equal(nrow(parse_{{slug}}_postings("", "url")), 0)
-})
-
-test_that("fetch_{{slug}}_postings drives a chromote session and parses its real rendered HTML", {
-  html <- paste(readLines(test_path("fixtures", {{fixture}}), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  session <- fake_chromote_session(html)
-
-  result <- fetch_{{slug}}_postings(session)
-
-  expect_equal(nrow(result), {{n}})
-}))"
+  cat(sprintf("Node:     %s\n", apptegy_mode_name))
+  cat(sprintf("Fixture:  %s\n", apptegy_fixture))
+  dq <- function(x) deparse(x, width.cutoff = 500L)
 }
 
 cat(sprintf("=== Scaffolding District: %s ===\n", district))
@@ -375,19 +245,7 @@ rmd_path <- here::here("Mt_ED_Jobs.Rmd")
 rmd_content <- paste(readLines(rmd_path, warn = FALSE), collapse = "\n")
 
 if (apptegy_mode) {
-  # Only the label's "Apptegy/chromote K-12 districts" prefix is matched
-  # anywhere; the name list is for people reading the scrape log.
-  label_rx <- '("Apptegy/chromote K-12 districts \\()([^"]*)(\\)",)'
-  label_m <- regmatches(rmd_content, regexec(label_rx, rmd_content))[[1]]
-  if (length(label_m) == 0) {
-    cat("[WARNING] Could not find the Apptegy safe_scrape() label in Mt_ED_Jobs.Rmd. Add the district's name by hand.\n")
-  } else if (apptegy_label %in% trimws(strsplit(label_m[3], ",")[[1]])) {
-    cat(sprintf("[4/8] '%s' already in Mt_ED_Jobs.Rmd's Apptegy label\n", apptegy_label))
-  } else {
-    rmd_content <- sub(label_rx, paste0("\\1\\2, ", gsub("\\\\", "\\\\\\\\", apptegy_label), "\\3"), rmd_content)
-    writeLines(rmd_content, rmd_path)
-    cat(sprintf("[4/8] Updated Mt_ED_Jobs.Rmd (added '%s' to the Apptegy safe_scrape() label)\n", apptegy_label))
-  }
+  cat("[4/8] Mt_ED_Jobs.Rmd: nothing to add (the Apptegy family block reads the registry)\n")
 } else if (grepl(sprintf("%s_df <-", slug), rmd_content, fixed = TRUE)) {
   cat(sprintf("[4/8] District slug '%s' already wired in Mt_ED_Jobs.Rmd\n", slug))
 } else {
@@ -459,61 +317,28 @@ misc_path <- here::here("misc_district_scrapers.R")
 misc_content <- paste(readLines(misc_path, warn = FALSE), collapse = "\n")
 
 if (apptegy_mode) {
-  map_entry_rx <- sprintf('\n  "%s" = fetch_', district)
-  if (grepl(sprintf("fetch_%s_postings <-", slug), misc_content, fixed = TRUE)) {
-    cat(sprintf("[5/8] fetch_%s_postings already exists in misc_district_scrapers.R\n", slug))
-  } else {
-    parser <- fill(if (apptegy_node == "text") apptegy_text_parser else apptegy_panel_parser,
-                   slug = slug, url = dq(url), city = dq(city), panel_match = dq(apptegy_panel_match))
-    block <- fill(apptegy_scraper_block,
-                  district_comment = gsub("\n", " ", district), host = url_host, county = county,
-                  date = as.character(Sys.Date()),
-                  node_note = if (apptegy_node == "text") {
-                    "Each posting is a page-builder text block whose bold (<strong>) text is the title."
-                  } else {
-                    sprintf("Postings are lines inside the accordion panels whose heading matches \"%s\".", apptegy_panel_match)
-                  },
-                  parser = parser, slug = slug, url = dq(url))
-    dispatcher_marker <- "\n# Fetches all "
-    if (!grepl(dispatcher_marker, misc_content, fixed = TRUE)) {
-      cat("[ERROR] Could not find the '# Fetches all ...' comment above APPTEGY_DISTRICT_SCRAPERS in misc_district_scrapers.R\n")
-      quit(status = 1)
+  rules_path <- here::here("k12_list_rules.csv")
+  rules_lines <- readLines(rules_path, warn = FALSE)
+  if (any(nzchar(apptegy_rule))) {
+    if (any(startsWith(rules_lines, paste0(dq(district), ",")))) {
+      cat(sprintf("[5/8] '%s' already has a k12_list_rules.csv row (left as is)\n", district))
+    } else {
+      writeLines(c(rules_lines, paste(vapply(c(district, apptegy_rule), dq, ""), collapse = ",")), rules_path)
+      cat("[5/8] Added the district's k12_list_rules.csv row\n")
     }
-    misc_content <- replace_first(misc_content, dispatcher_marker, paste0("\n", block, "\n", dispatcher_marker))
-    cat(sprintf("[5/8] Added parse_%s_postings (%s blocks) and fetch_%s_postings to misc_district_scrapers.R\n",
-                slug, apptegy_node, slug))
-  }
-  if (grepl(map_entry_rx, misc_content, fixed = TRUE)) {
-    cat(sprintf("[5/8] '%s' already in APPTEGY_DISTRICT_SCRAPERS\n", district))
   } else {
-    map_end_rx <- "(\n  \"[^\"]+\" = fetch_[a-z0-9_]+_postings)\n\\)\n\nfetch_apptegy_k12_postings <- function\\("
-    if (!grepl(map_end_rx, misc_content)) {
-      cat("[ERROR] Could not find the end of APPTEGY_DISTRICT_SCRAPERS in misc_district_scrapers.R\n")
-      quit(status = 1)
-    }
-    misc_content <- sub(map_end_rx,
-                        paste0("\\1,\n  ", gsub("\\\\", "\\\\\\\\", dq(district)), " = fetch_", slug,
-                               "_postings\n)\n\nfetch_apptegy_k12_postings <- function("),
-                        misc_content)
-    cat(sprintf("[5/8] Added '%s' to APPTEGY_DISTRICT_SCRAPERS\n", district))
+    cat("[5/8] misc_district_scrapers.R: nothing to add (no per-district code; no list rules given)\n")
   }
-  writeLines(misc_content, misc_path)
-
-  # What the new parser returns on the fixture: the tests below assert it.
-  scraper_env <- new.env()
-  parsed <- tryCatch({
-    suppressMessages(sys.source(misc_path, envir = scraper_env))
-    scraper_env[[paste0("parse_", slug, "_postings")]](fixture_txt, url)
-  }, error = function(e) {
-    cat(sprintf("[ERROR] Running parse_%s_postings on the fixture failed: %s\n", slug, conditionMessage(e)))
-    quit(status = 1)
-  })
-  map_size <- length(scraper_env$APPTEGY_DISTRICT_SCRAPERS)
-  cat(sprintf("\nThe parser returns %d posting(s) from %s:\n", nrow(parsed), apptegy_fixture))
+  # What the routine returns on the fixture: the test below asserts it.
+  suppressMessages(library(edjobs))
+  r <- utils::read.csv(rules_path, stringsAsFactors = FALSE, na.strings = "", colClasses = "character")
+  rule <- function(col) { v <- r[[col]][r$District == district]; if (length(v) && !is.na(v[1]) && nzchar(v[1])) v[1] else NA }
+  parsed <- parse_apptegy_postings(fixture_txt, url, city, apptegy_mode_name, rule("List_Start"), rule("List_Stop"), rule("Skip_Section"))
+  cat(sprintf("\nThe family routine returns %d posting(s) from %s:\n", nrow(parsed), apptegy_fixture))
   if (nrow(parsed) > 0) cat(paste0("  - ", parsed$Title, collapse = "\n"), "\n")
   if (nrow(parsed) == 0) {
-    cat("[WARNING] Zero postings. If the page shows openings, try --node panel (or the other node type),\n")
-    cat("          or write the parser by hand; the tests below will assert zero until you do.\n")
+    cat("[WARNING] Zero postings. If the page shows openings, try the other --node, or a --start/--stop rule;\n")
+    cat("          the test below asserts zero until you do.\n")
   }
   cat("Check these against the live page before committing.\n\n")
 } else if (grepl(sprintf("fetch_%s_postings", slug), misc_content, fixed = TRUE)) {
@@ -754,65 +579,22 @@ test_path <- here::here("tests", "testthat", "test-misc-district-scrapers.R")
 test_content <- paste(readLines(test_path, warn = FALSE), collapse = "\n")
 
 if (apptegy_mode) {
-  test_lines <- readLines(test_path, warn = FALSE)
-  n_parsed <- nrow(parsed)
-
-  # A. The shared-session dispatcher test: fixture, URL routing, counts.
-  start <- grep('^test_that\\("fetch_apptegy_k12_postings shares one session across all [0-9]+ districts', test_lines)
-  if (length(start) != 1) {
-    cat("[ERROR] Could not find the fetch_apptegy_k12_postings dispatcher test in test-misc-district-scrapers.R\n")
-    quit(status = 1)
-  }
-  end <- start - 1 + which(test_lines[start:length(test_lines)] == "})")[1]
-  blk <- start:end
-  if (any(grepl(sprintf("District == %s)", dq(district)), test_lines[blk], fixed = TRUE))) {
-    cat(sprintf("[6/8] '%s' already in the dispatcher test\n", district))
+  fam_path <- here::here("tests", "testthat", "test-apptegy-family.R")
+  fam_lines <- readLines(fam_path, warn = FALSE)
+  head_line <- sprintf("test_that(%s, {", dq(paste0("parse_apptegy_postings: ", district)))
+  if (head_line %in% fam_lines) {
+    cat(sprintf("[6/8] '%s' already has a test-apptegy-family.R block\n", district))
   } else {
-    i_fix <- blk[grepl("^  # Same fake session serves every district", test_lines[blk])][1]
-    i_else <- blk[test_lines[blk] == '          else ""'][1]
-    i_n <- blk[grepl("^  expect_equal\\(nrow\\(result\\), .*\\)$", test_lines[blk])][1]
-    i_sum <- tail(blk[grepl("^  expect_equal\\(sum\\(result\\$District == ", test_lines[blk])], 1)
-    if (any(is.na(c(i_fix, i_else, i_n))) || length(i_sum) == 0) {
-      cat("[ERROR] The dispatcher test's layout changed (fixture block, else \"\" routing line, nrow or per-district lines); edit it by hand.\n")
-      quit(status = 1)
-    }
-    # An earlier routing branch whose pattern matches this URL would serve
-    # another district's fixture to this one.
-    pats <- regmatches(test_lines[blk], regexpr('grepl\\("[^"]+", navigated_url\\)', test_lines[blk]))
-    pats <- sub('^grepl\\("([^"]+)".*$', "\\1", pats)
-    clash <- pats[vapply(pats, function(p) grepl(p, url), logical(1))]
-    if (length(clash) > 0) {
-      cat(sprintf("[WARNING] Routing pattern(s) %s already match %s; the dispatcher test will route this district to the wrong fixture. Fix the routing by hand.\n",
-                  paste(dq(clash), collapse = ", "), url))
-    }
-    var <- paste0(slug, "_html")
-    fixture_line <- sprintf('  %s <- paste(readLines(test_path("fixtures", %s), warn = FALSE, encoding = "UTF-8"), collapse = "\\n")',
-                            var, dq(apptegy_fixture))
-    route_line <- sprintf("          else if (grepl(%s, navigated_url)) %s", dq(url_key), var)
-    sum_line <- sprintf("  expect_equal(sum(result$District == %s), %d)", dq(district), n_parsed)
-    test_lines[i_n] <- sub("\\)$", sprintf(" + %d)", n_parsed), test_lines[i_n])
-    test_lines[start] <- sub("across all [0-9]+ districts", sprintf("across all %d districts", map_size), test_lines[start])
-    # Insert bottom-up so earlier indices stay valid; the fixture line goes
-    # after the last fixture read (before the blank line above the comment).
-    test_lines <- append(test_lines, sum_line, after = i_sum)
-    test_lines <- append(test_lines, route_line, after = i_else - 1)
-    test_lines <- append(test_lines, fixture_line, after = i_fix - 2)
-    cat(sprintf("[6/8] Updated the dispatcher test (fixture, routing on \"%s\", +%d total, per-district count, %d districts)\n",
-                url_key, n_parsed, map_size))
+    block <- c(head_line,
+               sprintf("  r <- apptegy_parse(%s, test_path(\"fixtures\", %s))", dq(district), dq(apptegy_fixture)),
+               sprintf("  expect_equal(r$Title, %s)", paste(deparse(parsed$Title, width.cutoff = 500L), collapse = "")),
+               "})", "")
+    # Before the family-level tests at the end of the file.
+    at <- grep("^test_that\\(\"the family and the bespoke map cover", fam_lines)
+    fam_lines <- if (length(at)) append(fam_lines, block, after = at[1] - 1) else c(fam_lines, "", block)
+    writeLines(fam_lines, fam_path)
+    cat(sprintf("[6/8] Added a test-apptegy-family.R block for %s\n", district))
   }
-
-  # B. Unit tests for the new parser and fetch, at the end of the file.
-  if (any(grepl(sprintf("parse_%s_postings(html", slug), test_lines, fixed = TRUE))) {
-    cat(sprintf("[6/8] parse_%s_postings unit tests already exist\n", slug))
-  } else {
-    unit <- fill(apptegy_unit_tests, slug = slug, host = url_host, date = as.character(Sys.Date()),
-                 fixture = dq(apptegy_fixture), n = as.character(n_parsed),
-                 titles = paste(deparse(parsed$Title, width.cutoff = 500L), collapse = ""),
-                 city = dq(city))
-    test_lines <- c(test_lines, "", strsplit(unit, "\n", fixed = TRUE)[[1]])
-    cat(sprintf("[6/8] Added unit tests for parse_%s_postings / fetch_%s_postings\n", slug, slug))
-  }
-  writeLines(test_lines, test_path)
 } else if (grepl(sprintf("parse_%s_postings", slug), test_content, fixed = TRUE)) {
   cat(sprintf("[6/8] parse_%s_postings test already exists in test-misc-district-scrapers.R\n", slug))
 } else {
@@ -885,9 +667,9 @@ if (new_count > old_count) {
 cat("\n=== Scaffolding Complete! ===\n")
 if (apptegy_mode) {
   cat("Next steps:\n")
-  cat(sprintf("  1. Check the titles above against the live page; fill in the TODO comment above parse_%s_postings().\n", slug))
-  cat("  2. testthat::test_file(\"tests/testthat/test-misc-district-scrapers.R\") and test-salary-scrapers.R\n")
-  cat(sprintf("  3. Rscript scripts/repro_scraper.R \"%s\" for the live run; then DLI map, DISTRICT_BACKLOG.md, CLAUDE.md count, the repo's Copilot internet-access setting.\n", district))
+  cat("  1. Check the titles above against the live page (a --start/--stop/--skip rule, or the other --node, if not).\n")
+  cat("  2. testthat::test_file(\"tests/testthat/test-apptegy-family.R\") and test-salary-scrapers.R\n")
+  cat(sprintf("  3. Rscript scripts/repro_scraper.R \"%s\" for the live run; then DLI map, DISTRICT_BACKLOG.md, CLAUDE.md count, the repo's Copilot internet-access list.\n", district))
 } else {
   cat(sprintf("Next step: Implement parser selector logic in parse_%s_postings() in misc_district_scrapers.R\n", slug))
 }

@@ -11,7 +11,7 @@ Pipeline `Mt_ED_Jobs.Rmd` → dashboard `Mt_Ed_Jobs/app.R`. Weekly CI runs on Tu
 `state_config.R` → `MT_SCRAPER_SPECS` and `scraper_sources`, read by `edjobs::resolve_scraper_call(name)`:
 - Shared platforms map to one `fetch_*` with registry columns as arguments (e.g. `AppliTrack` → `fetch_applitrack_postings(Slug)`).
 - A K-12 `<Name>Heuristic` platform resolves **by convention** to `fetch_<lowercase name>_postings(Job_Link)`, so a new heuristic needs a function of exactly that name. (`CutBankHeuristic` → `fetch_cutbank_postings`.)
-- K-12 `Apptegy` / `RedRoverK12` dispatch through `APPTEGY_DISTRICT_SCRAPERS` in `misc_district_scrapers.R`, keyed by the exact `District` name, so a new Apptegy district needs an entry there.
+- K-12 `Apptegy` / `ApptegyPageBuilder` rows read through the edjobs family routine (`fetch_apptegy_postings()`, edjobs 0.18.0), with optional rules in `k12_list_rules.csv`: a new Apptegy district needs only its registry row. `ApptegyBespoke` rows (Shelby, Geyser) dispatch through `APPTEGY_DISTRICT_SCRAPERS` in `misc_district_scrapers.R`, keyed by the exact `District` name. CyberSchool rows read through `fetch_cyberschool_postings()`.
 - HE heuristics are listed explicitly in `MT_SCRAPER_SPECS`, so add one there.
 - `test-drift-check.R` asserts every function named in the specs exists and every registered row resolves.
 
@@ -24,8 +24,8 @@ Scraper files: `direct_api_scrapers.R` (real ATS APIs, K-12 + HE), `misc_distric
 
 ## Files that must change together when adopting a K-12 district
 1. `k12_district_registry.csv` row (county as "X County"). **The NCES id and coordinates come from CCD, not a search result:** the id is the district's LEAID (check name *and* county; CCD has repeated names such as two "Cottonwood Elem"), and the lat/long is its school's CCD location (`schools/ccd/directory`), not the town center. Six dots were 11-40 km off and one id pointed at another county's district before `tools/reference_audit.R` (toolkit) existed; run it after adding a row.
-2. Scraper wiring: a new heuristic fn by convention, or an `APPTEGY_DISTRICT_SCRAPERS` entry, or nothing for AppliTrack/SchoolSpring/TedK12/Portico. Plus the `Mt_ED_Jobs.Rmd` call if that platform isn't registry-looped.
-3. Fixture + test in `tests/testthat/test-misc-district-scrapers.R` (heuristics/Apptegy) or `test-direct-api-scrapers.R`.
+2. Scraper wiring: a new heuristic fn by convention, or nothing for AppliTrack/SchoolSpring/TedK12/Portico/CyberSchool/Apptegy (an `APPTEGY_DISTRICT_SCRAPERS` entry only for a bespoke Apptegy-session scraper). Plus the `Mt_ED_Jobs.Rmd` call if that platform isn't registry-looped.
+3. Fixture + test in `tests/testthat/test-misc-district-scrapers.R` (heuristics), `test-apptegy-family.R` / `test-cyberschool-family.R` (family routines) or `test-direct-api-scrapers.R`.
 4. `.github/copilot-allowlist.txt`: add the district's domain (`test-copilot-allowlist.R` fails otherwise). While the Copilot path is still enabled, tell the user to paste it into repo Settings → Copilot → Internet access too.
 5. DLI teacher pay: look the district up in DLI's regional PDFs (`fetch_dli_region_pdf_text(<region>)` in `salary_scrapers.R`; nine regions, search every one, since names repeat across regions: Gallatin's and Hill's "Cottonwood Elementary" are in 4Rivers and HiLine). Found: add an `MT_DLI_DISTRICT_MAP` entry (pay "ND" or a count "<5" parse to NA, a real gap). Not found: add the district to `test-salary-scrapers.R`'s `setdiff(registry$District, names(MT_DLI_DISTRICT_MAP))` list.
 6. Documented counts: grep for the old count (`grep -rn "128" README.md CLAUDE.md DATA_COOKBOOK.md`) and update each mention.
