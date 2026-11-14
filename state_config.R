@@ -37,6 +37,9 @@ MT_SCRAPER_SPECS <- list(
   # The Google Sites family routine, edjobs 0.19.0 (plain request, the shared title line filter).
   GoogleSites  = scraper_spec("fetch_googlesites_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
                                                                  mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  # The Finalsite family routine, edjobs 0.20.0 (plain request, the shared title line filter).
+  Finalsite    = scraper_spec("fetch_finalsite_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
+                                                               mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
   # Red Rover's API (edjobs 0.14.0): Slug is the board's numeric org ID, the
   # link slug comes from Job_Link (Columbia Falls: org 4161, slug sd659912).
   RedRoverK12  = scraper_spec("fetch_redrover_postings", list("Slug", function(row) redrover_org_slug(row$Job_Link))),

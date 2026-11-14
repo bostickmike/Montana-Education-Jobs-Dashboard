@@ -267,43 +267,6 @@ parse_broadview_page <- function(html_text, location, style, url) {
              Link = url, stringsAsFactors = FALSE)
 }
 
-# Custer Public Schools (custerschools.org) -- genuinely Finalsite (unlike
-# every other district found in the same 2026-08-16 pass, which turned out
-# to be Apptegy despite an initial "Finalsite cluster" hypothesis -- see the
-# Apptegy section below for the correction). A plain httr2 request works
-# fine here, no chromote needed: real postings are a clean `<ul><li>` list
-# immediately following a `<p><strong>Job Openings:</strong></p>` marker,
-# confirmed live 2026-08-16, 6 real postings.
-#
-# Use the www. host explicitly: the apex custerschools.org has no A record
-# (only www. does), so a plain request to the bare domain intermittently
-# fails DNS resolution ("Could not resolve host: custerschools.org") and
-# the whole district drops out of that week's data (confirmed 2026-09-01).
-fetch_custer_postings <- function(url = "https://www.custerschools.org/employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_custer_postings(resp_body_string(resp), url)
-}
-
-parse_custer_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  marker <- rvest::html_elements(page, xpath = "//p[strong[contains(text(), 'Job Openings')]]")
-  if (length(marker) == 0) return(empty)
-
-  list_node <- rvest::html_element(marker[[1]], xpath = "following-sibling::ul[1]")
-  if (is.na(list_node)) return(empty)
-
-  titles <- trimws(rvest::html_text2(rvest::html_elements(list_node, "li")))
-  titles <- titles[nzchar(titles)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Custer", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
 
 # Scobey Schools (scobeyschools.com) -- a Weebly site (found via a
 # 2026-08-16 follow-up on Scobey specifically, the single highest-volume
@@ -463,49 +426,6 @@ parse_arrowhead_postings <- function(html_text, url) {
   if (length(titles) == 0) return(empty)
 
   data.frame(Title = titles, Location = "Pray", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
-# Baker Public Schools (baker.k12.mt.us, found 2026-08-24 in the first
-# pass against OPI's own full district list -- see
-# [[mt-dashboard-full-opi-coverage-goal]]) -- Finalsite, same platform
-# as Thompson Falls/Hobson/Shepherd above. Real postings sit only under
-# "CLASSIFIED POSITIONS AVAILABLE" -- the page's own "CERTIFIED POSITIONS
-# AVAILABLE" section explicitly defers entirely to OPI's statewide feed
-# ("Please visit our listings on OPI Jobs for Teachers..."), the same
-# no-independent-listing pattern as Dodson/Baker's own Certified
-# section, deliberately excluded rather than scraped. Confirmed live
-# 2026-08-24, 3 real postings. Stops at "All interested parties are to
-# fill out...", the real, stable boundary before the application-form
-# instructions.
-fetch_baker_postings <- function(url = "https://www.baker.k12.mt.us/quick-links/employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_baker_postings(resp_body_string(resp), url)
-}
-
-parse_baker_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  start_idx <- which(lines == "CLASSIFIED POSITIONS AVAILABLE")
-  if (length(start_idx) == 0) return(empty)
-  lines <- lines[(start_idx[1] + 1):length(lines)]
-
-  stop_idx <- which(grepl("^All interested parties", lines))
-  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
-
-  titles <- lines[nzchar(lines)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Baker", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
 
@@ -1301,54 +1221,6 @@ parse_brockton_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Brockton", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
-# Culbertson School District 17-C (culbertsonschool.com, found
-# 2026-08-24) -- Finalsite, same platform as Shepherd/Roberts's shared
-# family above, plain httr2 fetch. The page groups postings under 3
-# headers ("Employment Opportunities: Certified Positions"/"...Classified
-# Positions"/"Roos-Valley Special Education Cooperative"), but Certified
-# and the Roos-Valley Coop are both genuinely empty right now -- each has
-# only its own boilerplate "[X] Application" link line and no actual
-# title, confirmed live 2026-08-24. Only Classified currently has 2 real
-# titles ("Substitute Teachers", "Activity Bus Drivers"). Boilerplate
-# application-link lines are filtered by containing the word
-# "Application" anywhere (not just as a suffix, since one of them --
-# "Certified Application Roos-Valley Coop" -- has real words after it).
-CULBERTSON_HEADER_PATTERN <- "^Employment Opportunities:"
-
-fetch_culbertson_postings <- function(url = "https://www.culbertsonschool.com/about-us/employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_culbertson_postings(resp_body_string(resp), url)
-}
-
-parse_culbertson_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
-  lines <- gsub(intToUtf8(160), " ", lines, fixed = TRUE)
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  start_idx <- which(grepl("^Employment Opportunities: Certified Positions$", lines))
-  stop_idx <- which(lines == "Please complete and return to:")
-  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
-  body <- lines[start_idx[1]:(stop_idx[1] - 1)]
-
-  body <- body[!grepl(CULBERTSON_HEADER_PATTERN, body)]
-  body <- body[body != "Open until filled"]
-  body <- body[!grepl("Application", body, fixed = TRUE)]
-  body <- body[body != "Roos-Valley Special Education Cooperative"]
-
-  titles <- body[nzchar(body)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Culbertson", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
 
 fetch_winnett_postings <- function(url = "https://www.winnettschool.org/employment") {
   resp <- request(url) %>%
@@ -1391,69 +1263,6 @@ parse_winnett_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Winnett", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
-
-# Shepherd School District #37 (shepherd.k12.mt.us, found 2026-08-24) --
-# Finalsite, same platform as Thompson Falls/Hobson above, but a genuine
-# multi-category flat-list template unlike either of those: 4 real
-# category headers (Administrator/Certified Teaching/Classified/
-# Coaching Positions), each followed directly by 0+ short title lines
-# with no per-category boilerplate to filter -- reuses the Hays-Lodge
-# Pole/Dutton title-shape heuristic (length cap, no trailing "."/":")
-# to separate real titles from the longer prose sentences (application
-# instructions, substitute-role blurbs) interleaved between categories.
-# Confirmed live 2026-08-24, 18 real postings (0 Administrator, 5
-# Certified, 4 Classified, 9 Coaching -- "Assistant High School
-# Wrestling Coach" is a real, genuinely duplicated title, kept as 2 rows
-# the same way Wolf Point's own duplicates are). Stops at the line
-# beginning "Shepherd School District #37 does not discriminate", the
-# real, stable boundary before contact info.
-SHEPHERD_CATEGORIES <- c("Administrator Positions:", "Certified Teaching Positions:", "Classified Positions:", "Coaching Positions:")
-
-looks_like_shepherd_title <- function(line) {
-  if (nchar(line) > 55) return(FALSE)
-  if (grepl("[.:]$", line)) return(FALSE)
-  if (!grepl("[A-Za-z]", line)) return(FALSE)
-  TRUE
-}
-
-fetch_shepherd_postings <- function(url = "https://www.shepherd.k12.mt.us/dist-office/jobs/overview") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_shepherd_postings(resp_body_string(resp), url)
-}
-
-parse_shepherd_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  start_idx <- which(lines == SHEPHERD_CATEGORIES[1])
-  if (length(start_idx) == 0) return(empty)
-  stop_idx <- which(grepl("^Shepherd School District #37 does not discriminate", lines))
-  if (length(stop_idx) == 0) return(empty)
-  lines <- lines[start_idx[1]:(stop_idx[1] - 1)]
-
-  rows <- list()
-  current_category <- NA_character_
-  for (line in lines) {
-    if (line %in% SHEPHERD_CATEGORIES) {
-      current_category <- sub(":$", "", line)
-      next
-    }
-    if (!is.na(current_category) && looks_like_shepherd_title(line)) {
-      rows[[length(rows) + 1]] <- data.frame(Title = line, Location = current_category,
-                                              Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-    }
-  }
-  if (length(rows) == 0) return(empty)
-  do.call(rbind, rows)
-}
 
 # Hysham Public Schools (hyshamschools.com, found 2026-08-24) -- an
 # unbranded CMS (no recognized platform signature), plain httr2 fetch.
@@ -1544,51 +1353,6 @@ parse_bigfork_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Bigfork", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
-
-# Hobson Public School (hobson.k12.mt.us, found 2026-08-24) -- Finalsite,
-# same platform as Thompson Falls, but a different page shape: real
-# postings sit in prose under a year-suffixed header ("Current Openings
-# at Hobson Public School for the 2026-2027 school year:") rather than
-# Thompson Falls's RSS-feed-style "Post RSS Feeds"/"Load More" boundary
-# -- matched by a regex tolerant of the school-year string changing
-# rather than a literal line, since this page's own content will
-# presumably get re-authored with a new year string every fall.
-# Confirmed live 2026-08-24, 3 real postings (Vo-Ag Teacher, Physical
-# Education, Elementary Education). Stops at the line beginning "Listing
-# of all Current Teacher Openings", the real, stable boundary before the
-# OPI-referral/CBA/application-form document links.
-HOBSON_START_PATTERN <- "^Current Openings at Hobson Public School for the .+ school year:$"
-HOBSON_STOP_PATTERN <- "^Listing of all Current Teacher Openings"
-
-fetch_hobson_postings <- function(url = "https://www.hobson.k12.mt.us/employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_hobson_postings(resp_body_string(resp), url)
-}
-
-parse_hobson_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  start_idx <- which(grepl(HOBSON_START_PATTERN, lines))
-  if (length(start_idx) == 0) return(empty)
-  lines <- lines[(start_idx[1] + 1):length(lines)]
-
-  stop_idx <- which(grepl(HOBSON_STOP_PATTERN, lines))
-  if (length(stop_idx) > 0) lines <- lines[seq_len(stop_idx[1] - 1)]
-
-  titles <- lines[nzchar(lines)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Hobson", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
 
 # Turner Public Schools (turner.k12.mt.us, found 2026-08-24) -- WordPress,
 # same platform as Ramsay above, plain httr2 fetch. The Employment page is
@@ -1867,91 +1631,6 @@ fetch_geyser_postings <- function(chromote_session, url = "https://www.geyser.k1
   parse_geyser_postings(text, url)
 }
 
-# Thompson Falls Public Schools (thompsonfalls.net) -- found in the same
-# follow-up pass. Genuinely Finalsite (confirmed by the real "Powered by
-# Finalsite" footer), a plain httr2 fetch, no chromote needed. Real
-# postings are a clean list right after "Post RSS Feeds Subscribe to Post
-# Alerts" (a real, stable Finalsite widget label, not authored content)
-# -- confirmed live 2026-08-23 (5 postings, with a "Load More" button) and
-# again 2026-09-07 (3 postings, no "Load More" -- the button only appears
-# when there are enough postings to paginate). The stop boundary is
-# whichever comes first of "Load More" or the "Employment Information"
-# section header that always follows the openings list -- the earlier
-# version keyed only on "Load More" and silently returned 0 once the
-# button went away (drift-check issue #1, 2026-09-07).
-parse_thompsonfalls_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  start_idx <- which(grepl("^Post RSS Feeds", lines))
-  if (length(start_idx) == 0) return(empty)
-  stop_candidates <- which(lines %in% c("Load More", "Employment Information"))
-  stop_candidates <- stop_candidates[stop_candidates > start_idx[1]]
-  if (length(stop_candidates) == 0) return(empty)
-  stop_idx <- min(stop_candidates)
-  # Markers back to back = no postings. Without this, (start + 1):(stop - 1)
-  # counts backwards and returns the two marker lines as fake postings.
-  if (stop_idx <= start_idx[1] + 1) return(empty)
-
-  titles <- lines[(start_idx[1] + 1):(stop_idx - 1)]
-  titles <- sub(" \\(opens in new window/tab\\)$", "", titles)
-  titles <- titles[nzchar(titles)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Thompson Falls", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-fetch_thompsonfalls_postings <- function(url = "https://www.thompsonfalls.net/employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_thompsonfalls_postings(resp_body_string(resp), url)
-}
-
-# Manhattan School District #3 (rollontigers.org) -- Finalsite, a plain
-# httr2 fetch. Was registered as Tyler Portico (manhattanpublicschoolsmt)
-# until 2026-11-02, but that tenant is only the staff self-service portal:
-# its Positions API answers 200 with an empty list, so every run since
-# August returned 0 while OPI listed Manhattan openings. The district posts
-# them on its own "Current Openings" page instead: one link per posting
-# (a PDF at /fs/resource-manager/view/<uuid>, a real per-posting URL)
-# under CERTIFIED / CLASSIFIED / COACHING POSITIONS headings, in the same
-# content blocks as the "Certified/Classified Application Form" links,
-# which are dropped. The standing "Always Accepting Applications For
-# Substitute..." list is plain text, not a posting, and isn't read.
-# Confirmed live 2026-11-02: 11 postings.
-parse_manhattan_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  page <- rvest::read_html(html_text)
-  blocks <- rvest::html_elements(page, xpath = paste0(
-    "//div[contains(@class,'fsElementContent')]",
-    "[.//h3[contains(translate(normalize-space(.), 'positions', 'POSITIONS'), 'POSITIONS')]]"))
-  if (length(blocks) == 0) return(empty)
-  links <- rvest::html_elements(blocks, "a[href*='/fs/resource-manager/view/']")
-  titles <- trimws(gsub("\\s+", " ", rvest::html_text2(links)))
-  hrefs <- xml2::url_absolute(rvest::html_attr(links, "href"), url)
-  keep <- nzchar(titles) & !grepl("application form|^application$", titles, ignore.case = TRUE)
-  if (!any(keep)) return(empty)
-  out <- data.frame(Title = titles[keep], Location = "Manhattan", Posted_Date = NA_character_,
-                    Link = hrefs[keep], stringsAsFactors = FALSE)
-  out[!duplicated(out$Link), , drop = FALSE]
-}
-
-fetch_manhattan_postings <- function(url = "https://www.rollontigers.org/district/employment/current-openings") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_manhattan_postings(resp_body_string(resp), url)
-}
-
 
 # Red Rover Hiring (St. Ignatius, Hamilton, Columbia Falls): read through Red
 # Rover's GraphQL API since edjobs 0.14.0 (fetch_redrover_postings(org_id,
@@ -2009,77 +1688,6 @@ parse_ekalaka_postings <- function(html_text, url) {
   posted_date <- suppressWarnings(as.character(as.Date(dates_raw, format = "%B %d, %Y")))
 
   data.frame(Title = titles, Location = "Ekalaka", Posted_Date = posted_date, Link = url, stringsAsFactors = FALSE)
-}
-
-# Shields Valley Public Schools (svalleyk12.org, serving both Clyde Park
-# and Wilsall -- the OPI feed's "CLYDE PARK" and "WILSALL" rows are the
-# same single district) -- found in the same follow-up pass. Genuinely
-# Finalsite (confirmed by the real "Powered by Finalsite" footer), a plain
-# httr2 fetch, no chromote needed. Real postings each sit inside their own
-# real `<p>` (or share a `<p>` with the preceding one via a real `<br>`,
-# e.g. the header "Park Special Education Co-op Openings" and its one
-# posting), each posting authored as a real `<a href="...google docs...">
-# TITLE</a>` link -- title text lives inside the anchor itself, not
-# guessed from surrounding prose. A posting already filled shows the same
-# `<a>` markup plus the real word "Filled" elsewhere in the same line
-# (confirmed live: 8 of 12 real posting lines are Filled right now) --
-# excluded by checking for that literal word in the line's full plain
-# text, the same "currently filled, not really open" judgment call Wolf
-# Point's EAE exclusion and Conrad's stale-posting exclusion already made
-# elsewhere in this file. Confirmed live 2026-08-23: 4 real currently-open
-# postings across 3 of the page's 4 real "<Category> Openings" headers
-# (K-12 Art under Certified Teacher; Maintenance/Grounds/Custodial
-# Technician and High Needs Para Educator under Classified Staff;
-# Occupational Therapist under Park Special Education Co-op -- Coaching/
-# Advisor's own single posting, Head HS Football Coach, is Filled).
-fetch_shieldsvalley_postings <- function(url = "https://svalleyk12.org/district/employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_shieldsvalley_postings(resp_body_string(resp), url)
-}
-
-parse_shieldsvalley_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  containers <- rvest::html_elements(page, ".fsElementContent")
-  target <- NULL
-  for (container in containers) {
-    if (grepl("Certified Teacher Openings", rvest::html_text2(container), fixed = TRUE)) {
-      target <- container
-      break
-    }
-  }
-  if (is.null(target)) return(empty)
-
-  frag_html <- as.character(target)
-  x <- gsub("<p[^>]*>|</p>|<br\\s*/?>", "\n", frag_html)
-  lines <- strsplit(x, "\n")[[1]]
-  lines <- trimws(lines)
-  lines <- lines[nzchar(lines)]
-
-  rows <- list()
-  current_header <- NA_character_
-  for (line in lines) {
-    plain <- trimws(gsub("<[^>]+>", "", line))
-    if (grepl(" Openings$", plain)) {
-      current_header <- sub(" Openings$", "", plain)
-      next
-    }
-    if (is.na(current_header)) next
-    a_match <- regmatches(line, regexpr("<a[^>]*>.*?</a>", line))
-    if (length(a_match) == 0) next
-    if (grepl("Filled", plain, fixed = TRUE)) next
-    title <- trimws(gsub("<[^>]+>", "", sub("^<a[^>]*>(.*)</a>$", "\\1", a_match)))
-    if (!nzchar(title)) next
-    rows[[length(rows) + 1]] <- data.frame(Title = title, Location = current_header,
-                                            Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-  }
-  if (length(rows) == 0) return(empty)
-  do.call(rbind, rows)
 }
 
 
@@ -2347,46 +1955,6 @@ parse_frazer_postings <- function(html_text, url = "https://www.frazer.k12.mt.us
   )
 }
 
-# Lambert School District (Richland County) -- Finalsite CMS,
-# plain httr2 fetch, no chromote needed. Active positions listed
-# in #fsPageContent .fsContent ul li.
-fetch_lambert_postings <- function(url = "https://www.lambertschool.net/career-opportunities/employment-opportunities") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_lambert_postings(resp_body_string(resp), url)
-}
-
-parse_lambert_postings <- function(html_text, url = "https://www.lambertschool.net/career-opportunities/employment-opportunities") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  page <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(page)) return(empty)
-  lis <- rvest::html_elements(page, "#fsPageContent .fsContent ul li, main .fsContent ul li")
-  if (length(lis) == 0) return(empty)
-
-  raw_titles <- rvest::html_text(lis, trim = TRUE)
-  raw_titles <- raw_titles[nzchar(raw_titles)]
-
-  clean_titles <- character(0)
-  for (t in raw_titles) {
-    cleaned <- trimws(gsub("(?i)click here.*|,\\s*for job description.*", "", t))
-    if (nzchar(cleaned) && nchar(cleaned) < 90 &&
-        !grepl("^Applications?|Master Agreement|Alumni|None|Equal Opportunity", cleaned, ignore.case = TRUE)) {
-      clean_titles <- c(clean_titles, cleaned)
-    }
-  }
-  if (length(clean_titles) == 0) return(empty)
-
-  data.frame(
-    Title = clean_titles,
-    Location = "Lambert",
-    Posted_Date = NA_character_,
-    Link = url,
-    stringsAsFactors = FALSE
-  )
-}
 
 # Richey Public Schools (Dawson County) -- CyberSchool CMS,
 # plain httr2 fetch, no chromote needed. Active positions listed
@@ -2704,42 +2272,6 @@ parse_rapelje_postings <- function(html_text, url = "https://www.rapelje.k12.mt.
   )
 }
 
-
-# ---------------------------------------------------------------------------
-# Elder Grove School District (Finalsite Posts CMS)
-# ---------------------------------------------------------------------------
-fetch_eldergrove_postings <- function(url = "https://www.eldergrove.k12.mt.us/about-eg/employment/available-positions") {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  parse_eldergrove_postings(resp_body_string(resp), url = url)
-}
-
-parse_eldergrove_postings <- function(html_text, url = "https://www.eldergrove.k12.mt.us/about-eg/employment/available-positions") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  titles <- rvest::html_elements(doc, ".fsListItems article .fsTitle a, .fsTitle a.fsPostLink")
-  if (length(titles) == 0) return(empty)
-
-  roles <- unique(trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(titles))))
-  roles <- roles[nzchar(roles)]
-  roles <- roles[!grepl("^(?:Certified|Classified) Positions?$", roles, ignore.case = TRUE)]
-  if (length(roles) == 0) return(empty)
-
-  data.frame(
-    Title = roles,
-    Location = "Billings",
-    Posted_Date = NA_character_,
-    Link = url,
-    stringsAsFactors = FALSE
-  )
-}
 
 # ---------------------------------------------------------------------------
 # Monforton School District #27 (WordPress Page)
@@ -3160,56 +2692,6 @@ parse_canyoncreek_postings <- function(html_text, url = "https://www.canyoncreek
   )
 }
 
-# ---------------------------------------------------------------------------
-# Hellgate Elementary School District #4 (hellgate.k12.mt.us)
-# ---------------------------------------------------------------------------
-fetch_hellgate_postings <- function(url = "https://www.hellgate.k12.mt.us/our-district/employment") {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  parse_hellgate_postings(resp_body_string(resp), url = url)
-}
-
-parse_hellgate_postings <- function(html_text, url = "https://www.hellgate.k12.mt.us/our-district/employment") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  content <- rvest::html_element(doc, "#fsPageContent")
-  if (is.null(content)) return(empty)
-
-  links <- rvest::html_elements(content, "span.fs_style_1 a, .fsElementContent a")
-  if (length(links) == 0) return(empty)
-
-  titles <- character(0)
-  urls_out <- character(0)
-
-  for (a in links) {
-    txt <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(a)))
-    href <- rvest::html_attr(a, "href")
-    if (grepl("Substitute|Teacher|Para|Custodial|Food Service|Nurse|Driver|Coach|Aide|Specialist|Principal|Superintendent", txt, ignore.case = TRUE) &&
-        !grepl("Forms|Schools|Handbook|Policy", txt, ignore.case = TRUE)) {
-      full_link <- if (!is.na(href) && nzchar(href)) xml2::url_absolute(href, url) else url
-      titles <- c(titles, txt)
-      urls_out <- c(urls_out, full_link)
-    }
-  }
-
-  if (length(titles) == 0) return(empty)
-
-  df <- data.frame(
-    Title = titles,
-    Location = "Missoula",
-    Posted_Date = NA_character_,
-    Link = urls_out,
-    stringsAsFactors = FALSE
-  )
-  unique(df)
-}
 
 # ---------------------------------------------------------------------------
 # Helena Flats School District #15 (Apptegy CMS)
