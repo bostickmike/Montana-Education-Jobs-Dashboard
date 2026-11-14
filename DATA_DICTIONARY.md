@@ -44,7 +44,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `position` | Categorical | Classification Model | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
 | `location` | String | District ATS / OPI | Specific school building, facility, or employer city/location label. |
 | `url` | URL | District ATS / OPI | Direct link to the job posting or district applicant tracking portal. |
-| `District` | String | Canonical Registry | Canonical public school district name. OPI statewide rows: the registry district when our own scrape of it returned nothing that week, else the district we don't scrape (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
+| `District` | String | Canonical Registry | Canonical public school district name. OPI statewide rows: the registry district when the dashboard's own scrape of it returned nothing that week, else the district not scraped directly (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
 | `Posting_Source` | String | Project Pipeline | Original job feed source (direct district ATS board vs OPI Jobs for Teachers feed). |
 | `Posting_Identity_Method` | String | Project Pipeline | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
 | `Posting_ID` | String | Project Pipeline | Durable unique posting identifier used to track openings longitudinally across weekly snapshots. |
@@ -244,18 +244,18 @@ Every Montana public district in NCES CCD, tied to the registry district whose j
 | `Longitude` | Numeric | NCES CCD | District longitude (CCD). |
 | `Teachers_Total_FTE` | Numeric | NCES CCD | Teacher FTE for this district. |
 | `Enrollment` | Integer | NCES CCD | Student enrollment for this district. |
-| `Registry_District` | String | Project Pipeline | The directly scraped registry district whose job board covers this district; NA if we don't scrape it. |
+| `Registry_District` | String | Project Pipeline | The directly scraped registry district whose job board covers this district; NA if it isn't scraped directly. |
 | `Match_Rule` | String | Project Pipeline | How Registry_District was assigned: registry NCES id, same town and name (elementary/high school pair), or high school in a scraped town. |
-| `Map_Entity` | String | Project Pipeline | Name used on the map and in District: the registry district, or for districts we don't scrape one name per town (e.g. 'Box Elder Elem / Box Elder H S'). |
+| `Map_Entity` | String | Project Pipeline | Name used on the map and in District: the registry district, or for districts not scraped directly one name per town (e.g. 'Box Elder Elem / Box Elder H S'). |
 | `CCD_Year` | Integer | NCES CCD | CCD directory year. |
 
 ### K. OPI-only Districts (`opi_only_districts.csv`)
 
-Districts we don't scrape that posted on OPI Jobs for Teachers this week: their map rows, with the same context as `salarymap2.csv` where a statewide source covers them.
+Districts not scraped directly that posted on OPI Jobs for Teachers this week: their map rows, with the same context as `salarymap2.csv` where a statewide source covers them.
 
 | Column | Type | Authority | Definition |
 |---|---|---|---|
-| `District` | String | Project Pipeline | Map entity: a district (or town pair) we don't scrape that posted on OPI Jobs for Teachers this week. |
+| `District` | String | Project Pipeline | Map entity: a district (or town pair) not scraped directly that posted on OPI Jobs for Teachers this week. |
 | `County` | String | NCES CCD | County. |
 | `City` | String | NCES CCD | City. |
 | `Latitude` | Numeric | NCES CCD | Latitude (mean over the entity's districts). |
