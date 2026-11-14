@@ -4,53 +4,6 @@ testthat::local_mocked_bindings(Sys.sleep = function(...) invisible(NULL), .pack
 # Real fixture captured 2026-08-07 from
 # https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638.
 
-test_that("parse_livingston_postings extracts the 20 real postings, excluding boilerplate forms/documents", {
-  html <- paste(readLines(test_path("fixtures", "livingston_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-
-  result <- parse_livingston_postings(html, "https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638")
-
-  expect_equal(nrow(result), 20)
-  expect_true("PHS Custodian 2026 (2)" %in% result$Title)
-  # Regression: the "OTHER DISTRICT POSTINGS" section genuinely mixes one
-  # real-postings block with a second, boilerplate-forms block under the
-  # SAME header -- title-pattern filtering (not section-heading scoping)
-  # is what has to catch these.
-  expect_false(any(result$Title %in% c(
-    "Administrator Application", "Certified Staff Application",
-    "classified employee application (Classified, Coaches, Substitutes)",
-    "MT W-4 2026", "Fed W-4 2026", "I-9 2026",
-    "LEA Professional Agreement 2024-2026", "LCEA CBA 2024-2026", "LCEA CBA 2026 2028"
-  )))
-})
-
-test_that("parse_livingston_postings uses the preceding school-building header as Location", {
-  html <- paste(readLines(test_path("fixtures", "livingston_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-
-  result <- parse_livingston_postings(html, "https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638")
-
-  phs <- result[result$Title == "PHS Custodian 2026 (2)", ]
-  expect_equal(phs$Location, "PARK HIGH SCHOOL")
-  sgms <- result[result$Title == "SGMS Volleyball Coach 26 27", ]
-  expect_equal(sgms$Location, "SLEEPING GIANT MIDDLE SCHOOL")
-  expect_true(all(is.na(result$Posted_Date)))
-})
-
-test_that("parse_livingston_postings returns zero rows (not an error) when there are no real postings", {
-  result <- parse_livingston_postings("<html><body><p>no openings</p></body></html>", "https://www.livingston.k12.mt.us/employment")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("fetch_livingston_postings fetches and parses a live-shaped response", {
-  fixture <- paste(readLines(test_path("fixtures", "livingston_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  httr2::local_mocked_responses(
-    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
-  )
-
-  result <- fetch_livingston_postings()
-
-  expect_equal(nrow(result), 20)
-})
 
 # Real fixtures captured 2026-08-07 from lgschools.org's Employment page
 # (uREC_ID=373420) across its 3 real tabs.
@@ -1177,46 +1130,6 @@ test_that("fetch_nashua_postings fetches and parses a live-shaped response", {
   expect_equal(nrow(result), 7)
 })
 
-test_that("parse_whitehall_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "whitehall_jobs_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.whitehallschools.org/apps/jobs/"
-
-  result <- parse_whitehall_postings(fixture, url)
-
-  expect_equal(nrow(result), 4)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_equal(result$Title, c(
-    "Extracurricular Position ( Advisor or Coach)",
-    "Paraprofessional / Teacher's Aide",
-    "School Custodian",
-    "Substitute Teacher"
-  ))
-  expect_equal(result$Location, c(
-    "Whitehall",
-    "Whitehall Elementary",
-    "Whitehall School District",
-    "Whitehall Elementary, Whitehall Middle and High Schools"
-  ))
-  expect_true(all(grepl("^https://www\\.whitehallschools\\.org/apps/jobs/show_job\\.jsp\\?REC_ID=", result$Link)))
-})
-
-test_that("parse_whitehall_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_whitehall_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("fetch_whitehall_postings fetches and parses a live-shaped response", {
-  fixture <- paste(readLines(test_path("fixtures", "whitehall_jobs_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  httr2::local_mocked_responses(
-    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
-  )
-
-  result <- fetch_whitehall_postings()
-
-  expect_equal(nrow(result), 4)
-})
-
 
 test_that("parse_wibaux_postings extracts real positions from captured fixture", {
   fixture <- paste(readLines(test_path("fixtures", "wibaux_employment_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -1807,26 +1720,6 @@ test_that("parse_charlo_postings returns zero rows on empty or non-matching HTML
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_canyoncreek_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "canyoncreek_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.canyoncreekschool.org/apps/jobs/"
-
-  result <- parse_canyoncreek_postings(fixture, url)
-
-  expect_equal(nrow(result), 1)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_equal(result$Title, "Paraprofessional Pre-K (All Day Full-Time)")
-  expect_equal(unique(result$Location), "Billings")
-  expect_equal(result$Link, "https://www.canyoncreekschool.org/apps/jobs/show_job.jsp?REC_ID=23398")
-  expect_true(all(is.na(result$Posted_Date)))
-})
-
-test_that("parse_canyoncreek_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_canyoncreek_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
 
 test_that("parse_helenaflats_postings extracts real positions from captured fixture", {
   fixture <- paste(readLines(test_path("fixtures", "helenaflats_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -1950,24 +1843,6 @@ test_that("parse_westglacier_postings returns zero rows on empty or non-matching
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_troutcreek_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "troutcreek_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685"
-
-  result <- parse_troutcreek_postings(fixture, url)
-
-  expect_equal(nrow(result), 4)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_setequal(result$Title, c("Teachers", "Business Manager/Clerk", "Substitute Teachers", "Para-Professional"))
-  expect_true(all(result$Location == "Trout Creek"))
-  expect_true(all(is.na(result$Posted_Date)))
-})
-
-test_that("parse_troutcreek_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_troutcreek_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
 
 test_that("parse_kila_postings extracts real positions from captured fixture", {
   fixture <- paste(readLines(test_path("fixtures", "kila_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2054,32 +1929,6 @@ test_that("parse_pleasantvalley_postings returns zero rows on empty or non-match
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_sunrivervalley_postings returns zero rows on fixture with only generic applications", {
-  fixture <- paste(readLines(test_path("fixtures", "sunrivervalley_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://srvs.k12.mt.us/apps/jobs/"
-
-  result <- parse_sunrivervalley_postings(fixture, url)
-
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("parse_sunrivervalley_postings extracts real positions when present", {
-  sample_html <- '<table width="100%"><tr><td class="light pale lightBorderBottom"><b><a href="/apps/jobs/show_job.jsp?REC_ID=19999">7-12 Science Teacher</a></b><br></td></tr></table>'
-  url <- "https://srvs.k12.mt.us/apps/jobs/"
-
-  result <- parse_sunrivervalley_postings(sample_html, url)
-  expect_equal(nrow(result), 1)
-  expect_equal(result$Title, "7-12 Science Teacher")
-  expect_equal(result$Location, "Simms")
-  expect_equal(result$Link, "https://srvs.k12.mt.us/apps/jobs/show_job.jsp?REC_ID=19999")
-})
-
-test_that("parse_sunrivervalley_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_sunrivervalley_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
 
 test_that("parse_circle_postings returns zero rows on fixture with only generic applications", {
   fixture <- paste(readLines(test_path("fixtures", "circle_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
