@@ -266,40 +266,6 @@ parse_scobey_postings <- function(html_text, url) {
 }
 
 
-# Roy School District 74 (roy.k12.mt.us) -- found in the same 2026-08-23
-# pass, a plain Joomla site (`sp-page-builder`), no chromote needed. Real
-# postings are two prose sentences sharing one real, repeatable template
-# ("Roy School District 74 is looking for a <TITLE>.") plus one separately
-# authored bold/underlined all-caps line ("BUS DRIVER NEEDED") -- confirmed
-# live 2026-08-23, 3 real postings (Head Cook, Full-time Paraprofessional,
-# Bus Driver).
-fetch_roy_postings <- function(url = "https://roy.k12.mt.us/") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_roy_postings(resp_body_string(resp), url)
-}
-
-parse_roy_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
-
-  looking_lines <- lines[grepl("is looking for an?\\s", lines)]
-  looking_titles <- trimws(sub(".*is looking for an?\\s+([^.]+)\\..*", "\\1", looking_lines))
-
-  bus_titles <- if (any(grepl("^BUS DRIVER NEEDED", lines))) "Bus Driver" else character(0)
-
-  titles <- c(looking_titles, bus_titles)
-  titles <- titles[nzchar(titles)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Roy", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
 # Arrowhead Elementary School District #75 (arrowheadk8.com, serving Pray
 # and Emigrant) -- found in the same 2026-08-23 pass, a modern WordPress/
 # Divi site, no chromote needed. Real postings are each a genuine `<h2>`
@@ -399,45 +365,6 @@ parse_hinsdale_postings <- function(html_text, url) {
 }
 
 
-# Roberts Public School (robertsrockets.org, found 2026-08-24) -- a
-# Joomla-based CMS ("uikit"/"el-item" theme classes), plain httr2 fetch.
-# Real postings render as a genuine HTML table (`table.uk-table`), each
-# with its own `.el-title` element -- but that same CSS class is reused
-# elsewhere on the page for unrelated application-form cards, so the
-# selector is scoped to `table.uk-table tbody tr .el-title` specifically
-# rather than matched loosely. Confirmed live 2026-08-24, 3 real
-# postings (Full Time Custodian, Substitute Teachers Needed, Classroom
-# Aide). Its Cloudflare front intermittently answers 502/520 to CI
-# runners, so it retries those too, with a longer budget (~1 min).
-# From 2026-11-03 the site answers HTTP 200 with the bare text " site under
-# maintenance " (no HTML); read_html() took that for a file path. A body with
-# no markup now fails with that text as the error, so the run logs an error
-# (the source wasn't healthy) that says what happened.
-fetch_roberts_postings <- function(url = "https://www.robertsrockets.org/index.php/district-information/district-employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry(max_tries = 6, is_transient = is_transient_gateway_error)
-  parse_roberts_postings(resp_body_string(resp), url)
-}
-
-parse_roberts_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  if (!grepl("<", html_text, fixed = TRUE)) {
-    stop("Roberts returned a page with no HTML: \"", substr(trimws(html_text), 1, 80), "\"", call. = FALSE)
-  }
-  page <- rvest::read_html(html_text)
-  titles <- rvest::html_text2(rvest::html_elements(page, "table.uk-table tbody tr .el-title"))
-  titles <- trimws(titles)
-  titles <- titles[nzchar(titles)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Roberts", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
 # Winnett Public Schools (winnettschool.org, found 2026-08-24) --
 # Squarespace, same platform as Terry above, plain httr2 fetch. 3 real
 # category headers (Certified/Classified/Coaching Positions Open:),
@@ -525,43 +452,6 @@ parse_zurich_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Zurich", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
 }
 
-
-# Belfry Public Schools (belfrybats.org, found 2026-10-20) -- Carbon County
-# district with structured HTML table (table.uk-table) under Employment Information,
-# same CMS architecture as Roberts Public School. Table columns: Position, Description,
-# and direct JotForm apply links. Confirmed live 2026-10-20: 2 real active postings
-# (Substitute Teachers, School Bus Drivers).
-fetch_belfry_postings <- function(url = "https://www.belfrybats.org/index.php/our-school/employment") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_belfry_postings(resp_body_string(resp), url)
-}
-
-parse_belfry_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  rows <- rvest::html_elements(page, "table.uk-table tbody tr")
-  if (length(rows) == 0) return(empty)
-
-  titles <- rvest::html_text(rvest::html_element(rows, ".el-title"), trim = TRUE)
-  links <- rvest::html_attr(rvest::html_element(rows, "a.el-link"), "href")
-  links[is.na(links) | links == ""] <- url
-
-  valid <- nzchar(titles) & !is.na(titles)
-  if (!any(valid)) return(empty)
-
-  data.frame(
-    Title = titles[valid],
-    Location = "Belfry",
-    Posted_Date = NA_character_,
-    Link = links[valid],
-    stringsAsFactors = FALSE
-  )
-}
 
 # Nashua Public Schools (nashua.k12.mt.us, found 2026-10-20) -- Valley County
 # district on CyberSchool CMS (same family as Hinsdale). Real open positions are
@@ -692,46 +582,6 @@ parse_westvalley_postings <- function(html_text, url) {
   }, character(1), USE.NAMES = FALSE)
 
   data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
-}
-
-# Luther School (lutherschool.org, found 2026-10-21) -- Carbon County rural school
-# running Joomla CMS (same framework as Belfry). Live vacancy notices are posted
-# under /index.php/documents with dedicated vacancy announcement PDFs.
-# Confirmed live 2026-10-21: 2 active postings (Bus Driver, Cook). Plain httr2 fetch.
-fetch_luther_postings <- function(url = "https://www.lutherschool.org/index.php/documents") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_luther_postings(resp_body_string(resp), url)
-}
-
-parse_luther_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  page <- rvest::read_html(html_text)
-  items <- rvest::html_elements(page, "a.el-item")
-  if (length(items) == 0) return(empty)
-
-  titles <- character(0)
-  links <- character(0)
-
-  for (item in items) {
-    meta <- rvest::html_element(item, ".el-meta")
-    meta_text <- if (!is.null(meta)) rvest::html_text(meta) else ""
-    if (grepl("currently looking for|looking for a|school year", meta_text, ignore.case = TRUE)) {
-      title_el <- rvest::html_element(item, ".el-title, h3")
-      t <- if (!is.null(title_el)) trimws(rvest::html_text(title_el)) else trimws(rvest::html_text(item))
-      h <- rvest::html_attr(item, "href")
-      if (is.na(h) || !nzchar(h)) next
-      full_h <- xml2::url_absolute(h, url)
-      titles <- c(titles, t)
-      links <- c(links, full_h)
-    }
-  }
-
-  if (length(titles) == 0) return(empty)
-  data.frame(Title = titles, Location = "Luther", Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
 }
 
 # Swan Valley School District #3 (swanvalleyelementary.org, found 2026-10-21) --
@@ -3646,73 +3496,6 @@ parse_lima_postings <- function(json_str, base_url = "https://www.limaschoolmt.o
 
   if (length(rows) == 0) return(empty)
   do.call(rbind, rows)
-}
-
-# Joliet Public School District 86 (jolietschools.org, Carbon County, adopted 2026-10-29 Batch 25).
-# Re-anchored to real Montana district website replacing stale Illinois SD86 TedK12 link.
-# Job openings are displayed in a structured HTML table (table.employment-table) on
-# https://www.jolietschools.org/district-information/important-clicks/employment-information.html.
-# Confirmed live 2026-10-29: 5 real active postings (Bus Driver, Subs, 3 Coaching positions).
-parse_joliet_postings <- function(html_text, url = "https://www.jolietschools.org/district-information/important-clicks/employment-information.html") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  table <- rvest::html_element(doc, "table.employment-table")
-  if (is.null(table)) return(empty)
-
-  rows <- rvest::html_elements(table, "tbody tr")
-  if (length(rows) == 0) return(empty)
-
-  res <- lapply(rows, function(r) {
-    title <- rvest::html_text2(rvest::html_element(r, ".el-title"))
-    if (is.na(title) || !nzchar(trimws(title))) return(NULL)
-    title <- trimws(title)
-
-    desc <- rvest::html_text2(rvest::html_element(r, ".el-content"))
-    link_el <- rvest::html_element(r, "a.el-link")
-    link <- if (!is.null(link_el)) rvest::html_attr(link_el, "href") else url
-    if (is.na(link) || !nzchar(link)) link <- url
-
-    if (grepl("coaching", title, ignore.case = TRUE) && !is.na(desc) && nzchar(desc)) {
-      lines <- trimws(strsplit(desc, "\n")[[1]])
-      coach_titles <- lines[grepl("Coach", lines, ignore.case = TRUE) &
-                            !grepl("looking for|positions for", lines, ignore.case = TRUE)]
-      if (length(coach_titles) > 0) {
-        return(data.frame(
-          Title = coach_titles,
-          Location = "Joliet",
-          Posted_Date = NA_character_,
-          Link = link,
-          stringsAsFactors = FALSE
-        ))
-      }
-    }
-
-    data.frame(
-      Title = title,
-      Location = "Joliet",
-      Posted_Date = NA_character_,
-      Link = link,
-      stringsAsFactors = FALSE
-    )
-  })
-
-  res <- res[!vapply(res, is.null, logical(1))]
-  if (length(res) == 0) return(empty)
-  do.call(rbind, res)
-}
-
-fetch_joliet_postings <- function(url = "https://www.jolietschools.org/district-information/important-clicks/employment-information.html") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  html <- resp_body_string(resp)
-  parse_joliet_postings(html, url)
 }
 
 # District-level data-completeness classification -- ported from Wyoming's
