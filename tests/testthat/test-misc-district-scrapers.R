@@ -1218,107 +1218,8 @@ test_that("fetch_dutton_postings drives a chromote session and parses its real r
   expect_equal(nrow(result), 2)
 })
 
-# Real fixtures: document.body.innerText captured via a live chromote
-# session -- stignatius_jobs_rendered.txt from jobs.redroverk12.com/org/2261
-# (St. Ignatius, 2026-08-24, a board that shows a relative "posted" stamp),
-# redrover_hamilton_rendered.txt from jobs.redroverk12.com/org/2362
-# (Hamilton, 2026-09-03, a board that shows no stamp -- captured after
-# Hamilton migrated off AppliTrack).
-
-test_that("parse_redrover_postings extracts the 6 real postings, excluding the 2 evergreen application-form placeholders", {
-  text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
-
-  result <- parse_redrover_postings(text, "url")
-
-  expect_equal(nrow(result), 6)
-  expect_true(all(c("Paraprofessional - Elem, Middle & High Positions Available!", "Title I", "Salish Teacher",
-                     "Elementary Education 2026-2027", "Special Ed K-12", "Substitute Teacher") %in% result$Title))
-  expect_equal(result$Location[result$Title == "Salish Teacher"], "St. Ignatius High School")
-  expect_true(is.na(result$Location[result$Title == "Special Ed K-12"]))
-  expect_false(any(result$Title %in% c("Classified Application", "Certified Application", "Volunteer Application")))
-})
-
-test_that("each Red Rover posting carries its own opening link when the page's links are passed", {
-  text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
-  # The page's opening links as St. Ignatius's board showed them on 2026-11-06 (placeholders included).
-  links <- data.frame(href = paste0("https://jobs.redroverk12.com/org/2261/opening/", c(206045, 181322, 120681, 114712, 102415)),
-                      text = c("Substitute Teacher", "Salish Teacher", "Classified Application", "Special Ed K-12",
-                               "Volunteer Application"), stringsAsFactors = FALSE)
-  result <- parse_redrover_postings(text, "https://jobs.redroverk12.com/org/2261", opening_links = links)
-  expect_equal(result$Link[result$Title == "Salish Teacher"], "https://jobs.redroverk12.com/org/2261/opening/181322")
-  expect_equal(result$Link[result$Title == "Special Ed K-12"], "https://jobs.redroverk12.com/org/2261/opening/114712")
-  # A posting with no matching link keeps the board URL.
-  expect_equal(result$Link[result$Title == "Title I"], "https://jobs.redroverk12.com/org/2261")
-})
-
-test_that("parse_redrover_postings returns zero rows (not an error) when there's no 'Found N job openings' header", {
-  result <- parse_redrover_postings("Just some regular page text with no postings.", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link",
-                                 "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text"))
-})
-
-test_that("fetch_redrover_postings drives a chromote session and parses its real rendered text", {
-  text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
-  session <- fake_chromote_session(text)
-
-  result <- fetch_redrover_postings(session, "https://jobs.redroverk12.com/org/2261")
-
-  expect_equal(nrow(result), 6)
-})
-
-test_that("parse_redrover_postings handles a board with no relative-date stamp after APPLY NOW (Hamilton)", {
-  text <- paste(readLines(test_path("fixtures", "redrover_hamilton_rendered.txt"), warn = FALSE), collapse = "\n")
-
-  result <- parse_redrover_postings(text, "url", default_location = "Hamilton")
-
-  # All 13 openings are real (no evergreen "* Application" placeholders on
-  # this board) -- the no-stamp layout must not drop or shift any of them.
-  expect_equal(nrow(result), 13)
-  expect_true(all(c("Daly Racers Coach", "Substitute Custodian", "Special Education Paraprofessional",
-                     "Substitute Teacher 2026-27", "Custodian") %in% result$Title))
-  expect_equal(result$Location[result$Title == "Daly Racers Coach"], "Daly Elementary")
-  # "No location specified" rows fall back to the district's own city.
-  expect_equal(result$Location[result$Title == "Substitute Custodian"], "Hamilton")
-})
-
-test_that("parse_redrover_postings reads each posting's own salary line as Pay_* (Hamilton)", {
-  text <- paste(readLines(test_path("fixtures", "redrover_hamilton_rendered.txt"), warn = FALSE), collapse = "\n")
-
-  result <- parse_redrover_postings(text, "url", default_location = "Hamilton")
-  pay <- function(title) result[result$Title == title, c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text")]
-
-  # Every Hamilton posting states pay, and the snippet is the board's own line.
-  expect_false(any(is.na(result$Pay_Min)))
-  expect_equal(unlist(pay("Substitute Teacher 2026-27")[1:2]), c(Pay_Min = 13.5, Pay_Max = 14.65))
-  expect_equal(pay("Substitute Teacher 2026-27")$Pay_Unit, "hour")
-  expect_equal(pay("Substitute Teacher 2026-27")$Pay_Text, "$13.50 - $14.65 per hour")
-  # "per unit" is RedRover's label for a stipend; amounts stay unconverted.
-  expect_equal(pay("HMS Head Basketball Coach")$Pay_Unit, "stipend")
-  expect_equal(unlist(pay("HMS Head Basketball Coach")[1:2]), c(Pay_Min = 2070, Pay_Max = 2525))
-  expect_equal(pay("Custodian")$Pay_Min, 16.5)
-  # The salary line doesn't displace title or location.
-  expect_equal(result$Location[result$Title == "HMS Head Basketball Coach"], "Hamilton Middle School")
-})
-
-test_that("parse_redrover_postings handles inline relative-date stamp button text (Columbia Falls)", {
-  text <- paste(readLines(test_path("fixtures", "columbiafalls_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
-
-  result <- parse_redrover_postings(text, "https://jobs.redroverk12.com/org/sd659912", default_location = "Columbia Falls")
-
-  expect_equal(nrow(result), 25)
-  expect_true(all(c("HOSA Advisor", "LEARNING STRATEGIES AND STUDENT TUTORING SUPPORT PARA", "Pre-K Paraeducator",
-                     "Substitute Teacher", "Traffic Education Teacher") %in% result$Title))
-  expect_equal(result$Location[result$Title == "HOSA Advisor"], "High School")
-  expect_equal(result$Location[result$Title == "Pre-K Paraeducator"], "Glacier Gateway")
-  expect_equal(result$Location[result$Title == "Substitute Teacher"], "Columbia Falls")
-  # Postings without a salary line keep NA pay rather than borrowing a neighbor's.
-  expect_equal(sum(!is.na(result$Pay_Min)), length(grep("^\\$", strsplit(text, "\n")[[1]])))
-  expect_true(is.na(result$Pay_Min[result$Title == "HOSA Advisor"]))
-  expect_equal(result$Pay_Unit[result$Title == "HS Boys Assistant Wrestling Coach (0.06)"], "stipend")
-  # An extra "Accepting remote/hybrid candidates" line ahead of the salary line.
-  expect_equal(result$Pay_Min[result$Title == "Key Club Advisor"], 1162.44)
-})
+# Red Rover (St. Ignatius, Hamilton, Columbia Falls) is read through its API since edjobs 0.14.0; the
+# Chrome parser and its rendered-text fixtures went with it (edjobs tests the API parser).
 
 # Real fixture: document.body.innerText captured via a live chromote
 # session 2026-08-24 from stanfordmtschool.com's Job Openings page.
@@ -2355,7 +2256,7 @@ test_that("fetch_apptegy_k12_postings keeps healthy districts when one fetch fai
   expect_equal(result$Title, "Healthy posting")
 })
 
-test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy/RedRoverK12 rows in both directions", {
+test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy rows in both directions", {
   # This is the actual bug class the 2026-09 AppliTrack migrations exposed
   # in miniature (a registry row whose scraper doesn't run, or vice versa)
   # -- catching it here means a forgotten sync surfaces as an immediate,
@@ -2363,12 +2264,12 @@ test_that("APPTEGY_DISTRICT_SCRAPERS exactly matches the registry's Apptegy/RedR
   # (or a scraped district with no registry row to join against on the
   # Map/District Summary) for however many weeks until someone notices.
   registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
-  registry_districts <- registry$District[registry$Platform %in% c("Apptegy", "RedRoverK12")]
+  registry_districts <- registry$District[registry$Platform == "Apptegy"]   # Red Rover: its API since edjobs 0.14.0
 
   expect_setequal(names(APPTEGY_DISTRICT_SCRAPERS), registry_districts)
 })
 
-test_that("fetch_apptegy_k12_postings shares one session across all 48 districts and tags each row with its real District", {
+test_that("fetch_apptegy_k12_postings shares one session across all 45 districts and tags each row with its real District", {
   wp_text <- paste(readLines(test_path("fixtures", "apptegy_wolfpoint_rendered.txt"), warn = FALSE), collapse = "\n")
   pw_text <- paste(readLines(test_path("fixtures", "apptegy_plentywood_rendered.txt"), warn = FALSE), collapse = "\n")
   conrad_html <- paste(readLines(test_path("fixtures", "conrad_apptegy_pagedata.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
@@ -2394,9 +2295,6 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
   chinook_text <- paste(readLines(test_path("fixtures", "apptegy_chinook_rendered.txt"), warn = FALSE), collapse = "\n")
   darby_text <- paste(readLines(test_path("fixtures", "apptegy_darby_rendered.txt"), warn = FALSE), collapse = "\n")
   dutton_text <- paste(readLines(test_path("fixtures", "apptegy_dutton_rendered.txt"), warn = FALSE), collapse = "\n")
-  stignatius_text <- paste(readLines(test_path("fixtures", "stignatius_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
-  hamilton_redrover_text <- paste(readLines(test_path("fixtures", "redrover_hamilton_rendered.txt"), warn = FALSE), collapse = "\n")
-  columbiafalls_text <- paste(readLines(test_path("fixtures", "columbiafalls_jobs_rendered.txt"), warn = FALSE), collapse = "\n")
   stanford_text <- paste(readLines(test_path("fixtures", "apptegy_stanford_rendered.txt"), warn = FALSE), collapse = "\n")
   lolo_text <- paste(readLines(test_path("fixtures", "apptegy_lolo_rendered.txt"), warn = FALSE), collapse = "\n")
   froid_text <- paste(readLines(test_path("fixtures", "apptegy_froid_rendered.txt"), warn = FALSE), collapse = "\n")
@@ -2458,9 +2356,6 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
           else if (grepl("chinookschools", navigated_url)) chinook_text
           else if (grepl("darby", navigated_url)) darby_text
           else if (grepl("dbps", navigated_url)) dutton_text
-          else if (grepl("redroverk12.*org/2261", navigated_url)) stignatius_text
-          else if (grepl("redroverk12.*org/2362", navigated_url)) hamilton_redrover_text
-          else if (grepl("redroverk12.*org/sd659912", navigated_url)) columbiafalls_text
           else if (grepl("stanfordmtschool", navigated_url)) stanford_text
           else if (grepl("loloschools", navigated_url)) lolo_text
           else if (grepl("froidschool", navigated_url)) froid_text
@@ -2492,7 +2387,7 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
 
   result <- fetch_apptegy_k12_postings(chromote_session_factory = session_factory, log_path = tempfile())
 
-  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 13 + 25 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8 + 6 + 8 + 1)
+  expect_equal(nrow(result), 19 + 4 + 12 + 2 + 5 + 5 + 11 + 8 + 4 + 5 + 5 + 10 + 4 + 3 + 4 + 4 + 13 + 5 + 6 + 5 + 4 + 8 + 7 + 6 + 2 + 6 + 4 + 3 + 5 + 2 + 6 + 3 + 5 + 2 + 14 + 9 + 5 + 1 + 1 + 5 + 1 + 5 + 8 + 6 + 8 + 1)
   expect_equal(sum(result$District == "Wolf Point Public Schools"), 19)
   expect_equal(sum(result$District == "Plentywood Public Schools"), 4)
   expect_equal(sum(result$District == "Conrad Public Schools"), 12)
@@ -2518,9 +2413,6 @@ test_that("fetch_apptegy_k12_postings shares one session across all 48 districts
   expect_equal(sum(result$District == "Chinook Public Schools"), 7)
   expect_equal(sum(result$District == "Darby School District 9"), 6)
   expect_equal(sum(result$District == "Dutton/Brady Public School District"), 2)
-  expect_equal(sum(result$District == "St. Ignatius School District"), 6)
-  expect_equal(sum(result$District == "Hamilton School District 3"), 13)
-  expect_equal(sum(result$District == "Columbia Falls School District 6"), 25)
   expect_equal(sum(result$District == "Stanford Public Schools"), 6)
   expect_equal(sum(result$District == "Lolo School District 7"), 4)
   expect_equal(sum(result$District == "Froid Public Schools"), 3)
@@ -4961,12 +4853,13 @@ test_that("k12_district_coverage_tiers labels non-direct-API-platform districts 
 
   tiers <- k12_district_coverage_tiers(registry)
 
-  expect_setequal(tiers$District, c("Apptegy District", "RedRover District", "Heuristic District"))
+  # Red Rover is read through its API since edjobs 0.14.0, so it is a direct-API platform too.
+  expect_setequal(tiers$District, c("Apptegy District", "Heuristic District"))
   expect_true(all(tiers$Data_Coverage == "Partial"))
-  # The 4 real-ATS-platform districts are absent -- callers coalesce a
+  # The 5 real-ATS-platform districts are absent -- callers coalesce a
   # missing match to "Full", the same convention Wyoming's own version uses.
   expect_false(any(c("AppliTrack District", "SchoolSpring District",
-                      "TedK12 District", "TylerPortico District") %in% tiers$District))
+                      "TedK12 District", "TylerPortico District", "RedRover District") %in% tiers$District))
 })
 
 test_that("k12_district_coverage_tiers against the real registry only ever returns real registered districts", {

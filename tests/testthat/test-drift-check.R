@@ -60,7 +60,7 @@ test_that("every real registered K-12 row resolves to a real scraper function, c
     expect_false(is.null(call), info = k12$Platform[i])
     expect_equal(call$where, "k12_district_registry.csv")
     if (call$map) {
-      expect_true(k12$Platform[i] %in% c("Apptegy", "RedRoverK12"), info = k12$District[i])
+      expect_equal(k12$Platform[i], "Apptegy", info = k12$District[i])
       expect_true(call$session)
       expect_true(k12$District[i] %in% names(APPTEGY_DISTRICT_SCRAPERS), info = k12$District[i])
     } else {
@@ -73,6 +73,10 @@ test_that("every real registered K-12 row resolves to a real scraper function, c
   tyler <- k12[k12$Platform == "TylerPortico", ][1, ]
   expect_equal(resolve_scraper_call(tyler$District)$args, list(tyler$Slug, tyler$District))
   expect_equal(resolve_scraper_call(k12$District[k12$Platform == "BroadviewHeuristic"][1])$args, list())
+  # Red Rover: the API's org ID (Slug) and the slug its links carry (Columbia Falls: 4161 / sd659912).
+  cf <- resolve_scraper_call("Columbia Falls School District 6")
+  expect_equal(cf[c("fn", "session")], list(fn = "fetch_redrover_postings", session = FALSE))
+  expect_equal(cf$args, list("4161", "sd659912"))
 })
 
 test_that("every real registered HE platform except the known gaps resolves to a real scraper function", {
@@ -96,7 +100,7 @@ test_that("scraper_fetch_fn follows the Apptegy map to the real fetch_* function
   expect_false(scraper_reads_inner_text("fetch_applitrack_postings", lines))
   # Every map district's entry names a fetch_ function the evidence step can read.
   k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
-  for (d in k12$District[k12$Platform %in% c("Apptegy", "RedRoverK12")]) {
+  for (d in k12$District[k12$Platform == "Apptegy"]) {
     expect_false(is.na(scraper_fetch_fn(resolve_scraper_call(d), lines)), info = d)
   }
 })

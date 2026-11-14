@@ -18,6 +18,9 @@ MT_SCRAPER_SPECS <- list(
   SchoolSpring = scraper_spec("fetch_schoolspring_postings", "Slug"),
   TylerPortico = scraper_spec("fetch_tylerportico_postings", c("Slug", "District")),
   TedK12       = scraper_spec("fetch_tedk12_postings",       "Slug"),
+  # Red Rover's API (edjobs 0.14.0): Slug is the board's numeric org ID, the
+  # link slug comes from Job_Link (Columbia Falls: org 4161, slug sd659912).
+  RedRoverK12  = scraper_spec("fetch_redrover_postings", list("Slug", function(row) redrover_org_slug(row$Job_Link))),
   BroadviewHeuristic = scraper_spec("fetch_broadview_postings"),
   # Reads its openings-PDF link from the rendered page (2026-11-05).
   CJIHeuristic = scraper_spec("fetch_cji_postings", "Job_Link", session = TRUE),
@@ -36,7 +39,7 @@ MT_SCRAPER_SPECS <- list(
   AnCollegeHeuristic = scraper_spec("fetch_ancollege_postings",  "Feed_URL"),
   CDKCHeuristic      = scraper_spec("fetch_cdkc_postings",       "Feed_URL")
 )
-# Every K-12 Apptegy / Red Rover district is dispatched through
+# Every K-12 Apptegy district is dispatched through
 # misc_district_scrapers.R's APPTEGY_DISTRICT_SCRAPERS map, keyed by district.
 APPTEGY_DISPATCH_FN <- "APPTEGY_DISTRICT_SCRAPERS"
 MT_APPTEGY_MAP_SPEC <- scraper_spec(APPTEGY_DISPATCH_FN, "District", session = TRUE, map = TRUE,
@@ -56,7 +59,7 @@ set_state_config(state_config(
   drift_baseline_from = "2026-08-06",
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
-      specs = c(MT_SCRAPER_SPECS, list(Apptegy = MT_APPTEGY_MAP_SPEC, RedRoverK12 = MT_APPTEGY_MAP_SPEC)),
+      specs = c(MT_SCRAPER_SPECS, list(Apptegy = MT_APPTEGY_MAP_SPEC)),
       # Every other K-12 "<Name>Heuristic" platform is fetch_<lowercase name>_postings(Job_Link).
       fallback = function(platform, row) {
         if (grepl("Heuristic$", platform)) {

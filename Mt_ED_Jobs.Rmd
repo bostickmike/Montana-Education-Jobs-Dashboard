@@ -156,6 +156,41 @@ if (nrow(tedk12_df) == 0) {
     mutate(Posting_Source = "TedK12 (direct district board)")
 }
 
+# Red Rover (St. Ignatius, Hamilton, Columbia Falls) -- the GraphQL API Red
+# Rover's own board calls (edjobs::fetch_redrover_postings(), 0.14.0; WY's
+# fetcher). Slug is the board's numeric org ID; the link slug comes from
+# Job_Link. Read with Chrome inside the Apptegy batch until 2026-11, which gave
+# a per-posting link to only some postings; every row now carries its own
+# /opening/<n> page and the board's posted pay. A posting with no location
+# takes the district's city, as the Chrome parser did.
+redrover_districts <- registry[registry$Platform == "RedRoverK12", ]
+redrover_results <- lapply(seq_len(nrow(redrover_districts)), function(i) {
+  row <- redrover_districts[i, ]
+  df <- safe_scrape(
+    row$District,
+    scrape_fn = function() fetch_redrover_postings(row$Slug, redrover_org_slug(row$Job_Link)),
+    expected_cols = c("Title", "Location", "Posted_Date", "Posting_ID", "Link")
+  )
+  if (nrow(df) > 0) {
+    df$District <- row$District
+    df$Location <- dplyr::coalesce(dplyr::na_if(trimws(df$Location), ""), row$City)
+  }
+  df
+})
+redrover_df <- bind_rows(redrover_results)
+if (nrow(redrover_df) > 0) {
+  redrover_df <- redrover_df %>%
+    ensure_posted_pay_columns() %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Red Rover (direct district board)",
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
+} else {
+  redrover_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # Livingston and Lodge Grass have no structured ATS -- heuristic scrapers
 # in misc_district_scrapers.R read their own site's real page structure
 # directly, same acknowledged-less-reliable-source spirit as
@@ -3043,13 +3078,13 @@ if (nrow(joliet_df) > 0) {
 # discarding healthy districts' results. The outer safe_scrape() protects the
 # pipeline if the shared session itself cannot start.
 apptegy_raw <- safe_scrape(
-  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, St. Ignatius, Hamilton, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock, Sweet Grass County High School, Hot Springs School District, Frenchtown K-12 Schools, Savage Public Schools, Olney-Bissell School District)",
+  "Apptegy/chromote K-12 districts (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Geyser, Arlee, Chinook, Darby, Dutton/Brady, Stanford, Lolo, Froid, Huntley Project, Park City, Alberton, Dillon, Ennis, Columbus, St Regis, Florence-Carlton, West Yellowstone, Bonner, Deer Park, Evergreen, Lone Rock, Sweet Grass County High School, Hot Springs School District, Frenchtown K-12 Schools, Savage Public Schools, Olney-Bissell School District)",
   scrape_fn = function() fetch_apptegy_k12_postings(chromote_session_factory = function() ChromoteSession$new()),
   expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
 )
 if (nrow(apptegy_raw) > 0) {
   apptegy_df <- apptegy_raw %>%
-    # Only the RedRover boards in this batch state pay; the rest get NA.
+    # A few Apptegy pages state pay; the rest get NA.
     ensure_posted_pay_columns() %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
@@ -3208,6 +3243,7 @@ applitrack_df <- applitrack_df %>% mutate(date_posted = standardize_date(date_po
 schoolspring_df <- schoolspring_df %>% mutate(date_posted = standardize_date(date_posted))
 tylerportico_df <- tylerportico_df %>% mutate(date_posted = standardize_date(date_posted))
 tedk12_df <- tedk12_df %>% mutate(date_posted = standardize_date(date_posted))
+redrover_df <- redrover_df %>% mutate(date_posted = standardize_date(date_posted))
 livingston_df <- livingston_df %>% mutate(date_posted = standardize_date(date_posted))
 lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_posted))
 broadview_df <- broadview_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -3320,7 +3356,7 @@ apptegy_df <- apptegy_df
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_dfs <- list(
-  applitrack_df, schoolspring_df, tylerportico_df, tedk12_df,
+  applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, redrover_df,
   livingston_df, lodgegrass_df, broadview_df, custer_df, manhattan_df, scobey_df, ramsay_df,
   roy_df, arrowhead_df, northstar_df, shieldsvalley_df, thompsonfalls_df, ekalaka_df, trego_df,
   lincoln_df, independent_df, shepherd_df, hysham_df, baker_df, cutbank_df, hinsdale_df, valier_df,
