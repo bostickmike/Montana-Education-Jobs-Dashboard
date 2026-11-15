@@ -342,7 +342,7 @@ test_that("Students_Per_Teacher is computed for both K-12 districts (vs. Teacher
 
 test_that("Enrollment_Change_Pct is a real institution-level 5-year trend for HE, and NA (not missing) for K-12", {
   # Montana has real IPEDS enrollment-trend data for HE
-  # (ipeds_enrollment_scraper.R) but no district-level enrollment-trend pull
+  # (edjobs::fetch_ipeds_he_enrollment()) but no district-level enrollment-trend pull
   # for K-12 -- map_k12's mutate() hardcodes Enrollment_Change_Pct to
   # NA_real_ rather than leaving the column absent, distinct from
   # Population_Change_Pct (county-level, real for K-12 via the Census join).

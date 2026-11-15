@@ -354,8 +354,7 @@ fetch_dli_teacher_compensation_all_districts <- function() {
 # real underlying problem: MT DLI's Teacher Compensation Report has no
 # public historical archive of its own (only the current edition's PDFs
 # are ever published, confirmed live), and (unlike IPEDS, queryable by
-# year indefinitely -- see ipeds_salary_scraper.R's
-# fetch_ipeds_he_salary_trend()) has had only one published edition found
+# year indefinitely -- see edjobs::fetch_ipeds_he_salary_trend()) has had only one published edition found
 # so far ("2022-23"). So a multi-year K-12 salary trend can only be built
 # by starting to capture this project's own snapshot now and letting it
 # accumulate as DLI republishes future editions -- a complete repeat is a

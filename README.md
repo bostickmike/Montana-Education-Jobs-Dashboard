@@ -58,7 +58,7 @@ A GitHub Actions workflow runs weekly (Tuesdays — deliberately not Wyoming's F
 - `direct_api_scrapers.R` — the real platform-API scrapers (AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV, ADP Workforce Now, isolved Hire, OPI statewide feed).
 - `misc_district_scrapers.R` / `misc_college_scrapers.R` — heuristic scrapers (including the chromote-driven Apptegy ones) for districts/institutions with no structured ATS, kept separate from the platform-API scrapers since they're a real but acknowledged-less-reliable source.
 - `opi_finance_scraper.R` — OPI's per-district General Fund expenditure data, a Montana-only data category.
-- `salary_scrapers.R`, `ccd_staff_scraper.R`, `ipeds_salary_scraper.R`, `ipeds_enrollment_scraper.R`, `fsa_pell_scraper.R`, `census_acs_scraper.R`, `census_saipe_scraper.R` — the salary/staffing/Census data pipeline.
+- `salary_scrapers.R`, `ccd_staff_scraper.R`, `ipeds_unitids.R`, `census_saipe_scraper.R` — the salary/staffing/Census data pipeline (the IPEDS, Pell and ACS fetchers are in edjobs).
 - `k12_he_classification.R`, `drift_check.R`, `scrape_helpers.R`, `schema_check.R` — classification and monitoring logic every chunk sources, largely state-agnostic and ported near-verbatim from Wyoming.
 - `history_accumulator.R` — appends each week's newly classified rows onto the existing accumulated datasets (idempotent, schema-checked) instead of reprocessing the full raw archive every run.
 - `k12_district_registry.csv` / `he_institution_registry.csv` — the hand-maintained list of every directly-scraped district/institution, its platform, and its real feed/job-board URL.
