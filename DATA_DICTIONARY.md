@@ -132,7 +132,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Median_Gross_Rent` | Currency ($) | US Census ACS 5-Year | County median monthly gross rent including estimated utilities. |
 | `Population` | Integer | US Census ACS 5-Year | Total estimated resident population of the county. |
 | `ACS_Year` | Integer | US Census ACS 5-Year | Data release year for US Census American Community Survey 5-year estimates. |
-| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Proportion of county civilian employed labor force in agriculture, forestry, mining, and energy extraction. |
+| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
 | `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year percentage change in total resident population. |
 | `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Share of children 5-17 in families below the poverty line. Separate elementary and high school districts (e.g. Billings) are combined by their numbers of children. |
 | `SAIPE_Year` | Integer | US Census SAIPE | Release year of federal Small Area Income and Poverty Estimates data. |
@@ -205,7 +205,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Median_Gross_Rent` | Currency ($) | US Census ACS 5-Year | County median monthly gross rent including estimated utilities. |
 | `Population` | Integer | US Census ACS 5-Year | Total estimated resident population of the county. |
 | `ACS_Year` | Integer | US Census ACS 5-Year | Data release year for US Census American Community Survey 5-year estimates. |
-| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Proportion of county civilian employed labor force in agriculture, forestry, mining, and energy extraction. |
+| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
 | `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year percentage change in total resident population. |
 
 ---
@@ -282,6 +282,6 @@ Districts not scraped directly that posted on OPI Jobs for Teachers this week: t
 | `Median_Gross_Rent` | Currency ($) | US Census ACS 5-Year | County median gross rent. |
 | `Population` | Integer | US Census ACS 5-Year | County population. |
 | `ACS_Year` | Integer | US Census ACS 5-Year | ACS release year. |
-| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | County share employed in agriculture, forestry, mining and energy extraction. |
+| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
 | `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year population change. |
 | `CCD_Year` | Integer | NCES CCD | CCD directory year. |
