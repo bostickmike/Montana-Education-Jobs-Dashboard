@@ -111,7 +111,7 @@ fill_first_seen <- function(posted, district, title, url, segment, lookup = firs
 POSTED_LISTED_NOTE <- paste0(
   "Posted / listed is the date the posting gives. Where the job board gives none, it shows the first week this ",
   "dashboard found the posting (\"First seen\"), or \"On the board since at least\" when the posting was already up ",
-  "the first time we checked that board. ")
+  "the first time this dashboard checked that board. ")
 
 # Pay as the posting itself states it (Pay_* from extract_posted_pay() in the
 # pipeline): "$21.46–$22.81/hr", "$46,500–$71,803/yr", "$3,691 stipend".
@@ -345,19 +345,17 @@ data_dictionary <- if (file.exists("data_dictionary.csv")) {
              Data_Type = character(0), Primary_Authority = character(0), Definition = character(0))
 }
 
-# Listing-duration ("spells") tabs: the duration KPIs and charts are paused
-# (2026-11-02 audit, claude-notes/2026-11-02_spells-trust-audit.md). A spell
-# is a District + title's first-to-last week on our weekly scrapes, and most
-# spell endings and starts come from our own coverage (scrapers added, broken
-# or switched) rather than from hiring, so they can't be read as
-# time-to-fill. The table stays, labeled for what it is.
-spells_paused_note <- function(what) {
-  div(class = "alert alert-warning mb-3", role = "note",
-      tags$strong("Time-to-fill estimates are paused while we rebuild them. "),
-      paste0("This table shows how long each ", what, " stayed listed on the boards we track, from the first to the last ",
-             "week we saw it. That is not the same as time-to-fill: a posting can drop off because it was filled, ",
-             "cancelled, moved to another board, or because our collection missed that week, and many were already ",
-             "listed before we started tracking their board. \u201cNo longer listed\u201d means only that it no longer appears."))
+# Listing-duration ("spells") tabs: the table of each posting's first and
+# last week seen, current every run, with one footnote at the bottom (Mike,
+# 11-14: no "paused" banner). The duration KPI boxes and charts stay out
+# (2026-11-02 audit, claude-notes/2026-11-02_spells-trust-audit.md): their
+# averages read as time-to-fill, which listing spans are not.
+spells_footnote <- function() {
+  p(class = "text-muted small mt-3 mb-0",
+    "Days listed run from the first to the last weekly scrape that showed a posting, plus 7 days. This is how long a ",
+    "posting was listed, not time to fill: a listing ends when it stops appearing, whether it was filled, cancelled, ",
+    "moved to another board or missed by a scrape, and a posting already listed when its board was first scraped ",
+    "starts late. \u201cNo longer listed\u201d means only that it no longer appears.")
 }
 SPELL_STATUS_LABELS <- c("Closed / Filled" = "No longer listed")
 relabel_spell_status <- function(df) {
@@ -1214,7 +1212,7 @@ ui <- page_navbar(
         " directly tracked district boards with Montana OPI's statewide Jobs for Teachers feed. ",
         "A job on both counts once: an OPI posting is checked, posting by posting, against the district's own board, and one that is the same opening ",
         "isn't counted again (the district's posting is marked \u201calso on OPI\u201d). OPI postings the district's board doesn't list count from OPI \u2014 ",
-        "many districts post their teaching jobs only there \u2014 as do OPI postings for districts we don't track."
+        "many districts post their teaching jobs only there \u2014 as do OPI postings for districts this dashboard doesn't scrape directly."
       ),
       tags$p(
         "OPI is a valuable statewide source, but its publication rules and coverage have not been independently verified as a complete census of Montana vacancies. ",
@@ -1222,7 +1220,7 @@ ui <- page_navbar(
       ),
       tags$p(
         class = "mb-0",
-        "Districts we don't track appear on the Map and District Summary when they post on OPI, marked \u201c", OPI_ONLY_COVERAGE, "\u201d, with NCES location and staffing and the same salary, finance and Census context where those sources cover them. ",
+        "Districts this dashboard doesn't scrape directly appear on the Map and District Summary when they post on OPI, marked \u201c", OPI_ONLY_COVERAGE, "\u201d, with NCES location and staffing and the same salary, finance and Census context where those sources cover them. ",
         "Private and tribal schools, co-ops and other employers outside the public district list stay in the Jobs Table only."
       )
     ),
@@ -1245,7 +1243,7 @@ ui <- page_navbar(
           "About this map",
           p("Only this project's ", n_distinct(map_k12$Name), " directly tracked K-12 districts and ",
             n_distinct(map_he$Name), " directly tracked Higher Ed institutions are shown here (with current openings)."),
-          p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies. OPI postings are matched to districts through the district each posting's OPI page names; districts we don't track are mapped from those postings."),
+          p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies. OPI postings are matched to districts through the district each posting's OPI page names; districts this dashboard doesn't scrape directly are mapped from those postings."),
           p("Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table."),
           p("K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison."),
           p(class = "mb-0", "A red \"Partial\" badge means that district's postings come from an automated monitor of the district's own site rather than a structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-monitored district's count.")
@@ -1310,7 +1308,7 @@ ui <- page_navbar(
         div(class = "mb-2", uiOutput("map_filter_count")),
         withSpinner(leafletOutput("combined_map", height = 650)),
         p(class = "text-muted small mt-2 mb-0",
-          "Shows the directly tracked districts and colleges, plus districts we don't track that post on OPI this week (marked in their popup). Circle size = current openings; color = vacancy rate. ",
+          "Shows the directly tracked districts and colleges, plus districts this dashboard doesn't scrape directly that post on OPI this week (marked in their popup). Circle size = current openings; color = vacancy rate. ",
           "Click a marker to see its jobs.")
       )
     )
@@ -1486,7 +1484,6 @@ ui <- page_navbar(
       h3(class = "page-title", tagList(icon("stopwatch"), " K-12 Listing Duration")),
       p(class = "text-muted small",
         "How long each K-12 posting stayed listed on the job boards this dashboard tracks."),
-      spells_paused_note("posting"),
       layout_sidebar(
         fillable = FALSE,
         class = "page-sidebar",
@@ -1517,15 +1514,15 @@ ui <- page_navbar(
                       choices = c("All Districts" = "all"),
                       selected = "all")
         ),
-        # Duration KPI boxes and charts paused (spells_paused_note()); their
-        # server outputs are kept for when the rebuilt spells return.
+        # Duration KPI boxes and charts left out (spells_footnote()); their
+        # server outputs are kept.
         card(
           card_header(
             class = "d-flex justify-content-between align-items-center",
             "Postings and how long they stayed listed",
             info_popover(
               "How days listed is counted",
-              p(class = "mb-0", "Days listed = the span from the first to the last weekly scrape that showed the posting, plus 7 days. It starts when we first saw the posting (often after it was posted) and ends when it stopped appearing, whatever the reason.")
+              p(class = "mb-0", "Days listed = the span from the first to the last weekly scrape that showed the posting, plus 7 days. It starts at the first scrape that showed the posting (often after it was posted) and ends when it stopped appearing, whatever the reason.")
             )
           ),
           card_body(
@@ -1534,7 +1531,8 @@ ui <- page_navbar(
                 withSpinner(DTOutput("k12_spell_table", fill = FALSE)))
           )
         )
-      )
+      ),
+      spells_footnote()
     )
   ),
 
@@ -1711,7 +1709,6 @@ ui <- page_navbar(
       h3(class = "page-title", tagList(icon("stopwatch"), " Higher Ed Listing Duration")),
       p(class = "text-muted small",
         "How long each higher ed posting stayed listed on the job boards this dashboard tracks."),
-      spells_paused_note("posting"),
       layout_sidebar(
         fillable = FALSE,
         class = "page-sidebar",
@@ -1738,14 +1735,14 @@ ui <- page_navbar(
                       choices = c("All Institutions" = "all"),
                       selected = "all")
         ),
-        # Duration KPI boxes and charts paused (spells_paused_note()).
+        # Duration KPI boxes and charts left out (spells_footnote()).
         card(
           card_header(
             class = "d-flex justify-content-between align-items-center",
             "Postings and how long they stayed listed",
             info_popover(
               "How days listed is counted",
-              p(class = "mb-0", "Days listed = the span from the first to the last weekly scrape that showed the posting, plus 7 days. It starts when we first saw the posting (often after it was posted) and ends when it stopped appearing, whatever the reason.")
+              p(class = "mb-0", "Days listed = the span from the first to the last weekly scrape that showed the posting, plus 7 days. It starts at the first scrape that showed the posting (often after it was posted) and ends when it stopped appearing, whatever the reason.")
             )
           ),
           card_body(
@@ -1754,7 +1751,8 @@ ui <- page_navbar(
                 withSpinner(DTOutput("he_spell_table", fill = FALSE)))
           )
         )
-      )
+      ),
+      spells_footnote()
     )
   ),
 
@@ -1776,7 +1774,7 @@ ui <- page_navbar(
                       "Historical record of weekly K-12 job postings across Montana (3,200+ records) for hiring seasonality and longitudinal teacher demand studies.",
                       "download_history_k12", "Historical K-12 (CSV)"),
         download_tile("stopwatch", "K-12 Listing Duration",
-                      "Each posting's first and last week on the boards we track, days listed, and subject flags (STEM, SPED, etc.). Not a time-to-fill measure: see the caveats on the Listing Duration tab.",
+                      "Each posting's first and last week on the boards this dashboard tracks, days listed, and subject flags (STEM, SPED, etc.). Not a time-to-fill measure: see the note on the Listing Duration tab.",
                       "download_spells", "Listing Duration (CSV)"),
         download_tile("school", "District Profiles",
                       "District-level profiles: MT DLI salaries (10th/avg/90th), NCES teacher FTE & enrollment, student-to-teacher ratios, and Census poverty/rent.",
@@ -1788,7 +1786,7 @@ ui <- page_navbar(
                       "Longitudinal postings for instructional faculty, adjuncts, and staff across the Montana University System, tribal colleges, and community colleges.",
                       "download_history_he", "Higher Ed Archive (CSV)"),
         download_tile("stopwatch", "Higher Ed Listing Duration",
-                      "Each faculty/staff posting's first and last week on the boards we track, days listed, and discipline flags. Not a time-to-fill measure: see the caveats on the Listing Duration tab.",
+                      "Each faculty/staff posting's first and last week on the boards this dashboard tracks, days listed, and discipline flags. Not a time-to-fill measure: see the note on the Listing Duration tab.",
                       "download_he_spells", "Higher Ed Listing Duration (CSV)"),
         download_tile("graduation-cap", "Higher Ed Profiles",
                       "Institution-level profiles: IPEDS UNITID, instructional faculty salaries (all ranks and professor), enrollment, and federal Pell shares.",

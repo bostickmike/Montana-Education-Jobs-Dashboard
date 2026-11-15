@@ -863,6 +863,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `iescentral.com` in the Copilot allowlist (also needed in repo Settings). Rehearsal passed every step
     (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.17.0.log`; suites 3,678 / 3,684, 0 failed); two
     `run_expectations.csv` rows for 11-17. Notes: `claude-notes/2026-11-14_cyberschool-family/README.md`.
+  * [x] Listing Duration tabs: the yellow "Time-to-fill estimates are paused" banner replaced by one footnote at
+    the bottom of each tab (K-12 and HE), no "we"; the "How days listed is counted" popover reworded the same way
+    (2026-11-14, Mike: "either have it or not"; chose: keep the current table, footnote). KPI boxes and charts stay
+    out. App tests passed (both states); screenshots checked: MT K-12 tab, WY higher-ed tab.
   * [x] Apptegy family routine (2026-11-14; edjobs 0.18.0, MT PR 34, waits on edjobs PR 17; Mike 11-13: the shared
     filter wins where it disagrees with an old parser, substitute lines kept, Shelby bespoke). 44 districts read
     through `edjobs::fetch_apptegy_postings()`: Platform `Apptegy` (rendered text, 38) / `ApptegyPageBuilder` (6),
@@ -1015,6 +1019,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [ ] Real posting dates, rest of step 5: WY (K-12 and HE, same design, once its coverage calendar
   has a few weeks). What, if anything, the Listing Duration tabs (paused 2026-11-02) show from
   `posting_durations_k12.csv` / `posting_durations_he.csv`, and when.
+  Update (Mike, 2026-11-14): no "paused" banner: the tabs show the current table with one footnote at the
+  bottom; the duration KPI boxes and charts stay out until the checks below. For when this resumes (Mike): a way to
+  filter out standing postings that are nearly always listed (adjunct pools and the like).
   Decision (Mike, 2026-11-09): the tabs stay paused until we are sure the data is accurate. Proposed checks
   (not yet agreed): (a) about 4 weekly runs after the 11-09/10 pushes (relistings censored, first-seen fallback,
   page-confirmed closings) with no processing change that moves the medians by more than a few days (the OPI
