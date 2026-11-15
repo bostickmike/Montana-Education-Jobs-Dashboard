@@ -325,32 +325,6 @@ if (nrow(ekalaka_df) > 0) {
                             Posting_Source = character(0))
 }
 
-# Hinsdale Public Schools (an unbranded CMS, found 2026-08-24) also has
-# no structured ATS -- a plain httr2 fetch, no chromote needed, same
-# pattern as the other heuristic districts above.
-hinsdale_districts <- registry[registry$Platform == "HinsdaleHeuristic", ]
-hinsdale_results <- lapply(seq_len(nrow(hinsdale_districts)), function(i) {
-  row <- hinsdale_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_hinsdale_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-hinsdale_df <- bind_rows(hinsdale_results)
-if (nrow(hinsdale_df) > 0) {
-  hinsdale_df <- hinsdale_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Hinsdale district site (direct board)")
-} else {
-  hinsdale_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                             location = character(0), url = character(0), District = character(0),
-                             Posting_Source = character(0))
-}
-
 # Winnett Public Schools (Squarespace, found 2026-08-24) also has no
 # structured ATS in this project's own platform list -- a plain httr2
 # fetch, no chromote needed, same pattern as Terry above.
@@ -430,31 +404,47 @@ if (nrow(brockton_df) > 0) {
                              Posting_Source = character(0))
 }
 
-# Creston School District (real postings live in a publicly-viewable
-# Google Doc, found 2026-08-25) also has no structured ATS -- a plain
-# httr2 fetch, no chromote needed, same pattern as the other heuristic
-# districts above.
-creston_districts <- registry[registry$Platform == "CrestonHeuristic", ]
-creston_results <- lapply(seq_len(nrow(creston_districts)), function(i) {
-  row <- creston_districts[i, ]
+# Google Doc job lists, one routine for the family (edjobs 0.24.0, 2026-11-14;
+# claude-notes/2026-11-14_mt-leftovers/README.md): every registry row with
+# Platform "GoogleDoc" goes through edjobs::fetch_googledoc_postings(), which
+# reads each doc in the row's Slug (";" between docs) from its text export, or
+# an uploaded file's preview page, with the district's k12_list_rules.csv rules.
+# Replaced the Victor, Superior, Bainville and Creston scrapers; each keeps the
+# Posting_Source its own block wrote.
+googledoc_source_names <- c(
+  "Victor School District" = "Victor district site (direct board)",
+  "Superior School District" = "Superior district site (direct board)",
+  "Bainville K-12 Schools" = "Bainville district site (direct board)",
+  "Creston School District" = "Creston district site (direct board)"
+)
+googledoc_rules <- read_k12_list_rules()
+googledoc_districts <- registry[registry$Platform == "GoogleDoc", ]
+googledoc_results <- lapply(seq_len(nrow(googledoc_districts)), function(i) {
+  row <- googledoc_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_creston_postings(row$Job_Link),
+    scrape_fn = function() fetch_googledoc_postings(row$Slug, row$City, row$Job_Link,
+                                                    k12_list_rule(googledoc_rules, row$District, "List_Start"),
+                                                    k12_list_rule(googledoc_rules, row$District, "List_Stop"),
+                                                    k12_list_rule(googledoc_rules, row$District, "Skip_Section")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
   df
 })
-creston_df <- bind_rows(creston_results)
-if (nrow(creston_df) > 0) {
-  creston_df <- creston_df %>%
+googledoc_df <- bind_rows(googledoc_results)
+if (nrow(googledoc_df) > 0) {
+  googledoc_df <- googledoc_df %>%
+    ensure_posted_pay_columns() %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
-              Posting_Source = "Creston district site (direct board)")
+              Posting_Source = dplyr::coalesce(unname(googledoc_source_names[District]),
+                                               paste0(District, " site (direct board)")),
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
-  creston_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                            location = character(0), url = character(0), District = character(0),
-                            Posting_Source = character(0))
+  googledoc_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                             location = character(0), url = character(0), District = character(0),
+                             Posting_Source = character(0))
 }
 
 # Clinton School District #32 (an unbranded CMS, found 2026-08-25) also
@@ -532,32 +522,6 @@ if (nrow(zurich_df) > 0) {
               Posting_Source = "Zurich district site (direct board)")
 } else {
   zurich_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                           location = character(0), url = character(0), District = character(0),
-                           Posting_Source = character(0))
-}
-
-# Nashua Public Schools (found 2026-10-20) -- a plain httr2 fetch,
-# no chromote needed, same pattern as the other heuristic districts
-# above.
-nashua_districts <- registry[registry$Platform == "NashuaHeuristic", ]
-nashua_results <- lapply(seq_len(nrow(nashua_districts)), function(i) {
-  row <- nashua_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_nashua_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-nashua_df <- bind_rows(nashua_results)
-if (nrow(nashua_df) > 0) {
-  nashua_df <- nashua_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Nashua district site (direct board)")
-} else {
-  nashua_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                            location = character(0), url = character(0), District = character(0),
                            Posting_Source = character(0))
 }
@@ -644,17 +608,28 @@ if (nrow(swanvalley_df) > 0) {
 # moved 2026-11). Replaced the Highwood, Vaughn and Power scrapers. Each keeps
 # the Posting_Source its own block wrote, so its spells don't read the switch
 # as a move to another board; a district joining later gets the standard form.
+# Platform "CyberSchoolText" (edjobs 0.24.0, Nashua, Frazer, Lavina, Hinsdale):
+# the whole list written as text in one item, read with the shared title line
+# filter and the district's k12_list_rules.csv rules; those pages can state pay.
 cyberschool_source_names <- c(
   "Highwood Public Schools" = "Highwood district site (direct board)",
   "Vaughn Elementary School District #74" = "Vaughn Elementary district site (direct board)",
-  "Power Public Schools" = "Power Public Schools site (direct board)"
+  "Power Public Schools" = "Power Public Schools site (direct board)",
+  "Nashua Public Schools" = "Nashua district site (direct board)",
+  "Frazer Public Schools" = "Frazer district site (direct board)",
+  "Lavina Public Schools" = "Lavina Public Schools site (direct board)",
+  "Hinsdale Public Schools" = "Hinsdale district site (direct board)"
 )
-cyberschool_districts <- registry[registry$Platform == "CyberSchool", ]
+cyberschool_rules <- read_k12_list_rules()
+cyberschool_districts <- registry[registry$Platform %in% c("CyberSchool", "CyberSchoolText"), ]
 cyberschool_results <- lapply(seq_len(nrow(cyberschool_districts)), function(i) {
   row <- cyberschool_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_cyberschool_postings(row$Job_Link, row$City),
+    scrape_fn = function() fetch_cyberschool_postings(
+      row$Job_Link, row$City, if (row$Platform == "CyberSchoolText") "text" else "items",
+      k12_list_rule(cyberschool_rules, row$District, "List_Start"), k12_list_rule(cyberschool_rules, row$District, "List_Stop"),
+      k12_list_rule(cyberschool_rules, row$District, "Skip_Section")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -663,10 +638,12 @@ cyberschool_results <- lapply(seq_len(nrow(cyberschool_districts)), function(i) 
 cyberschool_df <- bind_rows(cyberschool_results)
 if (nrow(cyberschool_df) > 0) {
   cyberschool_df <- cyberschool_df %>%
+    ensure_posted_pay_columns() %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
               Posting_Source = dplyr::coalesce(unname(cyberschool_source_names[District]),
-                                               paste0(District, " site (direct board)")))
+                                               paste0(District, " site (direct board)")),
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
   cyberschool_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                                location = character(0), url = character(0), District = character(0),
@@ -1020,31 +997,6 @@ if (nrow(jeffersonhigh_df) > 0) {
                                  Posting_Source = character(0))
 }
 
-# Frazer Public Schools (found 2026-10-21 via OPI Directory) -- CyberSchool CMS,
-# plain httr2 fetch, no chromote needed.
-frazer_districts <- registry[registry$Platform == "FrazerHeuristic", ]
-frazer_results <- lapply(seq_len(nrow(frazer_districts)), function(i) {
-  row <- frazer_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_frazer_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-frazer_df <- bind_rows(frazer_results)
-if (nrow(frazer_df) > 0) {
-  frazer_df <- frazer_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Frazer district site (direct board)")
-} else {
-  frazer_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                          location = character(0), url = character(0), District = character(0),
-                          Posting_Source = character(0))
-}
-
 # Richey Public Schools (found 2026-10-21 via OPI Directory) -- CyberSchool CMS,
 # plain httr2 fetch, no chromote needed.
 richey_districts <- registry[registry$Platform == "RicheyHeuristic", ]
@@ -1118,56 +1070,6 @@ if (nrow(whitewater_df) > 0) {
   whitewater_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                               location = character(0), url = character(0), District = character(0),
                               Posting_Source = character(0))
-}
-
-# Victor School District (found 2026-10-21 via OPI Directory) -- Google Doc preview,
-# plain httr2 fetch, no chromote needed.
-victor_districts <- registry[registry$Platform == "VictorHeuristic", ]
-victor_results <- lapply(seq_len(nrow(victor_districts)), function(i) {
-  row <- victor_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_victor_postings(),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-victor_df <- bind_rows(victor_results)
-if (nrow(victor_df) > 0) {
-  victor_df <- victor_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Victor district site (direct board)")
-} else {
-  victor_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                          location = character(0), url = character(0), District = character(0),
-                          Posting_Source = character(0))
-}
-
-# Superior School District (found 2026-10-21 via OPI Directory) -- Google Doc preview,
-# plain httr2 fetch, no chromote needed.
-superior_districts <- registry[registry$Platform == "SuperiorHeuristic", ]
-superior_results <- lapply(seq_len(nrow(superior_districts)), function(i) {
-  row <- superior_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_superior_postings(),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-superior_df <- bind_rows(superior_results)
-if (nrow(superior_df) > 0) {
-  superior_df <- superior_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Superior district site (direct board)")
-} else {
-  superior_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                            location = character(0), url = character(0), District = character(0),
-                            Posting_Source = character(0))
 }
 
 # Rapelje School District (ParentSquare CMS, found 2026-10-21)
@@ -1270,56 +1172,6 @@ if (nrow(heartbutte_df) > 0) {
                               Posting_Source = character(0))
 }
 
-# Noxon Public Schools (Apptegy CMS page, found 2026-10-21)
-# has no structured ATS -- a plain httr2 fetch, no chromote needed.
-noxon_districts <- registry[registry$Platform == "NoxonHeuristic", ]
-noxon_results <- lapply(seq_len(nrow(noxon_districts)), function(i) {
-  row <- noxon_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_noxon_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-noxon_df <- bind_rows(noxon_results)
-if (nrow(noxon_df) > 0) {
-  noxon_df <- noxon_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Noxon district site (direct board)")
-} else {
-  noxon_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                         location = character(0), url = character(0), District = character(0),
-                         Posting_Source = character(0))
-}
-
-# Seeley Lake Elementary #34 (Apptegy CMS page, found 2026-10-21)
-# has no structured ATS -- a plain httr2 fetch, no chromote needed.
-seeleylake_districts <- registry[registry$Platform == "SeeleyLakeHeuristic", ]
-seeleylake_results <- lapply(seq_len(nrow(seeleylake_districts)), function(i) {
-  row <- seeleylake_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_seeleylake_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-seeleylake_df <- bind_rows(seeleylake_results)
-if (nrow(seeleylake_df) > 0) {
-  seeleylake_df <- seeleylake_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Seeley Lake district site (direct board)")
-} else {
-  seeleylake_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                              location = character(0), url = character(0), District = character(0),
-                              Posting_Source = character(0))
-}
-
 # East Glacier Park Grade School (CyberSchool CMS, found 2026-10-21)
 # has no structured ATS -- a plain httr2 fetch, no chromote needed.
 eastglacier_districts <- registry[registry$Platform == "EastGlacierHeuristic", ]
@@ -1368,31 +1220,6 @@ if (nrow(charlo_df) > 0) {
   charlo_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                           location = character(0), url = character(0), District = character(0),
                           Posting_Source = character(0))
-}
-
-# Helena Flats School District #15 (helenaflats.org, Apptegy CMS, found 2026-10-22)
-# has no structured ATS -- a plain httr2 fetch, no chromote needed.
-helenaflats_districts <- registry[registry$Platform == "HelenaFlatsHeuristic", ]
-helenaflats_results <- lapply(seq_len(nrow(helenaflats_districts)), function(i) {
-  row <- helenaflats_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_helenaflats_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-helenaflats_df <- bind_rows(helenaflats_results)
-if (nrow(helenaflats_df) > 0) {
-  helenaflats_df <- helenaflats_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Helena Flats district site (direct board)")
-} else {
-  helenaflats_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                               location = character(0), url = character(0), District = character(0),
-                               Posting_Source = character(0))
 }
 
 
@@ -1542,54 +1369,6 @@ if (nrow(kila_df) > 0) {
               Posting_Source = "Kila School District #20 site (direct board)")
 } else {
   kila_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
-# Lavina Public Schools (lavinapublicschools.com, found 2026-10-22)
-lavina_districts <- registry[registry$Platform == "LavinaHeuristic", ]
-lavina_results <- lapply(seq_len(nrow(lavina_districts)), function(i) {
-  row <- lavina_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_lavina_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-lavina_df <- bind_rows(lavina_results)
-if (nrow(lavina_df) > 0) {
-  lavina_df <- lavina_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Lavina Public Schools site (direct board)")
-} else {
-  lavina_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
-# Fromberg Public Schools (frombergpublicschools.com, found 2026-10-22)
-fromberg_districts <- registry[registry$Platform == "FrombergHeuristic", ]
-fromberg_results <- lapply(seq_len(nrow(fromberg_districts)), function(i) {
-  row <- fromberg_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_fromberg_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-fromberg_df <- bind_rows(fromberg_results)
-if (nrow(fromberg_df) > 0) {
-  fromberg_df <- fromberg_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Fromberg Public Schools site (direct board)")
-} else {
-  fromberg_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                       location = character(0), url = character(0), District = character(0),
                       Posting_Source = character(0))
 }
@@ -1942,30 +1721,6 @@ if (nrow(gallatingateway_df) > 0) {
                                     Posting_Source = character(0))
 }
 
-# Bainville K-12 Schools (Batch 23)
-bainville_districts <- registry[registry$Platform == "BainvilleHeuristic", ]
-bainville_results <- lapply(seq_len(nrow(bainville_districts)), function(i) {
-  row <- bainville_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_bainville_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-bainville_df <- bind_rows(bainville_results)
-if (nrow(bainville_df) > 0) {
-  bainville_df <- bainville_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Bainville district site (direct board)")
-} else {
-  bainville_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                             location = character(0), url = character(0), District = character(0),
-                             Posting_Source = character(0))
-}
-
 # Chester-Joplin-Inverness Public Schools (Batch 23)
 cji_districts <- registry[registry$Platform == "CJIHeuristic", ]
 cji_results <- lapply(seq_len(nrow(cji_districts)), function(i) {
@@ -2232,15 +1987,13 @@ terry_df <- terry_df %>% mutate(date_posted = standardize_date(date_posted))
 gallatingateway_df <- gallatingateway_df %>% mutate(date_posted = standardize_date(date_posted))
 bigfork_df <- bigfork_df %>% mutate(date_posted = standardize_date(date_posted))
 hysham_df <- hysham_df %>% mutate(date_posted = standardize_date(date_posted))
-hinsdale_df <- hinsdale_df %>% mutate(date_posted = standardize_date(date_posted))
 winnett_df <- winnett_df %>% mutate(date_posted = standardize_date(date_posted))
 milescity_df <- milescity_df %>% mutate(date_posted = standardize_date(date_posted))
 brockton_df <- brockton_df %>% mutate(date_posted = standardize_date(date_posted))
-creston_df <- creston_df %>% mutate(date_posted = standardize_date(date_posted))
+googledoc_df <- googledoc_df %>% mutate(date_posted = standardize_date(date_posted))
 clinton_df <- clinton_df %>% mutate(date_posted = standardize_date(date_posted))
 miami_df <- miami_df %>% mutate(date_posted = standardize_date(date_posted))
 zurich_df <- zurich_df %>% mutate(date_posted = standardize_date(date_posted))
-nashua_df <- nashua_df %>% mutate(date_posted = standardize_date(date_posted))
 wibaux_df <- wibaux_df %>% mutate(date_posted = standardize_date(date_posted))
 westvalley_df <- westvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 swanvalley_df <- swanvalley_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -2254,35 +2007,26 @@ smithvalley_df <- smithvalley_df %>% mutate(date_posted = standardize_date(date_
 moore_df <- moore_df %>% mutate(date_posted = standardize_date(date_posted))
 boulder_df <- boulder_df %>% mutate(date_posted = standardize_date(date_posted))
 jeffersonhigh_df <- jeffersonhigh_df %>% mutate(date_posted = standardize_date(date_posted))
-frazer_df <- frazer_df %>% mutate(date_posted = standardize_date(date_posted))
 richey_df <- richey_df %>% mutate(date_posted = standardize_date(date_posted))
 judithgap_df <- judithgap_df %>% mutate(date_posted = standardize_date(date_posted))
 whitewater_df <- whitewater_df %>% mutate(date_posted = standardize_date(date_posted))
-victor_df <- victor_df %>% mutate(date_posted = standardize_date(date_posted))
-superior_df <- superior_df %>% mutate(date_posted = standardize_date(date_posted))
 rapelje_df <- rapelje_df %>% mutate(date_posted = standardize_date(date_posted))
 monforton_df <- monforton_df %>% mutate(date_posted = standardize_date(date_posted))
 grassrange_df <- grassrange_df %>% mutate(date_posted = standardize_date(date_posted))
 heartbutte_df <- heartbutte_df %>% mutate(date_posted = standardize_date(date_posted))
-noxon_df <- noxon_df %>% mutate(date_posted = standardize_date(date_posted))
-seeleylake_df <- seeleylake_df %>% mutate(date_posted = standardize_date(date_posted))
 eastglacier_df <- eastglacier_df %>% mutate(date_posted = standardize_date(date_posted))
 charlo_df <- charlo_df %>% mutate(date_posted = standardize_date(date_posted))
-helenaflats_df <- helenaflats_df %>% mutate(date_posted = standardize_date(date_posted))
 jordan_df <- jordan_df %>% mutate(date_posted = standardize_date(date_posted))
 pioneer_df <- pioneer_df %>% mutate(date_posted = standardize_date(date_posted))
 opheim_df <- opheim_df %>% mutate(date_posted = standardize_date(date_posted))
 pryor_df <- pryor_df %>% mutate(date_posted = standardize_date(date_posted))
 westglacier_df <- westglacier_df %>% mutate(date_posted = standardize_date(date_posted))
 kila_df <- kila_df %>% mutate(date_posted = standardize_date(date_posted))
-lavina_df <- lavina_df %>% mutate(date_posted = standardize_date(date_posted))
-fromberg_df <- fromberg_df %>% mutate(date_posted = standardize_date(date_posted))
 pleasantvalley_df <- pleasantvalley_df %>% mutate(date_posted = standardize_date(date_posted))
 circle_df <- circle_df %>% mutate(date_posted = standardize_date(date_posted))
 forsyth_df <- forsyth_df %>% mutate(date_posted = standardize_date(date_posted))
 potomac_df <- potomac_df %>% mutate(date_posted = standardize_date(date_posted))
 frontier_df <- frontier_df %>% mutate(date_posted = standardize_date(date_posted))
-bainville_df <- bainville_df %>% mutate(date_posted = standardize_date(date_posted))
 cji_df <- cji_df %>% mutate(date_posted = standardize_date(date_posted))
 marion_df <- marion_df %>% mutate(date_posted = standardize_date(date_posted))
 lima_df <- lima_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -2291,16 +2035,14 @@ opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_dfs <- list(
   applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, redrover_df,
-  lodgegrass_df, broadview_df, scobey_df, arrowhead_df, ekalaka_df, hysham_df, hinsdale_df, winnett_df, milescity_df, brockton_df, creston_df, clinton_df, miami_df, zurich_df, nashua_df, wibaux_df,
+  lodgegrass_df, broadview_df, scobey_df, arrowhead_df, ekalaka_df, hysham_df, winnett_df, milescity_df, brockton_df, googledoc_df, clinton_df, miami_df, zurich_df, wibaux_df,
   westvalley_df, swanvalley_df,
-  cyberschool_df, googlesites_df, finalsite_df, wordpress_df, edlio_df, joomla_df, smithvalley_df, moore_df, boulder_df, jeffersonhigh_df, frazer_df, richey_df,
-  judithgap_df, whitewater_df, victor_df, superior_df,
+  cyberschool_df, googlesites_df, finalsite_df, wordpress_df, edlio_df, joomla_df, smithvalley_df, moore_df, boulder_df, jeffersonhigh_df, richey_df,
+  judithgap_df, whitewater_df,
   rapelje_df, monforton_df, grassrange_df,
-  heartbutte_df, noxon_df, seeleylake_df, eastglacier_df,
-  charlo_df, helenaflats_df, jordan_df, pioneer_df, opheim_df,
+  heartbutte_df, eastglacier_df,
+  charlo_df, jordan_df, pioneer_df, opheim_df,
   pryor_df, westglacier_df, kila_df,
-  lavina_df,
-  fromberg_df,
   pleasantvalley_df,
   circle_df,
   forsyth_df,
@@ -2312,7 +2054,7 @@ direct_dfs <- list(
                        denton_df,
                        clancy_df,
                        bigfork_df, terry_df,
-                       bainville_df, cji_df, marion_df, lima_df, 
+                       cji_df, marion_df, lima_df, 
   gallatingateway_df, apptegy_df
 )
 direct_dfs <- lapply(direct_dfs, standardize_df_date)

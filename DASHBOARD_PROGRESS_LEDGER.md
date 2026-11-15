@@ -918,6 +918,31 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.23.0.log`; post-run suite 3,360 passed): 14 rows, all 14 with a
     district + title (any case) already in the committed data; no NA Posting_Source in the three families' rows.
     Notes: `claude-notes/2026-11-14_small-families/README.md`.
+  * [x] Noxon, Seeley Lake and Helena Flats back on the board (2026-11-14; edjobs 0.24.0, waits on the stack). All three
+    returned 0 rows every week since ~11-03: their scrapers fetched with a plain request, which Apptegy answers with its
+    3 KB bot-challenge page. Moved to the Apptegy family (text mode, rendered with the shared chromote session); Noxon
+    has a stop rule for its marketing headings. Old functions, Rmd blocks, tests and fixtures deleted; rendered 11-14
+    pages are the family test's fixtures. Live run of the step: 5 postings (Noxon 1, Seeley Lake 1, Helena Flats 3).
+    Suite 3,324 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
+  * [x] Nashua, Frazer, Lavina, Hinsdale on the CyberSchool routine, mode "text" (2026-11-14; edjobs 0.24.0, waits on
+    the stack). Registry Platform `CyberSchoolText`; each keeps its Posting_Source; the CyberSchool block now carries
+    posted pay. Same titles as the four old parsers on fixtures and live pages (live: 1, 5, 26, 2 postings); Hinsdale's
+    older fixture gains 2 per-posting document links. Old functions, Rmd blocks and tests deleted; the drift tests'
+    HTTP-scraper example is now Richey. Suite 3,320 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
+  * [x] Fromberg on the Finalsite family (2026-11-14; edjobs 0.24.0). Same title and link as its old parser on the
+    fixture and the live page; Posting_Source unchanged. Old function, Rmd block and tests deleted.
+  * [x] Victor, Superior, Bainville, Creston on the Google Doc routine (2026-11-14; edjobs 0.24.0
+    `fetch_googledoc_postings()`). Registry Platform `GoogleDoc`, doc ids in `Slug`; Bainville has list rules. Live
+    11-14: 4, 3, 7, 1 postings, the 11-10 counts; Victor keeps the doc's "updated" date. Title changes once: Victor
+    "Substitute" -> "Substitutes", Bainville "Paraprofessional- small intervention group" -> "Paraprofessional". Old
+    functions, the preview helper, Rmd blocks and tests deleted. Full suite 3,322 passed, 1 failed (the rules-file test
+    allowed only Apptegy/Google Sites rows; widened, that file then 287 passed, 0 failed).
+  * [x] Full rehearsal of the `apptegy-leftovers` branch on edjobs 0.24.0 (2026-11-14): every step passed, rebuild
+    parity 9/9, post-run suite 3,355 passed, 0 failed (`claude-notes/2026-11-14_rehearsal-mt-apptegy-leftovers-0.24.0.log`).
+    combinedclean 1,369 -> 1,399 rows. Own-page rows: Helena Flats 3, Seeley Lake 3, Noxon 1 (0 in the 11-10 data);
+    the other 9 moved districts the same counts as 11-10 (Frazer 26, Bainville 7, Victor 6, Nashua 5, Superior 4,
+    Lavina 2, Creston 1, Fromberg 1, Hinsdale 1). The other 9 districts with no own-page rows in 3 weeks are
+    genuinely quiet (no openings, application forms only, or an empty page; `claude-notes/2026-11-14_mt-leftovers/README.md`).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11

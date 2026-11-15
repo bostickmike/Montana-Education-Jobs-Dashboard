@@ -493,8 +493,10 @@ test_that("k12_list_rules.csv: one row per family district, each rule a valid pe
   rules <- read_k12_list_rules(here::here("k12_list_rules.csv"))
   expect_equal(names(rules), c("District", "List_Start", "List_Stop", "Skip_Section"))
   expect_false(anyDuplicated(rules$District) > 0)
-  # Rules are read by the Apptegy and Google Sites family routines.
-  expect_true(all(rules$District %in% reg$District[reg$Platform %in% c(names(APPTEGY_FAMILY_MODES), "GoogleSites")]))
+  # Rules are read by the family routines that use the shared title line filter.
+  rule_platforms <- c(names(APPTEGY_FAMILY_MODES), "GoogleSites", "Finalsite", "WordPress", "Edlio", "Joomla",
+                      "CyberSchoolText", "GoogleDoc")
+  expect_true(all(rules$District %in% reg$District[reg$Platform %in% rule_platforms]))
   for (col in c("List_Start", "List_Stop", "Skip_Section")) for (rx in stats::na.omit(rules[[col]])) {
     expect_silent(grepl(rx, "x", perl = TRUE))
   }
@@ -521,4 +523,22 @@ test_that("fetch_apptegy_k12_postings runs the family through one session, each 
   expect_equal(sum(r$District == "Deer Lodge School District #1"), 5)
   expect_true(all(r$Location[r$District == "Deer Lodge School District #1"] == "Deer Lodge"))
   expect_true(all(c("Pay_Min", "Pay_Text") %in% names(r)))
+})
+
+# Noxon, Seeley Lake and Helena Flats joined the family 2026-11-14 (edjobs 0.24.0;
+# claude-notes/2026-11-14_mt-leftovers/README.md). Their old scrapers fetched with a plain request, which has
+# answered with Apptegy's 3 KB bot-challenge page since ~11-03 (0 rows each week); the family renders the page.
+test_that("parse_apptegy_postings: Noxon Public Schools", {
+  r <- apptegy_parse("Noxon Public Schools", test_path("fixtures", "apptegy_noxon_rendered_2026-11-14.txt"))
+  expect_equal(r$Title, "7–12 Science Teacher")
+})
+
+test_that("parse_apptegy_postings: Seeley Lake Elementary #34", {
+  r <- apptegy_parse("Seeley Lake Elementary #34", test_path("fixtures", "apptegy_seeleylake_rendered_2026-11-14.txt"))
+  expect_equal(r$Title, "Substitute (All Areas)")
+})
+
+test_that("parse_apptegy_postings: Helena Flats School District #15", {
+  r <- apptegy_parse("Helena Flats School District #15", test_path("fixtures", "apptegy_helenaflats_rendered_2026-11-14.txt"))
+  expect_equal(r$Title, c("Maintenance/Custodial Supervisor", "Special Education Paraprofessional", "Substitutes Needed"))
 })

@@ -52,3 +52,53 @@ test_that("parse_cyberschool_postings: Vaughn Elementary, before and after its m
   expect_equal(new$Link, "https://vaughn.l.iescentral.com/jobs/substitutes-needed")
   expect_true(all(c(old$Location, new$Location) == "Vaughn"))
 })
+
+# Platform "CyberSchoolText" (edjobs 0.24.0, 2026-11-14; claude-notes/2026-11-14_mt-leftovers/): the whole list
+# written as text in one item, read with mode "text". Expected titles are the old parsers' titles on the same pages.
+cst_parse <- function(fixture, district) {
+  reg <- read.csv(test_path("..", "..", "k12_district_registry.csv"), stringsAsFactors = FALSE)
+  row <- reg[reg$District == district, ]
+  expect_equal(nrow(row), 1)
+  expect_equal(row$Platform, "CyberSchoolText")
+  rules <- read_k12_list_rules(test_path("..", "..", "k12_list_rules.csv"))
+  html <- paste(readLines(fixture, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  r <- parse_cyberschool_postings(html, row$Job_Link, row$City, "text", k12_list_rule(rules, district, "List_Start"),
+                                  k12_list_rule(rules, district, "List_Stop"), k12_list_rule(rules, district, "Skip_Section"))
+  expect_true(all(r$Location == row$City))
+  r
+}
+
+test_that("the CyberSchoolText rows resolve to the routine in mode text", {
+  for (d in c("Nashua Public Schools", "Frazer Public Schools", "Lavina Public Schools", "Hinsdale Public Schools")) {
+    call <- edjobs::resolve_scraper_call(d)
+    expect_equal(call$fn, "fetch_cyberschool_postings")
+    expect_equal(call$args[[3]], "text")
+  }
+})
+
+test_that("parse_cyberschool_postings (text): Nashua Public Schools", {
+  r <- cst_parse(test_path("fixtures", "nashua_jobs_2026-10-20.html"), "Nashua Public Schools")
+  expect_equal(r$Title, c("Part-Time Custodian", "K-12 Librarian (full or part-time)", "Music (full or part-time)",
+                          "Special Education", "Concessions", "Substitute Teacher",
+                          "Substitute Bus Driver/Activity Bus Driver"))
+})
+
+test_that("parse_cyberschool_postings (text): Frazer Public Schools", {
+  r <- cst_parse(test_path("fixtures", "frazer_cyberschool_2026-10-21.html"), "Frazer Public Schools")
+  expect_equal(length(r$Title), 26)
+  expect_true(all(c("Family and Consumer Sciences", "Business Education", "World Languages: Nakoda & Other",
+                    "Business Manager/Clerk", "Route Bus Driver") %in% r$Title))
+})
+
+test_that("parse_cyberschool_postings (text): Lavina Public Schools", {
+  r <- cst_parse(test_path("fixtures", "lavina_jobs.html"), "Lavina Public Schools")
+  expect_equal(r$Title, c("Junior High Assistant Volleyball Coach", "Junior High Assistant Football Coach"))
+})
+
+test_that("parse_cyberschool_postings (text): Hinsdale Public Schools, numbered and unnumbered", {
+  r <- cst_parse(test_path("fixtures", "hinsdale_untitled.html"), "Hinsdale Public Schools")
+  expect_equal(r$Title, c("Daycare Manager", "Childcare Worker at Little Raiders Daycare", "Route Bus Drivers"))
+  # The pay footnote and the superintendent's contact block are not postings
+  r2 <- cst_parse(test_path("fixtures", "hinsdale_untitled_2026-09-22.html"), "Hinsdale Public Schools")
+  expect_equal(r2$Title, "Route Bus Drivers")
+})

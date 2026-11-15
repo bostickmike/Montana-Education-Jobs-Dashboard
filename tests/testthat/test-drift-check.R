@@ -67,9 +67,10 @@ test_that("every real registered K-12 row resolves to a real scraper function, c
       expect_true(exists(call$fn, mode = "function"), info = paste(k12$Platform[i], "->", call$fn))
     }
   }
-  hinsdale <- resolve_scraper_call("Hinsdale Public Schools")
-  expect_equal(hinsdale[c("fn", "session")], list(fn = "fetch_hinsdale_postings", session = FALSE))
-  expect_equal(hinsdale$args, list(k12$Job_Link[k12$District == "Hinsdale Public Schools"]))
+  # (Hinsdale was the example here until it moved to the CyberSchool routine, 2026-11-14.)
+  richey <- resolve_scraper_call("Richey Public Schools")
+  expect_equal(richey[c("fn", "session")], list(fn = "fetch_richey_postings", session = FALSE))
+  expect_equal(richey$args, list(k12$Job_Link[k12$District == "Richey Public Schools"]))
   tyler <- k12[k12$Platform == "TylerPortico", ][1, ]
   expect_equal(resolve_scraper_call(tyler$District)$args, list(tyler$Slug, tyler$District))
   expect_equal(resolve_scraper_call(k12$District[k12$Platform == "BroadviewHeuristic"][1])$args, list())
@@ -132,8 +133,8 @@ test_that("an innerText scraper's issue hands the agent the CI capture as its fi
 })
 
 test_that("an HTTP scraper's issue keeps the capture as context and asks for a raw fixture", {
-  row <- data.frame(name = "Hinsdale Public Schools", type = "K-12", mean_count = 3, count = 0,
-                    url = "https://hinsdale.k12.mt.us/District/1557-Untitled.html",
+  row <- data.frame(name = "Richey Public Schools", type = "K-12", mean_count = 3, count = 0,
+                    url = "https://www.richey.k12.mt.us/currentopenings",
                     llm_titles = NA_character_, stringsAsFactors = FALSE)
   call <- resolve_scraper_call(row$name)
   ev <- gather_autofix_evidence(call, row$name, "Route Bus Drivers\nDaycare Manager", repo_root = here::here())
@@ -141,7 +142,7 @@ test_that("an HTTP scraper's issue keeps the capture as context and asks for a r
   expect_equal(ev$diff, character(0))
   expect_true(length(ev$fixtures) > 0)
   body <- paste(build_autofix_issue_body(row, call, evidence = ev), collapse = "\n")
-  expect_match(body, "`fetch_hinsdale_postings()`", fixed = TRUE)
+  expect_match(body, "`fetch_richey_postings()`", fixed = TRUE)
   expect_match(body, "1. Fetch the live page", fixed = TRUE)
   expect_no_match(body, "Diff: newest text fixture", fixed = TRUE)
   expect_no_match(body, "rendered this page in CI", fixed = TRUE)
