@@ -134,7 +134,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `ACS_Year` | Integer | US Census ACS 5-Year | Data release year for US Census American Community Survey 5-year estimates. |
 | `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Proportion of county civilian employed labor force in agriculture, forestry, mining, and energy extraction. |
 | `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year percentage change in total resident population. |
-| `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Estimated proportion of school-age children (ages 5-17) living in families below the federal poverty line. Where a district is a separate elementary and high school district (e.g. Billings), the two are combined by adding their children in poverty and dividing by all their children, the standard way to combine Census estimates. The high school district can reach beyond the elementary district, so a combined rate can include some children from neighboring districts. |
+| `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Share of children 5-17 in families below the poverty line. Separate elementary and high school districts (e.g. Billings) are combined by their numbers of children. |
 | `SAIPE_Year` | Integer | US Census SAIPE | Release year of federal Small Area Income and Poverty Estimates data. |
 | `Total_General_Fund_Expenditure` | Currency ($) | OPI School Finance Files | Total district General Fund operating expenditures. |
 | `Finance_FY` | String / Integer | OPI School Finance Files | State fiscal year for OPI financial expenditure reporting. |
