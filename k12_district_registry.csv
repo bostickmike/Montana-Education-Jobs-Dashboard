@@ -27,7 +27,7 @@ Poplar Public Schools,3021240,Poplar,Roosevelt County,48.1132,-105.1959,AppliTra
 Fairview Public Schools,3010210,Fairview,Richland County,47.8438,-104.0398,AppliTrack,fairview,https://www.applitrack.com/fairview/onlineapp/default.aspx
 Rocky Boy Public Schools,3022750,Rocky Boy,Hill County,48.2963,-109.8547,AppliTrack,rockyboy,https://www.applitrack.com/rockyboy/onlineapp/default.aspx
 Ronan Public Schools,3022790,Ronan,Lake County,47.5322,-114.1042,SchoolSpring,ronan.schoolspring.com,https://ronan.schoolspring.com/
-Livingston Public Schools,3016880,Livingston,Park County,45.6621,-110.5605,LivingstonHeuristic,,https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638
+Livingston Public Schools,3016880,Livingston,Park County,45.6621,-110.5605,Edlio,,https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638
 Wolf Point Public Schools,3028590,Wolf Point,Roosevelt County,48.0928,-105.6402,Apptegy,,https://www.wolfpointschools.org/page/job-opportunities-1
 Plentywood Public Schools,3020960,Plentywood,Sheridan County,48.7772,-104.5586,Apptegy,,https://www.plentywood.k12.mt.us/o/plentywood/page/employment-opportunities
 Lodge Grass Public Schools,3017010,Lodge Grass,Big Horn County,45.3164,-107.3624,LodgeGrassHeuristic,,https://www.lgschools.org/apps/pages/index.jsp?uREC_ID=373420&type=d
@@ -131,7 +131,7 @@ Sweet Grass County High School,3025560,Big Timber,Sweet Grass County,45.8350,-10
 Harlem Public Schools,3013395,Harlem,Blaine County,48.5311,-108.7838,AppliTrack,harlemhs,https://www.applitrack.com/harlemhs/onlineapp/
 Belfry Public Schools,3003270,Belfry,Carbon County,45.1386,-109.0068,BelfryHeuristic,,https://www.belfrybats.org/index.php/our-school/employment
 Nashua Public Schools,3019170,Nashua,Valley County,48.1328,-106.3575,NashuaHeuristic,,https://www.nashua.k12.mt.us/District/Jobs/
-Whitehall Public Schools,3027810,Whitehall,Jefferson County,45.8677,-112.0975,WhitehallHeuristic,,https://www.whitehallschools.org/apps/jobs/
+Whitehall Public Schools,3027810,Whitehall,Jefferson County,45.8677,-112.0975,Edlio,,https://www.whitehallschools.org/apps/jobs/
 Broadus Public Schools,3000006,Broadus,Powder River County,45.4430,-105.4083,GoogleSites,,https://www.broadus.net/job-openings
 Wibaux Public Schools,3028020,Wibaux,Wibaux County,46.9856,-104.1877,WibauxHeuristic,,https://www.wibauxschools.net/employment
 West Valley School District #1,3027570,Kalispell,Flathead County,48.2198,-114.3729,WestValleyHeuristic,,https://westvalleyschool.submittable.com/submit
@@ -164,7 +164,7 @@ Noxon Public Schools,3000090,Noxon,Sanders County,47.9966,-115.7796,NoxonHeurist
 Seeley Lake Elementary #34,3023730,Seeley Lake,Missoula County,47.1783,-113.4842,SeeleyLakeHeuristic,,https://www.sleonline.org/page/join-our-team
 East Glacier Park Grade School,3009510,East Glacier Park,Glacier County,48.4480,-113.2187,EastGlacierHeuristic,,https://eastglacierschool.com/employment
 Charlo School District 7J,3006112,Charlo,Lake County,47.4399,-114.1752,CharloHeuristic,,https://charlo.k12.mt.us/
-Canyon Creek School District,3005460,Billings,Yellowstone County,45.7196,-108.6835,CanyonCreekHeuristic,,https://www.canyoncreekschool.org/apps/jobs/
+Canyon Creek School District,3005460,Billings,Yellowstone County,45.7196,-108.6835,Edlio,,https://www.canyoncreekschool.org/apps/jobs/
 Hellgate Elementary School District,3013860,Missoula,Missoula County,46.9152,-114.0532,Finalsite,,https://www.hellgate.k12.mt.us/our-district/employment
 Helena Flats School District #15,3013800,Kalispell,Flathead County,48.2435,-114.2690,HelenaFlatsHeuristic,,https://www.helenaflats.org/page/employment
 Woodman Elementary School District #3,3028650,Lolo,Missoula County,46.7573,-114.2872,GoogleSites,,http://www.woodmanschool.org/district-information/employment-opportunities
@@ -174,13 +174,13 @@ Pioneer Elementary School District #41,3020790,Billings,Yellowstone County,45.86
 Opheim Public Schools,3019740,Opheim,Valley County,48.8580,-106.4022,OpheimHeuristic,,https://sites.google.com/site/opheimschool/office
 Pryor Public Schools,3021720,Pryor,Big Horn County,45.4300,-108.5300,PryorHeuristic,,https://pryorwarriors.org/human-resources/
 West Glacier Elementary School District #8,3000094,West Glacier,Flathead County,48.4983,-113.9806,WestGlacierHeuristic,,https://www.westglacierelementary.org/opportunities/employment
-Trout Creek School District #6,3026520,Trout Creek,Sanders County,47.8633,-115.6178,TroutCreekHeuristic,,https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685
+Trout Creek School District #6,3026520,Trout Creek,Sanders County,47.8633,-115.6178,Edlio,,https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685
 Power Public Schools,3021510,Power,Teton County,47.7122,-111.6844,CyberSchool,,https://power.k12.mt.us/District/Jobs/
 Kila School District #20,3015570,Kila,Flathead County,48.1158,-114.4533,KilaHeuristic,,https://docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/export?format=html
 Lavina Public Schools,3016290,Lavina,Golden Valley County,46.2941,-108.9390,LavinaHeuristic,,https://www.lavinapublicschools.com/District/2269-Untitled.html
 Fromberg Public Schools,3011650,Fromberg,Carbon County,45.3883,-108.9052,FrombergHeuristic,,https://www.frombergpublicschools.com/district-info/employment
 Pleasant Valley School District #27,3020880,Marion,Flathead County,48.1496,-114.9567,PleasantValleyHeuristic,,https://www.pvsmt.org/employment-opportunities.html
-Sun River Valley School District #24,3024300,Simms,Cascade County,47.5014,-111.9611,SunRiverValleyHeuristic,,https://srvs.k12.mt.us/apps/jobs/
+Sun River Valley School District #24,3024300,Simms,Cascade County,47.5014,-111.9611,Edlio,,https://srvs.k12.mt.us/apps/jobs/
 Circle Public Schools,3006790,Circle,McCone County,47.4169,-105.5918,CircleHeuristic,,https://www.circleschools.org/employment-opportunities.html
 Forsyth Public Schools,3011160,Forsyth,Rosebud County,46.2664,-106.6778,ForsythHeuristic,,https://forsythpublicschools.org/bus-drivers-wanted/
 DeSmet Public School,3008880,Missoula,Missoula County,46.9238,-114.1017,WordPress,,https://desmetschool.org/available-employment-opportunities/

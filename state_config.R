@@ -43,6 +43,9 @@ MT_SCRAPER_SPECS <- list(
   # The WordPress family routine, edjobs 0.21.0 (plain request, the shared title line filter).
   WordPress    = scraper_spec("fetch_wordpress_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
                                                                mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  # The Edlio family routine, edjobs 0.22.0 (plain request, the shared title line filter).
+  Edlio        = scraper_spec("fetch_edlio_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
+                                                           mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
   # Red Rover's API (edjobs 0.14.0): Slug is the board's numeric org ID, the
   # link slug comes from Job_Link (Columbia Falls: org 4161, slug sd659912).
   RedRoverK12  = scraper_spec("fetch_redrover_postings", list("Slug", function(row) redrover_org_slug(row$Job_Link))),

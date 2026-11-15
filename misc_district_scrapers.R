@@ -58,61 +58,6 @@ suppressMessages({
   library(jsonlite)
 })
 
-# Livingston Public Schools (livingston.k12.mt.us) -- an Edlio/Blackboard-
-# style CMS. Real postings are PDF links (class "attachment-type-pdf")
-# grouped under school-building headers ("PARK HIGH SCHOOL", "SLEEPING
-# GIANT MIDDLE SCHOOL", etc.) inside `div.page-block-files` blocks, each
-# immediately preceded by a `div.page-block-text` header block -- but the
-# same visual "OTHER DISTRICT POSTINGS" section genuinely mixes one real-
-# postings items-block with a second items-block of boilerplate
-# application forms/tax documents in the same header (confirmed live
-# 2026-08-07), so section-heading scoping alone (the Dawson CC approach)
-# doesn't cleanly separate them here. Filtered by title content instead:
-# real postings never match the application-form/HR-document title
-# pattern below, confirmed against every real title on the page.
-LIVINGSTON_NON_JOB_TITLE_PATTERN <- "Application|W-4|\\bI-9\\b|Agreement|\\bCBA\\b|Handbook|Policy"
-
-fetch_livingston_postings <- function(url = "https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_livingston_postings(resp_body_string(resp), url)
-}
-
-parse_livingston_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  blocks <- rvest::html_elements(page, "div.page-block")
-
-  rows <- list()
-  current_header <- NA_character_
-  for (block in blocks) {
-    cls <- rvest::html_attr(block, "class")
-    if (grepl("page-block-text", cls, fixed = TRUE)) {
-      txt <- trimws(rvest::html_text2(block))
-      if (nzchar(txt) && nchar(txt) < 60) current_header <- txt
-    } else if (grepl("page-block-files", cls, fixed = TRUE)) {
-      links <- rvest::html_elements(block, ".attachment-type-pdf")
-      if (length(links) == 0) next
-      titles <- rvest::html_text2(links)
-      keep <- !grepl(LIVINGSTON_NON_JOB_TITLE_PATTERN, titles, ignore.case = TRUE)
-      if (!any(keep)) next
-      rows[[length(rows) + 1]] <- data.frame(
-        Title = titles[keep],
-        Location = current_header,
-        Posted_Date = NA_character_,
-        Link = rvest::html_attr(links, "href")[keep],
-        stringsAsFactors = FALSE
-      )
-    }
-  }
-
-  if (length(rows) == 0) return(empty)
-  do.call(rbind, rows)
-}
 
 # Lodge Grass Public Schools (lgschools.org) -- an "Educational Networks"
 # CMS with real openings split across 3 tabs of the same Employment page
@@ -673,52 +618,6 @@ parse_nashua_postings <- function(html_text, url) {
     Link = url,
     stringsAsFactors = FALSE
   )
-}
-
-# Whitehall Public Schools (whitehallschools.org, found 2026-10-21) --
-# Jefferson County district on Edlio CMS (/apps/jobs/), with stable
-# per-posting show_job.jsp?REC_ID=... links. Confirmed live 2026-10-21:
-# 4 real active postings (Extracurricular Position ( Advisor or Coach),
-# Paraprofessional / Teacher's Aide, School Custodian, Substitute Teacher).
-fetch_whitehall_postings <- function(url = "https://www.whitehallschools.org/apps/jobs/") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_whitehall_postings(resp_body_string(resp), url)
-}
-
-parse_whitehall_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  page <- rvest::read_html(html_text)
-  items <- rvest::html_elements(page, ".list-item")
-  if (length(items) == 0) return(empty)
-
-  titles <- character(0)
-  links <- character(0)
-  locs <- character(0)
-
-  for (item in items) {
-    link_node <- rvest::html_element(item, "a.emphasize-title, a[href*=\"show_job.jsp\"]")
-    if (is.null(link_node)) next
-    t <- trimws(rvest::html_text(link_node))
-    h <- rvest::html_attr(link_node, "href")
-    full_link <- xml2::url_absolute(h, url)
-
-    loc_node <- rvest::html_element(item, "div")
-    loc <- if (!is.null(loc_node) && !is.na(rvest::html_text(loc_node))) {
-      trimws(sub("^[[:space:]]*Location:[[:space:]]*", "", trimws(rvest::html_text(loc_node))))
-    } else "Whitehall"
-    if (!nzchar(loc)) loc <- "Whitehall"
-
-    titles <- c(titles, t)
-    links <- c(links, full_link)
-    locs <- c(locs, loc)
-  }
-
-  if (length(titles) == 0) return(empty)
-  data.frame(Title = titles, Location = locs, Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
 }
 
 
@@ -2443,52 +2342,6 @@ parse_charlo_postings <- function(html_text, url = "https://charlo.k12.mt.us/") 
   )
 }
 
-# ---------------------------------------------------------------------------
-# Canyon Creek School District #4 (canyoncreekschool.org, Edlio CMS)
-# ---------------------------------------------------------------------------
-fetch_canyoncreek_postings <- function(url = "https://www.canyoncreekschool.org/apps/jobs/") {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  parse_canyoncreek_postings(resp_body_string(resp), url = url)
-}
-
-parse_canyoncreek_postings <- function(html_text, url = "https://www.canyoncreekschool.org/apps/jobs/") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  job_nodes <- rvest::html_elements(doc, "a[href*='show_job.jsp']")
-  if (length(job_nodes) == 0) return(empty)
-
-  titles <- character(0)
-  links <- character(0)
-
-  for (n in job_nodes) {
-    t <- trimws(rvest::html_text(n))
-    h <- rvest::html_attr(n, "href")
-    full_link <- if (!is.na(h) && nzchar(h)) xml2::url_absolute(h, url) else url
-    if (nzchar(t)) {
-      titles <- c(titles, t)
-      links <- c(links, full_link)
-    }
-  }
-
-  if (length(titles) == 0) return(empty)
-
-  data.frame(
-    Title = titles,
-    Location = "Billings",
-    Posted_Date = NA_character_,
-    Link = links,
-    stringsAsFactors = FALSE
-  )
-}
-
 
 # ---------------------------------------------------------------------------
 # Helena Flats School District #15 (Apptegy CMS)
@@ -2837,53 +2690,6 @@ parse_westglacier_postings <- function(html_text, url = "https://www.westglacier
   )
 }
 
-# ---------------------------------------------------------------------------
-# Trout Creek School District #6 (Edlio CMS, troutcreekeagles.org)
-# ---------------------------------------------------------------------------
-fetch_troutcreek_postings <- function(url = "https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685") {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  parse_troutcreek_postings(resp_body_string(resp), url = url)
-}
-
-parse_troutcreek_postings <- function(html_text, url = "https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2698685") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  links <- rvest::html_elements(doc, ".page-block-text div a")
-  titles <- character(0)
-  links_out <- character(0)
-
-  for (a in links) {
-    txt <- trimws(rvest::html_text2(a))
-    href <- rvest::html_attr(a, "href")
-    if (nzchar(txt)) {
-      clean_title <- sub("^[Ww]e are currently looking for[[:space:]]+", "", txt)
-      clean_title <- sub("!$", "", clean_title)
-      clean_title <- trimws(clean_title)
-      if (!nzchar(clean_title) || grepl("Application|Form|Handbook", clean_title, ignore.case = TRUE)) next
-      abs_url <- xml2::url_absolute(href, url)
-      titles <- c(titles, clean_title)
-      links_out <- c(links_out, abs_url)
-    }
-  }
-
-  if (length(titles) == 0) return(empty)
-
-  data.frame(
-    Title = titles,
-    Location = rep("Trout Creek", length(titles)),
-    Posted_Date = rep(NA_character_, length(titles)),
-    Link = links_out,
-    stringsAsFactors = FALSE
-  )
-}
 
 # ---------------------------------------------------------------------------
 # Kila School District #20
@@ -3100,54 +2906,6 @@ parse_pleasantvalley_postings <- function(html, url) {
   unique(df)
 }
 
-# ---------------------------------------------------------------------------
-# Sun River Valley School District #24
-# ---------------------------------------------------------------------------
-fetch_sunrivervalley_postings <- function(url) {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  html <- resp_body_string(resp)
-  parse_sunrivervalley_postings(html, url)
-}
-
-parse_sunrivervalley_postings <- function(html, url) {
-  empty <- data.frame(
-    Title = character(0),
-    Location = character(0),
-    Posted_Date = character(0),
-    Link = character(0),
-    stringsAsFactors = FALSE
-  )
-  if (!nzchar(html)) return(empty)
-
-  doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  links <- html_elements(doc, "a[href*=\"show_job.jsp\"], a[href*=\"/apps/jobs/\"]")
-  titles <- character(0)
-  links_out <- character(0)
-
-  for (a in links) {
-    href <- html_attr(a, "href")
-    txt <- trimws(html_text2(a))
-    if (grepl("show_job\\.jsp", href) && nzchar(txt) && !grepl("^(Job Applications|Employment Opportunities)$", txt, ignore.case = TRUE)) {
-      titles <- c(titles, txt)
-      links_out <- c(links_out, xml2::url_absolute(href, url))
-    }
-  }
-
-  if (length(titles) == 0) return(empty)
-
-  df <- data.frame(
-    Title = titles,
-    Location = rep("Simms", length(titles)),
-    Posted_Date = rep(NA_character_, length(titles)),
-    Link = links_out,
-    stringsAsFactors = FALSE
-  )
-  unique(df)
-}
 
 # ---------------------------------------------------------------------------
 # Circle Public Schools

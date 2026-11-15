@@ -901,6 +901,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     invitation). Bigfork and Pryor stay bespoke. Rehearsed together with Edlio and Joomla on 0.23.0 (see the Joomla
     entry): 12 rows vs 11 in the committed data, the one new row Upper West Shore's "Teachers". Notes:
     `claude-notes/2026-11-14_wordpress-family/README.md`.
+  * [x] Edlio family routine (2026-11-14; edjobs 0.22.0, stacked on WordPress). 5 districts read through
+    `edjobs::fetch_edlio_postings()` (Platform `Edlio`) on the new `district_page_text()`; one Rmd block replaces 5;
+    10 fetch/parse functions (242 lines) and 14 test blocks deleted; `test-edlio-family.R`. Difference: Livingston's
+    document file names read as words without the school year ("Baker_Cook 2026 27" -> "Baker Cook"). Broadview
+    stays bespoke. 0.22.0 alone dropped Canyon Creek's one posting (a POSIX `[ \t]` also matched a literal "t";
+    fixed in 0.23.0). Rehearsed on 0.23.0: 26 rows vs 27 in the committed data; the change is Whitehall's own page
+    (adds Agricultural Education Teacher, no longer lists School Custodian). Notes:
+    `claude-notes/2026-11-14_small-families/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
