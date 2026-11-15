@@ -885,6 +885,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Description" non-title gone. Suite on 0.19.0: 3,399 passed, 0 failed. Rehearsed together with the Finalsite change
     on 0.20.0 (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.20.0.log`, all steps passed): 65 rows, 62 of 65 spells
     continue, the 3 new ones are the retitles. Notes: `claude-notes/2026-11-14_googlesites-family/README.md`.
+  * [x] Finalsite family routine (2026-11-14; edjobs 0.20.0, stacked on Google Sites). 11 districts read through
+    `edjobs::fetch_finalsite_postings()` (Platform `Finalsite`); one Rmd block replaces 11; 22 fetch/parse functions +
+    5 helpers (494 lines) and 34 test blocks deleted; `test-finalsite-family.R`. A title that is a link on the page
+    keeps it: Manhattan's 9 and Hellgate's 2 per-posting links as before, new ones at Shields Valley (5) and Thompson
+    Falls (3), each the posting's own document. Whitewater and Fromberg stay bespoke. Differences: Baker's "(... open
+    until filled)" asides off, Thompson Falls' "Paraprofessional-" fixed, Shepherd's and Manhattan's substitute-pool
+    lines kept (Manhattan's as one run-together line), Shields Valley's co-op heading gone. Suite on 0.20.0: 3,374
+    passed, 0 failed; full rehearsal passed every step (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.20.0.log`;
+    suites 3,395 / 3,402): 46 rows, 41 of 46 spells continue. Notes: `claude-notes/2026-11-14_finalsite-family/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
