@@ -55,7 +55,7 @@ Sunburst Schools,3025320,Sunburst,Toole County,48.8736,-111.9056,Apptegy,,https:
 Ramsay School District #3,3021850,Ramsay,Silver Bow County,46.0057,-112.6825,RamsayHeuristic,,https://ramsayschool.com/employment/
 Roy School District 74,3023160,Roy,Fergus County,47.3314,-108.9599,RoyHeuristic,,https://roy.k12.mt.us/
 Arrowhead Elementary School District #75,3002300,Pray,Park County,45.3802,-110.6816,ArrowheadHeuristic,,https://arrowheadk8.com/careers/
-North Star Public Schools,3000096,Rudyard,Hill County,48.5600,-110.5541,NorthStarHeuristic,,https://sites.google.com/nsschools.org/home/employment
+North Star Public Schools,3000096,Rudyard,Hill County,48.5600,-110.5541,GoogleSites,,https://sites.google.com/nsschools.org/home/employment
 Belt Public Schools,3003420,Belt,Cascade County,47.3861,-110.9255,Apptegy,,https://www.beltschool.com/page/employment-opportunities
 Big Sky School District 72,3000654,Big Sky,Gallatin County,45.229,-111.2519,Apptegy,,https://www.bssd72.org/page/employment-opportunities
 Melstone Public Schools,3018240,Melstone,Musselshell County,46.5986,-107.8720,Apptegy,,https://www.melstonepublicschools.org/page/employment-opportunities
@@ -72,22 +72,22 @@ Chinook Public Schools,3006260,Chinook,Blaine County,48.5900,-109.2313,Apptegy,,
 Darby School District 9,3008280,Darby,Ravalli County,46.0227,-114.1781,Apptegy,,https://www.darby.k12.mt.us/page/employment
 Dutton/Brady Public School District,3000102,Dutton,Teton County,47.8427,-111.7117,Apptegy,,https://dbps.k12.mt.us/page/careers
 Ekalaka Public Schools,3009670,Ekalaka,Carter County,45.8889,-104.5527,EkalakaHeuristic,,https://www.ekalaka.net/336413_2
-Trego School District 53,3026460,Trego,Lincoln County,48.6556,-114.9222,TregoHeuristic,,https://www.tregoschool.org/about-us/our-staff/employment
+Trego School District 53,3026460,Trego,Lincoln County,48.6556,-114.9222,GoogleSites,,https://www.tregoschool.org/about-us/our-staff/employment
 St. Ignatius School District,3006110,St. Ignatius,Lake County,47.3199,-114.0940,RedRoverK12,2261,https://jobs.redroverk12.com/org/2261
 Stanford Public Schools,3024990,Stanford,Judith Basin County,47.1519,-110.2189,Apptegy,,https://www.stanfordmtschool.com/page/employment
 Lolo School District 7,3017130,Lolo,Missoula County,46.7653,-114.1028,Apptegy,,https://www.loloschools.org/page/employment
-Reed Point School District,3022230,Reed Point,Stillwater County,45.7072,-109.5472,ReedPointHeuristic,,https://www.reedpoint.k12.mt.us/employment
+Reed Point School District,3022230,Reed Point,Stillwater County,45.7072,-109.5472,GoogleSites,,https://www.reedpoint.k12.mt.us/employment
 Hobson Public School,3014430,Hobson,Judith Basin County,46.9986,-109.8744,HobsonHeuristic,,https://www.hobson.k12.mt.us/employment
 Froid Public Schools,3011550,Froid,Roosevelt County,48.3345,-104.4961,Apptegy,,https://www.froidschool.com/page/open-positionsapplications
 Terry Public Schools,3025950,Terry,Prairie County,46.7931,-105.3122,TerryHeuristic,,https://terryschools.org/employment
 Gallatin Gateway School,3011790,Gallatin Gateway,Gallatin County,45.5916,-111.1977,GallatinGatewayHeuristic,,https://www.gallatingatewayschool.com/About-Us/Employment/
 Turner Public Schools,3026640,Turner,Blaine County,48.8469,-108.4006,TurnerHeuristic,,https://turner.k12.mt.us/employment/
-Swan River School District #4,3025500,Bigfork,Flathead County,48.0960,-114.0280,SwanRiverHeuristic,,https://www.swanriverschool.org/human-resources/
+Swan River School District #4,3025500,Bigfork,Flathead County,48.0960,-114.0280,GoogleSites,,https://www.swanriverschool.org/human-resources/
 Bigfork School District 38,3003820,Bigfork,Flathead County,48.0646,-114.0783,BigforkHeuristic,,https://bigforkschools.org/about/employment/
-Lincoln School District #38,3016810,Lincoln,Lewis and Clark County,46.9556,-112.6728,LincolnHeuristic,,https://sites.google.com/a/lincoln.k12.mt.us/webpage2/employment
+Lincoln School District #38,3016810,Lincoln,Lewis and Clark County,46.9556,-112.6728,GoogleSites,,https://sites.google.com/a/lincoln.k12.mt.us/webpage2/employment
 Shepherd School District #37,3023940,Shepherd,Yellowstone County,45.9469,-108.3464,ShepherdHeuristic,,https://www.shepherd.k12.mt.us/dist-office/jobs/overview
 Hysham Public Schools,3014760,Hysham,Treasure County,46.2906,-107.2300,HyshamHeuristic,,https://www.hyshamschools.com/jobs
-Independent School,3014820,Billings,Yellowstone County,45.8400,-108.4650,IndependentHeuristic,,https://www.independent.k12.mt.us/job-openings
+Independent School,3014820,Billings,Yellowstone County,45.8400,-108.4650,GoogleSites,,https://www.independent.k12.mt.us/job-openings
 Huntley Project School District,3014700,Worden,Yellowstone County,45.9622,-108.1622,Apptegy,,https://www.huntley.k12.mt.us/page/employment-opportunities
 Park City Schools,3020040,Park City,Stillwater County,45.6272,-108.9286,Apptegy,,https://www.parkcityschools.org/page/employment-information
 Fort Benton School District 1,3011240,Fort Benton,Chouteau County,47.8289,-110.6558,AppliTrack,fortbenton,https://www.applitrack.com/fortbenton/onlineapp/default.aspx
@@ -95,7 +95,7 @@ Glasgow School District 1-A,3012420,Glasgow,Valley County,48.1992,-106.6319,TedK
 Alberton School District,3001860,Alberton,Mineral County,47.0016,-114.4735,Apptegy,,https://www.asdmt.org/page/employment-opportunities
 Dillon School District 10,3008910,Dillon,Beaverhead County,45.2256,-112.6272,Apptegy,,https://www.dillonschools.org/page/employment-opportunities
 Baker Public Schools,3002730,Baker,Fallon County,46.3670,-104.2847,BakerHeuristic,,https://www.baker.k12.mt.us/quick-links/employment
-Cut Bank School District #15,3000003,Cut Bank,Glacier County,48.6330,-112.3262,CutBankHeuristic,,https://sites.google.com/view/cutbankjobs/employment
+Cut Bank School District #15,3000003,Cut Bank,Glacier County,48.6330,-112.3262,GoogleSites,,https://sites.google.com/view/cutbankjobs/employment
 Bridger School District 2,3004800,Bridger,Carbon County,45.2947,-108.9167,SchoolSpring,bridger.schoolspring.com,https://bridger.schoolspring.com/
 Red Lodge School District 1,3022080,Red Lodge,Carbon County,45.1933,-109.2486,SchoolSpring,redlodge.schoolspring.com,https://redlodge.schoolspring.com/
 Joliet Public School District 86,3015200,Joliet,Carbon County,45.4844,-108.9722,JolietHeuristic,,https://www.jolietschools.org/district-information/important-clicks/employment-information.html
@@ -103,7 +103,7 @@ Ennis Schools,3009930,Ennis,Madison County,45.3461,-111.7319,Apptegy,,https://ww
 Columbus Public Schools,3007190,Columbus,Stillwater County,45.6347,-109.2458,Apptegy,,https://columbuscougars.com/page/district-employment
 Hinsdale Public Schools,3014340,Hinsdale,Valley County,48.3942,-107.0848,HinsdaleHeuristic,,https://hinsdale.k12.mt.us/District/1557-Untitled.html
 St Regis School District,3024930,St Regis,Mineral County,47.2994,-115.1026,Apptegy,,https://www.stregisschool.org/page/employment
-Valier School District #18,3027060,Valier,Pondera County,48.3078,-112.2498,ValierHeuristic,,https://www.valier.k12.mt.us/about-us/Employment
+Valier School District #18,3027060,Valier,Pondera County,48.3078,-112.2498,GoogleSites,,https://www.valier.k12.mt.us/about-us/Employment
 Roberts Public School,3022710,Roberts,Carbon County,45.3436,-109.1817,RobertsHeuristic,,https://www.robertsrockets.org/index.php/district-information/district-employment
 Winnett Public Schools,3028470,Winnett,Petroleum County,47.0017,-108.3469,WinnettHeuristic,,https://www.winnettschool.org/employment
 Florence-Carlton School District 15-6,3011100,Florence,Ravalli County,46.6278,-114.0839,Apptegy,,https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education
@@ -112,17 +112,17 @@ West Yellowstone School District,3027630,West Yellowstone,Gallatin County,44.662
 Augusta School District #45,3002430,Augusta,Lewis and Clark County,47.4972,-112.4136,AugustaHeuristic,,https://www.augustaschool.org/job-openings
 Brockton School District,3005010,Brockton,Roosevelt County,48.2244,-104.9591,BrocktonHeuristic,,https://www.brockton.k12.mt.us/employment
 Culbertson School District 17-C,3007830,Culbertson,Roosevelt County,48.1483,-104.5147,CulbertsonHeuristic,,https://www.culbertsonschool.com/about-us/employment
-Cottonwood School District #57,3014150,Havre,Hill County,48.7798,-109.9884,Cottonwood57Heuristic,,https://www.cottonwood57.org/job-openings
+Cottonwood School District #57,3014150,Havre,Hill County,48.7798,-109.9884,GoogleSites,,https://www.cottonwood57.org/job-openings
 Bonner School District #14,3004260,Bonner,Missoula County,46.8724,-113.8574,Apptegy,,https://www.bonner.k12.mt.us/o/bonner-school-district-14/page/employment
 Creston School District,3007710,Kalispell,Flathead County,48.1897,-114.1913,CrestonHeuristic,,https://docs.google.com/document/d/1BxeYApkcuS092nu5a1iRHAeg35jcUxjVPWnTCXEsThU/export?format=txt
 Clinton School District #32,3006870,Clinton,Missoula County,46.8560,-113.7274,ClintonHeuristic,,https://clintoncougars.com/employment
 Deer Park School District,3008700,Columbia Falls,Flathead County,48.2909,-114.1740,Apptegy,,https://www.deerpark.k12.mt.us/page/employment-opportunities
-Dixon School District #9,3009030,Dixon,Sanders County,47.3436,-114.3060,DixonHeuristic,,https://www.dixonschool.org/about-dixon-school/employment-opportunities
-Elysian School District #23,3009840,Billings,Yellowstone County,45.7833,-108.6167,ElysianHeuristic,,https://sites.google.com/a/elysianschool.org/ely23/employment
+Dixon School District #9,3009030,Dixon,Sanders County,47.3436,-114.3060,GoogleSites,,https://www.dixonschool.org/about-dixon-school/employment-opportunities
+Elysian School District #23,3009840,Billings,Yellowstone County,45.7833,-108.6167,GoogleSites,,https://sites.google.com/a/elysianschool.org/ely23/employment
 Evergreen School District #50,3010920,Kalispell,Flathead County,48.2166,-114.2385,Apptegy,,https://www.evergreensd50.com/page/employment-opportunities
-Fair-Mont-Egan Schools,3010230,Kalispell,Flathead County,48.1600,-114.2800,FairMontEganHeuristic,,https://www.fmemontana.net/human-resources/employment
+Fair-Mont-Egan Schools,3010230,Kalispell,Flathead County,48.1600,-114.2800,GoogleSites,,https://www.fmemontana.net/human-resources/employment
 Lone Rock School District,3017190,Stevensville,Ravalli County,46.5397,-114.0925,Apptegy,,https://www.lonerockschool.org/page/employment
-Lustre District 23,3017340,Lustre,Valley County,48.4079,-105.9395,LustreHeuristic,,https://www.lustregradeschool.com/employment
+Lustre District 23,3017340,Lustre,Valley County,48.4079,-105.9395,GoogleSites,,https://www.lustregradeschool.com/employment
 Miami Elementary School District #31,3021150,Conrad,Pondera County,48.191,-112.2821,MiamiHeuristic,,https://www.miamielementary.com/employment
 Target Range School District,3025890,Missoula,Missoula County,46.8393,-114.0708,SchoolSpring,target.schoolspring.com,https://target.schoolspring.com/
 Zurich Elementary School District #17,3028910,Zurich,Blaine County,48.586,-109.0305,ZurichHeuristic,,https://www.zurichelementary17.org/employment
@@ -132,7 +132,7 @@ Harlem Public Schools,3013395,Harlem,Blaine County,48.5311,-108.7838,AppliTrack,
 Belfry Public Schools,3003270,Belfry,Carbon County,45.1386,-109.0068,BelfryHeuristic,,https://www.belfrybats.org/index.php/our-school/employment
 Nashua Public Schools,3019170,Nashua,Valley County,48.1328,-106.3575,NashuaHeuristic,,https://www.nashua.k12.mt.us/District/Jobs/
 Whitehall Public Schools,3027810,Whitehall,Jefferson County,45.8677,-112.0975,WhitehallHeuristic,,https://www.whitehallschools.org/apps/jobs/
-Broadus Public Schools,3000006,Broadus,Powder River County,45.4430,-105.4083,BroadusHeuristic,,https://www.broadus.net/job-openings
+Broadus Public Schools,3000006,Broadus,Powder River County,45.4430,-105.4083,GoogleSites,,https://www.broadus.net/job-openings
 Wibaux Public Schools,3028020,Wibaux,Wibaux County,46.9856,-104.1877,WibauxHeuristic,,https://www.wibauxschools.net/employment
 West Valley School District #1,3027570,Kalispell,Flathead County,48.2198,-114.3729,WestValleyHeuristic,,https://westvalleyschool.submittable.com/submit
 Luther School,3017370,Luther,Carbon County,45.2844,-109.4288,LutherHeuristic,,https://www.lutherschool.org/index.php/documents
@@ -141,10 +141,10 @@ Hot Springs School District,3014640,Hot Springs,Sanders County,47.6091,-114.6687
 Highwood Public Schools,3014070,Highwood,Chouteau County,47.5819,-110.7852,CyberSchool,,https://www.highwood.k12.mt.us/District/Jobs/
 Smith Valley School District #8,3002850,Kalispell,Flathead County,48.1675,-114.4325,SmithValleyHeuristic,,https://www.smithvalleyschool.org/employment-opportunities
 Moore Public Schools,3018870,Moore,Fergus County,46.9744,-109.6974,MooreHeuristic,,https://www.mooreschoolmt.com/employment.html
-Cardwell Elementary School,3005550,Cardwell,Jefferson County,45.8624,-111.9569,CardwellHeuristic,,https://sites.google.com/cardwellschool.org/cougars/join-cardwell
+Cardwell Elementary School,3005550,Cardwell,Jefferson County,45.8624,-111.9569,GoogleSites,,https://sites.google.com/cardwellschool.org/cougars/join-cardwell
 Boulder Elementary,3004380,Boulder,Jefferson County,46.2369,-112.1194,BoulderHeuristic,,https://www.bgs.k12.mt.us/employment
 Jefferson High School,3015120,Boulder,Jefferson County,46.2345,-112.1220,JeffersonHighHeuristic,,https://www.jhs.k12.mt.us/EmploymentOpportunities.aspx
-Sheridan Public Schools,3024150,Sheridan,Madison County,45.4533,-112.1964,SheridanHeuristic,,https://www.sheridan.k12.mt.us/district/employment
+Sheridan Public Schools,3024150,Sheridan,Madison County,45.4533,-112.1964,GoogleSites,,https://www.sheridan.k12.mt.us/district/employment
 Frazer Public Schools,3011420,Frazer,Valley County,48.0614,-106.0397,FrazerHeuristic,,https://www.frazer.k12.mt.us/District/Jobs/
 Lambert Public Schools,3015990,Lambert,Richland County,47.6836,-104.6200,LambertHeuristic,,https://www.lambertschool.net/career-opportunities/employment-opportunities
 Richey Public Schools,3022370,Richey,Dawson County,47.6447,-105.0683,RicheyHeuristic,,https://www.richey.k12.mt.us/currentopenings
@@ -152,10 +152,10 @@ Judith Gap Schools,3015360,Judith Gap,Wheatland County,46.6841,-109.7524,JudithG
 Whitewater Public Schools,3027930,Whitewater,Phillips County,48.7758,-107.6322,WhitewaterHeuristic,,https://whitewater.k12.mt.us/employment
 Victor School District,3027270,Victor,Ravalli County,46.4172,-114.1500,VictorHeuristic,,https://www.victor.k12.mt.us/page/employment
 Superior School District,3025470,Superior,Mineral County,47.1927,-114.8918,SuperiorHeuristic,,https://www.ssd3.us/page/employment
-Ashland Public School,3000008,Ashland,Rosebud County,45.6022,-106.2625,AshlandHeuristic,,https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment
+Ashland Public School,3000008,Ashland,Rosebud County,45.6022,-106.2625,GoogleSites,,https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment
 Rapelje School District,3021870,Rapelje,Stillwater County,45.9655,-109.2552,RapeljeHeuristic,,https://www.rapelje.k12.mt.us/job-listings
-Cayuse Prairie School District #10,3005990,Kalispell,Flathead County,48.2185,-114.1685,CayusePrairieHeuristic,,https://www.cayuseprairie.com/page/employment
-Big Timber Grade School,3003800,Big Timber,Sweet Grass County,45.8340,-109.9550,BigTimberGSHeuristic,,https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment
+Cayuse Prairie School District #10,3005990,Kalispell,Flathead County,48.2185,-114.1685,GoogleSites,,https://www.cayuseprairie.com/page/employment
+Big Timber Grade School,3003800,Big Timber,Sweet Grass County,45.8340,-109.9550,GoogleSites,,https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment
 Elder Grove School District,3009720,Billings,Yellowstone County,45.7288,-108.6432,ElderGroveHeuristic,,https://www.eldergrove.k12.mt.us/about-eg/employment/available-positions
 Monforton School District #27,3018750,Bozeman,Gallatin County,45.6568,-111.1687,MonfortonHeuristic,,https://monfortonschool.org/contact-us/job-openings/
 Grass Range Public Schools,3012960,Grass Range,Fergus County,47.0264,-108.8028,GrassRangeHeuristic,,https://grps.k12.mt.us/staff/open-positions
@@ -167,7 +167,7 @@ Charlo School District 7J,3006112,Charlo,Lake County,47.4399,-114.1752,CharloHeu
 Canyon Creek School District,3005460,Billings,Yellowstone County,45.7196,-108.6835,CanyonCreekHeuristic,,https://www.canyoncreekschool.org/apps/jobs/
 Hellgate Elementary School District,3013860,Missoula,Missoula County,46.9152,-114.0532,HellgateHeuristic,,https://www.hellgate.k12.mt.us/our-district/employment
 Helena Flats School District #15,3013800,Kalispell,Flathead County,48.2435,-114.2690,HelenaFlatsHeuristic,,https://www.helenaflats.org/page/employment
-Woodman Elementary School District #3,3028650,Lolo,Missoula County,46.7573,-114.2872,WoodmanHeuristic,,http://www.woodmanschool.org/district-information/employment-opportunities
+Woodman Elementary School District #3,3028650,Lolo,Missoula County,46.7573,-114.2872,GoogleSites,,http://www.woodmanschool.org/district-information/employment-opportunities
 Vaughn Elementary School District #74,3005850,Vaughn,Cascade County,47.5627,-111.5439,CyberSchool,,https://www.vaughnschool.com/jobs
 Jordan Public Schools,3015340,Jordan,Garfield County,47.3214,-106.9103,JordanHeuristic,,https://www.jordanpublicschools.org
 Pioneer Elementary School District #41,3020790,Billings,Yellowstone County,45.8677,-108.4125,PioneerHeuristic,,http://pioneerschool.us/41034_2

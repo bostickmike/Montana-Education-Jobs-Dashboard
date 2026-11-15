@@ -876,6 +876,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Rehearsal passed every step (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.18.0.log`; suites 3,430 / 3,458,
     0 failed): 215 Apptegy rows, every district's count equal to its 11-14 live parity, 197 of 215 spells continue.
     Three `run_expectations.csv` rows for 11-17. Notes: `claude-notes/2026-11-14_apptegy-family/README.md`.
+  * [x] Google Sites family routine (2026-11-14; edjobs 0.19.0, stacked on the Apptegy change; same rule as
+    Apptegy). 20 districts read through `edjobs::fetch_googlesites_postings()` (Platform `GoogleSites`; rules for Cut
+    Bank, Dixon, Swan River in `k12_list_rules.csv`); one Rmd block replaces 20 (each keeps its Posting_Source); 40
+    fetch/parse functions + 11 helpers (823 lines) and 56 test blocks deleted; `test-googlesites-family.R`. Eight
+    districts stay bespoke (Lodge Grass, Charlo, Creston, Kila, West Glacier, Smith Valley, Opheim, Marion: reasons in
+    the notes). Differences: 4 retitles (Lincoln, Fair-Mont-Egan, Ashland, Woodman) and Fair-Mont-Egan's old "Job
+    Description" non-title gone. Suite on 0.19.0: 3,399 passed, 0 failed. Rehearsed together with the Finalsite change
+    on 0.20.0 (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.20.0.log`, all steps passed): 65 rows, 62 of 65 spells
+    continue, the 3 new ones are the retitles. Notes: `claude-notes/2026-11-14_googlesites-family/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
