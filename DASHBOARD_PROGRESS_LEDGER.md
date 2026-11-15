@@ -863,6 +863,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `iescentral.com` in the Copilot allowlist (also needed in repo Settings). Rehearsal passed every step
     (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.17.0.log`; suites 3,678 / 3,684, 0 failed); two
     `run_expectations.csv` rows for 11-17. Notes: `claude-notes/2026-11-14_cyberschool-family/README.md`.
+  * [x] Apptegy family routine (2026-11-14; edjobs 0.18.0, MT PR 34, waits on edjobs PR 17; Mike 11-13: the shared
+    filter wins where it disagrees with an old parser, substitute lines kept, Shelby bespoke). 44 districts read
+    through `edjobs::fetch_apptegy_postings()`: Platform `Apptegy` (rendered text, 38) / `ApptegyPageBuilder` (6),
+    optional rules in the new `k12_list_rules.csv` (5 rows); Shelby and Geyser keep their scrapers as
+    `ApptegyBespoke`. Same browser session, log names and Posting_Source. 88 fetch/parse functions + helpers deleted
+    (2,238 lines), 130 old test blocks; `test-apptegy-family.R` per district. Exact-title parity found the measured
+    filter merging real postings ("Music - Instrumental"/"- Vocal" -> "Music"; St Regis's head/assistant coaches):
+    fixed before building. Remaining differences are the decided ones (Townsend's 3 coaching jobs the old parser
+    missed, substitute lines, Sweet Grass, Dutton, West Yellowstone's non-jobs) plus cleaner titles at Huntley,
+    Florence-Carlton, Drummond. Posted pay now read from Apptegy lines (Melstone, Wolf Point, Townsend, St Regis).
+    Rehearsal passed every step (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.18.0.log`; suites 3,430 / 3,458,
+    0 failed): 215 Apptegy rows, every district's count equal to its 11-14 live parity, 197 of 215 spells continue.
+    Three `run_expectations.csv` rows for 11-17. Notes: `claude-notes/2026-11-14_apptegy-family/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11

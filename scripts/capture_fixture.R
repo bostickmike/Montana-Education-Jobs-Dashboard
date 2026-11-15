@@ -12,9 +12,12 @@
 # --apptegy: Apptegy sites sit behind a Fastly "Client Challenge" a plain
 # request can't pass, so this renders the page in headless Chrome the way the
 # pipeline does (navigate, wait for load, 4 s, document.documentElement.outerHTML)
-# and saves tests/testthat/fixtures/apptegy_<slug>_pagedata_<today>.html, the
-# name scripts/scaffold_district.R's apptegy mode looks for. It refuses to
-# save a page without the page-builder data (a challenge page or a wrong URL).
+# and saves, from the same render, the two inputs edjobs::fetch_apptegy_postings()
+# reads: tests/testthat/fixtures/apptegy_<slug>_rendered_<today>.txt
+# (document.body.innerText, mode "text") and apptegy_<slug>_pagedata_<today>.html
+# (the HTML with the page-builder data, mode "pagebuilder"): the names
+# scripts/scaffold_district.R's apptegy mode looks for. It refuses to save a
+# page without the page-builder data (a challenge page or a wrong URL).
 
 suppressMessages({
   library(httr2)
@@ -67,15 +70,20 @@ if (apptegy) {
   suppressMessages(library(chromote))
   cat(sprintf("Rendering in headless Chrome: %s\n", url))
   session <- ChromoteSession$new()
+  inner_text <- NULL
   body <- tryCatch({
     session$Page$navigate(url)
     session$Page$loadEventFired(wait_ = TRUE, timeout_ = 30)
     Sys.sleep(4)
+    inner_text <- session$Runtime$evaluate("document.body.innerText")$result$value
     session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
   }, finally = session$close())
   if (is.null(body) || !grepl("window.clientWorkStateTemp = JSON.parse(", body, fixed = TRUE)) {
     stop("The rendered page has no Apptegy page-builder data (Fastly challenge, wrong URL, or not Apptegy). Nothing saved.")
   }
+  text_file <- sub("_pagedata_(.*)[.]html$", "_rendered_\\1.txt", out_file)
+  writeLines(if (is.null(inner_text)) "" else inner_text, text_file, useBytes = TRUE)
+  cat(sprintf("Saved the rendered text to fixture: %s\n", text_file))
 } else {
   out_file <- here::here("tests", "testthat", "fixtures", paste0(slug, "_jobs.html"))
 

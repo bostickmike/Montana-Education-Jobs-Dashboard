@@ -34,16 +34,16 @@ Lodge Grass Public Schools,3017010,Lodge Grass,Big Horn County,45.3164,-107.3624
 Browning Public Schools,3005140,Browning,Glacier County,48.5577,-113.0173,AppliTrack,bpsk12,https://www.applitrack.com/bpsk12/onlineapp/default.aspx
 Libby Public Schools,3016530,Libby,Lincoln County,48.3884,-115.5559,SchoolSpring,libbyschools.schoolspring.com,https://libbyschools.schoolspring.com/
 Broadview School District,3004890,Broadview,Yellowstone County,46.0989,-108.8761,BroadviewHeuristic,,https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=425960&type=d
-Conrad Public Schools,3007330,Conrad,Pondera County,48.1742,-111.9467,Apptegy,,https://conradschools.org/page/employment
+Conrad Public Schools,3007330,Conrad,Pondera County,48.1742,-111.9467,ApptegyPageBuilder,,https://conradschools.org/page/employment
 Westby School District 3,3027730,Westby,Sheridan County,48.8736,-104.0550,Apptegy,,https://westbyschool.k12.mt.us/page/job-openings-applications
 Choteau School District,3006320,Choteau,Teton County,47.8136,-112.1794,Apptegy,,https://www.choteauschools.net/o/csd/page/employment-at-choteau-school-district
-Gardiner Public Schools,3011820,Gardiner,Park County,45.0619,-110.7556,Apptegy,,https://www.gardiner.org/page/job-openings
+Gardiner Public Schools,3011820,Gardiner,Park County,45.0619,-110.7556,ApptegyPageBuilder,,https://www.gardiner.org/page/job-openings
 Malta Public Schools,3017580,Malta,Phillips County,48.3558,-107.8753,Apptegy,,https://www.maltaschools.org/page/district-employment
-Drummond Public Schools,3009180,Drummond,Granite County,46.6667,-113.1469,Apptegy,,https://www.drummondschool.net/page/application
+Drummond Public Schools,3009180,Drummond,Granite County,46.6667,-113.1469,ApptegyPageBuilder,,https://www.drummondschool.net/page/application
 Custer Public Schools,3008130,Custer,Yellowstone County,46.1292,-107.5556,CusterHeuristic,,https://www.custerschools.org/employment
 Scobey Schools,3023670,Scobey,Daniels County,48.7903,-105.4206,ScobeyHeuristic,,http://scobeyschools.com/employment.html
 Three Forks Public Schools,3026160,Three Forks,Gallatin County,45.8924,-111.5522,AppliTrack,tfschools,https://www.applitrack.com/tfschools/onlineapp/default.aspx
-Deer Lodge School District #1,3008670,Deer Lodge,Powell County,46.3983,-112.7333,Apptegy,,https://www.deerlodgeschools.org/page/employment
+Deer Lodge School District #1,3008670,Deer Lodge,Powell County,46.3983,-112.7333,ApptegyPageBuilder,,https://www.deerlodgeschools.org/page/employment
 Townsend School District,3004980,Townsend,Broadwater County,46.3192,-111.5197,Apptegy,,https://www.townsend.k12.mt.us/page/employment
 Anaconda School District #10,3002010,Anaconda,Deer Lodge County,46.1263,-112.9478,AppliTrack,anacondaschools,https://www.applitrack.com/anacondaschools/onlineapp/default.aspx
 Philipsburg School District,3012840,Philipsburg,Granite County,46.3325,-113.2961,AppliTrack,pburgsd,https://www.applitrack.com/pburgsd/onlineapp/default.aspx
@@ -63,8 +63,8 @@ Shields Valley Public Schools,3000932,Clyde Park,Park County,45.8869,-110.6038,S
 Manhattan School District,3017610,Manhattan,Gallatin County,45.8566,-111.3325,ManhattanHeuristic,,https://www.rollontigers.org/district/employment/current-openings
 Roundup School District,3023040,Roundup,Musselshell County,46.4452,-108.5418,Apptegy,,https://www.roundup.k12.mt.us/page/roundup-public-schools-employment
 White Sulphur Springs Schools,3028770,White Sulphur Springs,Meagher County,46.5483,-110.9022,Apptegy,,https://www.whitesulphur.k12.mt.us/page/employment
-Shelby School District,3023900,Shelby,Toole County,48.5053,-111.8570,Apptegy,,https://www.shelbypublicschools.org/page/job-opportunites
-Geyser Public Schools,3012300,Geyser,Judith Basin County,47.2591,-110.4933,Apptegy,,https://www.geyser.k12.mt.us/District/jobs/297-Job-Opportunities-at-Geyser-School.html
+Shelby School District,3023900,Shelby,Toole County,48.5053,-111.8570,ApptegyBespoke,,https://www.shelbypublicschools.org/page/job-opportunites
+Geyser Public Schools,3012300,Geyser,Judith Basin County,47.2591,-110.4933,ApptegyBespoke,,https://www.geyser.k12.mt.us/District/jobs/297-Job-Opportunities-at-Geyser-School.html
 Centerville Public Schools,3025130,Sand Coulee,Cascade County,47.3994,-111.1677,Apptegy,,https://www.centerville.k12.mt.us/page/job-openings
 Thompson Falls Public Schools,3026070,Thompson Falls,Sanders County,47.5972,-115.3443,ThompsonFallsHeuristic,,https://www.thompsonfalls.net/employment
 Arlee Joint School District,3002220,Arlee,Lake County,47.1619,-114.0851,Apptegy,,https://www.arleeschools.org/page/employment-opportunities
@@ -198,5 +198,5 @@ Potomac Elementary School District #11,3021330,Potomac,Missoula County,46.8906,-
 "Marion School District #54",3017700,"Marion","Flathead County",48.1052,-114.6596,"MarionHeuristic","","https://sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment"
 "Frenchtown K-12 Schools",3011520,"Frenchtown","Missoula County",47.0163,-114.2323,"Apptegy","","https://www.ftsd.org/page/open-employment-opportunities/"
 "Lima School District #12",3016710,"Lima","Beaverhead County",44.6339,-112.5908,"LimaHeuristic","","https://www.limaschoolmt.org"
-"Savage Public Schools",3023520,"Savage","Richland County",47.4533,-104.3414,"Apptegy","","https://www.savagepublicschool.com/page/employment"
-"Olney-Bissell School District",3010950,"Whitefish","Flathead County",48.3695,-114.458,"Apptegy","","https://www.olneybissellschool.com/o/obs/page/employment"
+"Savage Public Schools",3023520,"Savage","Richland County",47.4533,-104.3414,"ApptegyPageBuilder","","https://www.savagepublicschool.com/page/employment"
+"Olney-Bissell School District",3010950,"Whitefish","Flathead County",48.3695,-114.458,"ApptegyPageBuilder","","https://www.olneybissellschool.com/o/obs/page/employment"

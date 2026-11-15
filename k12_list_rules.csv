@@ -1,0 +1,6 @@
+"District","List_Start","List_Stop","Skip_Section"
+"Wolf Point Public Schools","^JOB OPENINGS$","^(Find Us|Join the Team)$","CURRENTLY FILLED"
+"Plevna School District #55","^[0-9]{4}-[0-9]{4} School Year Positions Open:$","^Full Family Health Insurance Offered$",""
+"Lone Rock School District","^Classified Positions:$","^(If selected,|District Employment Applications[.]$|Classified Employee Application$)",""
+"Plentywood Public Schools","^(Classified|Certified) Positions available","^How to Apply$",""
+"Park City Schools","","","^Job Descriptions$"
