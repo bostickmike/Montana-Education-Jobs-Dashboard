@@ -13,6 +13,16 @@ library(edjobs)
 # (SharesBoard, split-feed ADP/isolved) have no single-source live check.
 # test-drift-check.R asserts every function named here exists and every
 # registered row resolves.
+mt_list_rule <- function(col) function(row) {
+  path <- if (file.exists("k12_list_rules.csv")) "k12_list_rules.csv" else here::here("k12_list_rules.csv")
+  rules <- utils::read.csv(path, stringsAsFactors = FALSE, na.strings = "", colClasses = "character")
+  v <- rules[[col]][rules$District == row$District]
+  if (length(v) == 0 || is.na(v[1]) || !nzchar(v[1])) NA_character_ else v[1]
+}
+apptegy_spec <- function(mode) {
+  scraper_spec("fetch_apptegy_postings", list("Job_Link", "City", function(row) mode, mt_list_rule("List_Start"),
+                                               mt_list_rule("List_Stop"), mt_list_rule("Skip_Section")), session = TRUE)
+}
 MT_SCRAPER_SPECS <- list(
   AppliTrack   = scraper_spec("fetch_applitrack_postings",   "Slug"),
   SchoolSpring = scraper_spec("fetch_schoolspring_postings", "Slug"),
@@ -20,6 +30,30 @@ MT_SCRAPER_SPECS <- list(
   TedK12       = scraper_spec("fetch_tedk12_postings",       "Slug"),
   # The CyberSchool (IES) family routine, edjobs 0.17.0: one function for every row.
   CyberSchool  = scraper_spec("fetch_cyberschool_postings",  c("Job_Link", "City")),
+  # Google Doc job lists, edjobs 0.24.0: the doc ids are in Slug.
+  GoogleDoc    = scraper_spec("fetch_googledoc_postings", list("Slug", "City", "Job_Link", mt_list_rule("List_Start"),
+                              mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  CyberSchoolText = scraper_spec("fetch_cyberschool_postings", list("Job_Link", "City", function(row) "text",
+                                 mt_list_rule("List_Start"), mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  # The Apptegy family routine, edjobs 0.18.0: the rendered text or the
+  # page-builder JSON, with the district's k12_list_rules.csv row if it has one.
+  Apptegy            = apptegy_spec("text"),
+  ApptegyPageBuilder = apptegy_spec("pagebuilder"),
+  # The Google Sites family routine, edjobs 0.19.0 (plain request, the shared title line filter).
+  GoogleSites  = scraper_spec("fetch_googlesites_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
+                                                                 mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  # The Finalsite family routine, edjobs 0.20.0 (plain request, the shared title line filter).
+  Finalsite    = scraper_spec("fetch_finalsite_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
+                                                               mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  # The WordPress family routine, edjobs 0.21.0 (plain request, the shared title line filter).
+  WordPress    = scraper_spec("fetch_wordpress_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
+                                                               mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  # The Edlio family routine, edjobs 0.22.0 (plain request, the shared title line filter).
+  Edlio        = scraper_spec("fetch_edlio_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
+                                                           mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
+  # The Joomla family routine, edjobs 0.23.0 (the Edlio reading on Joomla pages).
+  Joomla       = scraper_spec("fetch_joomla_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
+                                                            mt_list_rule("List_Stop"), mt_list_rule("Skip_Section"))),
   # Red Rover's API (edjobs 0.14.0): Slug is the board's numeric org ID, the
   # link slug comes from Job_Link (Columbia Falls: org 4161, slug sd659912).
   RedRoverK12  = scraper_spec("fetch_redrover_postings", list("Slug", function(row) redrover_org_slug(row$Job_Link))),
@@ -41,8 +75,9 @@ MT_SCRAPER_SPECS <- list(
   AnCollegeHeuristic = scraper_spec("fetch_ancollege_postings",  "Feed_URL"),
   CDKCHeuristic      = scraper_spec("fetch_cdkc_postings",       "Feed_URL")
 )
-# Every K-12 Apptegy district is dispatched through
-# misc_district_scrapers.R's APPTEGY_DISTRICT_SCRAPERS map, keyed by district.
+# The bespoke Apptegy-session districts (Shelby, Geyser: registry Platform
+# "ApptegyBespoke") are dispatched through misc_district_scrapers.R's
+# APPTEGY_DISTRICT_SCRAPERS map, keyed by district.
 APPTEGY_DISPATCH_FN <- "APPTEGY_DISTRICT_SCRAPERS"
 MT_APPTEGY_MAP_SPEC <- scraper_spec(APPTEGY_DISPATCH_FN, "District", session = TRUE, map = TRUE,
                                     defined_in = "misc_district_scrapers.R")
@@ -61,7 +96,7 @@ set_state_config(state_config(
   drift_baseline_from = "2026-08-06",
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
-      specs = c(MT_SCRAPER_SPECS, list(Apptegy = MT_APPTEGY_MAP_SPEC)),
+      specs = c(MT_SCRAPER_SPECS, list(ApptegyBespoke = MT_APPTEGY_MAP_SPEC)),
       # Every other K-12 "<Name>Heuristic" platform is fetch_<lowercase name>_postings(Job_Link).
       fallback = function(platform, row) {
         if (grepl("Heuristic$", platform)) {
@@ -69,8 +104,9 @@ set_state_config(state_config(
         }
       }),
     scraper_registry(mt_registry("he_institution_registry.csv"), "Institution", "he_institution_registry.csv",
-      # The one HE Apptegy site (Stone Child College).
-      specs = c(MT_SCRAPER_SPECS, list(Apptegy = scraper_spec("fetch_stonechild_postings", "Feed_URL", session = TRUE))))
+      # The one HE Apptegy site (Stone Child College), in place of the K-12 family routine.
+      specs = c(MT_SCRAPER_SPECS[setdiff(names(MT_SCRAPER_SPECS), "Apptegy")],
+                list(Apptegy = scraper_spec("fetch_stonechild_postings", "Feed_URL", session = TRUE))))
   ),
   # The auto-fix issue: scraper files read as text; fixture names here don't
   # carry the district, so a source's fixtures are found from its tests.

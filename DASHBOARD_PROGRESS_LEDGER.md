@@ -867,6 +867,86 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the bottom of each tab (K-12 and HE), no "we"; the "How days listed is counted" popover reworded the same way
     (2026-11-14, Mike: "either have it or not"; chose: keep the current table, footnote). KPI boxes and charts stay
     out. App tests passed (both states); screenshots checked: MT K-12 tab, WY higher-ed tab.
+  * [x] Apptegy family routine (2026-11-14; edjobs 0.18.0, MT PR 34, waits on edjobs PR 17; Mike 11-13: the shared
+    filter wins where it disagrees with an old parser, substitute lines kept, Shelby bespoke). 44 districts read
+    through `edjobs::fetch_apptegy_postings()`: Platform `Apptegy` (rendered text, 38) / `ApptegyPageBuilder` (6),
+    optional rules in the new `k12_list_rules.csv` (5 rows); Shelby and Geyser keep their scrapers as
+    `ApptegyBespoke`. Same browser session, log names and Posting_Source. 88 fetch/parse functions + helpers deleted
+    (2,238 lines), 130 old test blocks; `test-apptegy-family.R` per district. Exact-title parity found the measured
+    filter merging real postings ("Music - Instrumental"/"- Vocal" -> "Music"; St Regis's head/assistant coaches):
+    fixed before building. Remaining differences are the decided ones (Townsend's 3 coaching jobs the old parser
+    missed, substitute lines, Sweet Grass, Dutton, West Yellowstone's non-jobs) plus cleaner titles at Huntley,
+    Florence-Carlton, Drummond. Posted pay now read from Apptegy lines (Melstone, Wolf Point, Townsend, St Regis).
+    Rehearsal passed every step (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.18.0.log`; suites 3,430 / 3,458,
+    0 failed): 215 Apptegy rows, every district's count equal to its 11-14 live parity, 197 of 215 spells continue.
+    Three `run_expectations.csv` rows for 11-17. Notes: `claude-notes/2026-11-14_apptegy-family/README.md`.
+  * [x] Google Sites family routine (2026-11-14; edjobs 0.19.0, stacked on the Apptegy change; same rule as
+    Apptegy). 20 districts read through `edjobs::fetch_googlesites_postings()` (Platform `GoogleSites`; rules for Cut
+    Bank, Dixon, Swan River in `k12_list_rules.csv`); one Rmd block replaces 20 (each keeps its Posting_Source); 40
+    fetch/parse functions + 11 helpers (823 lines) and 56 test blocks deleted; `test-googlesites-family.R`. Eight
+    districts stay bespoke (Lodge Grass, Charlo, Creston, Kila, West Glacier, Smith Valley, Opheim, Marion: reasons in
+    the notes). Differences: 4 retitles (Lincoln, Fair-Mont-Egan, Ashland, Woodman) and Fair-Mont-Egan's old "Job
+    Description" non-title gone. Suite on 0.19.0: 3,399 passed, 0 failed. Rehearsed together with the Finalsite change
+    on 0.20.0 (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.20.0.log`, all steps passed): 65 rows, 62 of 65 spells
+    continue, the 3 new ones are the retitles. Notes: `claude-notes/2026-11-14_googlesites-family/README.md`.
+  * [x] Finalsite family routine (2026-11-14; edjobs 0.20.0, stacked on Google Sites). 11 districts read through
+    `edjobs::fetch_finalsite_postings()` (Platform `Finalsite`); one Rmd block replaces 11; 22 fetch/parse functions +
+    5 helpers (494 lines) and 34 test blocks deleted; `test-finalsite-family.R`. A title that is a link on the page
+    keeps it: Manhattan's 9 and Hellgate's 2 per-posting links as before, new ones at Shields Valley (5) and Thompson
+    Falls (3), each the posting's own document. Whitewater and Fromberg stay bespoke. Differences: Baker's "(... open
+    until filled)" asides off, Thompson Falls' "Paraprofessional-" fixed, Shepherd's and Manhattan's substitute-pool
+    lines kept (Manhattan's as one run-together line), Shields Valley's co-op heading gone. Suite on 0.20.0: 3,374
+    passed, 0 failed; full rehearsal passed every step (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.20.0.log`;
+    suites 3,395 / 3,402): 46 rows, 41 of 46 spells continue. Notes: `claude-notes/2026-11-14_finalsite-family/README.md`.
+  * [x] WordPress family routine (2026-11-14; edjobs 0.21.0, stacked on Finalsite). 7 districts read through
+    `edjobs::fetch_wordpress_postings()` (Platform `WordPress`); one Rmd block replaces 7; 14 fetch/parse functions
+    and their helpers (350 lines) and 21 test blocks deleted; `test-wordpress-family.R`. Differences: Turner's
+    "Secretary – $14 per hour, ..." -> "Secretary" with Pay_Min 14/hour; Upper West Shore adds "Teachers" (a standing
+    invitation). Bigfork and Pryor stay bespoke. Rehearsed together with Edlio and Joomla on 0.23.0 (see the Joomla
+    entry): 12 rows vs 11 in the committed data, the one new row Upper West Shore's "Teachers". Notes:
+    `claude-notes/2026-11-14_wordpress-family/README.md`.
+  * [x] Edlio family routine (2026-11-14; edjobs 0.22.0, stacked on WordPress). 5 districts read through
+    `edjobs::fetch_edlio_postings()` (Platform `Edlio`) on the new `district_page_text()`; one Rmd block replaces 5;
+    10 fetch/parse functions (242 lines) and 14 test blocks deleted; `test-edlio-family.R`. Difference: Livingston's
+    document file names read as words without the school year ("Baker_Cook 2026 27" -> "Baker Cook"). Broadview
+    stays bespoke. 0.22.0 alone dropped Canyon Creek's one posting (a POSIX `[ \t]` also matched a literal "t";
+    fixed in 0.23.0). Rehearsed on 0.23.0: 26 rows vs 27 in the committed data; the change is Whitehall's own page
+    (adds Agricultural Education Teacher, no longer lists School Custodian). Notes:
+    `claude-notes/2026-11-14_small-families/README.md`.
+  * [x] Joomla family routine (2026-11-14; edjobs 0.23.0, stacked on Edlio). 5 districts (Roy, Roberts, Belfry,
+    Luther, Joliet) read through `edjobs::fetch_joomla_postings()` (Platform `Joomla`); one Rmd block replaces 5;
+    10 fetch/parse functions (217 lines) and 15 test blocks deleted; `test-joomla-family.R`. Roberts's
+    maintenance-page error and longer retry budget now apply to the family. Difference: Roy "Bus Driver" ->
+    "BUS DRIVER" (its heading's case). Grass Range stays bespoke (jobs named in a sentence). Suite on 0.23.0: 3,332
+    passed, 0 failed; full rehearsal (WordPress + Edlio + Joomla) passed every step
+    (`claude-notes/2026-11-14_rehearsal-mt-edjobs-0.23.0.log`; post-run suite 3,360 passed): 14 rows, all 14 with a
+    district + title (any case) already in the committed data; no NA Posting_Source in the three families' rows.
+    Notes: `claude-notes/2026-11-14_small-families/README.md`.
+  * [x] Noxon, Seeley Lake and Helena Flats back on the board (2026-11-14; edjobs 0.24.0, waits on the stack). All three
+    returned 0 rows every week since ~11-03: their scrapers fetched with a plain request, which Apptegy answers with its
+    3 KB bot-challenge page. Moved to the Apptegy family (text mode, rendered with the shared chromote session); Noxon
+    has a stop rule for its marketing headings. Old functions, Rmd blocks, tests and fixtures deleted; rendered 11-14
+    pages are the family test's fixtures. Live run of the step: 5 postings (Noxon 1, Seeley Lake 1, Helena Flats 3).
+    Suite 3,324 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
+  * [x] Nashua, Frazer, Lavina, Hinsdale on the CyberSchool routine, mode "text" (2026-11-14; edjobs 0.24.0, waits on
+    the stack). Registry Platform `CyberSchoolText`; each keeps its Posting_Source; the CyberSchool block now carries
+    posted pay. Same titles as the four old parsers on fixtures and live pages (live: 1, 5, 26, 2 postings); Hinsdale's
+    older fixture gains 2 per-posting document links. Old functions, Rmd blocks and tests deleted; the drift tests'
+    HTTP-scraper example is now Richey. Suite 3,320 passed, 0 failed. Notes: `claude-notes/2026-11-14_mt-leftovers/README.md`.
+  * [x] Fromberg on the Finalsite family (2026-11-14; edjobs 0.24.0). Same title and link as its old parser on the
+    fixture and the live page; Posting_Source unchanged. Old function, Rmd block and tests deleted.
+  * [x] Victor, Superior, Bainville, Creston on the Google Doc routine (2026-11-14; edjobs 0.24.0
+    `fetch_googledoc_postings()`). Registry Platform `GoogleDoc`, doc ids in `Slug`; Bainville has list rules. Live
+    11-14: 4, 3, 7, 1 postings, the 11-10 counts; Victor keeps the doc's "updated" date. Title changes once: Victor
+    "Substitute" -> "Substitutes", Bainville "Paraprofessional- small intervention group" -> "Paraprofessional". Old
+    functions, the preview helper, Rmd blocks and tests deleted. Full suite 3,322 passed, 1 failed (the rules-file test
+    allowed only Apptegy/Google Sites rows; widened, that file then 287 passed, 0 failed).
+  * [x] Full rehearsal of the `apptegy-leftovers` branch on edjobs 0.24.0 (2026-11-14): every step passed, rebuild
+    parity 9/9, post-run suite 3,355 passed, 0 failed (`claude-notes/2026-11-14_rehearsal-mt-apptegy-leftovers-0.24.0.log`).
+    combinedclean 1,369 -> 1,399 rows. Own-page rows: Helena Flats 3, Seeley Lake 3, Noxon 1 (0 in the 11-10 data);
+    the other 9 moved districts the same counts as 11-10 (Frazer 26, Bainville 7, Victor 6, Nashua 5, Superior 4,
+    Lavina 2, Creston 1, Fromberg 1, Hinsdale 1). The other 9 districts with no own-page rows in 3 weeks are
+    genuinely quiet (no openings, application forms only, or an empty page; `claude-notes/2026-11-14_mt-leftovers/README.md`).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11

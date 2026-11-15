@@ -60,16 +60,17 @@ test_that("every real registered K-12 row resolves to a real scraper function, c
     expect_false(is.null(call), info = k12$Platform[i])
     expect_equal(call$where, "k12_district_registry.csv")
     if (call$map) {
-      expect_equal(k12$Platform[i], "Apptegy", info = k12$District[i])
+      expect_equal(k12$Platform[i], "ApptegyBespoke", info = k12$District[i])
       expect_true(call$session)
       expect_true(k12$District[i] %in% names(APPTEGY_DISTRICT_SCRAPERS), info = k12$District[i])
     } else {
       expect_true(exists(call$fn, mode = "function"), info = paste(k12$Platform[i], "->", call$fn))
     }
   }
-  hinsdale <- resolve_scraper_call("Hinsdale Public Schools")
-  expect_equal(hinsdale[c("fn", "session")], list(fn = "fetch_hinsdale_postings", session = FALSE))
-  expect_equal(hinsdale$args, list(k12$Job_Link[k12$District == "Hinsdale Public Schools"]))
+  # (Hinsdale was the example here until it moved to the CyberSchool routine, 2026-11-14.)
+  richey <- resolve_scraper_call("Richey Public Schools")
+  expect_equal(richey[c("fn", "session")], list(fn = "fetch_richey_postings", session = FALSE))
+  expect_equal(richey$args, list(k12$Job_Link[k12$District == "Richey Public Schools"]))
   tyler <- k12[k12$Platform == "TylerPortico", ][1, ]
   expect_equal(resolve_scraper_call(tyler$District)$args, list(tyler$Slug, tyler$District))
   expect_equal(resolve_scraper_call(k12$District[k12$Platform == "BroadviewHeuristic"][1])$args, list())
@@ -93,14 +94,17 @@ test_that("every real registered HE platform except the known gaps resolves to a
   expect_null(resolve_scraper_call("No Such District"))
 })
 
-test_that("scraper_fetch_fn follows the Apptegy map to the real fetch_* function", {
+test_that("scraper_fetch_fn follows the Apptegy map to the real fetch_* function, and the family to edjobs's", {
   lines <- scraper_source_lines()
-  expect_equal(scraper_fetch_fn(resolve_scraper_call("Lone Rock School District"), lines), "fetch_lonerock_postings")
-  expect_true(scraper_reads_inner_text("fetch_lonerock_postings", lines))
+  expect_equal(scraper_fetch_fn(resolve_scraper_call("Shelby School District"), lines), "fetch_shelbymt_postings")
+  expect_true(scraper_reads_inner_text("fetch_shelbymt_postings", lines))
   expect_false(scraper_reads_inner_text("fetch_applitrack_postings", lines))
+  # The family routine lives in edjobs; its body is read from the package.
+  expect_equal(scraper_fetch_fn(resolve_scraper_call("Lone Rock School District"), lines), "fetch_apptegy_postings")
+  expect_true(scraper_reads_inner_text("fetch_apptegy_postings", lines))
   # Every map district's entry names a fetch_ function the evidence step can read.
   k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
-  for (d in k12$District[k12$Platform == "Apptegy"]) {
+  for (d in k12$District[k12$Platform == "ApptegyBespoke"]) {
     expect_false(is.na(scraper_fetch_fn(resolve_scraper_call(d), lines)), info = d)
   }
 })
@@ -118,7 +122,8 @@ test_that("an innerText scraper's issue hands the agent the CI capture as its fi
   expect_match(body, "Full page text captured in CI", fixed = TRUE)
   expect_match(body, "Classified Employee Application", fixed = TRUE)
   expect_match(body, "1. Save the **Full page text captured in CI**", fixed = TRUE)
-  expect_match(body, "the `APPTEGY_DISTRICT_SCRAPERS[[\"Lone Rock School District\"]]` entry in misc_district_scrapers.R", fixed = TRUE)
+  # Lone Rock reads through the Apptegy family routine in edjobs since 0.18.0.
+  expect_match(body, "**Scraper entry point:** `fetch_apptegy_postings()`", fixed = TRUE)
   expect_match(body, "rendered this page in CI", fixed = TRUE)
   expect_match(body, "scripts/repro_scraper.R \"Lone Rock School District\"", fixed = TRUE)
   expect_match(body, "Do **not** edit the registries (k12_district_registry.csv, he_institution_registry.csv), the accumulated data under `Mt_Ed_Jobs/`, or archives.", fixed = TRUE)
@@ -128,8 +133,8 @@ test_that("an innerText scraper's issue hands the agent the CI capture as its fi
 })
 
 test_that("an HTTP scraper's issue keeps the capture as context and asks for a raw fixture", {
-  row <- data.frame(name = "Hinsdale Public Schools", type = "K-12", mean_count = 3, count = 0,
-                    url = "https://hinsdale.k12.mt.us/District/1557-Untitled.html",
+  row <- data.frame(name = "Richey Public Schools", type = "K-12", mean_count = 3, count = 0,
+                    url = "https://www.richey.k12.mt.us/currentopenings",
                     llm_titles = NA_character_, stringsAsFactors = FALSE)
   call <- resolve_scraper_call(row$name)
   ev <- gather_autofix_evidence(call, row$name, "Route Bus Drivers\nDaycare Manager", repo_root = here::here())
@@ -137,7 +142,7 @@ test_that("an HTTP scraper's issue keeps the capture as context and asks for a r
   expect_equal(ev$diff, character(0))
   expect_true(length(ev$fixtures) > 0)
   body <- paste(build_autofix_issue_body(row, call, evidence = ev), collapse = "\n")
-  expect_match(body, "`fetch_hinsdale_postings()`", fixed = TRUE)
+  expect_match(body, "`fetch_richey_postings()`", fixed = TRUE)
   expect_match(body, "1. Fetch the live page", fixed = TRUE)
   expect_no_match(body, "Diff: newest text fixture", fixed = TRUE)
   expect_no_match(body, "rendered this page in CI", fixed = TRUE)
