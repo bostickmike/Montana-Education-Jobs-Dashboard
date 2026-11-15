@@ -33,8 +33,8 @@ he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALS
 k12_counties_covered <- length(unique(k12$County[!is.na(k12$Median_Household_Income)]))
 he_counties_covered <- length(unique(he$County[!is.na(he$Median_Household_Income)]))
 
-# SAIPE is K-12-district-level with no HE equivalent. All 32 districts
-# MT_SAIPE_DISTRICT_MAP covers resolve with real data -- Wolf Point and
+# SAIPE is K-12-district-level with no HE equivalent (by NCES id since
+# 2026-11-15). All 32 districts the old name map covered resolve with real data -- Wolf Point and
 # Plentywood's own fast-follow gap here closed 2026-08-07, so 32 is the
 # expected full-health count, matching the current registry size exactly
 # (no permanent SAIPE gap the way MT_DLI_DISTRICT_MAP's Lame Deer/Lodge

@@ -134,7 +134,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `ACS_Year` | Integer | US Census ACS 5-Year | Data release year for US Census American Community Survey 5-year estimates. |
 | `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Proportion of county civilian employed labor force in agriculture, forestry, mining, and energy extraction. |
 | `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year percentage change in total resident population. |
-| `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Estimated proportion of school-age children (ages 5-17) living in families below the federal poverty line. |
+| `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Estimated proportion of school-age children (ages 5-17) living in families below the federal poverty line. Where a district is a separate elementary and high school district (e.g. Billings), the two are combined by adding their children in poverty and dividing by all their children, the standard way to combine Census estimates. The high school district can reach beyond the elementary district, so a combined rate can include some children from neighboring districts. |
 | `SAIPE_Year` | Integer | US Census SAIPE | Release year of federal Small Area Income and Poverty Estimates data. |
 | `Total_General_Fund_Expenditure` | Currency ($) | OPI School Finance Files | Total district General Fund operating expenditures. |
 | `Finance_FY` | String / Integer | OPI School Finance Files | State fiscal year for OPI financial expenditure reporting. |
@@ -273,7 +273,7 @@ Districts not scraped directly that posted on OPI Jobs for Teachers this week: t
 | `DLI_Name` | String | MT DLI Teacher Compensation | DLI school system matched by name (one match only); may cover an elementary and high school district together. |
 | `Salary_Year` | String | MT DLI Teacher Compensation | School year of the DLI figures. |
 | `Salary_Source` | String | MT DLI Teacher Compensation | Source of the salary figures. |
-| `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Estimated share of children 5-17 in poverty (SAIPE, by NCES id; first of the entity's districts with a rate). |
+| `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Estimated share of children 5-17 in poverty (SAIPE, by NCES id). An entity with an elementary and a high school district adds their children in poverty and divides by all their children. |
 | `SAIPE_Year` | Integer | US Census SAIPE | SAIPE year. |
 | `Total_General_Fund_Expenditure` | Currency ($) | OPI School Finance Files | General Fund expenditure, summed over the entity's districts. |
 | `Finance_FY` | String / Integer | OPI School Finance Files | State fiscal year of the finance figures. |

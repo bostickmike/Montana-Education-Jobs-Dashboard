@@ -654,13 +654,11 @@ build_opi_only_districts <- function(crosswalk, entities, dli_systems = NULL, sa
     out$DLI_Name <- dli_systems$DLI_Name[pick]
   }
   if (!is.null(saipe) && nrow(saipe) > 0) {
-    # saipe: LEAID, Child_Poverty_Rate, SAIPE_Year. Entities with two
-    # districts take the first one that has a rate.
-    out$Child_Poverty_Rate <- vapply(strsplit(out$LEAIDs, ";", fixed = TRUE), function(ids) {
-      r <- saipe$Child_Poverty_Rate[match(ids, saipe$LEAID)]
-      r <- r[!is.na(r)]
-      if (length(r)) r[1] else NA_real_
-    }, numeric(1))
+    # saipe: edjobs::fetch_saipe_by_leaid(). An entity with two districts
+    # (elementary + high school) pools their counts (edjobs::pool_child_poverty(),
+    # 2026-11-15; before, the first district with a rate).
+    out$Child_Poverty_Rate <- vapply(strsplit(out$LEAIDs, ";", fixed = TRUE), function(ids)
+      pool_child_poverty(saipe[saipe$LEAID %in% ids, , drop = FALSE]), numeric(1))
     out$SAIPE_Year <- saipe$SAIPE_Year[1]
   }
   if (!is.null(finance) && nrow(finance) > 0) {
@@ -686,23 +684,6 @@ fetch_dli_all_systems <- function() {
   texts <- lapply(names(DLI_REGION_FILENAMES), fetch_dli_region_pdf_text)
   out <- parse_dli_all_systems(texts)
   if (nrow(out) > 0) out$Salary_Year <- extract_dli_salary_year(texts[[1]])
-  out
-}
-
-# SAIPE 5-17 child poverty rate per district, keyed by NCES id: the API's
-# school-district code is the LEA code, so LEAID = state FIPS "30" + code.
-fetch_saipe_by_leaid <- function(year = NULL, api_key = census_api_key()) {
-  year <- year %||% latest_saipe_year(api_key = api_key)
-  rows <- lapply(c("unified", "elementary", "secondary"), function(geocat) {
-    df <- fetch_saipe_geography(geocat, year, api_key)
-    code_col <- paste0("school district (", geocat, ")")
-    if (nrow(df) == 0 || !code_col %in% names(df)) return(NULL)
-    data.frame(LEAID = paste0(state_fips(), df[[code_col]]),
-               Child_Poverty_Rate = clean_acs_value(suppressWarnings(as.numeric(df$SAEPOVRAT5_17RV_PT))) / 100,
-               stringsAsFactors = FALSE)
-  })
-  out <- dplyr::bind_rows(rows)
-  if (nrow(out) > 0) out$SAIPE_Year <- year
   out
 }
 

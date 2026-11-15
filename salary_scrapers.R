@@ -58,7 +58,7 @@ DLI_REGION_FILENAMES <- list(
 # Public Schools" here vs. "Belgrade School District 44" in this project;
 # "Missoula Co Public Schls" here vs. "Missoula County Public Schools").
 # Hand-maintained and confirmed against the live PDFs' real table rows
-# 2026-08-06, the same way MT_CCD_LEA_MAP in ccd_staff_scraper.R is.
+# 2026-08-06, the same way MT_CCD_LEA_MAP in ccd_lea_pairs.R is.
 # Maps this project's canonical District name to (a) which regional PDF
 # covers it and (b) the report's own school-system name for that district.
 # Hand-maintained and confirmed against the live 9 regional DLI PDFs.
