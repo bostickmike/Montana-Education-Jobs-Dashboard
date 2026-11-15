@@ -947,6 +947,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the other 9 moved districts the same counts as 11-10 (Frazer 26, Bainville 7, Victor 6, Nashua 5, Superior 4,
     Lavina 2, Creston 1, Fromberg 1, Hinsdale 1). The other 9 districts with no own-page rows in 3 weeks are
     genuinely quiet (no openings, application forms only, or an empty page; `claude-notes/2026-11-14_mt-leftovers/README.md`).
+  * [x] Package phase 5, slice 1: IPEDS faculty salaries, enrollment, Pell share and ACS county context from edjobs
+    0.25.0 (2026-11-15; branch `phase5-ipeds-acs`, ef1a60d; edjobs branch `phase5-ipeds-acs`, 74b9c6f + c4695a4, not
+    tagged). `ipeds_salary_scraper.R`, `ipeds_enrollment_scraper.R`, `fsa_pell_scraper.R`, `census_acs_scraper.R`, their
+    tests and fixtures deleted (tests moved to the package); the map is in `ipeds_unitids.R`; FIPS from
+    `state_config()`. Package output identical to the old functions on every fixture; live fetch identical to the
+    committed files. Full rehearsal on 0.25.0: every step passed; federal steps ok (IPEDS salaries 22, trend 66, enrollment 22, trend 22, Pell 22, ACS 56 + 56); `salarymap.csv` (23 rows) and
+    `salarymap2.csv` (201 rows) federal columns identical to the committed files; rebuild parity 9/9 (combinedclean
+    1,394); post-run suite 3,274 passed, 0 failed (`claude-notes/2026-11-15_rehearsal-mt-phase5-0.25.0.log`). Notes:
+    `claude-notes/2026-11-15_phase5-federal/README.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
