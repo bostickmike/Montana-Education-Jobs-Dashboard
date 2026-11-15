@@ -956,6 +956,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `salarymap2.csv` (201 rows) federal columns identical to the committed files; rebuild parity 9/9 (combinedclean
     1,394); post-run suite 3,274 passed, 0 failed (`claude-notes/2026-11-15_rehearsal-mt-phase5-0.25.0.log`). Notes:
     `claude-notes/2026-11-15_phase5-federal/README.md`.
+  * [x] Package phase 5, slice 2: CCD staffing and SAIPE child poverty from edjobs 0.26.0, by NCES id; combined
+    districts' poverty pooled (2026-11-15; branch `phase5-ccd-saipe`, 457e0f4 + 90f63d5 + 18f19c5, on slice 1; edjobs
+    branch `phase5-ccd-saipe`). `ccd_staff_scraper.R`, `census_saipe_scraper.R`, their tests and fixtures deleted;
+    `MT_CCD_LEA_MAP` kept in `ccd_lea_pairs.R` as the crosswalk's pair input; `MT_SAIPE_DISTRICT_MAP` gone. By id vs by
+    name on 2024 data: identical for all 201 districts (`claude-notes/2026-11-15_phase5-federal/slice2_side_by_side.R`).
+    **Mike's decision 11-15:** an elementary + high school district's child poverty = children in poverty / relevant
+    children summed over both (was the equal average of the two rates); also for the OPI-only table (was the first
+    rate) and the surrounding-district stand-ins. Data dictionary (one sentence) and cookbook (with the SAIPE source)
+    say so. Rehearsal on 0.26.0: every step passed; `salarymap2.csv` 201 rows, Child_Poverty_Rate changed for exactly
+    the 90 combined districts, each to the measured pooled rate (median 0.4, max 2.5 points; `weighting_effect.csv`),
+    every other column identical; `opi_only_districts.csv` 11 of 35 rows' poverty moved (median 0.4, max 1.8 points);
+    parity 9/9 (combinedclean 1,394); post-run suite 3,208 passed, 0 failed
+    (`claude-notes/2026-11-15_rehearsal-mt-phase5-0.26.0.log`).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **R package migration (current focus, Mike 2026-11-10):** shared code moves to `bostickmike/edjobs`, pinned in
   `EDJOBS_VERSION` (plan and status: `claude-notes/2026-11-10_r-package-migration-plan.md`). Phase 0 merged 11-11
