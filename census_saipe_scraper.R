@@ -79,7 +79,7 @@ MT_SAIPE_DISTRICT_MAP <- list(
 )
 
 # Pure transformation: SAIPE's array-of-arrays JSON shape has different
-# column names than census_acs_scraper.R's ACS responses (SD_NAME instead
+# column names than the ACS responses (SD_NAME instead
 # of NAME), so this doesn't reuse parse_acs_json() -- reusing it would have
 # silently tried to coerce SD_NAME (real district name text) to numeric via
 # that function's NAME/state/county exclude-list, which doesn't know about
@@ -100,7 +100,7 @@ fetch_saipe_geography <- function(geocat, year, api_key) {
     req_url_query(
       get = paste(c("SD_NAME", "SAEPOVRAT5_17RV_PT"), collapse = ","),
       `for` = paste0("school district (", geocat, ")"),
-      `in` = paste0("state:", MT_STATE_FIPS),
+      `in` = paste0("state:", state_fips()),
       time = year,
       key = api_key
     ) %>%

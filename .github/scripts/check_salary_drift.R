@@ -7,7 +7,7 @@
 # weekly-scrape.yml's continue-on-error on this step).
 #
 # No Sheridan/Gillette-style merged-entity split-watch section here --
-# Montana has no equivalent case (see ipeds_salary_scraper.R's header).
+# Montana has no equivalent case (see ipeds_unitids.R).
 # No K-12 year-over-year plausibility check either -- unlike WSBA (which
 # reports current + prior year base salary in the same scrape), the MT DLI
 # Teacher Compensation Report has only ever had one published edition
@@ -30,7 +30,7 @@ he <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"), stringsAsFactors = FALS
 # regional PDFs at all -- confirmed live, not a lookup miss. 32 - 5 = 27
 # is this source's real full-health ceiling, not 32.
 #
-# On the HE side, MT_IPEDS_UNITID_MAP covers 22 of the 23 registered
+# On the HE side, IPEDS_UNITID_MAP (ipeds_unitids.R) covers 22 of the 23 registered
 # institutions -- Missoula College is the one real, permanent exception
 # (no independent unitid in the Urban Institute's directory at all, its
 # figures are fully consolidated into University of Montana's own

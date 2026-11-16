@@ -49,7 +49,7 @@ copy-paste later. Supersedes nothing yet — no code exists — but should infor
     Bozeman) have **no independent UNITID at all** — fully merged into the parent's
     IPEDS reporting. This is the direct Montana analog of Wyoming's
     Sheridan/Gillette shared-reporting case, and the existing `IPEDS_UNITID_MAP`
-    pattern from `ipeds_salary_scraper.R` should generalize to it.
+    pattern from edjobs `R/ipeds_he.R` should generalize to it.
   - **Missoula College** (`18048901`) and **City College at MSU Billings**
     (`18017901`) get their own IPEDS "branch" UNITIDs (8-digit, parent-ID + suffix)
     rather than fully independent 6-digit ones — needs a probe against the Urban

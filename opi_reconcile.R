@@ -697,7 +697,7 @@ fetch_saipe_by_leaid <- function(year = NULL, api_key = census_api_key()) {
     df <- fetch_saipe_geography(geocat, year, api_key)
     code_col <- paste0("school district (", geocat, ")")
     if (nrow(df) == 0 || !code_col %in% names(df)) return(NULL)
-    data.frame(LEAID = paste0(MT_STATE_FIPS, df[[code_col]]),
+    data.frame(LEAID = paste0(state_fips(), df[[code_col]]),
                Child_Poverty_Rate = clean_acs_value(suppressWarnings(as.numeric(df$SAEPOVRAT5_17RV_PT))) / 100,
                stringsAsFactors = FALSE)
   })

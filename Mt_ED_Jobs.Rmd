@@ -2316,7 +2316,6 @@ write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 ```{r k12 census county and district context, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
 library(edjobs)
-source("census_acs_scraper.R")
 source("census_saipe_scraper.R")
 source("opi_finance_scraper.R")
 
@@ -2326,7 +2325,7 @@ source("opi_finance_scraper.R")
 # this run, rather than crashing the whole pipeline.
 county_context <- safe_scrape(
   "Census ACS county context (MT)",
-  scrape_fn = fetch_census_county_context,
+  scrape_fn = function() fetch_census_county_context(county_suffix = ", Montana"),
   expected_cols = c("County", "Median_Household_Income", "Median_Gross_Rent",
                      "Population", "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct")
 )
@@ -2911,13 +2910,11 @@ write.csv(Allnow_he, file = file.path("Mt_Ed_Jobs", "allnow_he.csv"), row.names 
 ```{r he salary enrollment pell data, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
 library(edjobs)
-source("ipeds_salary_scraper.R")
-source("ipeds_enrollment_scraper.R")
-source("fsa_pell_scraper.R")
+source("ipeds_unitids.R")   # IPEDS_UNITID_MAP; the fetchers are in edjobs
 
 he_salary <- safe_scrape(
   "IPEDS instructional staff salaries (MT)",
-  scrape_fn = fetch_ipeds_he_salaries,
+  scrape_fn = function() fetch_ipeds_he_salaries(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor",
                      "Faculty_Count", "Salary_Year")
 )
@@ -2935,19 +2932,19 @@ local({
 
 he_enrollment <- safe_scrape(
   "IPEDS fall enrollment FTE (MT)",
-  scrape_fn = fetch_ipeds_he_enrollment,
+  scrape_fn = function() fetch_ipeds_he_enrollment(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Enrollment", "Enrollment_Year")
 )
 
 he_enrollment_trend <- safe_scrape(
   "IPEDS fall enrollment 5-year trend (MT)",
-  scrape_fn = fetch_ipeds_he_enrollment_trend,
+  scrape_fn = function() fetch_ipeds_he_enrollment_trend(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Enrollment_Change_Pct")
 )
 
 he_pell_share <- safe_scrape(
   "FSA Pell Grant recipient share (MT)",
-  scrape_fn = fetch_ipeds_he_pell_share,
+  scrape_fn = function() fetch_ipeds_he_pell_share(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Pell_Recipient_Share", "Pell_Year")
 )
 
@@ -2982,7 +2979,7 @@ if (nrow(he_salary) > 0) {
   # schema stays stable as the calendar year rolls over.
   salary_trend <- safe_scrape(
     "IPEDS instructional staff salary 3-year trend (MT)",
-    scrape_fn = function() fetch_ipeds_he_salary_trend(n_years = 3),
+    scrape_fn = function() fetch_ipeds_he_salary_trend(IPEDS_UNITID_MAP, n_years = 3),
     expected_cols = c("Name", "Year", "Faculty_Avg_Salary")
   )
   if (nrow(salary_trend) > 0) {
@@ -3032,7 +3029,6 @@ write.csv(salarymap, salarymap_path, row.names = FALSE)
 ```{r he census county context, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
 library(edjobs)
-source("census_acs_scraper.R")
 
 # Reuses the exact same fetch_census_county_context() pipeline as the K-12
 # chunk earlier in this file -- fetched independently rather than reusing
@@ -3040,7 +3036,7 @@ source("census_acs_scraper.R")
 # this file being self-contained and re-runnable on its own.
 county_context_he <- safe_scrape(
   "Census ACS county context for HE institutions (MT)",
-  scrape_fn = fetch_census_county_context,
+  scrape_fn = function() fetch_census_county_context(county_suffix = ", Montana"),
   expected_cols = c("County", "Median_Household_Income", "Median_Gross_Rent",
                      "Population", "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct")
 )
