@@ -1049,6 +1049,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     WY's committed files); `needs_k12_salary_archive_update()` retired. Rehearsal
     (`claude-notes/2026-11-16_rehearsal-mt-phase5-closeout-0.30.0.log`): every step passed; salary history
     unchanged; parity 9/9; suites pre 3,210 / post 3,221 passed, 0 failed.
+  * [x] One registry schema for both states (2026-11-16; branch `registry-schema`, edjobs 0.31.0; Mike 11-16: the
+    column set, `Slug` -> `Platform_Key`, list rules in the registry). `k12_district_registry.csv` columns: District,
+    NCES_LEAID, City, County, Latitude, Longitude, Platform, Platform_Key, Job_Link, List_Start, List_Stop, List_Skip;
+    `k12_list_rules.csv` folded in and removed (`Skip_Section` -> `List_Skip`). Every source resolves to the same call
+    as before (224 of 224: fn, args, session, platform, url; `claude-notes/2026-11-16_registry-schema/`). Rehearsal
+    (`claude-notes/2026-11-16_rehearsal-mt-registry-schema-0.31.0.log`): every step passed; parity 9/9; suites pre
+    3,211 / post 3,222 passed, 0 failed; combinedclean 1,395 rows.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
