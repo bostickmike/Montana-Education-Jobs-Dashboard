@@ -1072,6 +1072,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-16_ipeds-salary-live.txt`): MT Blackfeet $25,621 -> $54,317, University of Montana
     $93,938 -> $95,013, the other 19 MT and all 9 WY figures and every professor-rank figure unchanged; Faculty_Count
     unchanged. Findings: `claude-notes/2026-11-16_ipeds-faculty-salary.md`.
+  * [x] College postings at outreach sites and field offices, campus stage 2 (2026-11-16; branch `he-campus-stage2`,
+    edjobs 0.34.0; Mike 11-16: "yes, build it"). MSU-system boards give a department, not a town, so a posting is
+    now also placed from a title marker ("*Havre, MT*"), `he_campus_departments.csv` (MSU's research centers ->
+    town, each with its source: the center's own page on agresearch.montana.edu) or an explicit sentence on its
+    PeopleAdmin page ("This position is located in Joliet, Montana"; "The Extension office is located in
+    Plentywood"); never a bare town name, and a posting naming several towns stays at the main campus. Extension
+    agents are not placed at the county seat (Carbon County's office is in Joliet). Measured on 360 live PeopleAdmin
+    pages (18 placed away from the main town, all read and right) and MT's archives (33 MSU postings placed by title
+    or department; the two agree on all 10 where both apply): `claude-notes/2026-11-16_college-campus-locations.md`,
+    "Stage 2 measured". Rehearsal (`claude-notes/2026-11-16_rehearsal-mt-campus2-0.34.0.log`): every step passed;
+    parity 9/9; suites pre 3,231 / post 3,246 passed, 0 failed; combinedclean 1,402 rows; hedata 374 postings: 79
+    main town, 15 other town (MSU 11: Havre 3, Great Falls 2, Helena, Joliet, Lewistown, Miles City, Plentywood,
+    Sidney; FVCC Libby 4), 280 no town.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
