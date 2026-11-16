@@ -545,6 +545,7 @@ OPI_ONLY_DISTRICT_COLUMNS <- c(
   "Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source",
   "Median_Household_Income", "Median_Gross_Rent", "Population", "ACS_Year",
   "Mining_Employment_Share", "Population_Change_Pct", "CCD_Year",
+  "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE",
   "Child_Poverty_Basis", "Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year", "Posting_Names")
 
 # The same columns every week, whichever sources answered (NA where one

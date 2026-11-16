@@ -2330,7 +2330,8 @@ county_context <- safe_scrape(
 if (nrow(county_context) > 0) {
   salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
     select(-any_of(c("Median_Household_Income", "Median_Gross_Rent", "Population",
-                      "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct"))) %>%
+                      "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct",
+                      "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE"))) %>%
     left_join(county_context, by = "County")
   write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 } else {
@@ -2420,7 +2421,8 @@ finance_by_name <- safe_scrape("OPI General Fund by district name (MT)",
                                scrape_fn = function() opi_finance_by_district(fetch_opi_finance_workbook(OPI_FINANCE_CURRENT_YEAR_URL)),
                                expected_cols = c("OPI_District", "Total_General_Fund_Expenditure"))
 acs_cols <- c("County", "Median_Household_Income", "Median_Gross_Rent", "Population", "ACS_Year",
-              "Mining_Employment_Share", "Population_Change_Pct")
+              "Mining_Employment_Share", "Population_Change_Pct",
+              "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE")
 county_ctx <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>% select(any_of(acs_cols))
 
 opi_only <- build_opi_only_districts(district_crosswalk, opi_only_entities,
@@ -3042,7 +3044,8 @@ county_context_he <- safe_scrape(
 if (nrow(county_context_he) > 0) {
   salarymap <- read.csv(salarymap_path, fileEncoding = "UTF-8") %>%
     select(-any_of(c("Median_Household_Income", "Median_Gross_Rent", "Population",
-                      "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct"))) %>%
+                      "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct",
+                      "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE"))) %>%
     left_join(county_context_he, by = "County")
   write.csv(salarymap, salarymap_path, row.names = FALSE)
 } else {
