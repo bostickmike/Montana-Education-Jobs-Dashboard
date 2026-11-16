@@ -1037,6 +1037,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the local copy's context rows are months old). Rehearsal (`claude-notes/2026-11-16_rehearsal-mt-source-dates-0.29.0.log`):
     every step passed; data quality 125 passed; parity 9/9; suites pre 3,227 / post 3,238 passed, 0 failed; every
     source dated (OEWS kept 2026-10-31: BLS has no newer year).
+  * [x] Feedback form live (2026-11-16): `GITHUB_FEEDBACK_TOKEN` (fine-grained PAT, this repo only, Issues
+    read/write, expires 2027-11-16) set as a Connect Cloud secret and the app republished by Mike; his test report
+    opened issue #48 with the data-quality and user-report labels (closed). Token added to `.github/token-expiry.csv`
+    (the upkeep run opens an issue 30 days before; renewal steps in the file).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Citations audit follow-ups (2026-11-15; `claude-notes/2026-11-15_citations-audit.md`), decisions for Mike:**
   BLS asks for the access date (apps don't know it yet); WSBA/WDE pages say "All rights reserved" with no reuse
