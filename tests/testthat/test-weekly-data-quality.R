@@ -127,6 +127,13 @@ test_that("percentage / rate columns are stored as proportions in [0, 1] (not 0-
     x <- d2[[col]]
     expect_true(all(is.na(x) | (x >= 0 & x <= 1)), info = paste("salarymap2", col))
   }
+  # Census's approximate 90% range (edjobs::add_saipe_range()) brackets the
+  # estimate: low <= rate <= high, all in [0, 1]. Skipped until the columns exist.
+  if (all(c("Child_Poverty_Low", "Child_Poverty_High") %in% names(d2))) {
+    ok <- is.na(d2$Child_Poverty_Rate) | (d2$Child_Poverty_Low >= 0 & d2$Child_Poverty_Low <= d2$Child_Poverty_Rate &
+                                          d2$Child_Poverty_Rate <= d2$Child_Poverty_High & d2$Child_Poverty_High <= 1)
+    expect_true(all(ok %in% TRUE), info = "salarymap2 Child_Poverty_Low <= Child_Poverty_Rate <= Child_Poverty_High")
+  }
   # 5-year population change: a district gaining/losing >50% in 5yr is a data error
   expect_true(all(is.na(d2$Population_Change_Pct) | abs(d2$Population_Change_Pct) <= 0.5),
               info = "salarymap2 Population_Change_Pct")

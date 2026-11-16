@@ -995,6 +995,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     force" (MT also "agriculture/resource extraction"); ACS S2403's denominator is the civilian employed population
     16 and over and line 4 is mining, quarrying, and oil and gas extraction only (Census API labels, read 2026-11-15).
     Now matches the data dictionary. Text only.
+  * [x] SAIPE child poverty: Census's approximate 90% range beside each estimate (2026-11-16; branch `saipe-range`,
+    edjobs 0.27.0). **Mike's choice 11-15 (option A):** Census publishes no margin of error for one district, only
+    median relative errors by district size ("Quantifying Relative Error in the School District Estimates", revised
+    2025-12-17); range = rate x (1 -/+ 1.645 x CV), floored at 0, capped at 1. New columns SAIPE_Population,
+    Child_Poverty_Low, Child_Poverty_High (data dictionary; `pending` until the first run writes them;
+    run_expectations `saipe_range_*`). Table column "Approx. 90% Range", map popup, comparator card, footnote.
+    Rehearsal (`claude-notes/2026-11-15_rehearsal-mt-saipe-range-0.27.0.log`): every step passed; salarymap2 201 rows,
+    201 with a range; opi_only_districts 30 rates, all with a range; rates changed only for the 90 combined
+    districts (slice 2's pooling, not yet in main's data); parity 9/9; suites pre 3,199 / post 3,209 passed, 0 failed.
+    Read back live in the rehearsed app (Billings 7.9%, about 6%-10%).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Citations audit follow-ups (2026-11-15; `claude-notes/2026-11-15_citations-audit.md`), decisions for Mike:**
   BLS asks for the access date (apps don't know it yet); WSBA/WDE pages say "All rights reserved" with no reuse
