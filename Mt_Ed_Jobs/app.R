@@ -1896,7 +1896,7 @@ ui <- page_navbar(
               tags$td(strong("Student Need Context")),
               tags$td("Census SAIPE & US Dept of Education FSA"),
               tags$td(span(class = "badge text-bg-info", "Annual")),
-              tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level child poverty rates for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
+              tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level estimates of school-age children in poverty for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
             )
           )
         )
@@ -2257,8 +2257,8 @@ server <- function(input, output, session) {
         # table sorts on the server, in R, by the underlying value); where the rate is a
         # stand-in (a school with no SAIPE geography of its own) the next
         # column says so.
-        `District Child Poverty Rate` = Child_Poverty_Rate,
-        `Poverty Rate Basis` = ifelse(is.na(Child_Poverty_Rate), NA_character_,
+        `School-Age Children in Poverty (Census est.)` = Child_Poverty_Rate,
+        `Poverty Estimate Basis` = ifelse(is.na(Child_Poverty_Rate), NA_character_,
                                       ifelse(is.na(Child_Poverty_Basis), "District", "Surrounding district")),
         # School-based count beside the Census estimate (CCD school directory):
         # share of students eligible for free or reduced-price lunch, and its year.
@@ -2274,7 +2274,7 @@ server <- function(input, output, session) {
     cols_like <- function(prefixes) names(df)[vapply(names(df), function(n) any(startsWith(n, prefixes)), logical(1))]
     datatable(df, filter = "top", extensions = "Buttons",
               options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 18)) %>%
-      formatPercentage(cols_like(c("Teacher Vacancy Rate", "County Mining/Energy Jobs", "District Child Poverty Rate", "County Population Trend (5yr)")), digits = 1) %>%
+      formatPercentage(cols_like(c("Teacher Vacancy Rate", "County Mining/Energy Jobs", "School-Age Children in Poverty (Census est.)", "County Population Trend (5yr)")), digits = 1) %>%
       formatPercentage(cols_like(c("Free/Reduced Lunch")), digits = 0) %>%
       formatCurrency(cols_like(c("Teacher Avg Salary", "County Median Income", "Annual General Fund Budget", "County Median Rent (per month)")), digits = 0) %>%
       formatRound("Students per Teacher", digits = 1)
@@ -2326,11 +2326,17 @@ server <- function(input, output, session) {
       ),
       if (length(saipe_year) > 0) {
         helpText(
-          "District child poverty rate: US Census Bureau, Small Area Income and Poverty Estimates (SAIPE)",
+          "School-age children in poverty: US Census Bureau, Small Area Income and Poverty Estimates (SAIPE)",
           paste0("(", saipe_year[1], ")"), "—",
           tags$a(href = "https://www.census.gov/programs-surveys/saipe/data/datasets.html", target = "_blank", "census.gov/saipe"),
           ". District-level. For districts split between an elementary and a high-school district, this pools the two: children 5-17 in poverty summed over both districts, divided by their children 5-17 summed -- see DATA_COOKBOOK.md.",
-          "A private or tribal school has no Census poverty estimate of its own; it shows its surrounding district's rate (marked \"Surrounding district\")."
+          # Census: "A true poverty \"rate\" for children cannot be determined from these figures,
+          # because the numerator and denominator refer to slightly different universes" (SAIPE
+          # school district overview, revised 2026-01-12; Mike chose this label 2026-11-15).
+          "Census's estimate of related children 5-17 in families in poverty, divided by all children 5-17 in the district.",
+          "Census notes this is not a true poverty rate: foster children, other children not related to the householder and",
+          "children in group quarters are counted in the second figure only.",
+          "A private or tribal school has no Census poverty estimate of its own; it shows its surrounding district's estimate (marked \"Surrounding district\")."
         )
       }
     )
@@ -2425,7 +2431,7 @@ server <- function(input, output, session) {
               tags$tr(tags$td(class = "text-muted", "Students / Teacher:"), tags$td(style = "text-align: right; font-weight: 600;", spt)),
               tags$tr(tags$td(class = "text-muted", "General Fund Budget:"), tags$td(style = "text-align: right; font-weight: 600;", gen_fund)),
               tags$tr(tags$td(class = "text-muted", "County Median Rent:"), tags$td(style = "text-align: right; font-weight: 600;", rent)),
-              tags$tr(tags$td(class = "text-muted", "Child Poverty Rate:"), tags$td(style = "text-align: right; font-weight: 600;", poverty)),
+              tags$tr(tags$td(class = "text-muted", "Children in Poverty (Census est.):"), tags$td(style = "text-align: right; font-weight: 600;", poverty)),
               tags$tr(tags$td(class = "text-muted", "Free/Reduced Lunch:"), tags$td(style = "text-align: right; font-weight: 600;", frl))
             )
           )
@@ -2846,7 +2852,7 @@ server <- function(input, output, session) {
       ifelse(!is.na(Child_Poverty_Rate),
              paste0("<div style='font-size:0.85em;color:#666;'>",
                     ifelse(is.na(Child_Poverty_Basis), "District: ", ""),
-                    scales::percent(Child_Poverty_Rate, accuracy = 0.1), " child poverty rate",
+                    scales::percent(Child_Poverty_Rate, accuracy = 0.1), " of school-age children in poverty (Census est.)",
                     ifelse(is.na(Child_Poverty_Basis), "", paste0(" (", sub("^Surrounding", "surrounding", Child_Poverty_Basis), ")")),
                     "</div>"),
              ""),
