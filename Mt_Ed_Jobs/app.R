@@ -632,15 +632,20 @@ k12nowsum <- read.csv("allnow.csv", fileEncoding = "UTF-8") %>%
 ccdata <- read_xlsx("hedata.xlsx")
 # Optional posted-pay columns, padded the same way as combinedclean.csv's.
 for (col in c("Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text",
-              "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year")) {
+              "Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year",
+              "Campus_Town", "Campus_County", "Campus_Latitude", "Campus_Longitude", "Place_Basis")) {
   if (!col %in% names(ccdata)) ccdata[[col]] <- NA
 }
+# Typed, so a file written before the placement columns existed still joins.
+for (col in c("Campus_Town", "Campus_County", "Place_Basis")) ccdata[[col]] <- as.character(ccdata[[col]])
+for (col in c("Campus_Latitude", "Campus_Longitude")) ccdata[[col]] <- as.numeric(ccdata[[col]])
 ccdata <- ccdata %>%
   validate_and_pad_schema(c("Institution", "Title", "Location", "Posted_Date", "Link"), "hedata.xlsx") %>%
   mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit),
          `Typical pay (IPEDS est.)` = format_ipeds_estimate(Est_Pay, Est_Pay_Unit, Est_Occupation, Est_Area, !is.na(Pay_Min))) %>%
   select(Institution, Title, Location, `Posted Pay`, `Typical pay (IPEDS est.)`, Posted_Date, Link,
-         Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit) %>%
+         Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit,
+         Campus_Town, Campus_County, Campus_Latitude, Campus_Longitude, Place_Basis) %>%
   arrange(Institution, Title) %>%
   mutate(
     Appointment = classify_he_appointment(Title),
@@ -675,6 +680,27 @@ he_salary_lookup <- mapdata2_he %>%
     )
   )
 
+# Branch campuses, outreach centers and field offices (edjobs place_he_postings(),
+# 2026-11-16; Mike: "we need the locations to be accurate on the map"). A
+# posting whose Location names another town in the state has Campus_Town set
+# by the pipeline and gets its own map dot, keyed "<Institution> (<Town>)";
+# every other posting is on the institution's main dot. .Map_Name is that key
+# (hidden in the tables).
+he_map_name <- function(institution, town) ifelse(is.na(town) | !nzchar(town), institution, paste0(institution, " (", town, ")"))
+ccdata$.Map_Name <- he_map_name(ccdata$Institution, ccdata$Campus_Town)
+he_campus_points <- ccdata %>%
+  filter(!is.na(Campus_Town), !is.na(Campus_Latitude), !is.na(Campus_Longitude)) %>%
+  distinct(.Map_Name, Institution, Campus_Town, Campus_County, Campus_Latitude, Campus_Longitude)
+ccdata$.Map_Name <- ifelse(ccdata$.Map_Name %in% he_campus_points$.Map_Name, ccdata$.Map_Name, ccdata$Institution)
+# Postings shown at the main campus because they name no town in the state
+# (a department or building, several sites, "United States", another state).
+he_unplaced_n <- sum(ccdata$Place_Basis %in% c("no_town", "out_of_state"))
+he_place_note <- if (any(!is.na(ccdata$Place_Basis))) paste0(
+  "College postings are shown at the town the posting names (a branch campus, outreach center or field office). ",
+  format(he_unplaced_n, big.mark = ","), " of ", format(nrow(ccdata), big.mark = ","),
+  " current college postings don't name one Montana town (the job board gives a department, a building or no place, ",
+  "or the job covers several sites or is out of state) and are shown at the institution's main campus.") else ""
+
 ccdata <- ccdata %>%
   left_join(he_salary_lookup, by = c("Institution" = "Name")) %>%
   # Figure for the map's pay bands: posted pay, else the institution's IPEDS
@@ -688,7 +714,7 @@ ccdata <- ccdata %>%
     .Pay_Unit = posting_pay_value(Pay_Min, Pay_Max, Pay_Unit, .fallback_value, .fallback_unit)$unit
   ) %>%
   select(Institution, Title, Location, Appointment, `Posted Pay`, `Typical pay (IPEDS est.)`, `Avg Faculty Salary`,
-         `Posted / listed`, Link, .Pay_Value, .Pay_Unit)
+         `Posted / listed`, Link, .Pay_Value, .Pay_Unit, .Map_Name)
 
 hesum_he <- read.csv("allsum_he.csv") %>%
   validate_and_pad_schema(c("Category", "Archive_Date", "Institution", "Job_Type", "sum"), "allsum_he.csv") %>%
@@ -928,11 +954,16 @@ map_k12 <- mapdata2_k12 %>%
          Child_Poverty_Rate, Child_Poverty_Low, Child_Poverty_High, SAIPE_Year, Child_Poverty_Basis, Free_Reduced_Lunch_Share, FRL_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source,
          Data_Coverage)
 
-he_current_counts <- ccdata %>% count(Institution, name = "CurrentCount")
+he_current_counts <- ccdata %>% count(Institution = .Map_Name, name = "CurrentCount")
 he_sample_titles <- ccdata %>%
-  group_by(Institution) %>%
+  group_by(Institution = .Map_Name) %>%
   summarize(SampleTitles = paste(head(Title, 3), collapse = "; "), .groups = "drop")
-he_weekly_new <- he_new_this_week %>% count(Institution, name = "WeeklyNew")
+# New-this-week postings counted on the dot their current posting is on.
+he_weekly_new <- he_new_this_week %>%
+  left_join(ccdata %>% distinct(Institution, Title, Location, .Map_Name) %>%
+              distinct(Institution, Title, Location, .keep_all = TRUE),
+            by = c("Institution", "Title", "Location")) %>%
+  count(Institution = coalesce(.Map_Name, Institution), name = "WeeklyNew")
 
 # Scoped to full-time faculty only, matching Faculty_Count's own scope --
 # IPEDS's salaries-instructional-staff survey (the source of Faculty_Count)
@@ -991,6 +1022,36 @@ map_he <- mapdata2_he %>%
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
          Median_Household_Income_MOE, Median_Gross_Rent_MOE, Mining_Employment_Share_MOE,
          Child_Poverty_Rate, Child_Poverty_Low, Child_Poverty_High, SAIPE_Year, Child_Poverty_Basis, Free_Reduced_Lunch_Share, FRL_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source)
+
+# One dot per branch campus or site with current postings: its own count,
+# new-this-week and sample titles, its town's county context (the ACS figures
+# a district in that county shows), and no institution-wide figures (salary,
+# vacancy rate, enrollment), which stay on the main campus dot.
+he_county_context <- bind_rows(map_k12, map_he) %>%
+  filter(!is.na(County), !is.na(Median_Household_Income)) %>%
+  distinct(County, .keep_all = TRUE) %>%
+  select(County, Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
+         Median_Household_Income_MOE, Median_Gross_Rent_MOE, Mining_Employment_Share_MOE)
+map_he_campus <- he_campus_points %>%
+  transmute(Name = .Map_Name, Campus_Of = Institution, Longitude = Campus_Longitude, Latitude = Campus_Latitude,
+            County = Campus_County, Link = mapdata2_he$Link[match(Institution, mapdata2_he$Name)]) %>%
+  left_join(he_current_counts, by = c("Name" = "Institution")) %>%
+  left_join(he_sample_titles, by = c("Name" = "Institution")) %>%
+  left_join(he_weekly_new, by = c("Name" = "Institution")) %>%
+  left_join(he_county_context, by = "County") %>%
+  mutate(CurrentCount = coalesce(CurrentCount, 0L), WeeklyNew = coalesce(WeeklyNew, 0L),
+         SampleTitles = coalesce(SampleTitles, ""), Type = "Higher Ed Institution", Data_Coverage = NA_character_,
+         Campus_Note = paste0("A campus or site of ", Campus_Of, ". Its salary, vacancy and enrollment figures are on the ",
+                              Campus_Of, " dot."))
+he_other_site_counts <- map_he_campus %>% group_by(Campus_Of) %>% summarize(n = sum(CurrentCount), .groups = "drop")
+map_he <- map_he %>%
+  mutate(Campus_Of = NA_character_,
+         Campus_Note = {
+           n <- he_other_site_counts$n[match(Name, he_other_site_counts$Campus_Of)]
+           ifelse(!is.na(n) & n > 0, paste0("Plus ", n, " opening", ifelse(n == 1, "", "s"),
+                                            " at other campuses or sites (their own dots)."), NA_character_)
+         }) %>%
+  bind_rows(map_he_campus)
 
 combined_map_data <- bind_rows(map_k12, map_he)
 
@@ -1390,7 +1451,8 @@ ui <- page_navbar(
         withSpinner(leafletOutput("combined_map", height = 650)),
         p(class = "text-muted small mt-2 mb-0",
           "Shows the directly tracked districts and colleges, plus districts this dashboard doesn't scrape directly that post on OPI this week (marked in their popup). Circle size = current openings; color = vacancy rate. ",
-          "Click a marker to see its jobs.")
+          "Click a marker to see its jobs.",
+          if (nzchar(he_place_note)) tags$br(), he_place_note)
       )
     )
   ),
@@ -2552,7 +2614,7 @@ server <- function(input, output, session) {
     } else {
       df <- df[0, ]
     }
-    datatable(df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit"))), filter = "top", escape = FALSE, extensions = "Buttons",
+    datatable(df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit", ".Map_Name"))), filter = "top", escape = FALSE, extensions = "Buttons",
               options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 10))
   })
 
@@ -2657,7 +2719,7 @@ server <- function(input, output, session) {
       }
 
       he_counts <- if (nrow(he_matches) > 0) {
-        as.data.frame(table(Name = he_matches$Institution), stringsAsFactors = FALSE)
+        as.data.frame(table(Name = he_matches$.Map_Name), stringsAsFactors = FALSE)
       } else {
         data.frame(Name = character(0), Freq = integer(0))
       }
@@ -2665,9 +2727,8 @@ server <- function(input, output, session) {
 
       he_samples <- if (nrow(he_matches) > 0) {
         he_matches %>%
-          group_by(Institution) %>%
-          summarize(MatchingSample = paste(head(unique(Title), 3), collapse = "; "), .groups = "drop") %>%
-          rename(Name = Institution)
+          group_by(Name = .Map_Name) %>%
+          summarize(MatchingSample = paste(head(unique(Title), 3), collapse = "; "), .groups = "drop")
       } else {
         data.frame(Name = character(0), MatchingSample = character(0))
       }
@@ -2819,7 +2880,7 @@ server <- function(input, output, session) {
     )) %>% lapply(HTML)
 
     popups <- with(df, paste0(
-      "<div><strong>", Name, "</strong><br/>", Type, "</div>",
+      "<div><strong>", Name, "</strong><br/>", ifelse(!is.na(Campus_Of), "Higher Ed campus or site", Type), "</div>",
       ifelse(SearchActive,
              paste0("<div style='margin:4px 0;background:#e8f5e9;color:#2e7d32;padding:3px 8px;border-radius:4px;font-weight:600;font-size:0.9em;'>",
                     "🎯 ", DisplayCount, " matching opening", ifelse(DisplayCount == 1, "", "s"),
@@ -2842,6 +2903,7 @@ server <- function(input, output, session) {
                     Data_Coverage, "</span></div>"),
              ""),
       "<div>Current openings: <strong>", CurrentCount, "</strong></div>",
+      ifelse(!is.na(Campus_Note), paste0("<div style='font-size:0.85em;color:#666;'>", Campus_Note, "</div>"), ""),
       "<div>New this week: ", WeeklyNew, "</div>",
       ifelse(!is.na(Vacancy_Rate),
              paste0("<div>", ifelse(Type == "K-12 District", "Teacher", "Faculty"),
@@ -3109,12 +3171,12 @@ server <- function(input, output, session) {
   # -------- Higher Ed --------
   output$he_jobs <- renderDT({
     df <- ccdata
-    if (!is.null(selected_institution())) df <- df %>% filter(Institution == selected_institution())
+    if (!is.null(selected_institution())) df <- df %>% filter(Institution == selected_institution() | .Map_Name == selected_institution())
     if (!is.null(selected_he_query())) {
       df <- df[match_job_query(paste(coalesce(df$Title, ""), coalesce(df$Appointment, "")), selected_he_query()), , drop = FALSE]
     }
     if (!is.null(selected_pay_band())) df <- df[in_pay_band(df$.Pay_Value, df$.Pay_Unit, selected_pay_band()), , drop = FALSE]
-    df <- df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit")))
+    df <- df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit", ".Map_Name")))
     if (!identical(input$he_table_appointment, "all")) {
       df <- df %>% filter(Appointment == input$he_table_appointment)
     }
@@ -3378,7 +3440,7 @@ server <- function(input, output, session) {
     } else {
       df <- df[0, ]
     }
-    datatable(df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit"))), filter = "top", escape = FALSE, extensions = "Buttons",
+    datatable(df %>% select(-any_of(c(".Pay_Value", ".Pay_Unit", ".Map_Name"))), filter = "top", escape = FALSE, extensions = "Buttons",
               options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 10))
   })
 
