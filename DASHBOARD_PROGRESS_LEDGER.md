@@ -1065,6 +1065,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-16_rehearsal-mt-campus-0.32.0.log`): every step passed; parity 9/9; suites pre 3,222 /
     post 3,236 passed, 0 failed; hedata 375 postings: 75 main town, 4 other town (FVCC Libby), 296 no town (mostly
     MSU-system departments: campus rules are stage 2, not built).
+  * [x] IPEDS faculty salary over 9- to 12-month contracts (2026-11-16; edjobs 0.33.0; Mike 11-16: headline "Avg.
+    salary, full-time instructional staff (IPEDS, 9-12-month contracts)"). The contract_length 99 "Total" row counted
+    staff on contracts under 9 months, whose salaries IPEDS doesn't collect; the map popup's "blends part-time/adjunct
+    pay" note was wrong (IPEDS salaries are full-time only) and is gone. Live fetch on 0.33.0
+    (`claude-notes/2026-11-16_ipeds-salary-live.txt`): MT Blackfeet $25,621 -> $54,317, University of Montana
+    $93,938 -> $95,013, the other 19 MT and all 9 WY figures and every professor-rank figure unchanged; Faculty_Count
+    unchanged. Findings: `claude-notes/2026-11-16_ipeds-faculty-salary.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
