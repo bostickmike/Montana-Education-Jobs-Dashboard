@@ -541,6 +541,7 @@ OPI_ONLY_DISTRICT_COLUMNS <- c(
   "OPI_Districts", "LEAIDs", "Data_Coverage", "Job_Link",
   "Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary", "Teacher_Salary_90th_Pctile",
   "DLI_Name", "Salary_Year", "Salary_Source", "Child_Poverty_Rate", "SAIPE_Year",
+  "SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High",
   "Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source",
   "Median_Household_Income", "Median_Gross_Rent", "Population", "ACS_Year",
   "Mining_Employment_Share", "Population_Change_Pct", "CCD_Year",
@@ -579,6 +580,7 @@ build_other_employer_rows <- function(spec, posting_districts, saipe = NULL, cou
     mutate(Data_Coverage = OPI_ONLY_COVERAGE, Job_Link = OPI_STATEWIDE_BOARD_URL)
   out <- as.data.frame(out)
   out$Child_Poverty_Rate <- NA_real_; out$SAIPE_Year <- NA; out$Child_Poverty_Basis <- NA_character_
+  out$SAIPE_Population <- NA_real_
   # A geocoder failure keeps last run's rate (`previous`, last week's
   # opi_only_districts.csv) and is reported, not silently blanked.
   failed <- character(0)
@@ -587,6 +589,7 @@ build_other_employer_rows <- function(spec, posting_districts, saipe = NULL, cou
       p <- surrounding_district_poverty(out$Latitude[i], out$Longitude[i], saipe, district_names, geocode)
       if (p$status == "ok") {
         out$Child_Poverty_Rate[i] <- p$rate; out$SAIPE_Year[i] <- p$year; out$Child_Poverty_Basis[i] <- p$basis
+        out$SAIPE_Population[i] <- p$population
       } else if (p$status == "failed") {
         failed <- c(failed, out$District[i])
         k <- if (!is.null(previous)) match(out$District[i], previous$District) else NA
@@ -594,6 +597,7 @@ build_other_employer_rows <- function(spec, posting_districts, saipe = NULL, cou
           out$Child_Poverty_Rate[i] <- previous$Child_Poverty_Rate[k]
           out$SAIPE_Year[i] <- previous$SAIPE_Year[k]
           out$Child_Poverty_Basis[i] <- previous$Child_Poverty_Basis[k]
+          if ("SAIPE_Population" %in% names(previous)) out$SAIPE_Population[i] <- previous$SAIPE_Population[k]
         }
       }
     }
@@ -659,6 +663,8 @@ build_opi_only_districts <- function(crosswalk, entities, dli_systems = NULL, sa
     # 2026-11-15; before, the first district with a rate).
     out$Child_Poverty_Rate <- vapply(strsplit(out$LEAIDs, ";", fixed = TRUE), function(ids)
       pool_child_poverty(saipe[saipe$LEAID %in% ids, , drop = FALSE]), numeric(1))
+    out$SAIPE_Population <- vapply(strsplit(out$LEAIDs, ";", fixed = TRUE), function(ids)
+      pool_saipe_population(saipe[saipe$LEAID %in% ids, , drop = FALSE]), numeric(1))
     out$SAIPE_Year <- saipe$SAIPE_Year[1]
   }
   if (!is.null(finance) && nrow(finance) > 0) {

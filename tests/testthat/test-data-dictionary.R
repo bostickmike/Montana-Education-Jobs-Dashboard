@@ -29,7 +29,12 @@ test_that("every column in every public research CSV is documented in data_dicti
   # (file = columns), so this suite (the weekly run's first, blocking step)
   # doesn't stop that very run; remove each entry once a run has written it.
   # Empty since the 2026-11-10 run wrote the lunch-share and Posting_Names columns.
-  pending <- list()
+  # Written by the first run on edjobs 0.27.0 (SAIPE range, 2026-11-15): empty this
+  # once that run's files have the columns (run_expectations.csv "saipe_range_*").
+  pending <- list(
+    "salarymap2.csv" = c("SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High"),
+    "opi_only_districts.csv" = c("SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High")
+  )
 
   for (f in documented_files) {
     file_path <- file.path(app_dir, f)

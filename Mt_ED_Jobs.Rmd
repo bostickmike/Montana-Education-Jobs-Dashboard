@@ -2340,13 +2340,14 @@ if (nrow(county_context) > 0) {
 child_poverty <- safe_scrape(
   "Census SAIPE district child poverty rate (MT)",
   scrape_fn = function() fetch_census_saipe_child_poverty(crosswalk_leaids(district_crosswalk)),   # edjobs: by NCES id, pairs pooled
-  expected_cols = c("District", "Child_Poverty_Rate", "SAIPE_Year")
+  expected_cols = c("District", "Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population")
 )
 
 if (nrow(child_poverty) > 0) {
   salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
-    select(-any_of(c("Child_Poverty_Rate", "SAIPE_Year"))) %>%
-    left_join(child_poverty, by = "District")
+    select(-any_of(c("Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High"))) %>%
+    left_join(child_poverty, by = "District") %>%
+    add_saipe_range()   # edjobs: Census's approximate 90% range from the district's size (Mike, 2026-11-15)
   write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 } else {
   message("Census SAIPE child poverty fetch failed -- leaving salarymap2.csv untouched this run.")
@@ -2447,7 +2448,7 @@ if (nrow(opi_only) > 0) {
     prev <- read.csv(opi_only_path, fileEncoding = "UTF-8", stringsAsFactors = FALSE)
     carry <- list(dli = c("Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
                           "Teacher_Salary_90th_Pctile", "DLI_Name", "Salary_Year", "Salary_Source"),
-                  saipe = c("Child_Poverty_Rate", "SAIPE_Year"),
+                  saipe = c("Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population"),
                   fin = c("Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"),
                   frl = c("Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year"))
     failed <- c(dli = nrow(dli_systems) == 0, saipe = nrow(saipe_leaid) == 0, fin = nrow(finance_by_name) == 0,
@@ -2481,7 +2482,8 @@ unmapped <- unmapped_employers(combinedclean$District, registry$District, opi_on
 write.csv(data.frame(District = unmapped,
                      Postings = as.integer(table(combinedclean$District)[unmapped]), stringsAsFactors = FALSE),
           "unmapped_employers.csv", row.names = FALSE)
-write.csv(complete_opi_only_columns(opi_only), opi_only_path, row.names = FALSE)
+# Census's approximate 90% range beside each child poverty estimate (edjobs::add_saipe_range()).
+write.csv(complete_opi_only_columns(add_saipe_range(opi_only)), opi_only_path, row.names = FALSE)
 ```
 
 
