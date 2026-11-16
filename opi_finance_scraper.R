@@ -3,7 +3,7 @@
 # Finance/OPI-Financial-Data-Files) -- a real, structured, per-district
 # financial dataset this pipeline didn't touch at all before 2026-08-07,
 # distinct from teacher salary (DLI) and staffing (CCD) data already
-# covered by salary_scrapers.R/ccd_staff_scraper.R.
+# covered by salary_scrapers.R/edjobs (CCD).
 #
 # The published .xlsx's "ExpByLineItemByLE" sheet is real per-district
 # (per-LE, "Local Education agency") line-item data -- County, DistrictName,
@@ -24,7 +24,7 @@
 # below is hand-verified against the live FY2025 file's real DistrictName
 # values for all 30 of this project's currently-registered K-12 districts
 # (confirmed live 2026-08-07) -- every one of the 18 districts already in
-# ccd_staff_scraper.R's MT_CCD_LEA_MAP resolved to the exact same LE names
+# ccd_lea_pairs.R's MT_CCD_LEA_MAP resolved to the exact same LE names
 # in this file too (same underlying OPI-sourced data), so this map isn't
 # independently hand-typed from nothing, just independently verified.
 MT_OPI_FINANCE_LEA_MAP <- list(
@@ -96,7 +96,7 @@ fetch_opi_finance_workbook <- function(url = OPI_FINANCE_CURRENT_YEAR_URL) {
 # some of its LEs present in a given year's file (a real possible gap, not
 # yet observed) still gets a real partial sum rather than NA for the whole
 # district, same "don't propagate NA from one missing part" behavior as
-# ccd_staff_scraper.R's parse_ccd_teacher_fte().
+# edjobs::parse_ccd_teacher_fte().
 # `lea_map`: registry district -> OPI DistrictNames (CCD's naming); the
 # pipeline passes crosswalk_lea_names(district_crosswalk, MT_OPI_FINANCE_LEA_MAP).
 # `county_map` (optional, crosswalk_counties()): a DistrictName held in two

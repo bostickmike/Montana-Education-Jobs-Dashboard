@@ -1931,7 +1931,7 @@ if (nrow(llm_shadow_raw) > 0) {
 # The combine step below uses it to decide which OPI postings count. A
 # failed or implausible refresh keeps last run's file (write_reference_file()).
 library(edjobs)
-source("ccd_staff_scraper.R")
+source("ccd_lea_pairs.R")   # MT_CCD_LEA_MAP, the crosswalk's pair input
 source("opi_reconcile.R")
 crosswalk_path <- file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv")
 tryCatch({
@@ -2229,7 +2229,6 @@ write.csv(Allnow, file = file.path("Mt_Ed_Jobs", "allnow.csv"), row.names = FALS
 library(dplyr)
 library(edjobs)
 source("salary_scrapers.R")
-source("ccd_staff_scraper.R")
 
 teacher_salary <- safe_scrape(
   "MT DLI teacher compensation",
@@ -2241,8 +2240,7 @@ teacher_salary <- safe_scrape(
 teacher_fte <- safe_scrape(
   "CCD district teacher FTE (MT)",
   # Every district the crosswalk ties to CCD, hand map entries first.
-  scrape_fn = function() fetch_ccd_teacher_fte(
-    MT_CCD_LEA_MAP, leaid_map = crosswalk_leaids(district_crosswalk, exclude = names(MT_CCD_LEA_MAP))),
+  scrape_fn = function() fetch_ccd_teacher_fte(crosswalk_leaids(district_crosswalk)),   # edjobs, by NCES id
   expected_cols = c("District", "Teachers_Total_FTE", "Enrollment", "CCD_Year")
 )
 
@@ -2316,7 +2314,6 @@ write.csv(salarymap2, salarymap2_path, row.names = FALSE)
 ```{r k12 census county and district context, message=FALSE, warning=FALSE, echo=TRUE}
 library(dplyr)
 library(edjobs)
-source("census_saipe_scraper.R")
 source("opi_finance_scraper.R")
 
 # CENSUS_API_KEY must be set (a GitHub Actions secret in CI, .Renviron
@@ -2342,8 +2339,7 @@ if (nrow(county_context) > 0) {
 
 child_poverty <- safe_scrape(
   "Census SAIPE district child poverty rate (MT)",
-  scrape_fn = function() fetch_census_saipe_child_poverty(
-    leaid_map = crosswalk_leaids(district_crosswalk, exclude = names(MT_SAIPE_DISTRICT_MAP))),
+  scrape_fn = function() fetch_census_saipe_child_poverty(crosswalk_leaids(district_crosswalk)),   # edjobs: by NCES id, pairs pooled
   expected_cols = c("District", "Child_Poverty_Rate", "SAIPE_Year")
 )
 
@@ -2377,7 +2373,7 @@ if (nrow(district_finance) > 0) {
 # Free/reduced-price lunch share beside SAIPE's child poverty rate, for every
 # map entity at once: registry districts (crosswalk LEAIDs; a district the
 # crosswalk doesn't tie yet uses its registry NCES id) and the OPI-only
-# districts below (fetch_ccd_frl_share(), ccd_staff_scraper.R; each entity's
+# districts below (edjobs::fetch_ccd_frl_share(); each entity's
 # newest reporting year). salarymap2.csv keeps last run's values on a failure.
 frl_registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
 frl_ids <- crosswalk_leaids(district_crosswalk)

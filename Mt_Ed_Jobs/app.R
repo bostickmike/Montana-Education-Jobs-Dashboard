@@ -1056,12 +1056,45 @@ download_tile <- function(icon_name, heading, text, output_id, label) {
   )
 }
 
+# Sources and required notices, shown at the foot of every page. The Census
+# Data API terms require their notice "prominently within the application"
+# (census.gov/data/developers/about/terms-of-service.html, revised
+# 2026-04-14); the BLS API terms require theirs ("Users must clearly state",
+# bls.gov/developers/termsOfService.htm, modified 2023-08-30); Urban's
+# Education Data Portal data are under ODC-By, cited in its short form for
+# visualizations (educationdata.urban.org/documentation/). Audit:
+# claude-notes/2026-11-15_citations-audit.md.
+# USGS's requested acknowledgment for The National Map's services
+# (usgs.gov FAQ "What are the Terms of Use/Licensing for map services and data
+# from The National Map?", updated 2022-11-10).
+USGS_TILE_CREDIT <- paste('<a href="https://www.usgs.gov/programs/national-geospatial-program/national-map"',
+                          'target="_blank" rel="noopener">USGS The National Map</a>: map services and data available',
+                          "from U.S. Geological Survey, National Geospatial Program")
+
+data_sources_footer <- tags$footer(
+  class = "data-sources-footer",
+  tags$p(tags$strong("Data sources."), "Job postings: each employer's own job board (every posting links to it) and the Office of Public Instruction's Montana job board."),
+  tags$p(
+    "U.S. Census Bureau: American Community Survey 5-Year Estimates; Small Area Income and Poverty Estimates; Census Geocoder.",
+    "U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics.",
+    HTML(paste("NCES Common Core of Data, IPEDS and Federal Student Aid Title IV data, via Education Data Portal, Urban Institute,",
+               "under <a href=\"https://opendatacommons.org/licenses/by/1-0/\" target=\"_blank\" rel=\"noopener\">ODC Attribution License</a>."))
+  ),
+    tags$p("NCES Private School Universe Survey, 2023-24."),
+  tags$p("Montana Department of Labor & Industry, Labor Market Information (teacher pay); Office of Public Instruction (GEMS pay, school finance data files)."),
+  tags$p(
+    "This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.",
+    "BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov."
+  )
+)
+
 ui <- page_navbar(
   id = "sidebar_tabs",
   title = tags$span(icon("graduation-cap"), " Montana Education Jobs"),
   window_title = "Montana Education Jobs",
   theme = app_theme,
   fillable = FALSE,
+  footer = data_sources_footer,
   navbar_options = navbar_options(theme = "dark", bg = "#1e293b"),
   header = tags$head(
     tags$style(HTML("
@@ -1070,6 +1103,8 @@ ui <- page_navbar(
     h1.page-title { font-size: 1.6rem; font-weight: 600; margin: 4px 0 14px; }
     h3.page-title { font-size: 1.3rem; font-weight: 600; margin: 4px 0 8px; }
     .card { margin-bottom: 1rem; }
+    .data-sources-footer { border-top: 1px solid var(--bs-border-color); margin: 24px 0 0; padding: 12px 16px 16px; font-size: 0.78rem; color: var(--bs-secondary-color); }
+    .data-sources-footer p { margin: 0 0 4px; }
     .bslib-value-box .value-box-title { font-size: 0.85rem; }
     .bslib-value-box .value-box-showcase svg { max-width: 100%; height: auto; }
     .download-tile { border: 1px solid var(--bs-border-color); border-radius: 8px; padding: 14px;
@@ -1855,13 +1890,13 @@ ui <- page_navbar(
               tags$td(strong("County Economic Context")),
               tags$td("US Census Bureau (ACS 5-Year Estimates)"),
               tags$td(span(class = "badge text-bg-info", "Annual")),
-              tags$td("County median household income, median gross rent, share of civilian labor force in agriculture/resource extraction, and 5-year population trajectory.")
+              tags$td("County median household income, median gross rent, share of employed residents 16 and over working in mining, quarrying, and oil and gas extraction (ACS S2403), and 5-year population trajectory.")
             ),
             tags$tr(
               tags$td(strong("Student Need Context")),
               tags$td("Census SAIPE & US Dept of Education FSA"),
               tags$td(span(class = "badge text-bg-info", "Annual")),
-              tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level child poverty rates for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
+              tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level estimates of school-age children in poverty for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
             )
           )
         )
@@ -2222,8 +2257,8 @@ server <- function(input, output, session) {
         # table sorts on the server, in R, by the underlying value); where the rate is a
         # stand-in (a school with no SAIPE geography of its own) the next
         # column says so.
-        `District Child Poverty Rate` = Child_Poverty_Rate,
-        `Poverty Rate Basis` = ifelse(is.na(Child_Poverty_Rate), NA_character_,
+        `School-Age Children in Poverty (Census est.)` = Child_Poverty_Rate,
+        `Poverty Estimate Basis` = ifelse(is.na(Child_Poverty_Rate), NA_character_,
                                       ifelse(is.na(Child_Poverty_Basis), "District", "Surrounding district")),
         # School-based count beside the Census estimate (CCD school directory):
         # share of students eligible for free or reduced-price lunch, and its year.
@@ -2239,7 +2274,7 @@ server <- function(input, output, session) {
     cols_like <- function(prefixes) names(df)[vapply(names(df), function(n) any(startsWith(n, prefixes)), logical(1))]
     datatable(df, filter = "top", extensions = "Buttons",
               options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 18)) %>%
-      formatPercentage(cols_like(c("Teacher Vacancy Rate", "County Mining/Energy Jobs", "District Child Poverty Rate", "County Population Trend (5yr)")), digits = 1) %>%
+      formatPercentage(cols_like(c("Teacher Vacancy Rate", "County Mining/Energy Jobs", "School-Age Children in Poverty (Census est.)", "County Population Trend (5yr)")), digits = 1) %>%
       formatPercentage(cols_like(c("Free/Reduced Lunch")), digits = 0) %>%
       formatCurrency(cols_like(c("Teacher Avg Salary", "County Median Income", "Annual General Fund Budget", "County Median Rent (per month)")), digits = 0) %>%
       formatRound("Students per Teacher", digits = 1)
@@ -2291,11 +2326,17 @@ server <- function(input, output, session) {
       ),
       if (length(saipe_year) > 0) {
         helpText(
-          "District child poverty rate: US Census Bureau, Small Area Income and Poverty Estimates (SAIPE)",
+          "School-age children in poverty: US Census Bureau, Small Area Income and Poverty Estimates (SAIPE)",
           paste0("(", saipe_year[1], ")"), "—",
           tags$a(href = "https://www.census.gov/programs-surveys/saipe/data/datasets.html", target = "_blank", "census.gov/saipe"),
-          ". District-level. For districts split between an elementary and a high-school district, this is an unweighted average of the two rates -- see DATA_COOKBOOK.md.",
-          "A private or tribal school has no Census poverty estimate of its own; it shows its surrounding district's rate (marked \"Surrounding district\")."
+          ". District-level. For districts split between an elementary and a high-school district, this pools the two: children 5-17 in poverty summed over both districts, divided by their children 5-17 summed -- see DATA_COOKBOOK.md.",
+          # Census: "A true poverty \"rate\" for children cannot be determined from these figures,
+          # because the numerator and denominator refer to slightly different universes" (SAIPE
+          # school district overview, revised 2026-01-12; Mike chose this label 2026-11-15).
+          "Census's estimate of related children 5-17 in families in poverty, divided by all children 5-17 in the district.",
+          "Census notes this is not a true poverty rate: foster children, other children not related to the householder and",
+          "children in group quarters are counted in the second figure only.",
+          "A private or tribal school has no Census poverty estimate of its own; it shows its surrounding district's estimate (marked \"Surrounding district\")."
         )
       }
     )
@@ -2390,7 +2431,7 @@ server <- function(input, output, session) {
               tags$tr(tags$td(class = "text-muted", "Students / Teacher:"), tags$td(style = "text-align: right; font-weight: 600;", spt)),
               tags$tr(tags$td(class = "text-muted", "General Fund Budget:"), tags$td(style = "text-align: right; font-weight: 600;", gen_fund)),
               tags$tr(tags$td(class = "text-muted", "County Median Rent:"), tags$td(style = "text-align: right; font-weight: 600;", rent)),
-              tags$tr(tags$td(class = "text-muted", "Child Poverty Rate:"), tags$td(style = "text-align: right; font-weight: 600;", poverty)),
+              tags$tr(tags$td(class = "text-muted", "Children in Poverty (Census est.):"), tags$td(style = "text-align: right; font-weight: 600;", poverty)),
               tags$tr(tags$td(class = "text-muted", "Free/Reduced Lunch:"), tags$td(style = "text-align: right; font-weight: 600;", frl))
             )
           )
@@ -2466,20 +2507,39 @@ server <- function(input, output, session) {
   # -------- Combined map (Introduction tab) --------
   output$combined_map <- renderLeaflet({
     leaflet() %>%
-      # Esri World Light Gray, not CARTO Positron: CARTO's basemaps now require
-      # an API key and serve an "API KEY REQUIRED" image tile without one.
-      # The reference layer adds place names on top of the label-free base.
-      addProviderTiles(providers$Esri.WorldGrayCanvas, group = "Clean (Default)") %>%
+      # Basemaps with open terms, OpenStreetMap first (Mike, 2026-11-15; claude-notes/2026-11-15_basemap-options.md).
+      # Esri's tiles were dropped: its terms need Esri software or an ArcGIS
+      # Online subscription for use like this. USGS The National Map is public
+      # domain ("There are no restrictions"), with an acknowledgment requested;
+      # OpenStreetMap needs its credit, which addTiles() shows by default.
+      # OSM's tile policy: "https://tile.openstreetmap.org/{z}/{x}/{y}.png" exactly
+      # (Leaflet's default still uses the old a/b/c subdomains).
       addTiles(
-        urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
-        options = tileOptions(maxZoom = 16),
-        group = "Clean (Default)"
+        urlTemplate = "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+        options = tileOptions(maxZoom = 19),
+        group = "OpenStreetMap (Default)"
       ) %>%
-      addTiles(group = "OpenStreetMap") %>%
-      addProviderTiles(providers$Esri.WorldTopoMap, group = "Topographic") %>%
+      addTiles(
+        urlTemplate = "https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}",
+        attribution = USGS_TILE_CREDIT,
+        options = tileOptions(maxZoom = 16),
+        group = "USGS National Map"
+      ) %>%
+      addTiles(
+        urlTemplate = "https://basemap.nationalmap.gov/arcgis/rest/services/USGSShadedReliefOnly/MapServer/tile/{z}/{y}/{x}",
+        attribution = USGS_TILE_CREDIT,
+        options = tileOptions(maxZoom = 16),
+        group = "Shaded Relief"
+      ) %>%
+      addTiles(
+        urlTemplate = "https://basemap.nationalmap.gov/arcgis/rest/services/USGSHydroCached/MapServer/tile/{z}/{y}/{x}",
+        options = tileOptions(maxZoom = 16),
+        group = "Shaded Relief"
+      ) %>%
       setView(lng = -111.5, lat = 46.8, zoom = 7) %>%
       addLayersControl(
-        baseGroups = c("Clean (Default)", "OpenStreetMap", "Topographic"),
+        baseGroups = c("OpenStreetMap (Default)", "USGS National Map", "Shaded Relief"),
         options = layersControlOptions(collapsed = TRUE)
       ) %>%
       addLegend(position = "bottomright", pal = vacancy_rate_palette, values = vacancy_rate_domain,
@@ -2792,7 +2852,7 @@ server <- function(input, output, session) {
       ifelse(!is.na(Child_Poverty_Rate),
              paste0("<div style='font-size:0.85em;color:#666;'>",
                     ifelse(is.na(Child_Poverty_Basis), "District: ", ""),
-                    scales::percent(Child_Poverty_Rate, accuracy = 0.1), " child poverty rate",
+                    scales::percent(Child_Poverty_Rate, accuracy = 0.1), " of school-age children in poverty (Census est.)",
                     ifelse(is.na(Child_Poverty_Basis), "", paste0(" (", sub("^Surrounding", "surrounding", Child_Poverty_Basis), ")")),
                     "</div>"),
              ""),
