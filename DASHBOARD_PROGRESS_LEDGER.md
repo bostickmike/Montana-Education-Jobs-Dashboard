@@ -1031,12 +1031,22 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     other sources too. The pipeline records a source in `source_retrieved_dates.csv` (app folder; REQUIRED_SCHEMAS
     entry; committed by the weekly run) only when its fetch succeeded and the data was kept (`retrieved_source` on
     safe_scrape() / write_reference_file(); OEWS only when a new year is downloaded). Each footer line shows
-    "(retrieved YYYY-MM-DD)", or a range when one line's parts were fetched on different days.  last download) and NCES PSS 2026-11-10 (git: records added):QCEW, which the app uses, is now named in the footer. Seeded from
-    git: BLS OEWS 2026-10-31 (git; the weekly sources get their first dates from the next run (the committed scrape_log.csv's
-    context rows are months old). Rehearsal (`claude-notes/2026-11-16_rehearsal-mt-source-dates-0.29.0.log`):
+    "(retrieved YYYY-MM-DD)", or a range when one line's parts were fetched on different days. QCEW, which the app
+    uses, is now named in the footer. Seeded from git: BLS OEWS 2026-10-31 (last download), NCES PSS 2026-11-10
+    (records added); the weekly sources get their first dates from the next run (scrape_log.csv is not committed, and
+    the local copy's context rows are months old). Rehearsal (`claude-notes/2026-11-16_rehearsal-mt-source-dates-0.29.0.log`):
     every step passed; data quality 125 passed; parity 9/9; suites pre 3,227 / post 3,238 passed, 0 failed; every
     source dated (OEWS kept 2026-10-31: BLS has no newer year).
+  * [x] Feedback form live (2026-11-16): `GITHUB_FEEDBACK_TOKEN` (fine-grained PAT, this repo only, Issues
+    read/write, expires 2027-11-16) set as a Connect Cloud secret and the app republished by Mike; his test report
+    opened issue #48 with the data-quality and user-report labels (closed). Token added to `.github/token-expiry.csv`
+    (the upkeep run opens an issue 30 days before; renewal steps in the file).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
+  report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
+  separate address, recommended; (B) an optional field whose address the app emails to Mike privately via a mail
+  service (new account and secret; the form then needs a note on how the address is used); (C) the address
+  encrypted in the issue (ruled out: clumsy).
 - [ ] **Citations audit follow-ups (2026-11-15; `claude-notes/2026-11-15_citations-audit.md`), decisions for Mike:**
   BLS asks for the access date (apps don't know it yet); WSBA/WDE pages say "All rights reserved" with no reuse
   terms. (Esri basemaps: done, replaced 11-15.)
