@@ -32,10 +32,10 @@ applitrack_expected_cols <- c("title", "position", "position2", "date_posted", "
 
 applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
   row <- applitrack_districts[i, ]
-  message("Scraping ", row$District, " (AppliTrack: ", row$Slug, ")...")
+  message("Scraping ", row$District, " (AppliTrack: ", row$Platform_Key, ")...")
   df <- safe_scrape(
     source_name = row$District,
-    scrape_fn = function() fetch_applitrack_postings(row$Slug),
+    scrape_fn = function() fetch_applitrack_postings(row$Platform_Key),
     expected_cols = applitrack_expected_cols
   )
   if (nrow(df) > 0) {
@@ -53,10 +53,10 @@ schoolspring_expected_cols <- c("Title", "Location", "Posted_Date", "Link")
 
 schoolspring_results <- lapply(seq_len(nrow(schoolspring_districts)), function(i) {
   row <- schoolspring_districts[i, ]
-  message("Scraping ", row$District, " (SchoolSpring: ", row$Slug, ")...")
+  message("Scraping ", row$District, " (SchoolSpring: ", row$Platform_Key, ")...")
   df <- safe_scrape(
     source_name = row$District,
-    scrape_fn = function() fetch_schoolspring_postings(row$Slug),
+    scrape_fn = function() fetch_schoolspring_postings(row$Platform_Key),
     expected_cols = schoolspring_expected_cols
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -71,10 +71,10 @@ tylerportico_expected_cols <- c("Title", "Location", "Posted_Date", "Link")
 
 tylerportico_results <- lapply(seq_len(nrow(tylerportico_districts)), function(i) {
   row <- tylerportico_districts[i, ]
-  message("Scraping ", row$District, " (Tyler Portico: ", row$Slug, ")...")
+  message("Scraping ", row$District, " (Tyler Portico: ", row$Platform_Key, ")...")
   df <- safe_scrape(
     source_name = row$District,
-    scrape_fn = function() fetch_tylerportico_postings(row$Slug, row$District),
+    scrape_fn = function() fetch_tylerportico_postings(row$Platform_Key, row$District),
     expected_cols = tylerportico_expected_cols
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -89,10 +89,10 @@ tedk12_expected_cols <- c("title", "date_posted", "position", "location", "url")
 
 tedk12_results <- lapply(seq_len(nrow(tedk12_districts)), function(i) {
   row <- tedk12_districts[i, ]
-  message("Scraping ", row$District, " (TedK12: ", row$Slug, ")...")
+  message("Scraping ", row$District, " (TedK12: ", row$Platform_Key, ")...")
   df <- safe_scrape(
     source_name = row$District,
-    scrape_fn = function() fetch_tedk12_postings(row$Slug),
+    scrape_fn = function() fetch_tedk12_postings(row$Platform_Key),
     expected_cols = tedk12_expected_cols
   )
   if (nrow(df) > 0) df$District <- row$District

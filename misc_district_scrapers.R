@@ -1082,7 +1082,8 @@ parse_ekalaka_postings <- function(html_text, url) {
 # edjobs::fetch_apptegy_postings(): registry Platform "Apptegy" reads the
 # rendered text, "ApptegyPageBuilder" the page-builder JSON (jobs in collapsed
 # accordions, buttons or cards). Optional per-district rules (where the list
-# starts and stops, a section to skip) are rows in k12_list_rules.csv.
+# starts and stops, a section to skip) are the registry row's List_Start,
+# List_Stop and List_Skip (k12_list_rules.csv until 2026-11-16).
 # Platform "ApptegyBespoke" keeps its own scraper in APPTEGY_DISTRICT_SCRAPERS:
 # Shelby (titles inside a sentence) and Geyser (a CyberSchool page rendered in
 # this session). test-misc-district-scrapers.R checks the map matches the
@@ -1094,14 +1095,16 @@ APPTEGY_DISTRICT_SCRAPERS <- list(
 
 APPTEGY_FAMILY_MODES <- c(Apptegy = "text", ApptegyPageBuilder = "pagebuilder")
 
-# One registry row's k12_list_rules.csv rule (NA when the district has none).
+# One registry row's list rule (NA when the district has none).
 k12_list_rule <- function(rules, district, col) {
   v <- if (is.null(rules) || !col %in% names(rules)) character(0) else rules[[col]][rules$District == district]
   if (length(v) == 0 || is.na(v[1]) || !nzchar(v[1])) NA_character_ else v[1]
 }
 
-read_k12_list_rules <- function(path = "k12_list_rules.csv") {
-  utils::read.csv(path, stringsAsFactors = FALSE, na.strings = "", colClasses = "character")
+# Every district's list rules: k12_district_registry.csv's District, List_Start, List_Stop, List_Skip.
+read_k12_list_rules <- function(path = "k12_district_registry.csv") {
+  r <- utils::read.csv(path, stringsAsFactors = FALSE, na.strings = "", colClasses = "character")
+  r[, c("District", "List_Start", "List_Stop", "List_Skip")]
 }
 
 # The family routine's calls, one function(session) per registry row, named
@@ -1114,7 +1117,7 @@ apptegy_family_scrapers <- function(registry, rules = read_k12_list_rules()) {
     function(session) edjobs::fetch_apptegy_postings(
       session, row$Job_Link, row$City, APPTEGY_FAMILY_MODES[[row$Platform]],
       k12_list_rule(rules, row$District, "List_Start"), k12_list_rule(rules, row$District, "List_Stop"),
-      k12_list_rule(rules, row$District, "Skip_Section"))
+      k12_list_rule(rules, row$District, "List_Skip"))
   }), rows$District)
 }
 

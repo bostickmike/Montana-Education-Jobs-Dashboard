@@ -72,9 +72,9 @@ test_that("every real registered K-12 row resolves to a real scraper function, c
   expect_equal(richey[c("fn", "session")], list(fn = "fetch_richey_postings", session = FALSE))
   expect_equal(richey$args, list(k12$Job_Link[k12$District == "Richey Public Schools"]))
   tyler <- k12[k12$Platform == "TylerPortico", ][1, ]
-  expect_equal(resolve_scraper_call(tyler$District)$args, list(tyler$Slug, tyler$District))
+  expect_equal(resolve_scraper_call(tyler$District)$args, list(tyler$Platform_Key, tyler$District))
   expect_equal(resolve_scraper_call(k12$District[k12$Platform == "BroadviewHeuristic"][1])$args, list())
-  # Red Rover: the API's org ID (Slug) and the slug its links carry (Columbia Falls: 4161 / sd659912).
+  # Red Rover: the API's org ID (Platform_Key) and the slug its links carry (Columbia Falls: 4161 / sd659912).
   cf <- resolve_scraper_call("Columbia Falls School District 6")
   expect_equal(cf[c("fn", "session")], list(fn = "fetch_redrover_postings", session = FALSE))
   expect_equal(cf$args, list("4161", "sd659912"))
