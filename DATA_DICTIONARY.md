@@ -117,6 +117,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Longitude` | Decimal Degrees | US Census / Geocoding | Geographic longitude coordinate of district central headquarters. |
 | `Job_Link` | URL | District Registry | Official employment or applicant tracking portal link for the district. |
 | `NCES_LEAID` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier. |
+| `CCD_Link` | URL | NCES CCD | Link to this district's page in the NCES Common Core of Data district search, built from NCES_LEAID (edjobs nces_district_url()). The page shows NCES's newest school year, which can be newer than CCD_Year. Blank when the district has no NCES id. |
 | `Teacher_Count` | Integer | MT DLI Compensation Report | Total certified classroom teachers reported in the regional DLI compensation dataset. |
 | `Teacher_Salary_10th_Pctile` | Currency ($) | MT DLI Compensation Report | 10th percentile teacher salary published in the Montana DLI Regional Wage Report. |
 | `Teacher_Avg_Salary` | Currency ($) | MT DLI Compensation Report | Average annual compensation paid across all employed certified classroom teachers. |
@@ -195,6 +196,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Latitude` | Decimal Degrees | IPEDS Directory | Geographic latitude coordinate of main campus centroid. |
 | `Link` | URL | Institutional Directory | Official careers or employment opportunities portal URL for the institution. |
 | `IPEDS_UNITID` | String (6-digit) | NCES IPEDS | Official 6-digit federal NCES Integrated Postsecondary Education Data System Unit ID. |
+| `IPEDS_Link` | URL | NCES IPEDS | Link to this institution's page in NCES College Navigator, built from IPEDS_UNITID (edjobs college_navigator_url()). The page shows NCES's newest year, which can be newer than this file's year columns. Blank when the institution has no IPEDS id. |
 | `Faculty_Avg_Salary` | Currency ($) | NCES IPEDS | Average salary of full-time instructional staff on 9- to 12-month contracts (IPEDS collects none for part-time staff or for contracts under 9 months) across all academic ranks combined. |
 | `Faculty_Avg_Salary_Professor` | Currency ($) | NCES IPEDS | Average salary of full-time instructional staff on 9- to 12-month contracts (IPEDS collects none for part-time staff or for contracts under 9 months) for the Full Professor rank. |
 | `Faculty_Count` | Integer | NCES IPEDS | Total count of full-time instructional faculty employed by the institution. |

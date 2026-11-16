@@ -142,6 +142,7 @@ One current row per this project's **128 directly-scraped K-12 districts** (`k12
 | `County` | text | registry | |
 | `Latitude` / `Longitude` | numeric | registry | |
 | `Job_Link` | text | registry | District's job-board URL. |
+| `CCD_Link` | text | built from `NCES_LEAID` | The district's NCES CCD page (edjobs `add_source_record_links()`, last chunk of the Rmd). Shows NCES's newest year, which can be newer than `CCD_Year`. Blank without an NCES id. |
 | `Teacher_Count` | numeric | MT DLI Teacher Compensation Report | Full-time general-education teacher count that report's underlying data covers for this district. |
 | `Teacher_Salary_10th_Pctile` / `Teacher_Avg_Salary` / `Teacher_Salary_90th_Pctile` | numeric | MT DLI | **Not the same metric as Wyoming's `Teacher_Base_Salary`** — Montana has no clean WSBA equivalent (no BA-step-1 contract base salary source exists publicly). The best available source, the MT Dept. of Labor & Industry's "Teacher Compensation Report," reports average salary and 10th/90th percentile bands instead, so these columns are named to make that difference explicit rather than implying equivalence. |
 | `Salary_Year` | text | MT DLI | e.g. `"2022-23"` (a school year, extracted from the report's own "Source: OPI GEMS `<year>`" footer) — the real freshness signal, since this report has only ever had one published edition found so far (cadence unconfirmed). |
@@ -322,6 +323,7 @@ One current row per this project's **23 registered HE institutions** — matchin
 | `County` | text | registry | |
 | `Longitude` / `Latitude` | numeric | registry | |
 | `Link` | text | registry | Careers page. |
+| `IPEDS_Link` | text | built from `IPEDS_UNITID` | The institution's NCES College Navigator page (edjobs `add_source_record_links()`, last chunk of the Rmd). Shows NCES's newest year. Missoula College carries the University of Montana's id (its figures are reported under UM), so its link opens UM's page. |
 | `Faculty_Avg_Salary` / `Faculty_Avg_Salary_Professor` | numeric | IPEDS via Urban Institute | "All ranks combined" and Professor-rank average salary. |
 | `Faculty_Count` | numeric | IPEDS | Vacancy-rate denominator. |
 | `Salary_Year` | text | IPEDS | Calendar year IPEDS surveyed as of (Nov 1), not an academic year. |
