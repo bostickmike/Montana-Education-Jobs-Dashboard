@@ -1016,6 +1016,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     its MOE (salarymap2 201 of 201, salarymap 23 of 23, opi_only_districts 35 of 35); not distinguishable from 0:
     38 K-12 rows, 3 HE, 6 OPI-only; data quality 125 passed; parity 9/9; suites pre 3,199 / post 3,213 passed,
     0 failed. Read back live in the rehearsed app (Billings: income +/-$2,657; rent +/-$37; mining +/-0.3 pts).
+  * [x] Feedback without a GitHub login (2026-11-16; branch `feedback-form`). Mike: the public shouldn't need a login;
+    filter spam in the app and open one issue per real report in this repo (no second repo, no weekly digest).
+    `Mt_Ed_Jobs/feedback.R` (same file in both states): form in a modal (problem type, district, job/link, details; no
+    email field, reports are public), checks in `feedback_check()` (hidden honeypot field, under 4 s from opening, spam
+    words, exact repeats: dropped silently; missing/oversized fields, > 3 links, 3 per visit, 20 per hour: message),
+    @mentions and #N neutralized, issue labeled data-quality + user-report (labels created in the repo). Posts with
+    `GITHUB_FEEDBACK_TOKEN` (Connect Cloud secret: fine-grained, this repo, Issues read/write only); without it the
+    button stays the GitHub issue-form link. manifest.json lists feedback.R; the manifest check now requires curl and
+    jsonlite. `test-feedback.R` 28 passed; full suite 3,227 passed, 0 failed; checked in a headless browser (form opens,
+    too-fast submit dropped, short text gets a message, a valid report reaches GitHub and a refused post says so).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Citations audit follow-ups (2026-11-15; `claude-notes/2026-11-15_citations-audit.md`), decisions for Mike:**
   BLS asks for the access date (apps don't know it yet); WSBA/WDE pages say "All rights reserved" with no reuse
