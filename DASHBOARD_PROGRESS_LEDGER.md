@@ -1031,9 +1031,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     other sources too. The pipeline records a source in `source_retrieved_dates.csv` (app folder; REQUIRED_SCHEMAS
     entry; committed by the weekly run) only when its fetch succeeded and the data was kept (`retrieved_source` on
     safe_scrape() / write_reference_file(); OEWS only when a new year is downloaded). Each footer line shows
-    "(retrieved YYYY-MM-DD)", or a range when one line's parts were fetched on different days.  last download) and NCES PSS 2026-11-10 (git: records added):QCEW, which the app uses, is now named in the footer. Seeded from
-    git: BLS OEWS 2026-10-31 (git; the weekly sources get their first dates from the next run (the committed scrape_log.csv's
-    context rows are months old). Rehearsal (`claude-notes/2026-11-16_rehearsal-mt-source-dates-0.29.0.log`):
+    "(retrieved YYYY-MM-DD)", or a range when one line's parts were fetched on different days. QCEW, which the app
+    uses, is now named in the footer. Seeded from git: BLS OEWS 2026-10-31 (last download), NCES PSS 2026-11-10
+    (records added); the weekly sources get their first dates from the next run (scrape_log.csv is not committed, and
+    the local copy's context rows are months old). Rehearsal (`claude-notes/2026-11-16_rehearsal-mt-source-dates-0.29.0.log`):
     every step passed; data quality 125 passed; parity 9/9; suites pre 3,227 / post 3,238 passed, 0 failed; every
     source dated (OEWS kept 2026-10-31: BLS has no newer year).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
