@@ -1950,16 +1950,7 @@ library(stringr)
 library(dplyr)
 library(lubridate)
 
-standardize_date <- function(x) {
-  x <- as.character(x)
-  x <- str_remove(x, "\\s*\\(.*\\)$")
-  parsed <- parse_date_time(
-    x,
-    orders = c("b d Y h:M p", "B d Y h:M p", "ymd", "mdy", "dmy", "Y-m-d H:M:S"),
-    tz = "UTC", quiet = TRUE
-  )
-  as.Date(parsed)
-}
+# standardize_date() is in edjobs (phase 5 close-out, 2026-11-16).
 
 standardize_df_date <- function(df) {
   if (is.null(df)) return(NULL)
@@ -2279,7 +2270,8 @@ if (nrow(teacher_salary) > 0) {
   # historical archive (only the current edition's PDFs are ever
   # published, confirmed live). Complete snapshots are idempotent while a
   # partial prior district/year set is safely backfilled.
-  archive_k12_salary_snapshot(salarymap2, file.path("Mt_Ed_Jobs", "k12_salary_history.csv"))
+  archive_k12_salary_snapshot(salarymap2, file.path("Mt_Ed_Jobs", "k12_salary_history.csv"),
+                              MT_K12_SALARY_HISTORY_COLUMNS)
 } else {
   message("MT DLI teacher compensation fetch failed -- leaving salarymap2.csv's salary columns untouched this run.")
 }

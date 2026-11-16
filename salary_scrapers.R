@@ -349,8 +349,8 @@ fetch_dli_teacher_compensation_all_districts <- function() {
 # K-12 salary history archive
 # ---------------------------------------------------------------------------
 #
-# Ported from the Wyoming Education Jobs Dashboard's own
-# archive_k12_salary_snapshot()/needs_k12_salary_archive_update() -- same
+# Ported from the Wyoming Education Jobs Dashboard's own salary archive
+# (both now edjobs::archive_k12_salary_snapshot()) -- same
 # real underlying problem: MT DLI's Teacher Compensation Report has no
 # public historical archive of its own (only the current edition's PDFs
 # are ever published, confirmed live), and (unlike IPEDS, queryable by
@@ -367,55 +367,7 @@ fetch_dli_teacher_compensation_all_districts <- function() {
 # Not currently read by app.R -- exists to grow into a real trend as more
 # Salary_Years accumulate, same as Wyoming's own version.
 
-# Pure decision logic, testable without file I/O: given the archive's
-# existing recorded years and this run's salary year, does a new
-# snapshot need to be appended?
-needs_k12_salary_archive_update <- function(existing_years, current_year) {
-  !is.na(current_year) && !(current_year %in% existing_years)
-}
-
-# Return only district/year pairs the archive does not already contain. This
-# also repairs an interrupted prior run that wrote only part of a salary year.
-missing_k12_salary_snapshot_rows <- function(existing, snapshot) {
-  snapshot <- snapshot %>% distinct(District, Salary_Year, .keep_all = TRUE)
-  existing_keys <- paste(existing$District, existing$Salary_Year, sep = "\r")
-  snapshot_keys <- paste(snapshot$District, snapshot$Salary_Year, sep = "\r")
-  snapshot[!(snapshot_keys %in% existing_keys), , drop = FALSE]
-}
-
-archive_k12_salary_snapshot <- function(salarymap2, history_path) {
-  current_year <- unique(stats::na.omit(salarymap2$Salary_Year))
-  if (length(current_year) != 1) {
-    message("K-12 salary archive: Salary_Year isn't a single consistent value this run, skipping archive.")
-    return(invisible(FALSE))
-  }
-  current_year <- current_year[1]
-
-  existing <- if (file.exists(history_path)) {
-    read.csv(history_path, stringsAsFactors = FALSE)
-  } else {
-    data.frame(District = character(0), Salary_Year = character(0),
-               Teacher_Count = numeric(0), Teacher_Salary_10th_Pctile = numeric(0),
-               Teacher_Avg_Salary = numeric(0), Teacher_Salary_90th_Pctile = numeric(0),
-               stringsAsFactors = FALSE)
-  }
-
-  snapshot <- salarymap2 %>%
-    filter(Salary_Year == current_year) %>%
-    select(District, Salary_Year, Teacher_Count, Teacher_Salary_10th_Pctile,
-           Teacher_Avg_Salary, Teacher_Salary_90th_Pctile) %>%
-    distinct(District, Salary_Year, .keep_all = TRUE)
-
-  missing_snapshot <- missing_k12_salary_snapshot_rows(existing, snapshot)
-  if (nrow(missing_snapshot) == 0) {
-    message("K-12 salary archive: every district/year pair for ", current_year,
-            " is already recorded, no snapshot update needed.")
-    return(invisible(FALSE))
-  }
-
-  updated <- bind_rows(existing, missing_snapshot)
-  write.csv(updated, history_path, row.names = FALSE)
-  message("K-12 salary archive: appended ", nrow(missing_snapshot),
-          " missing district snapshot(s) for ", current_year, ".")
-  invisible(TRUE)
-}
+# The archive function is edjobs::archive_k12_salary_snapshot() (phase 5 close-out, 2026-11-16): it appends any
+# district/year pair the history lacks. These are the columns this state keeps.
+MT_K12_SALARY_HISTORY_COLUMNS <- c("Teacher_Count", "Teacher_Salary_10th_Pctile",
+                                   "Teacher_Avg_Salary", "Teacher_Salary_90th_Pctile")
