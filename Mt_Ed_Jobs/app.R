@@ -124,6 +124,21 @@ format_poverty_range <- function(low, high) {
          paste0("about ", scales::percent(low, accuracy = 1), "\u2013", scales::percent(high, accuracy = 1)))
 }
 
+# ACS county figures' 90% margins of error (Mike's decision 2026-11-16, option
+# B): "\u00b1$2,190" / "\u00b10.4 pts"; a share whose MOE is at least the share
+# itself is not distinguishable from zero (Census's CV > 0.61 line).
+format_moe_dollars <- function(moe) ifelse(is.na(moe), "", paste0(" \u00b1", scales::dollar(moe)))
+format_moe_points <- function(moe) ifelse(is.na(moe), "", paste0(" \u00b1", formatC(100 * moe, format = "f", digits = 1), " pts"))
+indistinct_from_zero <- function(est, moe) !is.na(est) & !is.na(moe) & moe >= est
+county_moe_summary <- function(income_moe, rent_moe, share, share_moe) {
+  parts <- cbind(ifelse(is.na(income_moe), NA, paste0("income", format_moe_dollars(income_moe))),
+                 ifelse(is.na(rent_moe), NA, paste0("rent", format_moe_dollars(rent_moe))),
+                 ifelse(is.na(share_moe), NA, paste0("mining", format_moe_points(share_moe),
+                                                     ifelse(indistinct_from_zero(share, share_moe), " (not distinguishable from 0)", ""))))
+  out <- apply(parts, 1, function(x) paste(x[!is.na(x)], collapse = "; "))
+  ifelse(nzchar(out), out, NA_character_)
+}
+
 format_posted_pay <- function(pay_min, pay_max, pay_unit) {
   fmt <- function(x) ifelse(x >= 1000, scales::dollar(x, accuracy = 1), scales::dollar(x, accuracy = 0.01))
   amount <- ifelse(is.na(pay_min), NA_character_,
@@ -259,7 +274,8 @@ mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8")
 # padded here rather than in validate_and_pad_schema(), which would flag their
 # absence as a data problem on the Home tab.
 # Child_Poverty_Low / _High: Census's approximate 90% range (edjobs 0.27.0, first written by the run after 2026-11-15).
-for (col in c("Child_Poverty_Basis", "Free_Reduced_Lunch_Share", "FRL_Year", "Child_Poverty_Low", "Child_Poverty_High")) {
+for (col in c("Child_Poverty_Basis", "Free_Reduced_Lunch_Share", "FRL_Year", "Child_Poverty_Low", "Child_Poverty_High",
+               "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE")) {
   if (!col %in% names(mapdata2_k12)) mapdata2_k12[[col]] <- NA
 }
 mapdata2_k12 <- mapdata2_k12 %>%
@@ -633,7 +649,10 @@ ccdata <- ccdata %>%
 ccdata$Link <- paste0('<a href="', ccdata$Link, '" target="_blank">', ccdata$Link, '</a>')
 he_faculty_counts <- summarize_he_faculty_postings(ccdata$Title)
 
-mapdata2_he <- read.csv("salarymap.csv") %>%
+mapdata2_he <- read.csv("salarymap.csv")
+# ACS margins of error (edjobs 0.28.0): optional until the first run writes them.
+for (col in c("Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE")) if (!col %in% names(mapdata2_he)) mapdata2_he[[col]] <- NA_real_
+mapdata2_he <- mapdata2_he %>%
   validate_and_pad_schema(c("Name", "Longitude", "Latitude", "Link", "Faculty_Avg_Salary",
                              "Faculty_Avg_Salary_Professor", "Faculty_Count", "Salary_Year",
                              "Salary_Source", "Faculty_Avg_Salary_Y1Ago", "Faculty_Avg_Salary_Y2Ago",
@@ -903,6 +922,7 @@ map_k12 <- mapdata2_k12 %>%
          Vacancy_Rate, Vacancy_Numerator, Vacancy_Denominator, Salary_Source, County,
          Enrollment, Students_Per_Teacher, Enrollment_Change_Pct, Pell_Recipient_Share, Pell_Year,
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
+         Median_Household_Income_MOE, Median_Gross_Rent_MOE, Mining_Employment_Share_MOE,
          Child_Poverty_Rate, Child_Poverty_Low, Child_Poverty_High, SAIPE_Year, Child_Poverty_Basis, Free_Reduced_Lunch_Share, FRL_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source,
          Data_Coverage)
 
@@ -967,6 +987,7 @@ map_he <- mapdata2_he %>%
          Vacancy_Rate, Vacancy_Numerator, Vacancy_Denominator, Salary_Source, County,
          Enrollment, Students_Per_Teacher, Enrollment_Change_Pct, Pell_Recipient_Share, Pell_Year,
          Median_Household_Income, Median_Gross_Rent, Mining_Employment_Share, Population_Change_Pct, ACS_Year,
+         Median_Household_Income_MOE, Median_Gross_Rent_MOE, Mining_Employment_Share_MOE,
          Child_Poverty_Rate, Child_Poverty_Low, Child_Poverty_High, SAIPE_Year, Child_Poverty_Basis, Free_Reduced_Lunch_Share, FRL_Year, Total_General_Fund_Expenditure, Finance_FY, Finance_Source)
 
 combined_map_data <- bind_rows(map_k12, map_he)
@@ -2260,6 +2281,8 @@ server <- function(input, output, session) {
         `County Median Income` = Median_Household_Income,
         `County Median Rent (per month)` = Median_Gross_Rent,
         `County Mining/Energy Jobs` = Mining_Employment_Share,
+        `County Figures: 90% Margin of Error` = county_moe_summary(Median_Household_Income_MOE, Median_Gross_Rent_MOE,
+                                                            Mining_Employment_Share, Mining_Employment_Share_MOE),
         `County Population Trend (5yr)` = Population_Change_Pct,
         # Numbers, formatted by DT below, so the column sorts as numbers (the
         # table sorts on the server, in R, by the underlying value); where the rate is a
@@ -2314,7 +2337,10 @@ server <- function(input, output, session) {
           "County context (income, rent, mining/energy employment share, population trend): US Census Bureau, American Community Survey 5-Year Estimates",
           paste0("(", acs_year[1], ")"), "—",
           tags$a(href = "https://www.census.gov/data/developers/data-sets/acs-5year.html", target = "_blank", "census.gov"),
-          ". County-level, not district-level -- sibling districts in the same county share the same figures."
+          ". County-level, not district-level -- sibling districts in the same county share the same figures.",
+          "\u00b1 values are the Census Bureau's 90% margins of error (the mining share's from Census's formula for a",
+          "proportion); a share whose margin is at least as large as the share is marked \"not distinguishable from 0\".",
+          "County population totals are set to Census's population estimates, so the 5-year trend has no margin of error."
         )
       },
       helpText(
@@ -2409,7 +2435,7 @@ server <- function(input, output, session) {
       vac_rate <- if (!is.na(row$Vacancy_Rate[1])) scales::percent(row$Vacancy_Rate[1], accuracy = 0.1) else "N/A"
       enroll <- if (!is.na(row$Enrollment[1])) scales::comma(row$Enrollment[1]) else "N/A"
       spt <- if (!is.na(row$Students_Per_Teacher[1])) sprintf("%.1f", row$Students_Per_Teacher[1]) else "N/A"
-      rent <- if (!is.na(row$Median_Gross_Rent[1])) paste0(scales::dollar(row$Median_Gross_Rent[1]), "/mo") else "N/A"
+      rent <- if (!is.na(row$Median_Gross_Rent[1])) paste0(scales::dollar(row$Median_Gross_Rent[1]), "/mo", format_moe_dollars(row$Median_Gross_Rent_MOE[1])) else "N/A"
       poverty <- if (!is.na(row$Child_Poverty_Rate[1])) scales::percent(row$Child_Poverty_Rate[1], accuracy = 0.1) else "N/A"
       if (!is.na(row$Child_Poverty_Rate[1]) && !is.na(row$Child_Poverty_Basis[1])) poverty <- paste(poverty, "(surrounding district)")
       poverty_range <- format_poverty_range(row$Child_Poverty_Low[1], row$Child_Poverty_High[1])
@@ -2858,9 +2884,11 @@ server <- function(input, output, session) {
              ""),
       ifelse(!is.na(Median_Household_Income),
              paste0("<div style='font-size:0.85em;color:#666;margin-top:4px;'>County: median income ",
-                    scales::dollar(Median_Household_Income), ", median rent ", scales::dollar(Median_Gross_Rent), "/mo",
+                    scales::dollar(Median_Household_Income), format_moe_dollars(Median_Household_Income_MOE),
+                    ", median rent ", scales::dollar(Median_Gross_Rent), "/mo", format_moe_dollars(Median_Gross_Rent_MOE),
                     ifelse(!is.na(Mining_Employment_Share) & Mining_Employment_Share >= 0.05,
-                           paste0(", ", scales::percent(Mining_Employment_Share, accuracy = 1), " of jobs in mining/energy"),
+                           paste0(", ", scales::percent(Mining_Employment_Share, accuracy = 1), format_moe_points(Mining_Employment_Share_MOE),
+                                  " of jobs in mining/energy"),
                            ""),
                     "</div>"),
              ""),
@@ -3137,9 +3165,14 @@ server <- function(input, output, session) {
                                            paste0(ifelse(Enrollment_Change_Pct >= 0, "+", ""), scales::percent(Enrollment_Change_Pct, accuracy = 0.1))),
         `Pell Grant Recipient Share` = ifelse(is.na(Pell_Recipient_Share), NA_character_,
                                                paste0(scales::percent(Pell_Recipient_Share, accuracy = 0.1), " (", Pell_Year, ")")),
-        `County Median Income` = ifelse(is.na(Median_Household_Income), NA_character_, scales::dollar(Median_Household_Income)),
-        `County Median Rent` = ifelse(is.na(Median_Gross_Rent), NA_character_, paste0(scales::dollar(Median_Gross_Rent), "/mo")),
-        `County Mining/Energy Jobs` = ifelse(is.na(Mining_Employment_Share), NA_character_, scales::percent(Mining_Employment_Share, accuracy = 0.1)),
+        `County Median Income` = ifelse(is.na(Median_Household_Income), NA_character_,
+                                        paste0(scales::dollar(Median_Household_Income), format_moe_dollars(Median_Household_Income_MOE))),
+        `County Median Rent` = ifelse(is.na(Median_Gross_Rent), NA_character_,
+                                      paste0(scales::dollar(Median_Gross_Rent), "/mo", format_moe_dollars(Median_Gross_Rent_MOE))),
+        `County Mining/Energy Jobs` = ifelse(is.na(Mining_Employment_Share), NA_character_,
+                                             paste0(scales::percent(Mining_Employment_Share, accuracy = 0.1), format_moe_points(Mining_Employment_Share_MOE),
+                                                    ifelse(indistinct_from_zero(Mining_Employment_Share, Mining_Employment_Share_MOE),
+                                                           " (not distinguishable from 0)", ""))),
         `County Population Trend (5yr)` = ifelse(is.na(Population_Change_Pct), NA_character_,
                                                    paste0(ifelse(Population_Change_Pct >= 0, "+", ""), scales::percent(Population_Change_Pct, accuracy = 0.1)))
       )
@@ -3170,7 +3203,11 @@ server <- function(input, output, session) {
         helpText(
           "County context (income, rent, mining/energy employment share, population trend): US Census Bureau, American Community Survey 5-Year Estimates",
           paste0("(", acs_year[1], ")"), "—",
-          tags$a(href = "https://www.census.gov/data/developers/data-sets/acs-5year.html", target = "_blank", "census.gov")
+          tags$a(href = "https://www.census.gov/data/developers/data-sets/acs-5year.html", target = "_blank", "census.gov"),
+          ".",
+          "\u00b1 values are the Census Bureau's 90% margins of error (the mining share's from Census's formula for a",
+          "proportion); a share whose margin is at least as large as the share is marked \"not distinguishable from 0\".",
+          "County population totals are set to Census's population estimates, so the 5-year trend has no margin of error."
         )
       },
       if (length(pell_year) > 0) {

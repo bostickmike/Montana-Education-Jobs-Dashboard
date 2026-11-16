@@ -1005,6 +1005,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     201 with a range; opi_only_districts 30 rates, all with a range; rates changed only for the 90 combined
     districts (slice 2's pooling, not yet in main's data); parity 9/9; suites pre 3,199 / post 3,209 passed, 0 failed.
     Read back live in the rehearsed app (Billings 7.9%, about 6%-10%).
+  * [x] ACS county figures: Census's 90% margins of error (2026-11-16; branch `acs-moe`, edjobs 0.28.0). **Mike's
+    choice 11-16 (option B; `claude-notes/2026-11-16_acs-moe-reliability-decision.md`):** show the MOE, no CV tiers.
+    New columns Median_Household_Income_MOE, Median_Gross_Rent_MOE, Mining_Employment_Share_MOE (salarymap2,
+    salarymap, opi_only_districts; data dictionary; `pending` until the first run writes them; run_expectations
+    `acs_moe_salarymap2`). Map popup income/rent +/- (mining +/- where shown, >= 5%), comparator rent, HE table,
+    K-12 column "County Figures: 90% Margin of Error", footnotes (population trend has no MOE: controlled totals). A
+    share whose MOE is at least the share is marked "not distinguishable from 0" (Census's CV > 0.61 line).
+    Rehearsal (`claude-notes/2026-11-16_rehearsal-mt-acs-moe-0.28.0.log`): every step passed; every county figure has
+    its MOE (salarymap2 201 of 201, salarymap 23 of 23, opi_only_districts 35 of 35); not distinguishable from 0:
+    38 K-12 rows, 3 HE, 6 OPI-only; data quality 125 passed; parity 9/9; suites pre 3,199 / post 3,213 passed,
+    0 failed. Read back live in the rehearsed app (Billings: income +/-$2,657; rent +/-$37; mining +/-0.3 pts).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Citations audit follow-ups (2026-11-15; `claude-notes/2026-11-15_citations-audit.md`), decisions for Mike:**
   BLS asks for the access date (apps don't know it yet); WSBA/WDE pages say "All rights reserved" with no reuse
