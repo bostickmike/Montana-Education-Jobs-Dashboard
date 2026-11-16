@@ -2788,17 +2788,22 @@ hedata <- hedata_raw %>%
   mutate(Close_Date = if ("Close_Date" %in% names(.)) as.character(Close_Date) else NA_character_) %>%
   # Close_Date: PeopleAdmin's own close date (or "Open Until Filled") and NEOGOV's stated closing
   # date (each posting's page; edjobs 0.11.0); NA for other HE sources.
-  select(Title, Location, Posted_Date, Institution, Link, Close_Date, all_of(POSTED_PAY_COLUMNS)) %>%
+  select(Title, Location, Posted_Date, Institution, Link, Close_Date, all_of(POSTED_PAY_COLUMNS), any_of("Page_Places")) %>%
   mutate(Posted_Date = as.character(Posted_Date),
          Archive_Date = Sys.Date())
 
 # Where each posting goes on the map (edjobs place_he_postings(), 2026-11-16):
-# a posting is placed at another MT town only when its Location writes that
-# town (FVCC's "Libby, MT"), using places.csv
-# (every Census place in the state, its point and county). Anything else (the
-# main campus town, a department, "United States", several sites, another
-# state) stays at the main campus; Place_Basis says which, for the map's note.
-hedata <- place_he_postings(hedata, he_registry, read_state_places("places.csv"), "MT")
+# a posting is placed at another MT town only when the posting itself names
+# that town: its Location (FVCC's "Libby, MT"), a title marker ("*Havre, MT*"),
+# its department when that is a fixed site (he_campus_departments.csv: MSU's
+# research centers, each with its source), or an explicit sentence on its
+# PeopleAdmin page (Page_Places: "This position is located in Joliet, Montana";
+# edjobs 0.34.0). Towns come from places.csv (every Census place in the state,
+# its point and county). Anything else (the main campus town, a department,
+# "United States", several towns, another state) stays at the main campus;
+# Place_Basis says which, for the map's note. Page_Places is dropped there.
+hedata <- place_he_postings(hedata, he_registry, read_state_places("places.csv"), "MT",
+                            campus_departments = read.csv("he_campus_departments.csv", stringsAsFactors = FALSE))
 
 if (!dir.exists("Archived_HE_Data")) dir.create("Archived_HE_Data")
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
