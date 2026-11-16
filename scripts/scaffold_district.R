@@ -28,7 +28,7 @@
 #     fixture apptegy_<slug>_rendered_<date>.txt) or "ApptegyPageBuilder"
 #     (--node pagebuilder, the page-builder JSON; fixture
 #     apptegy_<slug>_pagedata_<date>.html, AIza keys redacted);
-#   - a k12_list_rules.csv row when --start / --stop / --skip are given (perl
+#   - the registry row's List_Start / List_Stop / List_Skip when --start / --stop / --skip are given (perl
 #     regexes: where the list starts, where it stops, a section to skip);
 #   - a test-apptegy-family.R block asserting the titles the routine returns.
 # It prints those titles: check them against the live page.
@@ -148,7 +148,7 @@ if (apptegy_mode) {
     cat(sprintf("Error: %s still holds an AIza... API key; redact it before committing the fixture.\n", apptegy_fixture))
     quit(status = 1)
   }
-  apptegy_rule <- c(List_Start = get_arg("start", ""), List_Stop = get_arg("stop", ""), Skip_Section = get_arg("skip", ""))
+  apptegy_rule <- c(List_Start = get_arg("start", ""), List_Stop = get_arg("stop", ""), List_Skip = get_arg("skip", ""))
   for (rx in apptegy_rule[nzchar(apptegy_rule)]) {
     if (inherits(try(grepl(rx, "x", perl = TRUE), silent = TRUE), "try-error")) {
       cat(sprintf("Error: \"%s\" is not a valid perl regex.\n", rx)); quit(status = 1)
@@ -180,8 +180,12 @@ if (district %in% existing_reg$District) {
 } else {
   new_count <- old_count + 1
   leaid_val <- if (!is.null(leaid) && nzchar(leaid)) leaid else ""
-  new_reg_row <- sprintf('"%s",%s,"%s","%s",%s,%s,"%s","","%s"',
-                         district, leaid_val, city, county, lat, lon, platform, url)
+  # Columns: District, NCES_LEAID, City, County, Latitude, Longitude, Platform, Platform_Key, Job_Link,
+  # List_Start, List_Stop, List_Skip (the family routines' per-district rules).
+  rules_out <- if (exists("apptegy_rule")) apptegy_rule else c("", "", "")
+  new_reg_row <- sprintf('"%s",%s,"%s","%s",%s,%s,"%s","","%s",%s',
+                         district, leaid_val, city, county, lat, lon, platform, url,
+                         paste0('"', gsub('"', '""', rules_out, fixed = TRUE), '"', collapse = ","))
   # Append row
   writeLines(c(reg_lines, new_reg_row), reg_path)
   cat(sprintf("[1/8] Updated k12_district_registry.csv (+1 row, total %d)\n", new_count))
@@ -317,23 +321,11 @@ misc_path <- here::here("misc_district_scrapers.R")
 misc_content <- paste(readLines(misc_path, warn = FALSE), collapse = "\n")
 
 if (apptegy_mode) {
-  rules_path <- here::here("k12_list_rules.csv")
-  rules_lines <- readLines(rules_path, warn = FALSE)
-  if (any(nzchar(apptegy_rule))) {
-    if (any(startsWith(rules_lines, paste0(dq(district), ",")))) {
-      cat(sprintf("[5/8] '%s' already has a k12_list_rules.csv row (left as is)\n", district))
-    } else {
-      writeLines(c(rules_lines, paste(vapply(c(district, apptegy_rule), dq, ""), collapse = ",")), rules_path)
-      cat("[5/8] Added the district's k12_list_rules.csv row\n")
-    }
-  } else {
-    cat("[5/8] misc_district_scrapers.R: nothing to add (no per-district code; no list rules given)\n")
-  }
+  cat("[5/8] misc_district_scrapers.R: nothing to add (no per-district code; list rules, if any, are in the registry row)\n")
   # What the routine returns on the fixture: the test below asserts it.
   suppressMessages(library(edjobs))
-  r <- utils::read.csv(rules_path, stringsAsFactors = FALSE, na.strings = "", colClasses = "character")
-  rule <- function(col) { v <- r[[col]][r$District == district]; if (length(v) && !is.na(v[1]) && nzchar(v[1])) v[1] else NA }
-  parsed <- parse_apptegy_postings(fixture_txt, url, city, apptegy_mode_name, rule("List_Start"), rule("List_Stop"), rule("Skip_Section"))
+  rule <- function(col) { v <- apptegy_rule[[col]]; if (nzchar(v)) v else NA }
+  parsed <- parse_apptegy_postings(fixture_txt, url, city, apptegy_mode_name, rule("List_Start"), rule("List_Stop"), rule("List_Skip"))
   cat(sprintf("\nThe family routine returns %d posting(s) from %s:\n", nrow(parsed), apptegy_fixture))
   if (nrow(parsed) > 0) cat(paste0("  - ", parsed$Title, collapse = "\n"), "\n")
   if (nrow(parsed) == 0) {

@@ -41,7 +41,7 @@ peopleadmin_combined <- do.call(rbind, peopleadmin_results)
 # Feed_URL holds the applytojob.com subdomain here (fetch_jazzhr_postings()
 # builds the full URL itself), unlike PeopleAdmin's row above where it's
 # already a complete feed URL -- the same per-platform meaning difference
-# k12_district_registry.csv's Slug column already has (tenant path vs.
+# k12_district_registry.csv's Platform_Key column already has (tenant path vs.
 # domain name vs. full URL depending on platform).
 jazzhr_institutions <- registry[registry$Platform == "JazzHR", ]
 

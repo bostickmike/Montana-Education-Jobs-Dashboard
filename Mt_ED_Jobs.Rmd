@@ -40,7 +40,7 @@ applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
   row <- applitrack_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_applitrack_postings(row$Slug),
+    scrape_fn = function() fetch_applitrack_postings(row$Platform_Key),
     expected_cols = c("title", "position", "position2", "date_posted", "location", "closing_date")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -58,9 +58,9 @@ if (nrow(applitrack_raw) > 0) {
     ensure_posted_pay_columns() %>%
     mutate(job_id = if ("job_id" %in% names(.)) job_id else NA_character_,
            closing_date = if ("closing_date" %in% names(.)) closing_date else NA_character_) %>%
-    left_join(select(applitrack_districts, District, Slug, Job_Link), by = "District") %>%
+    left_join(select(applitrack_districts, District, Platform_Key, Job_Link), by = "District") %>%
     transmute(title, date_posted, position = NA_character_, location,
-              url = coalesce(applitrack_posting_url(Slug, job_id), Job_Link), District,
+              url = coalesce(applitrack_posting_url(Platform_Key, job_id), Job_Link), District,
               Posting_Source = "AppliTrack (direct district board)",
               Close_Date = closing_date,
               Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
@@ -79,7 +79,7 @@ schoolspring_results <- lapply(seq_len(nrow(schoolspring_districts)), function(i
   row <- schoolspring_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_schoolspring_postings(row$Slug),
+    scrape_fn = function() fetch_schoolspring_postings(row$Platform_Key),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -113,7 +113,7 @@ tylerportico_results <- lapply(seq_len(nrow(tylerportico_districts)), function(i
   row <- tylerportico_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_tylerportico_postings(row$Slug, row$District),
+    scrape_fn = function() fetch_tylerportico_postings(row$Platform_Key, row$District),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -140,7 +140,7 @@ tedk12_results <- lapply(seq_len(nrow(tedk12_districts)), function(i) {
   row <- tedk12_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_tedk12_postings(row$Slug),
+    scrape_fn = function() fetch_tedk12_postings(row$Platform_Key),
     expected_cols = c("title", "date_posted", "position", "location", "url")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -158,7 +158,7 @@ if (nrow(tedk12_df) == 0) {
 
 # Red Rover (St. Ignatius, Hamilton, Columbia Falls) -- the GraphQL API Red
 # Rover's own board calls (edjobs::fetch_redrover_postings(), 0.14.0; WY's
-# fetcher). Slug is the board's numeric org ID; the link slug comes from
+# fetcher). Platform_Key is the board's numeric org ID; the link slug comes from
 # Job_Link. Read with Chrome inside the Apptegy batch until 2026-11, which gave
 # a per-posting link to only some postings; every row now carries its own
 # /opening/<n> page and the board's posted pay. A posting with no location
@@ -168,7 +168,7 @@ redrover_results <- lapply(seq_len(nrow(redrover_districts)), function(i) {
   row <- redrover_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_redrover_postings(row$Slug, redrover_org_slug(row$Job_Link)),
+    scrape_fn = function() fetch_redrover_postings(row$Platform_Key, redrover_org_slug(row$Job_Link)),
     expected_cols = c("Title", "Location", "Posted_Date", "Posting_ID", "Link")
   )
   if (nrow(df) > 0) {
@@ -407,8 +407,8 @@ if (nrow(brockton_df) > 0) {
 # Google Doc job lists, one routine for the family (edjobs 0.24.0, 2026-11-14;
 # claude-notes/2026-11-14_mt-leftovers/README.md): every registry row with
 # Platform "GoogleDoc" goes through edjobs::fetch_googledoc_postings(), which
-# reads each doc in the row's Slug (";" between docs) from its text export, or
-# an uploaded file's preview page, with the district's k12_list_rules.csv rules.
+# reads each doc in the row's Platform_Key (";" between docs) from its text export, or
+# an uploaded file's preview page, with the district's registry list rules.
 # Replaced the Victor, Superior, Bainville and Creston scrapers; each keeps the
 # Posting_Source its own block wrote.
 googledoc_source_names <- c(
@@ -423,10 +423,10 @@ googledoc_results <- lapply(seq_len(nrow(googledoc_districts)), function(i) {
   row <- googledoc_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_googledoc_postings(row$Slug, row$City, row$Job_Link,
+    scrape_fn = function() fetch_googledoc_postings(row$Platform_Key, row$City, row$Job_Link,
                                                     k12_list_rule(googledoc_rules, row$District, "List_Start"),
                                                     k12_list_rule(googledoc_rules, row$District, "List_Stop"),
-                                                    k12_list_rule(googledoc_rules, row$District, "Skip_Section")),
+                                                    k12_list_rule(googledoc_rules, row$District, "List_Skip")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -610,7 +610,7 @@ if (nrow(swanvalley_df) > 0) {
 # as a move to another board; a district joining later gets the standard form.
 # Platform "CyberSchoolText" (edjobs 0.24.0, Nashua, Frazer, Lavina, Hinsdale):
 # the whole list written as text in one item, read with the shared title line
-# filter and the district's k12_list_rules.csv rules; those pages can state pay.
+# filter and the district's registry list rules; those pages can state pay.
 cyberschool_source_names <- c(
   "Highwood Public Schools" = "Highwood district site (direct board)",
   "Vaughn Elementary School District #74" = "Vaughn Elementary district site (direct board)",
@@ -629,7 +629,7 @@ cyberschool_results <- lapply(seq_len(nrow(cyberschool_districts)), function(i) 
     scrape_fn = function() fetch_cyberschool_postings(
       row$Job_Link, row$City, if (row$Platform == "CyberSchoolText") "text" else "items",
       k12_list_rule(cyberschool_rules, row$District, "List_Start"), k12_list_rule(cyberschool_rules, row$District, "List_Stop"),
-      k12_list_rule(cyberschool_rules, row$District, "Skip_Section")),
+      k12_list_rule(cyberschool_rules, row$District, "List_Skip")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -654,7 +654,7 @@ if (nrow(cyberschool_df) > 0) {
 # 2026-11-14; claude-notes/2026-11-14_googlesites-family/): every registry row
 # with Platform "GoogleSites" goes through edjobs::fetch_googlesites_postings()
 # (a plain request; the shared title line filter on the page text), with
-# optional per-district rules from k12_list_rules.csv. Replaced 20 per-district
+# optional per-district rules from the registry (List_Start/List_Stop/List_Skip). Replaced 20 per-district
 # scrapers. Each keeps the Posting_Source its own block wrote, so its spells
 # don't read the switch as a move to another board.
 googlesites_source_names <- c(
@@ -688,7 +688,7 @@ googlesites_results <- lapply(seq_len(nrow(googlesites_districts)), function(i) 
     scrape_fn = function() fetch_googlesites_postings(row$Job_Link, row$City,
                                                       k12_list_rule(googlesites_rules, row$District, "List_Start"),
                                                       k12_list_rule(googlesites_rules, row$District, "List_Stop"),
-                                                      k12_list_rule(googlesites_rules, row$District, "Skip_Section")),
+                                                      k12_list_rule(googlesites_rules, row$District, "List_Skip")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -714,7 +714,7 @@ if (nrow(googlesites_df) > 0) {
 # with Platform "Finalsite" goes through edjobs::fetch_finalsite_postings()
 # (a plain request; the shared title line filter on the page content; a title that
 # is a link keeps it), with
-# optional per-district rules from k12_list_rules.csv. Replaced 11 per-district
+# optional per-district rules from the registry (List_Start/List_Stop/List_Skip). Replaced 11 per-district
 # scrapers. Each keeps the Posting_Source its own block wrote, so its spells
 # don't read the switch as a move to another board.
 finalsite_source_names <- c(
@@ -739,7 +739,7 @@ finalsite_results <- lapply(seq_len(nrow(finalsite_districts)), function(i) {
     scrape_fn = function() fetch_finalsite_postings(row$Job_Link, row$City,
                                                       k12_list_rule(finalsite_rules, row$District, "List_Start"),
                                                       k12_list_rule(finalsite_rules, row$District, "List_Stop"),
-                                                      k12_list_rule(finalsite_rules, row$District, "Skip_Section")),
+                                                      k12_list_rule(finalsite_rules, row$District, "List_Skip")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -765,7 +765,7 @@ if (nrow(finalsite_df) > 0) {
 # with Platform "WordPress" goes through edjobs::fetch_wordpress_postings()
 # (a plain request; the shared title line filter on the post content; a title that
 # is a link keeps it), with
-# optional per-district rules from k12_list_rules.csv. Replaced 7 per-district
+# optional per-district rules from the registry (List_Start/List_Stop/List_Skip). Replaced 7 per-district
 # scrapers. Each keeps the Posting_Source its own block wrote, so its spells
 # don't read the switch as a move to another board.
 wordpress_source_names <- c(
@@ -786,7 +786,7 @@ wordpress_results <- lapply(seq_len(nrow(wordpress_districts)), function(i) {
     scrape_fn = function() fetch_wordpress_postings(row$Job_Link, row$City,
                                                       k12_list_rule(wordpress_rules, row$District, "List_Start"),
                                                       k12_list_rule(wordpress_rules, row$District, "List_Stop"),
-                                                      k12_list_rule(wordpress_rules, row$District, "Skip_Section")),
+                                                      k12_list_rule(wordpress_rules, row$District, "List_Skip")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -812,7 +812,7 @@ if (nrow(wordpress_df) > 0) {
 # with Platform "Edlio" goes through edjobs::fetch_edlio_postings()
 # (a plain request; the shared title line filter on the page text; a title that
 # is a link keeps it), with
-# optional per-district rules from k12_list_rules.csv. Replaced 5 per-district
+# optional per-district rules from the registry (List_Start/List_Stop/List_Skip). Replaced 5 per-district
 # scrapers. Each keeps the Posting_Source its own block wrote, so its spells
 # don't read the switch as a move to another board.
 edlio_source_names <- c(
@@ -831,7 +831,7 @@ edlio_results <- lapply(seq_len(nrow(edlio_districts)), function(i) {
     scrape_fn = function() fetch_edlio_postings(row$Job_Link, row$City,
                                                       k12_list_rule(edlio_rules, row$District, "List_Start"),
                                                       k12_list_rule(edlio_rules, row$District, "List_Stop"),
-                                                      k12_list_rule(edlio_rules, row$District, "Skip_Section")),
+                                                      k12_list_rule(edlio_rules, row$District, "List_Skip")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -857,7 +857,7 @@ if (nrow(edlio_df) > 0) {
 # with Platform "Joomla" goes through edjobs::fetch_joomla_postings() (the Edlio
 # reading: a plain request; the shared title line filter on the page text; a
 # title that is a link keeps it), with optional per-district rules from
-# k12_list_rules.csv. Replaced 5 per-district scrapers (Grass Range stays
+# the registry's list rules. Replaced 5 per-district scrapers (Grass Range stays
 # bespoke: its jobs are named in a sentence). Each keeps the Posting_Source its
 # own block wrote, so its spells don't read the switch as a move to another board.
 joomla_source_names <- c(
@@ -876,7 +876,7 @@ joomla_results <- lapply(seq_len(nrow(joomla_districts)), function(i) {
     scrape_fn = function() fetch_joomla_postings(row$Job_Link, row$City,
                                                       k12_list_rule(joomla_rules, row$District, "List_Start"),
                                                       k12_list_rule(joomla_rules, row$District, "List_Stop"),
-                                                      k12_list_rule(joomla_rules, row$District, "Skip_Section")),
+                                                      k12_list_rule(joomla_rules, row$District, "List_Skip")),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
@@ -1803,7 +1803,7 @@ if (nrow(lima_df) > 0) {
 # request receives a bot-challenge shell). Since edjobs 0.18.0 (2026-11-14)
 # the Apptegy districts (registry Platform "Apptegy" / "ApptegyPageBuilder")
 # go through one family routine, edjobs::fetch_apptegy_postings(), with
-# optional per-district rules from k12_list_rules.csv; Shelby and Geyser
+# optional per-district rules from the registry (List_Start/List_Stop/List_Skip); Shelby and Geyser
 # ("ApptegyBespoke") keep their own scrapers (APPTEGY_DISTRICT_SCRAPERS).
 # Each district is independently wrapped by fetch_apptegy_k12_postings() and
 # logs as "Apptegy/chromote: <District>", so a changed page is logged without

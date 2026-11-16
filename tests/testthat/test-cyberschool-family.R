@@ -60,10 +60,10 @@ cst_parse <- function(fixture, district) {
   row <- reg[reg$District == district, ]
   expect_equal(nrow(row), 1)
   expect_equal(row$Platform, "CyberSchoolText")
-  rules <- read_k12_list_rules(test_path("..", "..", "k12_list_rules.csv"))
+  rules <- read_k12_list_rules(test_path("..", "..", "k12_district_registry.csv"))
   html <- paste(readLines(fixture, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   r <- parse_cyberschool_postings(html, row$Job_Link, row$City, "text", k12_list_rule(rules, district, "List_Start"),
-                                  k12_list_rule(rules, district, "List_Stop"), k12_list_rule(rules, district, "Skip_Section"))
+                                  k12_list_rule(rules, district, "List_Stop"), k12_list_rule(rules, district, "List_Skip"))
   expect_true(all(r$Location == row$City))
   r
 }

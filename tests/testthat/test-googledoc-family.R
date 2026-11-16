@@ -1,6 +1,6 @@
 # Google Doc job lists read through edjobs::fetch_googledoc_postings() (edjobs 0.24.0, 2026-11-14;
-# claude-notes/2026-11-14_mt-leftovers/README.md): each registry row, with its Slug (doc ids), City, Job_Link and
-# k12_list_rules.csv rule, against the district's captured doc. Expected titles are the old scrapers' titles (Victor's
+# claude-notes/2026-11-14_mt-leftovers/README.md): each registry row, with its Platform_Key (doc ids), City, Job_Link and
+# registry list rules, against the district's captured doc. Expected titles are the old scrapers' titles (Victor's
 # "Substitute" now "Substitutes"; Bainville's "Paraprofessional- small intervention group" now "Paraprofessional").
 # Test titles name the parser so the auto-fix issue finds these fixtures.
 
@@ -9,10 +9,10 @@ gd_parse <- function(district, texts) {
   row <- reg[reg$District == district, ]
   expect_equal(nrow(row), 1)
   expect_equal(row$Platform, "GoogleDoc")
-  expect_true(nzchar(row$Slug))
-  rules <- read_k12_list_rules(test_path("..", "..", "k12_list_rules.csv"))
+  expect_true(nzchar(row$Platform_Key))
+  rules <- read_k12_list_rules(test_path("..", "..", "k12_district_registry.csv"))
   r <- parse_googledoc_postings(texts, row$City, row$Job_Link, k12_list_rule(rules, district, "List_Start"),
-                                k12_list_rule(rules, district, "List_Stop"), k12_list_rule(rules, district, "Skip_Section"))
+                                k12_list_rule(rules, district, "List_Stop"), k12_list_rule(rules, district, "List_Skip"))
   expect_true(all(r$Location == row$City))
   expect_true(all(r$Link == row$Job_Link))
   r
