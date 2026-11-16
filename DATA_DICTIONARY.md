@@ -195,13 +195,13 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Latitude` | Decimal Degrees | IPEDS Directory | Geographic latitude coordinate of main campus centroid. |
 | `Link` | URL | Institutional Directory | Official careers or employment opportunities portal URL for the institution. |
 | `IPEDS_UNITID` | String (6-digit) | NCES IPEDS | Official 6-digit federal NCES Integrated Postsecondary Education Data System Unit ID. |
-| `Faculty_Avg_Salary` | Currency ($) | NCES IPEDS | Average full-time instructional faculty salary across all academic ranks combined. |
-| `Faculty_Avg_Salary_Professor` | Currency ($) | NCES IPEDS | Average full-time instructional faculty salary for the Full Professor rank. |
+| `Faculty_Avg_Salary` | Currency ($) | NCES IPEDS | Average salary of full-time instructional staff on 9- to 12-month contracts (IPEDS collects none for part-time staff or for contracts under 9 months) across all academic ranks combined. |
+| `Faculty_Avg_Salary_Professor` | Currency ($) | NCES IPEDS | Average salary of full-time instructional staff on 9- to 12-month contracts (IPEDS collects none for part-time staff or for contracts under 9 months) for the Full Professor rank. |
 | `Faculty_Count` | Integer | NCES IPEDS | Total count of full-time instructional faculty employed by the institution. |
 | `Salary_Year` | Integer | NCES IPEDS | Academic reporting year for IPEDS faculty compensation data. |
 | `Salary_Source` | String | NCES IPEDS | Primary source citation for instructional faculty pay. |
-| `Faculty_Avg_Salary_Y1Ago` | Currency ($) | NCES IPEDS | Average full-time instructional faculty salary in the prior academic year (t-1). |
-| `Faculty_Avg_Salary_Y2Ago` | Currency ($) | NCES IPEDS | Average full-time instructional faculty salary two academic years prior (t-2). |
+| `Faculty_Avg_Salary_Y1Ago` | Currency ($) | NCES IPEDS | Average salary of full-time instructional staff on 9- to 12-month contracts (IPEDS collects none for part-time staff or for contracts under 9 months) in the prior academic year (t-1). |
+| `Faculty_Avg_Salary_Y2Ago` | Currency ($) | NCES IPEDS | Average salary of full-time instructional staff on 9- to 12-month contracts (IPEDS collects none for part-time staff or for contracts under 9 months) two academic years prior (t-2). |
 | `Enrollment` | Integer | NCES IPEDS | Total unduplicated fall student enrollment count. |
 | `Enrollment_Year` | Integer | NCES IPEDS | Academic reporting year for IPEDS fall enrollment figures. |
 | `Enrollment_Change_Pct` | Proportion | NCES IPEDS | 5-year percentage change in total fall student enrollment. |
