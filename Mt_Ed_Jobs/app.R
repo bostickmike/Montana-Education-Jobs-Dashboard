@@ -1056,12 +1056,38 @@ download_tile <- function(icon_name, heading, text, output_id, label) {
   )
 }
 
+# Sources and required notices, shown at the foot of every page. The Census
+# Data API terms require their notice "prominently within the application"
+# (census.gov/data/developers/about/terms-of-service.html, revised
+# 2026-04-14); the BLS API terms require theirs ("Users must clearly state",
+# bls.gov/developers/termsOfService.htm, modified 2023-08-30); Urban's
+# Education Data Portal data are under ODC-By, cited in its short form for
+# visualizations (educationdata.urban.org/documentation/). Audit:
+# claude-notes/2026-11-15_citations-audit.md.
+data_sources_footer <- tags$footer(
+  class = "data-sources-footer",
+  tags$p(tags$strong("Data sources."), "Job postings: each employer's own job board (every posting links to it) and the Office of Public Instruction's Montana job board."),
+  tags$p(
+    "U.S. Census Bureau: American Community Survey 5-Year Estimates; Small Area Income and Poverty Estimates; Census Geocoder.",
+    "U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics.",
+    HTML(paste("NCES Common Core of Data, IPEDS and Federal Student Aid Title IV data, via Education Data Portal, Urban Institute,",
+               "under <a href=\"https://opendatacommons.org/licenses/by/1-0/\" target=\"_blank\" rel=\"noopener\">ODC Attribution License</a>."))
+  ),
+    tags$p("NCES Private School Universe Survey, 2023-24."),
+  tags$p("Montana Department of Labor & Industry, Labor Market Information (teacher pay); Office of Public Instruction (GEMS pay, school finance data files)."),
+  tags$p(
+    "This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.",
+    "BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov."
+  )
+)
+
 ui <- page_navbar(
   id = "sidebar_tabs",
   title = tags$span(icon("graduation-cap"), " Montana Education Jobs"),
   window_title = "Montana Education Jobs",
   theme = app_theme,
   fillable = FALSE,
+  footer = data_sources_footer,
   navbar_options = navbar_options(theme = "dark", bg = "#1e293b"),
   header = tags$head(
     tags$style(HTML("
@@ -1070,6 +1096,8 @@ ui <- page_navbar(
     h1.page-title { font-size: 1.6rem; font-weight: 600; margin: 4px 0 14px; }
     h3.page-title { font-size: 1.3rem; font-weight: 600; margin: 4px 0 8px; }
     .card { margin-bottom: 1rem; }
+    .data-sources-footer { border-top: 1px solid var(--bs-border-color); margin: 24px 0 0; padding: 12px 16px 16px; font-size: 0.78rem; color: var(--bs-secondary-color); }
+    .data-sources-footer p { margin: 0 0 4px; }
     .bslib-value-box .value-box-title { font-size: 0.85rem; }
     .bslib-value-box .value-box-showcase svg { max-width: 100%; height: auto; }
     .download-tile { border: 1px solid var(--bs-border-color); border-radius: 8px; padding: 14px;
@@ -2294,7 +2322,7 @@ server <- function(input, output, session) {
           "District child poverty rate: US Census Bureau, Small Area Income and Poverty Estimates (SAIPE)",
           paste0("(", saipe_year[1], ")"), "—",
           tags$a(href = "https://www.census.gov/programs-surveys/saipe/data/datasets.html", target = "_blank", "census.gov/saipe"),
-          ". District-level. For districts split between an elementary and a high-school district, this is an unweighted average of the two rates -- see DATA_COOKBOOK.md.",
+          ". District-level. For districts split between an elementary and a high-school district, this pools the two: children 5-17 in poverty summed over both districts, divided by their children 5-17 summed -- see DATA_COOKBOOK.md.",
           "A private or tribal school has no Census poverty estimate of its own; it shows its surrounding district's rate (marked \"Surrounding district\")."
         )
       }
@@ -2469,14 +2497,28 @@ server <- function(input, output, session) {
       # Esri World Light Gray, not CARTO Positron: CARTO's basemaps now require
       # an API key and serve an "API KEY REQUIRED" image tile without one.
       # The reference layer adds place names on top of the label-free base.
-      addProviderTiles(providers$Esri.WorldGrayCanvas, group = "Clean (Default)") %>%
+      # Credits are each Esri service's own copyrightText (MapServer?f=json,
+      # read 2026-11-15); leaflet-providers' bundled strings are older and
+      # leave out OpenStreetMap contributors.
+      addTiles(
+        urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+        attribution = "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community",
+        options = tileOptions(maxZoom = 16),
+        group = "Clean (Default)"
+      ) %>%
       addTiles(
         urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
         options = tileOptions(maxZoom = 16),
         group = "Clean (Default)"
       ) %>%
       addTiles(group = "OpenStreetMap") %>%
-      addProviderTiles(providers$Esri.WorldTopoMap, group = "Topographic") %>%
+      addTiles(
+        urlTemplate = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+        attribution = paste("Tiles &copy; Esri &mdash; Sources: Esri, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO,",
+                            "NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong),",
+                            "&copy; OpenStreetMap contributors, and the GIS User Community"),
+        group = "Topographic"
+      ) %>%
       setView(lng = -111.5, lat = 46.8, zoom = 7) %>%
       addLayersControl(
         baseGroups = c("Clean (Default)", "OpenStreetMap", "Topographic"),
