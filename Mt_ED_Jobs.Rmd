@@ -1940,7 +1940,7 @@ tryCatch({
                                         read.csv("k12_district_registry.csv", stringsAsFactors = FALSE),
                                         MT_CCD_LEA_MAP)
   xw_new$CCD_Year <- rep(as.character(ccd_latest$year), nrow(xw_new))
-  write_reference_file(xw_new, crosswalk_path)
+  write_reference_file(xw_new, crosswalk_path, retrieved_source = "Urban CCD")
 }, error = function(e) message("District crosswalk refresh failed: ", conditionMessage(e)))
 district_crosswalk <- read.csv(crosswalk_path, stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
 ```
@@ -2140,7 +2140,7 @@ tryCatch(refresh_schoolspring_endings("Archivek12_Data", "schoolspring_endings.c
 # a failed check keeps the committed file.
 library(edjobs)
 oews_path <- file.path("Mt_Ed_Jobs", "oews_role_wages.csv")
-tryCatch(refresh_oews_wages("MT", oews_path),
+tryCatch(refresh_oews_wages("MT", oews_path, retrieved_source = "BLS OEWS"),
          error = function(e) log_reference_result(oews_path, "error", conditionMessage(e)))
 
 # BLS QCEW average pay of public school employees by county (all roles), the
@@ -2148,7 +2148,7 @@ tryCatch(refresh_oews_wages("MT", oews_path),
 # existing file, and so does a partial or implausible one (write_reference_file()).
 library(edjobs)
 qcew_path <- file.path("Mt_Ed_Jobs", "qcew_county_school_pay.csv")
-tryCatch(write_reference_file(fetch_qcew_school_pay("30"), qcew_path),
+tryCatch(write_reference_file(fetch_qcew_school_pay("30"), qcew_path, retrieved_source = "BLS QCEW"),
          error = function(e) log_reference_result(qcew_path, "error", conditionMessage(e)))
 oews_wages <- read.csv(oews_path, stringsAsFactors = FALSE,
                        colClasses = c(Area_Code = "character", SOC = "character", Year = "character"))
@@ -2231,14 +2231,14 @@ library(edjobs)
 source("salary_scrapers.R")
 
 teacher_salary <- safe_scrape(
-  "MT DLI teacher compensation",
+  "MT DLI teacher compensation", retrieved_source = "MT DLI", app_dir = "Mt_Ed_Jobs",
   scrape_fn = fetch_dli_teacher_compensation_all_districts,
   expected_cols = c("District", "Teacher_Count", "Teacher_Salary_10th_Pctile",
                      "Teacher_Avg_Salary", "Teacher_Salary_90th_Pctile", "Salary_Year")
 )
 
 teacher_fte <- safe_scrape(
-  "CCD district teacher FTE (MT)",
+  "CCD district teacher FTE (MT)", retrieved_source = "Urban CCD", app_dir = "Mt_Ed_Jobs",
   # Every district the crosswalk ties to CCD, hand map entries first.
   scrape_fn = function() fetch_ccd_teacher_fte(crosswalk_leaids(district_crosswalk)),   # edjobs, by NCES id
   expected_cols = c("District", "Teachers_Total_FTE", "Enrollment", "CCD_Year")
@@ -2321,7 +2321,7 @@ source("opi_finance_scraper.R")
 # catches any other fetch failure: logs it, leaves salarymap2.csv untouched
 # this run, rather than crashing the whole pipeline.
 county_context <- safe_scrape(
-  "Census ACS county context (MT)",
+  "Census ACS county context (MT)", retrieved_source = "Census ACS", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_census_county_context(county_suffix = ", Montana"),
   expected_cols = c("County", "Median_Household_Income", "Median_Gross_Rent",
                      "Population", "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct")
@@ -2339,7 +2339,7 @@ if (nrow(county_context) > 0) {
 }
 
 child_poverty <- safe_scrape(
-  "Census SAIPE district child poverty rate (MT)",
+  "Census SAIPE district child poverty rate (MT)", retrieved_source = "Census SAIPE", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_census_saipe_child_poverty(crosswalk_leaids(district_crosswalk)),   # edjobs: by NCES id, pairs pooled
   expected_cols = c("District", "Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population")
 )
@@ -2355,7 +2355,7 @@ if (nrow(child_poverty) > 0) {
 }
 
 district_finance <- safe_scrape(
-  "OPI per-district General Fund expenditures (MT)",
+  "OPI per-district General Fund expenditures (MT)", retrieved_source = "OPI finance", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_opi_district_expenditures(
     lea_map = crosswalk_lea_names(district_crosswalk, MT_OPI_FINANCE_LEA_MAP),
     county_map = crosswalk_counties(district_crosswalk)),
@@ -2385,7 +2385,7 @@ opi_only_xw <- district_crosswalk[is.na(district_crosswalk$Registry_District), ,
 frl_ids <- c(frl_ids, lapply(split(as.character(opi_only_xw$LEAID), opi_only_xw$Map_Entity), unique))
 frl_ids <- frl_ids[!vapply(frl_ids, function(x) all(is.na(x)), logical(1))]
 frl_all <- safe_scrape(
-  "CCD free/reduced-price lunch share (MT)",
+  "CCD free/reduced-price lunch share (MT)", retrieved_source = "Urban CCD", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_ccd_frl_share(30, frl_ids),
   expected_cols = c("District", "Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year")
 )
@@ -2413,11 +2413,11 @@ opi_only_path <- file.path("Mt_Ed_Jobs", "opi_only_districts.csv")
 opi_only_entities <- unique(combinedclean$District[
   combinedclean$District %in% district_crosswalk$Map_Entity[is.na(district_crosswalk$Registry_District)]])
 
-dli_systems <- safe_scrape("MT DLI teacher compensation (all school systems)", scrape_fn = fetch_dli_all_systems,
+dli_systems <- safe_scrape("MT DLI teacher compensation (all school systems)", retrieved_source = "MT DLI", app_dir = "Mt_Ed_Jobs", scrape_fn = fetch_dli_all_systems,
                            expected_cols = c("DLI_Name", "Teacher_Avg_Salary"))
-saipe_leaid <- safe_scrape("Census SAIPE child poverty by NCES id (MT)", scrape_fn = fetch_saipe_by_leaid,
+saipe_leaid <- safe_scrape("Census SAIPE child poverty by NCES id (MT)", retrieved_source = "Census SAIPE", app_dir = "Mt_Ed_Jobs", scrape_fn = fetch_saipe_by_leaid,
                            expected_cols = c("LEAID", "Child_Poverty_Rate"))
-finance_by_name <- safe_scrape("OPI General Fund by district name (MT)",
+finance_by_name <- safe_scrape("OPI General Fund by district name (MT)", retrieved_source = "OPI finance", app_dir = "Mt_Ed_Jobs",
                                scrape_fn = function() opi_finance_by_district(fetch_opi_finance_workbook(OPI_FINANCE_CURRENT_YEAR_URL)),
                                expected_cols = c("OPI_District", "Total_General_Fund_Expenditure"))
 acs_cols <- c("County", "Median_Household_Income", "Median_Gross_Rent", "Population", "ACS_Year",
@@ -2476,6 +2476,7 @@ log_scrape_result("Census geocoder (surrounding-district poverty, other employer
                   status = if (length(geo_failed)) "error" else "ok",
                   n_rows = sum(!is.na(others$Child_Poverty_Basis)),
                   error_message = if (length(geo_failed)) paste("geocoder failed for:", paste(geo_failed, collapse = "; ")) else NA_character_)
+if (!length(geo_failed)) record_source_retrieved("Census Geocoder", "Mt_Ed_Jobs")
 # CCD_Year is text: a private school's record year is "2023-24" (PSS).
 opi_only <- dplyr::bind_rows(dplyr::mutate(complete_opi_only_columns(opi_only), CCD_Year = as.character(CCD_Year)),
                              dplyr::mutate(others, CCD_Year = as.character(CCD_Year)))
@@ -2913,7 +2914,7 @@ library(edjobs)
 source("ipeds_unitids.R")   # IPEDS_UNITID_MAP; the fetchers are in edjobs
 
 he_salary <- safe_scrape(
-  "IPEDS instructional staff salaries (MT)",
+  "IPEDS instructional staff salaries (MT)", retrieved_source = "Urban IPEDS", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_ipeds_he_salaries(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor",
                      "Faculty_Count", "Salary_Year")
@@ -2926,24 +2927,24 @@ library(edjobs)
 local({
   unitids <- na.omit(read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"))$IPEDS_UNITID)
   staff_path <- file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv")
-  tryCatch(write_reference_file(fetch_ipeds_staff_salaries(30, unitids), staff_path),
+  tryCatch(write_reference_file(fetch_ipeds_staff_salaries(30, unitids), staff_path, retrieved_source = "Urban IPEDS"),
            error = function(e) log_reference_result(staff_path, "error", conditionMessage(e)))
 })
 
 he_enrollment <- safe_scrape(
-  "IPEDS fall enrollment FTE (MT)",
+  "IPEDS fall enrollment FTE (MT)", retrieved_source = "Urban IPEDS", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_ipeds_he_enrollment(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Enrollment", "Enrollment_Year")
 )
 
 he_enrollment_trend <- safe_scrape(
-  "IPEDS fall enrollment 5-year trend (MT)",
+  "IPEDS fall enrollment 5-year trend (MT)", retrieved_source = "Urban IPEDS", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_ipeds_he_enrollment_trend(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Enrollment_Change_Pct")
 )
 
 he_pell_share <- safe_scrape(
-  "FSA Pell Grant recipient share (MT)",
+  "FSA Pell Grant recipient share (MT)", retrieved_source = "Urban FSA", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_ipeds_he_pell_share(IPEDS_UNITID_MAP),
   expected_cols = c("Name", "Pell_Recipient_Share", "Pell_Year")
 )
@@ -2978,7 +2979,7 @@ if (nrow(he_salary) > 0) {
   # generic "N years ago" column names, not literal year numbers, so the
   # schema stays stable as the calendar year rolls over.
   salary_trend <- safe_scrape(
-    "IPEDS instructional staff salary 3-year trend (MT)",
+    "IPEDS instructional staff salary 3-year trend (MT)", retrieved_source = "Urban IPEDS", app_dir = "Mt_Ed_Jobs",
     scrape_fn = function() fetch_ipeds_he_salary_trend(IPEDS_UNITID_MAP, n_years = 3),
     expected_cols = c("Name", "Year", "Faculty_Avg_Salary")
   )
@@ -3035,7 +3036,7 @@ library(edjobs)
 # that chunk's `county_context` variable, matching every other chunk in
 # this file being self-contained and re-runnable on its own.
 county_context_he <- safe_scrape(
-  "Census ACS county context for HE institutions (MT)",
+  "Census ACS county context for HE institutions (MT)", retrieved_source = "Census ACS", app_dir = "Mt_Ed_Jobs",
   scrape_fn = function() fetch_census_county_context(county_suffix = ", Montana"),
   expected_cols = c("County", "Median_Household_Income", "Median_Gross_Rent",
                      "Population", "ACS_Year", "Mining_Employment_Share", "Population_Change_Pct")
