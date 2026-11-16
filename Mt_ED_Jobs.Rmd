@@ -2792,6 +2792,14 @@ hedata <- hedata_raw %>%
   mutate(Posted_Date = as.character(Posted_Date),
          Archive_Date = Sys.Date())
 
+# Where each posting goes on the map (edjobs place_he_postings(), 2026-11-16):
+# a posting is placed at another MT town only when its Location writes that
+# town (FVCC's "Libby, MT"), using places.csv
+# (every Census place in the state, its point and county). Anything else (the
+# main campus town, a department, "United States", several sites, another
+# state) stays at the main campus; Place_Basis says which, for the map's note.
+hedata <- place_he_postings(hedata, he_registry, read_state_places("places.csv"), "MT")
+
 if (!dir.exists("Archived_HE_Data")) dir.create("Archived_HE_Data")
 if (!dir.exists("Mt_Ed_Jobs")) dir.create("Mt_Ed_Jobs")
 
@@ -2855,7 +2863,7 @@ this_week_he_cat <- hedata %>% mutate(Job_Type = classify_he_job_type(Title))
 this_week_facultydata <- this_week_he_cat %>%
   filter(Job_Type %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")) %>%
   mutate(Category = classify_he_faculty_category(Title)) %>%
-  select(-all_of(POSTED_PAY_COLUMNS), -any_of(c("Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year", "Close_Date")))
+  select(-all_of(POSTED_PAY_COLUMNS), -any_of(c("Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year", "Close_Date")), -any_of(HE_PLACE_COLUMNS))
 
 source("history_accumulator.R")
 
