@@ -1056,6 +1056,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     as before (224 of 224: fn, args, session, platform, url; `claude-notes/2026-11-16_registry-schema/`). Rehearsal
     (`claude-notes/2026-11-16_rehearsal-mt-registry-schema-0.31.0.log`): every step passed; parity 9/9; suites pre
     3,211 / post 3,222 passed, 0 failed; combinedclean 1,395 rows.
+  * [x] College postings at branch campuses on the map (2026-11-16; branch `he-campus-places`, edjobs 0.32.0; Mike
+    11-16: "we need the locations to be accurate on the map"). A posting whose Location names another Montana town
+    gets its own dot (edjobs `place_he_postings()`); the HE registry gains `Town`, `places.csv` holds every Census
+    place with its county; anything else stays at the main campus, counted in a note under the map;
+    facultydata.csv leaves the new columns out (`HE_PLACE_COLUMNS`). Plan and measurement:
+    `claude-notes/2026-11-16_college-campus-locations.md`. Rehearsal
+    (`claude-notes/2026-11-16_rehearsal-mt-campus-0.32.0.log`): every step passed; parity 9/9; suites pre 3,222 /
+    post 3,236 passed, 0 failed; hedata 375 postings: 75 main town, 4 other town (FVCC Libby), 296 no town (mostly
+    MSU-system departments: campus rules are stage 2, not built).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
