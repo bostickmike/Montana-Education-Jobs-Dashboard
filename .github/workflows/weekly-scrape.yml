@@ -78,6 +78,12 @@ jobs:
           r-version: 'release'
           use-public-rspm: true
 
+      # setup-r writes TZ=UTC to $GITHUB_ENV, which overrides the workflow's
+      # env for every later step (test dispatch 2026-11-17: the guard ran in
+      # Mountain time, the commit date in UTC). Put Mountain time back.
+      - name: Run in Mountain time (setup-r sets UTC)
+        run: echo "TZ=America/Denver" >> "$GITHUB_ENV"
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
@@ -471,10 +477,12 @@ jobs:
             # A code commit can land on main while the run works (2026-11-03: the
             # finished run's push was rejected). Rebase this data commit onto it;
             # a conflict (someone else changed the same data files) still fails
-            # the step, rather than merging data silently.
+            # the step, rather than merging data silently. Rebase onto the branch
+            # this run is on (main, or a test-dispatch branch: rebasing a branch
+            # onto main in this shallow checkout replays its commits, 2026-11-17).
             pushed=false
             for attempt in 1 2 3; do
-              if git pull --rebase origin main && git push; then pushed=true; break; fi
+              if git pull --rebase origin "$GITHUB_REF_NAME" && git push; then pushed=true; break; fi
               git rebase --abort 2>/dev/null || true
               sleep 15
             done
