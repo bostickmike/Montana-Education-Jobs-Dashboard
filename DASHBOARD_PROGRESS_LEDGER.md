@@ -1126,6 +1126,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     differences; app.R from main vs branch: every data object identical (79; only the 3 constants gone), every tab's
     36 outputs identical (shinytest2, `parity2-mt.log`, `claude-notes/2026-11-16_phase6/`). Suite 3,196
     passed; the one failure is the EDJOBS_VERSION pin test until the pin moves to 0.37.0.
+  * [x] Pin edjobs 0.38.0 (the 2026-11-17 full review's fixes) and split posting spells at gaps (2026-11-17; branch
+    `pin-0.38.0`). `scripts/build_posting_spells.R` runs `split_posting_gaps()` after `bridge_posting_ids()` for
+    K-12 and before `use_earliest_posted_date()` for college (Mike's evidence rule, workspace
+    `claude-notes/2026-11-17_spells-gaps/`): same posted date on both sides of a gap stays one spell; a later posted
+    date splits it and the earlier piece ends; no date splits it and the earlier piece is censored ("censored: back
+    after a gap"); stable IDs never split. On the committed archives: K-12 2,852 -> 2,856 postings, 470 -> 472
+    endings in durations, median 28 -> 25.5 days, 4 pieces censored back after a gap; college 927 -> 929 postings,
+    244 endings, median 31.5 -> 32.5, 2 censored. manifest.json: main's, with only the edjobs entry from v0.38.0
+    installed from GitHub (464c49c). Full rehearsal (`claude-notes/2026-11-17_rehearsal-mt-pin-0.38.0.log`): every
+    step passed, suites 3,218 / 3,233 passed, 0 failed; OPI statewide 333 rows, no source errors; K-12 rows 1,369 ->
+    1,393, college 381 -> 375.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
