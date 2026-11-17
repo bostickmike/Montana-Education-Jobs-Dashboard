@@ -1085,6 +1085,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     parity 9/9; suites pre 3,231 / post 3,246 passed, 0 failed; combinedclean 1,402 rows; hedata 374 postings: 79
     main town, 15 other town (MSU 11: Havre 3, Great Falls 2, Helena, Joliet, Lewistown, Miles City, Plentywood,
     Sidney; FVCC Libby 4), 280 no town.
+  * [x] A link to each district's and college's page at its source (2026-11-16; branch `source-record-links`, edjobs
+    0.35.0; Mike 11-16: "each row in each data set could have a url link to its source whenever possible"; option A,
+    Mike: "yes"). salarymap2.csv gets `CCD_Link` (NCES CCD district page, from `NCES_LEAID`) and salarymap.csv
+    `IPEDS_Link` (College Navigator, from `IPEDS_UNITID`), added by a last Rmd chunk after every chunk that rewrites
+    them. Posting files already link every posting; DLI/OPI salary, OPI finance, SAIPE and ACS have no page per
+    district, so they get none (measurement: `claude-notes/2026-11-16_source-links-per-row.md`). Both NCES pages show
+    NCES's newest year; split elementary/high school districts link the elementary district's record (the file's
+    existing `NCES_LEAID`); Missoula College carries UM's IPEDS id. Rehearsal
+    (`claude-notes/2026-11-16_rehearsal-mt-source-links-0.35.0.log`): every step passed; parity 9/9; suites pre 3,231
+    / post 3,246 passed, 0 failed; links on 201 / 201 districts and 23 / 23 colleges; 14 sampled links each opened the
+    right record.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
