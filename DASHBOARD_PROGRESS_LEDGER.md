@@ -1096,6 +1096,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-16_rehearsal-mt-source-links-0.35.0.log`): every step passed; parity 9/9; suites pre 3,231
     / post 3,246 passed, 0 failed; links on 201 / 201 districts and 23 / 23 colleges; 14 sampled links each opened the
     right record.
+  * [x] Data dictionary source labels a reader can look up (2026-11-16; branch `dictionary-source-labels`; Mike 11-16:
+    the `Primary_Authority` labels were internal, "Canonical Registry", "Project Pipeline"; option A, Mike: "A is
+    fine"). Every row now names an outside source or "This dashboard: ..." with how the value was made: weekly
+    snapshot, posting tracking, job title classification, district and college list, coverage summary; postings
+    are "Job posting (district job board or OPI Jobs for Teachers)" or "Job posting (college job board)"; duplicate source names merged (NCES Common Core
+    of Data (CCD), US Census ACS 5-year, US Dept of Education FSA, MT DLI Teacher Compensation Report). Names,
+    coordinates and careers links say "district and college list", not IPEDS or Census geocoding: the cookbook has
+    them hand-maintained. 161 of the CSV's rows and 154 rows of DATA_DICTIONARY.md changed; no other cell changed;
+    the two agree on every label. Suite 3,210 passed, 0 failed. Plan: `claude-notes/2026-11-16_dictionary-source-labels.md`.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
