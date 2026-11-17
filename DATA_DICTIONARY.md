@@ -38,24 +38,24 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `title` | String | District ATS / OPI | Official job vacancy title as published by the school district or OPI Jobs for Teachers feed. |
-| `Archive_Date` | Date (YYYY-MM-DD) | Project Scraper | Weekly snapshot observation date on which the vacancy was captured as actively open. |
-| `date_posted` | String / Date | District ATS / OPI | Original posted date string as published on the district applicant tracking board. |
-| `position` | Categorical | Classification Model | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
-| `location` | String | District ATS / OPI | Specific school building, facility, or employer city/location label. |
-| `url` | URL | District ATS / OPI | Direct link to the job posting or district applicant tracking portal. |
-| `District` | String | Canonical Registry | Canonical public school district name. OPI statewide rows: the registry district when the dashboard's own scrape of it returned nothing that week, else the district not scraped directly (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
-| `Posting_Source` | String | Project Pipeline | Original job feed source (direct district ATS board vs OPI Jobs for Teachers feed). |
-| `Posting_Identity_Method` | String | Project Pipeline | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
-| `Posting_ID` | String | Project Pipeline | Durable unique posting identifier used to track openings longitudinally across weekly snapshots. |
+| `title` | String | Job posting (district job board or OPI Jobs for Teachers) | Official job vacancy title as published by the school district or OPI Jobs for Teachers feed. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: weekly snapshot | Weekly snapshot observation date on which the vacancy was captured as actively open. |
+| `date_posted` | String / Date | Job posting (district job board or OPI Jobs for Teachers) | Original posted date string as published on the district applicant tracking board. |
+| `position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
+| `location` | String | Job posting (district job board or OPI Jobs for Teachers) | Specific school building, facility, or employer city/location label. |
+| `url` | URL | Job posting (district job board or OPI Jobs for Teachers) | Direct link to the job posting or district applicant tracking portal. |
+| `District` | String | This dashboard: district and college list | Canonical public school district name. OPI statewide rows: the registry district when the dashboard's own scrape of it returned nothing that week, else the district not scraped directly (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
+| `Posting_Source` | String | This dashboard: posting tracking | Original job feed source (direct district ATS board vs OPI Jobs for Teachers feed). |
+| `Posting_Identity_Method` | String | This dashboard: posting tracking | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
+| `Posting_ID` | String | This dashboard: posting tracking | Durable unique posting identifier used to track openings longitudinally across weekly snapshots. |
 | `Feed_District` | String | OPI Jobs for Teachers | For OPI statewide rows, the employer's district as the posting's detail page names it, in OPI's naming ("Lockwood K-12", "Richey Elem"), which is NCES CCD's district name; NA for direct-board rows and where the detail page could not be read. Used to decide whether the posting counts (`opi_reconcile.R`). |
-| `Also_On_Feed` | Logical | Project Pipeline | TRUE for a direct-board posting that OPI Jobs for Teachers also lists as the same opening (`opi_matcher.R`). Counted once, from the direct board; OPI postings a district's board doesn't list are counted from OPI. |
-| `Close_Date` | String | District ATS | The posting's closing date as its board states it, unparsed (a date, or "Open Until Filled", "TBD" and similar). AppliTrack (from 2026-11-03), Tyler Portico rows with a real end date (Tyler fills open-ended postings with the fetch date plus a year, which is left NA), SchoolSpring (from 2026-11-04: the deadline applicants see, as YYYY-MM-DD; "Posted until filled" is NA), and OPI (from 2026-11-04: the grid's "Closing Date", a date as YYYY-MM-DD, otherwise as written, nearly always "Open Until Filled"); NA where the board gives none and for other sources. |
-| `Role_Hint` | Categorical | Classification Model | What the posting's own description says about the role, used to refine its position bucket: Substitute (a long-term substitute), Paraprofessional, Part-Time (a part-time or under-1.0-FTE teacher), Teacher, Counselor or Administration (the role the description names first). OPI postings only, from 2026-11-03 (when OPI descriptions began to be archived): OPI's title is its subject-area field, which misfiles some postings (e.g. a long-term substitute, a paraeducator under "Elementary Curriculum", a teacher under "Administrative - Other"). NA when the description gives no clear signal, and for every other source. |
-| `Pay_Min` | Numeric | Job posting | Lowest pay amount stated in the posting itself, in `Pay_Unit` (NA when no dollar figure is stated). Never converted between units. |
-| `Pay_Max` | Numeric | Job posting | Highest stated amount (equals `Pay_Min` for a single figure). |
-| `Pay_Unit` | String | Job posting | `hour`, `day`, `month`, `year`, `credit hour`, or `stipend` (season/activity amount); NA when undeterminable. |
-| `Pay_Text` | String | Job posting | The posting text the pay was read from, for verification (for RedRover, the board's own pay line, e.g. "$13.50 - $14.65 per hour"; "per unit" there means a stipend). |
+| `Also_On_Feed` | Logical | This dashboard: posting tracking | TRUE for a direct-board posting that OPI Jobs for Teachers also lists as the same opening (`opi_matcher.R`). Counted once, from the direct board; OPI postings a district's board doesn't list are counted from OPI. |
+| `Close_Date` | String | Job posting (district job board or OPI Jobs for Teachers) | The posting's closing date as its board states it, unparsed (a date, or "Open Until Filled", "TBD" and similar). AppliTrack (from 2026-11-03), Tyler Portico rows with a real end date (Tyler fills open-ended postings with the fetch date plus a year, which is left NA), SchoolSpring (from 2026-11-04: the deadline applicants see, as YYYY-MM-DD; "Posted until filled" is NA), and OPI (from 2026-11-04: the grid's "Closing Date", a date as YYYY-MM-DD, otherwise as written, nearly always "Open Until Filled"); NA where the board gives none and for other sources. |
+| `Role_Hint` | Categorical | This dashboard: job title classification | What the posting's own description says about the role, used to refine its position bucket: Substitute (a long-term substitute), Paraprofessional, Part-Time (a part-time or under-1.0-FTE teacher), Teacher, Counselor or Administration (the role the description names first). OPI postings only, from 2026-11-03 (when OPI descriptions began to be archived): OPI's title is its subject-area field, which misfiles some postings (e.g. a long-term substitute, a paraeducator under "Elementary Curriculum", a teacher under "Administrative - Other"). NA when the description gives no clear signal, and for every other source. |
+| `Pay_Min` | Numeric | Job posting (district job board or OPI Jobs for Teachers) | Lowest pay amount stated in the posting itself, in `Pay_Unit` (NA when no dollar figure is stated). Never converted between units. |
+| `Pay_Max` | Numeric | Job posting (district job board or OPI Jobs for Teachers) | Highest stated amount (equals `Pay_Min` for a single figure). |
+| `Pay_Unit` | String | Job posting (district job board or OPI Jobs for Teachers) | `hour`, `day`, `month`, `year`, `credit hour`, or `stipend` (season/activity amount); NA when undeterminable. |
+| `Pay_Text` | String | Job posting (district job board or OPI Jobs for Teachers) | The posting text the pay was read from, for verification (for RedRover, the board's own pay line, e.g. "$13.50 - $14.65 per hour"; "per unit" there means a stipend). |
 | `Est_Pay` | Numeric | BLS OEWS | Where the posting states no pay of its own: the Bureau of Labor Statistics' median pay for the posting's role in its region (see `Est_Occupation`, `Est_Area`), in `Est_Pay_Unit`. A regional estimate across all employers of that occupation, not this job's offer. NA for roles with no fair match (coaches, unclassified postings). |
 | `Est_Pay_Unit` | String | BLS OEWS | `hour` for roles usually paid hourly where BLS publishes an hourly median; otherwise `year`. |
 | `Est_Occupation` | String | BLS OEWS | The OEWS occupation the posting was matched to from its position and title (e.g. "Teaching assistants", "School bus drivers"). |
@@ -68,18 +68,18 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `title` | String | District ATS / OPI | Standardized job vacancy title as published by the school district or OPI feed. |
-| `Archive_Date` | Date (YYYY-MM-DD) | Project Scraper | Weekly snapshot observation date on which the vacancy was captured as open. |
-| `position` | Categorical | Classification Model | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
-| `location` | String | District ATS / OPI | Specific school building, facility, or employer city/location label. |
-| `url` | URL | District ATS / OPI | Direct URL link to the official job vacancy listing or district portal. |
-| `District` | String | Canonical Registry | Canonical public school district name. |
-| `Posting_Source` | String | Project Pipeline | Original job feed source (direct district ATS board vs OPI statewide feed). |
-| `Posting_Identity_Method` | String | Project Pipeline | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
-| `Posting_ID` | String | Project Pipeline | Durable unique posting identifier tracking vacancies across multi-year weekly snapshots. |
-| `Category` | String | Classification Model | Fine-grained subject specialization or departmental role assignment. |
-| `Broad_Category` | Categorical | Classification Model | Clustered high-level category grouping (Elementary, STEM, Special Education, Humanities, etc.). |
-| `Role_Hint` | Categorical | Classification Model | What the posting's own description says about the role, used to refine its position bucket: Substitute (a long-term substitute), Paraprofessional, Part-Time (a part-time or under-1.0-FTE teacher), Teacher, Counselor or Administration (the role the description names first). OPI postings only, from 2026-11-03 (when OPI descriptions began to be archived): OPI's title is its subject-area field, which misfiles some postings (e.g. a long-term substitute, a paraeducator under "Elementary Curriculum", a teacher under "Administrative - Other"). NA when the description gives no clear signal, and for every other source. |
+| `title` | String | Job posting (district job board or OPI Jobs for Teachers) | Standardized job vacancy title as published by the school district or OPI feed. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: weekly snapshot | Weekly snapshot observation date on which the vacancy was captured as open. |
+| `position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
+| `location` | String | Job posting (district job board or OPI Jobs for Teachers) | Specific school building, facility, or employer city/location label. |
+| `url` | URL | Job posting (district job board or OPI Jobs for Teachers) | Direct URL link to the official job vacancy listing or district portal. |
+| `District` | String | This dashboard: district and college list | Canonical public school district name. |
+| `Posting_Source` | String | This dashboard: posting tracking | Original job feed source (direct district ATS board vs OPI statewide feed). |
+| `Posting_Identity_Method` | String | This dashboard: posting tracking | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
+| `Posting_ID` | String | This dashboard: posting tracking | Durable unique posting identifier tracking vacancies across multi-year weekly snapshots. |
+| `Category` | String | This dashboard: job title classification | Fine-grained subject specialization or departmental role assignment. |
+| `Broad_Category` | Categorical | This dashboard: job title classification | Clustered high-level category grouping (Elementary, STEM, Special Education, Humanities, etc.). |
+| `Role_Hint` | Categorical | This dashboard: job title classification | What the posting's own description says about the role, used to refine its position bucket: Substitute (a long-term substitute), Paraprofessional, Part-Time (a part-time or under-1.0-FTE teacher), Teacher, Counselor or Administration (the role the description names first). OPI postings only, from 2026-11-03 (when OPI descriptions began to be archived): OPI's title is its subject-area field, which misfiles some postings (e.g. a long-term substitute, a paraeducator under "Elementary Curriculum", a teacher under "Administrative - Other"). NA when the description gives no clear signal, and for every other source. |
 
 ---
 
@@ -87,23 +87,23 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `District` | String | Canonical Registry | Canonical public school district or employer location name. |
-| `NCES_LEAID` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier. |
-| `Title` | String | District Job Board / OPI | Standardized job vacancy title. |
-| `Category` | String | Classification Model | Fine-grained subject area or functional assignment. |
-| `Broad_Category` | Categorical | Classification Model | High-level clustered subject or role category. |
-| `Position` | Categorical | Classification Model | Broad staff position group (Teacher, Administrator, Support Services). |
-| `First_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Earliest weekly scraper run in which this job posting was observed active. |
-| `Last_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Latest weekly scraper run in which this job posting was observed active. |
-| `Weeks_Observed` | Integer | Project Derived | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
-| `Estimated_Days_Open` | Integer | Project Derived | Estimated calendar duration of the vacancy (proxy for labor shortage / time-to-fill). |
-| `Status` | Categorical | Project Derived | State of posting: Closed / Filled or Still Active as of the latest pipeline run. |
-| `is_stem` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
-| `is_sped` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Special Education; 0 otherwise. |
-| `is_elementary` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Elementary Education; 0 otherwise. |
-| `is_secondary` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Middle or High School; 0 otherwise. |
-| `is_admin` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Administration, Principal, or Superintendent; 0 otherwise. |
-| `is_support_staff` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Classified Support, Paraprofessional, Custodial, Bus, or Food Service; 0 otherwise. |
+| `District` | String | This dashboard: district and college list | Canonical public school district or employer location name. |
+| `NCES_LEAID` | String (7-digit) | NCES Common Core of Data (CCD) | Federal NCES 7-digit Local Education Agency identifier. |
+| `Title` | String | Job posting (district job board or OPI Jobs for Teachers) | Standardized job vacancy title. |
+| `Category` | String | This dashboard: job title classification | Fine-grained subject area or functional assignment. |
+| `Broad_Category` | Categorical | This dashboard: job title classification | High-level clustered subject or role category. |
+| `Position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services). |
+| `First_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Earliest weekly scraper run in which this job posting was observed active. |
+| `Last_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Latest weekly scraper run in which this job posting was observed active. |
+| `Weeks_Observed` | Integer | This dashboard: posting tracking | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
+| `Estimated_Days_Open` | Integer | This dashboard: posting tracking | Estimated calendar duration of the vacancy (proxy for labor shortage / time-to-fill). |
+| `Status` | Categorical | This dashboard: posting tracking | State of posting: Closed / Filled or Still Active as of the latest pipeline run. |
+| `is_stem` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
+| `is_sped` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Special Education; 0 otherwise. |
+| `is_elementary` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Elementary Education; 0 otherwise. |
+| `is_secondary` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Middle or High School; 0 otherwise. |
+| `is_admin` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Administration, Principal, or Superintendent; 0 otherwise. |
+| `is_support_staff` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Classified Support, Paraprofessional, Custodial, Bus, or Food Service; 0 otherwise. |
 
 ---
 
@@ -111,33 +111,33 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `District` | String | Canonical Registry | Canonical public school district name. |
+| `District` | String | This dashboard: district and college list | Canonical public school district name. |
 | `County` | String | US Census Bureau | Primary county in which the district central administrative office is located. |
-| `Latitude` | Decimal Degrees | US Census / Geocoding | Geographic latitude coordinate of district central headquarters. |
-| `Longitude` | Decimal Degrees | US Census / Geocoding | Geographic longitude coordinate of district central headquarters. |
-| `Job_Link` | URL | District Registry | Official employment or applicant tracking portal link for the district. |
-| `NCES_LEAID` | String (7-digit) | NCES CCD | Federal NCES 7-digit Local Education Agency identifier. |
-| `CCD_Link` | URL | NCES CCD | Link to this district's page in the NCES Common Core of Data district search, built from NCES_LEAID (edjobs nces_district_url()). The page shows NCES's newest school year, which can be newer than CCD_Year. Blank when the district has no NCES id. |
-| `Teacher_Count` | Integer | MT DLI Compensation Report | Total certified classroom teachers reported in the regional DLI compensation dataset. |
-| `Teacher_Salary_10th_Pctile` | Currency ($) | MT DLI Compensation Report | 10th percentile teacher salary published in the Montana DLI Regional Wage Report. |
-| `Teacher_Avg_Salary` | Currency ($) | MT DLI Compensation Report | Average annual compensation paid across all employed certified classroom teachers. |
-| `Teacher_Salary_90th_Pctile` | Currency ($) | MT DLI Compensation Report | 90th percentile teacher salary published in the Montana DLI Regional Wage Report. |
-| `Salary_Year` | String | MT DLI Compensation Report | Data collection school year corresponding to the published DLI wage report. |
-| `Salary_Source` | String | State Agency | Publishing authority (Montana Department of Labor & Industry via OPI GEMS). |
-| `Teachers_Total_FTE` | Numeric | NCES CCD | Total full-time-equivalent certified classroom teachers employed by the district. |
-| `Enrollment` | Integer | NCES CCD | Total pre-K through grade 12 student enrollment count. |
-| `CCD_Year` | Integer | NCES CCD | Data collection school year for federal CCD staffing and enrollment counts. |
-| `CCD_Source` | String | NCES CCD | Federal source citation for NCES CCD public school district universe data. |
-| `Data_Coverage` | Categorical | Project Methodology | Scraper coverage fidelity tier: Full (direct ATS integration) vs Partial (heuristic site scrape). |
-| `Median_Household_Income` | Currency ($) | US Census ACS 5-Year | County median annual household income in inflation-adjusted dollars. |
-| `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-Year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
-| `Median_Gross_Rent` | Currency ($) | US Census ACS 5-Year | County median monthly gross rent including estimated utilities. |
-| `Median_Gross_Rent_MOE` | Currency ($) | US Census ACS 5-Year | Census's 90% margin of error for Median_Gross_Rent (B25064_001M). |
-| `Population` | Integer | US Census ACS 5-Year | Total estimated resident population of the county. |
-| `ACS_Year` | Integer | US Census ACS 5-Year | Data release year for US Census American Community Survey 5-year estimates. |
-| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
-| `Mining_Employment_Share_MOE` | Proportion (0-1) | US Census ACS 5-Year (derived) | 90% margin of error for Mining_Employment_Share, from Census's formula for a derived proportion (ACS handbook 2020, ch. 8, formula 6) using the S2403 MOEs. When it is at least the share itself, the share is not distinguishable from zero (Census's CV > 0.61 line) and the dashboard says so. Census's CV-based reliability rules are unstable for shares under 5% (National Research Council 2007, p. 67), so no reliability tier is given. |
-| `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year percentage change in total resident population. |
+| `Latitude` | Decimal Degrees | This dashboard: district and college list | Geographic latitude coordinate of district central headquarters. |
+| `Longitude` | Decimal Degrees | This dashboard: district and college list | Geographic longitude coordinate of district central headquarters. |
+| `Job_Link` | URL | This dashboard: district and college list | Official employment or applicant tracking portal link for the district. |
+| `NCES_LEAID` | String (7-digit) | NCES Common Core of Data (CCD) | Federal NCES 7-digit Local Education Agency identifier. |
+| `CCD_Link` | URL | NCES Common Core of Data (CCD) | Link to this district's page in the NCES Common Core of Data district search, built from NCES_LEAID (edjobs nces_district_url()). The page shows NCES's newest school year, which can be newer than CCD_Year. Blank when the district has no NCES id. |
+| `Teacher_Count` | Integer | MT DLI Teacher Compensation Report | Total certified classroom teachers reported in the regional DLI compensation dataset. |
+| `Teacher_Salary_10th_Pctile` | Currency ($) | MT DLI Teacher Compensation Report | 10th percentile teacher salary published in the Montana DLI Regional Wage Report. |
+| `Teacher_Avg_Salary` | Currency ($) | MT DLI Teacher Compensation Report | Average annual compensation paid across all employed certified classroom teachers. |
+| `Teacher_Salary_90th_Pctile` | Currency ($) | MT DLI Teacher Compensation Report | 90th percentile teacher salary published in the Montana DLI Regional Wage Report. |
+| `Salary_Year` | String | MT DLI Teacher Compensation Report | Data collection school year corresponding to the published DLI wage report. |
+| `Salary_Source` | String | MT DLI Teacher Compensation Report | Publishing authority (Montana Department of Labor & Industry via OPI GEMS). |
+| `Teachers_Total_FTE` | Numeric | NCES Common Core of Data (CCD) | Total full-time-equivalent certified classroom teachers employed by the district. |
+| `Enrollment` | Integer | NCES Common Core of Data (CCD) | Total pre-K through grade 12 student enrollment count. |
+| `CCD_Year` | Integer | NCES Common Core of Data (CCD) | Data collection school year for federal CCD staffing and enrollment counts. |
+| `CCD_Source` | String | NCES Common Core of Data (CCD) | Federal source citation for NCES CCD public school district universe data. |
+| `Data_Coverage` | Categorical | This dashboard: coverage summary | Scraper coverage fidelity tier: Full (direct ATS integration) vs Partial (heuristic site scrape). |
+| `Median_Household_Income` | Currency ($) | US Census ACS 5-year | County median annual household income in inflation-adjusted dollars. |
+| `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
+| `Median_Gross_Rent` | Currency ($) | US Census ACS 5-year | County median monthly gross rent including estimated utilities. |
+| `Median_Gross_Rent_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Gross_Rent (B25064_001M). |
+| `Population` | Integer | US Census ACS 5-year | Total estimated resident population of the county. |
+| `ACS_Year` | Integer | US Census ACS 5-year | Data release year for US Census American Community Survey 5-year estimates. |
+| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
+| `Mining_Employment_Share_MOE` | Proportion (0-1) | US Census ACS 5-year (derived) | 90% margin of error for Mining_Employment_Share, from Census's formula for a derived proportion (ACS handbook 2020, ch. 8, formula 6) using the S2403 MOEs. When it is at least the share itself, the share is not distinguishable from zero (Census's CV > 0.61 line) and the dashboard says so. Census's CV-based reliability rules are unstable for shares under 5% (National Research Council 2007, p. 67), so no reliability tier is given. |
+| `Population_Change_Pct` | Proportion | US Census ACS 5-year | County 5-year percentage change in total resident population. |
 | `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Share of children 5-17 in families below the poverty line. Separate elementary and high school districts (e.g. Billings) are combined by their numbers of children. Not a true poverty rate (Census): the first count includes only children related to the householder, in families in poverty; the second, all children 5-17 (foster children, other unrelated children and children in group quarters are in the second only). The dashboards label it "School-age children in poverty (Census est.)". |
 | `SAIPE_Population` | Number | US Census SAIPE | Total population of the SAIPE district behind the child poverty estimate (SAEPOVALL_PT); for a combined elementary + high school district, the larger one's (the high school district covers both). It sets the estimate's error band. |
 | `Child_Poverty_Low` | Proportion (0-1) | US Census SAIPE (derived) | Low end of Census's approximate 90% range for Child_Poverty_Rate: rate x (1 - 1.645 x CV), floored at 0. CV is Census's median relative error for districts of that size (0.67 under 2,500 people down to 0.15 at 65,000+; "Quantifying Relative Error in the School District Estimates", revised 2025-12-17), which Census calls an approximate upper bound. Census publishes no margin of error for one district. |
@@ -153,14 +153,14 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `Title` | String | Institutional Board | Published higher education job vacancy title as advertised on the college careers portal. |
-| `Location` | String | Institutional Board | Campus location, city, or remote work designation. |
-| `Posted_Date` | String / Date | Institutional Board | Original date of vacancy posting as published by the college or university. |
-| `Institution` | String | IPEDS Directory | Collegiate institution canonical name. |
-| `Link` | URL | Institutional Board | Direct web URL to the employment vacancy listing. |
-| `Archive_Date` | Date (YYYY-MM-DD) | Project Scraper | Weekly snapshot observation date when the posting was captured open. |
-| `Job_Type` | Categorical | Classification Model | Position appointment category (Instructor/Teacher/Faculty, Adjunct/Part-Time Faculty, Other/Staff). |
-| `Category` | String | Classification Model | Academic discipline or administrative functional area. |
+| `Title` | String | Job posting (college job board) | Published higher education job vacancy title as advertised on the college careers portal. |
+| `Location` | String | Job posting (college job board) | Campus location, city, or remote work designation. |
+| `Posted_Date` | String / Date | Job posting (college job board) | Original date of vacancy posting as published by the college or university. |
+| `Institution` | String | This dashboard: district and college list | Collegiate institution canonical name. |
+| `Link` | URL | Job posting (college job board) | Direct web URL to the employment vacancy listing. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: weekly snapshot | Weekly snapshot observation date when the posting was captured open. |
+| `Job_Type` | Categorical | This dashboard: job title classification | Position appointment category (Instructor/Teacher/Faculty, Adjunct/Part-Time Faculty, Other/Staff). |
+| `Category` | String | This dashboard: job title classification | Academic discipline or administrative functional area. |
 
 ---
 
@@ -168,21 +168,21 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `Institution` | String | IPEDS Directory | Collegiate institution canonical name. |
+| `Institution` | String | This dashboard: district and college list | Collegiate institution canonical name. |
 | `IPEDS_UNITID` | String (6-digit) | NCES IPEDS | Official 6-digit federal NCES Integrated Postsecondary Education Data System Unit ID. |
-| `Title` | String | Institutional Board | Standardized collegiate job vacancy title. |
-| `Category` | String | Classification Model | Academic discipline or functional assignment area. |
-| `Job_Type` | Categorical | Classification Model | Collegiate appointment type (Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty). |
-| `First_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Earliest weekly scraper run in which this job posting was observed active. |
-| `Last_Seen_Date` | Date (YYYY-MM-DD) | Project Scraper | Latest weekly scraper run in which this job posting was observed active. |
-| `Weeks_Observed` | Integer | Project Derived | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
-| `Estimated_Days_Open` | Integer | Project Derived | Estimated calendar duration of the vacancy (proxy for search length and time-to-fill). |
-| `Status` | Categorical | Project Derived | State of posting: Closed / Filled or Still Active as of the latest pipeline run. |
-| `is_stem` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
-| `is_health` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Health Sciences, Nursing, or Medical; 0 otherwise. |
-| `is_cte` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Career & Technical Education or Trades; 0 otherwise. |
-| `is_adjunct` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Part-Time or Adjunct Faculty; 0 otherwise. |
-| `is_faculty` | Binary (0/1) | Shortage Taxonomy | Dummy indicator: 1 if position is Full-Time Instructional Faculty; 0 otherwise. |
+| `Title` | String | Job posting (college job board) | Standardized collegiate job vacancy title. |
+| `Category` | String | This dashboard: job title classification | Academic discipline or functional assignment area. |
+| `Job_Type` | Categorical | This dashboard: job title classification | Collegiate appointment type (Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty). |
+| `First_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Earliest weekly scraper run in which this job posting was observed active. |
+| `Last_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Latest weekly scraper run in which this job posting was observed active. |
+| `Weeks_Observed` | Integer | This dashboard: posting tracking | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
+| `Estimated_Days_Open` | Integer | This dashboard: posting tracking | Estimated calendar duration of the vacancy (proxy for search length and time-to-fill). |
+| `Status` | Categorical | This dashboard: posting tracking | State of posting: Closed / Filled or Still Active as of the latest pipeline run. |
+| `is_stem` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
+| `is_health` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Health Sciences, Nursing, or Medical; 0 otherwise. |
+| `is_cte` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Career & Technical Education or Trades; 0 otherwise. |
+| `is_adjunct` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Part-Time or Adjunct Faculty; 0 otherwise. |
+| `is_faculty` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Full-Time Instructional Faculty; 0 otherwise. |
 
 ---
 
@@ -190,11 +190,11 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `Name` | String | IPEDS Directory | Official legal institution name of the public college or university. |
+| `Name` | String | This dashboard: district and college list | Official legal institution name of the public college or university. |
 | `County` | String | US Census Bureau | County in which the collegiate campus is located. |
-| `Longitude` | Decimal Degrees | IPEDS Directory | Geographic longitude coordinate of main campus centroid. |
-| `Latitude` | Decimal Degrees | IPEDS Directory | Geographic latitude coordinate of main campus centroid. |
-| `Link` | URL | Institutional Directory | Official careers or employment opportunities portal URL for the institution. |
+| `Longitude` | Decimal Degrees | This dashboard: district and college list | Geographic longitude coordinate of main campus centroid. |
+| `Latitude` | Decimal Degrees | This dashboard: district and college list | Geographic latitude coordinate of main campus centroid. |
+| `Link` | URL | This dashboard: district and college list | Official careers or employment opportunities portal URL for the institution. |
 | `IPEDS_UNITID` | String (6-digit) | NCES IPEDS | Official 6-digit federal NCES Integrated Postsecondary Education Data System Unit ID. |
 | `IPEDS_Link` | URL | NCES IPEDS | Link to this institution's page in NCES College Navigator, built from IPEDS_UNITID (edjobs college_navigator_url()). The page shows NCES's newest year, which can be newer than this file's year columns. Blank when the institution has no IPEDS id. |
 | `Faculty_Avg_Salary` | Currency ($) | NCES IPEDS | Average salary of full-time instructional staff on 9- to 12-month contracts (IPEDS collects none for part-time staff or for contracts under 9 months) across all academic ranks combined. |
@@ -207,17 +207,17 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Enrollment` | Integer | NCES IPEDS | Total unduplicated fall student enrollment count. |
 | `Enrollment_Year` | Integer | NCES IPEDS | Academic reporting year for IPEDS fall enrollment figures. |
 | `Enrollment_Change_Pct` | Proportion | NCES IPEDS | 5-year percentage change in total fall student enrollment. |
-| `Pell_Recipient_Share` | Proportion (0-1) | US Dept of Ed FSA | Share of undergraduate degree-seeking students awarded federal need-based Pell Grants. |
-| `Pell_Year` | Integer | US Dept of Ed FSA | Award year for Federal Student Aid (FSA) Pell Grant recipient figures. |
-| `Median_Household_Income` | Currency ($) | US Census ACS 5-Year | County median annual household income in inflation-adjusted dollars. |
-| `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-Year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
-| `Median_Gross_Rent` | Currency ($) | US Census ACS 5-Year | County median monthly gross rent including estimated utilities. |
-| `Median_Gross_Rent_MOE` | Currency ($) | US Census ACS 5-Year | Census's 90% margin of error for Median_Gross_Rent (B25064_001M). |
-| `Population` | Integer | US Census ACS 5-Year | Total estimated resident population of the county. |
-| `ACS_Year` | Integer | US Census ACS 5-Year | Data release year for US Census American Community Survey 5-year estimates. |
-| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
-| `Mining_Employment_Share_MOE` | Proportion (0-1) | US Census ACS 5-Year (derived) | 90% margin of error for Mining_Employment_Share, from Census's formula for a derived proportion (ACS handbook 2020, ch. 8, formula 6) using the S2403 MOEs. When it is at least the share itself, the share is not distinguishable from zero (Census's CV > 0.61 line) and the dashboard says so. Census's CV-based reliability rules are unstable for shares under 5% (National Research Council 2007, p. 67), so no reliability tier is given. |
-| `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year percentage change in total resident population. |
+| `Pell_Recipient_Share` | Proportion (0-1) | US Dept of Education FSA | Share of undergraduate degree-seeking students awarded federal need-based Pell Grants. |
+| `Pell_Year` | Integer | US Dept of Education FSA | Award year for Federal Student Aid (FSA) Pell Grant recipient figures. |
+| `Median_Household_Income` | Currency ($) | US Census ACS 5-year | County median annual household income in inflation-adjusted dollars. |
+| `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
+| `Median_Gross_Rent` | Currency ($) | US Census ACS 5-year | County median monthly gross rent including estimated utilities. |
+| `Median_Gross_Rent_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Gross_Rent (B25064_001M). |
+| `Population` | Integer | US Census ACS 5-year | Total estimated resident population of the county. |
+| `ACS_Year` | Integer | US Census ACS 5-year | Data release year for US Census American Community Survey 5-year estimates. |
+| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
+| `Mining_Employment_Share_MOE` | Proportion (0-1) | US Census ACS 5-year (derived) | 90% margin of error for Mining_Employment_Share, from Census's formula for a derived proportion (ACS handbook 2020, ch. 8, formula 6) using the S2403 MOEs. When it is at least the share itself, the share is not distinguishable from zero (Census's CV > 0.61 line) and the dashboard says so. Census's CV-based reliability rules are unstable for shares under 5% (National Research Council 2007, p. 67), so no reliability tier is given. |
+| `Population_Change_Pct` | Proportion | US Census ACS 5-year | County 5-year percentage change in total resident population. |
 
 ---
 
@@ -225,9 +225,9 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `District` | String | Canonical Registry | Canonical public school district or employer location name. |
-| `Archive_Date` | Date (YYYY-MM-DD) | Project Scraper | Snapshot observation date for that weekly pipeline sweep. |
-| `n` | Integer | Project Scraper | Total count of active job postings observed open for that district in that week. |
+| `District` | String | This dashboard: district and college list | Canonical public school district or employer location name. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: weekly snapshot | Snapshot observation date for that weekly pipeline sweep. |
+| `n` | Integer | This dashboard: weekly snapshot | Total count of active job postings observed open for that district in that week. |
 
 ---
 
@@ -235,9 +235,9 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `Institution` | String | IPEDS Directory | Canonical public college or university name. |
-| `Archive_Date` | Date (YYYY-MM-DD) | Project Scraper | Snapshot observation date for that weekly pipeline sweep. |
-| `n` | Integer | Project Scraper | Total count of active job postings observed open for that higher education institution in that week. |
+| `Institution` | String | This dashboard: district and college list | Canonical public college or university name. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: weekly snapshot | Snapshot observation date for that weekly pipeline sweep. |
+| `n` | Integer | This dashboard: weekly snapshot | Total count of active job postings observed open for that higher education institution in that week. |
 
 ---
 
@@ -247,18 +247,18 @@ Every Montana public district in NCES CCD, tied to the registry district whose j
 
 | Column | Type | Authority | Definition |
 |---|---|---|---|
-| `LEAID` | String | NCES CCD | NCES district ID. |
-| `OPI_District` | String | NCES CCD | CCD district name, which is also the name OPI Jobs for Teachers detail pages use. |
-| `City` | String | NCES CCD | District's city (CCD location address). |
-| `County` | String | NCES CCD | District's county. |
-| `Latitude` | Numeric | NCES CCD | District latitude (CCD). |
-| `Longitude` | Numeric | NCES CCD | District longitude (CCD). |
-| `Teachers_Total_FTE` | Numeric | NCES CCD | Teacher FTE for this district. |
-| `Enrollment` | Integer | NCES CCD | Student enrollment for this district. |
-| `Registry_District` | String | Project Pipeline | The directly scraped registry district whose job board covers this district; NA if it isn't scraped directly. |
-| `Match_Rule` | String | Project Pipeline | How Registry_District was assigned: registry NCES id, same town and name (elementary/high school pair), or high school in a scraped town. |
-| `Map_Entity` | String | Project Pipeline | Name used on the map and in District: the registry district, or for districts not scraped directly one name per town (e.g. 'Box Elder Elem / Box Elder H S'). |
-| `CCD_Year` | Integer | NCES CCD | CCD directory year. |
+| `LEAID` | String | NCES Common Core of Data (CCD) | NCES district ID. |
+| `OPI_District` | String | NCES Common Core of Data (CCD) | CCD district name, which is also the name OPI Jobs for Teachers detail pages use. |
+| `City` | String | NCES Common Core of Data (CCD) | District's city (CCD location address). |
+| `County` | String | NCES Common Core of Data (CCD) | District's county. |
+| `Latitude` | Numeric | NCES Common Core of Data (CCD) | District latitude (CCD). |
+| `Longitude` | Numeric | NCES Common Core of Data (CCD) | District longitude (CCD). |
+| `Teachers_Total_FTE` | Numeric | NCES Common Core of Data (CCD) | Teacher FTE for this district. |
+| `Enrollment` | Integer | NCES Common Core of Data (CCD) | Student enrollment for this district. |
+| `Registry_District` | String | This dashboard: district and college list | The directly scraped registry district whose job board covers this district; NA if it isn't scraped directly. |
+| `Match_Rule` | String | This dashboard: district and college list | How Registry_District was assigned: registry NCES id, same town and name (elementary/high school pair), or high school in a scraped town. |
+| `Map_Entity` | String | This dashboard: district and college list | Name used on the map and in District: the registry district, or for districts not scraped directly one name per town (e.g. 'Box Elder Elem / Box Elder H S'). |
+| `CCD_Year` | Integer | NCES Common Core of Data (CCD) | CCD directory year. |
 
 ### K. OPI-only Districts (`opi_only_districts.csv`)
 
@@ -266,24 +266,24 @@ Districts not scraped directly that posted on OPI Jobs for Teachers this week: t
 
 | Column | Type | Authority | Definition |
 |---|---|---|---|
-| `District` | String | Project Pipeline | Map entity: a district (or town pair) not scraped directly that posted on OPI Jobs for Teachers this week. |
-| `County` | String | NCES CCD | County. |
-| `City` | String | NCES CCD | City. |
-| `Latitude` | Numeric | NCES CCD | Latitude (mean over the entity's districts). |
-| `Longitude` | Numeric | NCES CCD | Longitude (mean over the entity's districts). |
-| `Teachers_Total_FTE` | Numeric | NCES CCD | Teacher FTE, summed over the entity's districts. |
-| `Enrollment` | Integer | NCES CCD | Enrollment, summed over the entity's districts. |
-| `OPI_Districts` | String | NCES CCD | The entity's district names, ' / '-separated. |
-| `LEAIDs` | String | NCES CCD | The entity's NCES district IDs, ';'-separated. |
-| `Data_Coverage` | String | Project Pipeline | Always "Postings via OPI's statewide board": openings come from OPI, not a direct scrape. |
+| `District` | String | This dashboard: district and college list | Map entity: a district (or town pair) not scraped directly that posted on OPI Jobs for Teachers this week. |
+| `County` | String | NCES Common Core of Data (CCD) | County. |
+| `City` | String | NCES Common Core of Data (CCD) | City. |
+| `Latitude` | Numeric | NCES Common Core of Data (CCD) | Latitude (mean over the entity's districts). |
+| `Longitude` | Numeric | NCES Common Core of Data (CCD) | Longitude (mean over the entity's districts). |
+| `Teachers_Total_FTE` | Numeric | NCES Common Core of Data (CCD) | Teacher FTE, summed over the entity's districts. |
+| `Enrollment` | Integer | NCES Common Core of Data (CCD) | Enrollment, summed over the entity's districts. |
+| `OPI_Districts` | String | NCES Common Core of Data (CCD) | The entity's district names, ' / '-separated. |
+| `LEAIDs` | String | NCES Common Core of Data (CCD) | The entity's NCES district IDs, ';'-separated. |
+| `Data_Coverage` | String | This dashboard: coverage summary | Always "Postings via OPI's statewide board": openings come from OPI, not a direct scrape. |
 | `Job_Link` | String | OPI Jobs for Teachers | OPI Jobs for Teachers board. |
-| `Teacher_Count` | Integer | MT DLI Teacher Compensation | Teachers in the matched DLI school system. |
-| `Teacher_Salary_10th_Pctile` | Currency ($) | MT DLI Teacher Compensation | 10th percentile teacher salary of the matched DLI school system. |
-| `Teacher_Avg_Salary` | Currency ($) | MT DLI Teacher Compensation | Average teacher salary of the matched DLI school system; NA where DLI suppresses it or no system matches by name. |
-| `Teacher_Salary_90th_Pctile` | Currency ($) | MT DLI Teacher Compensation | 90th percentile teacher salary of the matched DLI school system. |
-| `DLI_Name` | String | MT DLI Teacher Compensation | DLI school system matched by name (one match only); may cover an elementary and high school district together. |
-| `Salary_Year` | String | MT DLI Teacher Compensation | School year of the DLI figures. |
-| `Salary_Source` | String | MT DLI Teacher Compensation | Source of the salary figures. |
+| `Teacher_Count` | Integer | MT DLI Teacher Compensation Report | Teachers in the matched DLI school system. |
+| `Teacher_Salary_10th_Pctile` | Currency ($) | MT DLI Teacher Compensation Report | 10th percentile teacher salary of the matched DLI school system. |
+| `Teacher_Avg_Salary` | Currency ($) | MT DLI Teacher Compensation Report | Average teacher salary of the matched DLI school system; NA where DLI suppresses it or no system matches by name. |
+| `Teacher_Salary_90th_Pctile` | Currency ($) | MT DLI Teacher Compensation Report | 90th percentile teacher salary of the matched DLI school system. |
+| `DLI_Name` | String | MT DLI Teacher Compensation Report | DLI school system matched by name (one match only); may cover an elementary and high school district together. |
+| `Salary_Year` | String | MT DLI Teacher Compensation Report | School year of the DLI figures. |
+| `Salary_Source` | String | MT DLI Teacher Compensation Report | Source of the salary figures. |
 | `Child_Poverty_Rate` | Proportion (0-1) | US Census SAIPE | Estimated share of children 5-17 in poverty (SAIPE, by NCES id). An entity with an elementary and a high school district adds their children in poverty and divides by all their children. Not a true poverty rate (Census): the first count includes only children related to the householder, in families in poverty; the second, all children 5-17 (foster children, other unrelated children and children in group quarters are in the second only). The dashboards label it "School-age children in poverty (Census est.)". |
 | `SAIPE_Population` | Number | US Census SAIPE | Total population of the SAIPE district behind the child poverty estimate (SAEPOVALL_PT); for a combined elementary + high school district, the larger one's (the high school district covers both). It sets the estimate's error band. |
 | `Child_Poverty_Low` | Proportion (0-1) | US Census SAIPE (derived) | Low end of Census's approximate 90% range for Child_Poverty_Rate: rate x (1 - 1.645 x CV), floored at 0. CV is Census's median relative error for districts of that size (0.67 under 2,500 people down to 0.15 at 65,000+; "Quantifying Relative Error in the School District Estimates", revised 2025-12-17), which Census calls an approximate upper bound. Census publishes no margin of error for one district. |
@@ -292,13 +292,13 @@ Districts not scraped directly that posted on OPI Jobs for Teachers this week: t
 | `Total_General_Fund_Expenditure` | Currency ($) | OPI School Finance Files | General Fund expenditure, summed over the entity's districts. |
 | `Finance_FY` | String / Integer | OPI School Finance Files | State fiscal year of the finance figures. |
 | `Finance_Source` | String | OPI School Finance Files | Source of the finance figures. |
-| `Median_Household_Income` | Currency ($) | US Census ACS 5-Year | County median household income. |
-| `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-Year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
-| `Median_Gross_Rent` | Currency ($) | US Census ACS 5-Year | County median gross rent. |
-| `Median_Gross_Rent_MOE` | Currency ($) | US Census ACS 5-Year | Census's 90% margin of error for Median_Gross_Rent (B25064_001M). |
-| `Population` | Integer | US Census ACS 5-Year | County population. |
-| `ACS_Year` | Integer | US Census ACS 5-Year | ACS release year. |
-| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-Year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
-| `Mining_Employment_Share_MOE` | Proportion (0-1) | US Census ACS 5-Year (derived) | 90% margin of error for Mining_Employment_Share, from Census's formula for a derived proportion (ACS handbook 2020, ch. 8, formula 6) using the S2403 MOEs. When it is at least the share itself, the share is not distinguishable from zero (Census's CV > 0.61 line) and the dashboard says so. Census's CV-based reliability rules are unstable for shares under 5% (National Research Council 2007, p. 67), so no reliability tier is given. |
-| `Population_Change_Pct` | Proportion | US Census ACS 5-Year | County 5-year population change. |
-| `CCD_Year` | Integer | NCES CCD | CCD directory year. |
+| `Median_Household_Income` | Currency ($) | US Census ACS 5-year | County median household income. |
+| `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
+| `Median_Gross_Rent` | Currency ($) | US Census ACS 5-year | County median gross rent. |
+| `Median_Gross_Rent_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Gross_Rent (B25064_001M). |
+| `Population` | Integer | US Census ACS 5-year | County population. |
+| `ACS_Year` | Integer | US Census ACS 5-year | ACS release year. |
+| `Mining_Employment_Share` | Proportion (0-1) | US Census ACS 5-year | Share of the county's employed civilians (16 and over) who work in mining, quarrying, and oil and gas extraction (ACS table S2403). |
+| `Mining_Employment_Share_MOE` | Proportion (0-1) | US Census ACS 5-year (derived) | 90% margin of error for Mining_Employment_Share, from Census's formula for a derived proportion (ACS handbook 2020, ch. 8, formula 6) using the S2403 MOEs. When it is at least the share itself, the share is not distinguishable from zero (Census's CV > 0.61 line) and the dashboard says so. Census's CV-based reliability rules are unstable for shares under 5% (National Research Council 2007, p. 67), so no reliability tier is given. |
+| `Population_Change_Pct` | Proportion | US Census ACS 5-year | County 5-year population change. |
+| `CCD_Year` | Integer | NCES Common Core of Data (CCD) | CCD directory year. |
