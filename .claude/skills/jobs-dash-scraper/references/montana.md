@@ -3,15 +3,15 @@
 Pipeline `Mt_ED_Jobs.Rmd` → dashboard `Mt_Ed_Jobs/app.R`. Weekly CI runs on Tuesdays. Counts as of 2026-11-09: **201 K-12 districts** of about 398 nominal (many are Elem+HS pairs sharing one board), and **23 HE institutions**. Check the current numbers with `wc -l k12_district_registry.csv he_institution_registry.csv` (subtract the header).
 
 ## Registries
-- `k12_district_registry.csv`: `District, City, County, Latitude, Longitude, Platform, Slug, Job_Link`. `Platform` is a shared platform name (`AppliTrack`, `SchoolSpring`, `TedK12`, `TylerPortico`, `Apptegy`, `RedRoverK12`) or a per-district `<Name>Heuristic`.
-- `he_institution_registry.csv`: `Institution, County, Latitude, Longitude, Platform, Feed_URL, Job_Link`.
+- `k12_district_registry.csv`: `District, NCES_LEAID, City, County, Latitude, Longitude, Platform, Platform_Key, Job_Link, List_Start, List_Stop, List_Skip` (the schema both states share since 2026-11-16; `Platform_Key` was `Slug`, and the list rules were `k12_list_rules.csv`). `Platform` is a shared platform name (`AppliTrack`, `SchoolSpring`, `TedK12`, `TylerPortico`, `Apptegy`, `RedRoverK12`) or a per-district `<Name>Heuristic`.
+- `he_institution_registry.csv`: `Institution, County, Latitude, Longitude, Platform, Feed_URL, Job_Link, Location_Pattern`.
 - `llm_extract_targets.csv`: the quarantined LLM shadow pilot for prose-only pages (`LLM_EXTRACT.md`). Not in the registry and not on the dashboard.
 
 ## How a registry row reaches its scraper
 `state_config.R` → `MT_SCRAPER_SPECS` and `scraper_sources`, read by `edjobs::resolve_scraper_call(name)`:
-- Shared platforms map to one `fetch_*` with registry columns as arguments (e.g. `AppliTrack` → `fetch_applitrack_postings(Slug)`).
+- Shared platforms map to one `fetch_*` with registry columns as arguments (e.g. `AppliTrack` → `fetch_applitrack_postings(Platform_Key)`).
 - A K-12 `<Name>Heuristic` platform resolves **by convention** to `fetch_<lowercase name>_postings(Job_Link)`, so a new heuristic needs a function of exactly that name. (`CutBankHeuristic` → `fetch_cutbank_postings`.)
-- K-12 `Apptegy` / `ApptegyPageBuilder` rows read through the edjobs family routine (`fetch_apptegy_postings()`, edjobs 0.18.0), with optional rules in `k12_list_rules.csv`: a new Apptegy district needs only its registry row. `ApptegyBespoke` rows (Shelby, Geyser) dispatch through `APPTEGY_DISTRICT_SCRAPERS` in `misc_district_scrapers.R`, keyed by the exact `District` name. CyberSchool rows read through `fetch_cyberschool_postings()`.
+- K-12 `Apptegy` / `ApptegyPageBuilder` rows read through the edjobs family routine (`fetch_apptegy_postings()`, edjobs 0.18.0), with optional rules in the row's `List_Start` / `List_Stop` / `List_Skip`: a new Apptegy district needs only its registry row. `ApptegyBespoke` rows (Shelby, Geyser) dispatch through `APPTEGY_DISTRICT_SCRAPERS` in `misc_district_scrapers.R`, keyed by the exact `District` name. CyberSchool rows read through `fetch_cyberschool_postings()`.
 - HE heuristics are listed explicitly in `MT_SCRAPER_SPECS`, so add one there.
 - `test-drift-check.R` asserts every function named in the specs exists and every registered row resolves.
 
