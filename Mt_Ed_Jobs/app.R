@@ -222,15 +222,19 @@ combineddata <- combineddata %>%
 
 # Weekly ALL-category posting totals per district/institution -- powers the
 # sparkline trend next to each entity's raw count on the Top Hiring tables.
+# Twice-weekly runs (2026-11-17): every history file the charts read is rolled up to each ISO week's last run
+# (latest_snapshot_per_week()), so a chart has one point a week and "new this week" compares with a week ago.
 k12_district_weekly_totals <- read.csv("k12_district_weekly_totals.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("District", "Archive_Date", "n"), "k12_district_weekly_totals.csv", on_missing = note_load_issue) %>%
   # An employer whose map row covers several posting names counts once.
   mutate(Archive_Date = as.Date(Archive_Date), District = relabel_employer(District)) %>%
   group_by(District, Archive_Date) %>%
-  summarise(n = sum(n), .groups = "drop")
+  summarise(n = sum(n), .groups = "drop") %>%
+  latest_snapshot_per_week()
 he_institution_weekly_totals <- read.csv("he_institution_weekly_totals.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("Institution", "Archive_Date", "n"), "he_institution_weekly_totals.csv", on_missing = note_load_issue) %>%
-  mutate(Archive_Date = as.Date(Archive_Date))
+  mutate(Archive_Date = as.Date(Archive_Date)) %>%
+  latest_snapshot_per_week()
 
 data_dictionary <- if (file.exists("data_dictionary.csv")) {
   read.csv("data_dictionary.csv", stringsAsFactors = FALSE)
@@ -308,6 +312,7 @@ k12sum <- read.csv("allsum.csv", fileEncoding = "UTF-8") %>%
   filter(Broad_Category != "Other")
 
 k12sum$Archive_Date <- as.Date(k12sum$Archive_Date)
+k12sum <- latest_snapshot_per_week(k12sum)
 
 # A week with zero postings for a category is simply absent from the source
 # aggregation, not an explicit 0 -- geom_line() would silently connect
@@ -419,6 +424,7 @@ hesum_he <- read.csv("allsum_he.csv") %>%
   filter(Category != "Uncategorized")
 
 hesum_he$Archive_Date <- as.Date(hesum_he$Archive_Date)
+hesum_he <- latest_snapshot_per_week(hesum_he)
 
 hesum_he <- hesum_he %>%
   tidyr::complete(Category, Archive_Date, Institution, Job_Type, fill = list(sum = 0))
@@ -561,13 +567,15 @@ HE_JOB_TYPE_COLORS <- c(
 k12_history <- read.csv("k12jobanalysis.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("title", "Archive_Date", "location", "District", "Posting_ID"),
                           "k12jobanalysis.csv", on_missing = note_load_issue) %>%
-  mutate(Archive_Date = as.Date(Archive_Date), District = relabel_employer(District))
+  mutate(Archive_Date = as.Date(Archive_Date), District = relabel_employer(District)) %>%
+  latest_snapshot_per_week()
 
 k12_new_this_week <- find_k12_new_postings(k12_history)
 
 he_history <- read.csv("facultydata.csv", fileEncoding = "UTF-8") %>%
   validate_and_pad_schema(c("Title", "Location", "Institution", "Link", "Archive_Date", "Job_Type", "Category"), "facultydata.csv", on_missing = note_load_issue) %>%
   mutate(Archive_Date = as.Date(Archive_Date)) %>%
+  latest_snapshot_per_week() %>%
   filter(Job_Type %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")) %>%
   mutate(Appointment = dplyr::recode(
     Job_Type,
