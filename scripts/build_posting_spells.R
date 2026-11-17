@@ -27,7 +27,7 @@ calendar <- if (file.exists("coverage_calendar.csv")) read.csv("coverage_calenda
 endings <- if (file.exists("schoolspring_endings.csv")) read.csv("schoolspring_endings.csv", colClasses = "character") else NULL
 statuses <- if (file.exists("posting_status.csv")) read.csv("posting_status.csv", colClasses = "character") else NULL
 
-panel <- bridge_posting_ids(k12_posting_panel("Archivek12_Data", crosswalk, registry), MT_K12_SPELL_RULES)
+panel <- split_posting_gaps(bridge_posting_ids(k12_posting_panel("Archivek12_Data", crosswalk, registry), MT_K12_SPELL_RULES))
 spells <- build_posting_spells(panel, calendar, endings, statuses = statuses, rules = MT_K12_SPELL_RULES)
 durations <- bind_rows(summarize_posting_durations(spells),
                        summarize_posting_durations(spells, "Position")) %>%
@@ -41,7 +41,7 @@ cat("posting_spells_k12.csv:", nrow(spells), "postings,", sum(spells$In_Duration
 
 # Higher ed: each institution is its own source in the calendar's HE rows.
 he_calendar <- if (is.null(calendar)) NULL else calendar[calendar$Segment == "HE", , drop = FALSE]
-he_panel <- use_earliest_posted_date(bridge_posting_ids(he_posting_panel("Archived_HE_Data"), MT_HE_SPELL_RULES))
+he_panel <- use_earliest_posted_date(split_posting_gaps(bridge_posting_ids(he_posting_panel("Archived_HE_Data"), MT_HE_SPELL_RULES)))
 he_spells <- build_posting_spells(he_panel, he_calendar, statuses = statuses, rules = MT_HE_SPELL_RULES)
 he_durations <- bind_rows(summarize_posting_durations(he_spells),
                           summarize_posting_durations(he_spells[he_spells$District != "Montana State University", ]) %>%
