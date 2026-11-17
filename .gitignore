@@ -12,3 +12,7 @@ scrape_log.csv
 .autofix/
 .claude/worktrees/
 .edjobs/
+
+# testthat failure snapshots (written when a test fails locally)
+tests/testthat/_problems/
+tests/testthat/testthat-problems.rds

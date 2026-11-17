@@ -1105,6 +1105,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     coordinates and careers links say "district and college list", not IPEDS or Census geocoding: the cookbook has
     them hand-maintained. 161 of the CSV's rows and 154 rows of DATA_DICTIONARY.md changed; no other cell changed;
     the two agree on every label. Suite 3,210 passed, 0 failed. Plan: `claude-notes/2026-11-16_dictionary-source-labels.md`.
+  * [x] Old test-failure files untracked (2026-11-16; branch `small-leftovers`). Main tracked testthat's local
+    failure snapshots (`tests/testthat/_problems/`, 4 files, and `testthat-problems.rds`) from 9c9c640; removed from
+    git and added to `.gitignore` so a local failing test no longer shows up as a change. No code or data change.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
