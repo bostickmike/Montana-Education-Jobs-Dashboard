@@ -1108,6 +1108,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Old test-failure files untracked (2026-11-16; branch `small-leftovers`). Main tracked testthat's local
     failure snapshots (`tests/testthat/_problems/`, 4 files, and `testthat-problems.rds`) from 9c9c640; removed from
     git and added to `.gitignore` so a local failing test no longer shows up as a change. No code or data change.
+  * [x] Package phase 6, slice 1: app helpers from edjobs 0.36.0 (2026-11-16; branch `phase6-slice1`). 22 functions
+    both states' app.R defined identically (pay/date/MOE text, sparklines, trends and movers, job search, first-seen
+    fill) now come from edjobs; app.R attaches it (`library(edjobs)`) and its copies are gone, with the app's copy of
+    `first_seen_key()`. `fill_first_seen()` now takes `lookup = first_seen_table`. Checks: package vs app copies on
+    both states' data 64/64 identical; app.R from main vs branch: all 82 data objects identical, every tab's 36
+    outputs and the rows shown (7 tables, 89 rows) identical (`claude-notes/2026-11-16_phase6/`). Suite 3,214 passed; the
+    only failures are the new committed-manifest test, which passes once manifest.json is rewritten from edjobs
+    v0.36.0 installed from GitHub (the PR carries that manifest; the weekly run's manifest check now also requires
+    edjobs as a GitHub package at the pinned tag). New test `test-app-no-local-copies.R`: app.R/feedback.R define no
+    edjobs export. The unit tests moved to edjobs.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
