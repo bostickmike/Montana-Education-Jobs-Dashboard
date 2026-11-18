@@ -42,7 +42,7 @@ K-12 current counts, vacancy numerators, longitudinal totals, and New This Week 
 
 ## Automation
 
-A GitHub Actions workflow runs weekly (Tuesdays — deliberately not Wyoming's Friday, since the two projects share one `CENSUS_API_KEY`), re-scrapes every source, regenerates every derived dataset, and commits + pushes if anything changed — which also triggers an automatic Posit Connect Cloud redeploy. Several non-blocking checks run alongside it:
+A GitHub Actions workflow runs twice a week (Mondays and Thursdays since 2026-11-17; never on Wyoming's Tuesdays and Fridays, since the two projects share one `CENSUS_API_KEY`), re-scrapes every source, regenerates every derived dataset, and commits + pushes if anything changed — which also triggers an automatic Posit Connect Cloud redeploy. Several non-blocking checks run alongside it:
 
 - Full `testthat` suite must pass before any real data is touched.
 - A sanity check compares the new pull against the previous run and refuses to commit if either side dropped more than half its postings.
