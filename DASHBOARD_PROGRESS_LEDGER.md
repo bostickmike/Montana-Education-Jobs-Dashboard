@@ -1150,6 +1150,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Second weekly run (2026-11-17; branch `second-cron`): `weekly-scrape.yml` cron `0 13 * * 1,4`, Mondays and
     Thursdays (was Tuesdays); Wyoming moves to Tuesdays and Fridays, so the shared `CENSUS_API_KEY` is never used by
     both on one day (days set by Mike 11-13). CLAUDE.md, README and the scraper skill's run-day line updated.
+  * [x] "How postings are counted" note moved from the top of the K-12 Trends tab to just below the Multi-Year Trends
+    chart (2026-11-17, Mike; branch `counting-note-placement`), text unchanged. Checked by screenshot
+    (`claude-notes/2026-11-17_counting-note/`); app smoke 21 and reactives 718 passed, 0 failed.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
