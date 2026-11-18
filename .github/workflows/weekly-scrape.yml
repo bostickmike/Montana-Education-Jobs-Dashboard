@@ -2,12 +2,12 @@ name: Weekly job data refresh
 
 on:
   schedule:
-    # Every Tuesday 13:00 UTC (~7am Mountain). Deliberately not Friday --
-    # this project shares one CENSUS_API_KEY with the Wyoming Education
-    # Jobs Dashboard's own weekly workflow, which runs Fridays; a different
-    # day avoids both pipelines' Census ACS/SAIPE calls landing at the same
-    # time (user request, 2026-08-06).
-    - cron: '0 13 * * 2'
+    # Mondays and Thursdays 13:00 UTC (~6am Mountain), twice a week since
+    # 2026-11-17 (Tuesdays before). Never on Wyoming's days (Tuesdays and
+    # Fridays): the two projects share one CENSUS_API_KEY, and different
+    # days keep both pipelines' Census ACS/SAIPE calls apart (user request,
+    # 2026-08-06; days chosen 2026-11-13).
+    - cron: '0 13 * * 1,4'
   workflow_dispatch: {}
 
 # One weekly run at a time: on 2026-11-03 a scheduled run that GitHub started

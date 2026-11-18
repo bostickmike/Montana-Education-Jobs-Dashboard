@@ -1147,6 +1147,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     pay flags. Full rehearsal (`claude-notes/2026-11-17_rehearsal-mt-twice-weekly.log`): every step passed, suites
     3,218 / 3,233 passed, 0 failed; OPI statewide 333 postings; K-12 rows 1,369 -> 1,388, college 381 -> 378. The
     second weekly cron is a separate change.
+  * [x] Second weekly run (2026-11-17; branch `second-cron`): `weekly-scrape.yml` cron `0 13 * * 1,4`, Mondays and
+    Thursdays (was Tuesdays); Wyoming moves to Tuesdays and Fridays, so the shared `CENSUS_API_KEY` is never used by
+    both on one day (days set by Mike 11-13). CLAUDE.md, README and the scraper skill's run-day line updated.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
