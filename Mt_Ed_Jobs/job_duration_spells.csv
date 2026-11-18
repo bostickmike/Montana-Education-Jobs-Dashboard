@@ -38,8 +38,6 @@
 "Belgrade School District 44",3003290,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-11","2026-09-08",5,35,"Closed / Filled",0,0,0,1,0,0
 "Belgrade School District 44",3003290,"Life Skills Teacher MS2627_21","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-09-07","2026-11-17",11,78,"Still Active",0,1,0,0,0,0
 "Belgrade School District 44",3003290,"Math Teacher  MS2627_24","Mathematics Education","Math","Teacher","2026-09-07","2026-09-08",1,8,"Closed / Filled",1,0,0,0,0,0
-"Belgrade School District 44",3003290,"Math Teacher  MS2627_24 .5 FTE","Mathematics Education","Math","Teacher","2026-09-15","2026-11-17",10,70,"Still Active",1,0,0,0,0,0
-"Belgrade School District 44",3003290,"Math Teacher HS2627_15 .5 FTE","Mathematics Education","Math","Teacher","2026-09-07","2026-09-08",1,8,"Closed / Filled",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Mathematics","Mathematics Education","Math","Teacher","2026-08-11","2026-09-01",4,28,"Closed / Filled",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Science (Broadfield)","Science Education","Science","Teacher","2026-08-11","2026-10-27",12,84,"Closed / Filled",1,0,0,0,0,0
 "Belgrade School District 44",3003290,"Spanish Teacher HS2627_38","Language Education","Language","Teacher","2026-09-29","2026-11-17",8,56,"Still Active",0,0,0,0,0,0
@@ -53,7 +51,7 @@
 "Big Sandy Public Schools",3003750,"Elementary Life Skills Teacher","Special Education - Resource/Life Skills","Special Education - Resource/Life Skills","Teacher","2026-08-07","2026-10-20",12,81,"Closed / Filled",0,1,0,0,0,0
 "Big Sandy Public Schools",3003750,"English","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-09-29",9,61,"Closed / Filled",0,0,0,1,0,0
 "Big Sandy Public Schools",3003750,"Mathematics Teacher","Mathematics Education","Math","Teacher","2026-08-07","2026-10-20",12,81,"Closed / Filled",1,0,0,0,0,0
-"Big Sandy Public Schools",3003750,"Music","Music Education","Music","Teacher","2026-08-06","2026-11-17",16,110,"Still Active",0,0,0,0,0,0
+"Big Sandy Public Schools",3003750,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,0,0,0,0
 "Big Sandy Public Schools",3003750,"Physical Ed","Physical Education","Physical Education","Teacher","2026-08-06","2026-11-17",16,110,"Still Active",0,0,0,0,0,0
 "Big Sandy Public Schools",3003750,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-09-15",7,47,"Closed / Filled",0,1,0,0,0,0
 "Big Sandy Public Schools",3003750,"Special Education","Special Education - General","Special Education - General","Teacher","2026-11-03","2026-11-17",3,21,"Still Active",0,1,0,0,0,0
@@ -191,7 +189,6 @@
 "Corvallis School District #1",3007410,"Adult Ed - Small Business Instructor","Business and Economics","CTE - Business & Family Sciences","Teacher","2026-08-25","2026-11-17",13,91,"Still Active",1,0,0,0,0,0
 "Corvallis School District #1",3007410,"Adult Ed - Yoga Instructor","Physical Education","Physical Education","Teacher","2026-08-25","2026-11-17",13,91,"Still Active",0,0,0,0,0,0
 "Corvallis School District #1",3007410,"Middle School 5/6 SPED Teacher","Special Education - General","Special Education - General","Teacher","2026-08-25","2026-09-15",4,28,"Closed / Filled",0,1,0,0,0,0
-"Corvallis School District #1",3007410,"Middle School Title I Teacher - .5 FTE 1 year only","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-25","2026-11-17",13,91,"Still Active",0,0,0,1,0,0
 "Corvallis School District #1",3007410,"RISE Charter School Special Education Teacher (Grades K-12)","Special Education - General","Special Education - General","Teacher","2026-10-13","2026-11-17",6,42,"Still Active",0,1,0,0,0,0
 "Corvallis School District #1",3007410,"Reading","English Language Arts Education","English Language Arts Secondary","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,0,1,0,0
 "Corvallis School District #1",3007410,"Special Education","Special Education - General","Special Education - General","Teacher","2026-08-06","2026-08-18",3,19,"Closed / Filled",0,1,0,0,0,0
@@ -712,7 +709,7 @@
 "Stevensville Public Schools",3025020,"Spanish Teacher","Language Education","Language","Teacher","2026-08-07","2026-11-17",16,109,"Still Active",0,0,0,0,0,0
 "Stevensville Public Schools",3025020,"World Languages","Language Education","Language","Teacher","2026-08-06","2026-08-06",1,7,"Closed / Filled",0,0,0,0,0,0
 "Sun River Valley School District #24",3024300,"Music","Music Education","Music","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,0,0,0,0
-"Sunburst Schools",3025320,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-11-17",16,110,"Still Active",0,0,1,0,0,0
+"Sunburst Schools",3025320,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-10-27",13,89,"Closed / Filled",0,0,1,0,0,0
 "Superior School District",3025470,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-08-06","2026-11-17",16,110,"Still Active",0,0,1,0,0,0
 "Surprise Creek School",,"Elementary Curriculum","Elementary Education","Elementary","Teacher","2026-11-03","2026-11-17",3,21,"Still Active",0,0,1,0,0,0
 "Swan River School District #4",3025500,"Teachers","Uncategorized","Other","Teacher","2026-08-25","2026-11-17",13,91,"Still Active",0,0,0,0,0,0
