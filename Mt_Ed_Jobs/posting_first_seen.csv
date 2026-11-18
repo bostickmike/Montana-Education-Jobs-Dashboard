@@ -1,7 +1,8 @@
 "Segment","Key","First_Seen","Left_Censored"
 "K-12","absarokee elem / absarokee h s | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
+"K-12","alberton school district | building and grounds coordinator | https://www.asdmt.org/page/employment-opportunities","2026-11-17",FALSE
 "K-12","alberton school district | substitute teachers | https://www.asdmt.org/page/employment-opportunities","2026-09-01",TRUE
-"K-12","alberton school district | varsity girls' basketball: head + assistant coach | https://www.asdmt.org/page/employment-opportunities","2026-09-01",TRUE
+"K-12","alberton school district | transportation director | https://www.asdmt.org/page/employment-opportunities","2026-11-17",FALSE
 "K-12","amsterdam elem | physical ed | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","anaconda school district #10 | elementary special education teacher | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=301","2026-11-10",FALSE
 "K-12","anaconda school district #10 | instructional aide | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=256","2026-08-25",TRUE
@@ -9,7 +10,6 @@
 "K-12","anaconda school district #10 | paraprofessional - multiple openings | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=307","2026-10-06",FALSE
 "K-12","anaconda school district #10 | paraprofessional | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=309","2026-11-10",FALSE
 "K-12","anaconda school district #10 | paraprofessional | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=311","2026-11-10",FALSE
-"K-12","anaconda school district #10 | paraprofessional fmis/hs part time | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=318","2026-11-10",FALSE
 "K-12","anaconda school district #10 | school psychologist/intern 2027-2028 school year | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=313","2026-10-20",FALSE
 "K-12","anaconda school district #10 | substitutes all areas | https://www.applitrack.com/anacondaschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=182","2026-08-25",TRUE
 "K-12","arlee joint school district | assistant hs boys basketball coach | https://www.arleeschools.org/page/employment-opportunities","2026-10-20",FALSE
@@ -17,7 +17,7 @@
 "K-12","arlee joint school district | substitute bus driver | https://www.arleeschools.org/page/employment-opportunities","2026-09-01",TRUE
 "K-12","arlee joint school district | substitute teacher | https://www.arleeschools.org/page/employment-opportunities","2026-09-01",TRUE
 "K-12","ashland public school | clerk | https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment","2026-10-27",TRUE
-"K-12","ashland public school | elementary teacher | https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment","2026-10-27",TRUE
+"K-12","ashland public school | elementary education teacher-multiple positions grades k-8 | https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment","2026-11-17",FALSE
 "K-12","ashland public school | on call substitutes | https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment","2026-10-27",TRUE
 "K-12","ashland public school | para educator | https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment","2026-10-27",TRUE
 "K-12","ashland public school | school counselor | https://sites.google.com/ashlandpublicschool.com/aps-district-site/employment","2026-10-27",TRUE
@@ -30,23 +30,22 @@
 "K-12","bainville k-12 schools | custodian subs | https://www.bainvilleschool.com/page/employment","2026-11-03",TRUE
 "K-12","bainville k-12 schools | elementary teacher | https://www.bainvilleschool.com/page/employment","2026-11-03",TRUE
 "K-12","bainville k-12 schools | k-12 art teacher | https://www.bainvilleschool.com/page/employment","2026-11-03",TRUE
-"K-12","bainville k-12 schools | paraprofessional- small intervention group | https://www.bainvilleschool.com/page/employment","2026-11-03",TRUE
+"K-12","bainville k-12 schools | paraprofessional | https://www.bainvilleschool.com/page/employment","2026-11-17",FALSE
 "K-12","bainville k-12 schools | substitute bus drivers | https://www.bainvilleschool.com/page/employment","2026-11-03",TRUE
 "K-12","bainville k-12 schools | substitute teachers | https://www.bainvilleschool.com/page/employment","2026-11-03",TRUE
 "K-12","baker public schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","baker public schools | english | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","baker public schools | full time custodian (10/27/2026 open until filled) | https://www.baker.k12.mt.us/quick-links/employment","2026-11-03",FALSE
-"K-12","baker public schools | personal attendant paraprofessional (10/27/2026 open until filled) | https://www.baker.k12.mt.us/quick-links/employment","2026-11-03",FALSE
+"K-12","baker public schools | full time custodian | https://www.baker.k12.mt.us/quick-links/employment","2026-11-17",FALSE
+"K-12","baker public schools | personal attendant paraprofessional | https://www.baker.k12.mt.us/quick-links/employment","2026-11-17",FALSE
 "K-12","baker public schools | science (broadfield) | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","baker public schools | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-10-06",FALSE
-"K-12","belfry public schools | school bus drivers | https://form.jotform.com/221025701862144","2026-10-27",TRUE
+"K-12","belfry public schools | school bus drivers | https://www.belfrybats.org/index.php/our-school/employment","2026-10-27",TRUE
 "K-12","belfry public schools | social studies (broadfield) | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","belfry public schools | substitute teachers | https://form.jotform.com/221025701862144","2026-10-27",TRUE
+"K-12","belfry public schools | substitute teachers | https://www.belfrybats.org/index.php/our-school/employment","2026-10-27",TRUE
 "K-12","belgrade school district 44 | (medically fragile) life skills special education teacher dw2627_71 | https://bsd44.schoolspring.com/jobs/5962420","2026-10-20",FALSE
 "K-12","belgrade school district 44 | administrative assistant - student achievement dw2627_74 | https://bsd44.schoolspring.com/jobs/5972133","2026-10-27",FALSE
 "K-12","belgrade school district 44 | assistant baseball coach hs2627_72 | https://bsd44.schoolspring.com/jobs/5964724","2026-10-20",FALSE
 "K-12","belgrade school district 44 | assistant girls basketball coach fy2526_161 | https://bsd44.schoolspring.com/jobs/5650395","2026-09-07",FALSE
-"K-12","belgrade school district 44 | assistant swim coach hs2627_30 | https://bsd44.schoolspring.com/jobs/5790463","2026-09-07",FALSE
 "K-12","belgrade school district 44 | assistant track and field coach hs2627_28 | https://bsd44.schoolspring.com/jobs/5790532","2026-09-07",FALSE
 "K-12","belgrade school district 44 | bus aide dw2627_20 | https://bsd44.schoolspring.com/jobs/5747141","2026-09-07",FALSE
 "K-12","belgrade school district 44 | custodian pool all locations dw2627_70 | https://bsd44.schoolspring.com/jobs/5952578","2026-10-13",FALSE
@@ -75,6 +74,7 @@
 "K-12","belgrade school district 44 | spanish teacher hs2627_38 | https://bsd44.schoolspring.com/jobs/5023525","2026-09-29",FALSE
 "K-12","belgrade school district 44 | special education behavior teacher - elementary dw2627_62 | https://bsd44.schoolspring.com/jobs/5931742","2026-09-22",FALSE
 "K-12","belgrade school district 44 | special education resource teacher sp2627_31 | https://bsd44.schoolspring.com/jobs/5791559","2026-09-07",FALSE
+"K-12","belgrade school district 44 | speech and language pathologist .5 fte dw2627_79 | https://bsd44.schoolspring.com/jobs/5989971","2026-11-17",FALSE
 "K-12","belgrade school district 44 | substitute bus driver tr2627_19 | https://bsd44.schoolspring.com/jobs/5747025","2026-09-07",FALSE
 "K-12","belgrade school district 44 | substitute concessions assistant hs2627_65 | https://bsd44.schoolspring.com/jobs/5937531","2026-09-29",FALSE
 "K-12","belgrade school district 44 | substitute school nurse dw2627_17 | https://bsd44.schoolspring.com/jobs/5746859","2026-09-07",FALSE
@@ -92,7 +92,6 @@
 "K-12","big sandy public schools | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","big sandy public schools | physical ed | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","big sandy public schools | school it technician | https://www.applitrack.com/bigsandy/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=333","2026-11-10",FALSE
-"K-12","big sandy public schools | school nurse | https://www.applitrack.com/bigsandy/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=329","2026-10-20",FALSE
 "K-12","big sandy public schools | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","big sandy public schools | special education teacher (life skills grades 6-12) | https://www.applitrack.com/bigsandy/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=326","2026-09-22",FALSE
 "K-12","big sandy public schools | substitute | https://www.applitrack.com/bigsandy/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=294","2026-08-18",FALSE
@@ -102,10 +101,9 @@
 "K-12","big sky school district 72 | hs girls basketball coach | https://www.bssd72.org/page/employment-opportunities","2026-10-20",FALSE
 "K-12","big sky school district 72 | ms girls basketball coach | https://www.bssd72.org/page/employment-opportunities","2026-10-20",FALSE
 "K-12","big sky school district 72 | ms/hs paraprofessional | https://www.bssd72.org/page/employment-opportunities","2026-09-22",FALSE
-"K-12","big sky school district 72 | science (broadfield) | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","big timber grade school | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","big timber grade school | history | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","big timber grade school | sped case manager | https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment","2026-10-27",TRUE
+"K-12","big timber grade school | sped case manager | https://docs.google.com/document/d/19tHjAmHiVwqUzazTetg9-1wyrekUSxtm8CwI0i5J-UE/edit?usp=sharing","2026-10-27",TRUE
 "K-12","big timber grade school | sped teacher | https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment","2026-10-27",TRUE
 "K-12","big timber grade school | substitute teachers | https://sites.google.com/a/bigtimber-gs.k12.mt.us/btgs/staff/employment","2026-10-27",TRUE
 "K-12","bigfork school district 38 | 2026-2027 high school girls basketball jv/assistant varsity coach | https://bigforkschools.org/about/employment/","2026-09-29",FALSE
@@ -114,12 +112,13 @@
 "K-12","bigfork school district 38 | full time high school special education paraprofessional | https://bigforkschools.org/about/employment/","2026-08-25",TRUE
 "K-12","bigfork school district 38 | full time instructional paraprofessional | https://bigforkschools.org/about/employment/","2026-08-25",TRUE
 "K-12","bigfork school district 38 | full-time temporary custodian | https://bigforkschools.org/about/employment/","2026-11-03",FALSE
+"K-12","bigfork school district 38 | head boys hs baseball coach | https://bigforkschools.org/about/employment/","2026-11-17",FALSE
 "K-12","bigfork school district 38 | substitute bus driver | https://bigforkschools.org/about/employment/","2026-08-25",TRUE
 "K-12","bigfork school district 38 | substitute food service worker | https://bigforkschools.org/about/employment/","2026-08-25",TRUE
 "K-12","bigfork school district 38 | temporary substitute custodian | https://bigforkschools.org/about/employment/","2026-08-25",TRUE
 "K-12","billings public schools | administrative - principal | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","billings public schools | assistant boys soccer coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5832","2026-08-18",FALSE
-"K-12","billings public schools | cheerleading head coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5972","2026-11-03",FALSE
+"K-12","billings public schools | basketball boys instructional coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5974","2026-11-17",FALSE
 "K-12","billings public schools | crosswalk guard | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5849","2026-08-18",FALSE
 "K-12","billings public schools | crosswalk guard | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5917","2026-09-15",FALSE
 "K-12","billings public schools | crosswalk guard | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5929","2026-09-22",FALSE
@@ -127,25 +126,28 @@
 "K-12","billings public schools | crosswalk guard | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5942","2026-10-27",FALSE
 "K-12","billings public schools | crosswalk guard | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5961","2026-10-27",FALSE
 "K-12","billings public schools | custodian i | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5956","2026-10-20",FALSE
-"K-12","billings public schools | custodian i | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5967","2026-10-27",FALSE
 "K-12","billings public schools | custodian iii | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5966","2026-10-27",FALSE
+"K-12","billings public schools | electrician | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5983","2026-11-17",FALSE
 "K-12","billings public schools | elementary teacher long-term assignments (k-5) (2026-2027 school year) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5906","2026-09-01",FALSE
-"K-12","billings public schools | english teacher lta | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5941","2026-09-29",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5654","2026-08-18",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5694","2026-11-03",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5878","2026-11-03",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5904","2026-09-01",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5946","2026-10-06",FALSE
+"K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5954","2026-11-17",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5957","2026-10-20",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5959","2026-10-20",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5960","2026-10-20",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5962","2026-10-27",FALSE
 "K-12","billings public schools | general duty assistant (gda) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5968","2026-11-03",FALSE
 "K-12","billings public schools | indigenous education mentor and cultural specialist | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5887","2026-08-18",FALSE
+"K-12","billings public schools | innovative learning center teacher lta | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5980","2026-11-17",FALSE
 "K-12","billings public schools | instructional paraprofessional (ipp) (special education) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5938","2026-09-29",FALSE
+"K-12","billings public schools | instructional paraprofessional (ipp) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5981","2026-11-17",FALSE
+"K-12","billings public schools | instructional paraprofessional (part-time) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5982","2026-11-17",FALSE
 "K-12","billings public schools | interpreter for the deaf i | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5715","2026-08-18",FALSE
-"K-12","billings public schools | journey center liaison | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5964","2026-10-27",FALSE
 "K-12","billings public schools | lunch driver | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5969","2026-11-03",FALSE
+"K-12","billings public schools | math teacher lta | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5979","2026-11-17",FALSE
 "K-12","billings public schools | mathematics | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","billings public schools | physical education/health enhancement teacher | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5921","2026-10-06",FALSE
 "K-12","billings public schools | physical education/health enhancement teacher lta | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5973","2026-11-10",FALSE
@@ -157,6 +159,7 @@
 "K-12","billings public schools | special needs assistant (sna) - preschool | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5881","2026-09-22",FALSE
 "K-12","billings public schools | special needs assistant (sna) - temporary | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5925","2026-09-22",FALSE
 "K-12","billings public schools | special needs assistants (sna) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5939","2026-09-29",FALSE
+"K-12","billings public schools | special olympics coordinators (high school) | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5978","2026-11-17",FALSE
 "K-12","billings public schools | speech and debate assistant coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5945","2026-10-06",FALSE
 "K-12","billings public schools | speech language pathologist | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5564","2026-08-18",FALSE
 "K-12","billings public schools | substitute crosswalk guard | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=113","2026-08-18",TRUE
@@ -170,9 +173,12 @@
 "K-12","billings public schools | substitute special needs assistant | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=108","2026-08-18",TRUE
 "K-12","billings public schools | substitute teachers | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=103","2026-08-18",TRUE
 "K-12","billings public schools | technical education teacher | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5735","2026-08-18",FALSE
+"K-12","billings public schools | track assistant coaches | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5977","2026-11-17",FALSE
+"K-12","billings public schools | track boys head coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5975","2026-11-17",FALSE
+"K-12","billings public schools | track boys head coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5984","2026-11-17",FALSE
+"K-12","billings public schools | track girls head coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5976","2026-11-17",FALSE
 "K-12","billings public schools | volleyball competitive coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5926","2026-09-22",FALSE
 "K-12","billings public schools | volleyball instructional coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5951","2026-10-13",FALSE
-"K-12","billings public schools | wrestling assistant girls coach | https://www.applitrack.com/billings/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=5933","2026-09-29",FALSE
 "K-12","blue creek elem | library | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","blue creek elem | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","bonner school district #14 | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
@@ -181,31 +187,29 @@
 "K-12","boulder elementary | girls basketball coach | https://www.bgs.k12.mt.us/employment","2026-10-27",TRUE
 "K-12","box elder elem / box elder h s | administrative - principal | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","box elder elem / box elder h s | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","box elder elem / box elder h s | english | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","box elder elem / box elder h s | mathematics | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","bozeman public schools | 3rd grade teacher - remainder of the year | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/9e838cad-60eb-4b4e-b385-b4fd00b2cd48","2026-11-10",FALSE
-"K-12","bozeman public schools | assistant high school swim coach | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/c33f3798-2a80-4e04-bb55-b48f0095f560","2026-11-03",FALSE
 "K-12","bozeman public schools | asst baseball coach - gallatin high school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/2385d3a8-0de7-43e7-9875-b4ec0100e404","2026-11-03",FALSE
-"K-12","bozeman public schools | asst boys basketball coach - bozeman high school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/0715f078-9299-467d-862b-b4bb00c6da06","2026-11-03",FALSE
-"K-12","bozeman public schools | asst girls basketball coach - gallatin high | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/4e7c6286-d07e-49c5-9556-b49b01000705","2026-11-03",FALSE
-"K-12","bozeman public schools | asst girls basketball coach-bozeman high | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/aed73c53-0d2f-44b4-9b2d-b4a500fc7d8f","2026-11-03",FALSE
 "K-12","bozeman public schools | asst softball coach - gallatin high school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/722c1130-b8a4-4fb8-8e0b-b4f300fbc506","2026-11-03",FALSE
 "K-12","bozeman public schools | asst track coach - gallatin high | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/94a88600-6513-4b84-87b1-b48100f0db70","2026-11-03",FALSE
+"K-12","bozeman public schools | behavioral support asst - morning star elementary | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/fcc89944-17c3-430b-94ac-b4ff00b53bd0","2026-11-17",FALSE
 "K-12","bozeman public schools | behavioral support asst - sacajawea middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/8a2bf28d-6bb0-4598-b776-b4f600ee0f08","2026-11-03",FALSE
 "K-12","bozeman public schools | boys basketball coach - chief joseph middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/6944e26f-902a-487f-934a-b4de010b2591","2026-11-03",FALSE
 "K-12","bozeman public schools | boys basketball coach - sacajawea middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/50b2db34-abcb-4f26-8e13-b4de00f300e2","2026-11-03",FALSE
 "K-12","bozeman public schools | controller | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/1de402d5-a065-4f78-b798-b4f9009f2c21","2026-11-10",FALSE
 "K-12","bozeman public schools | custodian - roving - district wide | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/5e9b3c78-1722-4bd7-9b99-b4f600e563ba","2026-11-03",FALSE
-"K-12","bozeman public schools | elementary cook ii - hawthorne elementary | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/31d9c14e-3230-41ad-b874-b4f200b9d18e","2026-11-03",FALSE
+"K-12","bozeman public schools | english | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
 "K-12","bozeman public schools | evening custodian - irving elementary | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/c664e3bb-db66-44a4-b217-b4f200bee750","2026-11-03",FALSE
 "K-12","bozeman public schools | food service cook iii - sacajawea middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/d2f945b5-4239-43f9-8d9c-b4f200bc7a99","2026-11-03",FALSE
 "K-12","bozeman public schools | food service specialist | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/14657f4c-ef1c-4b53-8160-b4a30123568e","2026-11-03",FALSE
 "K-12","bozeman public schools | food service-cashier - meadowlark elementary | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/bd601af2-57b3-4b79-bef5-b4c9012d778b","2026-11-03",FALSE
 "K-12","bozeman public schools | girls head wrestling coach - gallatin high | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/5d4cda3f-a5b2-440a-9542-b48100f80985","2026-11-03",FALSE
 "K-12","bozeman public schools | health aide paraprofessional-roving | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/23b303a6-f88a-4550-8ccd-b49600c523f9","2026-11-03",FALSE
+"K-12","bozeman public schools | iss paraprofessional at ghs | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/6d940510-6ae3-42ed-9373-b50400aac772","2026-11-17",FALSE
 "K-12","bozeman public schools | life skills paraprofessional - bozeman high | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/fd389099-f786-4c90-83c7-b4a500d19224","2026-11-03",FALSE
 "K-12","bozeman public schools | life skills paraprofessional - chief joseph | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/5211dc1a-ff03-4bbd-be9a-b47a00eb6f64","2026-11-03",FALSE
 "K-12","bozeman public schools | life skills teacher - long term substitute @ sms | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/e05b208b-7789-4e05-8aa7-b4f200d378ef","2026-11-03",FALSE
+"K-12","bozeman public schools | long term english teacher substitute at ghs | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/b23923b9-e5e5-4201-85e7-b504010edf84","2026-11-17",FALSE
 "K-12","bozeman public schools | long term substitute - elementary music teacher | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/9ca4e79f-af50-4901-92c7-b4d401074fa6","2026-11-03",FALSE
 "K-12","bozeman public schools | lunch aide - chief joseph middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/d353e671-dd60-4494-8654-b48900cfedd0","2026-11-03",FALSE
 "K-12","bozeman public schools | lunch aide - sacajawea middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/6a5e5483-4fcd-4794-b486-b48a00d26134","2026-11-03",FALSE
@@ -227,10 +231,12 @@
 "K-12","bozeman public schools | sped paraprofessional -chief joseph middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/73d5b0c0-a8a4-4aba-b5b5-b47a00ee7055","2026-11-03",FALSE
 "K-12","bozeman public schools | sped paraprofessional- emily dickinson elementary | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/e21f3700-fea9-4bb5-8850-b4c700f7198b","2026-11-03",FALSE
 "K-12","bozeman public schools | sped paraprofessional-chief joseph middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/542f7205-02b4-4350-8922-b47a00ff0007","2026-11-03",FALSE
+"K-12","bozeman public schools | sped teacher - life skills - morning star | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/ca67eae9-f874-4406-a4cd-b4ea00ebe880","2026-11-17",FALSE
 "K-12","bozeman public schools | stage crew | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/ae669eea-39ff-4be7-b87d-b47a00fb3261","2026-11-03",FALSE
 "K-12","bozeman public schools | teacher of the deaf and hard of hearing | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/e18c9ac7-c4a6-497e-8234-b47a00c7487e","2026-11-03",FALSE
 "K-12","bozeman public schools | wrestling coach - chief joseph middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/c490849e-f740-4682-bb95-b4de010faa42","2026-11-03",FALSE
 "K-12","bozeman public schools | wrestling coach - sacajawea middle school | https://bozemanschooldistrict7mt.tylerportico.com/tess/citizen/jobs/job-list/1f9aea02-ee04-4f0a-8088-b4de010cfe92","2026-11-03",FALSE
+"K-12","bridger school district 2 | assistant boys basketball coach-c squad | https://bridger.schoolspring.com/jobs/5993923","2026-11-17",FALSE
 "K-12","bridger school district 2 | assistant golf coach | https://bridger.schoolspring.com/jobs/5986703","2026-11-10",FALSE
 "K-12","bridger school district 2 | business manager/clerk | https://bridger.schoolspring.com/jobs/5937921","2026-09-29",FALSE
 "K-12","bridger school district 2 | head golf coach | https://bridger.schoolspring.com/jobs/5986648","2026-11-10",FALSE
@@ -246,27 +252,22 @@
 "K-12","broadview school district | business manager | https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=425960&type=d&pREC_ID=1074965","2026-08-25",TRUE
 "K-12","broadview school district | cheerleading advisor (hs/jh) | https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=559289&type=d&pREC_ID=1200157","2026-08-25",TRUE
 "K-12","broadview school district | e-bus driver to billings | https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=425960&type=d&pREC_ID=1074965","2026-08-25",TRUE
-"K-12","broadview school district | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","broadview school district | junior high assistant football | https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=559289&type=d&pREC_ID=1200157","2026-08-25",TRUE
 "K-12","broadview school district | junior high assistant volleyball | https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=559289&type=d&pREC_ID=1200157","2026-08-25",TRUE
-"K-12","broadview school district | library | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","broadview school district | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","broadview school district | transportation director | https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=425960&type=d&pREC_ID=1069330","2026-08-25",TRUE
 "K-12","brockton school district | elementary teacher (multiple openings) | https://www.brockton.k12.mt.us/employment","2026-11-03",FALSE
 "K-12","brockton school district | secondary teacher – humanities (multiple openings) | https://www.brockton.k12.mt.us/employment","2026-11-03",FALSE
 "K-12","brockton school district | secondary teacher – stem (multiple openings) | https://www.brockton.k12.mt.us/employment","2026-11-03",FALSE
-"K-12","browning public schools | 7th-grade pe/health teacher | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2081","2026-08-18",FALSE
 "K-12","browning public schools | after school activities coordinator | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2052","2026-10-27",FALSE
 "K-12","browning public schools | bus driver; 9 month (4 openings) | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2002","2026-08-18",FALSE
 "K-12","browning public schools | english language arts (ela)/reading teacher; 26-27 sy | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2050","2026-08-18",FALSE
-"K-12","browning public schools | head cook; bullshoe elementary | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2084","2026-10-06",FALSE
 "K-12","browning public schools | instructional coaches (2 openings); location tbd | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2039","2026-08-18",FALSE
 "K-12","browning public schools | middle school wood shop teacher | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2038","2026-09-01",FALSE
 "K-12","browning public schools | personal care attendant; 3 openings | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2083","2026-08-18",FALSE
 "K-12","browning public schools | special education teachers; k-12 | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2057","2026-08-18",FALSE
 "K-12","browning public schools | teacher assistant | https://www.applitrack.com/bpsk12/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2077","2026-08-18",FALSE
 "K-12","butte central high school | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","butte school district 1 | asst. girls wresting coach - bhs | https://buttepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/1b4bb650-b696-4e4d-92d6-b4f300a10698","2026-11-03",FALSE
 "K-12","butte school district 1 | bus driver | https://buttepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/261e4bc6-09b0-4b26-98fd-b43300b55229","2026-09-07",FALSE
 "K-12","butte school district 1 | food service - cook's helper | https://buttepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/61495e4a-4eb6-4ca3-9e55-b3e100bd4280","2026-09-07",FALSE
 "K-12","butte school district 1 | girls' basketball coach - east | https://buttepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/64e8f16e-cabf-4180-8010-b4f700ae1bef","2026-11-03",FALSE
@@ -282,11 +283,9 @@
 "K-12","butte school district 1 | track coach - east | https://buttepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/0d85d45e-1b31-49fb-bd67-b4f700ac693a","2026-11-03",FALSE
 "K-12","butte school district 1 | wrestling coach - east | https://buttepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/c44c1217-bec7-4426-9abc-b4f700af3f26","2026-11-03",FALSE
 "K-12","canyon creek school district | administrative assistant | https://www.canyoncreekschool.org/apps/jobs/show_job.jsp?REC_ID=25539","2026-10-27",TRUE
-"K-12","canyon creek school district | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","cardwell elementary school | 1st and 2nd grade classroom teacher (in january) | https://sites.google.com/cardwellschool.org/cougars/join-cardwell","2026-10-27",TRUE
 "K-12","cascade public schools | bus aide | https://cascadepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/8786917d-834d-4123-b78f-b48100e75ede","2026-08-25",FALSE
 "K-12","cascade public schools | bus driver | https://cascadepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/c2098825-bcff-4999-bf89-b44f00a78779","2026-08-25",FALSE
-"K-12","cascade public schools | custodian | https://cascadepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/104d88e1-d05c-4d1f-89c9-b44f00a6b9d2","2026-08-25",FALSE
 "K-12","cascade public schools | ek long term substitute teacher - certified | https://cascadepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/398d8e13-e93f-4dd3-94b5-b4db00d02065","2026-10-13",FALSE
 "K-12","cascade public schools | full time substitute - paraprofessional | https://cascadepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/f10f0748-f1da-4f72-82c7-b4db00e16962","2026-10-06",FALSE
 "K-12","cascade public schools | high school science & robotics teacher | https://cascadepublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/a5018ba7-bebb-4f90-836d-b44f00c11fda","2026-08-25",FALSE
@@ -346,29 +345,31 @@
 "K-12","colstrip public schools | school counseling | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","colstrip public schools | spanish education teacher / foreign language teacher grades 6-12 | https://www.applitrack.com/colstrip/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=207","2026-08-18",FALSE
 "K-12","colstrip public schools | special education teacher (grades k-12) | https://www.applitrack.com/colstrip/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=228","2026-08-18",FALSE
-"K-12","columbia falls school district 6 | activity bus driver - cdl certified | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | activity bus driver - non cdl certified | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | bus driver | https://jobs.redroverk12.com/org/sd659912/opening/167279","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | bus driver trainee | https://jobs.redroverk12.com/org/sd659912/opening/208518","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | bus monitor | https://jobs.redroverk12.com/org/sd659912/opening/171528","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | hs boys assistant wrestling coach (0.06) | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | hs girls assistant wrestling coach (0.06 fte) | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | hs head track coach | https://jobs.redroverk12.com/org/sd659912/opening/210093","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | hs special education paraeducator | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | jh girls basketball coach | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
+"K-12","columbia falls school district 6 | activity bus driver - cdl certified | https://jobs.redroverk12.com/org/sd659912/opening/199588","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | activity bus driver - non cdl certified | https://jobs.redroverk12.com/org/sd659912/opening/171523","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | bus driver | https://jobs.redroverk12.com/org/sd659912/opening/167279","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | bus driver trainee | https://jobs.redroverk12.com/org/sd659912/opening/208518","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | bus monitor | https://jobs.redroverk12.com/org/sd659912/opening/171528","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | hs boys assistant wrestling coach (0.06) | https://jobs.redroverk12.com/org/sd659912/opening/208592","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | hs custodian | https://jobs.redroverk12.com/org/sd659912/opening/216085","2026-11-17",FALSE
+"K-12","columbia falls school district 6 | hs girls assistant wrestling coach (0.06 fte) | https://jobs.redroverk12.com/org/sd659912/opening/205051","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | hs head track coach | https://jobs.redroverk12.com/org/sd659912/opening/210093","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | hs special education paraeducator | https://jobs.redroverk12.com/org/sd659912/opening/171395","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | jh girls basketball coach | https://jobs.redroverk12.com/org/sd659912/opening/173833","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | jh spanish teacher - long-term substitute | https://jobs.redroverk12.com/org/sd659912/opening/214825","2026-11-17",FALSE
 "K-12","columbia falls school district 6 | key club advisor | https://jobs.redroverk12.com/org/sd659912/opening/176229","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | ruder kindergarten teacher - long-term substitute | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | school bus driver | https://jobs.redroverk12.com/org/sd659912/opening/208528","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | special education paraeducator (rise) | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | special education teacher (little rise) | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | substitute bus driver | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | substitute bus monitor | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | substitute custodian | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | substitute food services | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | substitute nurse | https://jobs.redroverk12.com/org/sd659912/opening/171277","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | substitute paraeducator | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | substitute teacher | https://jobs.redroverk12.com/org/sd659912/opening/167250","2026-11-03",TRUE
-"K-12","columbia falls school district 6 | traffic education teacher | https://jobs.redroverk12.com/org/sd659912","2026-11-03",TRUE
+"K-12","columbia falls school district 6 | ruder kindergarten teacher - long-term substitute | https://jobs.redroverk12.com/org/sd659912/opening/200559","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | school bus driver | https://jobs.redroverk12.com/org/sd659912/opening/208528","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | special education paraeducator (rise) | https://jobs.redroverk12.com/org/sd659912/opening/199069","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | special education teacher (little rise) | https://jobs.redroverk12.com/org/sd659912/opening/199935","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | substitute bus driver | https://jobs.redroverk12.com/org/sd659912/opening/185776","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | substitute bus monitor | https://jobs.redroverk12.com/org/sd659912/opening/204345","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | substitute custodian | https://jobs.redroverk12.com/org/sd659912/opening/167255","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | substitute food services | https://jobs.redroverk12.com/org/sd659912/opening/167257","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | substitute nurse | https://jobs.redroverk12.com/org/sd659912/opening/171277","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | substitute paraeducator | https://jobs.redroverk12.com/org/sd659912/opening/167249","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | substitute teacher | https://jobs.redroverk12.com/org/sd659912/opening/167250","2026-11-03",FALSE
+"K-12","columbia falls school district 6 | traffic education teacher | https://jobs.redroverk12.com/org/sd659912/opening/171496","2026-11-03",FALSE
 "K-12","columbus public schools | facilities technician | https://columbuscougars.com/page/district-employment","2026-09-01",TRUE
 "K-12","columbus public schools | school food program assistant manager | https://columbuscougars.com/page/district-employment","2026-09-29",FALSE
 "K-12","columbus public schools | school food program staff | https://columbuscougars.com/page/district-employment","2026-09-29",FALSE
@@ -406,21 +407,16 @@
 "K-12","custer public schools | pe teaching position | https://www.custerschools.org/employment","2026-08-25",TRUE
 "K-12","custer public schools | route bus drivers (cdl or non cdl) | https://www.custerschools.org/employment","2026-08-25",TRUE
 "K-12","custer public schools | vo-ag teaching position | https://www.custerschools.org/employment","2026-08-25",TRUE
-"K-12","cut bank school district #15 | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
-"K-12","cut bank school district #15 | grounds keeper | https://sites.google.com/view/cutbankjobs/employment","2026-09-29",FALSE
 "K-12","cut bank school district #15 | health & wellness advisor | https://sites.google.com/view/cutbankjobs/employment","2026-08-25",TRUE
 "K-12","cut bank school district #15 | middle school head wrestling coach | https://sites.google.com/view/cutbankjobs/employment","2026-10-13",FALSE
-"K-12","cut bank school district #15 | route bus driver | https://sites.google.com/view/cutbankjobs/employment","2026-08-25",TRUE
-"K-12","cut bank school district #15 | school lunch worker | https://sites.google.com/view/cutbankjobs/employment","2026-08-25",TRUE
-"K-12","cut bank school district #15 | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","cut bank school district #15 | substitute teachers/paraprofessionals/bus drivers/janitorial | https://sites.google.com/view/cutbankjobs/employment","2026-09-29",FALSE
 "K-12","darby school district 9 | instructional coach(part-time) | https://www.darby.k12.mt.us/page/employment","2026-11-03",FALSE
 "K-12","darby school district 9 | mathematics | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","darby school district 9 | substitute bus driver | https://www.darby.k12.mt.us/page/employment","2026-09-01",TRUE
 "K-12","darby school district 9 | substitute teacher | https://www.darby.k12.mt.us/page/employment","2026-09-01",TRUE
+"K-12","darby school district 9 | substitute teachers | https://www.darby.k12.mt.us/page/employment","2026-11-17",FALSE
 "K-12","darby school district 9 | transportation supervisor or technician | https://www.darby.k12.mt.us/page/employment","2026-09-01",TRUE
 "K-12","deer lodge school district #1 | assistant golf coach | https://www.deerlodgeschools.org/page/employment","2026-09-22",FALSE
-"K-12","deer lodge school district #1 | bus driver | https://www.deerlodgeschools.org/page/employment","2026-09-01",TRUE
 "K-12","deer lodge school district #1 | full time custodian | https://www.deerlodgeschools.org/page/employment","2026-11-03",FALSE
 "K-12","deer lodge school district #1 | part time elementary classroom aide | https://www.deerlodgeschools.org/page/employment","2026-11-03",FALSE
 "K-12","deer lodge school district #1 | part time elementary sped aide | https://www.deerlodgeschools.org/page/employment","2026-11-03",FALSE
@@ -432,14 +428,16 @@
 "K-12","dillon school district 10 | substitute/guest teachers needed | https://www.dillonschools.org/page/employment-opportunities","2026-09-01",TRUE
 "K-12","dixon school district #9 | substitute teacher | https://www.dixonschool.org/about-dixon-school/employment-opportunities","2026-11-03",FALSE
 "K-12","dixon school district #9 | substitute teachers | https://www.dixonschool.org/about-dixon-school/employment-opportunities","2026-08-25",TRUE
+"K-12","dodson k-12 | administrative - principal | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
 "K-12","drummond public schools | elementary teaching position | https://www.drummondschool.net/page/application","2026-09-01",TRUE
 "K-12","drummond public schools | family consumer science | https://www.drummondschool.net/page/application","2026-09-01",TRUE
 "K-12","drummond public schools | full time assistant cook | https://www.drummondschool.net/page/application","2026-09-01",TRUE
-"K-12","drummond public schools | half-time k-12 librarian | https://www.drummondschool.net/page/application","2026-09-01",TRUE
+"K-12","drummond public schools | half-time k-12 librarian/other teaching duties | https://www.drummondschool.net/page/application","2026-11-17",FALSE
 "K-12","drummond public schools | high school boys basketball asst. coach | https://www.drummondschool.net/page/application","2026-09-01",TRUE
 "K-12","drummond public schools | high school girls basketball asst. coach | https://www.drummondschool.net/page/application","2026-09-01",TRUE
 "K-12","drummond public schools | jh girls volleyball asst. coach | https://www.drummondschool.net/page/application","2026-09-01",TRUE
 "K-12","drummond public schools | substitute teachers | https://www.drummondschool.net/page/application","2026-09-01",TRUE
+"K-12","dutton/brady public school district | dutton/brady public schools – maintenance position | https://dbps.k12.mt.us/page/careers","2026-11-17",FALSE
 "K-12","dutton/brady public school district | route and relief school bus drivers | https://dbps.k12.mt.us/page/careers","2026-09-01",TRUE
 "K-12","dutton/brady public school district | substitute teachers | https://dbps.k12.mt.us/page/careers","2026-09-01",TRUE
 "K-12","east glacier park grade school | licensed teachers | https://eastglacierschool.com/employment","2026-10-27",TRUE
@@ -452,6 +450,7 @@
 "K-12","east helena public schools | paraprofessional | https://www.applitrack.com/ehps/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=199","2026-08-18",FALSE
 "K-12","east helena public schools | science teacher | https://www.applitrack.com/ehps/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=291","2026-10-27",FALSE
 "K-12","east helena public schools | substitutes | https://www.applitrack.com/ehps/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=204","2026-08-18",FALSE
+"K-12","eastern yellowstone coop | speech-language pathologist | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
 "K-12","ekalaka public schools | agricultural teacher for the 2026-2027 | https://www.ekalaka.net/336413_2","2026-08-25",FALSE
 "K-12","ekalaka public schools | bus drivers | https://www.ekalaka.net/336413_2","2026-08-25",FALSE
 "K-12","ekalaka public schools | junior high basket ball assistant coaching positions available | https://www.ekalaka.net/336413_2","2026-09-15",FALSE
@@ -463,28 +462,27 @@
 "K-12","ennis schools | custodian | https://www.ennisschools.org/page/job-opportunities","2026-09-01",TRUE
 "K-12","ennis schools | high school wrestling head coach | https://www.ennisschools.org/page/job-opportunities","2026-09-01",TRUE
 "K-12","ennis schools | virtual programs paraprofessional | https://www.ennisschools.org/page/job-opportunities","2026-11-03",FALSE
-"K-12","eureka elem | physical therapist | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","evergreen school district #50 | bus drivers | https://www.evergreensd50.com/page/employment-opportunities","2026-09-15",FALSE
 "K-12","evergreen school district #50 | paraprofessional | https://www.evergreensd50.com/page/employment-opportunities","2026-10-27",FALSE
 "K-12","evergreen school district #50 | substitutes | https://www.evergreensd50.com/page/employment-opportunities","2026-09-01",TRUE
 "K-12","fair-mont-egan schools | .5 paraprofessional position | https://www.fmemontana.net/human-resources/employment","2026-11-10",FALSE
 "K-12","fair-mont-egan schools | 26/27 girls' basketball coaches | https://www.fmemontana.net/human-resources/employment","2026-10-06",FALSE
-"K-12","fair-mont-egan schools | job description | https://www.fmemontana.net/human-resources/employment","2026-11-10",FALSE
 "K-12","fair-mont-egan schools | substitute teacher | https://www.fmemontana.net/human-resources/employment","2026-09-22",FALSE
 "K-12","fairview public schools | bus driver - no experience needed - paid training | https://www.applitrack.com/fairview/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1021","2026-09-29",FALSE
 "K-12","fairview public schools | cte – family and consumer sciences | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","fairview public schools | educational aide (2 positions) | https://www.applitrack.com/fairview/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1018","2026-09-22",FALSE
 "K-12","fairview public schools | preschool teacher | https://www.applitrack.com/fairview/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1022","2026-11-10",FALSE
+"K-12","fairview public schools | reading intervention tutors | https://www.applitrack.com/fairview/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1023","2026-11-17",FALSE
 "K-12","flathead special ed. coop. | paraprofessional - special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","flathead special ed. coop. | school psychologist | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","flathead special ed. coop. | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","florence-carlton school district 15-6 | general custodian (k–12 school) | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-11-03",FALSE
-"K-12","florence-carlton school district 15-6 | school counseling | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","florence-carlton school district 15-6 | seeking one (1) high school wrestling assistant coach - girls team | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-10-06",FALSE
+"K-12","florence-carlton school district 15-6 | middle school general education counselor | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-11-17",FALSE
 "K-12","florence-carlton school district 15-6 | substitute custodians | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-09-01",TRUE
 "K-12","florence-carlton school district 15-6 | substitute food service workers | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-09-01",TRUE
 "K-12","florence-carlton school district 15-6 | substitute paraprofessionals | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-09-01",TRUE
 "K-12","florence-carlton school district 15-6 | substitute teachers | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-09-01",TRUE
+"K-12","florence-carlton school district 15-6 | substitutes | https://www.florencecarlton.org/page/available-positions-equal-employment-equal-education","2026-11-17",FALSE
 "K-12","fort benton school district 1 | substitute teacher (grades k-12) | https://www.applitrack.com/fortbenton/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=182","2026-08-25",TRUE
 "K-12","frazer public schools | activities bus driver | https://www.frazer.k12.mt.us/District/Jobs/","2026-10-27",TRUE
 "K-12","frazer public schools | administrative secretary | https://www.frazer.k12.mt.us/District/Jobs/","2026-10-27",TRUE
@@ -518,8 +516,8 @@
 "K-12","frenchtown k-12 schools | softball .5 assistant coach | https://www.ftsd.org/page/open-employment-opportunities/","2026-11-03",TRUE
 "K-12","frenchtown k-12 schools | substitute bus drivers | https://www.ftsd.org/page/open-employment-opportunities/","2026-11-03",TRUE
 "K-12","frenchtown k-12 schools | substitute teachers | https://www.ftsd.org/page/open-employment-opportunities/","2026-11-03",TRUE
-"K-12","froid public schools | administrative - superintendent | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","froid public schools | counselor | https://www.froidschool.com/page/open-positionsapplications","2026-09-01",TRUE
+"K-12","froid public schools | science (broadfield) | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
 "K-12","froid public schools | substitute bus driver | https://www.froidschool.com/page/open-positionsapplications","2026-09-01",TRUE
 "K-12","froid public schools | substitute teachers | https://www.froidschool.com/page/open-positionsapplications","2026-09-01",TRUE
 "K-12","fromberg public schools | subs music teaching position | https://resources.finalsite.net/images/v1788191968/frombergpublicschoolscom/ubmikbqkr9khjuq2znyw/SubsMusicTeachingPosition.pdf","2026-10-27",TRUE
@@ -560,11 +558,11 @@
 "K-12","glendive public schools | sustitute bus aide | https://www.applitrack.com/glendiveschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=423","2026-08-18",TRUE
 "K-12","glendive public schools | temporary custodian (gps) | https://www.applitrack.com/glendiveschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=317","2026-09-22",FALSE
 "K-12","golden ridge elem | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
+"K-12","grass range public schools | assistant/jh track coach | https://grps.k12.mt.us/staff/open-positions","2026-11-17",FALSE
 "K-12","grass range public schools | cdl bus/activity driver | https://grps.k12.mt.us/staff/open-positions","2026-10-27",TRUE
+"K-12","grass range public schools | head maintenance/custodian | https://grps.k12.mt.us/staff/open-positions","2026-11-17",FALSE
 "K-12","grass range public schools | substitutes in all areas | https://grps.k12.mt.us/staff/open-positions","2026-10-27",TRUE
-"K-12","great falls cent cath hs | science (broadfield) | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","great falls public schools | academic achievement center para educator | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2998","2026-08-18",TRUE
-"K-12","great falls public schools | academic intervention tutor | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3686","2026-11-10",FALSE
 "K-12","great falls public schools | board certified behavior analyst (bcba) | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3529","2026-08-18",FALSE
 "K-12","great falls public schools | campus supervisor | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3139","2026-08-18",TRUE
 "K-12","great falls public schools | core school teacher assistant | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3511","2026-08-18",FALSE
@@ -575,6 +573,7 @@
 "K-12","great falls public schools | elementary teacher | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3625","2026-08-18",FALSE
 "K-12","great falls public schools | english learner (el) proctor | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3685","2026-11-03",FALSE
 "K-12","great falls public schools | food service employees-various | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3630","2026-08-18",FALSE
+"K-12","great falls public schools | food service employees-various | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3689","2026-11-17",FALSE
 "K-12","great falls public schools | grounds position | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3687","2026-11-10",FALSE
 "K-12","great falls public schools | information security specialist | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3666","2026-09-22",FALSE
 "K-12","great falls public schools | lifeguards/swim instructor/ supervisor/cashier | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3665","2026-09-22",FALSE
@@ -594,32 +593,31 @@
 "K-12","great falls public schools | teacher aide - nms | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3661","2026-09-15",FALSE
 "K-12","great falls public schools | teacher aide / overload teacher aide / substitute teacher aides | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3640","2026-08-18",FALSE
 "K-12","great falls public schools | transitional services facilitator-para educator - oyo | https://www.applitrack.com/greatfalls/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3688","2026-11-10",FALSE
-"K-12","hamilton school district 3 | adult education instructor | https://jobs.redroverk12.com/org/2362","2026-10-13",FALSE
-"K-12","hamilton school district 3 | custodian | https://jobs.redroverk12.com/org/2362/opening/165948","2026-09-07",TRUE
-"K-12","hamilton school district 3 | hhs assistant wrestling coach | https://jobs.redroverk12.com/org/2362","2026-10-13",FALSE
-"K-12","hamilton school district 3 | hhs bench workers / ticket takers | https://jobs.redroverk12.com/org/2362","2026-09-07",TRUE
-"K-12","hamilton school district 3 | hhs hosa assistant coach | https://jobs.redroverk12.com/org/2362","2026-09-07",TRUE
-"K-12","hamilton school district 3 | hms assistant girls' basketball coach | https://jobs.redroverk12.com/org/2362","2026-10-27",FALSE
+"K-12","hamilton school district 3 | adult education instructor | https://jobs.redroverk12.com/org/2362/opening/208714","2026-10-13",FALSE
+"K-12","hamilton school district 3 | custodian | https://jobs.redroverk12.com/org/2362/opening/165948","2026-09-07",FALSE
+"K-12","hamilton school district 3 | food service transportation | https://jobs.redroverk12.com/org/2362/opening/215502","2026-11-17",FALSE
+"K-12","hamilton school district 3 | hhs bench workers / ticket takers | https://jobs.redroverk12.com/org/2362/opening/196295","2026-09-07",FALSE
+"K-12","hamilton school district 3 | hhs hosa assistant coach | https://jobs.redroverk12.com/org/2362/opening/174524","2026-09-07",TRUE
+"K-12","hamilton school district 3 | hms assistant girls' basketball coach | https://jobs.redroverk12.com/org/2362/opening/200090","2026-10-27",FALSE
 "K-12","hamilton school district 3 | hms game official | https://jobs.redroverk12.com/org/2362/opening/202716","2026-09-15",FALSE
-"K-12","hamilton school district 3 | hms head girls' basketball coach | https://jobs.redroverk12.com/org/2362","2026-10-20",FALSE
-"K-12","hamilton school district 3 | hms sporadic worker | https://jobs.redroverk12.com/org/2362","2026-09-07",TRUE
+"K-12","hamilton school district 3 | hms head girls' basketball coach | https://jobs.redroverk12.com/org/2362/opening/200098","2026-10-20",FALSE
+"K-12","hamilton school district 3 | hms sporadic worker | https://jobs.redroverk12.com/org/2362/opening/182491","2026-09-07",FALSE
+"K-12","hamilton school district 3 | hms spurs advisor | https://jobs.redroverk12.com/org/2362/opening/215167","2026-11-17",FALSE
 "K-12","hamilton school district 3 | percussionist | https://jobs.redroverk12.com/org/2362/opening/211571","2026-11-10",FALSE
 "K-12","hamilton school district 3 | piano accompanist | https://jobs.redroverk12.com/org/2362/opening/211530","2026-11-10",FALSE
-"K-12","hamilton school district 3 | social emotional paraprofessional | https://jobs.redroverk12.com/org/2362","2026-09-29",FALSE
-"K-12","hamilton school district 3 | special education paraprofessional | https://jobs.redroverk12.com/org/2362","2026-09-07",TRUE
-"K-12","hamilton school district 3 | special education teacher | https://jobs.redroverk12.com/org/2362","2026-10-20",FALSE
-"K-12","hamilton school district 3 | substitute custodian | https://jobs.redroverk12.com/org/2362","2026-09-07",TRUE
-"K-12","hamilton school district 3 | substitute teacher 2026-27 | https://jobs.redroverk12.com/org/2362","2026-09-07",TRUE
+"K-12","hamilton school district 3 | social emotional paraprofessional | https://jobs.redroverk12.com/org/2362/opening/206023","2026-09-29",FALSE
+"K-12","hamilton school district 3 | special education paraprofessional | https://jobs.redroverk12.com/org/2362/opening/193729","2026-09-07",FALSE
+"K-12","hamilton school district 3 | special education teacher | https://jobs.redroverk12.com/org/2362/opening/210217","2026-10-20",FALSE
+"K-12","hamilton school district 3 | substitute custodian | https://jobs.redroverk12.com/org/2362/opening/198207","2026-09-07",FALSE
+"K-12","hamilton school district 3 | substitute teacher 2026-27 | https://jobs.redroverk12.com/org/2362/opening/188537","2026-09-07",FALSE
 "K-12","hardin public schools | maintenance technician iv - district wide | https://hardinpublic.tedk12.com/hire/ViewJob.aspx?JobID=6225","2026-08-18",FALSE
 "K-12","hardin public schools | school psychologist - district wide sy26-27 | https://hardinpublic.tedk12.com/hire/ViewJob.aspx?JobID=6229","2026-11-10",FALSE
 "K-12","hardin public schools | substitute | https://hardinpublic.tedk12.com/hire/ViewJob.aspx?JobID=6222","2026-08-18",FALSE
 "K-12","harlem public schools | elementary basketball coach | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=300","2026-10-27",FALSE
 "K-12","harlem public schools | hs assistant cheer coach | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=292","2026-10-27",FALSE
 "K-12","harlem public schools | hs asst. boys basketball coach | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=277","2026-10-27",FALSE
-"K-12","harlem public schools | hs asst. football coach | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=273","2026-10-27",FALSE
+"K-12","harlem public schools | industrial arts teacher | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=281","2026-11-17",FALSE
 "K-12","harlem public schools | junior high wrestling coach | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=271","2026-10-27",FALSE
-"K-12","harlem public schools | mathematics | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-01",FALSE
-"K-12","harlem public schools | nurse | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-01",FALSE
 "K-12","harlem public schools | part-time custodian/bus driver | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=330","2026-10-27",FALSE
 "K-12","harlem public schools | substitute (general) | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=255","2026-10-27",TRUE
 "K-12","harlem public schools | title i teacher | https://www.applitrack.com/harlemhs/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=258","2026-10-27",FALSE
@@ -635,9 +633,10 @@
 "K-12","havre public schools | substitute teacher | https://www.applitrack.com/havre/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=413","2026-08-18",TRUE
 "K-12","hays-lodge pole school district | consumer science teacher | https://www.hlpschools.k12.mt.us/page/jobs","2026-10-20",FALSE
 "K-12","hays-lodge pole school district | cook's helper/aid | https://www.hlpschools.k12.mt.us/page/jobs","2026-11-10",FALSE
+"K-12","hays-lodge pole school district | head high school girls basketball coach | https://www.hlpschools.k12.mt.us/page/jobs","2026-11-17",FALSE
+"K-12","hays-lodge pole school district | high school physical ed teacher | https://www.hlpschools.k12.mt.us/page/jobs","2026-11-17",FALSE
 "K-12","hays-lodge pole school district | jh/hs art teacher | https://www.hlpschools.k12.mt.us/page/jobs","2026-09-01",TRUE
 "K-12","hays-lodge pole school district | junior high teacher | https://www.hlpschools.k12.mt.us/page/jobs","2026-11-03",FALSE
-"K-12","hays-lodge pole school district | native language teacher | https://www.hlpschools.k12.mt.us/page/jobs","2026-10-06",FALSE
 "K-12","hays-lodge pole school district | substitute bus drivers | https://www.hlpschools.k12.mt.us/page/jobs","2026-09-01",TRUE
 "K-12","hays-lodge pole school district | substitute cooks | https://www.hlpschools.k12.mt.us/page/jobs","2026-10-20",FALSE
 "K-12","hays-lodge pole school district | substitute teachers | https://www.hlpschools.k12.mt.us/page/jobs","2026-09-01",TRUE
@@ -650,8 +649,10 @@
 "K-12","heart butte k-12 schools | maintenance/transportation supervisor | https://heartbutte.k12.mt.us/employment/","2026-10-27",TRUE
 "K-12","heart butte k-12 schools | payroll clerk | https://heartbutte.k12.mt.us/employment/","2026-10-27",TRUE
 "K-12","heart butte k-12 schools | substitute teachers, teacher’s aides, bus drivers, custodians | https://heartbutte.k12.mt.us/employment/","2026-10-27",TRUE
+"K-12","helena flats school district #15 | maintenance/custodial supervisor | https://www.helenaflats.org/page/employment","2026-11-17",TRUE
+"K-12","helena flats school district #15 | special education paraprofessional | https://www.helenaflats.org/page/employment","2026-11-17",TRUE
+"K-12","helena flats school district #15 | substitutes needed | https://www.helenaflats.org/page/employment","2026-11-17",TRUE
 "K-12","helena public schools | assistant girls soccer coach | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3312","2026-11-03",FALSE
-"K-12","helena public schools | assistant softball coach | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3287","2026-08-18",FALSE
 "K-12","helena public schools | assistant softball coach | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3300","2026-09-22",FALSE
 "K-12","helena public schools | assistant wrestling coach | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3246","2026-11-03",FALSE
 "K-12","helena public schools | certified occupational therapist assistant (cota) | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3193","2026-09-15",FALSE
@@ -671,7 +672,6 @@
 "K-12","helena public schools | substitute custodians | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2702","2026-08-18",FALSE
 "K-12","helena public schools | substitute para educators (teacher assistants) | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3270","2026-08-18",FALSE
 "K-12","helena public schools | substitute registered nurse | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3296","2026-09-01",FALSE
-"K-12","helena public schools | substitute specialist | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3310","2026-11-03",FALSE
 "K-12","helena public schools | substitute teachers (26-27 school year) | https://www.applitrack.com/helena/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=3269","2026-08-18",FALSE
 "K-12","hellgate elementary school district | custodial substitutes | https://www.hellgate.k12.mt.us/fs/pages/3392","2026-10-27",TRUE
 "K-12","hellgate elementary school district | paraprofessional - instructional | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
@@ -707,19 +707,20 @@
 "K-12","jefferson high school | paraprofessional teacher aides | https://www.jhs.k12.mt.us/EmploymentOpportunities.aspx","2026-10-27",TRUE
 "K-12","jefferson high school | substitute teachers | https://www.jhs.k12.mt.us/EmploymentOpportunities.aspx","2026-10-27",TRUE
 "K-12","jefferson high school | teachers | https://www.jhs.k12.mt.us/EmploymentOpportunities.aspx","2026-10-27",TRUE
-"K-12","joliet public school district 86 | asst high school girls basketball coach | https://www.gojhawks.com/applications/classified.php","2026-11-03",TRUE
-"K-12","joliet public school district 86 | bus route & bus route sub drivers | https://www.gojhawks.com/applications/classified.php","2026-11-03",TRUE
-"K-12","joliet public school district 86 | head high school boys/girls golf coach | https://www.gojhawks.com/applications/classified.php","2026-11-03",TRUE
-"K-12","joliet public school district 86 | substitute teachers | https://www.gojhawks.com/applications/classified.php","2026-11-03",TRUE
+"K-12","joliet public school district 86 | asst high school girls basketball coach | https://www.jolietschools.org/district-information/important-clicks/employment-information.html","2026-11-03",TRUE
+"K-12","joliet public school district 86 | bus route & bus route sub drivers | https://www.jolietschools.org/district-information/important-clicks/employment-information.html","2026-11-03",TRUE
+"K-12","joliet public school district 86 | head high school boys/girls golf coach | https://www.jolietschools.org/district-information/important-clicks/employment-information.html","2026-11-03",TRUE
+"K-12","joliet public school district 86 | substitute teachers | https://www.jolietschools.org/district-information/important-clicks/employment-information.html","2026-11-03",TRUE
 "K-12","jordan public schools | k-12 music teacher | https://www.jordanpublicschools.org","2026-10-27",TRUE
-"K-12","jordan public schools | other | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","judith gap schools | custodian / maintenance / boiler operator | https://www.judithgap.k12.mt.us/District/Portal/Employment","2026-10-27",FALSE
+"K-12","judith gap schools | bus driver | https://www.judithgap.k12.mt.us/District/Portal/Employment","2026-11-17",FALSE
 "K-12","judith gap schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","judith gap schools | school cook | https://www.judithgap.k12.mt.us/District/Portal/Employment","2026-10-27",FALSE
+"K-12","judith gap schools | immediate bus driver | https://www.judithgap.k12.mt.us/District/Portal/Employment","2026-11-17",FALSE
+"K-12","judith gap schools | requirements: bus driver training, cpr and first aid. cdl preferred. | https://www.judithgap.k12.mt.us/District/Portal/Employment","2026-11-17",FALSE
 "K-12","kalispell public schools | bus - driver | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/a76ba87a-ff37-4194-9f9d-b47800b87221","2026-08-18",FALSE
 "K-12","kalispell public schools | bus monitor | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/fb8d984e-510d-4fb8-baa4-b32a00a7554a","2026-08-18",TRUE
 "K-12","kalispell public schools | central office student intern | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/e43f8efe-7385-458d-a8a3-b49e0100988c","2026-08-18",FALSE
 "K-12","kalispell public schools | cte – family and consumer sciences | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-29",FALSE
+"K-12","kalispell public schools | es - head | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/d1c881ce-4977-4209-b54e-b4fe00fb6552","2026-11-17",FALSE
 "K-12","kalispell public schools | es - tech | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/df36c559-2abc-431a-9e96-b35500a86f52","2026-08-18",FALSE
 "K-12","kalispell public schools | food service ii | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/f676d581-5aac-48df-b4b7-b38b00e61e14","2026-08-18",FALSE
 "K-12","kalispell public schools | long term substitute - behavior specialist | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/a8a5130f-c2e6-4847-bb35-b4c800e0befc","2026-09-22",FALSE
@@ -734,6 +735,7 @@
 "K-12","kalispell public schools | se - paraprofessional | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/5f173653-6428-409c-922f-b49e00fd622a","2026-08-18",FALSE
 "K-12","kalispell public schools | se - physical therapist | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/a08b16ae-5150-431f-bd38-b46700af890a","2026-08-18",FALSE
 "K-12","kalispell public schools | se - psych | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/70d848f3-eb6e-4f9b-a362-b31501109279","2026-08-18",FALSE
+"K-12","kalispell public schools | se - slp temp | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/4f94a6ff-abcc-4241-8f98-b47b00f4b4a4","2026-08-18",FALSE
 "K-12","kalispell public schools | se - teacher | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/2526cfb6-232f-4dc8-bba7-b4a4010146ae","2026-08-18",FALSE
 "K-12","kalispell public schools | se - teacher | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/e2035868-5fb1-4a82-b743-b46700ad6b43","2026-08-18",FALSE
 "K-12","kalispell public schools | special projects - activities supervision | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/0024190c-99b2-45e6-8d7f-b3fe00f5a8ea","2026-08-18",FALSE
@@ -742,12 +744,13 @@
 "K-12","kalispell public schools | stipend - cross country assistan | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/2aa462c4-7346-44e5-9b3f-b47b00f9f6d1","2026-08-18",FALSE
 "K-12","kalispell public schools | stipend - football assistant jv | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/1ab14277-9081-48d6-a7b0-b3fe00f45932","2026-08-18",FALSE
 "K-12","kalispell public schools | stipend - football ms | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/7e6823ff-e435-4e15-9204-b43b00b3d8ac","2026-08-18",FALSE
-"K-12","kalispell public schools | stipend - golf assistant jv | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/7e71970d-7bb5-46b8-a16b-b4ea011f051a","2026-10-27",FALSE
 "K-12","kalispell public schools | stipend - soccer assistant jv | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/818923c8-ab34-4034-9ae9-b43401142a90","2026-08-18",FALSE
 "K-12","kalispell public schools | stipend - softball assistant jv | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/de4c63cb-cf14-4657-9fc7-b4eb01099255","2026-10-27",FALSE
 "K-12","kalispell public schools | stipend - speech assistant | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/ff4cea6c-86ff-46f9-8483-b46700adf462","2026-08-18",FALSE
+"K-12","kalispell public schools | stipend - swet advisor | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/1fff43e8-0589-4ff0-9c47-b50100a65a4f","2026-11-17",FALSE
 "K-12","kalispell public schools | stipend - swimming assistant jv | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/267a1dfe-b31b-49f5-ac82-b36900be1226","2026-08-18",FALSE
 "K-12","kalispell public schools | stipend - swimming assistant jv | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/9e39b507-ef71-4110-9f92-b31b00a5b86d","2026-08-18",TRUE
+"K-12","kalispell public schools | stipend - tennis assistant jv | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/e2b3dc7d-74b1-4ff5-b102-b4fe00fa1fed","2026-11-17",FALSE
 "K-12","kalispell public schools | stipend - track hs head | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/7248caff-42bf-4d18-8cbb-b4ba0111965a","2026-09-07",FALSE
 "K-12","kalispell public schools | student store | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/473d68c7-216f-43f5-8c89-b475010d3b72","2026-08-18",FALSE
 "K-12","kalispell public schools | student worker | https://kalispellpublicschoolsmt.tylerportico.com/tess/citizen/jobs/job-list/50c9fd96-aa6c-40a6-918b-b36f00b5bc64","2026-08-18",FALSE
@@ -759,6 +762,7 @@
 "K-12","kila school district #20 | substitute custodian | https://docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/export?format=html","2026-10-27",TRUE
 "K-12","kila school district #20 | substitute para/student support | https://docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/export?format=html","2026-10-27",TRUE
 "K-12","kila school district #20 | substitute teachers | https://docs.google.com/document/d/10u_uwKptqVgvrhCL83skDHtK2lGzPCjRCl88em-58O0/export?format=html","2026-10-27",TRUE
+"K-12","kinsey elem | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
 "K-12","lambert public schools | music k-12 | https://www.lambertschool.net/career-opportunities/employment-opportunities","2026-10-27",TRUE
 "K-12","lame deer public schools | administrative - other | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","lame deer public schools | assistant principal | https://www.applitrack.com/lamedeer/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=174","2026-08-18",TRUE
@@ -796,6 +800,7 @@
 "K-12","laurel public schools | 26-27 substitute | https://laurel.schoolspring.com/jobs/5660181","2026-08-18",FALSE
 "K-12","laurel public schools | bus aide | https://laurel.schoolspring.com/jobs/5576634","2026-08-18",FALSE
 "K-12","laurel public schools | bus driver | https://laurel.schoolspring.com/jobs/5838370","2026-08-18",FALSE
+"K-12","laurel public schools | cafeteria assistant | https://laurel.schoolspring.com/jobs/5987336","2026-11-17",FALSE
 "K-12","laurel public schools | class e van driver | https://laurel.schoolspring.com/jobs/5975647","2026-11-03",FALSE
 "K-12","laurel public schools | community education | https://laurel.schoolspring.com/jobs/5007604","2026-08-18",TRUE
 "K-12","laurel public schools | dispatcher | https://laurel.schoolspring.com/jobs/5921880","2026-09-15",FALSE
@@ -817,6 +822,7 @@
 "K-12","lewistown public schools | food service | https://lewistown.schoolspring.com/jobs/5718971","2026-08-18",FALSE
 "K-12","lewistown public schools | guest or substitute teacher | https://lewistown.schoolspring.com/jobs/4831393","2026-08-18",TRUE
 "K-12","lewistown public schools | substitute bus driver | https://lewistown.schoolspring.com/jobs/4409755","2026-08-18",TRUE
+"K-12","libby public schools | 2026 in-house opening - - wtr koap lms cross-country ski coach | https://libbyschools.schoolspring.com/jobs/5995852","2026-11-17",FALSE
 "K-12","libby public schools | 2026-2027 paraprofessionals - grade levels tbd | https://libbyschools.schoolspring.com/jobs/5984081","2026-11-10",FALSE
 "K-12","libby public schools | 2026-2027 substitute for all positions | https://libbyschools.schoolspring.com/jobs/5851821","2026-08-18",FALSE
 "K-12","libby public schools | 2026-27 central charter school teacher grades 9-12 | https://libbyschools.schoolspring.com/jobs/5871252","2026-08-18",FALSE
@@ -828,13 +834,15 @@
 "K-12","libby public schools | coach - 2026-27 lms asst track | https://libbyschools.schoolspring.com/jobs/5773428","2026-08-18",FALSE
 "K-12","libby public schools | coach - 2026-27 lms head girls basketball | https://libbyschools.schoolspring.com/jobs/5883336","2026-08-18",FALSE
 "K-12","libby public schools | coach - 2027-28 les (5th & 6th) asst football | https://libbyschools.schoolspring.com/jobs/5970090","2026-10-27",FALSE
+"K-12","libby public schools | coach - 2027-28 lhs assistant boys soccer | https://libbyschools.schoolspring.com/jobs/5989440","2026-11-17",FALSE
+"K-12","libby public schools | coach - 2027-28 lhs head boys soccer | https://libbyschools.schoolspring.com/jobs/5989443","2026-11-17",FALSE
+"K-12","libby public schools | coach - 2027-28 lms head football | https://libbyschools.schoolspring.com/jobs/5996078","2026-11-17",FALSE
 "K-12","lima school district #12 | lead custodian | https://www.limaschoolmt.org","2026-11-03",FALSE
 "K-12","lima school district #12 | lead maintenance worker | https://www.limaschoolmt.org","2026-11-03",FALSE
 "K-12","lima school district #12 | mathematics | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","lima school district #12 | transportation director/lead bus driver | https://www.limaschoolmt.org","2026-11-03",FALSE
-"K-12","lincoln school district #38 | coaching positions available 26-27 school year | https://sites.google.com/a/lincoln.k12.mt.us/webpage2/employment","2026-09-01",FALSE
-"K-12","lincoln school district #38 | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
-"K-12","lincoln school district #38 | para professional job opening | https://sites.google.com/a/lincoln.k12.mt.us/webpage2/employment","2026-08-25",TRUE
+"K-12","lincoln school district #38 | coaching positions available 26-27 school year | https://drive.google.com/file/d/1wHsl6nlxm5YmZ_os-yAud0K3ktiGFLUB/view?usp=sharing","2026-09-01",FALSE
+"K-12","lincoln school district #38 | para professional | https://drive.google.com/file/d/1jewlzVxBorwqjwYK9HWFBs5tuuiHADoi/view?usp=sharing","2026-11-17",FALSE
 "K-12","livingston public schools | after school activity coordinator | https://4.files.edl.io/b470/07/31/26/152622-e9c26d56-8fb4-4849-919f-57d2bcd32628.pdf","2026-08-18",TRUE
 "K-12","livingston public schools | after school program aide | https://4.files.edl.io/3616/07/31/26/152622-4f115f16-7fb3-4d3d-b7d2-a018d1eb1b49.pdf","2026-08-18",TRUE
 "K-12","livingston public schools | baker cook | https://4.files.edl.io/f700/09/10/26/162245-36dd651d-60e0-4720-8a08-5a7669621f26.pdf","2026-09-15",FALSE
@@ -844,23 +852,19 @@
 "K-12","livingston public schools | mathematics | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","livingston public schools | next chapter paraeducator 2027 | https://4.files.edl.io/1a05/10/22/26/214954-a1743874-7679-4d9d-a131-d66daf1f6a21.pdf","2026-10-27",FALSE
 "K-12","livingston public schools | phs assistant boys basketball coach 2026 27 | https://4.files.edl.io/988e/10/05/26/203432-9fdf89e7-9560-4f18-96d8-cbed3ac7ab4f.pdf","2026-10-06",FALSE
-"K-12","livingston public schools | phs assistant speech and debate coach 26 27 | https://4.files.edl.io/b241/10/16/26/143357-d2aa0a25-80fe-4733-9551-50b70dd803bd.pdf","2026-10-20",FALSE
-"K-12","livingston public schools | phs bpa advisor 2026 27 | https://4.files.edl.io/106f/07/31/26/155215-bdba64a1-bce1-43a7-95fc-0713a22e63ef.pdf","2026-08-18",TRUE
 "K-12","livingston public schools | phs custodian 2026 (2) | https://4.files.edl.io/b775/03/10/26/215302-1685b9e7-a967-4963-9362-0203af0d2673.pdf","2026-08-18",TRUE
 "K-12","livingston public schools | phs head softball coach 26-27 | https://4.files.edl.io/bf13/10/05/26/203432-99d1aa40-f959-47ff-8549-9a9096397f86.pdf","2026-10-06",FALSE
 "K-12","livingston public schools | relief bus driver 2025 | https://4.files.edl.io/a2f2/04/08/25/140200-2a035424-aa22-4b77-a124-537ffb27bdfb.pdf","2026-08-18",TRUE
 "K-12","livingston public schools | school counseling | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","livingston public schools | sgms girls basketball coach 2026 | https://4.files.edl.io/afda/10/16/26/143411-9a165a97-bc0f-48c0-a6a3-c50aaedb15a8.pdf","2026-10-20",FALSE
 "K-12","livingston public schools | sgms student council advisor 26 27 | https://4.files.edl.io/8ac6/08/14/26/164707-f22a9c23-bdf3-4d5b-8b3d-819c7c5cd75a.pdf","2026-08-18",TRUE
 "K-12","lockwood schools | administrative - superintendent | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-10",FALSE
-"K-12","lockwood schools | art | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","lockwood schools | bus aide | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=289","2026-08-18",TRUE
 "K-12","lockwood schools | business education teacher | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=360","2026-08-18",FALSE
-"K-12","lockwood schools | business manager/ district clerk | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=345","2026-10-27",FALSE
 "K-12","lockwood schools | coach | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","lockwood schools | custodian | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=260","2026-08-18",TRUE
 "K-12","lockwood schools | english | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","lockwood schools | head softball coach | lockwood high school | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=363","2026-10-13",FALSE
+"K-12","lockwood schools | high school art teacher | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=352","2026-11-17",FALSE
 "K-12","lockwood schools | high school paraprofessional (non-instructional) | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=361","2026-08-18",TRUE
 "K-12","lockwood schools | library | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","lockwood schools | lockwood school district volunteer/chaperone | https://www.applitrack.com/lockwoodschool/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=343","2026-10-27",FALSE
@@ -892,12 +896,12 @@
 "K-12","lolo school district 7 | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-10",FALSE
 "K-12","lolo school district 7 | paraprofessional position(s) | https://www.loloschools.org/page/employment","2026-09-01",TRUE
 "K-12","lolo school district 7 | special education long term substitute | https://www.loloschools.org/page/employment","2026-11-10",FALSE
-"K-12","loyola-sacred heart h s | coach | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
+"K-12","lolo school district 7 | substitute teachers/aides/custodial/school nurse | https://www.loloschools.org/page/employment","2026-11-17",FALSE
 "K-12","lustre district 23 | bus driver - updated | https://www.lustregradeschool.com/employment","2026-11-10",FALSE
 "K-12","lustre district 23 | job opening - cook | https://www.lustregradeschool.com/employment","2026-11-10",FALSE
 "K-12","lustre district 23 | sped substitute | https://www.lustregradeschool.com/employment","2026-11-10",FALSE
-"K-12","luther school | bus driver | https://www.lutherschool.org/images/documents/2026-bus-driver.pdf","2026-10-27",TRUE
-"K-12","luther school | cook | https://www.lutherschool.org/images/documents/2026-cook.pdf","2026-10-27",TRUE
+"K-12","luther school | bus driver | https://www.lutherschool.org/index.php/documents","2026-10-27",TRUE
+"K-12","luther school | cook | https://www.lutherschool.org/index.php/documents","2026-10-27",TRUE
 "K-12","malta public schools | agricultural education - ffa | https://www.maltaschools.org/page/district-employment","2026-09-01",TRUE
 "K-12","malta public schools | bus drivers | https://www.maltaschools.org/page/district-employment","2026-09-01",TRUE
 "K-12","malta public schools | elementary noon duty aide | https://www.maltaschools.org/page/district-employment","2026-09-15",FALSE
@@ -909,21 +913,25 @@
 "K-12","malta public schools | substitute teacher | https://www.maltaschools.org/page/district-employment","2026-09-01",TRUE
 "K-12","manhattan christian | english | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","manhattan school district | asl interpreter | https://www.rollontigers.org/fs/resource-manager/view/3b6beb9d-53ca-4138-b199-6423979457ec","2026-11-03",TRUE
-"K-12","manhattan school district | deaf/hard of hearing specialist or teacher of the deaf | https://www.rollontigers.org/fs/resource-manager/view/f2bbc0da-2b58-40c1-99b8-ea129d0903eb","2026-11-10",FALSE
-"K-12","manhattan school district | hs assistant wrestling coach | https://www.rollontigers.org/fs/resource-manager/view/16137905-5dad-46e3-b913-b9cdfe81baea","2026-11-03",TRUE
 "K-12","manhattan school district | kitchen aide-cafeteria assistant | https://www.rollontigers.org/fs/resource-manager/view/412e0468-4873-4a66-a386-71ef6a90c180","2026-11-03",TRUE
 "K-12","manhattan school district | long-term substitute teacher: elementary | https://www.rollontigers.org/fs/resource-manager/view/cf7a1be0-f943-4710-9287-093a7b11067b","2026-11-03",TRUE
-"K-12","manhattan school district | paraprofessional - special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-10",FALSE
+"K-12","manhattan school district | paraprofessional - special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
 "K-12","manhattan school district | part-time kitchen aide | https://www.rollontigers.org/fs/resource-manager/view/63c3190d-ae1f-4b06-bba9-90827856e768","2026-11-03",TRUE
 "K-12","manhattan school district | part-time swing shift custodian | https://www.rollontigers.org/fs/resource-manager/view/fd553cc9-f7be-490f-aa43-3a61e9c3f3b3","2026-11-03",TRUE
 "K-12","manhattan school district | sped paraprofessional ms- part-time | https://www.rollontigers.org/fs/resource-manager/view/a4193c95-050c-493c-8273-4fb7f38b3f92","2026-11-03",TRUE
+"K-12","manhattan school district | substitute teachers kitchen helper substitutes custodial helper substitutes | https://www.rollontigers.org/district/employment/current-openings","2026-11-17",FALSE
 "K-12","manhattan school district | swing shift custodian | https://www.rollontigers.org/fs/resource-manager/view/2bcb10f9-1b9b-4116-b089-96b0b816655b","2026-11-03",TRUE
 "K-12","manhattan school district | weekend events: maintenance and custodial | https://www.rollontigers.org/fs/resource-manager/view/14dbac8b-a0b6-4706-9217-0d4c39b7fec6","2026-11-03",TRUE
 "K-12","marion school district #54 | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","marion school district #54 | guest teacher / pool of substitutes | https://sites.google.com/a/marionschoolmt.com/new-marion-school/district-information/employment","2026-11-03",TRUE
 "K-12","mccormick elem | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
+"K-12","melstone public schools | activity drivers (cdl) | https://www.melstonepublicschools.org/page/employment-opportunities","2026-11-17",FALSE
+"K-12","melstone public schools | activity drivers (non-cdl) | https://www.melstonepublicschools.org/page/employment-opportunities","2026-11-17",FALSE
+"K-12","melstone public schools | certified (teacher) substitute | https://www.melstonepublicschools.org/page/employment-opportunities","2026-11-17",FALSE
 "K-12","melstone public schools | head maintenance/custodian | https://www.melstonepublicschools.org/page/employment-opportunities","2026-09-01",TRUE
 "K-12","melstone public schools | substitute route bus drivers/activity drivers | https://www.melstonepublicschools.org/page/employment-opportunities","2026-09-01",TRUE
+"K-12","melstone public schools | substitute route drivers (cdl) | https://www.melstonepublicschools.org/page/employment-opportunities","2026-11-17",FALSE
+"K-12","melstone public schools | substitute route type e drivers (non-cdl) | https://www.melstonepublicschools.org/page/employment-opportunities","2026-11-17",FALSE
 "K-12","melstone public schools | substitute teachers, kitchen staff, custodian | https://www.melstonepublicschools.org/page/employment-opportunities","2026-09-01",TRUE
 "K-12","miami elementary school district #31 | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","miami elementary school district #31 | substitute teachers | https://www.miamielementary.com/employment","2026-08-25",TRUE
@@ -946,19 +954,22 @@
 "K-12","miles city unified school district 1 | track and field assistant coach | https://docs.google.com/spreadsheets/d/1Ct4NASCs-jCEllcMREDsXNdgx8zaKYCosoyo6fHGtKY/export?format=csv&gid=0","2026-08-25",TRUE
 "K-12","miles city unified school district 1 | wrestling assistant coach | https://docs.google.com/spreadsheets/d/1Ct4NASCs-jCEllcMREDsXNdgx8zaKYCosoyo6fHGtKY/export?format=csv&gid=0","2026-08-25",TRUE
 "K-12","miles city unified school district 1 | wrestling head coach | https://docs.google.com/spreadsheets/d/1Ct4NASCs-jCEllcMREDsXNdgx8zaKYCosoyo6fHGtKY/export?format=csv&gid=0","2026-10-13",FALSE
-"K-12","missoula county public schools | administrative secretary - district floating | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2145","2026-11-10",FALSE
-"K-12","missoula county public schools | boys basketball coach - meadow hill middle school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2140","2026-10-20",FALSE
+"K-12","missoula area education coop | school psychologist | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
+"K-12","missoula county public schools | assistant track coach - sentinel high school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2150","2026-11-17",FALSE
 "K-12","missoula county public schools | crossing guard - russell elementary school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2113","2026-09-29",FALSE
+"K-12","missoula county public schools | custodian - sentinel high school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2149","2026-11-17",FALSE
+"K-12","missoula county public schools | kitchen helper/sanitation worker - mcps central kitchen | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2152","2026-11-17",FALSE
 "K-12","missoula county public schools | noon duty - lewis and clark elementary - 2 days/week | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2031","2026-08-18",FALSE
 "K-12","missoula county public schools | noon duty - lowell elementary school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2117","2026-09-29",FALSE
 "K-12","missoula county public schools | noon duty - meadow hill middle school - (2) positions | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2132","2026-10-13",FALSE
 "K-12","missoula county public schools | noon duty - rattlesnake elementary school - 2 days/week | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2146","2026-11-10",FALSE
 "K-12","missoula county public schools | noon duty - russell elementary school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2122","2026-10-06",FALSE
 "K-12","missoula county public schools | noon duty - washington middle school - (4) positions | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2026","2026-08-18",FALSE
+"K-12","missoula county public schools | on-call security - missoula county public schools | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2154","2026-11-17",FALSE
 "K-12","missoula county public schools | paraeducator 2 - big sky high school - temporary | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2081","2026-09-01",FALSE
 "K-12","missoula county public schools | paraeducator 2 - big sky high school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2127","2026-10-06",FALSE
+"K-12","missoula county public schools | paraeducator 2 - chief charlo elementary school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2153","2026-11-17",FALSE
 "K-12","missoula county public schools | robotics advisor - cs porter middle school | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2071","2026-09-01",FALSE
-"K-12","missoula county public schools | sanitation worker - central kitchen | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2134","2026-10-13",FALSE
 "K-12","missoula county public schools | sign language interpreter | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2000","2026-08-18",FALSE
 "K-12","missoula county public schools | substitute noon duty / crossing grd/ bus aide | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=2125","2026-10-06",FALSE
 "K-12","missoula county public schools | substitute school bus driver | https://www.applitrack.com/mcpsmt/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1817","2026-08-18",FALSE
@@ -969,7 +980,6 @@
 "K-12","monforton school district #27 | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","monforton school district #27 | paraprofessional - instructional | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","monforton school district #27 | paraprofessional - special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","montana city elementary school district #27 | administrative - other | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-15",FALSE
 "K-12","moore public schools | full-time custodial position | https://www.mooreschoolmt.com/uploads/3/7/9/1/37910473/full-time_custodial_advertisment.pdf","2026-10-27",FALSE
 "K-12","nashua public schools | music (full or part-time) | https://www.nashua.k12.mt.us/District/Jobs/","2026-10-27",TRUE
 "K-12","nashua public schools | part-time custodian | https://www.nashua.k12.mt.us/District/Jobs/","2026-10-27",TRUE
@@ -982,7 +992,6 @@
 "K-12","north ctrl learn res ctr | school psychologist | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","north star public schools | bus drivers | https://sites.google.com/nsschools.org/home/employment","2026-08-25",TRUE
 "K-12","north star public schools | cte – family and consumer sciences | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
-"K-12","north star public schools | cte – industrial technology education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","north star public schools | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","north star public schools | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","north star public schools | substitute teachers | https://sites.google.com/nsschools.org/home/employment","2026-08-25",TRUE
@@ -990,6 +999,7 @@
 "K-12","northern cheyenne trib hs | history | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","northern cheyenne trib hs | library | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","northern cheyenne trib hs | mathematics | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-07",FALSE
+"K-12","noxon public schools | 7–12 science teacher | https://www.noxonschools.com/o/nps/page/certified-listings","2026-11-17",TRUE
 "K-12","olney-bissell school district | long term substitute - kindergarten | https://www.olneybissellschool.com/o/obs/page/employment","2026-11-10",TRUE
 "K-12","opheim public schools | music teacher | https://sites.google.com/site/opheimschool/office","2026-10-27",TRUE
 "K-12","opheim public schools | substitute bus driver | https://sites.google.com/site/opheimschool/office","2026-10-27",TRUE
@@ -998,6 +1008,7 @@
 "K-12","park city schools | various substitutes | https://www.parkcityschools.org/page/employment-information","2026-09-01",TRUE
 "K-12","philipsburg school district | in class-support special education teacher - phillipsburg elementary school / tch00541 | https://www.applitrack.com/pburgsd/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1948","2026-10-20",FALSE
 "K-12","philipsburg school district | sbys - jobs and more program coordinator - anticipated (grant funded position - 12 months) / sby00010 | https://www.applitrack.com/pburgsd/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1953","2026-11-10",FALSE
+"K-12","philipsburg school district | school custodian - (anticipated) 2nd shift/cus00001 | https://www.applitrack.com/pburgsd/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1954","2026-11-17",FALSE
 "K-12","philipsburg school district | substitute bus drivers | https://www.applitrack.com/pburgsd/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1802","2026-08-25",FALSE
 "K-12","philipsburg school district | substitute custodians (2nd shift) | https://www.applitrack.com/pburgsd/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1799","2026-08-25",FALSE
 "K-12","philipsburg school district | substitute school nurse | https://www.applitrack.com/pburgsd/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=1800","2026-08-25",FALSE
@@ -1017,6 +1028,7 @@
 "K-12","plevna school district #55 | track coach - jr. high - head | https://www.plevnacougars.com/o/plevna/page/employment-plevna","2026-11-03",FALSE
 "K-12","polson school district | food services cook | https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/d08ca8e2-e40e-4110-a28f-b4eb00ee5a5e","2026-11-03",FALSE
 "K-12","polson school district | speech/language therapist | https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/783abd55-07a4-4d3f-a12c-b49b00ab3754","2026-11-03",FALSE
+"K-12","polson school district | substitute | https://polsonschooldistrict23mt.tylerportico.com/tess/citizen/jobs/job-list/7180f91a-01c7-41ec-a88a-b50400a82f1b","2026-11-17",FALSE
 "K-12","poplar public schools | activities director | https://www.applitrack.com/poplar/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=236","2026-08-18",TRUE
 "K-12","poplar public schools | administrative - other | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","poplar public schools | cte – family and consumer sciences | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-10",FALSE
@@ -1034,12 +1046,10 @@
 "K-12","power public schools | substitute after-school custodians | https://power.k12.mt.us/District/Jobs/3771-Substitute-After-School-Custodians.html","2026-10-27",TRUE
 "K-12","power public schools | substitute kitchen aides | https://power.k12.mt.us/District/Jobs/3770-Substitute-Kitchen-Aides.html","2026-10-27",TRUE
 "K-12","power public schools | substitute teachers | https://power.k12.mt.us/District/Jobs/3773-Substitute-Teachers.html","2026-10-27",TRUE
-"K-12","pryor public schools | administrative - principal | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","pryor public schools | bus drivers | https://pryorwarriors.org/wp-content/uploads/2023/08/BUS-DRIVER-FLYER.pdf","2026-10-27",TRUE
 "K-12","pryor public schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","pryor public schools | english | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-15",FALSE
 "K-12","pryor public schools | literacy tutors | https://pryorwarriors.org/wp-content/uploads/2024/01/image-1.png","2026-10-27",TRUE
-"K-12","pryor public schools | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","pryor public schools | substitute | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-15",FALSE
 "K-12","ramsay school district #3 | bus monitor | https://ramsayschool.com/employment/","2026-08-25",TRUE
 "K-12","ramsay school district #3 | para-professional | https://ramsayschool.com/employment/","2026-08-25",TRUE
@@ -1080,7 +1090,6 @@
 "K-12","ronan public schools | coach - assistant wrestling - rhs | https://ronan.schoolspring.com/jobs/5916616","2026-09-07",FALSE
 "K-12","ronan public schools | coach ~ assistant baseball ~ rhs | https://ronan.schoolspring.com/jobs/5796614","2026-08-18",FALSE
 "K-12","ronan public schools | coach ~ assistant football ~ rhs | https://ronan.schoolspring.com/jobs/5516680","2026-08-18",FALSE
-"K-12","ronan public schools | coach ~ assistant girls basketball ~ rms | https://ronan.schoolspring.com/jobs/5732320","2026-08-18",FALSE
 "K-12","ronan public schools | coach ~ assistant track ~ rhs | https://ronan.schoolspring.com/jobs/5984469","2026-11-10",FALSE
 "K-12","ronan public schools | coach ~ assistant track ~ rms | https://ronan.schoolspring.com/jobs/5984479","2026-11-10",FALSE
 "K-12","ronan public schools | food service assistant cook | https://ronan.schoolspring.com/jobs/5616945","2026-08-18",FALSE
@@ -1106,19 +1115,14 @@
 "K-12","roy school district 74 | bus driver | https://roy.k12.mt.us/","2026-08-25",TRUE
 "K-12","roy school district 74 | full-time paraprofessional | https://roy.k12.mt.us/","2026-08-25",TRUE
 "K-12","roy school district 74 | head cook | https://roy.k12.mt.us/","2026-08-25",TRUE
-"K-12","ryegate k-12 schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","ryegate k-12 schools | paraprofessional - instructional | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-01",FALSE
 "K-12","sanders county ed servicescoop | occupational therapist | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","sanders county ed servicescoop | speech-language pathologist | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","savage public schools | 6-12 history teacher | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
-"K-12","savage public schools | assistant h.s. boys basketball coach | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
 "K-12","savage public schools | elementary teacher | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
-"K-12","savage public schools | head h.s. boys basketball coach | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
-"K-12","savage public schools | head h.s. golf coach | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
 "K-12","savage public schools | k-12 counselor | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
 "K-12","savage public schools | k-12 music teacher | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
-"K-12","savage public schools | physical ed | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","savage public schools | two paraeducators (bona fide occupational qualifications) to support a student with a disability | https://www.savagepublicschool.com/page/employment","2026-11-03",TRUE
+"K-12","savage public schools | k-12 physical education | https://www.savagepublicschool.com/page/employment","2026-11-17",FALSE
 "K-12","scobey schools | 7-12 family & consumer science teacher | http://scobeyschools.com/employment.html","2026-08-25",TRUE
 "K-12","scobey schools | 7-12 math teacher | http://scobeyschools.com/employment.html","2026-08-25",TRUE
 "K-12","scobey schools | activity drivers | http://scobeyschools.com/employment.html","2026-08-25",TRUE
@@ -1132,22 +1136,26 @@
 "K-12","scobey schools | k-6 special education teacher | http://scobeyschools.com/employment.html","2026-08-25",TRUE
 "K-12","scobey schools | substitute route bus drivers | http://scobeyschools.com/employment.html","2026-08-25",TRUE
 "K-12","scobey schools | substitute teachers | http://scobeyschools.com/employment.html","2026-08-25",TRUE
-"K-12","shelby school district | bus substitutes | https://www.shelbypublicschools.org/page/job-opportunites","2026-09-29",FALSE
-"K-12","shelby school district | k-8 colony teacher | https://www.shelbypublicschools.org/page/job-opportunites","2026-09-29",FALSE
-"K-12","shelby school district | paraprofessionals | https://www.shelbypublicschools.org/page/job-opportunites","2026-09-29",FALSE
-"K-12","shelby school district | teachers | https://www.shelbypublicschools.org/page/job-opportunites","2026-09-29",FALSE
+"K-12","seeley lake elementary #34 | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
+"K-12","seeley lake elementary #34 | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
+"K-12","seeley lake elementary #34 | substitute (all areas) | https://www.sleonline.org/page/join-our-team","2026-11-17",TRUE
+"K-12","shelby school district | bus substitutes | https://www.shelbypublicschools.org/page/job-opportunites","2026-11-17",FALSE
+"K-12","shelby school district | high school assistant wrestling coach | https://www.shelbypublicschools.org/page/job-opportunites","2026-11-17",FALSE
+"K-12","shelby school district | paraprofessionals | https://www.shelbypublicschools.org/page/job-opportunites","2026-11-17",FALSE
+"K-12","shelby school district | teachers | https://www.shelbypublicschools.org/page/job-opportunites","2026-11-17",FALSE
 "K-12","shepherd school district #37 | elementary teacher | https://www.shepherd.k12.mt.us/dist-office/jobs/overview","2026-08-25",TRUE
 "K-12","sheridan public schools | substitute bus drivers | https://www.sheridan.k12.mt.us/district/employment","2026-10-27",TRUE
 "K-12","sheridan public schools | substitute teachers | https://www.sheridan.k12.mt.us/district/employment","2026-10-27",TRUE
 "K-12","sheridan public schools | varsity boys' basketball-head and assistant coach | https://www.sheridan.k12.mt.us/district/employment","2026-10-27",TRUE
 "K-12","sheridan public schools | varsity girls' basketball-assistant coach | https://www.sheridan.k12.mt.us/district/employment","2026-10-27",TRUE
-"K-12","shields valley public schools | early literacy/math-2yk teacher | https://svalleyk12.org/district/employment","2026-09-15",FALSE
+"K-12","shields valley public schools | early literacy/math-2yk teacher | https://docs.google.com/document/d/1kkTfKKO8eWs2f29EVvyLUM-OznsZbKtieGtFdZufiiI/edit?usp=sharing","2026-09-15",FALSE
 "K-12","shields valley public schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
-"K-12","shields valley public schools | high needs para educator | https://svalleyk12.org/district/employment","2026-08-25",TRUE
-"K-12","shields valley public schools | k-12 art | https://svalleyk12.org/district/employment","2026-08-25",TRUE
-"K-12","shields valley public schools | maintenance / grounds / custodial technician | https://svalleyk12.org/district/employment","2026-08-25",TRUE
-"K-12","shields valley public schools | occupational therapist | https://svalleyk12.org/district/employment","2026-08-25",TRUE
+"K-12","shields valley public schools | high needs para educator | https://docs.google.com/document/d/1z4rxM5elIDalz1PCuFRwMm__o9GX_EUwvr8E_R5Ndbk/edit?usp=sharing","2026-08-25",TRUE
+"K-12","shields valley public schools | k-12 art | https://docs.google.com/document/d/1ZpjAQfQrJejc9HuEsoXVS58MbPJIhtzPNOtQ5b2UerU/edit?usp=sharing","2026-08-25",TRUE
+"K-12","shields valley public schools | maintenance / grounds / custodial technician | https://docs.google.com/document/d/1GzUooVorJG61WsMeHIxKtlXWVOGXosMcuGZEH3gLEbA/edit?usp=sharing","2026-08-25",TRUE
+"K-12","shields valley public schools | occupational therapist | https://docs.google.com/document/d/1sehZ1Yn7-BFtrSxwp-JcuzVu-tiRd1I9zD9SihLRz7U/edit?usp=sharing","2026-08-25",TRUE
 "K-12","shields valley public schools | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
+"K-12","shodair specialty hosp | other | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-17",FALSE
 "K-12","shodair specialty hosp | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","sidney public schools | afterschool bus driver | https://www.applitrack.com/sidney/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=514","2026-08-18",FALSE
 "K-12","sidney public schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
@@ -1183,8 +1191,7 @@
 "K-12","st regis school district | substitute paraprofessional position | https://www.stregisschool.org/page/employment","2026-09-01",TRUE
 "K-12","st regis school district | substitute teacher position | https://www.stregisschool.org/page/employment","2026-09-01",TRUE
 "K-12","st regis school district | ticket seller: winter season (basketball) | https://www.stregisschool.org/page/employment","2026-09-01",TRUE
-"K-12","st. ignatius school district | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
-"K-12","st. ignatius school district | salish teacher | https://jobs.redroverk12.com/org/2261/opening/181322","2026-09-01",TRUE
+"K-12","st. ignatius school district | salish teacher | https://jobs.redroverk12.com/org/2261/opening/181322","2026-09-01",FALSE
 "K-12","st. ignatius school district | special ed k-12 | https://jobs.redroverk12.com/org/2261/opening/114712","2026-09-01",TRUE
 "K-12","st. ignatius school district | substitute teacher | https://jobs.redroverk12.com/org/2261/opening/206045","2026-09-01",TRUE
 "K-12","stanford public schools | substitute teachers | https://www.stanfordmtschool.com/page/employment","2026-09-01",TRUE
@@ -1211,7 +1218,6 @@
 "K-12","sunburst schools | substitute teachers | https://www.sunburst.k12.mt.us/page/employment-opportunities","2026-09-01",TRUE
 "K-12","superior school district | bus drivers | https://www.ssd3.us/page/employment","2026-10-27",TRUE
 "K-12","superior school district | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
-"K-12","superior school district | paraprofessionals | https://www.ssd3.us/page/employment","2026-10-27",TRUE
 "K-12","superior school district | substitute teachers | https://www.ssd3.us/page/employment","2026-10-27",TRUE
 "K-12","surprise creek school | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","swan river school district #4 | custodian (full time) | https://www.swanriverschool.org/human-resources/","2026-08-25",TRUE
@@ -1233,6 +1239,7 @@
 "K-12","target range school district | substitute paraeducator | https://target.schoolspring.com/jobs/4954675","2026-08-25",TRUE
 "K-12","target range school district | substitute teacher/para | https://target.schoolspring.com/jobs/5327409","2026-08-25",TRUE
 "K-12","terry public schools | bus driver | https://terryschools.org/employment","2026-08-25",TRUE
+"K-12","terry public schools | clerk/business manager | https://terryschools.org/employment","2026-11-17",FALSE
 "K-12","terry public schools | expedition route driver | https://terryschools.org/employment","2026-08-25",TRUE
 "K-12","terry public schools | kitchen sub | https://terryschools.org/employment","2026-08-25",TRUE
 "K-12","terry public schools | music | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
@@ -1240,20 +1247,23 @@
 "K-12","terry public schools | sub bus driver | https://terryschools.org/employment","2026-08-25",TRUE
 "K-12","terry public schools | sub custodian | https://terryschools.org/employment","2026-08-25",TRUE
 "K-12","terry public schools | sub teacher/aide | https://terryschools.org/employment","2026-08-25",TRUE
-"K-12","thompson falls public schools | 1st grade teacher | https://www.thompsonfalls.net/employment","2026-10-13",FALSE
-"K-12","thompson falls public schools | assistant high school soccer coach | https://www.thompsonfalls.net/employment","2026-08-25",TRUE
-"K-12","thompson falls public schools | paraprofessional- | https://www.thompsonfalls.net/employment","2026-10-13",FALSE
+"K-12","thompson falls public schools | 1st grade teacher | https://resources.finalsite.net/images/v1791477979/thompsonfallsnet/ptat9w7ubelyhehhjcfp/JobPostingVacancy-1stGradeTeacher2026docx.pdf","2026-10-13",FALSE
+"K-12","thompson falls public schools | assistant high school soccer coach | https://resources.finalsite.net/images/v1782236873/thompsonfallsnet/rcxeliatgukofanl9jzv/AssistantSoccerCoach.pdf","2026-08-25",TRUE
+"K-12","thompson falls public schools | paraprofessional | https://resources.finalsite.net/images/v1791392466/thompsonfallsnet/qhlydtoahn2mixkezdss/JobPostingVacancy-Paraprofessionalpdf.pdf","2026-11-17",FALSE
 "K-12","three forks public schools | activities bus driver | https://www.applitrack.com/tfschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=193","2026-10-13",FALSE
 "K-12","three forks public schools | district transportation liaison | https://www.applitrack.com/tfschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=281","2026-09-01",FALSE
 "K-12","three forks public schools | drivers education (traffic ed.) instructor | https://www.applitrack.com/tfschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=229","2026-08-25",FALSE
 "K-12","three forks public schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
+"K-12","three forks public schools | event cleaner | https://www.applitrack.com/tfschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=244","2026-11-17",FALSE
 "K-12","three forks public schools | long term substitute posting: ms and hs english/ language arts | https://www.applitrack.com/tfschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=283","2026-10-27",FALSE
 "K-12","three forks public schools | special education | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","three forks public schools | special education paraprofessional | https://www.applitrack.com/tfschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=282","2026-10-13",FALSE
 "K-12","three forks public schools | substitute teacher | https://www.applitrack.com/tfschools/onlineapp/default.aspx?AppliTrackLayoutMode=detail&AppliTrackJobId=219","2026-08-25",TRUE
+"K-12","townsend school district | assistant hs speech and drama coach | https://www.townsend.k12.mt.us/page/employment","2026-11-17",FALSE
+"K-12","townsend school district | co-head hs winter cheerleading | https://www.townsend.k12.mt.us/page/employment","2026-11-17",FALSE
 "K-12","townsend school district | custodian/light maintenance (immediate opening) | https://www.townsend.k12.mt.us/page/employment","2026-09-01",TRUE
-"K-12","townsend school district | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "K-12","townsend school district | elementary special education | https://www.townsend.k12.mt.us/page/employment","2026-11-03",FALSE
+"K-12","townsend school district | head hs girls tennis coach | https://www.townsend.k12.mt.us/page/employment","2026-11-17",FALSE
 "K-12","trego school district 53 | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","trego school district 53 | snow removal | https://www.tregoschool.org/about-us/our-staff/employment","2026-08-25",TRUE
 "K-12","trout creek school district #6 | business manager/clerk | https://www.troutcreekeagles.org/apps/pages/index.jsp?uREC_ID=4449487&type=d&pREC_ID=2751220","2026-10-27",TRUE
@@ -1267,16 +1277,17 @@
 "K-12","ulm public schools | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","upper west shore school district #33 | paraprofessionals | https://daytonschool.net/employment/","2026-08-25",TRUE
 "K-12","upper west shore school district #33 | substitute teachers | https://daytonschool.net/employment/","2026-08-25",TRUE
+"K-12","upper west shore school district #33 | teachers | https://daytonschool.net/employment/","2026-11-17",FALSE
 "K-12","valier school district #18 | jh and hs basketball coach | https://www.valier.k12.mt.us/about-us/Employment","2026-09-15",FALSE
 "K-12","valier school district #18 | part-time cook | https://www.valier.k12.mt.us/about-us/Employment","2026-08-25",TRUE
 "K-12","valley view elem | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
-"K-12","vaughn elementary school district #74 | substitutes needed | https://www.vaughnschool.com/District/Jobs/497-Substitutes-Needed.html","2026-10-27",TRUE
+"K-12","vaughn elementary school district #74 | substitutes needed | https://www.vaughnschool.com/jobs/substitutes-needed","2026-10-27",FALSE
 "K-12","victor school district | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-29",FALSE
 "K-12","victor school district | english | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-29",FALSE
 "K-12","victor school district | head high school track coach | https://www.victor.k12.mt.us/page/employment","2026-10-27",FALSE
 "K-12","victor school district | hs/ms special education teacher | https://www.victor.k12.mt.us/page/employment","2026-10-27",FALSE
 "K-12","victor school district | paraprofessional | https://www.victor.k12.mt.us/page/employment","2026-10-27",FALSE
-"K-12","victor school district | substitute | https://www.victor.k12.mt.us/page/employment","2026-10-27",FALSE
+"K-12","victor school district | substitutes | https://www.victor.k12.mt.us/page/employment","2026-11-17",FALSE
 "K-12","vida elem | elementary curriculum | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","vida elem | paraprofessional - instructional | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-08-18",FALSE
 "K-12","west glacier elementary school district #8 | substitute teacher | https://docs.google.com/document/d/1Wr8Ga6J0pkGMMjO3LL_Vp3pZed7FHHqk0B2cVgyRjy4/edit?usp=sharing","2026-10-27",TRUE
@@ -1301,13 +1312,13 @@
 "K-12","whitefish school district | whs assistant swim coach | https://whitefishschools.schoolspring.com/jobs/5964753","2026-10-20",FALSE
 "K-12","whitefish school district | whs assistant track and field coach (2 positions) | https://whitefishschools.schoolspring.com/jobs/5914241","2026-09-07",FALSE
 "K-12","whitefish school district | whs assistant wrestling coach | https://whitefishschools.schoolspring.com/jobs/5911805","2026-09-01",FALSE
-"K-12","whitefish school district | whs head baseball coach | https://whitefishschools.schoolspring.com/jobs/5914422","2026-09-07",FALSE
+"K-12","whitefish school district | whs special education paraeducator | https://whitefishschools.schoolspring.com/jobs/5989457","2026-11-17",FALSE
 "K-12","whitefish school district | wms girls basketball coach (2 positions) | https://whitefishschools.schoolspring.com/jobs/5935066","2026-09-22",FALSE
 "K-12","whitefish school district | wms health/physical education teacher - long-term substitute | https://whitefishschools.schoolspring.com/jobs/5928431","2026-09-22",FALSE
 "K-12","whitefish school district | wms special education paraeducator (multiple positions) | https://whitefishschools.schoolspring.com/jobs/5832175","2026-08-18",FALSE
 "K-12","whitefish school district | wms track coach | https://whitefishschools.schoolspring.com/jobs/5958422","2026-10-13",FALSE
+"K-12","whitehall public schools | agricultural education teacher | https://www.whitehallschools.org/apps/jobs/show_job.jsp?REC_ID=31668","2026-11-17",FALSE
 "K-12","whitehall public schools | paraprofessional / teacher's aide | https://www.whitehallschools.org/apps/jobs/show_job.jsp?REC_ID=38774","2026-10-27",TRUE
-"K-12","whitehall public schools | school custodian | https://www.whitehallschools.org/apps/jobs/show_job.jsp?REC_ID=33881","2026-10-27",TRUE
 "K-12","whitehall public schools | substitute teacher | https://www.whitehallschools.org/apps/jobs/show_job.jsp?REC_ID=31494","2026-10-27",TRUE
 "K-12","whitewater public schools | bus drivers | https://whitewater.k12.mt.us/employment","2026-10-27",TRUE
 "K-12","whitewater public schools | custodians | https://whitewater.k12.mt.us/employment","2026-10-27",TRUE
@@ -1335,7 +1346,7 @@
 "K-12","wolf point public schools | school resource officer (sro) | https://www.wolfpointschools.org/page/job-opportunities-1","2026-08-18",TRUE
 "K-12","wolf point public schools | social studies (broadfield) | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-07",FALSE
 "K-12","wolf point public schools | substitute teachers | https://www.wolfpointschools.org/page/job-opportunities-1","2026-08-18",TRUE
-"K-12","woodman elementary school district #3 | substitute teacher | http://www.woodmanschool.org/district-information/employment-opportunities","2026-10-27",TRUE
+"K-12","woodman elementary school district #3 | substitute teachers | http://www.woodmanschool.org/district-information/employment-opportunities","2026-11-17",FALSE
 "K-12","wyola elem | other | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-09-07",FALSE
 "K-12","yellowstone academy elem | science (broadfield) | https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","2026-11-03",FALSE
 "HE","aaniiih nakoda college | buffalo center director | https://www.ancollege.edu/_files/ugd/4d0d84_eeca2e41f8204b67ac8a030866edf358.pdf","2026-10-06",FALSE
@@ -1345,12 +1356,10 @@
 "HE","aaniiih nakoda college | kgva 88.1 radio station programmer | https://www.ancollege.edu/_files/ugd/4d0d84_312d6c1231b9438f8267cae1f19c0c1a.pdf","2026-10-06",FALSE
 "HE","aaniiih nakoda college | nactep project assistant | https://www.ancollege.edu/_files/ugd/4d0d84_a118e61e43444d9f8a4fc01ca97752a4.pdf","2026-08-11",TRUE
 "HE","aaniiih nakoda college | nurse education instructor | https://www.ancollege.edu/_files/ugd/4d0d84_2fd55e72abe44861b601a436cf8c636e.pdf","2026-10-06",FALSE
-"HE","blackfeet community college | bnactep administrative assistant | https://bfcc.isolvedhire.com/jobs/1895426","2026-11-03",FALSE
 "HE","blackfeet community college | enrollment coordinator | https://bfcc.isolvedhire.com/jobs/1889890","2026-10-27",FALSE
 "HE","blackfeet community college | narch grant coordinator | https://bfcc.isolvedhire.com/jobs/1895411","2026-11-03",FALSE
 "HE","blackfeet community college | nursing director-bsn program | https://bfcc.isolvedhire.com/jobs/1895419","2026-11-03",FALSE
 "HE","blackfeet community college | nursing mentor/teaching assistant | https://bfcc.isolvedhire.com/jobs/1895413","2026-11-03",FALSE
-"HE","blackfeet community college | student services specialist | https://bfcc.isolvedhire.com/jobs/1889945","2026-10-27",FALSE
 "HE","carroll college | academic instructional technologist | https://www.carroll.edu/faculty-staff-positions","2026-10-27",FALSE
 "HE","carroll college | area coordinator | https://www.carroll.edu/faculty-staff-positions","2026-08-11",TRUE
 "HE","carroll college | collections librarian | https://www.carroll.edu/faculty-staff-positions","2026-10-13",FALSE
@@ -1375,12 +1384,10 @@
 "HE","flathead valley community college | adjunct instructor, communication | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/6749","2026-08-11",TRUE
 "HE","flathead valley community college | adjunct instructor, culinary | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/61479","2026-08-11",TRUE
 "HE","flathead valley community college | adjunct instructor, electrical | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/6759","2026-08-11",TRUE
-"HE","flathead valley community college | adjunct instructor, hvac | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/6792","2026-08-11",TRUE
 "HE","flathead valley community college | adjunct instructor, industrial machine technology | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/50048","2026-08-11",TRUE
 "HE","flathead valley community college | adjunct instructor, lincoln county campus, general education | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/7152","2026-08-11",TRUE
 "HE","flathead valley community college | adjunct instructor, lincoln county campus, history | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/111127","2026-10-06",FALSE
 "HE","flathead valley community college | adjunct instructor, native american studies | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/6838","2026-08-11",TRUE
-"HE","flathead valley community college | adjunct instructor, natural resources and conservation | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/119804","2026-10-20",FALSE
 "HE","flathead valley community college | adjunct instructor, spanish | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/24751","2026-08-11",TRUE
 "HE","flathead valley community college | adjunct instructor, surveying | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/104735","2026-09-29",FALSE
 "HE","flathead valley community college | adjunct instructor, welding | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/105485","2026-09-29",FALSE
@@ -1391,11 +1398,10 @@
 "HE","flathead valley community college | executive director, human resources | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/125040","2026-11-03",FALSE
 "HE","flathead valley community college | faculty, arts, jewelry and metalsmithing | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/110695","2026-10-27",FALSE
 "HE","flathead valley community college | financial associate | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/87267","2026-08-25",FALSE
-"HE","flathead valley community college | instructional specialist, writing lab | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/67909","2026-08-11",TRUE
 "HE","flathead valley community college | instructor, nursing | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/125624","2026-11-03",FALSE
-"HE","flathead valley community college | it developer/it developer, sr. | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/125026","2026-11-03",FALSE
-"HE","flathead valley community college | mechanic, heavy equipment operations | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/27124","2026-08-11",TRUE
+"HE","flathead valley community college | manager, tools | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/132519","2026-11-17",FALSE
 "HE","flathead valley community college | proctor | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/117475","2026-10-20",FALSE
+"HE","flathead valley community college | program director, medical laboratory technology | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/131233","2026-11-17",FALSE
 "HE","flathead valley community college | temp, clinical resource rn | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/41683","2026-08-11",TRUE
 "HE","flathead valley community college | temp, culinary assistant | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/7318","2026-08-11",TRUE
 "HE","flathead valley community college | temp, sign language interpreter | https://www.paycomonline.net/v4/ats/web.php/portal/23D9610C7FF62DF6DF80223B0B1ED6E3/jobs/7348","2026-08-11",TRUE
@@ -1405,25 +1411,19 @@
 "HE","fort peck community college | agriculture assistant | https://cdn.prod.website-files.com/68de85d9627927ed05698b64/69160b4cf0be390b6b317f44_Ag-Assistant-Job-Description.pdf","2026-08-11",TRUE
 "HE","great falls college msu | adjunct faculty pool - music & art | https://jobs.gfcmsu.edu/postings/2585","2026-10-06",FALSE
 "HE","great falls college msu | adjunct faculty pool | https://jobs.gfcmsu.edu/postings/2561","2026-08-25",FALSE
+"HE","great falls college msu | admissions representative | https://jobs.gfcmsu.edu/postings/2605","2026-11-17",FALSE
+"HE","great falls college msu | bookstore & cafe cashier | https://jobs.gfcmsu.edu/postings/2609","2026-11-17",FALSE
 "HE","great falls college msu | clinical adjunct instructor nursing pool | https://jobs.gfcmsu.edu/postings/2552","2026-08-18",FALSE
 "HE","great falls college msu | dental hygiene faculty | https://jobs.gfcmsu.edu/postings/2593","2026-11-03",FALSE
 "HE","great falls college msu | dental hygiene program adjunct (part-time) faculty **updated** | https://jobs.gfcmsu.edu/postings/2551","2026-08-18",FALSE
 "HE","great falls college msu | early learning center teachers pool **updated** | https://jobs.gfcmsu.edu/postings/2558","2026-08-18",FALSE
 "HE","great falls college msu | native american studies adjunct instructor | https://jobs.gfcmsu.edu/postings/2555","2026-08-18",FALSE
 "HE","great falls college msu | nursing faculty | https://jobs.gfcmsu.edu/postings/2599","2026-11-10",FALSE
-"HE","helena college | adjunct emergency medical technician instructor | https://www.schooljobs.com/careers/ummissoula/jobs/4678916/adjunct-emergency-medical-technician-instructor","2026-08-11",TRUE
-"HE","helena college | adjunct nursing clinical instructor (crrn) | https://www.schooljobs.com/careers/ummissoula/jobs/4694471/adjunct-nursing-clinical-instructor-crrn","2026-08-11",TRUE
-"HE","helena college | adjunct nursing clinical instructor (crrn) | https://www.schooljobs.com/careers/ummissoula/jobs/4993102/adjunct-nursing-clinical-instructor-crrn","2026-08-11",TRUE
-"HE","helena college | assistant director of fiscal services | https://www.schooljobs.com/careers/ummissoula/jobs/4831905/assistant-director-of-fiscal-services","2026-08-11",TRUE
 "HE","helena college | aviation maintenance adjunct instructor | https://www.schooljobs.com/careers/ummissoula/jobs/5463983/aviation-maintenance-adjunct-instructor","2026-09-01",FALSE
-"HE","helena college | budget analyst iv | https://www.schooljobs.com/careers/ummissoula/jobs/4696906/budget-analyst-iv","2026-08-11",TRUE
 "HE","helena college | cosmetology instructor | https://www.schooljobs.com/careers/ummissoula/jobs/5543174/cosmetology-instructor","2026-11-10",FALSE
-"HE","helena college | diesel mechanics instructor, 1-year temporary | https://www.schooljobs.com/careers/ummissoula/jobs/5026795/diesel-mechanics-instructor-1-year-temporary","2026-08-11",TRUE
-"HE","helena college | dual enrollment administrative associate iii | https://www.schooljobs.com/careers/ummissoula/jobs/4711381/dual-enrollment-administrative-associate-iii","2026-08-11",TRUE
 "HE","helena college | online teaching and learning support specialist | https://www.schooljobs.com/careers/ummissoula/jobs/5535834/online-teaching-and-learning-support-specialist","2026-11-03",FALSE
 "HE","helena college | student accounts | https://www.schooljobs.com/careers/ummissoula/jobs/5385676/student-accounts","2026-08-11",TRUE
 "HE","helena college | trio retention specialist | https://www.schooljobs.com/careers/ummissoula/jobs/5545518/trio-retention-specialist","2026-11-10",FALSE
-"HE","helena college | tutor/educ spec | https://www.schooljobs.com/careers/ummissoula/jobs/4597023/tutor-educ-spec","2026-08-11",TRUE
 "HE","highlands college | pearson test center administrator | https://montanatechuniversity.applytojob.com/apply/zypcAqMdMv/Pearson-Test-Center-Administrator","2026-10-06",FALSE
 "HE","little big horn college | ag instructor | http://lbhc.edu/sites/default/files/lbhc/humanresources/Ag_Instructor.pdf","2026-08-11",TRUE
 "HE","little big horn college | computer science instructor | http://lbhc.edu/sites/default/files/lbhc/humanresources/Computer_Science_Instructor_Position.pdf","2026-10-20",FALSE
@@ -1431,14 +1431,13 @@
 "HE","little big horn college | human resources director | http://lbhc.edu/sites/default/files/lbhc/humanresources/Human Resources App Packet.pdf","2026-11-03",FALSE
 "HE","miles community college | adjunct faculty opportunities | https://www.milescc.edu/employment/","2026-08-11",TRUE
 "HE","miles community college | nursing & allied health program advisor | https://www.milescc.edu/employment/","2026-10-27",FALSE
-"HE","miles community college | part-time clinical resource registered nurse (crrn) | https://www.milescc.edu/employment/","2026-08-11",TRUE
+"HE","montana state university | academic advisor ii | https://jobs.montana.edu/postings/53673","2026-11-17",FALSE
 "HE","montana state university | academic services coordinator | https://jobs.montana.edu/postings/53494","2026-11-03",FALSE
 "HE","montana state university | accessible technology support specialist | https://jobs.montana.edu/postings/52989","2026-09-22",FALSE
-"HE","montana state university | accounting associate iv | https://jobs.montana.edu/postings/53421","2026-10-27",FALSE
 "HE","montana state university | accounting associate iv | https://jobs.montana.edu/postings/53479","2026-10-27",FALSE
 "HE","montana state university | accounting instructors for the jake jabs college of business & entrepreneurship non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/53231","2026-10-06",FALSE
 "HE","montana state university | activity class for credit non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/49959","2026-08-11",FALSE
-"HE","montana state university | administrative coordinator | https://jobs.montana.edu/postings/53444","2026-10-27",FALSE
+"HE","montana state university | administrative associate iii | https://jobs.montana.edu/postings/53709","2026-11-17",FALSE
 "HE","montana state university | agricultural and technology education non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/53378","2026-10-20",FALSE
 "HE","montana state university | agricultural economics & economics non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50002","2026-08-11",FALSE
 "HE","montana state university | agricultural economics & economics non-tenure track visiting instructor (applicant pool) | https://jobs.montana.edu/postings/51218","2026-08-11",FALSE
@@ -1450,6 +1449,7 @@
 "HE","montana state university | animal and range sciences non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/49980","2026-08-11",FALSE
 "HE","montana state university | arabic non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50037","2026-08-11",FALSE
 "HE","montana state university | assistant manager - dining halls | https://jobs.montana.edu/postings/53602","2026-11-10",FALSE
+"HE","montana state university | assistant professor - civil engineering | https://jobs.montana.edu/postings/53705","2026-11-17",FALSE
 "HE","montana state university | assistant professor - prek-12 science education | https://jobs.montana.edu/postings/53465","2026-10-27",FALSE
 "HE","montana state university | assistant professor – family financial planning | https://jobs.montana.edu/postings/53115","2026-09-29",FALSE
 "HE","montana state university | assistant professor for educational leadership | https://jobs.montana.edu/postings/53507","2026-11-03",FALSE
@@ -1458,6 +1458,7 @@
 "HE","montana state university | assistant professor of accounting | https://jobs.montana.edu/postings/53358","2026-10-20",FALSE
 "HE","montana state university | assistant professor of american studies | https://jobs.montana.edu/postings/53487","2026-11-03",FALSE
 "HE","montana state university | assistant professor of architecture | https://jobs.montana.edu/postings/53457","2026-10-27",FALSE
+"HE","montana state university | assistant professor of autonomous agricultural systems | https://jobs.montana.edu/postings/53718","2026-11-17",FALSE
 "HE","montana state university | assistant professor of computer science | https://jobs.montana.edu/postings/53277","2026-10-13",FALSE
 "HE","montana state university | assistant professor of film production | https://jobs.montana.edu/postings/53258","2026-10-13",FALSE
 "HE","montana state university | assistant professor of history with a focus on artificial intelligence or digital history | https://jobs.montana.edu/postings/53106","2026-09-29",FALSE
@@ -1472,7 +1473,6 @@
 "HE","montana state university | assistant professor, cropping system agronomist *havre, mt* | https://jobs.montana.edu/postings/53496","2026-11-03",FALSE
 "HE","montana state university | assistant/associate/full professor - nursing | https://jobs.montana.edu/postings/53124","2026-09-29",FALSE
 "HE","montana state university | associate curator of indigenous history | https://jobs.montana.edu/postings/52923","2026-09-15",FALSE
-"HE","montana state university | associate director - external relations | https://jobs.montana.edu/postings/52975","2026-09-22",FALSE
 "HE","montana state university | aviation non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49996","2026-08-11",FALSE
 "HE","montana state university | bookkeeping and business management non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49995","2026-08-11",FALSE
 "HE","montana state university | business operations manager | https://jobs.montana.edu/postings/53217","2026-10-06",FALSE
@@ -1509,7 +1509,7 @@
 "HE","montana state university | design drafting non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49998","2026-08-11",FALSE
 "HE","montana state university | developmental math non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49987","2026-08-11",FALSE
 "HE","montana state university | developmental writing non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49988","2026-08-11",FALSE
-"HE","montana state university | director of master of science in science education and cls teacher programs | https://jobs.montana.edu/postings/53589","2026-11-10",FALSE
+"HE","montana state university | director of master of science in science education and cls teacher programs | https://jobs.montana.edu/postings/53679","2026-11-17",FALSE
 "HE","montana state university | director, mcnair scholars program | https://jobs.montana.edu/postings/53579","2026-11-10",FALSE
 "HE","montana state university | director, writing center | https://jobs.montana.edu/postings/52849","2026-09-07",FALSE
 "HE","montana state university | earth sciences non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50897","2026-08-11",FALSE
@@ -1519,18 +1519,21 @@
 "HE","montana state university | equine ntt instructor/assistant foreman | https://jobs.montana.edu/postings/52182","2026-08-11",FALSE
 "HE","montana state university | executive director, qcore | https://jobs.montana.edu/postings/53482","2026-10-27",FALSE
 "HE","montana state university | executive vice president for academic affairs and provost | https://jobs.montana.edu/postings/53481","2026-10-27",FALSE
+"HE","montana state university | extension agent – 4-h youth development – cascade county | https://jobs.montana.edu/postings/53682","2026-11-17",FALSE
 "HE","montana state university | extension agent – 4-h youth development – lewis and clark county | https://jobs.montana.edu/postings/52772","2026-09-01",FALSE
 "HE","montana state university | extension agent – agriculture and 4-h youth development – carbon county | https://jobs.montana.edu/postings/53598","2026-11-10",FALSE
 "HE","montana state university | extension agent – agriculture, natural resources, and 4-h youth development – fergus and petroleum counties | https://jobs.montana.edu/postings/53242","2026-10-13",FALSE
+"HE","montana state university | extension agent – agriculture, natural resources, horticulture, and 4-h youth development – cascade county | https://jobs.montana.edu/postings/53681","2026-11-17",FALSE
 "HE","montana state university | extension agent, agriculture and 4-h youth development, sheridan county | https://jobs.montana.edu/postings/53614","2026-11-10",FALSE
+"HE","montana state university | extension associate specialist and arthropod diagnostician | https://jobs.montana.edu/postings/53667","2026-11-17",FALSE
 "HE","montana state university | facility security officer | https://jobs.montana.edu/postings/53442","2026-10-27",FALSE
 "HE","montana state university | faculty instructor & bracken business center coach for the jake jabs college of business & entrepreneurship non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/53505","2026-11-03",FALSE
-"HE","montana state university | field research assistant ii | https://jobs.montana.edu/postings/53513","2026-11-03",FALSE
+"HE","montana state university | field research assistant ii | https://jobs.montana.edu/postings/53666","2026-11-17",FALSE
 "HE","montana state university | finance instructors for the jake jabs college of business & entrepreneurship non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/53244","2026-10-13",FALSE
 "HE","montana state university | financial associate | https://jobs.montana.edu/postings/53623","2026-11-10",FALSE
+"HE","montana state university | fire alarm technician | https://jobs.montana.edu/postings/53717","2026-11-17",FALSE
 "HE","montana state university | fire marshal | https://jobs.montana.edu/postings/53268","2026-10-13",FALSE
 "HE","montana state university | floating sous chef | https://jobs.montana.edu/postings/53238","2026-10-13",FALSE
-"HE","montana state university | floor supervisor | https://jobs.montana.edu/postings/53059","2026-09-29",FALSE
 "HE","montana state university | food systems, nutrition, and kinesiology non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/49962","2026-08-11",FALSE
 "HE","montana state university | french non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50040","2026-08-11",FALSE
 "HE","montana state university | gen ed - humanities non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/50726","2026-08-11",FALSE
@@ -1548,6 +1551,7 @@
 "HE","montana state university | honors college honr 201 and 202 texts and critics instructor (applicant pool) | https://jobs.montana.edu/postings/50043","2026-08-11",FALSE
 "HE","montana state university | hospitality instructors for the jake jabs college of business & entrepreneurship non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50070","2026-08-11",FALSE
 "HE","montana state university | hvac technician (heating/ventilation) | https://jobs.montana.edu/postings/53394","2026-10-20",FALSE
+"HE","montana state university | insre senior content developer | https://jobs.montana.edu/postings/53664","2026-11-17",FALSE
 "HE","montana state university | instructor of architecture non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/52318","2026-08-11",FALSE
 "HE","montana state university | instructor of art non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/49952","2026-08-11",FALSE
 "HE","montana state university | instructor of film non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/49943","2026-08-11",FALSE
@@ -1557,7 +1561,7 @@
 "HE","montana state university | interior design non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49985","2026-08-11",FALSE
 "HE","montana state university | japanese non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50038","2026-08-11",FALSE
 "HE","montana state university | lab manager | https://jobs.montana.edu/postings/53640","2026-11-10",FALSE
-"HE","montana state university | laborer | https://jobs.montana.edu/postings/53571","2026-11-10",FALSE
+"HE","montana state university | laborer | https://jobs.montana.edu/postings/53703","2026-11-17",FALSE
 "HE","montana state university | land resources & environmental sciences non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50050","2026-08-11",FALSE
 "HE","montana state university | law enforcement academy, non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/50145","2026-08-11",FALSE
 "HE","montana state university | leadership and learning experience designer | https://jobs.montana.edu/postings/53415","2026-10-27",FALSE
@@ -1566,10 +1570,10 @@
 "HE","montana state university | librarian/instructor non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/49966","2026-08-11",FALSE
 "HE","montana state university | library administrative coordinator | https://jobs.montana.edu/postings/53608","2026-11-10",FALSE
 "HE","montana state university | livestock and farm assistant manager *havre, mt* | https://jobs.montana.edu/postings/52959","2026-09-15",FALSE
+"HE","montana state university | maintenance plumber (journeyman plumber) | https://jobs.montana.edu/postings/53695","2026-11-17",FALSE
 "HE","montana state university | management & entrepreneurship instructors for the jake jabs college of business & entrepreneurship non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50072","2026-08-11",FALSE
 "HE","montana state university | marketing instructors for the jake jabs college of business & entrepreneurship non-tenure track faculty | https://jobs.montana.edu/postings/49974","2026-08-11",FALSE
 "HE","montana state university | mathematics, mathematics education and statistics non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/51817","2026-08-11",FALSE
-"HE","montana state university | mechanic ii or iii | https://jobs.montana.edu/postings/53391","2026-10-20",FALSE
 "HE","montana state university | mechanical & industrial engineering non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50288","2026-08-11",FALSE
 "HE","montana state university | medical flex position, registered nurse or advanced practice provider | https://jobs.montana.edu/postings/53576","2026-11-10",FALSE
 "HE","montana state university | mellon assistant research professor of native american studies | https://jobs.montana.edu/postings/53550","2026-11-03",FALSE
@@ -1580,7 +1584,7 @@
 "HE","montana state university | native american studies non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50034","2026-08-11",FALSE
 "HE","montana state university | navmsu program manager | https://jobs.montana.edu/postings/53653","2026-11-10",FALSE
 "HE","montana state university | networking/cyber security non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49984","2026-08-11",FALSE
-"HE","montana state university | non-clinical case manager, office of the dean of students | https://jobs.montana.edu/postings/53581","2026-11-10",FALSE
+"HE","montana state university | non-clinical case manager, office of the dean of students | https://jobs.montana.edu/postings/53696","2026-11-17",FALSE
 "HE","montana state university | ntt faculty instructors for mcb/mmls college of ag (applicant pool) | https://jobs.montana.edu/postings/50049","2026-08-11",FALSE
 "HE","montana state university | ocsl program manager | https://jobs.montana.edu/postings/53596","2026-11-10",FALSE
 "HE","montana state university | onramp hub ecosystem engagement lead | https://jobs.montana.edu/postings/53319","2026-10-20",FALSE
@@ -1594,7 +1598,6 @@
 "HE","montana state university | police officer commissioned (post certified) | https://jobs.montana.edu/postings/53565","2026-11-10",FALSE
 "HE","montana state university | political science non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/52272","2026-08-11",FALSE
 "HE","montana state university | postdoctoral fellowship - development of innovative airborne communication systems | https://jobs.montana.edu/postings/42083","2026-08-11",TRUE
-"HE","montana state university | postdoctoral research scientist | https://jobs.montana.edu/postings/53097","2026-09-29",FALSE
 "HE","montana state university | postdoctoral researcher - thin film deposition & characterization for quantum applications | https://jobs.montana.edu/postings/53417","2026-10-27",FALSE
 "HE","montana state university | postdoctoral researcher | https://jobs.montana.edu/postings/53156","2026-10-06",FALSE
 "HE","montana state university | postdoctoral researcher | https://jobs.montana.edu/postings/53163","2026-10-06",FALSE
@@ -1613,7 +1616,6 @@
 "HE","montana state university | registered dietitian nutritionist | https://jobs.montana.edu/postings/53645","2026-11-10",FALSE
 "HE","montana state university | registered nurse | https://jobs.montana.edu/postings/53599","2026-11-10",FALSE
 "HE","montana state university | research assistant ii | https://jobs.montana.edu/postings/53327","2026-10-20",FALSE
-"HE","montana state university | research assistant ii | https://jobs.montana.edu/postings/53652","2026-11-10",FALSE
 "HE","montana state university | research associate | https://jobs.montana.edu/postings/53657","2026-11-10",FALSE
 "HE","montana state university | research associate/lab manager | https://jobs.montana.edu/postings/53641","2026-11-10",FALSE
 "HE","montana state university | senior project manager | https://jobs.montana.edu/postings/53393","2026-10-20",FALSE
@@ -1621,6 +1623,7 @@
 "HE","montana state university | senior technology manager | https://jobs.montana.edu/postings/53624","2026-11-10",FALSE
 "HE","montana state university | sociology & anthropology non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/52273","2026-08-11",FALSE
 "HE","montana state university | spanish non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50041","2026-08-11",FALSE
+"HE","montana state university | system administrator for quantum and research computing | https://jobs.montana.edu/postings/53716","2026-11-17",FALSE
 "HE","montana state university | technical writing non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50031","2026-08-11",FALSE
 "HE","montana state university | technology manager | https://jobs.montana.edu/postings/53625","2026-11-10",FALSE
 "HE","montana state university | timekeeping and workforce systems manager | https://jobs.montana.edu/postings/53510","2026-11-03",FALSE
@@ -1629,26 +1632,30 @@
 "HE","montana state university | visiting scholar - architecture (non-tenure track faculty applicant pool) | https://jobs.montana.edu/postings/52317","2026-08-11",FALSE
 "HE","montana state university | welding technology non-tenure track faculty - gallatin college (applicant pool) | https://jobs.montana.edu/postings/49989","2026-08-11",FALSE
 "HE","montana state university | women’s gender and sexuality studies non-tenure track faculty (applicant pool) | https://jobs.montana.edu/postings/50012","2026-08-11",FALSE
-"HE","montana state university billings | academic support center (asc) assistant director | https://employment.msubillings.edu/postings/7847","2026-11-10",FALSE
 "HE","montana state university billings | admissions counselor ii | https://employment.msubillings.edu/postings/7846","2026-11-10",FALSE
+"HE","montana state university billings | assistant director of conferencing & events | https://employment.msubillings.edu/postings/7859","2026-11-17",FALSE
 "HE","montana state university billings | assistant or associate professor of criminal justice | https://employment.msubillings.edu/postings/7841","2026-11-03",FALSE
 "HE","montana state university billings | assistant professor of communication | https://employment.msubillings.edu/postings/7834","2026-11-03",FALSE
 "HE","montana state university billings | assistant professor of english, writing, and composition | https://employment.msubillings.edu/postings/7821","2026-10-06",FALSE
+"HE","montana state university billings | assistant professor, tenure track faculty for human performance and athletic training 3+2 | https://employment.msubillings.edu/postings/7849","2026-11-17",FALSE
 "HE","montana state university billings | assistant women's softball coach | https://employment.msubillings.edu/postings/7780","2026-08-11",FALSE
 "HE","montana state university billings | assistant/associate professor of accounting | https://employment.msubillings.edu/postings/7828","2026-10-13",FALSE
 "HE","montana state university billings | assistant/associate professor of criminal justice | https://employment.msubillings.edu/postings/7843","2026-11-10",FALSE
 "HE","montana state university billings | custodian i | https://employment.msubillings.edu/postings/7833","2026-11-03",FALSE
-"HE","montana state university billings | housing and residence life - night watch | https://employment.msubillings.edu/postings/7838","2026-11-03",FALSE
+"HE","montana state university billings | dean | https://employment.msubillings.edu/postings/7861","2026-11-17",FALSE
+"HE","montana state university billings | housing and residence life - night watch | https://employment.msubillings.edu/postings/7860","2026-11-17",FALSE
+"HE","montana state university billings | parking enforcement officer | https://employment.msubillings.edu/postings/7851","2026-11-17",FALSE
 "HE","montana state university billings | part time faculty | https://employment.msubillings.edu/postings/7601","2026-08-11",FALSE
+"HE","montana state university billings | police patrol officer | https://employment.msubillings.edu/postings/7856","2026-11-17",FALSE
 "HE","montana state university billings | transportation instructor | https://employment.msubillings.edu/postings/7426","2026-08-11",TRUE
 "HE","montana state university-northern | adjunct instructor of nursing | https://jobs.msun.edu/postings/2635","2026-08-11",FALSE
 "HE","montana state university-northern | assistant or associate professor of nursing, tenure track | https://jobs.msun.edu/postings/2698","2026-09-01",FALSE
-"HE","montana state university-northern | dean of the college of arts, sciences, and education (case) | https://jobs.msun.edu/postings/2683","2026-08-11",FALSE
 "HE","montana state university-northern | financial aid specialist i, rev. 5/11/2026 | https://jobs.msun.edu/postings/2669","2026-08-11",FALSE
 "HE","montana state university-northern | project director of student support services (trio grant) | https://jobs.msun.edu/postings/2680","2026-08-11",FALSE
 "HE","montana state university-northern | storekeeper | https://jobs.msun.edu/postings/2702","2026-10-06",FALSE
 "HE","montana tech | academic advisor i | https://montanatechuniversity.applytojob.com/apply/VpDQi8ClVj/Academic-Advisor-I","2026-10-27",FALSE
 "HE","montana tech | adjunct faculty for ay 27 (fall '26, spring '27 & summer '27) | https://montanatechuniversity.applytojob.com/apply/fqFzr9aJVi/Adjunct-Faculty-For-AY-27-Fall-26-Spring-27-Summer-27","2026-08-11",TRUE
+"HE","montana tech | assistant or associate professor - civil engineering | https://montanatechuniversity.applytojob.com/apply/TultAEED8V/Assistant-Or-Associate-Professor-Civil-Engineering","2026-11-17",FALSE
 "HE","montana tech | assistant or associate professor petroleum engineering | https://montanatechuniversity.applytojob.com/apply/gUzkurPLKW/Assistant-Or-Associate-Professor-Petroleum-Engineering","2026-08-11",TRUE
 "HE","montana tech | assistant or associate professor-chemistry & geochemistry | https://montanatechuniversity.applytojob.com/apply/hVRvT7VR2L/Assistant-Or-Associate-ProfessorChemistry-Geochemistry","2026-10-06",FALSE
 "HE","montana tech | assistant professor mathematical sciences | https://montanatechuniversity.applytojob.com/apply/qTVAvSiSkQ/Assistant-Professor-Mathematical-Sciences","2026-09-29",FALSE
@@ -1673,26 +1680,34 @@
 "HE","rocky mountain college | assistant/associate professor of accounting | https://rocky.edu/employment/opportunities/assistant-associate-professor-of-accounting/","2026-10-06",FALSE
 "HE","rocky mountain college | head bears cheer coach | https://rocky.edu/employment/opportunities/head-bears-cheer-coach/","2026-08-11",TRUE
 "HE","rocky mountain college | maintenance and grounds technician | https://rocky.edu/employment/opportunities/maintenance-and-grounds-technician/","2026-10-13",FALSE
+"HE","salish kootenai college | business content support specialist | https://www.skc.edu/employment/","2026-11-17",FALSE
+"HE","salish kootenai college | chemistry faculty (full-time) | https://www.skc.edu/employment/","2026-10-06",FALSE
+"HE","salish kootenai college | chief information officer | https://www.skc.edu/employment/","2026-11-17",FALSE
+"HE","salish kootenai college | college & career readiness mentor | https://www.skc.edu/employment/","2026-09-29",FALSE
+"HE","salish kootenai college | custodian (part-time) | https://www.skc.edu/employment/","2026-10-06",FALSE
+"HE","salish kootenai college | department chair & business instructional design faculty | https://www.skc.edu/employment/","2026-11-17",FALSE
+"HE","salish kootenai college | dept chair, native language teacher education faculty (ft, 9-month) | https://www.skc.edu/employment/","2026-11-17",FALSE
+"HE","salish kootenai college | early childhood education administrative assistant (10-month) | https://www.skc.edu/employment/","2026-11-17",FALSE
+"HE","salish kootenai college | graduate studies administrative assistant | https://www.skc.edu/employment/","2026-09-29",FALSE
+"HE","salish kootenai college | nursing faculty (part-time) | https://www.skc.edu/employment/","2026-10-06",FALSE
+"HE","salish kootenai college | seasonal grounds maintenance technician (part-time) | https://www.skc.edu/employment/","2026-10-06",FALSE
+"HE","salish kootenai college | soils & groundwater hydrology instructor (9-month) | https://www.skc.edu/employment/","2026-10-06",FALSE
+"HE","salish kootenai college | technology purchasing agent/it support | https://www.skc.edu/employment/","2026-08-25",FALSE
 "HE","stone child college | retention officer | https://www.stonechild.edu/page/employment-rfps","2026-11-10",FALSE
-"HE","university of montana | academic advisor ii, college of humanities and social sciences and the college of science | https://www.schooljobs.com/careers/ummissoula/jobs/5533670/academic-advisor-ii-college-of-humanities-and-social-sciences-and-the-college-of","2026-11-03",FALSE
 "HE","university of montana | administrative associate iv, human resource services | https://www.schooljobs.com/careers/ummissoula/jobs/5535775/administrative-associate-iv-human-resource-services","2026-11-03",FALSE
 "HE","university of montana | animal technician, laboratory animal resources | https://www.schooljobs.com/careers/ummissoula/jobs/5541829/animal-technician-laboratory-animal-resources","2026-11-10",FALSE
 "HE","university of montana | assistant director of faculty affairs, office of the provost | https://www.schooljobs.com/careers/ummissoula/jobs/5527146/assistant-director-of-faculty-affairs-office-of-the-provost","2026-10-27",FALSE
 "HE","university of montana | assistant director of scholarships, financial aid | https://www.schooljobs.com/careers/ummissoula/jobs/5535980/assistant-director-of-scholarships-financial-aid","2026-11-03",FALSE
-"HE","university of montana | assistant teacher, asum child care | https://www.schooljobs.com/careers/ummissoula/jobs/5287236/assistant-teacher-asum-child-care","2026-08-11",TRUE
 "HE","university of montana | broadcast engineer, broadcast media/school of journalism | https://www.schooljobs.com/careers/ummissoula/jobs/5504143/broadcast-engineer-broadcast-media-school-of-journalism","2026-10-06",FALSE
 "HE","university of montana | budget analyst ii/iii, center for population health research | https://www.schooljobs.com/careers/ummissoula/jobs/5514351/budget-analyst-ii-iii-center-for-population-health-research","2026-10-13",FALSE
 "HE","university of montana | clinical lab specialist i (on-call), curry health center | https://www.schooljobs.com/careers/ummissoula/jobs/5136995/clinical-lab-specialist-i-on-call-curry-health-center","2026-09-22",FALSE
 "HE","university of montana | culinary professional cook ii, um campus dining | https://www.schooljobs.com/careers/ummissoula/jobs/5541219/culinary-professional-cook-ii-um-campus-dining","2026-11-10",FALSE
-"HE","university of montana | database and application administrator, information technology | https://www.schooljobs.com/careers/ummissoula/jobs/5535759/database-and-application-administrator-information-technology","2026-11-03",FALSE
 "HE","university of montana | dental assistant, curry health center | https://www.schooljobs.com/careers/ummissoula/jobs/5545938/dental-assistant-curry-health-center","2026-11-10",FALSE
 "HE","university of montana | director of finance, broadcast media center | https://www.schooljobs.com/careers/ummissoula/jobs/5520007/director-of-finance-broadcast-media-center","2026-10-20",FALSE
 "HE","university of montana | director of finance, office of research and creative scholarship | https://www.schooljobs.com/careers/ummissoula/jobs/5527120/director-of-finance-office-of-research-and-creative-scholarship","2026-10-27",FALSE
-"HE","university of montana | director of fiscal and personnel services, college of education | https://www.schooljobs.com/careers/ummissoula/jobs/5472737/director-of-fiscal-and-personnel-services-college-of-education","2026-09-29",FALSE
 "HE","university of montana | director of technical assistance, independent living training and technical assistance center | https://www.schooljobs.com/careers/ummissoula/jobs/5479374/director-of-technical-assistance-independent-living-training-and-technical-assis","2026-09-15",FALSE
 "HE","university of montana | executive director of student financial services | https://www.schooljobs.com/careers/ummissoula/jobs/5523571/executive-director-of-student-financial-services","2026-10-27",FALSE
 "HE","university of montana | financial aid specialist i, financial aid office | https://www.schooljobs.com/careers/ummissoula/jobs/5527199/financial-aid-specialist-i-financial-aid-office","2026-10-27",FALSE
-"HE","university of montana | fiscal and personnel services specialist, um housing | https://www.schooljobs.com/careers/ummissoula/jobs/5390815/fiscal-and-personnel-services-specialist-um-housing","2026-09-22",FALSE
 "HE","university of montana | grant and contract officer, office of sponsored programs | https://www.schooljobs.com/careers/ummissoula/jobs/5357486/grant-and-contract-officer-office-of-sponsored-programs","2026-09-22",FALSE
 "HE","university of montana | hr generalist, compensation and benefits, human resource services | https://www.schooljobs.com/careers/ummissoula/jobs/5541605/hr-generalist-compensation-and-benefits-human-resource-services","2026-11-10",FALSE
 "HE","university of montana | hvac journeyman, um housing | https://www.schooljobs.com/careers/ummissoula/jobs/5518608/hvac-journeyman-um-housing","2026-10-20",FALSE
@@ -1702,20 +1717,15 @@
 "HE","university of montana | k–12 cybersecurity and school safety specialist, montana safe schools center | https://www.schooljobs.com/careers/ummissoula/jobs/5507985/k12-cybersecurity-and-school-safety-specialist-montana-safe-schools-center","2026-10-13",FALSE
 "HE","university of montana | lodge facilities manager, um campus dining | https://www.schooljobs.com/careers/ummissoula/jobs/5530950/lodge-facilities-manager-um-campus-dining","2026-10-27",FALSE
 "HE","university of montana | maintenance worker i, facilities services | https://www.schooljobs.com/careers/ummissoula/jobs/5535739/maintenance-worker-i-facilities-services","2026-11-03",FALSE
+"HE","university of montana | museum program coordinator, spectrum | https://www.schooljobs.com/careers/ummissoula/jobs/5551816/museum-program-coordinator-spectrum","2026-11-17",FALSE
 "HE","university of montana | pathways program coordinator, western montana area health education center | https://www.schooljobs.com/careers/ummissoula/jobs/5533688/pathways-program-coordinator-western-montana-area-health-education-center","2026-11-03",FALSE
 "HE","university of montana | proto-lab and testbed manager, research administration | https://www.schooljobs.com/careers/ummissoula/jobs/5521341/proto-lab-and-testbed-manager-research-administration","2026-10-20",FALSE
-"HE","university of montana | research associate, office of health research and partnership | https://www.schooljobs.com/careers/ummissoula/jobs/5521401/research-associate-office-of-health-research-and-partnership","2026-10-20",FALSE
 "HE","university of montana | research scientist, adjuvant discovery and vaccine development, center for translational medicine | https://www.schooljobs.com/careers/ummissoula/jobs/5530725/research-scientist-adjuvant-discovery-and-vaccine-development-center-for-transl","2026-10-27",FALSE
 "HE","university of montana | research scientist, center for translational medicine | https://www.schooljobs.com/careers/ummissoula/jobs/5506121/research-scientist-center-for-translational-medicine","2026-10-27",FALSE
 "HE","university of montana | senior assistant director of club sports, campus recreation | https://www.schooljobs.com/careers/ummissoula/jobs/5535802/senior-assistant-director-of-club-sports-campus-recreation","2026-11-10",FALSE
 "HE","university of montana | senior producer and podcast host, broadcast media | https://www.schooljobs.com/careers/ummissoula/jobs/5536309/senior-producer-and-podcast-host-broadcast-media","2026-11-03",FALSE
-"HE","university of montana | stationary engineer, facilities services | https://www.schooljobs.com/careers/ummissoula/jobs/5479535/stationary-engineer-facilities-services","2026-09-15",FALSE
 "HE","university of montana | subaward analyst, research administration | https://www.schooljobs.com/careers/ummissoula/jobs/5535903/subaward-analyst-research-administration","2026-11-03",FALSE
 "HE","university of montana | temporary employee pool | https://www.schooljobs.com/careers/ummissoula/jobs/4566897/temporary-employee-pool","2026-08-18",FALSE
 "HE","university of montana | temporary language instructors, defense language and security studies program | https://www.schooljobs.com/careers/ummissoula/jobs/5472232/temporary-language-instructors-defense-language-and-security-studies-program","2026-09-07",FALSE
-"HE","university of montana western | administrartive associate iii | https://www.schooljobs.com/careers/ummissoula/jobs/4896909/administrartive-associate-iii","2026-08-11",TRUE
-"HE","university of montana western | area coordinator | https://www.schooljobs.com/careers/ummissoula/jobs/4897070/area-coordinator","2026-08-11",TRUE
 "HE","university of montana western | commercial electrician, non-craft | https://www.schooljobs.com/careers/ummissoula/jobs/5546402/commercial-electrician-non-craft","2026-11-10",FALSE
-"HE","university of montana western | computer system administrator ii | https://www.schooljobs.com/careers/ummissoula/jobs/4937019/computer-system-administrator-ii","2026-08-11",TRUE
 "HE","university of montana western | director of career and technical education and dual enrollment | https://www.schooljobs.com/careers/ummissoula/jobs/5518418/director-of-career-and-technical-education-and-dual-enrollment","2026-10-20",FALSE
-"HE","university of montana western | facilities manager | https://www.schooljobs.com/careers/ummissoula/jobs/5527888/facilities-manager","2026-10-27",FALSE

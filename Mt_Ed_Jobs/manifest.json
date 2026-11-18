@@ -94,49 +94,20 @@
         "Built": "R 4.6.2; x86_64-pc-linux-gnu; 2026-10-29 18:38:51 UTC; unix"
       }
     },
-    "MASS": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "MASS",
-        "Priority": "recommended",
-        "Version": "7.3-65",
-        "Date": "2025-02-19",
-        "Revision": "$Rev: 3681 $",
-        "Depends": "R (>= 4.4.0), grDevices, graphics, stats, utils",
-        "Imports": "methods",
-        "Suggests": "lattice, nlme, nnet, survival",
-        "Authors@R": "c(person(\"Brian\", \"Ripley\", role = c(\"aut\", \"cre\", \"cph\"),\n                    email = \"Brian.Ripley@R-project.org\"),\n\t     person(\"Bill\", \"Venables\", role = c(\"aut\", \"cph\")),\n\t     person(c(\"Douglas\", \"M.\"), \"Bates\", role = \"ctb\"),\n\t     person(\"Kurt\", \"Hornik\", role = \"trl\",\n                     comment = \"partial port ca 1998\"),\n\t     person(\"Albrecht\", \"Gebhardt\", role = \"trl\",\n                     comment = \"partial port ca 1998\"),\n\t     person(\"David\", \"Firth\", role = \"ctb\",\n\t            comment = \"support functions for polr\"))",
-        "Description": "Functions and datasets to support Venables and Ripley,\n  \"Modern Applied Statistics with S\" (4th edition, 2002).",
-        "Title": "Support Functions and Datasets for Venables and Ripley's MASS",
-        "LazyData": "yes",
-        "ByteCompile": "yes",
-        "License": "GPL-2 | GPL-3",
-        "URL": "http://www.stats.ox.ac.uk/pub/MASS4/",
-        "Contact": "<MASS@stats.ox.ac.uk>",
-        "NeedsCompilation": "yes",
-        "Packaged": "2025-02-19 08:49:43 UTC; ripley",
-        "Author": "Brian Ripley [aut, cre, cph],\n  Bill Venables [aut, cph],\n  Douglas M. Bates [ctb],\n  Kurt Hornik [trl] (partial port ca 1998),\n  Albrecht Gebhardt [trl] (partial port ca 1998),\n  David Firth [ctb] (support functions for polr)",
-        "Maintainer": "Brian Ripley <Brian.Ripley@R-project.org>",
-        "Repository": "CRAN",
-        "Date/Publication": "2025-02-28 17:44:52 UTC",
-        "Built": "R 4.6.1; aarch64-apple-darwin23; 2026-06-25 21:54:07 UTC; unix"
-      }
-    },
     "Matrix": {
       "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "https://packagemanager.posit.co/cran/latest",
       "description": {
         "Package": "Matrix",
-        "Version": "1.7-5",
+        "Version": "1.7-6",
         "VersionNote": "do also bump src/version.h, inst/include/Matrix/version.h",
-        "Date": "2026-03-20",
+        "Date": "2026-07-24",
         "Priority": "recommended",
         "Title": "Sparse and Dense Matrix Classes and Methods",
         "Description": "A rich hierarchy of sparse and dense matrix classes,\n\tincluding general, symmetric, triangular, and diagonal matrices\n\twith numeric, logical, or pattern entries.  Efficient methods for\n\toperating on such matrices, often wrapping the 'BLAS', 'LAPACK',\n\tand 'SuiteSparse' libraries.",
         "License": "GPL (>= 2) | file LICENCE",
-        "URL": "https://Matrix.R-forge.R-project.org",
-        "BugReports": "https://R-forge.R-project.org/tracker/?atid=294&group_id=61",
+        "URL": "https://codeberg.org/jaganmn/Matrix",
+        "BugReports": "https://codeberg.org/jaganmn/Matrix/issues",
         "Contact": "Matrix-authors@R-project.org",
         "Authors@R": "\n\tc(person(\"Douglas\", \"Bates\", role = \"aut\",\n\t         comment = c(ORCID = \"0000-0001-8316-9503\")),\n\t  person(\"Martin\", \"Maechler\", role = c(\"aut\", \"cre\"),\n\t         email = \"mmaechler+Matrix@gmail.com\",\n\t         comment = c(ORCID = \"0000-0002-8685-9910\")),\n\t  person(\"Mikael\", \"Jagan\", role = \"aut\",\n\t         comment = c(ORCID = \"0000-0002-3542-2938\")),\n\t  person(\"Timothy A.\", \"Davis\", role = \"ctb\",\n\t         comment = c(ORCID = \"0000-0001-7614-6899\",\n\t                     \"SuiteSparse libraries\",\n\t                     \"collaborators listed in dir(system.file(\\\"doc\\\", \\\"SuiteSparse\\\", package=\\\"Matrix\\\"), pattern=\\\"License\\\", full.names=TRUE, recursive=TRUE)\")),\n\t  person(\"George\", \"Karypis\", role = \"ctb\",\n\t         comment = c(ORCID = \"0000-0003-2753-1437\",\n\t                     \"METIS library\",\n\t                     \"Copyright: Regents of the University of Minnesota\")),\n\t  person(\"Jason\", \"Riedy\", role = \"ctb\",\n\t         comment = c(ORCID = \"0000-0002-4345-4200\",\n\t                     \"GNU Octave's condest() and onenormest()\",\n\t                     \"Copyright: Regents of the University of California\")),\n\t  person(\"Jens\", \"Oehlschlägel\", role = \"ctb\",\n\t         comment = \"initial nearPD()\"),\n\t  person(\"R Core Team\", role = \"ctb\",\n\t         comment = c(ROR = \"02zz1nj61\", \"base R's matrix implementation\")))",
         "Depends": "R (>= 4.4), methods",
@@ -148,12 +119,12 @@
         "BuildResaveData": "no",
         "Encoding": "UTF-8",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-03-20 19:40:14 UTC; maechler",
+        "Packaged": "2026-07-24 11:40:35 UTC; maechler",
         "Author": "Douglas Bates [aut] (ORCID: <https://orcid.org/0000-0001-8316-9503>),\n  Martin Maechler [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-8685-9910>),\n  Mikael Jagan [aut] (ORCID: <https://orcid.org/0000-0002-3542-2938>),\n  Timothy A. Davis [ctb] (ORCID: <https://orcid.org/0000-0001-7614-6899>,\n    SuiteSparse libraries, collaborators listed in\n    dir(system.file(\"doc\", \"SuiteSparse\", package=\"Matrix\"),\n    pattern=\"License\", full.names=TRUE, recursive=TRUE)),\n  George Karypis [ctb] (ORCID: <https://orcid.org/0000-0003-2753-1437>,\n    METIS library, Copyright: Regents of the University of Minnesota),\n  Jason Riedy [ctb] (ORCID: <https://orcid.org/0000-0002-4345-4200>, GNU\n    Octave's condest() and onenormest(), Copyright: Regents of the\n    University of California),\n  Jens Oehlschlägel [ctb] (initial nearPD()),\n  R Core Team [ctb] (ROR: <https://ror.org/02zz1nj61>, base R's matrix\n    implementation)",
         "Maintainer": "Martin Maechler <mmaechler+Matrix@gmail.com>",
         "Repository": "CRAN",
-        "Date/Publication": "2026-03-21 14:40:03 UTC",
-        "Built": "R 4.6.1; aarch64-apple-darwin23; 2026-06-25 21:54:11 UTC; unix"
+        "Date/Publication": "2026-07-25 02:50:02 UTC",
+        "Built": "R 4.6.2; x86_64-pc-linux-gnu; 2026-10-29 18:35:20 UTC; unix"
       }
     },
     "R6": {
@@ -1061,10 +1032,10 @@
         "GithubRef": "v0.39.0",
         "GithubSHA1": "d7d12bd09f9a6cdecd88a6b5e1d3f93e6cf26200",
         "NeedsCompilation": "no",
-        "Packaged": "2026-11-17 19:09:44 UTC; mikebostick",
+        "Packaged": "2026-11-18 01:47:06 UTC; runner",
         "Author": "Mike Bostick [aut, cre]",
         "Maintainer": "Mike Bostick <michael.bostick@montana.edu>",
-        "Built": "R 4.6.2; ; 2026-11-17 19:09:46 UTC; unix"
+        "Built": "R 4.6.2; ; 2026-11-18 01:47:07 UTC; unix"
       }
     },
     "evaluate": {
@@ -1302,7 +1273,7 @@
       "description": {
         "Package": "ggplot2",
         "Title": "Create Elegant Data Visualisations Using the Grammar of Graphics",
-        "Version": "4.0.3",
+        "Version": "4.0.4",
         "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0003-4757-117X\")),\n    person(\"Winston\", \"Chang\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-1576-2126\")),\n    person(\"Lionel\", \"Henry\", role = \"aut\"),\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"Kohske\", \"Takahashi\", role = \"aut\"),\n    person(\"Claus\", \"Wilke\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-7470-9261\")),\n    person(\"Kara\", \"Woo\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-5125-4188\")),\n    person(\"Hiroaki\", \"Yutani\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-3385-7233\")),\n    person(\"Dewey\", \"Dunnington\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-9415-4582\")),\n    person(\"Teun\", \"van den Brand\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-9335-7468\")),\n    person(\"Posit, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
         "Description": "A system for 'declaratively' creating graphics, based on \"The\n    Grammar of Graphics\". You provide the data, tell 'ggplot2' how to map\n    variables to aesthetics, what graphical primitives to use, and it\n    takes care of the details.",
         "License": "MIT + file LICENSE",
@@ -1321,12 +1292,12 @@
         "RoxygenNote": "7.3.3",
         "Collate": "'ggproto.R' 'ggplot-global.R' 'aaa-.R'\n'aes-colour-fill-alpha.R' 'aes-evaluation.R'\n'aes-group-order.R' 'aes-linetype-size-shape.R'\n'aes-position.R' 'all-classes.R' 'compat-plyr.R' 'utilities.R'\n'aes.R' 'annotation-borders.R' 'utilities-checks.R'\n'legend-draw.R' 'geom-.R' 'annotation-custom.R'\n'annotation-logticks.R' 'scale-type.R' 'layer.R'\n'make-constructor.R' 'geom-polygon.R' 'geom-map.R'\n'annotation-map.R' 'geom-raster.R' 'annotation-raster.R'\n'annotation.R' 'autolayer.R' 'autoplot.R' 'axis-secondary.R'\n'backports.R' 'bench.R' 'bin.R' 'coord-.R' 'coord-cartesian-.R'\n'coord-fixed.R' 'coord-flip.R' 'coord-map.R' 'coord-munch.R'\n'coord-polar.R' 'coord-quickmap.R' 'coord-radial.R'\n'coord-sf.R' 'coord-transform.R' 'data.R' 'docs_layer.R'\n'facet-.R' 'facet-grid-.R' 'facet-null.R' 'facet-wrap.R'\n'fortify-map.R' 'fortify-models.R' 'fortify-spatial.R'\n'fortify.R' 'stat-.R' 'geom-abline.R' 'geom-rect.R'\n'geom-bar.R' 'geom-tile.R' 'geom-bin2d.R' 'geom-blank.R'\n'geom-boxplot.R' 'geom-col.R' 'geom-path.R' 'geom-contour.R'\n'geom-point.R' 'geom-count.R' 'geom-crossbar.R'\n'geom-segment.R' 'geom-curve.R' 'geom-defaults.R'\n'geom-ribbon.R' 'geom-density.R' 'geom-density2d.R'\n'geom-dotplot.R' 'geom-errorbar.R' 'geom-freqpoly.R'\n'geom-function.R' 'geom-hex.R' 'geom-histogram.R'\n'geom-hline.R' 'geom-jitter.R' 'geom-label.R'\n'geom-linerange.R' 'geom-pointrange.R' 'geom-quantile.R'\n'geom-rug.R' 'geom-sf.R' 'geom-smooth.R' 'geom-spoke.R'\n'geom-text.R' 'geom-violin.R' 'geom-vline.R'\n'ggplot2-package.R' 'grob-absolute.R' 'grob-dotstack.R'\n'grob-null.R' 'grouping.R' 'properties.R' 'margins.R'\n'theme-elements.R' 'guide-.R' 'guide-axis.R'\n'guide-axis-logticks.R' 'guide-axis-stack.R'\n'guide-axis-theta.R' 'guide-legend.R' 'guide-bins.R'\n'guide-colorbar.R' 'guide-colorsteps.R' 'guide-custom.R'\n'guide-none.R' 'guide-old.R' 'guides-.R' 'guides-grid.R'\n'hexbin.R' 'import-standalone-obj-type.R'\n'import-standalone-types-check.R' 'labeller.R' 'labels.R'\n'layer-sf.R' 'layout.R' 'limits.R' 'performance.R'\n'plot-build.R' 'plot-construction.R' 'plot-last.R' 'plot.R'\n'position-.R' 'position-collide.R' 'position-dodge.R'\n'position-dodge2.R' 'position-identity.R' 'position-jitter.R'\n'position-jitterdodge.R' 'position-nudge.R' 'position-stack.R'\n'quick-plot.R' 'reshape-add-margins.R' 'save.R' 'scale-.R'\n'scale-alpha.R' 'scale-binned.R' 'scale-brewer.R'\n'scale-colour.R' 'scale-continuous.R' 'scale-date.R'\n'scale-discrete-.R' 'scale-expansion.R' 'scale-gradient.R'\n'scale-grey.R' 'scale-hue.R' 'scale-identity.R'\n'scale-linetype.R' 'scale-linewidth.R' 'scale-manual.R'\n'scale-shape.R' 'scale-size.R' 'scale-steps.R' 'scale-view.R'\n'scale-viridis.R' 'scales-.R' 'stat-align.R' 'stat-bin.R'\n'stat-summary-2d.R' 'stat-bin2d.R' 'stat-bindot.R'\n'stat-binhex.R' 'stat-boxplot.R' 'stat-connect.R'\n'stat-contour.R' 'stat-count.R' 'stat-density-2d.R'\n'stat-density.R' 'stat-ecdf.R' 'stat-ellipse.R'\n'stat-function.R' 'stat-identity.R' 'stat-manual.R'\n'stat-qq-line.R' 'stat-qq.R' 'stat-quantilemethods.R'\n'stat-sf-coordinates.R' 'stat-sf.R' 'stat-smooth-methods.R'\n'stat-smooth.R' 'stat-sum.R' 'stat-summary-bin.R'\n'stat-summary-hex.R' 'stat-summary.R' 'stat-unique.R'\n'stat-ydensity.R' 'summarise-plot.R' 'summary.R' 'theme.R'\n'theme-defaults.R' 'theme-current.R' 'theme-sub.R'\n'utilities-break.R' 'utilities-grid.R' 'utilities-help.R'\n'utilities-patterns.R' 'utilities-resolution.R'\n'utilities-tidy-eval.R' 'zxx.R' 'zzz.R'",
         "NeedsCompilation": "no",
-        "Packaged": "2026-04-21 12:47:29 UTC; thomas",
+        "Packaged": "2026-11-11 10:47:46 UTC; thomas",
         "Author": "Hadley Wickham [aut] (ORCID: <https://orcid.org/0000-0003-4757-117X>),\n  Winston Chang [aut] (ORCID: <https://orcid.org/0000-0002-1576-2126>),\n  Lionel Henry [aut],\n  Thomas Lin Pedersen [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  Kohske Takahashi [aut],\n  Claus Wilke [aut] (ORCID: <https://orcid.org/0000-0002-7470-9261>),\n  Kara Woo [aut] (ORCID: <https://orcid.org/0000-0002-5125-4188>),\n  Hiroaki Yutani [aut] (ORCID: <https://orcid.org/0000-0002-3385-7233>),\n  Dewey Dunnington [aut] (ORCID: <https://orcid.org/0000-0002-9415-4582>),\n  Teun van den Brand [aut] (ORCID:\n    <https://orcid.org/0000-0002-9335-7468>),\n  Posit, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "RSPM",
-        "Date/Publication": "2026-04-22 09:10:03 UTC",
-        "Built": "R 4.6.0; ; 2026-08-12 20:26:08 UTC; unix"
+        "Date/Publication": "2026-11-14 00:20:15 UTC",
+        "Built": "R 4.6.0; ; 2026-11-14 04:21:48 UTC; unix"
       }
     },
     "glue": {
@@ -1657,8 +1628,8 @@
       }
     },
     "httr2": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
+      "Source": "RSPM",
+      "Repository": "https://packagemanager.posit.co/cran/latest",
       "description": {
         "Package": "httr2",
         "Title": "Perform HTTP Requests and Process the Responses",
@@ -1682,9 +1653,9 @@
         "Packaged": "2026-07-13 19:55:02 UTC; hadleywickham",
         "Author": "Hadley Wickham [aut, cre],\n  Posit Software, PBC [cph, fnd],\n  Maximilian Girlich [ctb]",
         "Maintainer": "Hadley Wickham <hadley@posit.co>",
-        "Repository": "CRAN",
+        "Repository": "RSPM",
         "Date/Publication": "2026-07-13 21:50:06 UTC",
-        "Built": "R 4.6.1; ; 2026-07-13 23:43:55 UTC; unix"
+        "Built": "R 4.6.0; ; 2026-07-14 05:11:56 UTC; unix"
       }
     },
     "ids": {
@@ -2168,13 +2139,13 @@
       }
     },
     "openssl": {
-      "Source": "RSPM",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
       "description": {
         "Package": "openssl",
         "Type": "Package",
         "Title": "Toolkit for Encryption, Signatures and Certificates Based on\nOpenSSL",
-        "Version": "2.5.0",
+        "Version": "2.6.0",
         "Authors@R": "c(person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n    comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Oliver\", \"Keyes\", role = \"ctb\"))",
         "Description": "Bindings to OpenSSL libssl and libcrypto, plus custom SSH key parsers.\n    Supports RSA, DSA and EC curves P-256, P-384, P-521, and curve25519. Cryptographic\n    signatures can either be created and verified manually or via x509 certificates. \n    AES can be used in cbc, ctr or gcm mode for symmetric encryption; RSA for asymmetric\n    (public key) encryption or EC for Diffie Hellman. High-level envelope functions \n    combine RSA and AES for encrypting arbitrary sized data. Other utilities include key\n    generators, hash functions (md5, sha1, sha256, etc), base64 encoder, a secure random\n    number generator, and 'bignum' math methods for manually performing crypto \n    calculations on large multibyte integers.",
         "License": "MIT + file LICENSE",
@@ -2187,12 +2158,12 @@
         "Encoding": "UTF-8",
         "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-11-01 10:34:10 UTC; jeroen",
+        "Packaged": "2026-11-16 17:49:35 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Oliver Keyes [ctb]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
-        "Repository": "RSPM",
-        "Date/Publication": "2026-11-02 17:20:02 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-11-03 04:40:37 UTC; unix"
+        "Repository": "CRAN",
+        "Date/Publication": "2026-11-17 07:50:17 UTC",
+        "Built": "R 4.6.2; x86_64-pc-linux-gnu; 2026-11-18 01:46:18 UTC; unix"
       }
     },
     "otel": {
@@ -2562,7 +2533,7 @@
         "Author": "Thomas Lin Pedersen [cre, aut] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  Maxim Shemanarev [aut, cph] (Author of AGG),\n  Tony Juricic [ctb, cph] (Contributor to AGG),\n  Milan Marusinec [ctb, cph] (Contributor to AGG),\n  Spencer Garrett [ctb] (Contributor to AGG),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
         "Repository": "RSPM",
         "Date/Publication": "2026-03-23 08:50:08 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-08-12 20:27:14 UTC; unix"
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-11-17 04:16:01 UTC; unix"
       }
     },
     "rappdirs": {
@@ -3236,29 +3207,29 @@
     },
     "survival": {
       "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
+      "Repository": "https://packagemanager.posit.co/cran/latest",
       "description": {
         "Title": "Survival Analysis",
         "Priority": "recommended",
         "Package": "survival",
-        "Version": "3.8-6",
-        "Date": "2026-01-09",
-        "Depends": "R (>= 3.5.0)",
+        "Version": "3.8-12",
+        "Date": "2026-09-02",
+        "Depends": "R (>= 4.1.0)",
         "Imports": "graphics, Matrix, methods, splines, stats, utils",
         "LazyData": "Yes",
         "LazyDataCompression": "xz",
         "ByteCompile": "Yes",
-        "Authors@R": "c(person(c(\"Terry\", \"M\"), \"Therneau\",\n                    email=\"therneau.terry@mayo.edu\",\n\t            role=c(\"aut\", \"cre\")),\n               person(\"Thomas\", \"Lumley\", role=c(\"ctb\", \"trl\"),\n\t       comment=\"original S->R port and R maintainer until 2009\"),\n\t       person(\"Atkinson\", \"Elizabeth\", role=\"ctb\"),\n\t       person(\"Crowson\", \"Cynthia\", role=\"ctb\"))",
+        "Authors@R": "c(person(c(\"Terry\", \"M\"), \"Therneau\",\n                    email=\"terry.therneau@proton.me\",\n\t            role=c(\"aut\", \"cre\")),\n               person(\"Thomas\", \"Lumley\", role=c(\"ctb\", \"trl\"),\n\t       comment=\"original S->R port and R maintainer until 2009\"),\n\t       person(\"Atkinson\", \"Elizabeth\", role=\"ctb\"),\n\t       person(\"Crowson\", \"Cynthia\", role=\"ctb\"))",
         "Description": "Contains the core survival analysis routines, including\n\t     definition of Surv objects, \n\t     Kaplan-Meier and Aalen-Johansen (multi-state) curves, Cox models,\n\t     and parametric accelerated failure time models.",
         "License": "LGPL (>= 2)",
         "URL": "https://github.com/therneau/survival",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-01-13 02:06:39 UTC; therneau",
+        "Packaged": "2026-09-09 11:38:39 UTC; therneau",
         "Author": "Terry M Therneau [aut, cre],\n  Thomas Lumley [ctb, trl] (original S->R port and R maintainer until\n    2009),\n  Atkinson Elizabeth [ctb],\n  Crowson Cynthia [ctb]",
-        "Maintainer": "Terry M Therneau <therneau.terry@mayo.edu>",
+        "Maintainer": "Terry M Therneau <terry.therneau@proton.me>",
         "Repository": "CRAN",
-        "Date/Publication": "2026-01-16 09:00:02 UTC",
-        "Built": "R 4.6.1; aarch64-apple-darwin23; 2026-06-25 21:54:33 UTC; unix"
+        "Date/Publication": "2026-09-09 18:10:02 UTC",
+        "Built": "R 4.6.2; x86_64-pc-linux-gnu; 2026-10-29 18:38:10 UTC; unix"
       }
     },
     "sys": {
@@ -3294,7 +3265,7 @@
         "Type": "Package",
         "Package": "systemfonts",
         "Title": "System Native Font Finding",
-        "Version": "1.3.2",
+        "Version": "1.3.3",
         "Authors@R": "c(\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"Jeroen\", \"Ooms\", , \"jeroen@berkeley.edu\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Devon\", \"Govett\", role = \"aut\",\n           comment = \"Author of font-manager\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
         "Description": "Provides system native access to the font catalogue. As font\n    handling varies between systems it is difficult to correctly locate\n    installed fonts across different operating systems. The 'systemfonts'\n    package provides bindings to the native libraries on Windows, macOS\n    and Linux for finding font files that can then be used further by e.g.\n    graphic devices. The main use is intended to be from compiled code but\n    'systemfonts' also provides access from R.",
         "License": "MIT + file LICENSE",
@@ -3302,22 +3273,22 @@
         "BugReports": "https://github.com/r-lib/systemfonts/issues",
         "Depends": "R (>= 3.2.0)",
         "Imports": "base64enc, grid, jsonlite, lifecycle, tools, utils",
-        "Suggests": "covr, farver, ggplot2, graphics, knitr, ragg, rmarkdown,\nsvglite, testthat (>= 2.1.0)",
+        "Suggests": "covr, farver, ggplot2, graphics, knitr, ragg, rmarkdown,\nsvglite, testthat (>= 3.2.0)",
         "LinkingTo": "cpp11 (>= 0.2.1)",
         "VignetteBuilder": "knitr",
         "Config/build/compilation-database": "true",
         "Config/Needs/website": "tidyverse/tidytemplate",
         "Config/usethis/last-upkeep": "2025-04-23",
         "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.2",
         "SystemRequirements": "fontconfig, freetype2",
+        "Config/roxygen2/version": "8.1.1",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-03-05 12:24:52 UTC; thomas",
+        "Packaged": "2026-11-16 08:26:34 UTC; thomas",
         "Author": "Thomas Lin Pedersen [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  Jeroen Ooms [aut] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Devon Govett [aut] (Author of font-manager),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "RSPM",
-        "Date/Publication": "2026-03-05 13:10:02 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-08-12 20:25:32 UTC; unix"
+        "Date/Publication": "2026-11-16 10:00:02 UTC",
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-11-17 04:11:08 UTC; unix"
       }
     },
     "terra": {
@@ -3380,7 +3351,7 @@
         "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
         "Repository": "RSPM",
         "Date/Publication": "2026-03-06 10:40:02 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-08-12 20:26:25 UTC; unix"
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-11-17 04:12:17 UTC; unix"
       }
     },
     "tibble": {
@@ -3939,58 +3910,58 @@
   },
   "files": {
     "allnow_he.csv": {
-      "checksum": "46cbba3d567793b45660a9606eacfd46"
+      "checksum": "c868b3f30803aa3f57bf05a6b4b55e9a"
     },
     "allnow.csv": {
-      "checksum": "3e7f97ce0ddf7a97bcdac3d0bcabb8b9"
+      "checksum": "dd074637c077dcf872e5dfb798b36b1c"
     },
     "allsum_he.csv": {
-      "checksum": "9b1ca2cc8eaf465ad5661e89064ba960"
+      "checksum": "935044ba0ea2e5be51a533b101988e49"
     },
     "allsum.csv": {
-      "checksum": "912e30c2ad0a031aa98ff1aecec0e1a2"
+      "checksum": "e6be535dda96ffd0d68d38e4341f6df1"
     },
     "app.R": {
-      "checksum": "8315c2f8d7e2c1cd0ad5894d4d37061c"
+      "checksum": "ec85743bb8712feda1d9eb9e9eaed958"
     },
     "combinedclean.csv": {
-      "checksum": "702c10c1a362fef9325a521876b60da6"
+      "checksum": "7384bd420240da27d59ce06f4233d94f"
     },
     "data_dictionary.csv": {
       "checksum": "08f269172c57504d5007851831ebb4a3"
     },
     "facultydata.csv": {
-      "checksum": "9ae663adc74deacbb97ce81dcb7383b8"
+      "checksum": "9fb6c7e3ba53ecf84e8ab80b3f810fe4"
     },
     "feedback.R": {
       "checksum": "fe40f8d90a88afcabc60c23a487950f4"
     },
     "he_institution_weekly_totals.csv": {
-      "checksum": "015f6ac5f56cca916d334bf3a6f41fcb"
+      "checksum": "8875e1a6c1a4ff4111b4e94cd44f5da4"
     },
     "he_job_duration_spells.csv": {
-      "checksum": "1ad6b588efa89f1dc44a0ccf174f41ce"
+      "checksum": "9fa78ec99e19dbbc1b386185d1fdec3d"
     },
     "hedata.xlsx": {
-      "checksum": "6f265848fdf4cd0dc5cc2d9a1ce0ca81"
+      "checksum": "72a67d5d185ad3cfc4e3c708d55b67c5"
     },
     "ipeds_staff_salaries.csv": {
       "checksum": "a87128dc2e9046938dc7e5cf0397672f"
     },
     "job_duration_spells.csv": {
-      "checksum": "bcfd64003850f424229a30c37a3b923c"
+      "checksum": "75d2c27d08a6e329666d75ac8b38d9b1"
     },
     "k12_district_weekly_totals.csv": {
-      "checksum": "82212993d4afd9c518f0c0c7f4ae5cc4"
+      "checksum": "32ac3c8074f7c7b9fb65cfa9fbe57b52"
     },
     "k12_salary_history.csv": {
       "checksum": "250fdf03f0c20fa6a81cac62ad2eb6b2"
     },
     "k12jobanalysis.csv": {
-      "checksum": "e31f081fbe9d8b02ec4cb1508c25baac"
+      "checksum": "215751285941619f8819c210033748b8"
     },
     "llm_extract_shadow.csv": {
-      "checksum": "89ea979bf83cdbd4b7abab698a61fec4"
+      "checksum": "1ff2ac4e21108016d0d1f836701cc058"
     },
     "mt_district_crosswalk.csv": {
       "checksum": "1a75dd1388c3c442401ac8cd44b56a4d"
@@ -4002,22 +3973,22 @@
       "checksum": "989b4a9926d3effe643f7164971d08b2"
     },
     "opi_only_districts.csv": {
-      "checksum": "f8f67cf78a5fbe19ed43c2dc6de93055"
+      "checksum": "c4a920a4caa1664060d85310f83dda54"
     },
     "posting_first_seen.csv": {
-      "checksum": "c0646b94490a4c0968ee5d25b5e86efc"
+      "checksum": "3519ff65bd6dd68ec2ec1e2c2d40cea0"
     },
     "qcew_county_school_pay.csv": {
       "checksum": "106d551bb8f080d6b5996612a408d163"
     },
     "salarymap.csv": {
-      "checksum": "06a9df7d06532a8842c6bac9164e942e"
+      "checksum": "c1673ba5624944ca5dad1f459014feb9"
     },
     "salarymap2.csv": {
-      "checksum": "8b2f6ecb8cb754227d125a55af9798d8"
+      "checksum": "27db8372534a3138f5856d7c876b9575"
     },
     "source_retrieved_dates.csv": {
-      "checksum": "6a45dbaa27641a113e95398c0a459097"
+      "checksum": "d9ed4c52d174c8d5178949bd060e3061"
     }
   },
   "users": null
