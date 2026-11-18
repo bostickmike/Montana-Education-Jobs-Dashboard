@@ -1167,8 +1167,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     vacancy-rate plots, the biggest-mover boxes and their footnote are gone from Home; "Top K-12 / Higher Ed Job
     Types This Week" cards take their place (open postings, share, 12-run sparkline; a click opens that type's
     jobs). The top tables and the KPI cards count postings edjobs `classify_work_schedule()` doesn't mark as
-    substitute, extra duty, part-time, student job or temporary: K-12 855 of 1,374, college 256 of 380. The district
-    and college sparklines still show all postings (their totals files have no not-marked count). The pipeline and
+    substitute, extra duty, part-time, student job or temporary: K-12 855 of 1,374, college 256 of 380. A switch on
+    Home (on by default; "Leave out substitutes, coaching, part-time, student and temporary jobs") sets which postings
+    the four top tables count, their Share and their sparklines, and the Jobs table a Home link opens follows it (a
+    map popup link never does); the KPI cards keep both numbers (plan `claude-notes/2026-11-18_sparkline-basis/PLAN.md`,
+    Mike 11-18). For the district and college sparklines, `k12_district_weekly_totals.csv` /
+    `he_institution_weekly_totals.csv` gain `n_not_marked` (edjobs `posting_run_totals()`, pipeline and both rebuild
+    scripts), backfilled from the archives (K-12 3,224 rows, college 346; the rebuilt `n` equals the committed `n` on every
+    row; script `claude-notes/2026-11-18_sparkline-basis/backfill_n_not_marked.R`); schema and data dictionary
+    cover the column. Switch screenshots `claude-notes/2026-11-18_sparkline-basis/shots/`. Rehearsal
+    (`claude-notes/2026-11-18_rehearsal-mt-sparkline-basis.log`): every pipeline step passed but the manifest
+    (until v0.41.0 is tagged), rebuild parity 11/11, K-12 rows 1,374 -> 1,371; the history-accumulator test still
+    counted this week's totals the old way (fixed after: `posting_run_totals()`). Suite on the final tree: 3,275
+    passed, 2 failed (the manifest test). The pipeline and
     both rebuild scripts write `k12_jobtype_weekly_totals.csv` / `he_jobtype_weekly_totals.csv` (edjobs
     `jobtype_run_totals()`), backfilled from the archives: 236 and 306 rows, 18 runs 2026-08-06 to 2026-11-17;
     schema, data dictionary, rebuild parity and reclassify cover them. On a phone the Share column is hidden and

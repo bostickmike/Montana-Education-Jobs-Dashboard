@@ -230,6 +230,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `District` | String | This dashboard: district and college list | Canonical public school district or employer location name. |
 | `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: weekly snapshot | Snapshot observation date for that weekly pipeline sweep. |
 | `n` | Integer | This dashboard: weekly snapshot | Total count of active job postings observed open for that district in that week. |
+| `n_not_marked` | Integer | This dashboard: job classification | Of those, postings classify_work_schedule() (edjobs) does not mark as a substitute, extra-duty (coaching, activities, stipend), part-time, student or temporary/seasonal job. Sources never confirm full-time, so this is "not marked", not "full-time". The Home page's top districts table and its sparklines count these when its switch is on (the default). |
 
 ---
 
@@ -251,6 +252,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Institution` | String | This dashboard: district and college list | Canonical public college or university name. |
 | `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: weekly snapshot | Snapshot observation date for that weekly pipeline sweep. |
 | `n` | Integer | This dashboard: weekly snapshot | Total count of active job postings observed open for that higher education institution in that week. |
+| `n_not_marked` | Integer | This dashboard: job classification | Of those, postings classify_work_schedule() (edjobs) does not mark as a substitute, extra-duty (coaching, activities, stipend), part-time, student or temporary/seasonal job. Sources never confirm full-time, so this is "not marked", not "full-time". The Home page's top colleges table and its sparklines count these when its switch is on (the default). |
 
 ---
 

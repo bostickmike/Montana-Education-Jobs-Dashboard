@@ -61,9 +61,8 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
   combinedclean <- mt_k12_combinedclean(counted, oews_wages, district_county, opi_counties)
   k12jobs <- build_k12_teacher_rows(combinedclean)
 
-  k12_district_weekly_totals <- combinedclean %>%
-    group_by(District, Archive_Date) %>%
-    summarize(n = n_distinct(Posting_ID), .groups = "drop")
+  k12_district_weekly_totals <- posting_run_totals(combinedclean, "District", "position", "title", "k12",
+                                                   id_col = "Posting_ID")
   k12_jobtype_weekly_totals <- jobtype_run_totals(combinedclean, "position", "title", "k12", id_col = "Posting_ID")
 
   k12sumdistrict <- summarize_k12_posting_counts(k12jobs)

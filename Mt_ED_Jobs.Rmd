@@ -2176,9 +2176,10 @@ this_week_k12jobs <- build_k12_teacher_rows(combinedclean)
 k12jobs <- append_weekly_rows(file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), this_week_k12jobs)
 write.csv(k12jobs, file = file.path("Mt_Ed_Jobs", "k12jobanalysis.csv"), row.names = FALSE)
 
-this_week_district_totals <- combinedclean %>%
-  group_by(District, Archive_Date) %>%
-  summarize(n = n_distinct(Posting_ID), .groups = "drop")
+# n_not_marked: the postings classify_work_schedule() does not mark, as in the job-type totals below (the Home
+# page's top districts table and its sparklines count these when its switch is on).
+this_week_district_totals <- posting_run_totals(combinedclean, "District", "position", "title", "k12",
+                                                id_col = "Posting_ID")
 k12_district_weekly_totals <- append_weekly_rows(
   file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), this_week_district_totals)
 write.csv(k12_district_weekly_totals, file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), row.names = FALSE)
@@ -2883,8 +2884,8 @@ source("history_accumulator.R")
 facultydata <- append_weekly_rows(file.path("Mt_Ed_Jobs", "facultydata.csv"), as.data.frame(this_week_facultydata))
 write.csv(facultydata, file.path("Mt_Ed_Jobs", "facultydata.csv"), row.names = FALSE)
 
-this_week_he_totals <- hedata %>%
-  count(Institution, Archive_Date, name = "n")
+# this_week_he_cat is hedata with Job_Type, which classify_work_schedule() reads for n_not_marked.
+this_week_he_totals <- posting_run_totals(this_week_he_cat, "Institution", "Job_Type", "Title", "college")
 he_institution_weekly_totals <- append_weekly_rows(
   file.path("Mt_Ed_Jobs", "he_institution_weekly_totals.csv"), this_week_he_totals)
 write.csv(he_institution_weekly_totals, file.path("Mt_Ed_Jobs", "he_institution_weekly_totals.csv"), row.names = FALSE)
