@@ -54,6 +54,9 @@ set_state_config(state_config(
   drift_baseline_from = "2026-08-06",
   # The boards' own time zone: the day a presence check counts for, a JSON-LD date's local day (edjobs 0.44.0).
   timezone = "America/Denver",
+  # Census names counties "Gallatin County, Montana"; Montana's files say "Gallatin County" (edjobs 0.47.0,
+  # refresh_county_context()).
+  county_suffix = ", Montana",
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
       specs = scraper_specs(ApptegyBespoke = MT_APPTEGY_MAP_SPEC, defaults = MT_SCRAPER_SPECS),
