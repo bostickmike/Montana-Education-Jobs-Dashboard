@@ -1220,6 +1220,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Scraper skill synced from the toolkit (2026-11-19): the specs for platforms edjobs scrapes come from
     `edjobs::default_scraper_specs()` (0.46.0; montana.md, wyoming.md), and an edjobs helper may be internal since
     0.44.0 (ci-automation.md: list the namespace with `ls(asNamespace("edjobs"))`, call one as `edjobs:::name`).
+  * [x] OPI answer key: `week1110` set (2026-11-19). 18 hand-judged OPI postings from the 2026-11-10 run
+    (`claude-notes/2026-11-10_opi-matcher-11-10-check.md`): the new postings (Hardin's two copies), the matches new that
+    week, the 5 whose board twin was gone, and Manhattan's ASL intervener (no match; fixed 11-10 in 0911e70). Anaconda's
+    SPED posting is labeled the same opening as the board's "Elementary Special Education Teacher" (Mike, 11-19: the
+    board's SPED vacancy was reposted from 07-31 on). Fixtures `opi_match_{labels,boards}_2026-11-10.csv` (boards = that
+    run's 1,170 direct rows; recomputing the run from them gives its decisions except Manhattan, which the 0911e70 fix
+    changed). New test in `test-opi-matcher.R`: every label holds (passes). 8 postings the 11-10 note never judged
+    (Monforton, Malta, Colstrip K-8, Three Forks, Helena, Big Timber, Poplar, Rocky Boy) are left out.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
@@ -1320,9 +1328,6 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   04-07 to 08-25). Not worked around on purpose: user agents, proxies or other routes past the block circumvent the
   site's bot protection. Running it from the Mac: built and withdrawn the same day (Mike: no jobs on his computer).
   Left: ask the district / its web host to let the weekly request through, or retire the source and say so.
-- [ ] OPI answer key: add the 2026-11-10 cases as a `week1110` set (Anaconda's doubtful match, Manhattan's ASL intervener,
-  the 9 new postings, the 3 new matches; `claude-notes/2026-11-10_opi-matcher-11-10-check.md`). Anaconda (OPI SPED at
-  Lincoln School, July, matched to a Fred Moodry posting from 11-04) is still matched: decide its label first.
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
   still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
