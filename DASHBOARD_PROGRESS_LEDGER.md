@@ -1220,6 +1220,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Scraper skill synced from the toolkit (2026-11-19): the specs for platforms edjobs scrapes come from
     `edjobs::default_scraper_specs()` (0.46.0; montana.md, wyoming.md), and an edjobs helper may be internal since
     0.44.0 (ci-automation.md: list the namespace with `ls(asNamespace("edjobs"))`, call one as `edjobs:::name`).
+  * [x] Pin edjobs 0.47.0: pipeline stages, slice 1 (2026-11-19; branch `stage-context`, replaces the 0.46.0 pin).
+    The Rmd's two Census ACS county-context blocks (salarymap2.csv, salarymap.csv) are now
+    `refresh_county_context()` calls, and the source-record-links loop is `refresh_source_record_links()` (edjobs
+    0.47.0; review step 5). `state_config.R` sets `county_suffix = ", Montana"` (what the Rmd passed by hand).
+    manifest.json's edjobs entry is from a pak install of the `v0.47.0` tag. Full rehearsal
+    (`claude-notes/2026-11-19_rehearsal-mt-stage-context-0.47.0.log`): every step passed (data quality 125/0). The
+    rehearsed files' ACS columns equal the committed ones (same vintage) apart from the last digit of 13 floating
+    values (`Mining_Employment_Share` and its MOE, Yellowstone and Daniels counties; largest difference 1e-17).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
