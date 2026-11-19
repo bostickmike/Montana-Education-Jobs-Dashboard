@@ -1217,6 +1217,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `claude-notes/2026-11-19_package-specs/`): 224 of 224 sources identical. Also in the pin: 0.45.0's `state_config(oews_areas = )`
     (`oews_area_definitions()` identical to 0.44.0's for this state, 81 rows) and the toy state in package CI.
     manifest.json's edjobs entry is from a pak install of the `v0.46.0` tag. `mt_list_rule()` (which re-read the registry CSV for every argument) is gone. Suite on the tag: 3,277 passed, 0 failed.
+  * [x] Scraper skill synced from the toolkit (2026-11-19): the specs for platforms edjobs scrapes come from
+    `edjobs::default_scraper_specs()` (0.46.0; montana.md, wyoming.md), and an edjobs helper may be internal since
+    0.44.0 (ci-automation.md: list the namespace with `ls(asNamespace("edjobs"))`, call one as `edjobs:::name`).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
