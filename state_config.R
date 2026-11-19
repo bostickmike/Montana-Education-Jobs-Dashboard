@@ -94,6 +94,8 @@ set_state_config(state_config(
   # The first archive that counts toward the drift check's per-source
   # baselines: earlier runs predate fixes that changed the counts.
   drift_baseline_from = "2026-08-06",
+  # The boards' own time zone: the day a presence check counts for, a JSON-LD date's local day (edjobs 0.44.0).
+  timezone = "America/Denver",
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
       specs = c(MT_SCRAPER_SPECS, list(ApptegyBespoke = MT_APPTEGY_MAP_SPEC)),
