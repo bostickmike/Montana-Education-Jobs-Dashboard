@@ -82,25 +82,25 @@
 "Elementary","2026-10-13","Total",121
 "Elementary","2026-10-20","Total",118
 "Elementary","2026-10-27","Total",109
-"Elementary","2026-11-03","Total",88
-"Elementary","2026-11-10","Total",84
+"Elementary","2026-11-03","Total",87
+"Elementary","2026-11-10","Total",83
 "English Language Arts Secondary","2026-08-06","Total",18
 "English Language Arts Secondary","2026-08-07","Total",20
 "English Language Arts Secondary","2026-08-11","Total",26
 "English Language Arts Secondary","2026-08-18","Total",25
-"English Language Arts Secondary","2026-08-25","Total",25
-"English Language Arts Secondary","2026-09-01","Total",26
-"English Language Arts Secondary","2026-09-07","Total",23
-"English Language Arts Secondary","2026-09-08","Total",22
-"English Language Arts Secondary","2026-09-15","Total",18
-"English Language Arts Secondary","2026-09-22","Total",20
-"English Language Arts Secondary","2026-09-29","Total",21
-"English Language Arts Secondary","2026-10-06","Total",20
-"English Language Arts Secondary","2026-10-13","Total",21
-"English Language Arts Secondary","2026-10-20","Total",20
-"English Language Arts Secondary","2026-10-27","Total",23
-"English Language Arts Secondary","2026-11-03","Total",17
-"English Language Arts Secondary","2026-11-10","Total",15
+"English Language Arts Secondary","2026-08-25","Total",24
+"English Language Arts Secondary","2026-09-01","Total",25
+"English Language Arts Secondary","2026-09-07","Total",22
+"English Language Arts Secondary","2026-09-08","Total",21
+"English Language Arts Secondary","2026-09-15","Total",17
+"English Language Arts Secondary","2026-09-22","Total",19
+"English Language Arts Secondary","2026-09-29","Total",20
+"English Language Arts Secondary","2026-10-06","Total",19
+"English Language Arts Secondary","2026-10-13","Total",20
+"English Language Arts Secondary","2026-10-20","Total",19
+"English Language Arts Secondary","2026-10-27","Total",22
+"English Language Arts Secondary","2026-11-03","Total",16
+"English Language Arts Secondary","2026-11-10","Total",14
 "Gifted and Talented","2026-09-22","Total",1
 "Gifted and Talented","2026-09-29","Total",1
 "Gifted and Talented","2026-10-06","Total",1
@@ -147,17 +147,17 @@
 "Math","2026-08-18","Total",36
 "Math","2026-08-25","Total",35
 "Math","2026-09-01","Total",34
-"Math","2026-09-07","Total",34
-"Math","2026-09-08","Total",34
-"Math","2026-09-15","Total",30
-"Math","2026-09-22","Total",29
-"Math","2026-09-29","Total",26
-"Math","2026-10-06","Total",28
-"Math","2026-10-13","Total",28
-"Math","2026-10-20","Total",28
-"Math","2026-10-27","Total",26
-"Math","2026-11-03","Total",23
-"Math","2026-11-10","Total",21
+"Math","2026-09-07","Total",33
+"Math","2026-09-08","Total",33
+"Math","2026-09-15","Total",29
+"Math","2026-09-22","Total",28
+"Math","2026-09-29","Total",25
+"Math","2026-10-06","Total",27
+"Math","2026-10-13","Total",27
+"Math","2026-10-20","Total",27
+"Math","2026-10-27","Total",25
+"Math","2026-11-03","Total",22
+"Math","2026-11-10","Total",20
 "Music","2026-08-06","Total",38
 "Music","2026-08-07","Total",33
 "Music","2026-08-11","Total",46
@@ -173,8 +173,8 @@
 "Music","2026-10-13","Total",32
 "Music","2026-10-20","Total",30
 "Music","2026-10-27","Total",34
-"Music","2026-11-03","Total",22
-"Music","2026-11-10","Total",21
+"Music","2026-11-03","Total",21
+"Music","2026-11-10","Total",20
 "Other","2026-08-06","Total",5
 "Other","2026-08-07","Total",5
 "Other","2026-08-11","Total",5
@@ -2530,7 +2530,6 @@
 "Elementary","2026-11-03","Sidney Public Schools",1
 "Elementary","2026-11-03","St Jude Thaddeus School",2
 "Elementary","2026-11-03","St Regis School District",1
-"Elementary","2026-11-03","Sunburst Schools",1
 "Elementary","2026-11-03","Superior School District",1
 "Elementary","2026-11-03","Surprise Creek School",1
 "Elementary","2026-11-03","Swan Valley School District #3",1
@@ -2597,7 +2596,6 @@
 "Elementary","2026-11-10","Shields Valley Public Schools",1
 "Elementary","2026-11-10","Sidney Public Schools",1
 "Elementary","2026-11-10","St Jude Thaddeus School",2
-"Elementary","2026-11-10","Sunburst Schools",1
 "Elementary","2026-11-10","Superior School District",1
 "Elementary","2026-11-10","Surprise Creek School",1
 "Elementary","2026-11-10","Swan Valley School District #3",1
@@ -2689,7 +2687,7 @@
 "English Language Arts Secondary","2026-08-25","Browning Public Schools",1
 "English Language Arts Secondary","2026-08-25","Chinook Public Schools",1
 "English Language Arts Secondary","2026-08-25","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-08-25","Corvallis School District #1",2
+"English Language Arts Secondary","2026-08-25","Corvallis School District #1",1
 "English Language Arts Secondary","2026-08-25","Fromberg Public Schools",1
 "English Language Arts Secondary","2026-08-25","Geyser Public Schools",1
 "English Language Arts Secondary","2026-08-25","Havre Public Schools",2
@@ -2707,7 +2705,7 @@
 "English Language Arts Secondary","2026-09-01","Box Elder",1
 "English Language Arts Secondary","2026-09-01","Browning Public Schools",1
 "English Language Arts Secondary","2026-09-01","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-09-01","Corvallis School District #1",2
+"English Language Arts Secondary","2026-09-01","Corvallis School District #1",1
 "English Language Arts Secondary","2026-09-01","Fromberg Public Schools",1
 "English Language Arts Secondary","2026-09-01","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-09-01","Geyser Public Schools",1
@@ -2727,7 +2725,7 @@
 "English Language Arts Secondary","2026-09-07","Box Elder",1
 "English Language Arts Secondary","2026-09-07","Browning Public Schools",1
 "English Language Arts Secondary","2026-09-07","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-09-07","Corvallis School District #1",2
+"English Language Arts Secondary","2026-09-07","Corvallis School District #1",1
 "English Language Arts Secondary","2026-09-07","Fromberg Public Schools",1
 "English Language Arts Secondary","2026-09-07","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-09-07","Geyser Public Schools",1
@@ -2745,7 +2743,7 @@
 "English Language Arts Secondary","2026-09-08","Box Elder",1
 "English Language Arts Secondary","2026-09-08","Browning Public Schools",1
 "English Language Arts Secondary","2026-09-08","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-09-08","Corvallis School District #1",2
+"English Language Arts Secondary","2026-09-08","Corvallis School District #1",1
 "English Language Arts Secondary","2026-09-08","Fromberg Public Schools",1
 "English Language Arts Secondary","2026-09-08","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-09-08","Geyser Public Schools",1
@@ -2762,7 +2760,7 @@
 "English Language Arts Secondary","2026-09-15","Box Elder",1
 "English Language Arts Secondary","2026-09-15","Browning Public Schools",1
 "English Language Arts Secondary","2026-09-15","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-09-15","Corvallis School District #1",2
+"English Language Arts Secondary","2026-09-15","Corvallis School District #1",1
 "English Language Arts Secondary","2026-09-15","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-09-15","Geyser Public Schools",1
 "English Language Arts Secondary","2026-09-15","Havre Public Schools",2
@@ -2779,7 +2777,7 @@
 "English Language Arts Secondary","2026-09-22","Bozeman Public Schools",1
 "English Language Arts Secondary","2026-09-22","Browning Public Schools",1
 "English Language Arts Secondary","2026-09-22","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-09-22","Corvallis School District #1",2
+"English Language Arts Secondary","2026-09-22","Corvallis School District #1",1
 "English Language Arts Secondary","2026-09-22","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-09-22","Geyser Public Schools",1
 "English Language Arts Secondary","2026-09-22","Havre Public Schools",2
@@ -2796,7 +2794,7 @@
 "English Language Arts Secondary","2026-09-29","Bozeman Public Schools",2
 "English Language Arts Secondary","2026-09-29","Browning Public Schools",1
 "English Language Arts Secondary","2026-09-29","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-09-29","Corvallis School District #1",2
+"English Language Arts Secondary","2026-09-29","Corvallis School District #1",1
 "English Language Arts Secondary","2026-09-29","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-09-29","Geyser Public Schools",1
 "English Language Arts Secondary","2026-09-29","Helena Public Schools",1
@@ -2812,7 +2810,7 @@
 "English Language Arts Secondary","2026-10-06","Bozeman Public Schools",2
 "English Language Arts Secondary","2026-10-06","Browning Public Schools",1
 "English Language Arts Secondary","2026-10-06","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-10-06","Corvallis School District #1",2
+"English Language Arts Secondary","2026-10-06","Corvallis School District #1",1
 "English Language Arts Secondary","2026-10-06","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-10-06","Geyser Public Schools",1
 "English Language Arts Secondary","2026-10-06","Helena Public Schools",1
@@ -2828,7 +2826,7 @@
 "English Language Arts Secondary","2026-10-13","Bozeman Public Schools",2
 "English Language Arts Secondary","2026-10-13","Browning Public Schools",1
 "English Language Arts Secondary","2026-10-13","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-10-13","Corvallis School District #1",2
+"English Language Arts Secondary","2026-10-13","Corvallis School District #1",1
 "English Language Arts Secondary","2026-10-13","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-10-13","Geyser Public Schools",1
 "English Language Arts Secondary","2026-10-13","Helena Public Schools",2
@@ -2844,7 +2842,7 @@
 "English Language Arts Secondary","2026-10-20","Bozeman Public Schools",2
 "English Language Arts Secondary","2026-10-20","Browning Public Schools",1
 "English Language Arts Secondary","2026-10-20","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-10-20","Corvallis School District #1",2
+"English Language Arts Secondary","2026-10-20","Corvallis School District #1",1
 "English Language Arts Secondary","2026-10-20","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-10-20","Geyser Public Schools",1
 "English Language Arts Secondary","2026-10-20","Helena Public Schools",2
@@ -2860,7 +2858,7 @@
 "English Language Arts Secondary","2026-10-27","Bozeman Public Schools",2
 "English Language Arts Secondary","2026-10-27","Browning Public Schools",1
 "English Language Arts Secondary","2026-10-27","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-10-27","Corvallis School District #1",2
+"English Language Arts Secondary","2026-10-27","Corvallis School District #1",1
 "English Language Arts Secondary","2026-10-27","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-10-27","Geyser Public Schools",1
 "English Language Arts Secondary","2026-10-27","Harlem Public Schools",1
@@ -2877,7 +2875,6 @@
 "English Language Arts Secondary","2026-11-03","Box Elder Elem / Box Elder H S",1
 "English Language Arts Secondary","2026-11-03","Browning Public Schools",1
 "English Language Arts Secondary","2026-11-03","Colstrip Public Schools",2
-"English Language Arts Secondary","2026-11-03","Corvallis School District #1",1
 "English Language Arts Secondary","2026-11-03","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-11-03","Harlem Public Schools",1
 "English Language Arts Secondary","2026-11-03","Lame Deer Public Schools",1
@@ -2892,7 +2889,6 @@
 "English Language Arts Secondary","2026-11-10","Box Elder Elem / Box Elder H S",1
 "English Language Arts Secondary","2026-11-10","Browning Public Schools",1
 "English Language Arts Secondary","2026-11-10","Colstrip Public Schools",1
-"English Language Arts Secondary","2026-11-10","Corvallis School District #1",1
 "English Language Arts Secondary","2026-11-10","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-11-10","Harlem Public Schools",1
 "English Language Arts Secondary","2026-11-10","Lame Deer Public Schools",1
@@ -3457,7 +3453,7 @@
 "Math","2026-09-01","Sheridan Public Schools",1
 "Math","2026-09-07","Arlee Joint School District",1
 "Math","2026-09-07","Ashland Public School",1
-"Math","2026-09-07","Belgrade School District 44",2
+"Math","2026-09-07","Belgrade School District 44",1
 "Math","2026-09-07","Big Sandy Public Schools",1
 "Math","2026-09-07","Billings Public Schools",1
 "Math","2026-09-07","Boulder Elementary",1
@@ -3490,7 +3486,7 @@
 "Math","2026-09-07","Sheridan Public Schools",1
 "Math","2026-09-08","Arlee Joint School District",1
 "Math","2026-09-08","Ashland Public School",1
-"Math","2026-09-08","Belgrade School District 44",2
+"Math","2026-09-08","Belgrade School District 44",1
 "Math","2026-09-08","Big Sandy Public Schools",1
 "Math","2026-09-08","Billings Public Schools",1
 "Math","2026-09-08","Boulder Elementary",1
@@ -3523,7 +3519,6 @@
 "Math","2026-09-08","Sheridan Public Schools",1
 "Math","2026-09-15","Arlee Joint School District",1
 "Math","2026-09-15","Ashland Public School",1
-"Math","2026-09-15","Belgrade School District 44",1
 "Math","2026-09-15","Big Sandy Public Schools",1
 "Math","2026-09-15","Billings Public Schools",1
 "Math","2026-09-15","Box Elder",1
@@ -3553,7 +3548,6 @@
 "Math","2026-09-15","Shields Valley Public Schools",1
 "Math","2026-09-22","Arlee Joint School District",1
 "Math","2026-09-22","Ashland Public School",1
-"Math","2026-09-22","Belgrade School District 44",1
 "Math","2026-09-22","Big Sandy Public Schools",1
 "Math","2026-09-22","Billings Public Schools",1
 "Math","2026-09-22","Box Elder",1
@@ -3581,7 +3575,6 @@
 "Math","2026-09-22","Shields Valley Public Schools",1
 "Math","2026-09-29","Arlee Joint School District",1
 "Math","2026-09-29","Ashland Public School",1
-"Math","2026-09-29","Belgrade School District 44",1
 "Math","2026-09-29","Big Sandy Public Schools",1
 "Math","2026-09-29","Billings Public Schools",1
 "Math","2026-09-29","Box Elder",1
@@ -3607,7 +3600,6 @@
 "Math","2026-09-29","Shields Valley Public Schools",1
 "Math","2026-10-06","Arlee Joint School District",1
 "Math","2026-10-06","Ashland Public School",1
-"Math","2026-10-06","Belgrade School District 44",1
 "Math","2026-10-06","Big Sandy Public Schools",1
 "Math","2026-10-06","Billings Public Schools",3
 "Math","2026-10-06","Box Elder",1
@@ -3633,7 +3625,6 @@
 "Math","2026-10-06","Shields Valley Public Schools",1
 "Math","2026-10-13","Arlee Joint School District",1
 "Math","2026-10-13","Ashland Public School",1
-"Math","2026-10-13","Belgrade School District 44",1
 "Math","2026-10-13","Big Sandy Public Schools",1
 "Math","2026-10-13","Billings Public Schools",3
 "Math","2026-10-13","Box Elder",1
@@ -3659,7 +3650,6 @@
 "Math","2026-10-13","Shields Valley Public Schools",1
 "Math","2026-10-20","Arlee Joint School District",1
 "Math","2026-10-20","Ashland Public School",1
-"Math","2026-10-20","Belgrade School District 44",1
 "Math","2026-10-20","Big Sandy Public Schools",1
 "Math","2026-10-20","Billings Public Schools",3
 "Math","2026-10-20","Box Elder",1
@@ -3685,7 +3675,6 @@
 "Math","2026-10-20","Shields Valley Public Schools",1
 "Math","2026-10-27","Arlee Joint School District",1
 "Math","2026-10-27","Ashland Public School",1
-"Math","2026-10-27","Belgrade School District 44",1
 "Math","2026-10-27","Billings Public Schools",3
 "Math","2026-10-27","Box Elder",1
 "Math","2026-10-27","Browning Public Schools",1
@@ -3707,7 +3696,6 @@
 "Math","2026-10-27","Scobey Schools",1
 "Math","2026-10-27","Sheridan Public Schools",1
 "Math","2026-10-27","Shields Valley Public Schools",1
-"Math","2026-11-03","Belgrade School District 44",1
 "Math","2026-11-03","Billings Public Schools",2
 "Math","2026-11-03","Box Elder Elem / Box Elder H S",1
 "Math","2026-11-03","Cascade Public Schools",1
@@ -3728,7 +3716,6 @@
 "Math","2026-11-03","Sheridan Public Schools",1
 "Math","2026-11-03","Shields Valley Public Schools",1
 "Math","2026-11-03","St Labre Indian H S",1
-"Math","2026-11-10","Belgrade School District 44",1
 "Math","2026-11-10","Billings Public Schools",2
 "Math","2026-11-10","Box Elder Elem / Box Elder H S",1
 "Math","2026-11-10","Cascade Public Schools",1
@@ -4210,7 +4197,6 @@
 "Music","2026-10-27","Westby School District 3",1
 "Music","2026-10-27","White Sulphur Springs Schools",1
 "Music","2026-10-27","Wolf Point Public Schools",1
-"Music","2026-11-03","Big Sandy Public Schools",1
 "Music","2026-11-03","Billings Public Schools",1
 "Music","2026-11-03","Blue Creek Elem",1
 "Music","2026-11-03","Custer Public Schools",1
@@ -4231,7 +4217,6 @@
 "Music","2026-11-03","Westby School District 3",1
 "Music","2026-11-03","White Sulphur Springs Schools",1
 "Music","2026-11-03","Wolf Point Public Schools",1
-"Music","2026-11-10","Big Sandy Public Schools",1
 "Music","2026-11-10","Blue Creek Elem",1
 "Music","2026-11-10","Custer Public Schools",1
 "Music","2026-11-10","Frazer Public Schools",1
@@ -6183,12 +6168,12 @@
 "CTE - Business & Family Sciences","2026-11-17","Total",15
 "CTE - Trades, Ag & Technical","2026-11-17","Total",20
 "Early Childhood","2026-11-17","Total",4
-"Elementary","2026-11-17","Total",77
-"English Language Arts Secondary","2026-11-17","Total",13
+"Elementary","2026-11-17","Total",76
+"English Language Arts Secondary","2026-11-17","Total",12
 "Language","2026-11-17","Total",9
 "Library Media","2026-11-17","Total",11
-"Math","2026-11-17","Total",21
-"Music","2026-11-17","Total",21
+"Math","2026-11-17","Total",20
+"Music","2026-11-17","Total",20
 "Other","2026-11-17","Total",23
 "Physical Education","2026-11-17","Total",19
 "Science","2026-11-17","Total",20
@@ -6285,7 +6270,6 @@
 "Elementary","2026-11-17","Shields Valley Public Schools",1
 "Elementary","2026-11-17","Sidney Public Schools",1
 "Elementary","2026-11-17","St Jude Thaddeus School",2
-"Elementary","2026-11-17","Sunburst Schools",1
 "Elementary","2026-11-17","Superior School District",1
 "Elementary","2026-11-17","Surprise Creek School",1
 "Elementary","2026-11-17","Swan Valley School District #3",1
@@ -6301,7 +6285,6 @@
 "English Language Arts Secondary","2026-11-17","Baker Public Schools",1
 "English Language Arts Secondary","2026-11-17","Browning Public Schools",1
 "English Language Arts Secondary","2026-11-17","Colstrip Public Schools",1
-"English Language Arts Secondary","2026-11-17","Corvallis School District #1",1
 "English Language Arts Secondary","2026-11-17","Gardiner Public Schools",1
 "English Language Arts Secondary","2026-11-17","Harlem Public Schools",1
 "English Language Arts Secondary","2026-11-17","Lame Deer Public Schools",1
@@ -6328,7 +6311,6 @@
 "Library Media","2026-11-17","Scobey Schools",1
 "Library Media","2026-11-17","Sidney Public Schools",1
 "Library Media","2026-11-17","Wolf Point Public Schools",2
-"Math","2026-11-17","Belgrade School District 44",1
 "Math","2026-11-17","Billings Public Schools",3
 "Math","2026-11-17","Box Elder Elem / Box Elder H S",1
 "Math","2026-11-17","Cascade Public Schools",1
@@ -6346,7 +6328,6 @@
 "Math","2026-11-17","Scobey Schools",1
 "Math","2026-11-17","Shields Valley Public Schools",1
 "Math","2026-11-17","St Labre Indian H S",1
-"Music","2026-11-17","Big Sandy Public Schools",1
 "Music","2026-11-17","Blue Creek Elem",1
 "Music","2026-11-17","Custer Public Schools",1
 "Music","2026-11-17","Frazer Public Schools",1
