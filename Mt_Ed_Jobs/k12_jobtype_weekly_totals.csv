@@ -1,237 +1,250 @@
 "Job_Type","Archive_Date","n","n_not_marked"
-"Teacher",2026-08-06,465,465
-"Support Services",2026-08-06,102,93
-"Athletics",2026-08-06,57,0
-"Paraprofessional",2026-08-06,45,45
-"Administration",2026-08-06,40,40
-"Substitute",2026-08-06,40,0
-"Custodial/Maintenance",2026-08-06,27,22
-"Other",2026-08-06,23,20
-"Staff",2026-08-06,16,16
-"Food Services",2026-08-06,10,10
-"Transportation",2026-08-06,8,7
-"Activities/Extracurricular",2026-08-06,7,0
-"Teacher",2026-08-07,474,474
-"Support Services",2026-08-07,108,99
-"Athletics",2026-08-07,77,0
-"Substitute",2026-08-07,61,0
-"Paraprofessional",2026-08-07,56,56
-"Administration",2026-08-07,42,42
-"Custodial/Maintenance",2026-08-07,41,31
-"Other",2026-08-07,24,21
-"Transportation",2026-08-07,19,17
-"Staff",2026-08-07,16,16
-"Food Services",2026-08-07,15,15
-"Activities/Extracurricular",2026-08-07,8,0
-"Teacher",2026-08-11,572,572
-"Support Services",2026-08-11,114,106
-"Athletics",2026-08-11,93,0
-"Paraprofessional",2026-08-11,70,69
-"Administration",2026-08-11,63,63
-"Substitute",2026-08-11,62,0
-"Custodial/Maintenance",2026-08-11,38,28
-"Other",2026-08-11,33,30
-"Transportation",2026-08-11,23,21
-"Food Services",2026-08-11,19,19
-"Staff",2026-08-11,14,14
-"Activities/Extracurricular",2026-08-11,10,0
-"Part-Time Teacher",2026-08-11,1,0
-"Teacher",2026-08-18,549,549
-"Support Services",2026-08-18,111,102
-"Athletics",2026-08-18,106,0
-"Paraprofessional",2026-08-18,69,68
-"Substitute",2026-08-18,62,0
-"Administration",2026-08-18,60,60
-"Custodial/Maintenance",2026-08-18,38,28
-"Other",2026-08-18,33,30
-"Transportation",2026-08-18,25,23
-"Food Services",2026-08-18,19,19
-"Staff",2026-08-18,12,12
-"Activities/Extracurricular",2026-08-18,11,0
-"Part-Time Teacher",2026-08-18,1,0
-"Teacher",2026-08-25,533,533
-"Athletics",2026-08-25,131,0
-"Substitute",2026-08-25,117,0
-"Support Services",2026-08-25,109,100
-"Paraprofessional",2026-08-25,101,99
-"Custodial/Maintenance",2026-08-25,54,45
-"Administration",2026-08-25,53,53
-"Transportation",2026-08-25,46,43
-"Other",2026-08-25,32,29
-"Food Services",2026-08-25,28,26
-"Activities/Extracurricular",2026-08-25,15,0
-"Staff",2026-08-25,12,12
-"Part-Time Teacher",2026-08-25,8,0
-"Teacher",2026-09-01,505,503
-"Substitute",2026-09-01,169,0
-"Athletics",2026-09-01,151,0
-"Paraprofessional",2026-09-01,116,114
-"Support Services",2026-09-01,113,104
-"Custodial/Maintenance",2026-09-01,69,60
-"Transportation",2026-09-01,61,58
-"Administration",2026-09-01,53,53
-"Other",2026-09-01,37,35
-"Food Services",2026-09-01,32,29
-"Activities/Extracurricular",2026-09-01,20,0
-"Staff",2026-09-01,17,17
-"Part-Time Teacher",2026-09-01,8,0
-"Child Care",2026-09-01,2,2
-"Teacher",2026-09-07,497,495
-"Substitute",2026-09-07,180,0
-"Athletics",2026-09-07,157,0
-"Support Services",2026-09-07,118,109
-"Paraprofessional",2026-09-07,107,104
-"Custodial/Maintenance",2026-09-07,73,64
-"Transportation",2026-09-07,65,63
-"Administration",2026-09-07,53,53
-"Other",2026-09-07,40,38
-"Food Services",2026-09-07,32,31
-"Activities/Extracurricular",2026-09-07,23,0
-"Staff",2026-09-07,16,15
-"Part-Time Teacher",2026-09-07,5,0
-"Child Care",2026-09-07,2,2
-"Teacher",2026-09-08,493,491
-"Substitute",2026-09-08,179,0
-"Athletics",2026-09-08,159,0
-"Support Services",2026-09-08,118,109
-"Paraprofessional",2026-09-08,107,104
-"Custodial/Maintenance",2026-09-08,71,63
-"Transportation",2026-09-08,65,63
-"Administration",2026-09-08,54,54
-"Other",2026-09-08,43,41
-"Food Services",2026-09-08,34,33
-"Activities/Extracurricular",2026-09-08,23,0
-"Staff",2026-09-08,16,15
-"Part-Time Teacher",2026-09-08,5,0
-"Child Care",2026-09-08,2,2
-"Teacher",2026-09-15,453,451
-"Athletics",2026-09-15,181,0
-"Substitute",2026-09-15,179,0
-"Support Services",2026-09-15,120,109
-"Paraprofessional",2026-09-15,113,109
-"Custodial/Maintenance",2026-09-15,72,65
-"Transportation",2026-09-15,66,64
-"Administration",2026-09-15,56,56
-"Other",2026-09-15,41,39
-"Food Services",2026-09-15,31,30
-"Activities/Extracurricular",2026-09-15,23,0
-"Staff",2026-09-15,13,12
-"Part-Time Teacher",2026-09-15,5,0
-"Child Care",2026-09-15,2,2
-"Teacher",2026-09-22,439,437
-"Substitute",2026-09-22,182,0
-"Athletics",2026-09-22,181,0
-"Support Services",2026-09-22,113,104
-"Paraprofessional",2026-09-22,110,105
-"Custodial/Maintenance",2026-09-22,66,59
-"Transportation",2026-09-22,64,62
-"Administration",2026-09-22,56,55
-"Other",2026-09-22,42,40
-"Food Services",2026-09-22,29,28
-"Activities/Extracurricular",2026-09-22,20,0
-"Staff",2026-09-22,9,8
-"Part-Time Teacher",2026-09-22,5,0
-"Teacher",2026-09-29,422,420
-"Athletics",2026-09-29,185,0
-"Substitute",2026-09-29,184,0
-"Support Services",2026-09-29,120,111
-"Paraprofessional",2026-09-29,108,104
-"Transportation",2026-09-29,68,66
-"Custodial/Maintenance",2026-09-29,66,60
-"Administration",2026-09-29,52,52
-"Other",2026-09-29,41,39
-"Food Services",2026-09-29,28,27
-"Activities/Extracurricular",2026-09-29,18,0
-"Staff",2026-09-29,9,9
-"Part-Time Teacher",2026-09-29,5,0
-"Teacher",2026-10-06,417,415
-"Substitute",2026-10-06,187,0
-"Athletics",2026-10-06,174,0
-"Support Services",2026-10-06,118,109
-"Paraprofessional",2026-10-06,107,104
-"Transportation",2026-10-06,68,66
-"Custodial/Maintenance",2026-10-06,62,56
-"Administration",2026-10-06,50,50
-"Other",2026-10-06,37,35
-"Food Services",2026-10-06,30,29
-"Activities/Extracurricular",2026-10-06,20,0
-"Staff",2026-10-06,8,8
-"Part-Time Teacher",2026-10-06,5,0
-"Teacher",2026-10-13,406,404
-"Substitute",2026-10-13,188,0
-"Athletics",2026-10-13,162,0
-"Support Services",2026-10-13,111,102
-"Paraprofessional",2026-10-13,102,99
-"Transportation",2026-10-13,71,69
-"Custodial/Maintenance",2026-10-13,61,55
-"Administration",2026-10-13,46,45
-"Other",2026-10-13,34,32
-"Food Services",2026-10-13,29,27
-"Activities/Extracurricular",2026-10-13,19,0
-"Staff",2026-10-13,8,8
-"Part-Time Teacher",2026-10-13,5,0
-"Teacher",2026-10-20,395,393
-"Substitute",2026-10-20,188,0
-"Athletics",2026-10-20,158,0
-"Support Services",2026-10-20,112,103
-"Paraprofessional",2026-10-20,98,95
-"Transportation",2026-10-20,71,69
-"Custodial/Maintenance",2026-10-20,60,55
-"Administration",2026-10-20,47,46
-"Other",2026-10-20,35,33
-"Food Services",2026-10-20,31,29
-"Activities/Extracurricular",2026-10-20,17,0
-"Staff",2026-10-20,11,11
-"Part-Time Teacher",2026-10-20,5,0
-"Teacher",2026-10-27,410,407
-"Substitute",2026-10-27,226,0
-"Athletics",2026-10-27,183,0
-"Support Services",2026-10-27,113,104
-"Paraprofessional",2026-10-27,112,108
-"Transportation",2026-10-27,84,82
-"Custodial/Maintenance",2026-10-27,74,68
-"Administration",2026-10-27,44,44
-"Food Services",2026-10-27,36,34
-"Other",2026-10-27,33,31
-"Staff",2026-10-27,22,22
-"Activities/Extracurricular",2026-10-27,14,0
-"Part-Time Teacher",2026-10-27,5,0
-"Teacher",2026-11-03,354,351
-"Substitute",2026-11-03,255,0
-"Athletics",2026-11-03,198,0
-"Paraprofessional",2026-11-03,136,130
-"Support Services",2026-11-03,124,115
-"Transportation",2026-11-03,91,89
-"Custodial/Maintenance",2026-11-03,79,70
-"Food Services",2026-11-03,37,35
-"Administration",2026-11-03,35,35
-"Other",2026-11-03,21,19
-"Staff",2026-11-03,19,19
-"Activities/Extracurricular",2026-11-03,16,0
-"Part-Time Teacher",2026-11-03,15,0
-"Teacher",2026-11-10,345,342
-"Substitute",2026-11-10,255,0
-"Athletics",2026-11-10,192,0
-"Paraprofessional",2026-11-10,139,130
-"Support Services",2026-11-10,123,114
-"Transportation",2026-11-10,91,90
-"Custodial/Maintenance",2026-11-10,78,68
-"Administration",2026-11-10,42,42
-"Food Services",2026-11-10,38,36
-"Other",2026-11-10,24,22
-"Staff",2026-11-10,16,16
-"Part-Time Teacher",2026-11-10,14,0
-"Activities/Extracurricular",2026-11-10,12,0
-"Teacher",2026-11-17,336,333
-"Substitute",2026-11-17,267,0
-"Athletics",2026-11-17,186,0
-"Paraprofessional",2026-11-17,141,132
-"Support Services",2026-11-17,126,114
-"Transportation",2026-11-17,95,94
-"Custodial/Maintenance",2026-11-17,83,73
-"Administration",2026-11-17,41,41
-"Food Services",2026-11-17,36,34
-"Other",2026-11-17,21,19
-"Staff",2026-11-17,15,15
-"Part-Time Teacher",2026-11-17,14,0
-"Activities/Extracurricular",2026-11-17,13,0
+"Teacher","2026-08-06",465,465
+"Support Services","2026-08-06",102,93
+"Athletics","2026-08-06",57,0
+"Paraprofessional","2026-08-06",45,45
+"Administration","2026-08-06",40,40
+"Substitute","2026-08-06",40,0
+"Custodial/Maintenance","2026-08-06",27,22
+"Other","2026-08-06",23,20
+"Staff","2026-08-06",16,16
+"Food Services","2026-08-06",10,10
+"Transportation","2026-08-06",8,7
+"Activities/Extracurricular","2026-08-06",7,0
+"Teacher","2026-08-07",474,474
+"Support Services","2026-08-07",108,99
+"Athletics","2026-08-07",77,0
+"Substitute","2026-08-07",61,0
+"Paraprofessional","2026-08-07",56,56
+"Administration","2026-08-07",42,42
+"Custodial/Maintenance","2026-08-07",41,31
+"Other","2026-08-07",24,21
+"Transportation","2026-08-07",19,17
+"Staff","2026-08-07",16,16
+"Food Services","2026-08-07",15,15
+"Activities/Extracurricular","2026-08-07",8,0
+"Teacher","2026-08-11",572,572
+"Support Services","2026-08-11",114,106
+"Athletics","2026-08-11",93,0
+"Paraprofessional","2026-08-11",70,69
+"Administration","2026-08-11",63,63
+"Substitute","2026-08-11",62,0
+"Custodial/Maintenance","2026-08-11",38,28
+"Other","2026-08-11",33,30
+"Transportation","2026-08-11",23,21
+"Food Services","2026-08-11",19,19
+"Staff","2026-08-11",14,14
+"Activities/Extracurricular","2026-08-11",10,0
+"Part-Time Teacher","2026-08-11",1,0
+"Teacher","2026-08-18",549,549
+"Support Services","2026-08-18",111,102
+"Athletics","2026-08-18",106,0
+"Paraprofessional","2026-08-18",69,68
+"Substitute","2026-08-18",62,0
+"Administration","2026-08-18",60,60
+"Custodial/Maintenance","2026-08-18",38,28
+"Other","2026-08-18",33,30
+"Transportation","2026-08-18",25,23
+"Food Services","2026-08-18",19,19
+"Staff","2026-08-18",12,12
+"Activities/Extracurricular","2026-08-18",11,0
+"Part-Time Teacher","2026-08-18",1,0
+"Teacher","2026-08-25",533,533
+"Athletics","2026-08-25",131,0
+"Substitute","2026-08-25",117,0
+"Support Services","2026-08-25",109,100
+"Paraprofessional","2026-08-25",101,99
+"Custodial/Maintenance","2026-08-25",54,45
+"Administration","2026-08-25",53,53
+"Transportation","2026-08-25",46,43
+"Other","2026-08-25",32,29
+"Food Services","2026-08-25",28,26
+"Activities/Extracurricular","2026-08-25",15,0
+"Staff","2026-08-25",12,12
+"Part-Time Teacher","2026-08-25",8,0
+"Teacher","2026-09-01",505,503
+"Substitute","2026-09-01",169,0
+"Athletics","2026-09-01",151,0
+"Paraprofessional","2026-09-01",116,114
+"Support Services","2026-09-01",113,104
+"Custodial/Maintenance","2026-09-01",69,60
+"Transportation","2026-09-01",61,58
+"Administration","2026-09-01",53,53
+"Other","2026-09-01",37,35
+"Food Services","2026-09-01",32,29
+"Activities/Extracurricular","2026-09-01",20,0
+"Staff","2026-09-01",17,17
+"Part-Time Teacher","2026-09-01",8,0
+"Child Care","2026-09-01",2,2
+"Teacher","2026-09-07",497,495
+"Substitute","2026-09-07",180,0
+"Athletics","2026-09-07",157,0
+"Support Services","2026-09-07",118,109
+"Paraprofessional","2026-09-07",107,104
+"Custodial/Maintenance","2026-09-07",73,64
+"Transportation","2026-09-07",65,63
+"Administration","2026-09-07",53,53
+"Other","2026-09-07",40,38
+"Food Services","2026-09-07",32,31
+"Activities/Extracurricular","2026-09-07",23,0
+"Staff","2026-09-07",16,15
+"Part-Time Teacher","2026-09-07",5,0
+"Child Care","2026-09-07",2,2
+"Teacher","2026-09-08",493,491
+"Substitute","2026-09-08",179,0
+"Athletics","2026-09-08",159,0
+"Support Services","2026-09-08",118,109
+"Paraprofessional","2026-09-08",107,104
+"Custodial/Maintenance","2026-09-08",71,63
+"Transportation","2026-09-08",65,63
+"Administration","2026-09-08",54,54
+"Other","2026-09-08",43,41
+"Food Services","2026-09-08",34,33
+"Activities/Extracurricular","2026-09-08",23,0
+"Staff","2026-09-08",16,15
+"Part-Time Teacher","2026-09-08",5,0
+"Child Care","2026-09-08",2,2
+"Teacher","2026-09-15",453,451
+"Athletics","2026-09-15",181,0
+"Substitute","2026-09-15",179,0
+"Support Services","2026-09-15",120,109
+"Paraprofessional","2026-09-15",113,109
+"Custodial/Maintenance","2026-09-15",72,65
+"Transportation","2026-09-15",66,64
+"Administration","2026-09-15",56,56
+"Other","2026-09-15",41,39
+"Food Services","2026-09-15",31,30
+"Activities/Extracurricular","2026-09-15",23,0
+"Staff","2026-09-15",13,12
+"Part-Time Teacher","2026-09-15",5,0
+"Child Care","2026-09-15",2,2
+"Teacher","2026-09-22",439,437
+"Substitute","2026-09-22",182,0
+"Athletics","2026-09-22",181,0
+"Support Services","2026-09-22",113,104
+"Paraprofessional","2026-09-22",110,105
+"Custodial/Maintenance","2026-09-22",66,59
+"Transportation","2026-09-22",64,62
+"Administration","2026-09-22",56,55
+"Other","2026-09-22",42,40
+"Food Services","2026-09-22",29,28
+"Activities/Extracurricular","2026-09-22",20,0
+"Staff","2026-09-22",9,8
+"Part-Time Teacher","2026-09-22",5,0
+"Teacher","2026-09-29",422,420
+"Athletics","2026-09-29",185,0
+"Substitute","2026-09-29",184,0
+"Support Services","2026-09-29",120,111
+"Paraprofessional","2026-09-29",108,104
+"Transportation","2026-09-29",68,66
+"Custodial/Maintenance","2026-09-29",66,60
+"Administration","2026-09-29",52,52
+"Other","2026-09-29",41,39
+"Food Services","2026-09-29",28,27
+"Activities/Extracurricular","2026-09-29",18,0
+"Staff","2026-09-29",9,9
+"Part-Time Teacher","2026-09-29",5,0
+"Teacher","2026-10-06",417,415
+"Substitute","2026-10-06",187,0
+"Athletics","2026-10-06",174,0
+"Support Services","2026-10-06",118,109
+"Paraprofessional","2026-10-06",107,104
+"Transportation","2026-10-06",68,66
+"Custodial/Maintenance","2026-10-06",62,56
+"Administration","2026-10-06",50,50
+"Other","2026-10-06",37,35
+"Food Services","2026-10-06",30,29
+"Activities/Extracurricular","2026-10-06",20,0
+"Staff","2026-10-06",8,8
+"Part-Time Teacher","2026-10-06",5,0
+"Teacher","2026-10-13",406,404
+"Substitute","2026-10-13",188,0
+"Athletics","2026-10-13",162,0
+"Support Services","2026-10-13",111,102
+"Paraprofessional","2026-10-13",102,99
+"Transportation","2026-10-13",71,69
+"Custodial/Maintenance","2026-10-13",61,55
+"Administration","2026-10-13",46,45
+"Other","2026-10-13",34,32
+"Food Services","2026-10-13",29,27
+"Activities/Extracurricular","2026-10-13",19,0
+"Staff","2026-10-13",8,8
+"Part-Time Teacher","2026-10-13",5,0
+"Teacher","2026-10-20",395,393
+"Substitute","2026-10-20",188,0
+"Athletics","2026-10-20",158,0
+"Support Services","2026-10-20",112,103
+"Paraprofessional","2026-10-20",98,95
+"Transportation","2026-10-20",71,69
+"Custodial/Maintenance","2026-10-20",60,55
+"Administration","2026-10-20",47,46
+"Other","2026-10-20",35,33
+"Food Services","2026-10-20",31,29
+"Activities/Extracurricular","2026-10-20",17,0
+"Staff","2026-10-20",11,11
+"Part-Time Teacher","2026-10-20",5,0
+"Teacher","2026-10-27",410,407
+"Substitute","2026-10-27",226,0
+"Athletics","2026-10-27",183,0
+"Support Services","2026-10-27",113,104
+"Paraprofessional","2026-10-27",112,108
+"Transportation","2026-10-27",84,82
+"Custodial/Maintenance","2026-10-27",74,68
+"Administration","2026-10-27",44,44
+"Food Services","2026-10-27",36,34
+"Other","2026-10-27",33,31
+"Staff","2026-10-27",22,22
+"Activities/Extracurricular","2026-10-27",14,0
+"Part-Time Teacher","2026-10-27",5,0
+"Teacher","2026-11-03",354,351
+"Substitute","2026-11-03",255,0
+"Athletics","2026-11-03",198,0
+"Paraprofessional","2026-11-03",136,130
+"Support Services","2026-11-03",124,115
+"Transportation","2026-11-03",91,89
+"Custodial/Maintenance","2026-11-03",79,70
+"Food Services","2026-11-03",37,35
+"Administration","2026-11-03",35,35
+"Other","2026-11-03",21,19
+"Staff","2026-11-03",19,19
+"Activities/Extracurricular","2026-11-03",16,0
+"Part-Time Teacher","2026-11-03",15,0
+"Teacher","2026-11-10",345,342
+"Substitute","2026-11-10",255,0
+"Athletics","2026-11-10",192,0
+"Paraprofessional","2026-11-10",139,130
+"Support Services","2026-11-10",123,114
+"Transportation","2026-11-10",91,90
+"Custodial/Maintenance","2026-11-10",78,68
+"Administration","2026-11-10",42,42
+"Food Services","2026-11-10",38,36
+"Other","2026-11-10",24,22
+"Staff","2026-11-10",16,16
+"Part-Time Teacher","2026-11-10",14,0
+"Activities/Extracurricular","2026-11-10",12,0
+"Teacher","2026-11-17",336,333
+"Substitute","2026-11-17",267,0
+"Athletics","2026-11-17",186,0
+"Paraprofessional","2026-11-17",141,132
+"Support Services","2026-11-17",126,114
+"Transportation","2026-11-17",95,94
+"Custodial/Maintenance","2026-11-17",83,73
+"Administration","2026-11-17",41,41
+"Food Services","2026-11-17",36,34
+"Other","2026-11-17",21,19
+"Staff","2026-11-17",15,15
+"Part-Time Teacher","2026-11-17",14,0
+"Activities/Extracurricular","2026-11-17",13,0
+"Activities/Extracurricular","2026-11-19",13,0
+"Administration","2026-11-19",40,40
+"Athletics","2026-11-19",184,0
+"Custodial/Maintenance","2026-11-19",81,71
+"Food Services","2026-11-19",40,37
+"Other","2026-11-19",21,19
+"Paraprofessional","2026-11-19",142,133
+"Part-Time Teacher","2026-11-19",14,0
+"Staff","2026-11-19",13,13
+"Substitute","2026-11-19",267,0
+"Support Services","2026-11-19",125,113
+"Teacher","2026-11-19",336,333
+"Transportation","2026-11-19",96,95
