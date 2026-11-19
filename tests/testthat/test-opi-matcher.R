@@ -36,6 +36,24 @@ test_that("missed duplicates and false matches stay at or below the shipped leve
   expect_gte(sum(nzchar(e) & got == e), 77)
 })
 
+# week1110: the 2026-11-10 run's new decisions, judged by hand
+# (claude-notes/2026-11-10_opi-matcher-11-10-check.md): the new OPI postings, the
+# 3 matches new that week, the 5 whose board twin was gone, and Manhattan's ASL
+# intervener (a wrong match on 11-10, fixed the same day by reading the level from
+# the school field). Anaconda's SPED posting is labeled the same opening as the
+# board's (Mike, 2026-11-19: the board's SPED vacancy was reposted from July on).
+# Run against that week's whole-state boards; every label must hold.
+test_that("week1110: every hand-judged 2026-11-10 decision holds", {
+  labels10 <- read.csv(test_path("fixtures", "opi_match_labels_2026-11-10.csv"), stringsAsFactors = FALSE)
+  boards10 <- read.csv(test_path("fixtures", "opi_match_boards_2026-11-10.csv"), stringsAsFactors = FALSE)
+  labels10[is.na(labels10)] <- ""
+  m <- match_opi_postings(transform(labels10, title = OPI_Title), labels10$District, boards10)
+  got <- ifelse(is.na(m), "", boards10$title[m])
+  bad <- got != labels10$Expected_Match
+  expect_equal(sum(bad), 0, info = paste(labels10$District[bad], labels10$OPI_Title[bad], "->", got[bad],
+                                         "expected", labels10$Expected_Match[bad], collapse = "; "))
+})
+
 test_that("the job phrase skips boilerplate and names the job", {
   libby <- opi_job_phrase("Coaching Opportunities Available NATURE OF POSITION The Special Education Teacher shall be responsible")
   expect_false(grepl("(?i)coach", libby, perl = TRUE))
