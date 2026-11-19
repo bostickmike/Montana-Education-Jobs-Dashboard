@@ -1280,14 +1280,6 @@ ui <- page_navbar(
     ),
     nav_panel(
       "Trends", value = "k12_trends", icon = icon("chart-line"),
-      # Method note (2026-11-03): how OPI postings are de-duplicated against
-      # district boards (opi_reconcile.R, scripts/reconcile_opi_history.R).
-      div(class = "alert alert-info small mb-2", role = "note",
-          tags$strong("How postings are counted: "),
-          "a job listed on both a district's own board and Montana OPI's statewide board counts once. ",
-          "Since November 3, 2026 each OPI posting is checked against the district's board using its description; ",
-          "earlier weeks were recomputed the same way but from OPI's subject titles alone, so they may include roughly 30 ",
-          "postings a week that OPI listed twice."),
       navset_card_tab(
         id = "k12_trends_tabs",
         nav_panel(
@@ -1359,7 +1351,17 @@ ui <- page_navbar(
               timeFormat = "%Y-%m-%d",
               width = "100%"
             ),
-            withSpinner(plotlyOutput("k12_longitudinal_plot"))
+            withSpinner(plotlyOutput("k12_longitudinal_plot")),
+            # Method note (2026-11-03): how OPI postings are de-duplicated against
+            # district boards (opi_reconcile.R, scripts/reconcile_opi_history.R).
+            # Below the multi-year chart since 2026-11-17 (Mike): it explains the
+            # chart's earlier weeks.
+            div(class = "alert alert-info small mt-3 mb-0", role = "note",
+                tags$strong("How postings are counted: "),
+                "a job listed on both a district's own board and Montana OPI's statewide board counts once. ",
+                "Since November 3, 2026 each OPI posting is checked against the district's board using its description; ",
+                "earlier weeks were recomputed the same way but from OPI's subject titles alone, so they may include roughly 30 ",
+                "postings a week that OPI listed twice.")
           )
         )
       )

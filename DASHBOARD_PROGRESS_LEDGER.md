@@ -1162,6 +1162,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-17_rehearsal-mt-pin-0.40.0.log`): every step passed but the pre-run suite's app boot
     smoke test (1 failure, Chrome timing while the render ran; 21/21 alone after); post-run suite 3,229 passed, 0
     failed; OPI statewide 333 postings; K-12 rows 1,374 -> 1,372.
+  * [x] "How postings are counted" note moved from the top of the K-12 Trends tab to just below the Multi-Year Trends
+    chart (2026-11-17, Mike; branch `counting-note-placement`), text unchanged. Checked by screenshot
+    (`claude-notes/2026-11-17_counting-note/`); app smoke 21 and reactives 718 passed, 0 failed.
   * [x] Home: top job types, pin edjobs 0.41.0 (2026-11-18; branch `home-job-types`; plan
     `claude-notes/2026-11-17_home-job-types-plan.md`, flag rules `claude-notes/2026-11-18_not-full-time/`). The
     vacancy-rate plots, the biggest-mover boxes and their footnote are gone from Home; "Top K-12 / Higher Ed Job
