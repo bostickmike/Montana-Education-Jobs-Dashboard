@@ -2325,39 +2325,22 @@ source("opi_finance_scraper.R")
 # a failed fetch leaves the file untouched. County names follow state_config(county_suffix = ).
 county_context <- refresh_county_context("salarymap2.csv", "Census ACS county context (MT)")
 
-child_poverty <- safe_scrape(
-  "Census SAIPE district child poverty rate (MT)", retrieved_source = "Census SAIPE", app_dir = "Mt_Ed_Jobs",
-  scrape_fn = function() fetch_census_saipe_child_poverty(crosswalk_leaids(district_crosswalk)),   # edjobs: by NCES id, pairs pooled
-  expected_cols = c("District", "Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population")
-)
+# edjobs::refresh_file_columns() (0.49.0): fetch, swap the SAIPE columns by District, then Census's approximate 90%
+# range from the district's size (add_saipe_range(); Mike, 2026-11-15). A failed fetch leaves the file alone.
+refresh_file_columns("salarymap2.csv", "Census SAIPE district child poverty rate (MT)",
+                     fetch = function() fetch_census_saipe_child_poverty(crosswalk_leaids(district_crosswalk)),   # by NCES id, pairs pooled
+                     expected_cols = c("District", "Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population"), by = "District",
+                     replace = c("Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High"),
+                     retrieved_source = "Census SAIPE", then = add_saipe_range)
 
-if (nrow(child_poverty) > 0) {
-  salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
-    select(-any_of(c("Child_Poverty_Rate", "SAIPE_Year", "SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High"))) %>%
-    left_join(child_poverty, by = "District") %>%
-    add_saipe_range()   # edjobs: Census's approximate 90% range from the district's size (Mike, 2026-11-15)
-  write.csv(salarymap2, salarymap2_path, row.names = FALSE)
-} else {
-  message("Census SAIPE child poverty fetch failed -- leaving salarymap2.csv untouched this run.")
-}
-
-district_finance <- safe_scrape(
-  "OPI per-district General Fund expenditures (MT)", retrieved_source = "OPI finance", app_dir = "Mt_Ed_Jobs",
-  scrape_fn = function() fetch_opi_district_expenditures(
-    lea_map = crosswalk_lea_names(district_crosswalk, MT_OPI_FINANCE_LEA_MAP),
-    county_map = crosswalk_counties(district_crosswalk)),
-  expected_cols = c("District", "Total_General_Fund_Expenditure", "Finance_FY")
-)
-
-if (nrow(district_finance) > 0) {
-  salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
-    select(-any_of(c("Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"))) %>%
-    left_join(district_finance, by = "District") %>%
-    mutate(Finance_Source = "OPI School Finance Data Files (opi.mt.gov/Leadership/Finance-Grants/School-Finance/OPI-Financial-Data-Files)")
-  write.csv(salarymap2, salarymap2_path, row.names = FALSE)
-} else {
-  message("OPI district finance fetch failed -- leaving salarymap2.csv untouched this run.")
-}
+refresh_file_columns("salarymap2.csv", "OPI per-district General Fund expenditures (MT)",
+                     fetch = function() fetch_opi_district_expenditures(
+                       lea_map = crosswalk_lea_names(district_crosswalk, MT_OPI_FINANCE_LEA_MAP),
+                       county_map = crosswalk_counties(district_crosswalk)),
+                     expected_cols = c("District", "Total_General_Fund_Expenditure", "Finance_FY"), by = "District",
+                     replace = c("Total_General_Fund_Expenditure", "Finance_FY", "Finance_Source"),
+                     retrieved_source = "OPI finance",
+                     then = function(d) dplyr::mutate(d, Finance_Source = "OPI School Finance Data Files (opi.mt.gov/Leadership/Finance-Grants/School-Finance/OPI-Financial-Data-Files)"))
 
 # Free/reduced-price lunch share beside SAIPE's child poverty rate, for every
 # map entity at once: registry districts (crosswalk LEAIDs; a district the
@@ -2371,19 +2354,11 @@ frl_ids[untied] <- as.list(as.character(frl_registry$NCES_LEAID[match(untied, fr
 opi_only_xw <- district_crosswalk[is.na(district_crosswalk$Registry_District), , drop = FALSE]
 frl_ids <- c(frl_ids, lapply(split(as.character(opi_only_xw$LEAID), opi_only_xw$Map_Entity), unique))
 frl_ids <- frl_ids[!vapply(frl_ids, function(x) all(is.na(x)), logical(1))]
-frl_all <- safe_scrape(
-  "CCD free/reduced-price lunch share (MT)", retrieved_source = "Urban CCD", app_dir = "Mt_Ed_Jobs",
-  scrape_fn = function() fetch_ccd_frl_share(30, frl_ids),
-  expected_cols = c("District", "Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year")
-)
-if (nrow(frl_all) > 0) {
-  salarymap2 <- read.csv(salarymap2_path, fileEncoding = "UTF-8") %>%
-    select(-any_of(c("Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year"))) %>%
-    left_join(frl_all, by = "District", relationship = "many-to-one")
-  write.csv(salarymap2, salarymap2_path, row.names = FALSE)
-} else {
-  message("CCD free/reduced lunch fetch failed -- leaving salarymap2.csv's lunch columns untouched this run.")
-}
+# The fetched table stays in frl_all: the OPI-only districts chunk below joins it too.
+frl_all <- refresh_file_columns("salarymap2.csv", "CCD free/reduced-price lunch share (MT)",
+                     fetch = function() fetch_ccd_frl_share(30, frl_ids),
+                     expected_cols = c("District", "Free_Reduced_Lunch_Share", "FRL_Schools_Reporting", "FRL_Year"),
+                     by = "District", retrieved_source = "Urban CCD", relationship = "many-to-one")
 ```
 
 ### K-12 districts we don't scrape that post on OPI (map entities with context)
@@ -2938,24 +2913,6 @@ local({
            error = function(e) log_reference_result(staff_path, "error", conditionMessage(e)))
 })
 
-he_enrollment <- safe_scrape(
-  "IPEDS fall enrollment FTE (MT)", retrieved_source = "Urban IPEDS", app_dir = "Mt_Ed_Jobs",
-  scrape_fn = function() fetch_ipeds_he_enrollment(IPEDS_UNITID_MAP),
-  expected_cols = c("Name", "Enrollment", "Enrollment_Year")
-)
-
-he_enrollment_trend <- safe_scrape(
-  "IPEDS fall enrollment 5-year trend (MT)", retrieved_source = "Urban IPEDS", app_dir = "Mt_Ed_Jobs",
-  scrape_fn = function() fetch_ipeds_he_enrollment_trend(IPEDS_UNITID_MAP),
-  expected_cols = c("Name", "Enrollment_Change_Pct")
-)
-
-he_pell_share <- safe_scrape(
-  "FSA Pell Grant recipient share (MT)", retrieved_source = "Urban FSA", app_dir = "Mt_Ed_Jobs",
-  scrape_fn = function() fetch_ipeds_he_pell_share(IPEDS_UNITID_MAP),
-  expected_cols = c("Name", "Pell_Recipient_Share", "Pell_Year")
-)
-
 # Static geo/link fields (Name/County/Latitude/Longitude/Link) come from
 # he_institution_registry.csv, the same "read salarymap.csv back first if
 # it exists, don't blank out a failed fetch's columns" pattern
@@ -3006,31 +2963,19 @@ if (nrow(he_salary) > 0) {
   message("IPEDS salary fetch failed -- leaving salarymap.csv's salary columns untouched this run.")
 }
 
-if (nrow(he_enrollment) > 0) {
-  salarymap <- salarymap %>%
-    select(-any_of(c("Enrollment", "Enrollment_Year"))) %>%
-    left_join(he_enrollment, by = "Name")
-} else {
-  message("IPEDS fall enrollment fetch failed -- leaving salarymap.csv's Enrollment untouched this run.")
-}
-
-if (nrow(he_enrollment_trend) > 0) {
-  salarymap <- salarymap %>%
-    select(-any_of("Enrollment_Change_Pct")) %>%
-    left_join(he_enrollment_trend, by = "Name")
-} else {
-  message("IPEDS fall enrollment trend fetch failed -- leaving salarymap.csv's Enrollment_Change_Pct untouched this run.")
-}
-
-if (nrow(he_pell_share) > 0) {
-  salarymap <- salarymap %>%
-    select(-any_of(c("Pell_Recipient_Share", "Pell_Year"))) %>%
-    left_join(he_pell_share, by = "Name")
-} else {
-  message("FSA Pell Grant recipient share fetch failed -- leaving salarymap.csv's Pell columns untouched this run.")
-}
-
 write.csv(salarymap, salarymap_path, row.names = FALSE)
+
+# edjobs::refresh_file_columns() (0.48.0): fetch through safe_scrape(); on rows, swap these columns in salarymap.csv
+# by Name; a failed fetch leaves the file (and last week's values) alone.
+refresh_file_columns("salarymap.csv", "IPEDS fall enrollment FTE (MT)",
+                     fetch = function() fetch_ipeds_he_enrollment(IPEDS_UNITID_MAP),
+                     expected_cols = c("Name", "Enrollment", "Enrollment_Year"), by = "Name", retrieved_source = "Urban IPEDS")
+refresh_file_columns("salarymap.csv", "IPEDS fall enrollment 5-year trend (MT)",
+                     fetch = function() fetch_ipeds_he_enrollment_trend(IPEDS_UNITID_MAP),
+                     expected_cols = c("Name", "Enrollment_Change_Pct"), by = "Name", retrieved_source = "Urban IPEDS")
+refresh_file_columns("salarymap.csv", "FSA Pell Grant recipient share (MT)",
+                     fetch = function() fetch_ipeds_he_pell_share(IPEDS_UNITID_MAP),
+                     expected_cols = c("Name", "Pell_Recipient_Share", "Pell_Year"), by = "Name", retrieved_source = "Urban FSA")
 ```
 
 ### HE institution county-level context (income, rent, mining/energy employment share, population trend), from the Census Bureau

@@ -1236,6 +1236,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     run's 1,170 direct rows; recomputing the run from them gives its decisions except Manhattan, which the 0911e70 fix
     changed). New test in `test-opi-matcher.R`: every label holds (passes). 8 postings the 11-10 note never judged
     (Monforton, Malta, Colstrip K-8, Three Forks, Helena, Big Timber, Poplar, Rocky Boy) are left out.
+  * [x] Pin edjobs 0.49.0: pipeline stages, slices 2 and 3 (2026-11-19; branch `stage-columns`, replaces the 0.47.0 pin).
+    Six fetch-then-swap-columns blocks are now `refresh_file_columns()` calls (edjobs 0.48.0/0.49.0; review step 5):
+    the HE chunk's IPEDS enrollment, 5-year enrollment trend and FSA Pell share (the chunk now writes salarymap.csv
+    after its salary part and each refresh reads, swaps and writes), and the K-12 chunk's SAIPE child poverty (with
+    `add_saipe_range()` as its `then` step), OPI district finance (its `Finance_Source` label as `then`) and CCD
+    free/reduced lunch (`relationship = "many-to-one"`; the fetched table stays in `frl_all` for the OPI-only
+    districts chunk). `test-pipeline-defensiveness.R` counts `refresh_file_columns()` / `refresh_county_context()`
+    as guards (they run their fetch through `safe_scrape()`). manifest.json's edjobs entry is from a pak install of
+    the `v0.49.0` tag. Full rehearsal (`claude-notes/2026-11-19_rehearsal-mt-stage-columns-0.49.0.log`): every step
+    passed (data quality 125/0); the rehearsed salarymap.csv (23 rows) and salarymap2.csv (201 rows) equal the
+    committed files in every column.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
