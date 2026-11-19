@@ -1264,6 +1264,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Full rehearsal (`claude-notes/2026-11-19_rehearsal-mt-step6-0.52.0.log`): every step passed (canary, data quality
     125/0, rebuild parity "all 11 files reproduced from the archives"); suite 3,269/0 before the run, 3,271/0 after,
     1 skip.
+  * [x] Pin edjobs 0.53.0: the Census check and the auto-fix live check in the package (2026-11-19; branch
+    `step6-census`, replaces the 0.52.0 pin; review step 6, slice 4). `check_census_drift.R` is
+    `check_census_step()` and `live_check_autofix.R` is `live_check_autofix_step()` (the script sources the scraper
+    files first). The Census check's expected counts now come from `salarymap2.csv` / `salarymap.csv`: the script's
+    hard-coded ones had gone stale (19 counties and 32 districts against 56 and 201), so a source could lose most of its coverage before it fired. Every county
+    should have ACS context and every district a SAIPE rate, except `state_config(saipe_gaps = )` (none in Montana).
+    Parity (`claude-notes/2026-11-19_step6-parity/slice4/`): identical output on the committed data (healthy); on a
+    copy with two SAIPE rates blanked, the new check flags both by name where the old script passed. Live check run with the state's real
+    scrapers through a stubbed `gh` (Lone Rock: 0 postings, as committed; Red Lodge: 4). manifest.json's edjobs entry is from a pak install of the `v0.53.0` tag
+    (Suggests gained chromote). Single-step change: each new script run on the committed data, plus the suite 3,269 passed, 0 failed, 1 skip, plus 2 app boot smoke failures from Chrome contention with the live checks; that file passes alone, 21/0.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
