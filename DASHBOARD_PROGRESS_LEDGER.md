@@ -1201,6 +1201,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     them, so the committed Melstone row keeps NA until the next run re-scrapes it. Live Apptegy scrape of Melstone
     on 0.42.0 (`claude-notes/2026-11-18_pin-0.42.0/melstone-live-mt.log`): 8 rows, the substitute posting $100/day.
     Suite: 3,277 passed, 0 failed (manifest test passes).
+  * [x] Pin edjobs 0.44.0 (2026-11-19; branch `pin-0.44.0`, replaces the 0.42.0 pin). 0.43.0: pay units after a
+    `;` and wrapped ranges (Browning "Lane 3/Step 0; $21.16" -> hour, Townsend "$13.52 -" / "$13.82/hour" ->
+    $13.52-$13.82/hour; replay of 1,044 archived Pay_Text: 1 changes); with Melstone (0.42.0) this should let `k12_pay_has_unit` pass once the next run re-scrapes them. 0.44.0, the hardening release: 170 exports
+    made internal, no state names in package code, `state_config(timezone = )` (set here to America/Denver, the value
+    the package used as its default), front matter. `scripts/reclassify_committed_data.R` reads the package namespace
+    (`asNamespace`), since some helpers are no longer exported. manifest.json's edjobs entry is from a pak install of
+    the `v0.44.0` tag (version, Title, Description, refs, SHA, build dates). Full rehearsal
+    (`claude-notes/2026-11-19_rehearsal-mt-pin-0.44.0.log`): every step passed, pre-run and post-run suites 3,277 passed, 0 failed.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
