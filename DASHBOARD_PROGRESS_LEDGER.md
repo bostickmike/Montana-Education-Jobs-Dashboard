@@ -1188,6 +1188,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     GitHub (edjobs installed from disk); post-run suite 3,236 passed, those 2 failed; OPI statewide 333 postings;
     K-12 rows 1,374 -> 1,377. App tests on the final tree: reactives 730/0, boot smoke 21/0. Screenshots
     `claude-notes/2026-11-18_home-job-types-shots/`.
+  * [x] Pin edjobs 0.42.0 (2026-11-18; branch `home-job-types`, replaces the 0.41.0 pin). 0.41.0 is the job-type
+    flags the Home switch uses; 0.42.0 adds a day rate for a full/half day written before the amount (Melstone's
+    "Full day/$100 and 1/2 day/$50": unit NA -> day) and `write_csv_keep_quoting()`, which
+    `scripts/reclassify_committed_data.R` now writes with (the file's own quoting kept; no more quoting every date in
+    combinedclean.csv). manifest.json's edjobs entry is from a pak install of the `v0.42.0` tag (only version, refs,
+    SHA and build dates change). Reclassify dry run (`claude-notes/2026-11-18_pin-0.42.0/reclassify-dryrun-mt.log`):
+    guard passed on v0.42.0, nothing to write. Pay units are set at scrape time and the rebuild doesn't recompute
+    them, so the committed Melstone row keeps NA until the next run re-scrapes it. Live Apptegy scrape of Melstone
+    on 0.42.0 (`claude-notes/2026-11-18_pin-0.42.0/melstone-live-mt.log`): 8 rows, the substitute posting $100/day.
+    Suite: 3,277 passed, 0 failed (manifest test passes).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
