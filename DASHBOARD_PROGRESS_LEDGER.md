@@ -1274,6 +1274,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     copy with two SAIPE rates blanked, the new check flags both by name where the old script passed. Live check run with the state's real
     scrapers through a stubbed `gh` (Lone Rock: 0 postings, as committed; Red Lodge: 4). manifest.json's edjobs entry is from a pak install of the `v0.53.0` tag
     (Suggests gained chromote). Single-step change: each new script run on the committed data, plus the suite 3,269 passed, 0 failed, 1 skip, plus 2 app boot smoke failures from Chrome contention with the live checks; that file passes alone, 21/0.
+  * [x] Salary source named only where that source gave a salary (2026-11-19; branch `dli-source-label`, found while
+    measuring the salary drift check). The pipeline set `Salary_Source` on every row, so 52 registry districts DLI
+    doesn't report and two colleges IPEDS reports under their parents (Highlands College, Missoula College) showed
+    "Salary source: ..." in their map popup with no salary above it. The OPI-only rows already blanked it. Now the
+    K-12 and HE blocks name the source only where `Teacher_Avg_Salary` / `Faculty_Avg_Salary` is present; the
+    committed files' 52 + 2 cells were blanked (every other column unchanged, and the new expression on the old file
+    gives the repaired one exactly). New data-quality test: a named source with no salary fails.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
