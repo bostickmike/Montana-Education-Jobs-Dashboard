@@ -1150,6 +1150,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Second weekly run (2026-11-17; branch `second-cron`): `weekly-scrape.yml` cron `0 13 * * 1,4`, Mondays and
     Thursdays (was Tuesdays); Wyoming moves to Tuesdays and Fridays, so the shared `CENSUS_API_KEY` is never used by
     both on one day (days set by Mike 11-13). CLAUDE.md, README and the scraper skill's run-day line updated.
+  * [x] Pin edjobs 0.40.0, the classifier batch (2026-11-17; branch `pin-0.40.0`): posted pay with a benefit word
+    after the amount, part-time FTE, subjects from school/place names, HE job types, Apptegy "open until filled".
+    Committed data (the 11-17 run, d73b27d) reclassified (`scripts/reclassify_committed_data.R --apply --skip-guard`;
+    the guard needs the old version installed, and the 11-17 run on 0.39.0 rebuilt all 9 files exactly):
+    combinedclean 4 Teacher -> Part-Time Teacher (two ".5 FTE" titles, two OPI postings marked part-time),
+    k12jobanalysis 8,097 -> 8,065, allsum 6,489 -> 6,470, allnow 309 -> 305, HE spells per bugs 9/11. The script's
+    `write.csv` quoted every date in combinedclean.csv; the file was patched back to the committed text with only the
+    6 changed fields (values identical). `run_expectations.csv`: `cyberschool_vaughn_read` filters on
+    vaughnschool.com/jobs/ (its links were never on iescentral.com; the 11-17 run read the posting). Full rehearsal
+    (`claude-notes/2026-11-17_rehearsal-mt-pin-0.40.0.log`): every step passed but the pre-run suite's app boot
+    smoke test (1 failure, Chrome timing while the render ran; 21/21 alone after); post-run suite 3,229 passed, 0
+    failed; OPI statewide 333 postings; K-12 rows 1,374 -> 1,372.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
