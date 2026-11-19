@@ -1,6 +1,6 @@
 # Disaster-recovery / verification tool: rebuilds the K-12 accumulated
 # datasets (combinedclean.csv, k12jobanalysis.csv, allsum.csv, allnow.csv,
-# k12_district_weekly_totals.csv)
+# k12_district_weekly_totals.csv, k12_jobtype_weekly_totals.csv)
 # from scratch by reprocessing every raw snapshot in Archivek12_Data/, the
 # same way the weekly pipeline used to do on every single run before
 # history_accumulator.R's incremental-append path replaced that. Ported
@@ -61,9 +61,9 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
   combinedclean <- mt_k12_combinedclean(counted, oews_wages, district_county, opi_counties)
   k12jobs <- build_k12_teacher_rows(combinedclean)
 
-  k12_district_weekly_totals <- combinedclean %>%
-    group_by(District, Archive_Date) %>%
-    summarize(n = n_distinct(Posting_ID), .groups = "drop")
+  k12_district_weekly_totals <- posting_run_totals(combinedclean, "District", "position", "title", "k12",
+                                                   id_col = "Posting_ID")
+  k12_jobtype_weekly_totals <- jobtype_run_totals(combinedclean, "position", "title", "k12", id_col = "Posting_ID")
 
   k12sumdistrict <- summarize_k12_posting_counts(k12jobs)
 
@@ -89,6 +89,7 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
     combinedclean = combinedclean %>% filter(Archive_Date == max(Archive_Date)),
     k12jobs = k12jobs,
     k12_district_weekly_totals = k12_district_weekly_totals,
+    k12_jobtype_weekly_totals = k12_jobtype_weekly_totals,
     allsum = allsum,
     allnow = allnow
   )
@@ -110,6 +111,7 @@ if (sys.nframe() == 0) {
   write.csv(result$allsum, file.path("Mt_Ed_Jobs", "allsum.csv"), row.names = FALSE)
   write.csv(result$allnow, file.path("Mt_Ed_Jobs", "allnow.csv"), row.names = FALSE)
   write.csv(result$k12_district_weekly_totals, file.path("Mt_Ed_Jobs", "k12_district_weekly_totals.csv"), row.names = FALSE)
+  write.csv(result$k12_jobtype_weekly_totals, file.path("Mt_Ed_Jobs", "k12_jobtype_weekly_totals.csv"), row.names = FALSE)
 
   cat("Rebuilt combinedclean.csv (", nrow(result$combinedclean), " rows), k12jobanalysis.csv (",
       nrow(result$k12jobs), " rows), allsum.csv/allnow.csv (",

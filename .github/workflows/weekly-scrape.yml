@@ -453,6 +453,8 @@ jobs:
             Mt_Ed_Jobs/facultydata.csv \
             Mt_Ed_Jobs/k12_district_weekly_totals.csv \
             Mt_Ed_Jobs/he_institution_weekly_totals.csv \
+            Mt_Ed_Jobs/k12_jobtype_weekly_totals.csv \
+            Mt_Ed_Jobs/he_jobtype_weekly_totals.csv \
             Mt_Ed_Jobs/salarymap2.csv \
             Mt_Ed_Jobs/salarymap.csv \
             Mt_Ed_Jobs/job_duration_spells.csv \
