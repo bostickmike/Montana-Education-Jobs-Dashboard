@@ -2273,7 +2273,10 @@ if (nrow(teacher_salary) > 0) {
     select(-any_of(c("Teacher_Count", "Teacher_Salary_10th_Pctile", "Teacher_Avg_Salary",
                       "Teacher_Salary_90th_Pctile", "Salary_Year", "Salary_Source"))) %>%
     left_join(teacher_salary, by = "District") %>%
-    mutate(Salary_Source = "MT Dept. of Labor & Industry Teacher Compensation Report (lmi.mt.gov/publications)")
+    # The source line only where DLI gave this district a figure: the map popup shows it under the salary, and a
+    # district DLI doesn't report (suppressed or no row) would otherwise show a source with no salary (2026-11-19).
+    mutate(Salary_Source = ifelse(is.na(Teacher_Avg_Salary), NA_character_,
+                                  "MT Dept. of Labor & Industry Teacher Compensation Report (lmi.mt.gov/publications)"))
 
   # Starts building a multi-year K-12 salary trend -- MT DLI has no public
   # historical archive (only the current edition's PDFs are ever
@@ -2935,7 +2938,9 @@ if (nrow(he_salary) > 0) {
     select(-any_of(c("Faculty_Avg_Salary", "Faculty_Avg_Salary_Professor",
                       "Faculty_Count", "Salary_Year", "Salary_Source"))) %>%
     left_join(he_salary, by = "Name") %>%
-    mutate(Salary_Source = "IPEDS via Urban Institute Education Data Portal (educationdata.urban.org)")
+    # Only where IPEDS gave a figure (Highlands College and Missoula College report under their parents).
+    mutate(Salary_Source = ifelse(is.na(Faculty_Avg_Salary), NA_character_,
+                                  "IPEDS via Urban Institute Education Data Portal (educationdata.urban.org)"))
 
   # Multi-year salary trend (current + 2 prior years) -- IPEDS is queryable
   # by year indefinitely, unlike the DLI Teacher Compensation Report (only

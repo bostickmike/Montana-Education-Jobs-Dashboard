@@ -118,6 +118,17 @@ test_that("salarymap.csv (HE): faculty salary / count columns are in a plausible
   expect_true(in_band(d$Enrollment, 0, 60000), info = "Enrollment")
 })
 
+test_that("a salary source is named only where that source gave a salary (the map popup shows it under the figure)", {
+  # Bug 2026-11-19: every registry district got the DLI label, so 52 districts DLI doesn't report (and two colleges
+  # IPEDS reports under their parents) showed "Salary source: ..." with no salary in their popup.
+  k12 <- read_mt("salarymap2.csv")
+  bad <- k12$District[!is.na(k12$Salary_Source) & is.na(k12$Teacher_Avg_Salary)]
+  expect_true(length(bad) == 0, info = paste("K-12 source with no DLI salary:", paste(bad, collapse = "; ")))
+  he <- read_mt("salarymap.csv")
+  bad <- he$Name[!is.na(he$Salary_Source) & is.na(he$Faculty_Avg_Salary)]
+  expect_true(length(bad) == 0, info = paste("HE source with no IPEDS salary:", paste(bad, collapse = "; ")))
+})
+
 test_that("percentage / rate columns are stored as proportions in [0, 1] (not 0-100)", {
   # These reach app.R as proportions and get scales::percent()'d there --
   # a value > 1 means the pipeline already multiplied by 100, which would
