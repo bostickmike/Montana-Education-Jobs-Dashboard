@@ -1162,6 +1162,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-17_rehearsal-mt-pin-0.40.0.log`): every step passed but the pre-run suite's app boot
     smoke test (1 failure, Chrome timing while the render ran; 21/21 alone after); post-run suite 3,229 passed, 0
     failed; OPI statewide 333 postings; K-12 rows 1,374 -> 1,372.
+  * [x] "How postings are counted" note moved from the top of the K-12 Trends tab to just below the Multi-Year Trends
+    chart (2026-11-17, Mike; branch `counting-note-placement`), text unchanged. Checked by screenshot
+    (`claude-notes/2026-11-17_counting-note/`); app smoke 21 and reactives 718 passed, 0 failed.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
