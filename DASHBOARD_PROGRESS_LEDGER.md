@@ -1247,6 +1247,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the `v0.49.0` tag. Full rehearsal (`claude-notes/2026-11-19_rehearsal-mt-stage-columns-0.49.0.log`): every step
     passed (data quality 125/0); the rehearsed salarymap.csv (23 rows) and salarymap2.csv (201 rows) equal the
     committed files in every column.
+  * [x] Scheduled runs moved to 07:17 UTC (2026-11-19; Mike: run very early, so a failure can be fixed and re-run the
+    same day and is known by morning). Just after midnight Mountain (00:17 MST, 01:17 MDT): every step's date is
+    Mountain (`TZ`), so a start before midnight would date the run the day before. GitHub started the 13:00 UTC cron
+    4-8.5 h late (runs since 09-25: 17:08-21:27 UTC), and the daily presence check's 13:17 UTC cron 5.5-9.5 h late,
+    so an off-the-hour minute doesn't avoid it. Days unchanged (MT Mon/Thu, WY Tue/Fri; shared Census key).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
