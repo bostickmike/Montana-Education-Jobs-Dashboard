@@ -38,7 +38,7 @@ registry_row <- if (source_name %in% k12$District) k12[k12$District == source_na
 if (is.null(registry_row)) stop("No registry row named '", source_name, "' in k12_district_registry.csv or he_institution_registry.csv")
 
 call <- resolve_scraper_call(source_name)
-if (is.null(call)) stop("Platform '", registry_row$Platform, "' has no single-source scraper call (see MT_SCRAPER_SPECS in state_config.R)")
+if (is.null(call)) stop("Platform '", registry_row$Platform, "' has no single-source scraper call (see edjobs::default_scraper_specs() and MT_SCRAPER_SPECS in state_config.R)")
 evidence <- gather_autofix_evidence(call, source_name, NA_character_)
 live_url <- c(registry_row$Job_Link, registry_row$Feed_URL)
 live_url <- live_url[!is.na(live_url) & nzchar(live_url)][1]

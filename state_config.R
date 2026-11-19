@@ -8,63 +8,21 @@ library(edjobs)
 # Which function scrapes each registry platform, with which registry columns
 # as its arguments (the same call shape Mt_ED_Jobs.Rmd uses);
 # edjobs::resolve_scraper_call() reads these for the PR live check,
-# scripts/repro_scraper.R and the auto-fix issue. `session = TRUE`: the
-# scraper's first argument is a chromote session. Platforms with no entry
-# (SharesBoard, split-feed ADP/isolved) have no single-source live check.
-# test-drift-check.R asserts every function named here exists and every
-# registered row resolves.
-mt_list_rule <- function(col) function(row) {
-  path <- if (file.exists("k12_district_registry.csv")) "k12_district_registry.csv" else here::here("k12_district_registry.csv")
-  rules <- utils::read.csv(path, stringsAsFactors = FALSE, na.strings = "", colClasses = "character")
-  v <- rules[[col]][rules$District == row$District]
-  if (length(v) == 0 || is.na(v[1]) || !nzchar(v[1])) NA_character_ else v[1]
-}
-apptegy_spec <- function(mode) {
-  scraper_spec("fetch_apptegy_postings", list("Job_Link", "City", function(row) mode, mt_list_rule("List_Start"),
-                                               mt_list_rule("List_Stop"), mt_list_rule("List_Skip")), session = TRUE)
-}
-MT_SCRAPER_SPECS <- list(
-  AppliTrack   = scraper_spec("fetch_applitrack_postings",   "Platform_Key"),
-  SchoolSpring = scraper_spec("fetch_schoolspring_postings", "Platform_Key"),
+# scripts/repro_scraper.R and the auto-fix issue. The platforms edjobs scrapes
+# (AppliTrack, SchoolSpring, TedK12, Red Rover, the CMS families, Google Doc,
+# CyberSchool, Apptegy, PeopleAdmin, NEOGOV) come from
+# edjobs::default_scraper_specs() (edjobs 0.46.0); MT_SCRAPER_SPECS adds only
+# Montana's own scrapers. `session = TRUE`: the scraper's first argument is a
+# chromote session. Platforms with no entry (SharesBoard, split-feed
+# ADP/isolved) have no single-source live check. test-drift-check.R asserts
+# every function named here exists and every registered row resolves.
+MT_SCRAPER_SPECS <- scraper_specs(
   TylerPortico = scraper_spec("fetch_tylerportico_postings", c("Platform_Key", "District")),
-  TedK12       = scraper_spec("fetch_tedk12_postings",       "Platform_Key"),
-  # The CyberSchool (IES) family routine, edjobs 0.17.0: one function for every row.
-  CyberSchool  = scraper_spec("fetch_cyberschool_postings",  c("Job_Link", "City")),
-  # Google Doc job lists, edjobs 0.24.0: the doc ids are in Platform_Key.
-  GoogleDoc    = scraper_spec("fetch_googledoc_postings", list("Platform_Key", "City", "Job_Link", mt_list_rule("List_Start"),
-                              mt_list_rule("List_Stop"), mt_list_rule("List_Skip"))),
-  CyberSchoolText = scraper_spec("fetch_cyberschool_postings", list("Job_Link", "City", function(row) "text",
-                                 mt_list_rule("List_Start"), mt_list_rule("List_Stop"), mt_list_rule("List_Skip"))),
-  # The Apptegy family routine, edjobs 0.18.0: the rendered text or the
-  # page-builder JSON, with the registry row's list rules if it has any.
-  Apptegy            = apptegy_spec("text"),
-  ApptegyPageBuilder = apptegy_spec("pagebuilder"),
-  # The Google Sites family routine, edjobs 0.19.0 (plain request, the shared title line filter).
-  GoogleSites  = scraper_spec("fetch_googlesites_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
-                                                                 mt_list_rule("List_Stop"), mt_list_rule("List_Skip"))),
-  # The Finalsite family routine, edjobs 0.20.0 (plain request, the shared title line filter).
-  Finalsite    = scraper_spec("fetch_finalsite_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
-                                                               mt_list_rule("List_Stop"), mt_list_rule("List_Skip"))),
-  # The WordPress family routine, edjobs 0.21.0 (plain request, the shared title line filter).
-  WordPress    = scraper_spec("fetch_wordpress_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
-                                                               mt_list_rule("List_Stop"), mt_list_rule("List_Skip"))),
-  # The Edlio family routine, edjobs 0.22.0 (plain request, the shared title line filter).
-  Edlio        = scraper_spec("fetch_edlio_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
-                                                           mt_list_rule("List_Stop"), mt_list_rule("List_Skip"))),
-  # The Joomla family routine, edjobs 0.23.0 (the Edlio reading on Joomla pages).
-  Joomla       = scraper_spec("fetch_joomla_postings", list("Job_Link", "City", mt_list_rule("List_Start"),
-                                                            mt_list_rule("List_Stop"), mt_list_rule("List_Skip"))),
-  # Red Rover's API (edjobs 0.14.0): Platform_Key is the board's numeric org ID, the
-  # link slug comes from Job_Link (Columbia Falls: org 4161, slug sd659912).
-  RedRoverK12  = scraper_spec("fetch_redrover_postings", list("Platform_Key", function(row) redrover_org_slug(row$Job_Link))),
   BroadviewHeuristic = scraper_spec("fetch_broadview_postings"),
   # Reads its openings-PDF link from the rendered page (2026-11-05).
   CJIHeuristic = scraper_spec("fetch_cji_postings", "Job_Link", session = TRUE),
-  PeopleAdmin  = scraper_spec("fetch_peopleadmin_atom",      c("Feed_URL", "Institution")),
   JazzHR       = scraper_spec("fetch_jazzhr_postings",       c("Feed_URL", "Institution")),
   Paycom       = scraper_spec("fetch_paycom_postings",       c("Feed_URL", "Institution")),
-  # The agency slug; NEOGOV redirects to the agency's own domain (edjobs 0.11.0).
-  Neogov       = scraper_spec("fetch_neogov_postings",       "Feed_URL"),
   MilesCCHeuristic   = scraper_spec("fetch_miles_cc_postings",   "Feed_URL"),
   DawsonCCHeuristic  = scraper_spec("fetch_dawson_cc_postings",  "Feed_URL"),
   CarrollCollegeHeuristic = scraper_spec("fetch_carroll_college_postings", "Feed_URL"),
@@ -98,7 +56,7 @@ set_state_config(state_config(
   timezone = "America/Denver",
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
-      specs = c(MT_SCRAPER_SPECS, list(ApptegyBespoke = MT_APPTEGY_MAP_SPEC)),
+      specs = scraper_specs(ApptegyBespoke = MT_APPTEGY_MAP_SPEC, defaults = MT_SCRAPER_SPECS),
       # Every other K-12 "<Name>Heuristic" platform is fetch_<lowercase name>_postings(Job_Link).
       fallback = function(platform, row) {
         if (grepl("Heuristic$", platform)) {
@@ -107,8 +65,8 @@ set_state_config(state_config(
       }),
     scraper_registry(mt_registry("he_institution_registry.csv"), "Institution", "he_institution_registry.csv",
       # The one HE Apptegy site (Stone Child College), in place of the K-12 family routine.
-      specs = c(MT_SCRAPER_SPECS[setdiff(names(MT_SCRAPER_SPECS), "Apptegy")],
-                list(Apptegy = scraper_spec("fetch_stonechild_postings", "Feed_URL", session = TRUE))))
+      specs = scraper_specs(Apptegy = scraper_spec("fetch_stonechild_postings", "Feed_URL", session = TRUE),
+                            defaults = MT_SCRAPER_SPECS))
   ),
   # The auto-fix issue: scraper files read as text; fixture names here don't
   # carry the district, so a source's fixtures are found from its tests.
