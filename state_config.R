@@ -48,7 +48,14 @@ set_state_config(state_config(
   state = "Montana", fips = "30", app_dir = "Mt_Ed_Jobs",
   feed = list(short_name = "OPI", label = "OPI Jobs for Teachers (statewide)",
               url = "https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx",
-              discrepancy_file = "mt_discrepancy_report.csv"),
+              discrepancy_file = "mt_discrepancy_report.csv",
+              # The pre-flight canary (edjobs 0.52.0): words the page must show; apps.opi.mt.gov needs the GoDaddy R1
+              # bundle (opi_ca_bundle(), direct_api_scrapers.R).
+              signature = c("TeacherSearch", "Montana"), cainfo = "certs/opi_godaddy_r1.pem"),
+  # How the weekly checks name a K-12 row's source (edjobs 0.51.0): OPI's rows are one source; archives from
+  # before Posting_Source (2026-08-18) can't be split that way and are left out. Floor 2 (Mike, 2026-11-13).
+  k12_source_names = function(df) if (!"Posting_Source" %in% names(df)) NULL else collapse_statewide_feed_names(df),
+  drift_min_mean = 2,
   # The first archive that counts toward the drift check's per-source
   # baselines: earlier runs predate fixes that changed the counts.
   drift_baseline_from = "2026-08-06",

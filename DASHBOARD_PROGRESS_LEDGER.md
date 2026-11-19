@@ -1252,6 +1252,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Mountain (`TZ`), so a start before midnight would date the run the day before. GitHub started the 13:00 UTC cron
     4-8.5 h late (runs since 09-25: 17:08-21:27 UTC), and the daily presence check's 13:17 UTC cron 5.5-9.5 h late,
     so an off-the-hour minute doesn't avoid it. Days unchanged (MT Mon/Thu, WY Tue/Fri; shared Census key).
+  * [x] Pin edjobs 0.52.0: weekly check scripts in the package (2026-11-19; branch `step6-scripts`, replaces the
+    0.49.0 pin; review step 6, `claude-notes/2026-11-19_step6-scripts-measure.md`). Nine `.github/scripts` are now
+    short calls into edjobs (0.50.0-0.52.0): sanity, schema, run expectations, render-with-stack, drift
+    (`check_drift_step()`), pay coverage, title quality, the pre-flight canary (`canary_step()`) and rebuild parity
+    (`report_rebuild_parity()`; the script still sources the state's rebuild files). What differed by state is in
+    `state_config.R`: `k12_source_names` (OPI rows as one source; archives before `Posting_Source` left out),
+    `drift_min_mean = 2`, and the feed's canary `signature` and `cainfo`. Workflow paths unchanged.
+    `test-canary-api-check.R` moved to edjobs. Parity of old and new scripts on the committed data:
+    `claude-notes/2026-11-19_step6-parity/`. manifest.json's edjobs entry is from a pak install of the `v0.52.0` tag.
+    Full rehearsal (`claude-notes/2026-11-19_rehearsal-mt-step6-0.52.0.log`): every step passed (canary, data quality
+    125/0, rebuild parity "all 11 files reproduced from the archives"); suite 3,269/0 before the run, 3,271/0 after,
+    1 skip.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
