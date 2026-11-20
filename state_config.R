@@ -64,6 +64,27 @@ set_state_config(state_config(
   # Census names counties "Gallatin County, Montana"; Montana's files say "Gallatin County" (edjobs 0.47.0,
   # refresh_county_context()).
   county_suffix = ", Montana",
+  # The weekly salary check (edjobs 0.57.0): each source's coverage against last run's committed file. Value bounds are
+  # generous (DLI 2022-23 teacher averages $52k-$67k; IPEDS faculty $25.6k at Blackfeet CC to $99k; OPI general fund
+  # $2.1M Big Sandy to $134.2M Billings): they catch a misread digit, not real variation. DLI has published one
+  # edition only, so there's no K-12 year-over-year pair.
+  salary_checks = salary_checks(
+    coverage = data.frame(
+      name = c("K-12 teacher avg salary (MT DLI)", "K-12 teacher FTE (CCD)", "K-12 General Fund expenditure (OPI Finance)",
+               "HE avg faculty salary (IPEDS)", "HE fall enrollment FTE (IPEDS)", "HE 5-year enrollment trend (IPEDS)",
+               "HE Pell Grant recipient share (FSA)"),
+      file = rep(c("salarymap2.csv", "salarymap.csv"), c(3, 4)),
+      column = c("Teacher_Avg_Salary", "Teachers_Total_FTE", "Total_General_Fund_Expenditure", "Faculty_Avg_Salary",
+                 "Enrollment", "Enrollment_Change_Pct", "Pell_Recipient_Share")),
+    bounds = data.frame(
+      name = c("K-12 teacher avg salary (MT DLI)", "K-12 teacher 10th pctile salary (MT DLI)",
+               "K-12 teacher 90th pctile salary (MT DLI)", "K-12 General Fund expenditure (OPI Finance)",
+               "HE avg faculty salary (IPEDS)"),
+      file = rep(c("salarymap2.csv", "salarymap.csv"), c(4, 1)),
+      column = c("Teacher_Avg_Salary", "Teacher_Salary_10th_Pctile", "Teacher_Salary_90th_Pctile",
+                 "Total_General_Fund_Expenditure", "Faculty_Avg_Salary"),
+      min_ok = c(25000, 20000, 25000, 500000, 15000), max_ok = c(150000, 150000, 175000, 250000000, 150000)),
+    yoy = data.frame(file = "salarymap.csv", current = "Faculty_Avg_Salary", prior = "Faculty_Avg_Salary_Y1Ago")),
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
       specs = scraper_specs(ApptegyBespoke = MT_APPTEGY_MAP_SPEC, defaults = MT_SCRAPER_SPECS),
