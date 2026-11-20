@@ -1312,6 +1312,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     committed data apart from one reworded sentence; with 10 DLI districts blanked the old script passed and the new one names
     them. Rehearsals have no `.git`: `dryrun.sh` sets `EDJOBS_SALARY_BASELINE`. manifest.json's edjobs entry is from a pak
     install of the `v0.57.0` tag. Suite on the tag: 3,273 passed, 0 failed, 1 skip.
+  * [x] Pin edjobs 0.58.0: MT's general-fund range is per enrolled student (2026-11-20; branch
+    `salary-fund-per-student`; Mike chose per student). The $500k floor, set when the smallest of 32 districts spent
+    $2.1M, flagged 13 real districts of 4-46 students every week since the 11-10 registry growth. Replayed on every
+    committed salarymap2.csv (`claude-notes/2026-11-20_mt-general-fund-bound.md`): $3k-$60k a student flags 0 in each,
+    and a misread digit gives ~$950 or ~$96k a student at any district size. The dollar range stays for rows with no
+    CCD enrollment (`salary_checks(bounds = )` `per` / `unless`, edjobs 0.58.0). Live step on the committed data: the
+    13 flags gone; Swan River's DLI 10th percentile ($16,900) still flags. Report amounts are whole dollars.
+    manifest.json's edjobs entry is from a pak install of the `v0.58.0` tag. Suite on the tag: 3,273 passed, 0 failed, 1 skip.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a

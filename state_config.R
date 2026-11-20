@@ -76,14 +76,19 @@ set_state_config(state_config(
       file = rep(c("salarymap2.csv", "salarymap.csv"), c(3, 4)),
       column = c("Teacher_Avg_Salary", "Teachers_Total_FTE", "Total_General_Fund_Expenditure", "Faculty_Avg_Salary",
                  "Enrollment", "Enrollment_Change_Pct", "Pell_Recipient_Share")),
+    # The general fund is checked per enrolled student (edjobs 0.58.0, Mike 2026-11-20): since the 11-10 registry growth
+    # the $500k floor flagged 13 real districts of 4-46 students every week ($7k-$27k a student; statewide $6.3k-$30.4k
+    # on 11-19), while a misread digit gives ~$950 or ~$96k a student at any size. The dollar range is kept only for
+    # rows with no CCD enrollment. claude-notes/2026-11-20_mt-general-fund-bound.md.
     bounds = data.frame(
       name = c("K-12 teacher avg salary (MT DLI)", "K-12 teacher 10th pctile salary (MT DLI)",
-               "K-12 teacher 90th pctile salary (MT DLI)", "K-12 General Fund expenditure (OPI Finance)",
-               "HE avg faculty salary (IPEDS)"),
-      file = rep(c("salarymap2.csv", "salarymap.csv"), c(4, 1)),
+               "K-12 teacher 90th pctile salary (MT DLI)", "K-12 General Fund expenditure per student (OPI Finance / CCD)",
+               "K-12 General Fund expenditure (OPI Finance; no CCD enrollment)", "HE avg faculty salary (IPEDS)"),
+      file = rep(c("salarymap2.csv", "salarymap.csv"), c(5, 1)),
       column = c("Teacher_Avg_Salary", "Teacher_Salary_10th_Pctile", "Teacher_Salary_90th_Pctile",
-                 "Total_General_Fund_Expenditure", "Faculty_Avg_Salary"),
-      min_ok = c(25000, 20000, 25000, 500000, 15000), max_ok = c(150000, 150000, 175000, 250000000, 150000)),
+                 "Total_General_Fund_Expenditure", "Total_General_Fund_Expenditure", "Faculty_Avg_Salary"),
+      per = c(NA, NA, NA, "Enrollment", NA, NA), unless = c(NA, NA, NA, NA, "Enrollment", NA),
+      min_ok = c(25000, 20000, 25000, 3000, 500000, 15000), max_ok = c(150000, 150000, 175000, 60000, 250000000, 150000)),
     yoy = data.frame(file = "salarymap.csv", current = "Faculty_Avg_Salary", prior = "Faculty_Avg_Salary_Y1Ago")),
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
