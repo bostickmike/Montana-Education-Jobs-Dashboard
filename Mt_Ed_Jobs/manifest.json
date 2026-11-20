@@ -1005,7 +1005,7 @@
       "description": {
         "Package": "edjobs",
         "Title": "Shared Code for State Education Jobs Dashboards",
-        "Version": "0.59.0",
+        "Version": "0.60.0",
         "Authors@R": "person(\"Mike\", \"Bostick\", email = \"michael.bostick@montana.edu\", role = c(\"aut\", \"cre\"))",
         "Description": "Code shared by state education jobs dashboards (today Montana\n    and Wyoming): platform and site-family scrapers, posting classification and\n    posted pay, posting spells and listing durations, federal context sources,\n    the daily presence check, the checks each weekly run makes on its own output,\n    and shared app helpers. What differs by state comes in as data through\n    state_config(). Each state repository pins a tagged version.",
         "License": "MIT + file LICENSE",
@@ -1013,7 +1013,7 @@
         "Encoding": "UTF-8",
         "Roxygen": "list(markdown = TRUE)",
         "Imports": "datasets, dplyr, htmltools, httr2, jsonlite, lubridate,\nmagrittr, readxl, rvest, scales, stringr, stats, survival,\ntidyr, utils, xml2",
-        "Suggests": "chromote, knitr, rmarkdown, testthat (>= 3.0.0), withr,\nwritexl",
+        "Suggests": "bslib, chromote, codetools, curl, DT, ggplot2, grid, knitr,\nplotly, rmarkdown, shiny, shinycssloaders, shinyWidgets,\ntestthat (>= 3.0.0), withr, writexl",
         "VignetteBuilder": "knitr",
         "Config/testthat/edition": "3",
         "Config/testthat/parallel": "true",
@@ -1024,18 +1024,18 @@
         "RemoteHost": "api.github.com",
         "RemoteRepo": "edjobs",
         "RemoteUsername": "bostickmike",
-        "RemotePkgRef": "bostickmike/edjobs@v0.59.0",
-        "RemoteRef": "v0.59.0",
-        "RemoteSha": "4b4d6132d7a2f337bf3ef50dfa2a2c0bf66f0367",
+        "RemotePkgRef": "bostickmike/edjobs@v0.60.0",
+        "RemoteRef": "v0.60.0",
+        "RemoteSha": "4c4ce67aed1b6bdf61d9ab5e36b5dae282d3245a",
         "GithubRepo": "edjobs",
         "GithubUsername": "bostickmike",
-        "GithubRef": "v0.59.0",
-        "GithubSHA1": "4b4d6132d7a2f337bf3ef50dfa2a2c0bf66f0367",
+        "GithubRef": "v0.60.0",
+        "GithubSHA1": "4c4ce67aed1b6bdf61d9ab5e36b5dae282d3245a",
         "NeedsCompilation": "no",
-        "Packaged": "2026-11-20 05:23:43 UTC; mikebostick",
+        "Packaged": "2026-11-20 21:32:01 UTC; mikebostick",
         "Author": "Mike Bostick [aut, cre]",
         "Maintainer": "Mike Bostick <michael.bostick@montana.edu>",
-        "Built": "R 4.6.2; ; 2026-11-20 05:23:44 UTC; unix"
+        "Built": "R 4.6.2; ; 2026-11-20 21:32:02 UTC; unix"
       }
     },
     "evaluate": {
@@ -3926,7 +3926,7 @@
       "checksum": "483883253bf95e93065a5dcce228e240"
     },
     "app.R": {
-      "checksum": "d5f153e751f67cf3922e3f0dabcc51d4"
+      "checksum": "c239acbef9e447edf4c30ac9044b4b19"
     },
     "combinedclean.csv": {
       "checksum": "ff61abb73d245c5b7f55c2a18c2b1773"
@@ -3936,9 +3936,6 @@
     },
     "facultydata.csv": {
       "checksum": "5424e30e6785e7329366bf7bcbbbc0ec"
-    },
-    "feedback.R": {
-      "checksum": "fe40f8d90a88afcabc60c23a487950f4"
     },
     "he_institution_weekly_totals.csv": {
       "checksum": "4c11ed4fe44782ad5afcdb66317b07a3"
@@ -3992,10 +3989,10 @@
       "checksum": "106d551bb8f080d6b5996612a408d163"
     },
     "salarymap.csv": {
-      "checksum": "c1673ba5624944ca5dad1f459014feb9"
+      "checksum": "d2a0da2764d7ca533ecd7a5e40eba732"
     },
     "salarymap2.csv": {
-      "checksum": "27db8372534a3138f5856d7c876b9575"
+      "checksum": "06d263c26605900e0539e82a307686a4"
     },
     "source_retrieved_dates.csv": {
       "checksum": "a0c522f64407d1caef141f0832d9072d"
