@@ -1320,6 +1320,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     CCD enrollment (`salary_checks(bounds = )` `per` / `unless`, edjobs 0.58.0). Live step on the committed data: the
     13 flags gone; Swan River's DLI 10th percentile ($16,900) still flags. Report amounts are whole dollars.
     manifest.json's edjobs entry is from a pak install of the `v0.58.0` tag. Suite on the tag: 3,273 passed, 0 failed, 1 skip.
+  * [x] The weekly run is edjobs's reusable workflow (2026-11-20; branch `weekly-run`, edjobs #58, v0.59.0; review
+    step 6, second half). `weekly-scrape.yml` is a short caller: cron, `concurrency`, `permissions`, secrets passed one
+    by one, and Montana's data as inputs (`tibble`, Gemini on the pipeline step, `check_opi_crosscheck.R`, the OPI
+    commit files, the LLM shadow file). The `uses:` tag equals `EDJOBS_VERSION` (`test-weekly-workflow-ref.R`).
+    Test dispatch on a branch (run 44675428576, data discarded): success, the same 40 step outcomes as the 11-19 run
+    44602197341 apart from three renamed steps and the auto-fix filing (skipped off main), a commit dated 2026-11-19
+    in Mountain time, the OPI cross-check (127 QC rows, 19 adoption candidates) and the salary check's git baseline.
+    Pin 0.59.0 (no R change). manifest.json's edjobs entry is from a pak install of the `v0.59.0` tag. Suite on the tag: 3,275 passed, 0 failed, 1 skip.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
