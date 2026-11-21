@@ -421,20 +421,6 @@ henowsum_he <- read.csv("allnow_he.csv") %>%
 
 last_refreshed_date <- format(max(k12sum$Archive_Date, hesum_he$Archive_Date, na.rm = TRUE), "%B %d, %Y")
 
-bounded_timeline_value <- function(dates, days = 365) {
-  latest <- max(dates)
-  c(max(min(dates), latest - days), latest)
-}
-
-timeline_history_note <- function(dates) {
-  span <- as.integer(max(dates) - min(dates))
-  if (span < 365) {
-    paste0("Only ", span, " days of archived history are currently available.")
-  } else {
-    ""
-  }
-}
-
 k12_timeline_value <- bounded_timeline_value(k12sum$Archive_Date)
 he_timeline_value <- bounded_timeline_value(hesum_he$Archive_Date, days = WINDOW_WEEKS * 7)
 
@@ -777,13 +763,6 @@ app_theme <- bs_theme(
 # Education Data Portal data are under ODC-By, cited in its short form for
 # visualizations (educationdata.urban.org/documentation/). Audit:
 # claude-notes/2026-11-15_citations-audit.md.
-# USGS's requested acknowledgment for The National Map's services
-# (usgs.gov FAQ "What are the Terms of Use/Licensing for map services and data
-# from The National Map?", updated 2022-11-10).
-USGS_TILE_CREDIT <- paste('<a href="https://www.usgs.gov/programs/national-geospatial-program/national-map"',
-                          'target="_blank" rel="noopener">USGS The National Map</a>: map services and data available',
-                          "from U.S. Geological Survey, National Geospatial Program")
-
 # When each outside source was last retrieved (source_retrieved_dates.csv, written by the pipeline only when a fetch
 # succeeds and its data is kept; hand-kept files carry the date they were added). BLS asks for the access date
 # (Mike, 2026-11-16: give one for every source). Missing file or source: the line shows no date.
@@ -1089,7 +1068,9 @@ server <- function(input, output, session) {
   # state's own blocks follow and read the reactives it returns.
   shared <- dashboard_server_shared(input, output, session,
                                     data = mget(dashboard_server_data_names(), inherits = TRUE),
-                                    state_name = "Montana", feedback_repo = FEEDBACK_REPO_DEFAULT)
+                                    state_name = "Montana", feedback_repo = FEEDBACK_REPO_DEFAULT,
+                                    timezone = "America/Denver",
+                                    map_view = list(lng = -111.5, lat = 46.8, zoom = 7), he_page_length = 6)
   k12_not_marked_only <- shared$k12_not_marked_only
   selected_district <- shared$selected_district
   selected_k12_query <- shared$selected_k12_query
@@ -1097,17 +1078,6 @@ server <- function(input, output, session) {
   selected_pay_band <- shared$selected_pay_band
   map_filtered <- shared$map_filtered
   filtered_hesum <- shared$filtered_hesum
-
-
-  # -------- New This Week --------
-  output$k12_new_table <- renderDT({
-    datatable(
-      k12_new_this_week %>%
-        select(title, District, location, Broad_Category, Posting_Source,
-               Posting_Identity_Method, url),
-      options = list(scrollX = TRUE)
-    )
-  })
 
 
   # -------- K-12 --------
@@ -1374,75 +1344,6 @@ server <- function(input, output, session) {
   })
 
 
-  # -------- Combined map (Introduction tab) --------
-  output$combined_map <- renderLeaflet({
-    leaflet() %>%
-      # Basemaps with open terms, OpenStreetMap first (Mike, 2026-11-15; claude-notes/2026-11-15_basemap-options.md).
-      # Esri's tiles were dropped: its terms need Esri software or an ArcGIS
-      # Online subscription for use like this. USGS The National Map is public
-      # domain ("There are no restrictions"), with an acknowledgment requested;
-      # OpenStreetMap needs its credit, which addTiles() shows by default.
-      # OSM's tile policy: "https://tile.openstreetmap.org/{z}/{x}/{y}.png" exactly
-      # (Leaflet's default still uses the old a/b/c subdomains).
-      addTiles(
-        urlTemplate = "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        attribution = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
-        options = tileOptions(maxZoom = 19),
-        group = "OpenStreetMap (Default)"
-      ) %>%
-      addTiles(
-        urlTemplate = "https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}",
-        attribution = USGS_TILE_CREDIT,
-        options = tileOptions(maxZoom = 16),
-        group = "USGS National Map"
-      ) %>%
-      addTiles(
-        urlTemplate = "https://basemap.nationalmap.gov/arcgis/rest/services/USGSShadedReliefOnly/MapServer/tile/{z}/{y}/{x}",
-        attribution = USGS_TILE_CREDIT,
-        options = tileOptions(maxZoom = 16),
-        group = "Shaded Relief"
-      ) %>%
-      addTiles(
-        urlTemplate = "https://basemap.nationalmap.gov/arcgis/rest/services/USGSHydroCached/MapServer/tile/{z}/{y}/{x}",
-        options = tileOptions(maxZoom = 16),
-        group = "Shaded Relief"
-      ) %>%
-      setView(lng = -111.5, lat = 46.8, zoom = 7) %>%
-      addLayersControl(
-        baseGroups = c("OpenStreetMap (Default)", "USGS National Map", "Shaded Relief"),
-        options = layersControlOptions(collapsed = TRUE)
-      ) %>%
-      addLegend(position = "bottomright", pal = vacancy_rate_palette, values = vacancy_rate_domain,
-                title = "Vacancy rate", labFormat = labelFormat(suffix = "%", transform = function(x) 100 * x),
-                na.label = "N/A")
-  })
-  outputOptions(output, "combined_map", suspendWhenHidden = FALSE)
-
-
-  observeEvent(input$map_county, {
-    if (is.null(input$map_county) || input$map_county == "all") {
-      leafletProxy("combined_map") %>%
-        setView(lng = -111.5, lat = 46.8, zoom = 7)
-    } else {
-      county_data <- combined_map_data %>%
-        filter(County == input$map_county, !is.na(Latitude), !is.na(Longitude))
-      if (nrow(county_data) > 0) {
-        if (nrow(county_data) == 1) {
-          leafletProxy("combined_map") %>%
-            setView(lng = county_data$Longitude[1], lat = county_data$Latitude[1], zoom = 9)
-        } else {
-          leafletProxy("combined_map") %>%
-            fitBounds(
-              lng1 = min(county_data$Longitude) - 0.15,
-              lat1 = min(county_data$Latitude) - 0.15,
-              lng2 = max(county_data$Longitude) + 0.15,
-              lat2 = max(county_data$Latitude) + 0.15
-            )
-        }
-      }
-    }
-  }, ignoreInit = TRUE)
-
   observe({
     df <- map_filtered()
 
@@ -1599,115 +1500,6 @@ server <- function(input, output, session) {
         ),
         popup = popups
       )
-  })
-
-
-  output$k12_slider_label <- renderText({
-    req(input$k12_scroll)
-    paste(
-      c(
-        timeline_history_note(k12sum$Archive_Date),
-        paste0("Showing: ", input$k12_scroll[1], " to ", input$k12_scroll[2])
-      )[nzchar(c(
-        timeline_history_note(k12sum$Archive_Date),
-        paste0("Showing: ", input$k12_scroll[1], " to ", input$k12_scroll[2])
-      ))],
-      collapse = " "
-    )
-  })
-
-
-  output$he_summary_table <- renderDT({
-    he_rows <- combined_map_data %>% filter(Type == "Higher Ed Institution")
-    appointment_counts <- ccdata %>%
-      count(Institution, Appointment, name = "Openings") %>%
-      tidyr::complete(
-        Institution,
-        Appointment = c("Faculty/instructor (non-adjunct)", "Adjunct/part-time faculty"),
-        fill = list(Openings = 0L)
-      ) %>%
-      tidyr::pivot_wider(names_from = Appointment, values_from = Openings, values_fill = 0)
-    year <- unique(na.omit(he_rows$Salary_Year))
-    year_label <- if (length(year) > 0) year[1] else "current"
-    year_int <- suppressWarnings(as.integer(year_label))
-    y1_label <- if (!is.na(year_int)) as.character(year_int - 1) else "1 year ago"
-    y2_label <- if (!is.na(year_int)) as.character(year_int - 2) else "2 years ago"
-
-    df <- he_rows %>%
-      left_join(appointment_counts, by = c("Name" = "Institution")) %>%
-      arrange(desc(CurrentCount)) %>%
-      transmute(
-        Institution = Name,
-        County,
-        `Current Openings` = CurrentCount,
-        `Faculty/instructor (non-adjunct)` = coalesce(`Faculty/instructor (non-adjunct)`, 0L),
-        `Adjunct/part-time faculty` = coalesce(`Adjunct/part-time faculty`, 0L),
-        `New This Week` = WeeklyNew,
-        `Faculty Vacancy Rate` = ifelse(is.na(Vacancy_Rate), NA_character_, scales::percent(Vacancy_Rate, accuracy = 0.1)),
-        AvgFacultySalary = ifelse(is.na(Faculty_Avg_Salary), NA_character_, scales::dollar(Faculty_Avg_Salary)),
-        AvgFacultySalaryY1 = ifelse(is.na(Faculty_Avg_Salary_Y1Ago), NA_character_, scales::dollar(Faculty_Avg_Salary_Y1Ago)),
-        AvgFacultySalaryY2 = ifelse(is.na(Faculty_Avg_Salary_Y2Ago), NA_character_, scales::dollar(Faculty_Avg_Salary_Y2Ago)),
-        ProfessorAvgSalary = ifelse(is.na(Faculty_Avg_Salary_Professor), NA_character_, scales::dollar(Faculty_Avg_Salary_Professor)),
-        `Faculty Count` = Faculty_Count,
-        Enrollment,
-        `Students per Faculty` = ifelse(is.na(Students_Per_Teacher), NA_character_, sprintf("%.1f", Students_Per_Teacher)),
-        `Enrollment Trend (5yr)` = ifelse(is.na(Enrollment_Change_Pct), NA_character_,
-                                           paste0(ifelse(Enrollment_Change_Pct >= 0, "+", ""), scales::percent(Enrollment_Change_Pct, accuracy = 0.1))),
-        `Pell Grant Recipient Share` = ifelse(is.na(Pell_Recipient_Share), NA_character_,
-                                               paste0(scales::percent(Pell_Recipient_Share, accuracy = 0.1), " (", Pell_Year, ")")),
-        `County Median Income` = ifelse(is.na(Median_Household_Income), NA_character_,
-                                        paste0(scales::dollar(Median_Household_Income), format_moe_dollars(Median_Household_Income_MOE))),
-        `County Median Rent` = ifelse(is.na(Median_Gross_Rent), NA_character_,
-                                      paste0(scales::dollar(Median_Gross_Rent), "/mo", format_moe_dollars(Median_Gross_Rent_MOE))),
-        `County Mining/Energy Jobs` = ifelse(is.na(Mining_Employment_Share), NA_character_,
-                                             paste0(scales::percent(Mining_Employment_Share, accuracy = 0.1), format_moe_points(Mining_Employment_Share_MOE),
-                                                    ifelse(indistinct_from_zero(Mining_Employment_Share, Mining_Employment_Share_MOE),
-                                                           " (not distinguishable from 0)", ""))),
-        `County Population Trend (5yr)` = ifelse(is.na(Population_Change_Pct), NA_character_,
-                                                   paste0(ifelse(Population_Change_Pct >= 0, "+", ""), scales::percent(Population_Change_Pct, accuracy = 0.1)))
-      )
-    names(df)[names(df) == "AvgFacultySalary"] <- paste0("Avg. salary, full-time instructional staff (IPEDS, 9–12-month contracts), ", year_label)
-    names(df)[names(df) == "AvgFacultySalaryY1"] <- paste0("Avg. salary, full-time instructional staff (IPEDS, 9–12-month contracts), ", y1_label)
-    names(df)[names(df) == "AvgFacultySalaryY2"] <- paste0("Avg. salary, full-time instructional staff (IPEDS, 9–12-month contracts), ", y2_label)
-    names(df)[names(df) == "ProfessorAvgSalary"] <- paste0("Professor Avg Salary (", year_label, ")")
-
-    datatable(df, filter = "top", extensions = "Buttons",
-              options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print"), pageLength = 6))
-  })
-
-
-  observe({
-    df <- filtered_hesum()
-    req(nrow(df) > 0)
-
-    df$Archive_Date <- as.Date(df$Archive_Date)
-    he_dates <- sort(unique(df$Archive_Date))
-
-    updateSliderInput(
-      session,
-      "he_scroll",
-      min = min(he_dates),
-      max = max(he_dates),
-      value = bounded_timeline_value(he_dates, days = WINDOW_WEEKS * 7),
-      timeFormat = "%Y-%m-%d"
-    )
-
-    session$userData$he_dates <- he_dates
-  })
-
-
-  output$he_slider_label <- renderText({
-    req(input$he_scroll)
-    paste(
-      c(
-        timeline_history_note(hesum_he$Archive_Date),
-        paste0("Showing: ", input$he_scroll[1], " to ", input$he_scroll[2])
-      )[nzchar(c(
-        timeline_history_note(hesum_he$Archive_Date),
-        paste0("Showing: ", input$he_scroll[1], " to ", input$he_scroll[2])
-      ))],
-      collapse = " "
-    )
   })
 
 
