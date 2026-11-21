@@ -1425,6 +1425,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     of 89 table rows shown, one cell differs (District Summary, Hamilton's New This Week 2 -> 1).
     manifest.json: the edjobs entry for the `v0.70.0` tag, and app.R's checksum; EDJOBS_VERSION and the weekly
     workflow ref 0.70.0. Suite on the tag: 3,244 passed, 0 failed, 1 skipped.
+  * [x] Package review step 7, slice 3, part 3: the Districts tab and map markers from edjobs 0.71.0's
+    `dashboard_server_shared()` (2026-11-21; branch `slice3-districts`, edjobs #72, this repo's #97): the District
+    Summary table and footnote, the compare cards and salary plot, and the map marker observer. app.R keeps a
+    `DISTRICT_SPEC <- district_spec(...)`: DLI average salary and 10th-90th range, the General Fund budget (FY label), their card rows, the popup's average-and-range line, the compare bars (DLI average vs county income), the DLI and General Fund source notes and the other-employers paragraph. Parity vs main (`claude-notes/2026-11-21_step7-slice3b/`,
+    testServer, old app.R on 0.70.0 vs branch): table data and widget, footnote, cards and plot (none / 4 / 2
+    districts), and every popup and label (66 + 248) identical. One rule changed: a popup pay line drops " · year" when
+    the year is missing (no row here has one). manifest.json: the edjobs entry for the `v0.71.0` tag, and app.R's
+    checksum; EDJOBS_VERSION and the weekly workflow ref 0.71.0. Suite on the tag: 3,244 passed, 0 failed, 1 skipped. app.R is 1,108 lines
+    (1,469 before).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
