@@ -1352,6 +1352,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Data tab screenshots looked at. manifest.json edjobs entry from a pak install of the `v0.61.0` tag;
     EDJOBS_VERSION and the weekly workflow ref 0.61.0. Suite on the tag: 3,246 passed, 0 failed (with NOT_CRAN=true, so the app boot test runs).
     Live 11-21 01:05 UTC: new counts shown; Home, Map, Data, K-12 Jobs connected with 0 errors, 3 tries.
+  * [x] Package review step 7, slice 2b, Map tab: its UI from edjobs 0.62.0's `map_tab_panel()` (2026-11-21;
+    branch `map-tab-panel`, edjobs #61, this repo's #87). app.R keeps only Montana's own text: the "About this map"
+    paragraphs, what the red "Partial" badge means here, and the note under the map; filters and map are the
+    package's. Checks vs main (`claude-notes/2026-11-21_step7-slice2b-map/`): page HTML identical (239,767 chars,
+    `ui_parity.R`); every tab's outputs identical (shinytest2, 34/34, 89 table rows shown). manifest.json: the edjobs
+    entry (leaflet now in its Suggests) for the `v0.62.0` tag, and app.R's checksum; EDJOBS_VERSION and the weekly
+    workflow ref 0.62.0. Suite on the tag: 3,246 passed, 0 failed, 1 skipped.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
