@@ -1413,7 +1413,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-21_step7-slice3a/`): every tab's outputs identical (shinytest2, main on 0.68.0 vs branch on
     0.69.0, 34/34, 89 table rows shown). manifest.json: the edjobs entry for the `v0.69.0` tag, and app.R's
     checksum; EDJOBS_VERSION and the weekly workflow ref 0.69.0. Suite on the tag: 3,244 passed, 0 failed,
-    1 skipped. app.R is 1,508 (1,716) lines before).
+    1 skipped. app.R is 1,508 lines (1,716 before).
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
