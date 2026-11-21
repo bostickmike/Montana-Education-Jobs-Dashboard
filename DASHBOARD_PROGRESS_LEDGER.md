@@ -1414,6 +1414,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     0.69.0, 34/34, 89 table rows shown). manifest.json: the edjobs entry for the `v0.69.0` tag, and app.R's
     checksum; EDJOBS_VERSION and the weekly workflow ref 0.69.0. Suite on the tag: 3,244 passed, 0 failed,
     1 skipped. app.R is 1,508 lines (1,716 before).
+  * [x] Package review step 7, slice 3, part 2: K-12 "new this week" from edjobs 0.70.0's `find_k12_new_postings()`,
+    the K-12 Jobs table from `dashboard_server_shared()` (2026-11-21; branch `slice3-new-this-week`, edjobs #70, this
+    repo's #96). Mike chose rule A, then its paired form once measured: a new `Posting_ID`, less ID changes (a new
+    ID replacing, one for one, a gone posting with the same title, location and district). Literal A would also have
+    dropped a second same-title opening next to one still listed (MT 18, WY 76 over the archives;
+    `claude-notes/2026-11-21_step7-slice3a/rule_a_paired.R`). Here: 578 new over 15 archived weeks instead of 889 by ID (11-03: 159
+    were ID changes); latest week 46 -> 43 (Hamilton, Thompson Falls, Shelby: fallback keys turning into real IDs).
+    The local `find_k12_new_postings()` is deleted. Parity vs main (shinytest2, every tab): 34/34 outputs identical;
+    of 89 table rows shown, one cell differs (District Summary, Hamilton's New This Week 2 -> 1).
+    manifest.json: the edjobs entry for the `v0.70.0` tag, and app.R's checksum; EDJOBS_VERSION and the weekly
+    workflow ref 0.70.0. Suite on the tag: 3,244 passed, 0 failed, 1 skipped.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a

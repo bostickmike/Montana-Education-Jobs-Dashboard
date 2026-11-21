@@ -27,23 +27,6 @@ DATA_LOAD_ISSUES <- character(0)
 note_load_issue <- function(msg) DATA_LOAD_ISSUES <<- c(DATA_LOAD_ISSUES, msg)
 
 
-# Keep the deployed app aligned with the pipeline's posting-identity
-# comparison without requiring the app bundle to source files above it.
-find_k12_new_postings <- function(k12_history) {
-  dates <- sort(unique(as.Date(k12_history$Archive_Date)))
-  if (length(dates) < 2) return(k12_history[0, , drop = FALSE])
-
-  latest <- dates[length(dates)]
-  previous <- dates[length(dates) - 1]
-  k12_history %>%
-    filter(as.Date(Archive_Date) == latest) %>%
-    anti_join(
-      k12_history %>% filter(as.Date(Archive_Date) == previous) %>% select(Posting_ID),
-      by = "Posting_ID"
-    )
-}
-
-
 first_seen_table <- tryCatch(read.csv("posting_first_seen.csv", colClasses = "character", fileEncoding = "UTF-8"),
                              error = function(e) NULL, warning = function(w) NULL)
 POSTED_LISTED_NOTE <- paste0(
@@ -1078,28 +1061,6 @@ server <- function(input, output, session) {
   selected_pay_band <- shared$selected_pay_band
   map_filtered <- shared$map_filtered
   filtered_hesum <- shared$filtered_hesum
-
-
-  # -------- K-12 --------
-  output$k12_jobs <- renderDT({
-    df <- combineddata
-    if (!is.null(selected_district())) df <- df %>% filter(District == selected_district())
-    if (!is.null(selected_k12_type())) df <- df %>% filter(Position == selected_k12_type())
-    if (k12_not_marked_only()) df <- df %>% filter(.Not_Marked)
-    # Same matcher and searchable text as map_filtered(), so the count here
-    # equals the popup's "N matching openings".
-    if (!is.null(selected_k12_query())) {
-      df <- df[match_job_query(paste(coalesce(df$Title, ""), coalesce(df$Position, "")), selected_k12_query()), , drop = FALSE]
-    }
-    if (!is.null(selected_pay_band())) df <- df[in_pay_band(df$.Pay_Value, df$.Pay_Unit, selected_pay_band(), PAY_BANDS), , drop = FALSE]
-    df <- df %>% select(-any_of(HIDDEN_COLS))
-    if (isTRUE(identical(input$k12_quick_filter, "new"))) {
-      df <- df %>% filter(Posting_ID %in% k12_new_this_week$Posting_ID)
-    }
-    df <- df %>% select(-any_of(c("Posting_ID", "Identity method", "Posting_Identity_Method", ".salary_district")))
-    datatable(df, filter = "top", escape = FALSE, extensions = "Buttons",
-              options = list(scrollX = TRUE, dom = "Bfrtip", buttons = c("copy", "csv", "print")))
-  })
 
 
   # District Summary -- everything the map popups show, as a real
