@@ -1379,6 +1379,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     identical (239,767 chars, `ui_parity.R`); every tab's outputs identical (shinytest2, 34/34, 89 table rows shown).
     edjobs R CMD check OK (0/0/0). manifest.json: the edjobs entry for the `v0.65.0` tag, and app.R's checksum;
     EDJOBS_VERSION and the weekly workflow ref 0.65.0. Suite on the tag: 3,246 passed, 0 failed, 1 skipped.
+  * [x] Package review step 7, slice 2b, K-12 Trends: its UI from edjobs 0.66.0's `k12_trends_panel()` (2026-11-21;
+    branch `k12-trends-panel`, edjobs #65, this repo's #91). app.R keeps Montana's two pieces: the slider label
+    (`slider_label = TRUE`) and the note under the multi-year chart on how OPI postings are counted against district
+    boards (`counting_note`). Checks vs main (`claude-notes/2026-11-21_step7-slice2b-home-districts/`): page HTML
+    identical (239,767 chars, `ui_parity.R`); every tab's outputs identical (shinytest2, 34/34, 89 table rows shown).
+    edjobs R CMD check OK (0/0/0). manifest.json: the edjobs entry for the `v0.66.0` tag, and app.R's checksum;
+    EDJOBS_VERSION and the weekly workflow ref 0.66.0. Suite on the tag: 3,246 passed, 0 failed, 1 skipped.
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
