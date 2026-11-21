@@ -1016,88 +1016,18 @@ ui <- page_navbar(
         paste0("Refreshed on: ", last_refreshed_date, " · Created by Mike Bostick"))
   ),
 
-  nav_panel(
-    "Map", value = "map_tab", icon = icon("map-location-dot"),
-    h1(class = "page-title", "Where the Openings Are"),
-    card(
-      full_screen = TRUE,
-      card_header(
-        class = "d-flex justify-content-between align-items-center",
-        "Montana Education Job Openings Map",
-        info_popover(
-          "About this map",
-          p("Only this project's ", n_distinct(map_k12$Name), " directly tracked K-12 districts and ",
-            n_distinct(map_he$Name), " directly tracked Higher Ed institutions are shown here (with current openings)."),
-          p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies. OPI postings are matched to districts through the district each posting's OPI page names; districts this dashboard doesn't scrape directly are mapped from those postings."),
-          p("Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table."),
-          p("K-12 and Higher Ed vacancy rates use different staffing sources (CCD vs. IPEDS) and years -- the shared color scale is for a rough at-a-glance read, not a precise cross-type comparison."),
-          p(class = "mb-0", "A red \"Partial\" badge means that district's postings come from an automated monitor of the district's own site rather than a structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-monitored district's count.")
-        )
-      ),
-      layout_sidebar(
-        fillable = FALSE,
-        sidebar = sidebar(
-          title = "Filters",
-          width = 300,
-          textInput(
-            "map_search_keyword",
-            label = tagList(icon("magnifying-glass"), " Search by keyword or role:"),
-            value = "",
-            placeholder = "e.g., special ed, coach, bus driver..."
-          ),
-          div(
-            class = "map-chips",
-            span("Popular: "),
-            actionLink("map_chip_sped", "Special Ed"),
-            actionLink("map_chip_math", "Mathematics"),
-            actionLink("map_chip_elem", "Elementary"),
-            actionLink("map_chip_science", "Science"),
-            actionLink("map_chip_music", "Music / Art"),
-            actionLink("map_chip_driver", "Bus Driver"),
-            actionLink("map_chip_clear", "✕ Clear", class = "text-danger fw-semibold")
-          ),
-          selectInput(
-            "map_county", "County:",
-            choices = map_county_choices,
-            selected = "all"
-          ),
-          checkboxGroupInput(
-            "map_types", "Employer type:",
-            choices = c("K-12 Districts" = "K-12 District", "Higher Ed" = "Higher Ed Institution"),
-            selected = c("K-12 District", "Higher Ed Institution"),
-            inline = TRUE
-          ),
-          selectInput(
-            "map_salary_tier", "Pay:",
-            # Built from PAY_BANDS. A posting counts by its posted pay,
-            # else its district/institution role figure, else the BLS
-            # estimate -- each in its own unit.
-            choices = c("All pay" = "all", setNames(names(PAY_BANDS), vapply(PAY_BANDS, function(b) {
-              paste0(if (b$unit == "hour") "Hourly: " else "Annual: ", b$label)
-            }, character(1)))),
-            selected = "all"
-          ),
-          selectInput(
-            "map_urgency", "Posting volume:",
-            choices = c(
-              "All Active Locations" = "all",
-              "High Volume (5+ openings)" = "5_plus",
-              "Multiple Openings (2+)" = "2_plus",
-              "New Postings This Week" = "has_new"
-            ),
-            selected = "all"
-          ),
-          actionButton("map_filter_reset", "Reset All Filters", icon = icon("arrow-rotate-left"),
-                       class = "btn-outline-secondary btn-sm w-100")
-        ),
-        div(class = "mb-2", uiOutput("map_filter_count")),
-        withSpinner(leafletOutput("combined_map", height = 650)),
-        p(class = "text-muted small mt-2 mb-0",
-          "Shows the directly tracked districts and colleges, plus districts this dashboard doesn't scrape directly that post on OPI this week (marked in their popup). Circle size = current openings; color = vacancy rate. ",
-          "Click a marker to see its jobs.",
-          if (nzchar(he_place_note)) tags$br(), he_place_note)
-      )
-    )
+  # Map tab: the layout, filters and shared text are edjobs's map_tab_panel(); this is Montana's own text.
+  map_tab_panel(
+    "Montana",
+    about = list(
+      p("Only this project's ", n_distinct(map_k12$Name), " directly tracked K-12 districts and ",
+        n_distinct(map_he$Name), " directly tracked Higher Ed institutions are shown here (with current openings)."),
+      p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies. OPI postings are matched to districts through the district each posting's OPI page names; districts this dashboard doesn't scrape directly are mapped from those postings."),
+      p("Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table.")
+    ),
+    partial_note = "A red \"Partial\" badge means that district's postings come from an automated monitor of the district's own site rather than a structured job-board platform (AppliTrack/SchoolSpring/TedK12/Tyler Portico) -- its current-openings count may be less complete or slower to reflect changes than a platform-monitored district's count.",
+    map_note = "Shows the directly tracked districts and colleges, plus districts this dashboard doesn't scrape directly that post on OPI this week (marked in their popup). Circle size = current openings; color = vacancy rate. ",
+    county_choices = map_county_choices, pay_bands = PAY_BANDS, he_place_note = he_place_note
   ),
 
   # ------------------ K-12 ------------------
