@@ -47,29 +47,30 @@ A GitHub Actions workflow runs twice a week (Mondays and Thursdays since 2026-11
 - Full `testthat` suite must pass before any real data is touched.
 - A sanity check compares the new pull against the previous run and refuses to commit if either side dropped more than half its postings.
 - Drift detection flags any source whose posting count falls far below its own historical baseline, with a live `chromote` render of the page as corroboration before anything is filed as a GitHub Issue.
-- Salary-source coverage checks watch each source against its own known-fixed (or, where a source has a real permanent gap like MT DLI's, known-partial) universe and flag if it starts returning noticeably less than expected.
+- Salary-source coverage checks compare each source (DLI teacher pay, OPI finance, CCD staffing, IPEDS) with the last run's committed salary files and flag a source that comes back with values for fewer districts or colleges than before, or with values outside plausible bounds.
 - The same coverage + value-plausibility checks run for the Census ACS/SAIPE sources.
-- Twenty-four K-12 districts and one HE institution (Wolf Point, Plentywood, Conrad, Westby, Choteau, Gardiner, Malta, Drummond, Deer Lodge, Townsend, Hays-Lodge Pole, Plevna, Sunburst, Belt, Big Sky, Melstone, Roundup, White Sulphur Springs, Shelby, Centerville, Arlee, Chinook, Darby, Dutton/Brady, and Stone Child College) run on Apptegy, a CMS that ships no real content to a plain HTTP request — a real headless Chrome instance (installed via `browser-actions/setup-chrome`) renders these during the pipeline run itself, the same technique 4 of Wyoming's own districts already needed. One more district, Geyser, runs a different CMS ("CyberSchool 2.0") with the same plain-HTTP-request limitation, sharing that same headless-Chrome render rather than needing a second browser instance.
+- Many small districts run their sites on a school CMS. In `k12_district_registry.csv` (201 districts on 2026-11-21), 49 are on Apptegy (41 `Apptegy`, 6 `ApptegyPageBuilder`, 2 `ApptegyBespoke` with scrapers of their own), plus one college (Stone Child College). Apptegy ships no postings to a plain HTTP request, so a real headless Chrome (installed via `browser-actions/setup-chrome`) renders these pages during the run. Seven more are on CyberSchool (`CyberSchool`, `CyberSchoolText`). Each site family has one reader in edjobs (`fetch_apptegy_postings()`, `fetch_cyberschool_postings()`), and each district's list rules are in the registry's `List_Start` / `List_Stop` / `List_Skip` columns.
 
 ## Repository layout
 
 - `Mt_ED_Jobs.Rmd` — the single pipeline entry point: scrapes every source, classifies and cleans postings, and appends this week's newly derived rows onto the accumulated datasets in `Mt_Ed_Jobs/`.
-- `Mt_Ed_Jobs/app.R` — the Shiny dashboard itself.
+- `Mt_Ed_Jobs/app.R` — the Shiny dashboard itself. Its tabs and most of its server come from edjobs (one function per tab, such as `home_tab_panel()`, and `dashboard_server_shared()`); app.R loads the data, passes Montana's text for each tab, and keeps the server blocks that still differ by state.
 - `direct_api_scrapers.R` — the real platform-API scrapers (AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV, ADP Workforce Now, isolved Hire, OPI statewide feed).
 - `misc_district_scrapers.R` / `misc_college_scrapers.R` — heuristic scrapers (including the chromote-driven Apptegy ones) for districts/institutions with no structured ATS, kept separate from the platform-API scrapers since they're a real but acknowledged-less-reliable source.
 - `opi_finance_scraper.R` — OPI's per-district General Fund expenditure data, a Montana-only data category.
 - `salary_scrapers.R`, `ccd_lea_pairs.R`, `ipeds_unitids.R` — the salary/staffing/Census data pipeline (the CCD, IPEDS, Pell, ACS and SAIPE fetchers are in edjobs).
-- `k12_he_classification.R`, `drift_check.R`, `scrape_helpers.R`, `schema_check.R` — classification and monitoring logic every chunk sources, largely state-agnostic and ported near-verbatim from Wyoming.
+- `k12_he_classification.R`, `drift_check.R`, `scrape_helpers.R`, `schema_check.R` — Montana's own parts of classification and monitoring (name corrections, posting identity, its schemas); each attaches edjobs, which holds the shared classifier and checks.
+- `EDJOBS_VERSION` — the [edjobs](https://github.com/bostickmike/edjobs) version this repo pins: the R package with the code Montana and Wyoming share (platform scrapers, classifier, posting spells, the weekly run's checks, the dashboard's tabs).
 - `history_accumulator.R` — appends each week's newly classified rows onto the existing accumulated datasets (idempotent, schema-checked) instead of reprocessing the full raw archive every run.
 - `k12_district_registry.csv` / `he_institution_registry.csv` — the hand-maintained list of every directly-scraped district/institution, its platform, and its real feed/job-board URL.
 - `RESEARCH_NOTES.md` — the original WY→MT scoping research (district counts, salary-source gap, FIPS codes) that shaped every structural decision in this port.
 - `Archivek12_Data/`, `Archived_HE_Data/` — one dated raw snapshot per week, still written every run as the durable source of truth. `scripts/rebuild_*_history_from_archive.R` rebuild the accumulated datasets from these from scratch, for disaster recovery or to verify the incremental path hasn't drifted. Run `Rscript scripts/rebuild_k12_history_from_archive.R` to deterministically migrate K-12 derived data to the current identity/provenance schema from committed archives.
 - `tests/testthat/` — the test suite, built almost entirely on real captured fixtures (real scraped HTML, real downloaded PDFs, real API responses) rather than synthetic data.
-- `.github/workflows/weekly-scrape.yml` — the automation described above.
+- `.github/workflows/weekly-scrape.yml` — the automation described above: a short caller of edjobs's reusable `weekly-run.yml` at the pinned tag, holding Montana's cron, secrets and state check.
 
 ## Running locally
 
-Requirements: R (>= 4.0).
+Requirements: R (>= 4.5.0), the version edjobs requires.
 
 ```r
 install.packages(c(
@@ -82,6 +83,12 @@ install.packages(c(
   "shiny", "bslib", "shinyWidgets", "DT", "data.table",
   "leaflet", "plotly", "scales", "shinycssloaders"
 ))
+```
+
+Install the pinned edjobs (the app and the pipeline both load it):
+
+```r
+pak::pak(paste0("bostickmike/edjobs@v", readLines("EDJOBS_VERSION")))
 ```
 
 To run the dashboard against the data already committed in the repo (no scraping needed):
