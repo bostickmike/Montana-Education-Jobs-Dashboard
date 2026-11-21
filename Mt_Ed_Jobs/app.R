@@ -987,78 +987,20 @@ ui <- page_navbar(
         if (!is.na(oews_year)) paste0("May ", oews_year, " ") else "",
         "median pay for that role in the posting's region (hover for the role and area; OEWS, all employers, not just schools), so treat it as a regional estimate, not this job's offer. "),
         "Teacher salary columns reflect MT DLI Teacher Compensation data (Source: OPI GEMS) and are shown on teaching postings only; Montana publishes no district-level pay data for paraprofessional, bus driver, or other classified roles. OPI Jobs for Teachers rows show the district named on the posting's OPI page; Location keeps OPI's raw city.")),
-    nav_panel(
-      "Districts", value = "k12_summary", icon = icon("school"),
-      navset_card_tab(
-        id = "k12_summary_tabs",
-        nav_panel(
-          title = tagList(icon("table-list"), " District Directory"),
-          value = "k12_summary_dir",
-          h4("One row per district -- current openings, teacher vacancy rate, and salary data ",
-             help_popover("District directory",
-               p(tags$strong("Openings: "), "postings in this week's scrape (all job types) and those new since last week. Posting Data says where they come from: the district's own board, a monitor of its own site (Partial), or only OPI's statewide board."),
-               p(tags$strong("Teacher vacancy rate and students per teacher: "), "current teacher postings, and enrollment, divided by teacher FTE (NCES Common Core of Data)."),
-               p(tags$strong("Teacher pay: "), "average salary and the 10th-90th percentile range (Montana Department of Labor & Industry, from OPI's GEMS data). ", tags$strong("General Fund Budget: "), "the district's General Fund expenditure (OPI school finance data files)."),
-               p(tags$strong("County, poverty and lunch: "), "county median household income, median rent, mining/energy share of jobs and 5-year population change (Census American Community Survey 5-year estimates, with 90% margins of error); school-age children in poverty (Census SAIPE), with its approximate 90% range; share of students eligible for free or reduced-price lunch (NCES Common Core of Data)."),
-               source = "see each group above; full definitions in the District Profiles download's (?) on the Data tab.")),
-          DTOutput("k12_summary_table", fill = FALSE),
-          uiOutput("k12_summary_footnote")
-        ),
-        nav_panel(
-          title = tagList(icon("code-compare"), " Head-to-Head Comparator"),
-          value = "k12_summary_comp",
-          p(class = "text-muted small", style = "margin-top: 6px;",
-            "Select up to four school districts to evaluate staffing demand, DLI compensation benchmarks, and community demographics side-by-side."),
-          layout_columns(
-            col_widths = c(8, 4),
-            selectizeInput(
-              "k12_compare_districts",
-              label = "Select School Districts (up to 4):",
-              choices = sort(unique(mapdata2_k12$Name)),
-              selected = c("Billings Public Schools", "Kalispell Public Schools"),
-              multiple = TRUE,
-              width = "100%",
-              options = list(maxItems = 4, placeholder = "Type or select up to 4 districts...")
-            ),
-            div(
-              tags$label("Quick Presets:", style = "display: block; margin-bottom: 5px;"),
-              div(
-                class = "btn-group",
-                actionButton("k12_comp_preset_top", "Top Hiring", class = "btn-sm btn-outline-secondary", icon = icon("fire")),
-                actionButton("k12_comp_preset_largest", "Largest", class = "btn-sm btn-outline-secondary", icon = icon("users")),
-                actionButton("k12_comp_preset_clear", "Clear", class = "btn-sm btn-outline-secondary", icon = icon("xmark"))
-              )
-            )
-          ),
-          uiOutput("k12_compare_cards"),
-          layout_columns(
-            col_widths = c(4, 4, 4),
-            dash_card("Teacher Avg Salary & County Median Income", info = help_popover("Teacher pay and county income",
-                        p(tags$strong("Teacher Avg Salary: "), "the average salary of the district's teachers, for the school system the Montana Department of Labor & Industry reports it under (blank where it suppresses the figure or no system matches)."),
-                        p(tags$strong("County Median Income: "), "median household income in the district's county."),
-                        source = "Montana Department of Labor & Industry, Labor Market Information, teacher pay from OPI's GEMS data; Census American Community Survey 5-year estimates."),
-                      withSpinner(plotlyOutput("k12_compare_salary_plot", height = "360px"))),
-            dash_card("Student Enrollment",
-                      withSpinner(plotlyOutput("k12_compare_enrollment_plot", height = "360px")),
-                      info = help_popover("Student enrollment",
-                        p("Pre-K through grade 12 fall enrollment. Districts are in the same order in all three charts, largest enrollment first."),
-                        source = "NCES Common Core of Data, via the Urban Institute's Education Data Portal.")),
-            # Two bar charts, not one dual-axis chart (Mike 2026-11-16): a line
-            # across districts implied a trend, and the two axes' scales made the
-            # bars-vs-line comparison arbitrary. Same district order in both.
-            dash_card("Active Openings",
-                      withSpinner(plotlyOutput("k12_compare_openings_plot", height = "360px")),
-                      info = help_popover("Active openings",
-                        p("Postings in this week's scrape, all job types (teachers, aides, coaches, drivers and so on)."),
-                        source = "each district's own job board, and the Office of Public Instruction's Montana job board."))
-          ),
-          dash_card("Active Openings in Selected Districts",
-                    DTOutput("k12_compare_jobs_table", fill = FALSE),
-                    info = help_popover("Openings in the selected districts",
-                      p("Every current posting from the districts chosen above, with the same columns as the K-12 Jobs tab: see \"About the pay columns\" there.")))
-        )
-      )
-    ),
+    # K-12 Districts tab: edjobs's k12_districts_panel() (step 7 slice 2b); this state's text and salary card.
+    k12_districts_panel(sort(unique(mapdata2_k12$Name)), c("Billings Public Schools", "Kalispell Public Schools"),
+      openings_note = "postings in this week's scrape (all job types) and those new since last week. Posting Data says where they come from: the district's own board, a monitor of its own site (Partial), or only OPI's statewide board.",
+      directory_notes = tagList(
+        p(tags$strong("Teacher pay: "), "average salary and the 10th-90th percentile range (Montana Department of Labor & Industry, from OPI's GEMS data). ", tags$strong("General Fund Budget: "), "the district's General Fund expenditure (OPI school finance data files)."),
+        p(tags$strong("County, poverty and lunch: "), "county median household income, median rent, mining/energy share of jobs and 5-year population change (Census American Community Survey 5-year estimates, with 90% margins of error); school-age children in poverty (Census SAIPE), with its approximate 90% range; share of students eligible for free or reduced-price lunch (NCES Common Core of Data).")),
+      directory_source = "see each group above; full definitions in the District Profiles download's (?) on the Data tab.",
+      compare_blurb = "Select up to four school districts to evaluate staffing demand, DLI compensation benchmarks, and community demographics side-by-side.",
+      salary_card = dash_card("Teacher Avg Salary & County Median Income", info = help_popover("Teacher pay and county income",
+          p(tags$strong("Teacher Avg Salary: "), "the average salary of the district's teachers, for the school system the Montana Department of Labor & Industry reports it under (blank where it suppresses the figure or no system matches)."),
+          p(tags$strong("County Median Income: "), "median household income in the district's county."),
+          source = "Montana Department of Labor & Industry, Labor Market Information, teacher pay from OPI's GEMS data; Census American Community Survey 5-year estimates."),
+        withSpinner(plotlyOutput("k12_compare_salary_plot", height = "360px"))),
+      openings_source = "each district's own job board, and the Office of Public Instruction's Montana job board."),
     # K-12 Trends tab: edjobs's k12_trends_panel() (step 7 slice 2b). Montana adds its slider label and, under the multi-year chart (Mike 11-17: it explains the chart's earlier weeks), how OPI postings are de-duplicated against district boards (opi_reconcile.R, scripts/reconcile_opi_history.R; 2026-11-03).
     k12_trends_panel(k12nowsum, k12sum, k12_timeline_value, slider_label = TRUE,
       counting_note = tagList(
