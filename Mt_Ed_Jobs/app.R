@@ -1488,147 +1488,53 @@ ui <- page_navbar(
   ),
 
   # ------------------ Data & community ------------------
-  nav_panel(
-    "Data", value = "data_tab", icon = icon("database"),
-    h1(class = "page-title", "Data Sources & Open Research Downloads"),
-    p(class = "lead", "Transparent data provenance, methodology documentation, and downloadable datasets for researchers, policy analysts, school administrators, and the public."),
-
-    dash_card(
-      "Open Research Downloads",
-      p("Every weekly snapshot is preserved. Download current or multi-year longitudinal datasets in standard CSV format:"),
-      layout_column_wrap(
-        width = "230px", fill = FALSE,
-        download_tile("briefcase", "Active K-12 Jobs",
-                      "All current public school job openings in Montana with standardized titles, positions, locations, links, and district salary benchmarks.",
-                      "download_active_k12", "Active Jobs (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "each district's own job board and the Office of Public Instruction's Montana job board; Typical pay: BLS Occupational Employment and Wage Statistics; teacher salary columns: Montana Department of Labor & Industry."),
-                                          dictionary_columns_help("combinedclean.csv", data_dictionary))),
-        download_tile("clock-rotate-left", "K-12 History Archive",
-                      "Historical record of weekly K-12 job postings across Montana (3,200+ records) for hiring seasonality and longitudinal teacher demand studies.",
-                      "download_history_k12", "Historical K-12 (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "the districts' job boards, one row per teacher posting per weekly scrape; subjects by this dashboard's title classifier."),
-                                          dictionary_columns_help("k12jobanalysis.csv", data_dictionary))),
-        download_tile("stopwatch", "K-12 Listing Duration",
-                      "Each posting's first and last week on the boards this dashboard tracks, days listed, and subject flags (STEM, SPED, etc.). Not a time-to-fill measure: see the note on the Listing Duration tab.",
-                      "download_spells", "Listing Duration (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "built from the weekly scrapes: the first and last week each posting was seen."),
-                                          dictionary_columns_help("job_duration_spells.csv", data_dictionary))),
-        download_tile("school", "District Profiles",
-                      "District-level profiles: MT DLI salaries (10th/avg/90th), NCES teacher FTE & enrollment, student-to-teacher ratios, and Census poverty/rent.",
-                      "download_district_benchmarks", "District Profiles (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "Montana Department of Labor & Industry (teacher pay); OPI school finance data files; NCES Common Core of Data (via the Urban Institute); Census American Community Survey 5-year estimates and SAIPE."),
-                                          dictionary_columns_help("salarymap2.csv", data_dictionary))),
-        download_tile("chart-line", "K-12 Weekly Vacancies",
-                      "Weekly longitudinal vacancy totals across Montana school districts (3,700+ observations). Ideal for seasonal hiring cycles and supply/demand modeling.",
-                      "download_weekly_totals", "Weekly Totals (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "the weekly scrapes: each district's postings in each week."),
-                                          dictionary_columns_help("k12_district_weekly_totals.csv", data_dictionary))),
-        download_tile("building-columns", "Higher Ed Archive",
-                      "Longitudinal postings for instructional faculty, adjuncts, and staff across the Montana University System, tribal colleges, and community colleges.",
-                      "download_history_he", "Higher Ed Archive (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "each college's own job board, one row per posting per weekly scrape; categories by this dashboard's title classifier."),
-                                          dictionary_columns_help("facultydata.csv", data_dictionary))),
-        download_tile("stopwatch", "Higher Ed Listing Duration",
-                      "Each faculty/staff posting's first and last week on the boards this dashboard tracks, days listed, and discipline flags. Not a time-to-fill measure: see the note on the Listing Duration tab.",
-                      "download_he_spells", "Higher Ed Listing Duration (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "built from the weekly scrapes: the first and last week each posting was seen."),
-                                          dictionary_columns_help("he_job_duration_spells.csv", data_dictionary))),
-        download_tile("graduation-cap", "Higher Ed Profiles",
-                      "Institution-level profiles: IPEDS UNITID, instructional faculty salaries (all ranks and professor), enrollment, and federal Pell shares.",
-                      "download_he_benchmarks", "Higher Ed Profiles (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "IPEDS and Federal Student Aid data (via the Urban Institute's Education Data Portal); Census American Community Survey 5-year estimates."),
-                                          dictionary_columns_help("salarymap.csv", data_dictionary))),
-        download_tile("chart-line", "Higher Ed Weekly Vacancies",
-                      "Weekly longitudinal vacancy totals across Montana colleges, universities, and tribal colleges. Ideal for tracking higher ed hiring seasonality.",
-                      "download_he_weekly_totals", "Higher Ed Weekly Totals (CSV)",
-                      info = help_popover("What is in this file", p(tags$strong("Sources: "), "the weekly scrapes: each college's postings in each week."),
-                                          dictionary_columns_help("he_institution_weekly_totals.csv", data_dictionary))),
-        download_tile("book", "Data Dictionary",
-                      "Comprehensive machine-readable codebook documenting variable names, data types, definitions, and source authorities across all datasets.",
-                      "download_dictionary", "Codebook (CSV)")
-      )
+  # Data tab: the layout and the text both states share are edjobs's data_tab_panel(); this is Montana's own text.
+  data_tab_panel(
+    tiles = list(
+      data_tile("download_active_k12",
+                "All current public school job openings in Montana with standardized titles, positions, locations, links, and district salary benchmarks.",
+                sources = "each district's own job board and the Office of Public Instruction's Montana job board; Typical pay: BLS Occupational Employment and Wage Statistics; teacher salary columns: Montana Department of Labor & Industry."),
+      data_tile("download_history_k12",
+                paste0("Historical record of weekly K-12 job postings across Montana", rows_phrase(download_rows("k12jobanalysis.csv")),
+                       " for hiring seasonality and longitudinal teacher demand studies.")),
+      data_tile("download_spells",
+                "Each posting's first and last week on the boards this dashboard tracks, days listed, and subject flags (STEM, SPED, etc.). Not a time-to-fill measure: see the note on the Listing Duration tab."),
+      data_tile("download_district_benchmarks",
+                "District-level profiles: MT DLI salaries (10th/avg/90th), NCES teacher FTE & enrollment, student-to-teacher ratios, and Census poverty/rent.",
+                heading = "District Profiles",
+                sources = "Montana Department of Labor & Industry (teacher pay); OPI school finance data files; NCES Common Core of Data (via the Urban Institute); Census American Community Survey 5-year estimates and SAIPE."),
+      data_tile("download_weekly_totals",
+                paste0("Weekly longitudinal vacancy totals across Montana school districts",
+                       rows_phrase(download_rows("k12_district_weekly_totals.csv", latest_week = TRUE), "observations"),
+                       ". Ideal for seasonal hiring cycles and supply/demand modeling."),
+                label = "Weekly Totals (CSV)"),
+      data_tile("download_history_he",
+                "Longitudinal postings for instructional faculty, adjuncts, and staff across the Montana University System, tribal colleges, and community colleges."),
+      data_tile("download_he_spells"),
+      data_tile("download_he_benchmarks"),
+      data_tile("download_he_weekly_totals",
+                "Weekly longitudinal vacancy totals across Montana colleges, universities, and tribal colleges. Ideal for tracking higher ed hiring seasonality."),
+      data_tile("download_dictionary")
     ),
-
-    dash_card(
-      "Interactive Data Dictionary & Variable Codebook",
-      p("Search, sort, and filter variable definitions, data types, and primary source authorities across all datasets:"),
-      div(style = "overflow-x: auto;", withSpinner(DTOutput("data_dictionary_table", fill = FALSE)))
+    dictionary = data_dictionary,
+    provenance_rows = list(
+      data_provenance_row(layer = "K-12 Active Vacancies",
+                          source = "District Hiring Portals (Frontline/AppliTrack, SchoolSpring, TalentEd, Tyler Portico) + Montana OPI Jobs for Teachers",
+                          cadence = "Weekly", badge = "success",
+                          description = "Standardized active postings across 180+ Montana school districts and regional education cooperatives, cleaned to remove duplicate listings and enriched with standardized job roles, categories, and direct application links."),
+      data_provenance_row(layer = "K-12 Historical Archive", source = "Historical Project Archive (2023-Present)", cadence = "Weekly Append",
+                          description = "Multi-year archive of education postings used to model seasonal hiring waves, subject-area shortages (STEM, Special Education, CTE), and geographic vacancy patterns."),
+      data_provenance_row(layer = "K-12 Teacher Compensation",
+                          source = "Montana Dept of Labor & Industry (DLI) / OPI GEMS Certified Staff Collection", cadence = "Annual / Periodic",
+                          description = "Published teacher compensation distributions (10th percentile, average, and 90th percentile) across 105+ Montana school districts. Sourced directly from official state regional wage reports."),
+      data_provenance_row("ccd_staffing", layer = "District Staffing & Enrollment"),
+      data_provenance_row("ipeds_pay",
+                          description = "Average salaries of full-time instructional staff on 9- to 12-month contracts (all ranks and full professor rank) for Montana University System campuses, tribal colleges, and community colleges."),
+      data_provenance_row("county"),
+      data_provenance_row("student_need")
     ),
-
-    dash_card(
-      "Data Provenance & Source Transparency",
-      p("All datasets are compiled through automated, reproducible collection pipelines and federal/state data integration. Here is where every data point originates:"),
-      div(class = "table-responsive",
-        tags$table(
-          class = "table table-striped table-bordered table-hover",
-          tags$thead(
-            tags$tr(
-              tags$th("Dataset Layer"),
-              tags$th("Primary Authority / Source"),
-              tags$th("Refresh Frequency"),
-              tags$th("Description & Research Utility")
-            )
-          ),
-          tags$tbody(
-            tags$tr(
-              tags$td(strong("K-12 Active Vacancies")),
-              tags$td("District Hiring Portals (Frontline/AppliTrack, SchoolSpring, TalentEd, Tyler Portico) + Montana OPI Jobs for Teachers"),
-              tags$td(span(class = "badge text-bg-success", "Weekly")),
-              tags$td("Standardized active postings across 180+ Montana school districts and regional education cooperatives, cleaned to remove duplicate listings and enriched with standardized job roles, categories, and direct application links.")
-            ),
-            tags$tr(
-              tags$td(strong("K-12 Historical Archive")),
-              tags$td("Historical Project Archive (2023-Present)"),
-              tags$td(span(class = "badge text-bg-info", "Weekly Append")),
-              tags$td("Multi-year archive of education postings used to model seasonal hiring waves, subject-area shortages (STEM, Special Education, CTE), and geographic vacancy patterns.")
-            ),
-            tags$tr(
-              tags$td(strong("K-12 Teacher Compensation")),
-              tags$td("Montana Dept of Labor & Industry (DLI) / OPI GEMS Certified Staff Collection"),
-              tags$td(span(class = "badge text-bg-info", "Annual / Periodic")),
-              tags$td("Published teacher compensation distributions (10th percentile, average, and 90th percentile) across 105+ Montana school districts. Sourced directly from official state regional wage reports.")
-            ),
-            tags$tr(
-              tags$td(strong("District Staffing & Enrollment")),
-              tags$td("NCES Common Core of Data (CCD) via Urban Institute"),
-              tags$td(span(class = "badge text-bg-info", "Annual")),
-              tags$td("Federal National Center for Education Statistics district-level teacher FTE and student enrollment counts. Powers vacancy-rate calculations and student-to-teacher ratios.")
-            ),
-            tags$tr(
-              tags$td(strong("Higher Ed Faculty Compensation")),
-              tags$td("NCES IPEDS Instructional Staff Salary Survey"),
-              tags$td(span(class = "badge text-bg-info", "Annual")),
-              tags$td("Average salaries of full-time instructional staff on 9- to 12-month contracts (all ranks and full professor rank) for Montana University System campuses, tribal colleges, and community colleges.")
-            ),
-            tags$tr(
-              tags$td(strong("County Economic Context")),
-              tags$td("US Census Bureau (ACS 5-Year Estimates)"),
-              tags$td(span(class = "badge text-bg-info", "Annual")),
-              tags$td("County median household income, median gross rent, share of employed residents 16 and over working in mining, quarrying, and oil and gas extraction (ACS S2403), and 5-year population trajectory.")
-            ),
-            tags$tr(
-              tags$td(strong("Student Need Context")),
-              tags$td("Census SAIPE & US Dept of Education FSA"),
-              tags$td(span(class = "badge text-bg-info", "Annual")),
-              tags$td("Small Area Income and Poverty Estimates (SAIPE) district-level estimates of school-age children in poverty for K-12, and Federal Student Aid (FSA) undergraduate Pell Grant recipient shares for colleges.")
-            )
-          )
-        )
-      )
-    ),
-
-    dash_card(
-      "Open Research Citation & Code",
-      p("This project is open-source and maintained to promote labor market transparency in public education. If you use these datasets in academic research, policy analysis, or journalism, please cite:"),
-      tags$blockquote(
-        style = "font-size: 13px; background: #f9f9f9; padding: 10px 15px; border-left: 4px solid #2a78d6;",
-        "Bostick, M. (2026). Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context. ",
-        tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard", target = "_blank", "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard")
-      ),
-      p(style = "margin-bottom: 0; font-size: 12px; color: #777;",
-        "To report discrepancies, missing districts, or data issues, use the Feedback button at the top right (no account needed), or open an issue on the ",
-        tags$a(href = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard/issues", target = "_blank", "GitHub Issue Tracker"), ".")
-    )
+    citation = "Bostick, M. (2026). Montana Education Jobs Dashboard: Longitudinal Staffing Demand, Compensation, and Socioeconomic Context. ",
+    repo_url = "https://github.com/bostickmike/Montana-Education-Jobs-Dashboard"
   ),
 
   nav_spacer(),
