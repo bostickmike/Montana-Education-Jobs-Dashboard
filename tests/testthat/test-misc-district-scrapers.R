@@ -854,6 +854,34 @@ test_that("parse_zurich_postings returns zero rows (not an error) when there's n
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
+# The real fixture with its "no jobs" sentence swapped for other wording:
+# every line in the Employment span becomes a title, so a reworded "nothing
+# open" line must not become a posting, while a real title still counts.
+# A second line closes the fixture's <h2> and opens another, the way Wix
+# lays out separate lines (a <br> inside the heading reads as one line).
+zurich_fixture_with <- function(replacement) {
+  html <- paste(readLines(test_path("fixtures", "zurich_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  stopifnot(grepl("There are no current jobs open.", html, fixed = TRUE))
+  sub("There are no current jobs open.", replacement, html, fixed = TRUE)
+}
+
+test_that("parse_zurich_postings returns zero rows for reworded 'nothing open' sentences", {
+  wordings <- c("There are currently no job openings.", "No openings at this time.",
+                "No current positions available.", "We are not currently hiring.",
+                "None at this time. Please check back later.", "There are no vacancies.",
+                "Zurich School has no open positions for the 2027-2028 school year.")
+  for (w in wordings) {
+    expect_equal(nrow(parse_zurich_postings(zurich_fixture_with(w), "url")), 0, info = w)
+  }
+})
+
+test_that("parse_zurich_postings still returns a real title from the Employment span", {
+  html <- zurich_fixture_with("Elementary Teacher (K-2)</span></span></span></span></span></h2><h2>No other openings at this time.")
+  result <- parse_zurich_postings(html, "url")
+  expect_equal(result$Title, "Elementary Teacher (K-2)")
+  expect_equal(result$Location, "Zurich")
+})
+
 test_that("fetch_zurich_postings fetches and parses a live-shaped response", {
   fixture <- paste(readLines(test_path("fixtures", "zurich_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   httr2::local_mocked_responses(

@@ -1467,6 +1467,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     fixture `judithgap_cyberschool_2026-11-21.html` with an exact-title test. The two extra rows removed from the
     11-17 and 11-19 archives (`scripts/archived_non_jobs.csv`) and the history rebuilt: Judith Gap 4 -> 2 those
     weeks, Support Services and Transportation -1 each; rebuild parity 11/11.
+  * [x] Cottonwood #57 and Zurich #17 kept as scraped; Zurich's parser no longer reads "nothing open" wording as a
+    job (2026-11-21; branch `zurich-no-openings-wording`; review question from `claude-notes/2026-11-21_step8-review/`,
+    checks in `claude-notes/2026-11-21_cottonwood-zurich-check.md`). Cottonwood's two OPI listings (05-31, 06-08,
+    "Open Until Filled", 2026-27) are still on OPI and have no online application (you email the contact). The
+    district's page says no openings and its staff page lists a lead teacher/administrator, so they stay dropped as
+    stale; retiring Cottonwood to OPIOnly would count them. Zurich's site is current, says no openings, and Zurich
+    posts on OPI (2025-26 teacher, 04-16 to 05-20-2025); no other jobs site found, no Zurich rows in any archive.
+    `parse_zurich_postings()` took every line of its Employment span as a title except one exact sentence. It now
+    drops any line matching `ZURICH_NO_OPENINGS_PATTERN` ("no current/open/other openings", "not currently hiring",
+    "none at this time", "check back", ...). New tests swap the real fixture's sentence for 7 rewordings (0 rows)
+    and for a title next to a "No other openings" line (the title only). Live 11-21: 0 rows.
 
   * [x] Potomac and Forsyth retired to Platform `OPIOnly` (2026-11-21; branch `retire-potomac-forsyth`; Mike's
     call, from the pre-step-8 review). Potomac's Jobs page (its own menu link, `/general-9`) holds only an application

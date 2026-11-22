@@ -361,15 +361,27 @@ parse_miami_postings <- function(html_text, url) {
 # Zurich Elementary School District #17 (a Wix site, found 2026-08-25)
 # -- plain httr2 fetch, same platform as Augusta above. Genuinely empty
 # right now ("There are no current jobs open."), confirmed live
-# 2026-08-25 -- that exact sentence is filtered out explicitly so this
+# 2026-08-25 and again 2026-11-21 -- that sentence, and any other "nothing
+# open" wording (ZURICH_NO_OPENINGS_PATTERN), is filtered out so this
 # returns 0 real rows now but is ready to pick up real titles the same
-# way once any appear, matching the Cottonwood #57 precedent.
+# way once any appear, matching the Cottonwood #57 precedent. Zurich
+# advertises openings on OPI too (its 2025-26 teacher posting, 04-16 to
+# 05-20-2025); no other jobs site found (2026-11-21).
 fetch_zurich_postings <- function(url = "https://www.zurichelementary17.org/employment") {
   resp <- request(url) %>%
     req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
     perform_with_retry()
   parse_zurich_postings(resp_body_string(resp), url)
 }
+
+ZURICH_NO_OPENINGS_PATTERN <- paste(
+  "\\bno (current |open |other |available )?(jobs?|positions?|openings?|vacanc(y|ies))\\b",
+  "not (currently )?(hiring|accepting)",
+  "\\bthere are (currently )?no\\b",
+  "\\b(none|nothing) (open |available )?at this time\\b",
+  "check back",
+  sep = "|"
+)
 
 parse_zurich_postings <- function(html_text, url) {
   empty <- data.frame(Title = character(0), Location = character(0),
@@ -386,7 +398,15 @@ parse_zurich_postings <- function(html_text, url) {
   if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
   if (start_idx[1] >= stop_idx[1]) return(empty)
   body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
-  body <- body[body != "There are no current jobs open."]
+  # Every other line in this span becomes a title, so any "nothing open"
+  # wording is dropped, not just today's exact sentence ("There are no
+  # current jobs open."): a reworded one ("No openings at this time",
+  # "We are not currently hiring") would otherwise be counted as a job
+  # (step 8 review, 2026-11-21). Matched per line, so a real title listed
+  # beside such a line still counts. Lines with no letters (a stray
+  # zero-width space) are dropped too.
+  body <- body[!grepl(ZURICH_NO_OPENINGS_PATTERN, body, ignore.case = TRUE, perl = TRUE)]
+  body <- body[grepl("[[:alpha:]]", body)]
 
   titles <- body[nzchar(body)]
   if (length(titles) == 0) return(empty)
