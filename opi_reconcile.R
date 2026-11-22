@@ -779,13 +779,13 @@ opi_finance_by_district <- function(raw_df) {
 }
 
 # ---- Weekly OPI cross-check section of the drift issue ----
-# qc: mt_discrepancy_report.csv; adoption: opi_adoption_candidates.csv;
+# qc: mt_discrepancy_report.csv (every unmatched posting is listed, up to max_districts districts); adoption: opi_adoption_candidates.csv;
 # backlog_text: DISTRICT_BACKLOG.md (an adoption candidate already there was
 # checked before, and the line says what was found). opi_primary:
 # opi_primary_districts.csv, districts checked and found to have no board of
 # their own (OPI is where they post): summarized in one line, so the list
 # shows only districts nobody has looked at. Empty when nothing to say.
-build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character(0), max_districts = 15,
+build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character(0), max_districts = 60,
                                           opi_primary = NULL, unmapped = NULL) {
   md <- character(0)
   if (!is.null(qc) && nrow(qc) > 0) {
@@ -804,10 +804,13 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
               sprintf("%d OPI posting%s at %d district%s we scrape matched no posting on that district's own board, so %s counted from OPI. A district that keeps appearing here either posts some jobs only on OPI or has a scraper missing postings. Districts with the most:",
                       nrow(unmatched), ifelse(nrow(unmatched) == 1, "", "s"), length(by_d), ifelse(length(by_d) == 1, "", "s"),
                       ifelse(nrow(unmatched) == 1, "it was", "they were")), "")
+      # Every posting, with its OPI posted date, so an acknowledgement (drift_acknowledged.csv, Details) can name
+      # the postings that were checked and a new one brings the district back (2026-11-22).
       for (d in names(shown)) {
-        titles <- unique(unmatched$Title[unmatched$District == d])
-        md <- c(md, sprintf("- **%s** (%d): %s%s", d, as.integer(shown[[d]]), paste(head(titles, 4), collapse = "; "),
-                            if (length(titles) > 4) "; ..." else ""))
+        u <- unmatched[unmatched$District == d, , drop = FALSE]
+        posts <- unique(ifelse(is.na(u$Date_Posted) | !nzchar(u$Date_Posted), u$Title,
+                               sprintf("%s (posted %s)", u$Title, u$Date_Posted)))
+        md <- c(md, sprintf("- **%s** (%d): %s", d, as.integer(shown[[d]]), paste(sort(posts), collapse = "; ")))
       }
       if (length(by_d) > max_districts) md <- c(md, sprintf("- ... and %d more districts", length(by_d) - max_districts))
       old <- sum(grepl("counted from OPI", qc$Discrepancy_Type) & grepl("over 60 days", qc$Discrepancy_Type))
