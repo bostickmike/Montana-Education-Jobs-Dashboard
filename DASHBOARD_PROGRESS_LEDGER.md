@@ -1468,6 +1468,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     11-17 and 11-19 archives (`scripts/archived_non_jobs.csv`) and the history rebuilt: Judith Gap 4 -> 2 those
     weeks, Support Services and Transportation -1 each; rebuild parity 11/11.
 
+  * [x] Potomac and Forsyth retired to Platform `OPIOnly` (2026-11-21; branch `retire-potomac-forsyth`; Mike's
+    call, from the pre-step-8 review). Potomac's Jobs page (its own menu link, `/general-9`) holds only an application
+    form: 0 direct rows in its 5 archives. Forsyth's Job_Link was one blog post ("Bus Drivers Wanted!", its only row,
+    10-27, kept in the archive: it was a real posting); a plain fetch now gets a "site couldn't load" shell. Replayed
+    on 11-19: as empty boards each one's OPI listing was dropped as over 60 days old (Potomac's Paraprofessional -
+    Special Education, 09-10; Forsyth's Computer Science, 06-10); as OPIOnly both count, as at every district not
+    scraped. That follows Mike's 11-09 standard ("still open" = a candidate can apply; nearly every OPI posting gives
+    a live way to, `claude-notes/2026-11-09_opi-old-postings.md`): the 60-day drop is only for a district whose own
+    board came back empty (a likely correct zero), and a district with no board gives no such signal. 11-19: 144 of
+    the 191 counted OPI rows are over 60 days old, 3 of them at OPIOnly districts
+    (`claude-notes/2026-11-21_opi-60day/`).
+    Parsers (4 functions), Rmd blocks, 5 test blocks and both fixtures deleted; map rows get the OPI badge and link.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
