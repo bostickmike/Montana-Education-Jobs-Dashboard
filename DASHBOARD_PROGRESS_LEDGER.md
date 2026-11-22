@@ -1505,6 +1505,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Flathead Lake Bio Station posting is placed at Polson (`he_campus_departments.csv`). edjobs 0.72.0 also stops
     reading "$1M" (an endowment) as pay. Copilot allowlist: `interfolio.com`. Notes:
     `claude-notes/2026-11-21_missoula-college-and-um-interfolio.md`.
+  * [x] HE faculty category fixes, edjobs 0.73.0 (2026-11-21; branch `edjobs-0.73.0`, edjobs #75; Mike chose b).
+    6 of UM's 19 Interfolio faculty titles were mislabeled ("Clinical Assistant Professor, Communication Studies" as
+    Health Sciences, Silviculture as Business & Computing, "Speech, Language, Hearing" as Humanities, the biological
+    sciences as Health Sciences or uncategorized). Clinical ranks, speech-language, forestry, the biological sciences
+    and UW's Wyoming Institute for Disabilities are fixed. Replay over both states' archives: 15 WY titles move and
+    none here, so `reclassify_committed_data.R` finds nothing to write. Notes:
+    `claude-notes/2026-11-21_um-interfolio/faculty-category.md`.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
