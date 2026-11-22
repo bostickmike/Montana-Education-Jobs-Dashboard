@@ -25,7 +25,7 @@ OPI_ROLE_LEXICON <- c(
   AG = "agricultur|vo-?ag|\\bffa\\b", BUSED = "business (ed|teacher|and marketing|education)", CTE = "industrial|technology education|tech ed|welding|\\bcte\\b|technical education",
   APRIN = "assistant principal|vice principal", ADMIN = "^administrative -|\\bdean\\b|\\badministrator\\b", BUSMGR = "business manager|business official|district clerk", CURRIC = "curriculum director|curriculum coordinator|director of curriculum", ACTDIR = "activities director|athletic director|activities coordinator|athletics and activities", PRIN = "(?<!assistant )(?<!vice )principal", SUPT = "superintendent", DIRECTOR = "director|coordinator",
   NURSE = "\\bnurse", SPED = "special ed|\\bsped\\b|^se - |life skills|resource teacher|behavior (teacher|specialist)", PARA = "para(professional|educator|-educator)?s?\\b|\\baide\\b",
-  LTS = "long[- ]term sub|\\blts\\b|\\blta\\b|long[- ]term assignment|daily sub rate", SUB = "(?<!long-term )(?<!long term )\\bsubstitute", CLERK = "clerk|payroll|secretar|administrative assistant",
+  LTS = "long[- ]term (\\w+ ){0,3}?sub|\\blts\\b|\\blta\\b|long[- ]term assignment|daily sub rate", SUB = "(?<!long-term )(?<!long term )\\bsubstitute", CLERK = "clerk|payroll|secretar|administrative assistant",
   INTERV = "intervention|title (i|1)\\b|reading specialist", EC = "early childhood|pre-?k\\b|pre-?school|head start", DRED = "driver'?s'? ed|traffic ed",
   COACH = "\\bcoach", CUST = "custod|janitor", COOK = "\\bcook|food service|kitchen", BUSDRV = "bus driver",
   ELEM = "elementary|kindergarten|\\bk-?[1-6]\\b|\\b[1-6](st|nd|rd|th)\\b.{0,12}grade|grade classroom|primary")
@@ -43,7 +43,13 @@ opi_grades <- function(txt) {
 OPI_LEVELS <- c(JH = "junior high|middle school|\\bms\\b|\\bjh\\b|7-8|7th|8th|5-8|6-8", HS = "high school|\\bhs\\b|9-12|7-12|6-12|secondary")
 # Tokens that must agree: present on one side's job, absent on the other -> different job
 OPI_DECISIVE <- c("SPED", "PARA", "LTS", "SUB", "APRIN", "PRIN", "SUPT", "COUNSEL", "PSYCH", "SLP", "OT", "PT", "DEAF", "LIB", "NURSE", "CLERK", "EC", "COACH", "CURRIC", "ACTDIR", "INTERV", "ADMIN", "BUSMGR", "DIRECTOR")
-opi_tokens <- function(txt, lex) { t <- tolower(txt); names(lex)[vapply(lex, function(r) grepl(r, t, perl = TRUE), logical(1))] }
+opi_tokens <- function(txt, lex) {
+  t <- tolower(txt); tok <- names(lex)[vapply(lex, function(r) grepl(r, t, perl = TRUE), logical(1))]
+  # "Long Term English Teacher Substitute" is a long-term sub, not a substitute
+  # (Bozeman, 2026-11-22): SUB's lookbehind can't see past the words in between.
+  if ("LTS" %in% tok) tok <- setdiff(tok, "SUB")
+  tok
+}
 
 # The job the OPI posting is for, from its description: the words after
 # "Position:", "Title:", "seeking a ..." etc., else its opening words. Role
@@ -100,6 +106,12 @@ opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc,
   }
   rel <- c("PT", "OT", "SLP", "PSYCH", "DEAF")
   dt_need <- if (any(rel %in% dt)) setdiff(dt, "SPED") else dt
+  # "Music K-12 endorsement" covers an elementary opening (Great Falls' "Elementary
+  # Instrumental Music Teacher", 2026-11-22): K-12 meets the board's ELEM, but only
+  # when the board title also names a subject the OPI posting has (Savage's K-12 PE
+  # job isn't its "Elementary Teacher").
+  subj <- setdiff(dt_need, "ELEM")
+  if ("ELEM" %in% dt_need && length(subj) && all(subj %in% of) && grepl("\\bk-12\\b", tolower(paste(opi_title, phrase, substr(opi_full, 1, 300))), perl = TRUE)) of <- union(of, "ELEM")
   if (!all(dt_need %in% of)) return(-Inf)                  # every role the board names appears in the OPI posting
   if ("COACH" %in% dt) {                                   # coaches: the sport must agree
     ds <- opi_tokens(d_title, OPI_SPORTS); os <- opi_tokens(paste(opi_title, phrase, substr(opi_full, 1, 200)), OPI_SPORTS)
