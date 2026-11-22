@@ -1434,6 +1434,21 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the year is missing (no row here has one). manifest.json: the edjobs entry for the `v0.71.0` tag, and app.R's
     checksum; EDJOBS_VERSION and the weekly workflow ref 0.71.0. Suite on the tag: 3,244 passed, 0 failed, 1 skipped. app.R is 1,108 lines
     (1,469 before).
+  * [x] Ulm's direct scraper retired (2026-11-21; branch `retire-ulm-direct`; Mike chose option C). Its registry
+    `Job_Link` was the Weebly "Forms & Files" page (the site has no jobs page), and the only row it ever produced, in
+    the 11-03 to 11-19 archives, was a Title I parent notice that passed its keyword filter ("Teacher Qualifications").
+    Registry Platform `OPIOnly` (new): the row stays for Ulm's map dot, name and history, nothing is scraped, and
+    `reconcile_opi_with_direct()` counts its OPI postings as they are (an `OPIOnly` district is not an "empty board",
+    so no 60-day limit and no "check the scraper" QC line); `k12_district_coverage_tiers()` gives it the OPI-only
+    badge, `Job_Link` is OPI's listing. Replayed on the 11-19 archive (`claude-notes/2026-11-21_ulm-retire/`): keeping
+    the row with no scraper would have dropped Ulm's one OPI posting as a ghost, removing the row would have renamed
+    it "Ulm Elem". The four archive rows removed by `scripts/drop_archived_non_jobs.R` (named rows in
+    `scripts/archived_non_jobs.csv`; deletes only those records, every other line byte for byte) and the history
+    rebuilt: Ulm's weekly count 2 -> 1 and Elementary totals -1 from 11-03, the row gone from combinedclean,
+    k12jobanalysis, the spells and first-seen. Rebuild parity before and after: all 11 files. Parser, Rmd block,
+    tests and fixture deleted; tests for the new platform in test-opi-reconcile, test-misc-district-scrapers,
+    test-drift-check, test-app-reactives. Two `run_expectations.csv` rows for 11-23.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a

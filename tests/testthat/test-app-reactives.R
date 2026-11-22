@@ -184,8 +184,11 @@ test_that("Data_Coverage is carried through to combined_map_data, Full for real-
   # Districts we don't scrape that posted on OPI (opi_only_districts.csv)
   # carry their own label instead.
   expect_true(all(k12$Data_Coverage %in% c("Full", "Partial", env$OPI_ONLY_COVERAGE)))
+  # A registry district carries it only when it has no board of its own (Platform "OPIOnly", e.g. Ulm).
   opi_only <- k12[k12$Data_Coverage == env$OPI_ONLY_COVERAGE, ]
-  expect_false(any(opi_only$Name %in% read.csv(here::here("k12_district_registry.csv"))$District))
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  expect_false(any(opi_only$Name %in% reg$District[reg$Platform != "OPIOnly"]))
+  expect_true(all(reg$District[reg$Platform == "OPIOnly"] %in% opi_only$Name))
 
   he <- env$combined_map_data[env$combined_map_data$Type == "Higher Ed Institution", ]
   skip_if(nrow(he) == 0, "no HE rows in committed data -- skipping")

@@ -55,6 +55,9 @@ test_that("every scraper function MT_SCRAPER_SPECS names really exists", {
 
 test_that("every real registered K-12 row resolves to a real scraper function, called as Mt_ED_Jobs.Rmd calls it", {
   k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  # A district with no board of its own (Platform "OPIOnly") has nothing to scrape: no call, no auto-fix issue.
+  for (d in k12$District[k12$Platform == "OPIOnly"]) expect_null(resolve_scraper_call(d), info = d)
+  k12 <- k12[k12$Platform != "OPIOnly", ]
   for (i in seq_len(nrow(k12))) {
     call <- resolve_scraper_call(k12$District[i])
     expect_false(is.null(call), info = k12$Platform[i])

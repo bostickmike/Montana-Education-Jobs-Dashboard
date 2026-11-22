@@ -150,7 +150,7 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Potomac Elementary School District #11 | Missoula | `potomacschoolmontana.us/general-9` | Wix CMS; dedicated Jobs page with application prompt; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
 | Frontier Elementary School | Roosevelt | `frontierk8.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
 | Saco Public Schools | Phillips | `sacoschools.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
-| Ulm Public Schools | Cascade | `ulmschools.com/forms--files.html` | Weebly CMS; dedicated forms & files page; extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
+| Ulm Public Schools | Cascade | `ulmschools.com/forms--files.html` | Weebly CMS; the site has no jobs page (nav: about, calendars, forms & files, board, staff); the scraper's only row ever was a Title I parent notice | ↩️ **Retired 2026-11-21**: registry Platform `OPIOnly` (postings via OPI's statewide board; row kept for the map and history) |
 | Brockton School District | Roosevelt | `brockton.k12.mt.us/employment` | Plain HTML; migrated from SchoolInSites to district site; 3 active positions (Elementary Teacher, STEM Secondary, Humanities Secondary) | ✅ **Recovered** (2026-10-27, Batch 21) |
 
 ---

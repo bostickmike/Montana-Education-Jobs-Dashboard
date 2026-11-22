@@ -2354,54 +2354,6 @@ parse_saco_postings <- function(html, url) {
 }
 
 # ---------------------------------------------------------------------------
-# Ulm Public Schools
-# ---------------------------------------------------------------------------
-fetch_ulm_postings <- function(url) {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  html <- resp_body_string(resp)
-  parse_ulm_postings(html, url)
-}
-
-parse_ulm_postings <- function(html, url) {
-  empty <- data.frame(
-    Title = character(0),
-    Location = character(0),
-    Posted_Date = character(0),
-    Link = character(0),
-    stringsAsFactors = FALSE
-  )
-  if (!nzchar(html)) return(empty)
-
-  doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  content <- html_element(doc, "#wsite-content")
-  if (is.null(content)) return(empty)
-
-  elements <- html_elements(content, "h2.wsite-content-title, .wsite-content-title, .paragraph, p, li")
-  if (length(elements) == 0) return(empty)
-
-  raw_texts <- trimws(html_text2(elements))
-  raw_texts <- raw_texts[nzchar(raw_texts)]
-
-  clean_titles <- raw_texts[!grepl("^(Employment Opportunities|Certified Salary|Click here|Classified Personnel|Certified Personnel|Coaching Personnel|NOTE:|No opening|Equal Opportunity|Application Form)", raw_texts, ignore.case = TRUE) &
-                            grepl("teacher|aide|driver|custodian|coach|specialist|para|clerk|opening|position|substitute", raw_texts, ignore.case = TRUE)]
-
-  if (length(clean_titles) == 0) return(empty)
-
-  df <- data.frame(
-    Title = clean_titles,
-    Location = rep("Ulm", length(clean_titles)),
-    Posted_Date = rep(NA_character_, length(clean_titles)),
-    Link = rep(url, length(clean_titles)),
-    stringsAsFactors = FALSE
-  )
-  unique(df)
-}
-
-# ---------------------------------------------------------------------------
 # Montana City Elementary School District #27
 # ---------------------------------------------------------------------------
 fetch_montanacity_postings <- function(url) {
@@ -2790,8 +2742,12 @@ MT_DIRECT_API_PLATFORMS <- c("AppliTrack", "SchoolSpring", "TedK12", "TylerPorti
 # against a synthetic registry without touching the real committed file.
 # Every district not returned here is implicitly "Full" -- callers coalesce
 # a missing match to that, the same convention Wyoming's own version uses.
+# A registry district with no board of its own (Platform "OPIOnly", opi_reconcile.R) gets the label the
+# OPI-only map rows carry (app.R's OPI_ONLY_COVERAGE): its postings come from OPI, not a scrape.
 k12_district_coverage_tiers <- function(registry_csv = "k12_district_registry.csv") {
   registry <- read.csv(registry_csv, stringsAsFactors = FALSE)
   partial <- registry[!(registry$Platform %in% MT_DIRECT_API_PLATFORMS), ]
-  data.frame(District = partial$District, Data_Coverage = "Partial", stringsAsFactors = FALSE)
+  data.frame(District = partial$District,
+             Data_Coverage = ifelse(partial$Platform %in% "OPIOnly", "Postings via OPI's statewide board", "Partial"),
+             stringsAsFactors = FALSE)
 }

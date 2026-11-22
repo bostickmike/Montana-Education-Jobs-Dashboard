@@ -1517,30 +1517,6 @@ if (nrow(saco_df) > 0) {
                       Posting_Source = character(0))
 }
 
-# Ulm Public Schools (ulmschools.com, found 2026-10-27)
-ulm_districts <- registry[registry$Platform == "UlmHeuristic", ]
-ulm_results <- lapply(seq_len(nrow(ulm_districts)), function(i) {
-  row <- ulm_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_ulm_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-ulm_df <- bind_rows(ulm_results)
-if (nrow(ulm_df) > 0) {
-  ulm_df <- ulm_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Ulm Public Schools site (direct board)")
-} else {
-  ulm_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
 # Montana City Elementary School District #27 (mtcityschool.net, found 2026-10-28)
 montanacity_districts <- registry[registry$Platform == "MontanacityHeuristic", ]
 montanacity_results <- lapply(seq_len(nrow(montanacity_districts)), function(i) {
@@ -2040,7 +2016,6 @@ direct_dfs <- list(
   potomac_df,
   frontier_df,
                        saco_df,
-                       ulm_df,
                        montanacity_df,
                        denton_df,
                        clancy_df,
