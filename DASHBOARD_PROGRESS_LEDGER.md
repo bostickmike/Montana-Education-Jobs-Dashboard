@@ -1540,6 +1540,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     boards (container test) and Missoula College. On the archives today (11-22) it lists 9: Arrowhead (last rows
     09-01), Circle, Cottonwood, DeSmet, Fishtail, Nye, Pleasant Valley, Sun River Valley, Zurich. The workflow step
     runs from the pin bump to 0.74.0, held until after the 11-23 MT run (the first on 0.73.0).
+  * [x] Chief Dull Knife College titles from the posting documents (2026-11-22; branch `cdkc-document-titles`;
+    `claude-notes/2026-11-22_cdkc/README.md`; step-8 review question). The page's File blocks are titled by file name:
+    "Birney Vacancy Open Until Filled" (10 archives) is a Board of Trustees seat its name doesn't say, "HR Job Posting
+    9 2026" (10 archives) is the Human Resources Manager job (Other -> Management). `fetch_cdkc_postings()` now reads
+    each linked .docx/.pdf: "Board of Trustee" documents are dropped, the title comes from "Position Title:" / "Job
+    Posting:", an unreadable document keeps its row. Live 11-22: 1 row, "Human Resources Manager". The .docx link
+    is the stable posting identity, so the spell continues. Fixtures from the 11-22 capture (page, HR .docx, Birney
+    text). Archived rows keep their old titles (the HE board seat stays in 10 past weeks).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the

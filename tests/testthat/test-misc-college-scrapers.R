@@ -403,3 +403,46 @@ test_that("fetch_cdkc_postings fetches and parses a live-shaped response", {
 
   expect_equal(nrow(result), 0)
 })
+
+# 2026-11-22 capture: two File blocks titled by file name. "Birney Vacancy Open Until Filled" is a Board of
+# Trustees seat (its document says so, its name doesn't); "HR Job Posting 9 2026" is the Human Resources Manager job.
+test_that("parse_cdkc_postings reads the 2026-11-22 page's two File blocks", {
+  html <- paste(readLines(test_path("fixtures", "cdkc_employment_2026-11-22.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  result <- parse_cdkc_postings(html)
+  expect_equal(result$Title, c("Birney Vacancy Open Until Filled", "HR Job Posting 9 2026"))
+  expect_equal(result$Link, c("https://www.cdkc.edu/wp-content/uploads/Birney-Vacancy-Open-Until-Filled.docx",
+                              "https://www.cdkc.edu/wp-content/uploads/HR-Job-Posting-9-2026.docx"))
+})
+
+test_that("refine_cdkc_postings drops a trustee vacancy by its text and titles a job from its document", {
+  html <- paste(readLines(test_path("fixtures", "cdkc_employment_2026-11-22.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  rows <- parse_cdkc_postings(html)
+  birney <- paste(readLines(test_path("fixtures", "cdkc_birney_vacancy_2026-11-22.txt"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  hr_xml <- paste(readLines(unz(test_path("fixtures", "cdkc_hr_job_posting_2026-11-22.docx"), "word/document.xml"),
+                            warn = FALSE, encoding = "UTF-8"), collapse = "")
+  result <- refine_cdkc_postings(rows, c(birney, cdkc_docx_xml_text(hr_xml)))
+  expect_equal(result$Title, "Human Resources Manager")
+  expect_equal(result$Link, "https://www.cdkc.edu/wp-content/uploads/HR-Job-Posting-9-2026.docx")
+  # A document that couldn't be read keeps its row and file-name title
+  expect_equal(refine_cdkc_postings(rows, c(NA, NA))$Title, rows$Title)
+  expect_equal(refine_cdkc_postings(rows, c(birney, "Job Posting: Payroll Clerk\nStatus: Full-Time"))$Title, "Payroll Clerk")
+})
+
+test_that("fetch_cdkc_postings reads each linked document (2026-11-22 capture)", {
+  page <- readBin(test_path("fixtures", "cdkc_employment_2026-11-22.html"), "raw", 2e5)
+  hr <- readBin(test_path("fixtures", "cdkc_hr_job_posting_2026-11-22.docx"), "raw", 1e6)
+  # A one-paragraph .docx saying "Board of Trustee's Vacancy Announcement" stands in for the 910 KB Birney file
+  birney_docx <- local({
+    d <- withr::local_tempdir(); dir.create(file.path(d, "word"))
+    writeLines('<w:document><w:body><w:p><w:r><w:t>CDKC Board of Trustee&#8217;s Vacancy Announcement</w:t></w:r></w:p></w:body></w:document>',
+               file.path(d, "word", "document.xml"))
+    z <- tempfile(fileext = ".docx"); withr::with_dir(d, utils::zip(z, "word/document.xml", flags = "-q")); readBin(z, "raw", 1e5)
+  })
+  httr2::local_mocked_responses(function(req) {
+    body <- if (grepl("Birney", req$url)) birney_docx else if (grepl("HR-Job", req$url)) hr else page
+    httr2::response(200, body = body)
+  })
+  result <- fetch_cdkc_postings()
+  expect_equal(result$Title, "Human Resources Manager")
+  expect_equal(result$Location, "Lame Deer")
+})
