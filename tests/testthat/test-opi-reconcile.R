@@ -150,7 +150,11 @@ test_that("a registry district with no board of its own (OPIOnly) counts its OPI
   base <- reconcile_fixture()
   other <- function(x) x[x$OPI_District != "Cottonwood Elem" | is.na(x$OPI_District), c("title", "District")]
   expect_equal(other(f$r$opi_keep), other(base$r$opi_keep), ignore_attr = TRUE)
-  expect_setequal(opi_only_registry_districts(reg), c("Cottonwood School District #57", "Ulm Public Schools"))
+  real <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  expect_setequal(opi_only_registry_districts(reg),
+                  c("Cottonwood School District #57", real$District[real$Platform == "OPIOnly"]))
+  expect_true(all(c("Ulm Public Schools", "Potomac Elementary School District #11", "Forsyth Public Schools") %in%
+                    opi_only_registry_districts(real)))
   expect_equal(opi_only_registry_districts(reg[, "District", drop = FALSE]), character(0))
 })
 

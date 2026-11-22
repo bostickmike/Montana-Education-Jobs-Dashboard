@@ -1493,54 +1493,6 @@ test_that("parse_circle_postings returns zero rows on empty or non-matching HTML
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_forsyth_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "forsyth_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://forsythpublicschools.org/bus-drivers-wanted/"
-
-  result <- parse_forsyth_postings(fixture, url)
-
-  expect_equal(nrow(result), 1)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_equal(result$Title, "Bus Drivers Wanted!")
-  expect_true(all(result$Location == "Forsyth"))
-  expect_true(all(is.na(result$Posted_Date)))
-  expect_equal(result$Link, "https://www.forsythpublicschools.org/kL14New/uploads/2025/11/Bus-Driver-Education.pdf")
-})
-
-test_that("parse_forsyth_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_forsyth_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("parse_potomac_postings returns zero rows on fixture with only application prompt", {
-  fixture <- paste(readLines(test_path("fixtures", "potomac_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.potomacschoolmontana.us/general-9"
-
-  result <- parse_potomac_postings(fixture, url)
-
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("parse_potomac_postings extracts real positions when present", {
-  test_html <- "<main><h2>Special Education Paraprofessional</h2></main>"
-  url <- "https://www.potomacschoolmontana.us/general-9"
-
-  result <- parse_potomac_postings(test_html, url)
-
-  expect_equal(nrow(result), 1)
-  expect_equal(result$Title, "Special Education Paraprofessional")
-  expect_equal(result$Location, "Potomac")
-  expect_equal(result$Link, url)
-})
-
-test_that("parse_potomac_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_potomac_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
 test_that("parse_cji_postings extracts vacancies from PDF text fixture", {
   fixture <- paste(readLines(test_path("fixtures", "cji_positions_text.txt"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   url <- "https://www.cji.k12.mt.us/page/employmentcji"
