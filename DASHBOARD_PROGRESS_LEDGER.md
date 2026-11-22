@@ -1517,8 +1517,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     which `read.csv()` stores as `\n` and the parity guard ignores. `in_committed_order()` now turns `\r\n` into
     `\n`. Check here (rebuild at the pinned classifier, old vs fixed code, byte comparison): no CRs in any of the
     11 files with either version, so MT's archives don't trigger it today; no committed MT CSV has ever held one
-    (November commits checked). Separate, not fixed: facultydata.csv comes back with one blank Location as NA, and
-    combinedclean.csv with Est_Year bare (committed quoted).
+    (November commits checked). Follow-up (2026-11-22, same branch): matched rows keep their committed text where
+    the rebuild differs only in NA vs "" or \r\n (facultydata.csv's one blank Location had come back NA), every
+    column is written as text so combinedclean.csv's quoted Est_Year stays quoted, and the
+    `rebuild_*_history_from_archive.R` entry points write the committed format instead of plain `write.csv()`
+    (quoted dates in 7 files). Check: all 11 files byte-identical; rebuild entry points give the committed content
+    (row order is the rebuild's). Open, for Mike: `scripts/reconcile_opi_history.R` re-decides every archived OPI
+    posting (`recompute = TRUE`), unlike the pipeline and the rebuild; run now it would restate history (weekly
+    totals -27 to +16, OPI teacher rows 5,254 -> 5,078).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
