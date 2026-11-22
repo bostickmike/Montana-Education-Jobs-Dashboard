@@ -1383,6 +1383,16 @@ parse_judithgap_postings <- function(html_text, url = "https://www.judithgap.k12
       NA_character_
     }
 
+    # A panel is one posting when it has a real heading (2026-11-21: "Bus Driver", whose body also says "Immediate
+    # Bus Driver Position" and "Requirements: Bus Driver Training ...", was read as three postings). A panel headed
+    # "Untitled" can hold several in its body (10-21: Custodian / Boiler Operator and School Cook): read by line.
+    heading <- trimws(rvest::html_text2(rvest::html_element(p, ".panel-heading")))
+    if (!is.na(heading) && nzchar(heading) && !grepl("^untitled$", heading, ignore.case = TRUE)) {
+      rows[[length(rows) + 1]] <- data.frame(Title = heading, Location = "Judith Gap", Posted_Date = posted_date,
+                                             Link = url, stringsAsFactors = FALSE)
+      next
+    }
+
     lines <- strsplit(p_text, "\n")[[1]]
     lines <- trimws(lines)
     lines <- lines[nzchar(lines)]

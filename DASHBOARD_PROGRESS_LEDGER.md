@@ -1459,6 +1459,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     New tests check the container is found and empty (an empty result is only a real zero if the list is on the
     page) and that it holds Highwood's and Power's items. 10 functions (250 lines), 5 Rmd blocks (120 lines) and 10
     test blocks deleted. Notes: `claude-notes/2026-11-21_step8/README.md` ("Measured").
+  * [x] Judith Gap: one posting per panel (2026-11-21; branch `judithgap-one-per-panel`; found by the pre-step-8
+    review, `claude-notes/2026-11-21_step8-review/`). The parser read every line with a role word in a jobs panel,
+    so the 11-16 "Bus Driver" posting was three: "Bus Driver", "Immediate Bus Driver" (the body repeating the role)
+    and "Requirements: Bus Driver Training, CPR and First Aid. CDL preferred.". A panel with a real heading is now
+    one posting titled by it; an "Untitled" panel (10-21: two jobs in one body) is still read by line. New captured
+    fixture `judithgap_cyberschool_2026-11-21.html` with an exact-title test. The two extra rows removed from the
+    11-17 and 11-19 archives (`scripts/archived_non_jobs.csv`) and the history rebuilt: Judith Gap 4 -> 2 those
+    weeks, Support Services and Transportation -1 each; rebuild parity 11/11.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the

@@ -1157,6 +1157,15 @@ test_that("parse_judithgap_postings extracts real positions from captured fixtur
   expect_equal(unique(result$Link), url)
 })
 
+test_that("parse_judithgap_postings: a panel with a heading is one posting (11-21 capture)", {
+  # The body repeats the role ("Immediate Bus Driver Position") and lists requirements; neither is a posting.
+  fixture <- paste(readLines(test_path("fixtures", "judithgap_cyberschool_2026-11-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  result <- parse_judithgap_postings(fixture)
+  expect_equal(result$Title, "Bus Driver")
+  expect_equal(result$Posted_Date, "November 16 , 2026")
+  expect_equal(result$Location, "Judith Gap")
+})
+
 test_that("parse_judithgap_postings returns zero rows on empty or non-matching HTML", {
   result <- parse_judithgap_postings("<html><body><p>No jobs</p></body></html>", "url")
   expect_equal(nrow(result), 0)
