@@ -14,7 +14,7 @@ A live, weekly-updated dashboard of K-12 and higher education job openings from 
 
 ## Data sources
 
-K-12 covers 201 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV Attract, ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render — see Automation below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
+K-12 covers 201 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV, Interfolio (University of Montana's faculty jobs), ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render — see Automation below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
 
 | Data | Source |
 |---|---|
@@ -55,7 +55,7 @@ A GitHub Actions workflow runs twice a week (Mondays and Thursdays since 2026-11
 
 - `Mt_ED_Jobs.Rmd` — the single pipeline entry point: scrapes every source, classifies and cleans postings, and appends this week's newly derived rows onto the accumulated datasets in `Mt_Ed_Jobs/`.
 - `Mt_Ed_Jobs/app.R` — the Shiny dashboard itself. Its tabs and most of its server come from edjobs (one function per tab, such as `home_tab_panel()`, and `dashboard_server_shared()`); app.R loads the data, passes Montana's text for each tab, and keeps the server blocks that still differ by state.
-- `direct_api_scrapers.R` — the real platform-API scrapers (AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV, ADP Workforce Now, isolved Hire, OPI statewide feed).
+- `direct_api_scrapers.R` — the real platform-API scrapers (AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV, Interfolio, ADP Workforce Now, isolved Hire, OPI statewide feed).
 - `misc_district_scrapers.R` / `misc_college_scrapers.R` — heuristic scrapers (including the chromote-driven Apptegy ones) for districts/institutions with no structured ATS, kept separate from the platform-API scrapers since they're a real but acknowledged-less-reliable source.
 - `opi_finance_scraper.R` — OPI's per-district General Fund expenditure data, a Montana-only data category.
 - `salary_scrapers.R`, `ccd_lea_pairs.R`, `ipeds_unitids.R` — the salary/staffing/Census data pipeline (the CCD, IPEDS, Pell, ACS and SAIPE fetchers are in edjobs).

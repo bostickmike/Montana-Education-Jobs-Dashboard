@@ -28,6 +28,17 @@ test_that("HE per-posting links are IDs; one employment page for every posting i
   expect_equal(x$Bridgeable, c(FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE))
 })
 
+test_that("an Interfolio position link is a stable HE posting ID; the board page is not", {
+  d <- rbind(he_raw("2026-11-23", "Assistant Professor, Anthropology", "University of Montana",
+                    "https://apply.interfolio.com/195126"),
+             he_raw("2026-11-23", "Dean, Mansfield Library", "University of Montana",
+                    "https://apply.interfolio.com/53871/positions"))
+  x <- add_he_posting_identity(d)
+  expect_equal(x$Posting_Identity_Method,
+               c("Stable per-posting URL", "Source fallback: institution + title (no stable posting URL)"))
+  expect_equal(x$Posting_ID[1], "url:https://apply.interfolio.com/195126")
+})
+
 test_that("the committed spells mark relistings unknown but keep platform-reported fills", {
   p <- here::here("posting_spells_k12.csv")
   skip_if_not(file.exists(p), "posting_spells_k12.csv not built")
