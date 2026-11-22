@@ -42,8 +42,10 @@ jobs:
       pipeline_gemini: true
       # OPI vs. our scrapes: districts where OPI lists jobs our scrape didn't find, scrapes that came back empty, and
       # districts we don't scrape that posted on OPI.
+      # Then boards whose postings haven't changed in weeks (WY's check, 2026-11-22).
       state_checks: |
         .github/scripts/check_opi_crosscheck.R
+        .github/scripts/check_frozen_boards.R
       state_files: |
         Mt_Ed_Jobs/opi_district_counties.csv
         Mt_Ed_Jobs/mt_district_crosswalk.csv
