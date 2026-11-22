@@ -1285,44 +1285,6 @@ parse_jeffersonhigh_postings <- function(html_text, url) {
 }
 
 
-# Lockwood School District (lockwoodschool.org, found 2026-10-21
-# via OPI Directory) -- Yellowstone County K-12 district on Edlio CMS.
-# Confirmed live 2026-10-21: 8 active postings (Special Education Teacher,
-# High School Paraprofessional, High School Business Teacher, Speech Language
-# Pathologist, Softball Coach, Basketball Coach, Substitute Teachers, Crosswalk Guard).
-# Plain httr2 fetch, no chromote needed.
-fetch_lockwood_postings <- function(url = "https://www.lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_lockwood_postings(resp_body_string(resp), url)
-}
-
-parse_lockwood_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  page <- rvest::read_html(html_text)
-  text <- rvest::html_text2(page)
-  lines <- trimws(strsplit(text, "\n")[[1]])
-  lines <- lines[nzchar(lines)]
-  start_idx <- which(grepl("Lockwood Schools Open Positions", lines))
-  stop_idx <- which(grepl("Questions[?]|Fingerprinting & Background Checks", lines))
-  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
-
-  block <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
-  exclude_patterns <- "Lockwood Schools Open Positions|Athletic Coaching|Rolling Job Openings|Application|Applications & Info|Maintenance and Custodial$|Transportation$|Crosswalk Guards & Transportation Aides$|Food Service$|Chartwells"
-
-  titles <- character(0)
-  for (l in block) {
-    if (grepl(exclude_patterns, l, ignore.case = TRUE)) next
-    if (nzchar(l) && nchar(l) < 90) titles <- c(titles, l)
-  }
-  if (length(titles) == 0) return(empty)
-  data.frame(Title = titles, Location = "Lockwood", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
 # Richey Public Schools (Dawson County) -- CyberSchool CMS,
 # plain httr2 fetch, no chromote needed. Active positions listed
 # in #maincontent .cs-html-widget strong / headings.
