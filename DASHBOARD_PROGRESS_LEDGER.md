@@ -1521,7 +1521,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the rebuild differs only in NA vs "" or \r\n (facultydata.csv's one blank Location had come back NA), every
     column is written as text so combinedclean.csv's quoted Est_Year stays quoted, and the
     `rebuild_*_history_from_archive.R` entry points write the committed format instead of plain `write.csv()`
-    (quoted dates in 7 files). Check: all 11 files byte-identical; rebuild entry points give the committed content
+    (quoted dates). Check: all 11 files byte-identical; rebuild entry points give the committed content
     (row order is the rebuild's). Open, for Mike: `scripts/reconcile_opi_history.R` re-decides every archived OPI
     posting (`recompute = TRUE`), unlike the pipeline and the rebuild; run now it would restate history (weekly
     totals -27 to +16, OPI teacher rows 5,254 -> 5,078).
