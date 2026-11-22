@@ -1592,6 +1592,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (11-03 to 11-19, 1,030 OPI rows at scraped districts): 6 decisions change, all these two postings. Archived
     decisions are kept (`OPI_Counted`); two run expectations for 11-23 (an error, not a pass, if the board posting
     is gone). Suite 3,274 passed, 1 failed (the local edjobs 0.78.0 vs pinned 0.73.0 check; CI installs the pin).
+  * [x] Map dots for two special-education co-ops (2026-11-22; branch `coop-map-dots`;
+    `claude-notes/2026-11-22_drift-triage/README.md`). The drift issue had listed "Eastern Yellowstone Coop" and
+    "Missoula Area Education Coop" under "Employers with postings but no map dot" since 11-17 (an SLP and a school
+    psychologist, both on OPI). `other_employers.csv` gets a row each from CCD's 2024 directory (Urban Institute API,
+    read 11-22): 3000087 "E. Yellowstone Spec. Ser Coop", Worden (the posting names the "Eastern Yellowstone Special
+    Services Cooperative"), and 3000053 "Missoula Area Education Coop", Missoula. The run builds their map rows
+    (`build_other_employer_rows()`); `reference_audit.R` lists both under "no map row" until then. One run
+    expectation for 11-23 (`unmapped_employers.csv`).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
