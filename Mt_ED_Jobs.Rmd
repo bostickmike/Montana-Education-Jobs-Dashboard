@@ -191,6 +191,9 @@ if (nrow(redrover_df) > 0) {
                             Posting_Source = character(0))
 }
 
+# No registry row has this Platform since 2026-11-22: Lodge Grass is OPIOnly (its pages have read "UPDATED:
+# 4-30-2026" since April while OPI dropped most of the same jobs). The block and parser stay until the
+# district clerk says whether the page is kept current (claude-notes/2026-11-22_lodge-grass/README.md).
 lodgegrass_districts <- registry[registry$Platform == "LodgeGrassHeuristic", ]
 lodgegrass_results <- lapply(seq_len(nrow(lodgegrass_districts)), function(i) {
   row <- lodgegrass_districts[i, ]

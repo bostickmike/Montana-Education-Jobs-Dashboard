@@ -30,7 +30,7 @@
 "Livingston Public Schools","3016880","Livingston","Park County","45.6621","-110.5605","Edlio","","https://www.livingston.k12.mt.us/apps/pages/index.jsp?uREC_ID=2055955&type=d&pREC_ID=2121638","","",""
 "Wolf Point Public Schools","3028590","Wolf Point","Roosevelt County","48.0928","-105.6402","Apptegy","","https://www.wolfpointschools.org/page/job-opportunities-1","^JOB OPENINGS$","^(Find Us|Join the Team)$","CURRENTLY FILLED"
 "Plentywood Public Schools","3020960","Plentywood","Sheridan County","48.7772","-104.5586","Apptegy","","https://www.plentywood.k12.mt.us/o/plentywood/page/employment-opportunities","^(Classified|Certified) Positions available","^How to Apply$",""
-"Lodge Grass Public Schools","3017010","Lodge Grass","Big Horn County","45.3164","-107.3624","LodgeGrassHeuristic","","https://www.lgschools.org/apps/pages/index.jsp?uREC_ID=373420&type=d","","",""
+"Lodge Grass Public Schools","3017010","Lodge Grass","Big Horn County","45.3164","-107.3624","OPIOnly","","https://apps.opi.mt.gov/mtjobsforteachers/frmJobListingPublic.aspx","","",""
 "Browning Public Schools","3005140","Browning","Glacier County","48.5577","-113.0173","AppliTrack","bpsk12","https://www.applitrack.com/bpsk12/onlineapp/default.aspx","","",""
 "Libby Public Schools","3016530","Libby","Lincoln County","48.3884","-115.5559","SchoolSpring","libbyschools.schoolspring.com","https://libbyschools.schoolspring.com/","","",""
 "Broadview School District","3004890","Broadview","Yellowstone County","46.0989","-108.8761","BroadviewHeuristic","","https://www.broadviewschools.org/apps/pages/index.jsp?uREC_ID=425960&type=d","","",""
