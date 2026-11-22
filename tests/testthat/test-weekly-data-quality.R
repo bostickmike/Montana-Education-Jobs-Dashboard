@@ -229,10 +229,15 @@ test_that("every this-week district total ties out to a distinct Posting_ID coun
 # 4. Enum coverage -- a value app.R's switch/recode/ifelse logic doesn't
 #    know about renders blank or falls through a case.
 # ---------------------------------------------------------------------------
-test_that("Data_Coverage is one of the three documented values", {
-  dc <- read_mt("salarymap2.csv")$Data_Coverage
-  expect_true(all(is.na(dc) | dc %in% c("Full", "Partial")),
-              info = paste("unexpected Data_Coverage:", paste(setdiff(unique(dc), c(NA, "Full", "Partial")), collapse = ", ")))
+test_that("Data_Coverage is one of the documented values", {
+  # The OPI label only for a registry district with no board of its own (Platform "OPIOnly", 2026-11-21).
+  ok <- c("Full", "Partial", "Postings via OPI's statewide board")
+  sm <- read_mt("salarymap2.csv")
+  dc <- sm$Data_Coverage
+  expect_true(all(is.na(dc) | dc %in% ok),
+              info = paste("unexpected Data_Coverage:", paste(setdiff(unique(dc), c(NA, ok)), collapse = ", ")))
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  expect_setequal(sm$District[dc %in% ok[3]], reg$District[reg$Platform == "OPIOnly"])
 })
 
 test_that("Posting_Identity_Method values all describe a known method", {

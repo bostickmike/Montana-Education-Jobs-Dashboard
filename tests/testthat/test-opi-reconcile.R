@@ -41,13 +41,12 @@ test_that("a district name CCD gives twice resolves to the registry district, ne
 
 reconcile_fixture <- function(direct = read.csv(test_path("fixtures", "direct_postings_2026-10-27_reconcile.csv"),
                                                 stringsAsFactors = FALSE),
-                              today = as.Date("2026-11-02")) {
+                              today = as.Date("2026-11-02"),
+                              registry = read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)) {
   opi <- read.csv(test_path("fixtures", "opi_postings_2026-11-02_reconcile.csv"), stringsAsFactors = FALSE)
   opi$District <- opi$location
   list(opi = opi, direct = direct,
-       r = reconcile_opi_with_direct(opi, direct, xw_fixture(),
-                                     read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE),
-                                     today = today))
+       r = reconcile_opi_with_direct(opi, direct, xw_fixture(), registry, today = today))
 }
 
 test_that("at a district we scrape, an OPI posting is dropped only when it matches a board posting", {
@@ -133,6 +132,26 @@ test_that("an empty scrape is not filled with OPI listings over 60 days old", {
   # Dates in either format; unknown dates are not stale.
   expect_equal(opi_listing_is_stale(c("2026-08-01", "08/01/2026", "2026-10-01", NA, ""), as.Date("2026-11-02")),
                c(TRUE, TRUE, FALSE, FALSE, FALSE))
+})
+
+test_that("a registry district with no board of its own (OPIOnly) counts its OPI postings, old ones too, unreported", {
+  # Same fixture week as the 60-day test above, with Cottonwood #57 marked as having no board: its two
+  # May-June listings are no longer "an empty scrape's ghosts" but the district's only postings (Ulm, 2026-11-21).
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  reg$Platform[reg$District == "Cottonwood School District #57"] <- "OPIOnly"
+  f <- reconcile_fixture(registry = reg)
+  cw <- f$r$opi_keep[f$r$opi_keep$OPI_District == "Cottonwood Elem", ]
+  expect_equal(nrow(cw), 2)
+  expect_true(all(cw$District == "Cottonwood School District #57"))
+  expect_false(any(f$r$opi_dropped$OPI_District == "Cottonwood Elem"))
+  expect_false(any(f$r$qc$District == "Cottonwood School District #57"))
+  expect_false("Cottonwood School District #57" %in% f$r$adoption$Map_Entity)
+  # Every other district is counted exactly as before.
+  base <- reconcile_fixture()
+  other <- function(x) x[x$OPI_District != "Cottonwood Elem" | is.na(x$OPI_District), c("title", "District")]
+  expect_equal(other(f$r$opi_keep), other(base$r$opi_keep), ignore_attr = TRUE)
+  expect_setequal(opi_only_registry_districts(reg), c("Cottonwood School District #57", "Ulm Public Schools"))
+  expect_equal(opi_only_registry_districts(reg[, "District", drop = FALSE]), character(0))
 })
 
 test_that("without OPI_District a posting falls back to its town, conservatively", {

@@ -130,7 +130,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Enrollment` | Integer | NCES Common Core of Data (CCD) | Total pre-K through grade 12 student enrollment count. |
 | `CCD_Year` | Integer | NCES Common Core of Data (CCD) | Data collection school year for federal CCD staffing and enrollment counts. |
 | `CCD_Source` | String | NCES Common Core of Data (CCD) | Federal source citation for NCES CCD public school district universe data. |
-| `Data_Coverage` | Categorical | This dashboard: coverage summary | Scraper coverage fidelity tier: Full (direct ATS integration) vs Partial (heuristic site scrape). |
+| `Data_Coverage` | Categorical | This dashboard: coverage summary | Scraper coverage fidelity tier: Full (direct ATS integration) vs Partial (heuristic site scrape); "Postings via OPI's statewide board" for a district with no board of its own (registry Platform OPIOnly). |
 | `Median_Household_Income` | Currency ($) | US Census ACS 5-year | County median annual household income in inflation-adjusted dollars. |
 | `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
 | `Median_Gross_Rent` | Currency ($) | US Census ACS 5-year | County median monthly gross rent including estimated utilities. |

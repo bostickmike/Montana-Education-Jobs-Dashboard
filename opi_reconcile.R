@@ -22,6 +22,8 @@
 #   4. Our scrape of a district returned nothing this week -> its OPI
 #      postings fill in (relabeled to the registry district) and are listed in
 #      the QC report too (likely a broken scraper).
+#   5. A registry district with no board of its own (Platform "OPIOnly") ->
+#      its OPI postings count under the registry district, not reported.
 #   Employers outside CCD (private and tribal schools, co-ops) -> counted,
 #      labeled with OPI's employer name, no map entity.
 #
@@ -247,6 +249,14 @@ assign_opi_districts <- function(opi_df, crosswalk, registry) {
   out
 }
 
+# Registry districts with no job board of their own (Platform "OPIOnly"): kept in the registry for their map row,
+# name and history, but nothing is scraped; their postings come from OPI's statewide board.
+OPI_ONLY_PLATFORM <- "OPIOnly"
+opi_only_registry_districts <- function(registry) {
+  if (is.null(registry) || !all(c("District", "Platform") %in% names(registry))) return(character(0))
+  registry$District[registry$Platform %in% OPI_ONLY_PLATFORM]
+}
+
 # TRUE where a posted date (ISO or OPI's m/d/Y) is more than 60 days before
 # `today`; unknown dates are not stale.
 opi_listing_is_stale <- function(date_posted, today, days = 60) {
@@ -310,7 +320,11 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   # today's registry, an old week's "empty scrape" is mostly a district not
   # adopted yet, whose spring postings were still open in August.
   active <- scraped & a$Registry_District %in% direct_active
-  empty_board <- scraped & !active
+  # A registry district with no job board of its own (Platform "OPIOnly": Ulm, whose site has none, 2026-11-21)
+  # posts only on OPI, so an empty "scrape" there says nothing: its OPI postings count as they are, with no
+  # 60-day limit and no "check the scraper" QC line.
+  no_board <- scraped & a$Registry_District %in% opi_only_registry_districts(registry)
+  empty_board <- scraped & !active & !no_board
   # OPI lists one job more than once (elementary and high-school district,
   # two schools): same district, same description -> one posting.
   dup <- opi_duplicate_listing(opi_df, ifelse(!is.na(a$Map_Entity), a$Map_Entity, as.character(opi_df$District)))
