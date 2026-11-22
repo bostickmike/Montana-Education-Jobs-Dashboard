@@ -1742,16 +1742,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Drift acknowledgements by posting, each checked against its source (2026-11-22; branch
     `drift-ack-source-checked`; edjobs 0.80.0, bostickmike/edjobs#82; `claude-notes/2026-11-22_drift-triage/README.md`).
     A district-wide acknowledgement would hide a later scraper miss there. The OPI cross-check's "On OPI but not on our
-    scrape" list now names every posting as "Title (posted YYYY-MM-DD)" (it showed 4 titles and 15 districts), and
-    `drift_acknowledged.csv` gets a `Details` column: the postings that were checked. A new posting there brings the
-    district back as "New this run". Entries: Richey (now by posting); Baker, Monforton and Victor (their pages send
-    teaching jobs to OPI); Colstrip, Sidney, Stevensville, Glendive, Lockwood, Darby and Froid (each posting checked
-    on the live board, 11-22: not there); and Swan River's DLI 10th percentile of $16,900, which is DLI's own figure
-    (NorthWest report: "Swan River Elementary 9 16,900 42,900 70,600"). Replay on the 11-19 archive with this
-    writer and edjobs 0.80.0: 11 of 17 districts acknowledged, the other 6 listed (Bozeman and Great Falls: the
-    matcher fix above; Dillon, Jordan, Turner, White Sulphur Springs: not checked yet; the last two were past the old
-    15-district cut). Needs the pin at 0.80.0 or later (0.78.0 ignores `Details` and would acknowledge whole districts); rebased
-    on 11-23's main, which pins 0.84.0.
+    scrape" list now names every posting as "Title (posted YYYY-MM-DD)", with ", N postings" when one title and date
+    repeat (Richey's two PE postings), whitespace collapsed (it showed 4 titles and 15 districts; now up to 60), and
+    `drift_acknowledged.csv` gets a `Details` column: the postings that were checked. A new posting, a relisting or
+    another copy brings the district back as "New this run". Entries (16): Richey (now by posting); Baker, Monforton
+    and Victor (their pages send teaching jobs to OPI); Colstrip, Sidney, Stevensville, Glendive, Lockwood, Darby,
+    Froid, Dillon, Jordan, Turner and White Sulphur Springs (each posting checked on the live board, 11-22: not
+    there; each saved page carries the jobs the scraper read); Swan River's DLI 10th percentile of $16,900, DLI's own
+    figure (NorthWest report: "Swan River Elementary 9 16,900 42,900 70,600"). Replay on the 11-19 archive with this
+    writer and edjobs 0.80.0: 15 of 17 districts acknowledged; Bozeman and Great Falls stay listed until a run with
+    the matcher fix above. `test-opi-reconcile.R` fails while `Details` are in use and the pin is below 0.80.0
+    (0.78.0 ignores them and would acknowledge whole districts). Rebased on
+    11-23's main (pins 0.84.0).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's

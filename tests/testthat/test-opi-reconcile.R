@@ -244,12 +244,20 @@ test_that("the OPI miss list names every posting with its posted date, for posti
                    Date_Posted = c("2026-10-28", "2026-10-05", "2026-10-28", "2026-11-16"),
                    Discrepancy_Type = "On OPI, not on our scrape, counted from OPI (scraper miss or posted only on OPI)")
   md <- build_opi_crosscheck_markdown(qc, NULL)
-  expect_true("- **Baker Public Schools** (3): English (posted 2026-10-28); Special Education (posted 2026-10-05)" %in% md)
+  expect_true("- **Baker Public Schools** (3): English (posted 2026-10-28, 2 postings); Special Education (posted 2026-10-05)" %in% md)
   expect_true("- **Froid Public Schools** (1): Science (Broadfield) (posted 2026-11-16)" %in% md)
   # No 4-title cut, and no district cut below 60: a new problem can't hide behind acknowledged ones.
   many <- data.frame(District = sprintf("District %02d", 1:20), Title = "Music", Date_Posted = "2026-11-01",
                      Discrepancy_Type = qc$Discrepancy_Type[1])
   expect_equal(sum(grepl("^- \\*\\*District", build_opi_crosscheck_markdown(many, NULL))), 20)
+})
+
+test_that("drift_acknowledged.csv's Details need edjobs 0.80.0, which reads them", {
+  # Older edjobs ignores Details and would acknowledge whole districts, hiding a later scraper miss there.
+  ack <- read.csv(here::here("drift_acknowledged.csv"), colClasses = "character")
+  if ("Details" %in% names(ack) && any(nzchar(trimws(ack$Details))))
+    expect_true(package_version(trimws(readLines(here::here("EDJOBS_VERSION")))) >= "0.80.0",
+                info = "Pin edjobs 0.80.0 or later before acknowledging by posting (Details).")
 })
 
 test_that("archived weeks keep their old OPI fill-ins: the 60-day limit applies only to new runs", {

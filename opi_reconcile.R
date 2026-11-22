@@ -807,9 +807,13 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
       # Every posting, with its OPI posted date, so an acknowledgement (drift_acknowledged.csv, Details) can name
       # the postings that were checked and a new one brings the district back (2026-11-22).
       for (d in names(shown)) {
+        # Two openings with one title and date (Richey's two PE postings, 10-25) say how many, so a third is new.
         u <- unmatched[unmatched$District == d, , drop = FALSE]
-        posts <- unique(ifelse(is.na(u$Date_Posted) | !nzchar(u$Date_Posted), u$Title,
-                               sprintf("%s (posted %s)", u$Title, u$Date_Posted)))
+        tl <- gsub("\\s+", " ", trimws(u$Title))
+        p1 <- ifelse(is.na(u$Date_Posted) | !nzchar(u$Date_Posted), tl, sprintf("%s (posted %s", tl, u$Date_Posted))
+        n <- table(p1); has_date <- grepl("\\(posted ", names(n))
+        posts <- ifelse(has_date, ifelse(n > 1, sprintf("%s, %d postings)", names(n), as.integer(n)), paste0(names(n), ")")),
+                        ifelse(n > 1, sprintf("%s (%d postings)", names(n), as.integer(n)), names(n)))
         md <- c(md, sprintf("- **%s** (%d): %s", d, as.integer(shown[[d]]), paste(sort(posts), collapse = "; ")))
       }
       if (length(by_d) > max_districts) md <- c(md, sprintf("- ... and %d more districts", length(by_d) - max_districts))
