@@ -60,6 +60,8 @@ suppressMessages({
 
 
 # Lodge Grass Public Schools (lgschools.org) -- an "Educational Networks"
+# (Not run since 2026-11-22: the registry row is Platform OPIOnly, the
+# pages unchanged since 4-30-2026; kept until the district clerk answers.)
 # CMS with real openings split across 3 tabs of the same Employment page
 # (uREC_ID=373420): the default view ("Certified Job Opening"), pREC_ID
 # 1206958 ("Classified Job Openings"), and pREC_ID 1206962 ("Coach - Open

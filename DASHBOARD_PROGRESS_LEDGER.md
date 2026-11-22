@@ -1548,6 +1548,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Posting:", an unreadable document keeps its row. Live 11-22: 1 row, "Human Resources Manager". The .docx link
     is the stable posting identity, so the spell continues. Fixtures from the 11-22 capture (page, HR .docx, Birney
     text). Archived rows keep their old titles (the HE board seat stays in 10 past weeks).
+  * [x] Lodge Grass to OPI only (2026-11-22; branch `lodge-grass-opi-only`; Mike's call, option B of
+    `claude-notes/2026-11-22_lodge-grass/README.md`). Both board pages read "UPDATED: 4-30-2026", the same 15 titles
+    in every run since 08-11, and 7 of the same jobs came off OPI Aug-Oct. Registry Platform `OPIOnly` (as Ulm),
+    Job_Link OPI's listing; salarymap2's row gets the OPI-only badge and link now (the run rebuilds it the same way).
+    Replayed on the 11-19 archive with `reconcile_opi_with_direct()`: Lodge Grass 15 direct + 0 OPI -> 0 direct + 2
+    OPI (Elementary Curriculum, CTE Business and Marketing, posted 06-10). Archived rows kept (real postings,
+    likely stale). Parser, Rmd block and fixture tests kept, unused, until the district clerk answers (draft in
+    `claude-notes/2026-11-21_contact-drafts.md`, section 6); if the page is current, the registry row goes back
+    to `LodgeGrassHeuristic`. Two run expectations for 11-23. Suite 3,268 passed, 0 failed (test-drift-check: 2
+    fewer, Lodge Grass no longer resolves to a scraper).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
