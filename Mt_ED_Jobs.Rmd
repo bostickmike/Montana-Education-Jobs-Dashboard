@@ -605,7 +605,8 @@ if (nrow(swanvalley_df) > 0) {
 # 2026-11-14; claude-notes/2026-11-14_cyberschool-family/): every registry row
 # with Platform "CyberSchool" goes through edjobs::fetch_cyberschool_postings(),
 # which reads the classic CyberSchool 2.0 list and IES's newer platform (Vaughn
-# moved 2026-11). Replaced the Highwood, Vaughn and Power scrapers. Each keeps
+# moved 2026-11). Replaced the Highwood, Vaughn and Power scrapers, and on 2026-11-21 the bespoke ones for
+# Frontier, Saco, Montana City, Denton and Clancy (classic sites, empty boards so far). Each keeps
 # the Posting_Source its own block wrote, so its spells don't read the switch
 # as a move to another board; a district joining later gets the standard form.
 # Platform "CyberSchoolText" (edjobs 0.24.0, Nashua, Frazer, Lavina, Hinsdale):
@@ -1469,126 +1470,6 @@ if (nrow(potomac_df) > 0) {
                       Posting_Source = character(0))
 }
 
-# Frontier Elementary School (frontierk8.org, found 2026-10-27)
-frontier_districts <- registry[registry$Platform == "FrontierHeuristic", ]
-frontier_results <- lapply(seq_len(nrow(frontier_districts)), function(i) {
-  row <- frontier_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_frontier_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-frontier_df <- bind_rows(frontier_results)
-if (nrow(frontier_df) > 0) {
-  frontier_df <- frontier_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Frontier Elementary School site (direct board)")
-} else {
-  frontier_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
-# Saco Public Schools (sacoschools.k12.mt.us, found 2026-10-27)
-saco_districts <- registry[registry$Platform == "SacoHeuristic", ]
-saco_results <- lapply(seq_len(nrow(saco_districts)), function(i) {
-  row <- saco_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_saco_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-saco_df <- bind_rows(saco_results)
-if (nrow(saco_df) > 0) {
-  saco_df <- saco_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Saco Public Schools site (direct board)")
-} else {
-  saco_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
-# Montana City Elementary School District #27 (mtcityschool.net, found 2026-10-28)
-montanacity_districts <- registry[registry$Platform == "MontanacityHeuristic", ]
-montanacity_results <- lapply(seq_len(nrow(montanacity_districts)), function(i) {
-  row <- montanacity_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_montanacity_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-montanacity_df <- bind_rows(montanacity_results)
-if (nrow(montanacity_df) > 0) {
-  montanacity_df <- montanacity_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Montana City Elementary School District #27 site (direct board)")
-} else {
-  montanacity_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
-# Denton Public Schools (denton.k12.mt.us, found 2026-10-28)
-denton_districts <- registry[registry$Platform == "DentonHeuristic", ]
-denton_results <- lapply(seq_len(nrow(denton_districts)), function(i) {
-  row <- denton_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_denton_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-denton_df <- bind_rows(denton_results)
-if (nrow(denton_df) > 0) {
-  denton_df <- denton_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Denton Public Schools site (direct board)")
-} else {
-  denton_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
-# Clancy Elementary School District #1 (clancyschool.org, found 2026-10-28)
-clancy_districts <- registry[registry$Platform == "ClancyHeuristic", ]
-clancy_results <- lapply(seq_len(nrow(clancy_districts)), function(i) {
-  row <- clancy_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_clancy_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-clancy_df <- bind_rows(clancy_results)
-if (nrow(clancy_df) > 0) {
-  clancy_df <- clancy_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Clancy Elementary School District #1 site (direct board)")
-} else {
-  clancy_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-
 # Hysham Public Schools (unbranded CMS, found 2026-08-24) also has no
 # structured ATS in this project's own platform list -- a plain httr2
 # fetch, no chromote needed, same pattern as the other heuristic
@@ -1993,7 +1874,6 @@ pleasantvalley_df <- pleasantvalley_df %>% mutate(date_posted = standardize_date
 circle_df <- circle_df %>% mutate(date_posted = standardize_date(date_posted))
 forsyth_df <- forsyth_df %>% mutate(date_posted = standardize_date(date_posted))
 potomac_df <- potomac_df %>% mutate(date_posted = standardize_date(date_posted))
-frontier_df <- frontier_df %>% mutate(date_posted = standardize_date(date_posted))
 cji_df <- cji_df %>% mutate(date_posted = standardize_date(date_posted))
 marion_df <- marion_df %>% mutate(date_posted = standardize_date(date_posted))
 lima_df <- lima_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -2014,11 +1894,6 @@ direct_dfs <- list(
   circle_df,
   forsyth_df,
   potomac_df,
-  frontier_df,
-                       saco_df,
-                       montanacity_df,
-                       denton_df,
-                       clancy_df,
                        bigfork_df, terry_df,
                        cji_df, marion_df, lima_df, 
   gallatingateway_df, apptegy_df

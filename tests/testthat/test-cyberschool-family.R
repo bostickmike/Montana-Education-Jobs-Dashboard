@@ -19,9 +19,11 @@ cs_parse <- function(fixture, district) {
   parse_cyberschool_postings(html, row$Job_Link, row$City)
 }
 
-test_that("the CyberSchool registry rows are the three migrated districts, each with a spec", {
+test_that("the CyberSchool registry rows are the eight migrated districts, each with a spec", {
   expect_setequal(cs_registry()$District, c("Highwood Public Schools", "Vaughn Elementary School District #74",
-                                            "Power Public Schools"))
+                                            "Power Public Schools", "Frontier Elementary School", "Saco Public Schools",
+                                            "Montana City Elementary School District #27", "Denton Public Schools",
+                                            "Clancy Elementary School District #1"))
   for (d in cs_registry()$District) {
     call <- edjobs::resolve_scraper_call(d)
     expect_equal(call$fn, "fetch_cyberschool_postings")
@@ -51,6 +53,48 @@ test_that("parse_cyberschool_postings: Vaughn Elementary, before and after its m
   expect_equal(new$Posted_Date, old$Posted_Date)
   expect_equal(new$Link, "https://vaughn.l.iescentral.com/jobs/substitutes-needed")
   expect_true(all(c(old$Location, new$Location) == "Vaughn"))
+})
+
+# Frontier, Saco, Montana City, Denton and Clancy (2026-11-21, claude-notes/2026-11-21_step8/): classic CyberSchool
+# sites whose bespoke parsers were written 10-27/10-28 against empty boards and kept any li/p/strong line with a
+# role word. Their fixtures, like their live pages on 11-21 and their "Archive Jobs" views, hold the job list with
+# no items. An empty result is only a real zero if the list itself is on the page, so each test checks both: the
+# list container Highwood's and Power's postings sit in is there, and it holds nothing.
+cs_empty_board <- function(fixture, district) {
+  html <- paste(readLines(test_path("fixtures", fixture), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  doc <- rvest::read_html(html)
+  expect_length(rvest::html_elements(doc, "div.pageData > div.listItem_list"), 1)
+  expect_length(rvest::html_elements(doc, ".listItem_holder"), 0)
+  expect_equal(nrow(cs_parse(test_path("fixtures", fixture), district)), 0)
+}
+
+test_that("the classic list container is where the postings are: Highwood and Power", {
+  for (f in c("highwood_cyberschool_2026-10-21.html", "power_jobs.html")) {
+    doc <- rvest::read_html(paste(readLines(test_path("fixtures", f), warn = FALSE, encoding = "UTF-8"), collapse = "\n"))
+    expect_gt(length(rvest::html_elements(doc, "div.pageData > div.listItem_list .listItem_holder")), 0)
+  }
+})
+
+test_that("parse_cyberschool_postings: Frontier Elementary School, an empty board", {
+  cs_empty_board("frontier_jobs.html", "Frontier Elementary School")
+})
+
+test_that("parse_cyberschool_postings: Saco Public Schools, an empty board", {
+  cs_empty_board("saco_jobs.html", "Saco Public Schools")
+})
+
+test_that("parse_cyberschool_postings: Montana City Elementary School District #27, an empty board", {
+  cs_empty_board("montanacity_jobs.html", "Montana City Elementary School District #27")
+  # The registry City is Clancy (its mailing town), as the old parser had it.
+  expect_equal(cs_row("Montana City Elementary School District #27")$City, "Clancy")
+})
+
+test_that("parse_cyberschool_postings: Denton Public Schools, an empty board", {
+  cs_empty_board("denton_jobs.html", "Denton Public Schools")
+})
+
+test_that("parse_cyberschool_postings: Clancy Elementary School District #1, an empty board", {
+  cs_empty_board("clancy_jobs.html", "Clancy Elementary School District #1")
 })
 
 # Platform "CyberSchoolText" (edjobs 0.24.0, 2026-11-14; claude-notes/2026-11-14_mt-leftovers/): the whole list

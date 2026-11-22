@@ -1449,6 +1449,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     tests and fixture deleted; tests for the new platform in test-opi-reconcile, test-misc-district-scrapers,
     test-drift-check, test-app-reactives. Two `run_expectations.csv` rows for 11-23.
 
+  * [x] Frontier, Saco, Montana City, Denton and Clancy read through the CyberSchool family (2026-11-21; branch
+    `cyberschool-five`, stacked on `retire-ulm-direct`): registry Platform `CyberSchool`. They are classic CyberSchool
+    2.0 sites (generator IESAres404, the `/District/Jobs/` list), but had five copies of one bespoke parser, written
+    10-27/10-28 against empty boards, that kept any `li`/`p`/`strong`/heading line with a role word; their tests
+    passed on any result (`if (nrow(result) > 0)`). None has produced a row in its 4-5 archives. Their fixtures, their
+    live pages on 11-21 and their "Archive Jobs" views all hold the list container with no items, the container
+    Highwood's and Power's postings sit in, so a posting will now be read with its own link, posted date and deadline.
+    New tests check the container is found and empty (an empty result is only a real zero if the list is on the
+    page) and that it holds Highwood's and Power's items. 10 functions (250 lines), 5 Rmd blocks (120 lines) and 10
+    test blocks deleted. Notes: `claude-notes/2026-11-21_step8/README.md` ("Measured").
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
