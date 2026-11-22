@@ -608,6 +608,77 @@ parse_isolvedhire_postings <- function(json_text, institution_name) {
 }
 
 # ---------------------------------------------------------------------------
+# Interfolio -- University of Montana's faculty jobs
+# ---------------------------------------------------------------------------
+
+# UM posts staff jobs on NEOGOV (schooljobs.com/careers/ummissoula) and every
+# faculty search, Missoula College's included, on Interfolio: "Faculty
+# searches use Interfolio as the applicant tracking system rather than NEOED.
+# Positions are posted at apply.interfolio.com/53871/positions"
+# (umt.edu/human-resources/talent/faculty_hiring/, read 2026-11-21). The
+# board is an Angular app; its data is a public JSON endpoint the app itself
+# calls (byc-search/<tenant>/public_job_boards?page=N, found in its bundle):
+# 25 positions a page with total_count, no key. 19 positions on 2026-11-21,
+# none on the NEOGOV board.
+#
+# A posting's page is apply.interfolio.com/<id> (its stable id). Posted_Date is
+# open_date_raw; Close_Date is close_date_raw, the date Interfolio closes the
+# posting to applications (UM's postings give it as their "Priority
+# Application Date"; most have none). Pay is read from the posting's own
+# text (description, qualifications, application instructions); 17 of the 19
+# state a salary. Unit is the posting's unit ("College of Health", and would
+# be "Missoula College" for its searches), kept for the shared-board
+# assignment in Mt_ED_Jobs.Rmd and dropped there.
+INTERFOLIO_SEARCH_API <- "https://logic.interfolio.com/byc-search"
+
+fetch_interfolio_postings <- function(tenant, max_pages = 20) {
+  pages <- list()
+  total <- NA_integer_
+  for (page in seq_len(max_pages)) {
+    resp <- request(paste0(INTERFOLIO_SEARCH_API, "/", tenant, "/public_job_boards")) %>%
+      req_url_query(page = page) %>%
+      perform_with_retry()
+    txt <- resp_body_string(resp)
+    meta <- jsonlite::fromJSON(txt, simplifyVector = FALSE)
+    total <- if (is.null(meta$total_count)) NA_integer_ else as.integer(meta$total_count)
+    pages[[page]] <- parse_interfolio_postings(txt)
+    if (nrow(pages[[page]]) == 0 || is.na(total) || sum(vapply(pages, nrow, 0L)) >= total) break
+  }
+  out <- dplyr::bind_rows(pages)
+  out <- out[!duplicated(out$Link), , drop = FALSE]
+  # A short read (paging broke, the cap was hit) is an error, not a smaller
+  # board: the missing postings would otherwise read as ended.
+  if (!is.na(total) && nrow(out) < total) {
+    stop("Interfolio tenant ", tenant, ": read ", nrow(out), " of ", total, " positions")
+  }
+  out
+}
+
+parse_interfolio_postings <- function(json_text) {
+  empty <- ensure_posted_pay_columns(
+    data.frame(Title = character(0), Location = character(0), Posted_Date = character(0), Link = character(0),
+               Close_Date = character(0), Unit = character(0), stringsAsFactors = FALSE))
+  parsed <- jsonlite::fromJSON(json_text, simplifyVector = FALSE)
+  res <- parsed$results
+  if (is.null(res) || length(res) == 0) return(empty)
+
+  field <- function(k) vapply(res, function(x) if (is.null(x[[k]]) || !nzchar(as.character(x[[k]]))) NA_character_ else as.character(x[[k]]), "")
+  html_text <- function(h) ifelse(is.na(h), "", vapply(h, function(x) rvest::html_text2(rvest::read_html(paste0("<div>", x, "</div>"))), ""))
+  text <- paste(html_text(field("description")), html_text(field("qualifications")), html_text(field("instructions")), sep = "\n")
+
+  cbind(data.frame(
+    Title = trimws(field("name")),
+    # "Missoula, MT, United States" -> "Missoula, MT"; "Montana, United States" -> "Montana".
+    Location = sub(",\\s*United States$", "", field("location")),
+    Posted_Date = field("open_date_raw"),
+    Link = paste0("https://apply.interfolio.com/", field("id")),
+    Close_Date = field("close_date_raw"),
+    Unit = field("unit_name"),
+    stringsAsFactors = FALSE
+  ), extract_posted_pay(text))
+}
+
+# ---------------------------------------------------------------------------
 # ADP Workforce Now (careercenter) -- University of Providence
 # ---------------------------------------------------------------------------
 

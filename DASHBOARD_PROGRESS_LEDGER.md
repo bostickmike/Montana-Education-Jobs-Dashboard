@@ -1491,6 +1491,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the 191 counted OPI rows are over 60 days old, 3 of them at OPIOnly districts
     (`claude-notes/2026-11-21_opi-60day/`).
     Parsers (4 functions), Rmd blocks, 5 test blocks and both fixtures deleted; map rows get the OPI badge and link.
+  * [x] University of Montana's faculty jobs from Interfolio (2026-11-21; branch `um-interfolio-faculty`, edjobs
+    0.72.0; Mike chose A). From the Missoula College review question (0 rows in 19 archives): UM's HR pages say every
+    UM and Missoula College faculty search is on Interfolio (`apply.interfolio.com/53871/positions`), staff jobs on
+    NEOGOV. On 11-21 Interfolio had 19 open positions, and UM's NEOGOV board none of them. New
+    `fetch_interfolio_postings()` reads the board's public JSON (`logic.interfolio.com/byc-search/<tenant>/
+    public_job_boards`, 25 a page): the posting's own link, open and close dates, and pay from its text (17 of 19).
+    A short read is an error, not a smaller board. It is UM's second source, logged as "University of Montana
+    (Interfolio faculty)". The coverage calendar's new `extra_sources` (edjobs 0.72.0) makes UM, and the campuses
+    sharing its board, healthy only when both scrapes are. A posting whose unit is Missoula College, Helena College
+    or UM Western goes to that institution by the registry's `Location_Pattern` read against the unit, so the
+    Missoula College row stays. Interfolio links are stable HE posting IDs (`HE_POSTING_URL_PATTERN`); the
+    Flathead Lake Bio Station posting is placed at Polson (`he_campus_departments.csv`). edjobs 0.72.0 also stops
+    reading "$1M" (an endowment) as pay. Copilot allowlist: `interfolio.com`. Notes:
+    `claude-notes/2026-11-21_missoula-college-and-um-interfolio.md`.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the

@@ -81,6 +81,8 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
 # ---------------------------------------------------------------------------
 HE_POSTING_URL_PATTERN <- paste0(
   "/postings/\\d+|/apply/[A-Za-z0-9]+/|/employment/opportunities/[^/]+/?$|",
+  # Interfolio: apply.interfolio.com/<position id> (UM's faculty jobs, 2026-11-21).
+  "apply\\.interfolio\\.com/\\d+/?$|",
   "\\.(pdf|docx?)$|/file_download/|/_files/ugd/")
 HE_DOCUMENT_URL_PATTERN <- "\\.(pdf|docx?)$|/file_download/|/_files/ugd/|/uploads/|/files/"
 
