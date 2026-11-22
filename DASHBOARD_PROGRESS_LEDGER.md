@@ -1525,6 +1525,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (row order is the rebuild's). Open, for Mike: `scripts/reconcile_opi_history.R` re-decides every archived OPI
     posting (`recompute = TRUE`), unlike the pipeline and the rebuild; run now it would restate history (weekly
     totals -27 to +16, OPI teacher rows 5,254 -> 5,078).
+  * [x] `scripts/reconcile_opi_history.R` retired (2026-11-22; branch `retire-reconcile-opi-history`; Mike's call).
+    It re-decided every archived OPI posting (`recompute = TRUE`) and predated the OPIOnly rule, so a rerun would
+    have restated history the pipeline and the rebuild agree on (measured 11-22: weekly totals -27 to +16, OPI
+    teacher rows 5,254 -> 5,078). Its one job, the pre-11-03 restatement, is done; history rebuilds go through
+    `scripts/rebuild_k12_history_from_archive.R`. CLAUDE.md no longer calls it rerunnable; DATA_COOKBOOK.md's two
+    history mentions note the retirement; git history keeps the script. `opi_rule_for_archive(recompute = )` stays
+    (tested in `test-opi-reconcile.R`). The app.R comment naming it is left until the next app.R edit (changing it
+    now would mean a manifest checksum edit for a comment).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
