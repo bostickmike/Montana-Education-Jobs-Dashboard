@@ -18,7 +18,10 @@
 #     --lon -114.5678 \
 #     --url "https://example.com/jobs" \
 #     --slug "districtslug" \
-#     [--platform "CustomHeuristic"]
+#     [--platform "CustomHeuristic"] [--empty-board]
+#
+# CyberSchool, Google Sites, Edlio and WordPress sites have edjobs family routines: the script stops and says
+# which registry Platform to use. A bespoke parser test is written to fail until its exact titles are pinned.
 #
 # Apptegy districts (--cms apptegy, or auto-detected from an
 # apptegy_<slug>_rendered_YYYY-MM-DD.txt or apptegy_<slug>_pagedata_YYYY-MM-DD.html
@@ -112,6 +115,19 @@ if (is.null(cms)) {
   cat(sprintf("CMS:      %s (specified)\n", cms))
 }
 apptegy_mode <- identical(cms, "apptegy")
+empty_board <- "--empty-board" %in% args
+
+# A CMS with an edjobs family routine gets no per-district code (2026-11-21: five CyberSchool districts scaffolded
+# 10-27/10-28 got five copies of one bespoke parser that read nothing the family did not already read).
+family_platforms <- c(cyberschool = "CyberSchool (or CyberSchoolText: the whole list as text in one item)",
+                      google_sites = "GoogleSites", edlio = "Edlio", wordpress = "WordPress")
+if (cms %in% names(family_platforms)) {
+  cat(sprintf("Stop: %s sites are read by an edjobs family routine; this script writes no code for them.\n", cms))
+  cat(sprintf("Add the registry row by hand with Platform %s (list rules, if needed, in List_Start / List_Stop /\n", family_platforms[[cms]]))
+  cat("List_Skip), the domain to .github/copilot-allowlist.txt, and a block in that family test file asserting the\n")
+  cat("exact titles the routine returns on a captured fixture (an empty board: 0 rows and the list container found).\n")
+  quit(status = 1)
+}
 
 # Default platform name if not provided
 if (is.null(platform)) {
@@ -328,9 +344,13 @@ if (apptegy_mode) {
   parsed <- parse_apptegy_postings(fixture_txt, url, city, apptegy_mode_name, rule("List_Start"), rule("List_Stop"), rule("List_Skip"))
   cat(sprintf("\nThe family routine returns %d posting(s) from %s:\n", nrow(parsed), apptegy_fixture))
   if (nrow(parsed) > 0) cat(paste0("  - ", parsed$Title, collapse = "\n"), "\n")
-  if (nrow(parsed) == 0) {
-    cat("[WARNING] Zero postings. If the page shows openings, try the other --node, or a --start/--stop rule;\n")
-    cat("          the test below asserts zero until you do.\n")
+  if (nrow(parsed) == 0 && !empty_board) {
+    cat("Error: zero postings from the fixture. A test written now would only prove the routine returns nothing.\n")
+    cat("If the page shows openings, try the other --node or a --start/--stop rule. If the board really is empty\n")
+    cat("today, rerun with --empty-board and check by hand that the fixture holds the board list (not another\n")
+    cat("page); better, capture it again on a day it has a posting. The registry row was already written: remove it\n")
+    cat("or rerun (the rerun skips it).\n")
+    quit(status = 1)
   }
   cat("Check these against the live page before committing.\n\n")
 } else if (grepl(sprintf("fetch_%s_postings", slug), misc_content, fixed = TRUE)) {
@@ -591,18 +611,19 @@ if (apptegy_mode) {
   cat(sprintf("[6/8] parse_%s_postings test already exists in test-misc-district-scrapers.R\n", slug))
 } else {
   test_scaffold <- sprintf('
-test_that("parse_%s_postings extracts real positions or returns empty cleanly", {
+test_that("parse_%s_postings reads the postings on the captured page", {
   fixture <- paste(readLines(test_path("fixtures", "%s_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\\n")
   url <- "%s"
 
   result <- parse_%s_postings(fixture, url)
 
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  if (nrow(result) > 0) {
-    expect_true(all(result$Location == "%s"))
-    expect_true(all(is.na(result$Posted_Date) | nzchar(result$Posted_Date)))
-    expect_true(all(nzchar(result$Link)))
-  }
+  expect_true(all(result$Location == "%s"))
+  # Pin what this real page holds, then delete the fail(): expect_equal(result$Title, c("...", "...")).
+  # An empty board: expect_equal(nrow(result), 0) AND assert the board list container is in the fixture,
+  # so the test can tell an empty board from the wrong page. No if (nrow(result) > 0) guards:
+  # test-no-guarded-assertions.R fails on them.
+  fail("scaffolded test: pin the exact titles of this fixture before committing")
 })
 
 test_that("parse_%s_postings returns zero rows on empty or non-matching HTML", {
@@ -663,5 +684,6 @@ if (apptegy_mode) {
   cat("  2. testthat::test_file(\"tests/testthat/test-apptegy-family.R\") and test-salary-scrapers.R\n")
   cat(sprintf("  3. Rscript scripts/repro_scraper.R \"%s\" for the live run; then DLI map, DISTRICT_BACKLOG.md, CLAUDE.md count, the repo's Copilot internet-access list.\n", district))
 } else {
-  cat(sprintf("Next step: Implement parser selector logic in parse_%s_postings() in misc_district_scrapers.R\n", slug))
+  cat(sprintf("Next steps: implement parse_%s_postings() in misc_district_scrapers.R, then replace the fail() in its\n", slug))
+  cat("test with the exact titles of the fixture (the suite fails until you do).\n")
 }
