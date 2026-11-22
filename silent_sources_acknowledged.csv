@@ -1,0 +1,7 @@
+"Type","Source","Reason","Acknowledged"
+"K-12","Frontier Elementary School","CyberSchool board with an empty .listItem_list; the container test checks the list is on the page (cyberschool-five)","2026-11-22"
+"K-12","Saco Public Schools","CyberSchool board with an empty .listItem_list; the container test checks the list is on the page (cyberschool-five)","2026-11-22"
+"K-12","Montana City Elementary School District #27","CyberSchool board with an empty .listItem_list; the container test checks the list is on the page (cyberschool-five)","2026-11-22"
+"K-12","Denton Public Schools","CyberSchool board with an empty .listItem_list; the container test checks the list is on the page (cyberschool-five)","2026-11-22"
+"K-12","Clancy Elementary School District #1","CyberSchool board with an empty .listItem_list; the container test checks the list is on the page (cyberschool-five)","2026-11-22"
+"Higher Ed","Missoula College","Gets rows only from UM's NEOGOV and Interfolio boards (location or unit); none has named Missoula College since 08-06; row kept (2026-11-21 note)","2026-11-22"

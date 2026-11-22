@@ -1533,6 +1533,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     history mentions note the retirement; git history keeps the script. `opi_rule_for_archive(recompute = )` stays
     (tested in `test-opi-reconcile.R`). The app.R comment naming it is left until the next app.R edit (changing it
     now would mean a manifest checksum edit for a comment).
+  * [x] Silent-source check, repo side (2026-11-22; branch `silent-sources-check`; edjobs 0.74.0, bostickmike/edjobs#76;
+    test-kit plan item 1). `.github/scripts/check_silent_sources.R` runs `check_silent_sources_step(skip_platforms =
+    "OPIOnly")`: a registry district or college with no rows in any of its last 4 weekly runs goes into the drift
+    issue unless `silent_sources_acknowledged.csv` lists it with a reason. Acknowledged: the five CyberSchool empty
+    boards (container test) and Missoula College. On the archives today (11-22) it lists 9: Arrowhead (last rows
+    09-01), Circle, Cottonwood, DeSmet, Fishtail, Nye, Pleasant Valley, Sun River Valley, Zurich. The workflow step
+    runs from the pin bump to 0.74.0, held until after the 11-23 MT run (the first on 0.73.0).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
