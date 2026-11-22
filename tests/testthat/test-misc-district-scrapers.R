@@ -1110,37 +1110,6 @@ test_that("fetch_jeffersonhigh_postings fetches and parses a live-shaped respons
   expect_equal(nrow(result), 6)
 })
 
-test_that("parse_lockwood_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "lockwood_edlio_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d"
-
-  result <- parse_lockwood_postings(fixture, url)
-
-  expect_equal(nrow(result), 8)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_true("Special Education Teacher (K12)" %in% result$Title)
-  expect_true("Part-Time Crosswalk Guard" %in% result$Title)
-  expect_equal(unique(result$Location), "Lockwood")
-  expect_equal(unique(result$Link), url)
-})
-
-test_that("parse_lockwood_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_lockwood_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("fetch_lockwood_postings fetches and parses a live-shaped response", {
-  fixture <- paste(readLines(test_path("fixtures", "lockwood_edlio_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  httr2::local_mocked_responses(
-    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
-  )
-
-  result <- fetch_lockwood_postings()
-
-  expect_equal(nrow(result), 8)
-})
-
 test_that("parse_richey_postings extracts real positions from captured fixture", {
   fixture <- paste(readLines(test_path("fixtures", "richey_cscms_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
   url <- "https://www.richey.k12.mt.us/currentopenings"

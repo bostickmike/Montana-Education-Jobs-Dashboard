@@ -1558,6 +1558,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `claude-notes/2026-11-21_contact-drafts.md`, section 6); if the page is current, the registry row goes back
     to `LodgeGrassHeuristic`. Two run expectations for 11-23. Suite 3,268 passed, 0 failed (test-drift-check: 2
     fewer, Lodge Grass no longer resolves to a scraper).
+  * [x] Every posting parser has a captured, non-empty fixture with an exact title (2026-11-22; branch
+    `test-kit-parser-fixtures`; test-kit plan item 4). `tests/testthat/test-parser-fixtures.R` (same file in WY) reads
+    the code: each `parse_*_postings/_positions/_page/_vacancies/_requisitions/_jobs` function at the repo root
+    (salary parsers aside) needs a `test_that` block that reads a file from `fixtures/` (directly or through a test
+    helper that doesn't edit it) and asserts a literal title in a form that fails on 0 rows (`"X" %in% r$Title`,
+    `all(c(...) %in% r$Title)`, `expect_equal(r$Title..., "X")`). Otherwise it must be in
+    `parser-fixture-allowlist.csv` with a reason and a date; an entry that is no longer needed fails too. Today 61
+    parsers, 58 covered; allowlisted: Zurich, Pleasant Valley, Circle (boards empty in every capture; re-capture when
+    one lists a job). Dead code removed: `fetch_/parse_lockwood_postings` (Lockwood is read through AppliTrack; no
+    dispatch reached it), its 3 tests and fixture. Checked by breaking it both ways (an uncovered parser off the list;
+    a covered one on it): both fail and name the parser.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
