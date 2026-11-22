@@ -118,4 +118,13 @@ test_that("a K-12 endorsement meets an elementary board title only when the subj
   expect_gt(s("Elementary Instrumental Music Teacher -oyo"), -Inf)
   expect_equal(s("Elementary Teacher"), -Inf)                    # K-12 alone isn't the subject-less elementary opening
   expect_equal(s("Elementary Special Education Teacher"), -Inf)  # nor another subject's
+  # "K-12" must sit next to the subject: Lockwood's boilerplate (11-19 archive) is about the district, not the job
+  lw <- "Lockwood School is looking for a dynamic educator to join our team as a Middle School Librarian starting in August 2026. Lockwood currently educates approximately 1,550 students in grades K-12. Lockwood is located just east of Montana's largest city, Billings"
+  expect_equal(opi_match_score("Library", opi_job_phrase(lw, "Library"), lw, "District Wide", "Elementary Librarian", ""), -Inf)
+})
+
+test_that("the long-term-sub reach ends on a whole 'sub' word", {
+  expect_true("LTS" %in% opi_tokens("Long-term Custodian Substitute", OPI_ROLE_LEXICON))
+  expect_true("LTS" %in% opi_tokens("long term literacy sub needed", OPI_ROLE_LEXICON))
+  expect_false("LTS" %in% opi_tokens("a long term position with subsequent renewal", OPI_ROLE_LEXICON))
 })

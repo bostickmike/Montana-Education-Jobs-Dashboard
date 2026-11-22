@@ -1582,13 +1582,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     from OPI next to its own board posting: Bozeman's GHS long-term English sub ("LONG TERM ENGLISH TEACHER SUBSTITUTE
     AT GHS": `LTS` needed "long term" and "sub" side by side, so the title read as a substitute) and Great Falls'
     music job (board "Elementary Instrumental Music Teacher"; OPI's says "Music K-12 endorsement" and names no
-    level). `opi_matcher.R`: `LTS` allows up to 3 words in between and drops `SUB` when both match; a "K-12" OPI
-    posting meets a board title's elementary level only when the board title also names a subject the posting has.
-    Hand-labeled sets (166): unchanged (0 wrong, 1 missed, 2 false). A first, looser K-12 rule matched Savage's K-12
-    PE posting to "Elementary Teacher", hence the subject condition. Replay on every archive with OPI descriptions
+    level). `opi_matcher.R`: `LTS` allows up to 3 words in between, ending on a whole "sub"/"subs"/"substitute"
+    word, and drops `SUB` when both match; a "K-12" OPI posting meets a board title's elementary level only when the
+    board title also names a subject the posting has and "K-12" sits within 25 characters of it. A first, looser K-12
+    rule matched Savage's K-12 PE posting to "Elementary Teacher" (subject condition); the review found district
+    boilerplate ("students in grades K-12") would let Lockwood's middle school librarian match an "Elementary
+    Librarian" (nearness condition), and that "long term goals and subsequent" read as LTS (whole-word ending).
+    Hand-labeled sets (166): unchanged (0 wrong, 1 missed, 2 false). Replay on every archive with OPI descriptions
     (11-03 to 11-19, 1,030 OPI rows at scraped districts): 6 decisions change, all these two postings. Archived
-    decisions are kept (`OPI_Counted`); two run expectations for 11-23. Suite 3,270 passed, 1 failed (the local
-    edjobs 0.78.0 vs pinned 0.73.0 check).
+    decisions are kept (`OPI_Counted`); two run expectations for 11-23 (an error, not a pass, if the board posting
+    is gone). Suite 3,274 passed, 1 failed (the local edjobs 0.78.0 vs pinned 0.73.0 check; CI installs the pin).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
