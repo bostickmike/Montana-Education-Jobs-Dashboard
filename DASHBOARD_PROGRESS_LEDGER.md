@@ -1512,6 +1512,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     and UW's Wyoming Institute for Disabilities are fixed. Replay over both states' archives: 15 WY titles move and
     none here, so `reclassify_committed_data.R` finds nothing to write. Notes:
     `claude-notes/2026-11-21_um-interfolio/faculty-category.md`.
+  * [x] `reclassify_committed_data.R` no longer writes CRs (2026-11-21; branch `reclassify-no-cr`), the fix WY
+    needed after its 0.73.0 reclassify wrote 2,228 CRs into facultydata.csv: raw-archive `\r\n` inside text fields,
+    which `read.csv()` stores as `\n` and the parity guard ignores. `in_committed_order()` now turns `\r\n` into
+    `\n`. Check here (rebuild at the pinned classifier, old vs fixed code, byte comparison): no CRs in any of the
+    11 files with either version, so MT's archives don't trigger it today; no committed MT CSV has ever held one
+    (November commits checked). Separate, not fixed: facultydata.csv comes back with one blank Location as NA, and
+    combinedclean.csv with Est_Year bare (committed quoted).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
