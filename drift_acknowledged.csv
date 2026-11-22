@@ -1,0 +1,2 @@
+Section,Item,Reason,Acknowledged
+On OPI but not on our scrape (counted from OPI; possible scraper misses),Richey Public Schools,"Richey posts its teaching jobs only on OPI. Its own page (checked 2026-11-21, claude-notes/2026-11-21_step8-review/richey_live.log) lists only ""2026-27 Assistant Cook / Custodian"", which the parser reads; the OPI rows are counted from OPI as intended.",2026-11-22

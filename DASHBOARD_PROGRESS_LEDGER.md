@@ -1569,6 +1569,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     one lists a job). Dead code removed: `fetch_/parse_lockwood_postings` (Lockwood is read through AppliTrack; no
     dispatch reached it), its 3 tests and fixture. Checked by breaking it both ways (an uncovered parser off the list;
     a covered one on it): both fail and name the parser.
+  * [x] `drift_acknowledged.csv` started (2026-11-22; branch `drift-acknowledged-richey`; Mike's call). For edjobs
+    0.78.0's "new this run / still unresolved" block at the top of each drift comment (test-kit item 3, option B,
+    edjobs #80): an item listed here (Section, Item, Reason, Acknowledged) leaves both lists and stays in the full
+    report. First entry: Richey under "On OPI but not on our scrape", because it posts teaching jobs only on OPI
+    (page checked 11-21; the parser reads its one posting). On the replay of issue #11's last report: 23 -> 22
+    still unresolved. Acts from the pin bump to 0.78.0.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
