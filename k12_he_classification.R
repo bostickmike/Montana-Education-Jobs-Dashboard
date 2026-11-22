@@ -134,19 +134,8 @@ add_k12_posting_identity <- function(df) {
 
 # summarize_k12_posting_counts() is in edjobs since 0.10.0.
 
-find_k12_new_postings <- function(k12_history) {
-  dates <- sort(unique(as.Date(k12_history$Archive_Date)))
-  if (length(dates) < 2) return(k12_history[0, , drop = FALSE])
-
-  latest <- dates[length(dates)]
-  previous <- dates[length(dates) - 1]
-  k12_history %>%
-    filter(as.Date(Archive_Date) == latest) %>%
-    anti_join(
-      k12_history %>% filter(as.Date(Archive_Date) == previous) %>% select(Posting_ID),
-      by = "Posting_ID"
-    )
-}
+# find_k12_new_postings() is in edjobs since 0.70.0 (a new Posting_ID, less one-for-one ID changes); the local
+# copy of the old rule stayed here until 2026-11-21 and was what the tests ran (helper-setup.R sources this file).
 
 # ---------------------------------------------------------------------------
 # K-12
