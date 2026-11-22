@@ -99,15 +99,15 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Lockwood School District | Yellowstone | `lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d` | Covered via primary AppliTrack feed (`Lockwood Schools`, `lockwoodschool`); duplicate heuristic entry retired | ✅ **Covered** |
 | Canyon Creek School | Yellowstone | `canyoncreekschool.org/apps/jobs/` | Edlio CMS (/apps/jobs/); 1 active position (Paraprofessional Pre-K (All Day Full-Time)) | ✅ **Adopted** (2026-10-21, Batch 13) |
 | Pioneer School | Yellowstone | `pioneerschool.us/41034_2` | SchoolCMS; 1 active position (Substitute Teacher) | ✅ **Adopted** (2026-10-22, Batch 15) |
-| Montana City Elementary School District #27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
+| Montana City Elementary School District #27 | Jefferson | `mtcityschool.net/District/Jobs/` | CyberSchool CMS (/District/Jobs/); read by the CyberSchool family since 2026-11-21 (board empty when adopted and since) | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Circle Public Schools | McCone | `circleschools.org/employment-opportunities.html` | Weebly CMS; generic personnel application links only; checked 2026-10-21 | RECHECK |
 | Whitewater School District | Phillips | `whitewater.k12.mt.us/employment` | Finalsite CMS (#fsEl_3056); 3 active positions (substitutes, bus drivers, custodians) | ✅ **Adopted** (2026-10-21, Batch 9) |
 | Geraldine Public Schools | Chouteau | `geraldine.k12.mt.us/o/geraldine-ps/page/employment` | Apptegy; generic Teacher/Classified application forms only; checked 2026-10-21 | TODO |
-| Denton Public Schools | Fergus | `denton.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
+| Denton Public Schools | Fergus | `denton.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); read by the CyberSchool family since 2026-11-21 (board empty when adopted and since) | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Vaughn Elementary School District #74 | Cascade | `vaughnschool.com/District/Jobs/` | CyberSchool CMS; 1 active position (Substitutes Needed) | ✅ **Adopted** (2026-10-22, Batch 14) |
 | Harlowton Public Schools | Wheatland | `harlowton.k12.mt.us/page/employment` | Apptegy site with salary schedule; 0 active job titles under Certified Positions; rechecked 2026-10-21 | TODO |
 | Chester-Joplin-Inverness (CJI) | Liberty | `cji.k12.mt.us/page/employmentcji` | Apptegy site links live PDF vacancy notice; 5 active positions (Math Teacher, Activities Coord, Admin Assistant, Custodial/Teacher Subs) | ✅ **Adopted** (2026-10-28, Batch 23) |
-| Clancy Elementary School District #1 | Jefferson | `clancyschool.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-28, Batch 22) |
+| Clancy Elementary School District #1 | Jefferson | `clancyschool.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); read by the CyberSchool family since 2026-11-21 (board empty when adopted and since) | ✅ **Adopted** (2026-10-28, Batch 22) |
 | Seeley Lake Elementary #34 | Missoula | `sleonline.org/page/join-our-team` | Apptegy site; 1 active position (Substitute (All Areas)); checked 2026-10-21 | ✅ **Adopted** (2026-10-21, Batch 12) |
 | Winifred School District | Fergus | `winifred.k12.mt.us` | Apptegy site; links to generic blank application PDFs only (`5il.co/1dfyi`); checked 2026-10-21 | TODO |
 | Plains (Plains K-12 #1) | Sanders | employment page exists | 4 evergreen "Application" PDFs + redirect to OPI; rechecked 2026-10-20 | TODO |
@@ -148,8 +148,8 @@ named titles show up with a marker → direct scraper; without a marker → LLM.
 | Fishtail School District #13 | Stillwater | `fishtailschool.org/job-openings/` | WordPress CMS; dedicated job openings page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
 | Nye School District #31 | Stillwater | `nyeschooldistrict.org/job-openings/` | WordPress CMS; dedicated job openings page; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
 | Potomac Elementary School District #11 | Missoula | `potomacschoolmontana.us/general-9` | Wix CMS; dedicated Jobs page with application prompt; extracts postings on demand | ✅ **Adopted** (2026-10-22, Batch 20) |
-| Frontier Elementary School | Roosevelt | `frontierk8.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
-| Saco Public Schools | Phillips | `sacoschools.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); extracts postings on demand | ✅ **Adopted** (2026-10-27, Batch 21) |
+| Frontier Elementary School | Roosevelt | `frontierk8.org/District/Jobs/` | CyberSchool CMS (/District/Jobs/); read by the CyberSchool family since 2026-11-21 (board empty when adopted and since) | ✅ **Adopted** (2026-10-27, Batch 21) |
+| Saco Public Schools | Phillips | `sacoschools.k12.mt.us/District/Jobs/` | CyberSchool CMS (/District/Jobs/); read by the CyberSchool family since 2026-11-21 (board empty when adopted and since) | ✅ **Adopted** (2026-10-27, Batch 21) |
 | Ulm Public Schools | Cascade | `ulmschools.com/forms--files.html` | Weebly CMS; the site has no jobs page (nav: about, calendars, forms & files, board, staff); the scraper's only row ever was a Title I parent notice | ↩️ **Retired 2026-11-21**: registry Platform `OPIOnly` (postings via OPI's statewide board; row kept for the map and history) |
 | Brockton School District | Roosevelt | `brockton.k12.mt.us/employment` | Plain HTML; migrated from SchoolInSites to district site; 3 active positions (Elementary Teacher, STEM Secondary, Humanities Secondary) | ✅ **Recovered** (2026-10-27, Batch 21) |
 
