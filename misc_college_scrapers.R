@@ -461,11 +461,65 @@ parse_ancollege_postings <- function(html_text) {
 # campus (Lame Deer).
 CDKC_NON_JOB_TITLE_PATTERN <- "trustee"
 
+# 2026-11-22: the File blocks' link text is the file name ("HR Job Posting 9
+# 2026", "Birney Vacancy Open Until Filled"), so each linked document is read:
+# a Board of Trustees vacancy is dropped whatever the file is called, and the
+# title comes from the document's "Position Title:" / "Job Posting:" line.
+# The .docx link is the posting's stable identity (posting_spells.R), so a
+# better title doesn't split the posting's spell. A document that can't be read
+# keeps the file-name title.
+CDKC_TRUSTEE_TEXT_PATTERN <- "(?i)board of trustee"
+CDKC_UA <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
 fetch_cdkc_postings <- function(url = "https://www.cdkc.edu/faculty-staff/employment/") {
   resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
+    req_user_agent(CDKC_UA) %>%
     perform_with_retry()
-  parse_cdkc_postings(resp_body_string(resp))
+  rows <- parse_cdkc_postings(resp_body_string(resp))
+  texts <- vapply(rows$Link, cdkc_document_text, character(1), USE.NAMES = FALSE)
+  refine_cdkc_postings(rows, texts)
+}
+
+# The text of a linked .docx or .pdf; NA when it can't be fetched or read.
+cdkc_document_text <- function(link) {
+  if (is.na(link) || !grepl("\\.(docx|pdf)$", link, ignore.case = TRUE)) return(NA_character_)
+  tryCatch({
+    resp <- request(link) %>% req_user_agent(CDKC_UA) %>% perform_with_retry()
+    tmp <- tempfile(fileext = if (grepl("\\.pdf$", link, ignore.case = TRUE)) ".pdf" else ".docx")
+    on.exit(unlink(tmp), add = TRUE)
+    writeBin(resp_body_raw(resp), tmp)
+    if (grepl("\\.pdf$", tmp)) return(paste(pdftools::pdf_text(tmp), collapse = "\n"))
+    xml <- paste(readLines(unz(tmp, "word/document.xml"), warn = FALSE, encoding = "UTF-8"), collapse = "")
+    cdkc_docx_xml_text(xml)
+  }, error = function(e) NA_character_)
+}
+
+# word/document.xml -> text, one line per paragraph.
+cdkc_docx_xml_text <- function(xml) {
+  xml <- gsub("</w:p>", "\n", xml, fixed = TRUE)
+  xml <- gsub("<w:tab/>|<w:br/>", " ", xml)
+  txt <- gsub("<[^>]+>", "", xml)
+  txt <- xml2::xml_text(xml2::read_html(paste0("<p>", gsub("\n", "&#10;", txt, fixed = TRUE), "</p>")))
+  trimws(txt)
+}
+
+# Drops Board of Trustees vacancies and takes each title from its document.
+refine_cdkc_postings <- function(rows, texts) {
+  if (nrow(rows) == 0) return(rows)
+  keep <- is.na(texts) | !grepl(CDKC_TRUSTEE_TEXT_PATTERN, texts, perl = TRUE)
+  doc_title <- vapply(texts, function(t) {
+    if (is.na(t)) return(NA_character_)
+    lines <- trimws(strsplit(t, "\n", fixed = TRUE)[[1]])
+    m <- regmatches(t, regexec("(?i)Position Title:\\s*(.+?)\\s*(?:Institution:|Reports To:|Department:|Status:|\n|$)", t, perl = TRUE))[[1]]
+    if (length(m) == 2 && nzchar(m[2])) return(m[2])
+    jp <- grep("^(?i)Job Posting:\\s*\\S", lines, value = TRUE, perl = TRUE)
+    if (length(jp)) return(trimws(sub("^(?i)Job Posting:", "", jp[1], perl = TRUE)))
+    NA_character_
+  }, character(1), USE.NAMES = FALSE)
+  rows$Title <- ifelse(is.na(doc_title), rows$Title, doc_title)
+  rows <- rows[keep, , drop = FALSE]
+  rownames(rows) <- NULL
+  rows
 }
 
 parse_cdkc_postings <- function(html_text) {
