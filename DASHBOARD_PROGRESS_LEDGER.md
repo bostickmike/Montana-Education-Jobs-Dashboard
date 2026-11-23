@@ -1715,6 +1715,22 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     read postings at 4 and 19 other districts; the 3 one-off parsers at none: MT #121 makes them error on a missing
     layout). Sun River Valley not acknowledged: its registry link is the forms page ("Job Applications"); the
     site's "Current Job Advertisements" page may be where postings go (open item below).
+  * [x] edjobs pinned at 0.84.0 (2026-11-23; same branch; bostickmike/edjobs#85-#88): "Last 12 Weeks" sparklines
+    plot the latest count in each of the last 12 weeks, and the dashboard text says "update", not "scrape" (dashboard
+    code only). Rebased on 11-23's main (data files taken from main) and restated with 0.84.0 installed
+    (`reclassify_committed_data.R --skip-guard --apply`): combinedclean 3 positions (Wyola cook -> Food Services,
+    Stevensville payroll clerk -> Staff, Lame Deer business manager -> Staff), k12jobanalysis 6 categories (3 FCS,
+    St. Labre's band and VoAg, Northern Cheyenne's culture teacher); every total in allsum, allnow and the weekly
+    totals unchanged. Found on the way: with Arrowhead's registry row gone (11-23), a rebuild put its OPI postings of
+    08-06 to 08-25 (archives before 11-01 match OPI by town) under OPI's label "Pray/Emigrant", while 09-01's board
+    rows kept "Arrowhead Elementary School District #75". `canonicalize_k12_district()` now maps "Pray/Emigrant" to
+    the district's name (only those five archives carry it), with a test in `test-data-integrity.R` replacing a
+    stale skip. The map's "has new" test now checks for an exact match rather than at least one row (WY's rehearsal
+    found a quiet stretch with none).
+    Full rehearsal (11-23, `claude-notes/2026-11-23_bump-0.84/rehearsal-mt.log`): every pipeline step and the
+    post-run suite (3,374) passed; rebuild parity 11/11; K-12 1335 -> 1332, HE 393 -> 391. The pre-run suite, which
+    runs alongside the render, had one failure: the boot smoke test's Jobs table had drawn no rows yet when checked.
+    The same file passed twice on that copy afterwards, so it was the busy machine, not the change.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's

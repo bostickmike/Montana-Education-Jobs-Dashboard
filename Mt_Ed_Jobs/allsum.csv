@@ -16,23 +16,23 @@
 "Art","2026-10-27","Total",8
 "Art","2026-11-03","Total",7
 "Art","2026-11-10","Total",8
-"CTE - Business & Family Sciences","2026-08-06","Total",32
-"CTE - Business & Family Sciences","2026-08-07","Total",28
-"CTE - Business & Family Sciences","2026-08-11","Total",36
-"CTE - Business & Family Sciences","2026-08-18","Total",30
-"CTE - Business & Family Sciences","2026-08-25","Total",29
-"CTE - Business & Family Sciences","2026-09-01","Total",23
-"CTE - Business & Family Sciences","2026-09-07","Total",24
-"CTE - Business & Family Sciences","2026-09-08","Total",24
-"CTE - Business & Family Sciences","2026-09-15","Total",22
-"CTE - Business & Family Sciences","2026-09-22","Total",21
-"CTE - Business & Family Sciences","2026-09-29","Total",20
-"CTE - Business & Family Sciences","2026-10-06","Total",20
-"CTE - Business & Family Sciences","2026-10-13","Total",18
-"CTE - Business & Family Sciences","2026-10-20","Total",17
-"CTE - Business & Family Sciences","2026-10-27","Total",20
-"CTE - Business & Family Sciences","2026-11-03","Total",14
-"CTE - Business & Family Sciences","2026-11-10","Total",15
+"CTE - Business & Family Sciences","2026-08-06","Total",33
+"CTE - Business & Family Sciences","2026-08-07","Total",29
+"CTE - Business & Family Sciences","2026-08-11","Total",37
+"CTE - Business & Family Sciences","2026-08-18","Total",33
+"CTE - Business & Family Sciences","2026-08-25","Total",32
+"CTE - Business & Family Sciences","2026-09-01","Total",27
+"CTE - Business & Family Sciences","2026-09-07","Total",28
+"CTE - Business & Family Sciences","2026-09-08","Total",28
+"CTE - Business & Family Sciences","2026-09-15","Total",26
+"CTE - Business & Family Sciences","2026-09-22","Total",26
+"CTE - Business & Family Sciences","2026-09-29","Total",24
+"CTE - Business & Family Sciences","2026-10-06","Total",23
+"CTE - Business & Family Sciences","2026-10-13","Total",21
+"CTE - Business & Family Sciences","2026-10-20","Total",20
+"CTE - Business & Family Sciences","2026-10-27","Total",23
+"CTE - Business & Family Sciences","2026-11-03","Total",18
+"CTE - Business & Family Sciences","2026-11-10","Total",19
 "CTE - Trades, Ag & Technical","2026-08-06","Total",23
 "CTE - Trades, Ag & Technical","2026-08-07","Total",23
 "CTE - Trades, Ag & Technical","2026-08-11","Total",27
@@ -48,8 +48,8 @@
 "CTE - Trades, Ag & Technical","2026-10-13","Total",21
 "CTE - Trades, Ag & Technical","2026-10-20","Total",20
 "CTE - Trades, Ag & Technical","2026-10-27","Total",18
-"CTE - Trades, Ag & Technical","2026-11-03","Total",19
-"CTE - Trades, Ag & Technical","2026-11-10","Total",19
+"CTE - Trades, Ag & Technical","2026-11-03","Total",20
+"CTE - Trades, Ag & Technical","2026-11-10","Total",20
 "Early Childhood","2026-08-06","Total",1
 "Early Childhood","2026-08-07","Total",9
 "Early Childhood","2026-08-11","Total",10
@@ -122,8 +122,8 @@
 "Language","2026-10-13","Total",9
 "Language","2026-10-20","Total",9
 "Language","2026-10-27","Total",10
-"Language","2026-11-03","Total",10
-"Language","2026-11-10","Total",10
+"Language","2026-11-03","Total",11
+"Language","2026-11-10","Total",11
 "Library Media","2026-08-06","Total",13
 "Library Media","2026-08-07","Total",15
 "Library Media","2026-08-11","Total",17
@@ -173,8 +173,8 @@
 "Music","2026-10-13","Total",32
 "Music","2026-10-20","Total",30
 "Music","2026-10-27","Total",34
-"Music","2026-11-03","Total",21
-"Music","2026-11-10","Total",20
+"Music","2026-11-03","Total",22
+"Music","2026-11-10","Total",21
 "Other","2026-08-06","Total",5
 "Other","2026-08-07","Total",5
 "Other","2026-08-11","Total",5
@@ -190,8 +190,8 @@
 "Other","2026-10-13","Total",10
 "Other","2026-10-20","Total",10
 "Other","2026-10-27","Total",13
-"Other","2026-11-03","Total",21
-"Other","2026-11-10","Total",20
+"Other","2026-11-03","Total",17
+"Other","2026-11-10","Total",16
 "Physical Education","2026-08-06","Total",17
 "Physical Education","2026-08-07","Total",17
 "Physical Education","2026-08-11","Total",20
@@ -209,23 +209,23 @@
 "Physical Education","2026-10-27","Total",21
 "Physical Education","2026-11-03","Total",18
 "Physical Education","2026-11-10","Total",19
-"Science","2026-08-06","Total",20
-"Science","2026-08-07","Total",19
-"Science","2026-08-11","Total",27
-"Science","2026-08-18","Total",27
-"Science","2026-08-25","Total",23
-"Science","2026-09-01","Total",24
-"Science","2026-09-07","Total",23
-"Science","2026-09-08","Total",23
-"Science","2026-09-15","Total",22
-"Science","2026-09-22","Total",21
-"Science","2026-09-29","Total",22
-"Science","2026-10-06","Total",22
-"Science","2026-10-13","Total",22
-"Science","2026-10-20","Total",23
-"Science","2026-10-27","Total",24
-"Science","2026-11-03","Total",20
-"Science","2026-11-10","Total",20
+"Science","2026-08-06","Total",19
+"Science","2026-08-07","Total",18
+"Science","2026-08-11","Total",26
+"Science","2026-08-18","Total",24
+"Science","2026-08-25","Total",20
+"Science","2026-09-01","Total",20
+"Science","2026-09-07","Total",19
+"Science","2026-09-08","Total",19
+"Science","2026-09-15","Total",18
+"Science","2026-09-22","Total",16
+"Science","2026-09-29","Total",18
+"Science","2026-10-06","Total",19
+"Science","2026-10-13","Total",19
+"Science","2026-10-20","Total",20
+"Science","2026-10-27","Total",21
+"Science","2026-11-03","Total",17
+"Science","2026-11-10","Total",17
 "Secondary Social Studies","2026-08-06","Total",20
 "Secondary Social Studies","2026-08-07","Total",21
 "Secondary Social Studies","2026-08-11","Total",23
@@ -1132,7 +1132,6 @@
 "Early Childhood","2026-11-10","Rocky Boy Public Schools",1
 "Elementary","2026-08-06","Absarokee Elem / Absarokee H S",2
 "Elementary","2026-08-06","Anaconda School District #10",2
-"Elementary","2026-08-06","Arrowhead Elementary School District #75",2
 "Elementary","2026-08-06","Bainville K-12 Schools",1
 "Elementary","2026-08-06","Belfry Public Schools",3
 "Elementary","2026-08-06","Belt Public Schools",1
@@ -1228,7 +1227,6 @@
 "Elementary","2026-08-06","Yaak",1
 "Elementary","2026-08-07","Absarokee Elem / Absarokee H S",2
 "Elementary","2026-08-07","Anaconda School District #10",2
-"Elementary","2026-08-07","Arrowhead Elementary School District #75",2
 "Elementary","2026-08-07","Bainville K-12 Schools",1
 "Elementary","2026-08-07","Belfry Public Schools",3
 "Elementary","2026-08-07","Belt Public Schools",1
@@ -1318,7 +1316,6 @@
 "Elementary","2026-08-07","Yaak",1
 "Elementary","2026-08-11","Absarokee Elem / Absarokee H S",2
 "Elementary","2026-08-11","Anaconda School District #10",2
-"Elementary","2026-08-11","Arrowhead Elementary School District #75",2
 "Elementary","2026-08-11","Bainville K-12 Schools",1
 "Elementary","2026-08-11","Belfry Public Schools",3
 "Elementary","2026-08-11","Belt Public Schools",1
@@ -1421,7 +1418,6 @@
 "Elementary","2026-08-11","Wyola Elem",1
 "Elementary","2026-08-18","Absarokee Elem / Absarokee H S",2
 "Elementary","2026-08-18","Anaconda School District #10",2
-"Elementary","2026-08-18","Arrowhead Elementary School District #75",2
 "Elementary","2026-08-18","Bainville K-12 Schools",1
 "Elementary","2026-08-18","Belfry Public Schools",3
 "Elementary","2026-08-18","Belt Public Schools",1
@@ -1523,7 +1519,6 @@
 "Elementary","2026-08-25","Absarokee Elem / Absarokee H S",2
 "Elementary","2026-08-25","Anaconda School District #10",2
 "Elementary","2026-08-25","Arlee Joint School District",2
-"Elementary","2026-08-25","Arrowhead Elementary School District #75",2
 "Elementary","2026-08-25","Bainville K-12 Schools",1
 "Elementary","2026-08-25","Belfry Public Schools",3
 "Elementary","2026-08-25","Belt Public Schools",1
@@ -4354,12 +4349,10 @@
 "Other","2026-11-03","Hamilton School District 3",1
 "Other","2026-11-03","Hays-Lodge Pole School District",1
 "Other","2026-11-03","Jefferson High School",1
-"Other","2026-11-03","Lame Deer Public Schools",1
 "Other","2026-11-03","Libby Public Schools",1
 "Other","2026-11-03","Lodge Grass Public Schools",1
-"Other","2026-11-03","North Cheyenne Trib Elem",1
 "Other","2026-11-03","Shelby School District",1
-"Other","2026-11-03","St Labre Indian H S",3
+"Other","2026-11-03","St Labre Indian H S",1
 "Other","2026-11-03","Swan River School District #4",1
 "Other","2026-11-03","Whitefish School District",1
 "Other","2026-11-10","Big Sky School District 72",1
@@ -4371,12 +4364,10 @@
 "Other","2026-11-10","Hamilton School District 3",1
 "Other","2026-11-10","Hays-Lodge Pole School District",1
 "Other","2026-11-10","Jefferson High School",1
-"Other","2026-11-10","Lame Deer Public Schools",1
 "Other","2026-11-10","Libby Public Schools",1
 "Other","2026-11-10","Lodge Grass Public Schools",1
-"Other","2026-11-10","North Cheyenne Trib Elem",1
 "Other","2026-11-10","Shelby School District",1
-"Other","2026-11-10","St Labre Indian H S",3
+"Other","2026-11-10","St Labre Indian H S",1
 "Other","2026-11-10","Swan River School District #4",1
 "Other","2026-11-10","Whitefish School District",1
 "Physical Education","2026-08-06","Big Sandy Public Schools",1
@@ -4687,7 +4678,6 @@
 "Physical Education","2026-11-10","St Josephs School",1
 "Physical Education","2026-11-10","St Jude Thaddeus School",1
 "Physical Education","2026-11-10","Wolf Point Public Schools",1
-"Science","2026-08-06","Billings Public Schools",1
 "Science","2026-08-06","Cascade Public Schools",1
 "Science","2026-08-06","East Helena Public Schools",1
 "Science","2026-08-06","Fairview Public Schools",1
@@ -4704,7 +4694,6 @@
 "Science","2026-08-06","Westby School District 3",1
 "Science","2026-08-06","Whitewater Public Schools",1
 "Science","2026-08-06","Wolf Point Public Schools",1
-"Science","2026-08-07","Billings Public Schools",1
 "Science","2026-08-07","Cascade Public Schools",1
 "Science","2026-08-07","East Helena Public Schools",1
 "Science","2026-08-07","Gallatin Gateway School",1
@@ -4741,10 +4730,9 @@
 "Science","2026-08-11","Sweet Grass County High School",2
 "Science","2026-08-11","Westby School District 3",1
 "Science","2026-08-11","Whitewater Public Schools",1
-"Science","2026-08-11","Wolf Point Public Schools",2
+"Science","2026-08-11","Wolf Point Public Schools",1
 "Science","2026-08-18","Belgrade School District 44",1
 "Science","2026-08-18","Billings Public Schools",2
-"Science","2026-08-18","Browning Public Schools",1
 "Science","2026-08-18","Cascade Public Schools",1
 "Science","2026-08-18","Columbia Falls School District 6",1
 "Science","2026-08-18","East Helena Public Schools",1
@@ -4753,7 +4741,6 @@
 "Science","2026-08-18","Great Falls Public Schools",1
 "Science","2026-08-18","Harrison K-12 Schools",2
 "Science","2026-08-18","Helena Public Schools",1
-"Science","2026-08-18","Kalispell Public Schools",1
 "Science","2026-08-18","Lame Deer Public Schools",1
 "Science","2026-08-18","Miles City Unified School District 1",1
 "Science","2026-08-18","Plevna School District #55",1
@@ -4763,22 +4750,20 @@
 "Science","2026-08-18","Sweet Grass County High School",2
 "Science","2026-08-18","Westby School District 3",1
 "Science","2026-08-18","Whitewater Public Schools",1
-"Science","2026-08-18","Wolf Point Public Schools",2
+"Science","2026-08-18","Wolf Point Public Schools",1
 "Science","2026-08-25","Belgrade School District 44",1
 "Science","2026-08-25","Billings Public Schools",1
-"Science","2026-08-25","Browning Public Schools",1
 "Science","2026-08-25","Cascade Public Schools",1
 "Science","2026-08-25","East Helena Public Schools",1
 "Science","2026-08-25","Fairview Public Schools",1
 "Science","2026-08-25","Gallatin Gateway School",1
 "Science","2026-08-25","Great Falls Public Schools",1
 "Science","2026-08-25","Helena Public Schools",1
-"Science","2026-08-25","Kalispell Public Schools",1
 "Science","2026-08-25","Lame Deer Public Schools",1
 "Science","2026-08-25","Miles City Unified School District 1",1
 "Science","2026-08-25","Plevna School District #55",1
 "Science","2026-08-25","Ronan Public Schools",1
-"Science","2026-08-25","Scobey Schools",3
+"Science","2026-08-25","Scobey Schools",2
 "Science","2026-08-25","Shepherd School District #37",1
 "Science","2026-08-25","Sweet Grass County High School",2
 "Science","2026-08-25","Westby School District 3",1
@@ -4788,20 +4773,16 @@
 "Science","2026-09-01","Big Sky School District 72",1
 "Science","2026-09-01","Billings Public Schools",1
 "Science","2026-09-01","Cascade Public Schools",1
-"Science","2026-09-01","Drummond Public Schools",1
 "Science","2026-09-01","East Helena Public Schools",1
 "Science","2026-09-01","Fairview Public Schools",1
 "Science","2026-09-01","Gallatin Gateway School",1
-"Science","2026-09-01","Gardiner Public Schools",1
 "Science","2026-09-01","Great Falls Public Schools",1
 "Science","2026-09-01","Harrison K-12 Schools",1
 "Science","2026-09-01","Helena Public Schools",1
-"Science","2026-09-01","Kalispell Public Schools",1
 "Science","2026-09-01","Lame Deer Public Schools",1
 "Science","2026-09-01","Miles City Unified School District 1",1
 "Science","2026-09-01","Plevna School District #55",1
 "Science","2026-09-01","Ronan Public Schools",1
-"Science","2026-09-01","Scobey Schools",1
 "Science","2026-09-01","Shepherd School District #37",1
 "Science","2026-09-01","Sweet Grass County High School",2
 "Science","2026-09-01","Westby School District 3",1
@@ -4811,20 +4792,16 @@
 "Science","2026-09-07","Big Sky School District 72",1
 "Science","2026-09-07","Billings Public Schools",1
 "Science","2026-09-07","Cascade Public Schools",1
-"Science","2026-09-07","Drummond Public Schools",1
 "Science","2026-09-07","East Helena Public Schools",1
 "Science","2026-09-07","Fairview Public Schools",1
 "Science","2026-09-07","Gallatin Gateway School",1
-"Science","2026-09-07","Gardiner Public Schools",1
 "Science","2026-09-07","Great Falls Public Schools",1
 "Science","2026-09-07","Harrison K-12 Schools",1
 "Science","2026-09-07","Helena Public Schools",1
-"Science","2026-09-07","Kalispell Public Schools",1
 "Science","2026-09-07","Lame Deer Public Schools",1
 "Science","2026-09-07","Miles City Unified School District 1",1
 "Science","2026-09-07","Plevna School District #55",1
 "Science","2026-09-07","Ronan Public Schools",1
-"Science","2026-09-07","Scobey Schools",1
 "Science","2026-09-07","Shepherd School District #37",1
 "Science","2026-09-07","Sweet Grass County High School",2
 "Science","2026-09-07","Westby School District 3",1
@@ -4833,20 +4810,16 @@
 "Science","2026-09-08","Big Sky School District 72",1
 "Science","2026-09-08","Billings Public Schools",1
 "Science","2026-09-08","Cascade Public Schools",1
-"Science","2026-09-08","Drummond Public Schools",1
 "Science","2026-09-08","East Helena Public Schools",1
 "Science","2026-09-08","Fairview Public Schools",1
 "Science","2026-09-08","Gallatin Gateway School",1
-"Science","2026-09-08","Gardiner Public Schools",1
 "Science","2026-09-08","Great Falls Public Schools",1
 "Science","2026-09-08","Harrison K-12 Schools",1
 "Science","2026-09-08","Helena Public Schools",1
-"Science","2026-09-08","Kalispell Public Schools",1
 "Science","2026-09-08","Lame Deer Public Schools",1
 "Science","2026-09-08","Miles City Unified School District 1",1
 "Science","2026-09-08","Plevna School District #55",1
 "Science","2026-09-08","Ronan Public Schools",1
-"Science","2026-09-08","Scobey Schools",1
 "Science","2026-09-08","Shepherd School District #37",1
 "Science","2026-09-08","Sweet Grass County High School",2
 "Science","2026-09-08","Westby School District 3",1
@@ -4855,50 +4828,40 @@
 "Science","2026-09-15","Big Sky School District 72",1
 "Science","2026-09-15","Billings Public Schools",1
 "Science","2026-09-15","Cascade Public Schools",1
-"Science","2026-09-15","Drummond Public Schools",1
 "Science","2026-09-15","East Helena Public Schools",1
 "Science","2026-09-15","Fairview Public Schools",1
 "Science","2026-09-15","Gallatin Gateway School",1
-"Science","2026-09-15","Gardiner Public Schools",1
 "Science","2026-09-15","Harrison K-12 Schools",1
 "Science","2026-09-15","Helena Public Schools",1
-"Science","2026-09-15","Kalispell Public Schools",1
 "Science","2026-09-15","Lame Deer Public Schools",1
 "Science","2026-09-15","Miles City Unified School District 1",1
 "Science","2026-09-15","Plevna School District #55",1
 "Science","2026-09-15","Ronan Public Schools",1
-"Science","2026-09-15","Scobey Schools",1
 "Science","2026-09-15","Shepherd School District #37",1
 "Science","2026-09-15","Sweet Grass County High School",2
 "Science","2026-09-15","Westby School District 3",1
 "Science","2026-09-15","Whitewater Public Schools",1
 "Science","2026-09-22","Baker Public Schools",1
 "Science","2026-09-22","Belgrade School District 44",1
-"Science","2026-09-22","Billings Public Schools",2
+"Science","2026-09-22","Billings Public Schools",1
 "Science","2026-09-22","Cascade Public Schools",1
-"Science","2026-09-22","Drummond Public Schools",1
 "Science","2026-09-22","East Helena Public Schools",1
 "Science","2026-09-22","Fairview Public Schools",1
 "Science","2026-09-22","Gallatin Gateway School",1
-"Science","2026-09-22","Gardiner Public Schools",1
 "Science","2026-09-22","Harrison K-12 Schools",1
 "Science","2026-09-22","Helena Public Schools",1
-"Science","2026-09-22","Kalispell Public Schools",1
 "Science","2026-09-22","Lame Deer Public Schools",1
 "Science","2026-09-22","Miles City Unified School District 1",1
 "Science","2026-09-22","Plevna School District #55",1
-"Science","2026-09-22","Scobey Schools",1
 "Science","2026-09-22","Sweet Grass County High School",2
 "Science","2026-09-22","Westby School District 3",1
 "Science","2026-09-22","Whitewater Public Schools",1
 "Science","2026-09-29","Baker Public Schools",1
 "Science","2026-09-29","Belgrade School District 44",1
-"Science","2026-09-29","Billings Public Schools",2
+"Science","2026-09-29","Billings Public Schools",1
 "Science","2026-09-29","Cascade Public Schools",1
-"Science","2026-09-29","Drummond Public Schools",1
 "Science","2026-09-29","East Helena Public Schools",1
 "Science","2026-09-29","Gallatin Gateway School",1
-"Science","2026-09-29","Gardiner Public Schools",1
 "Science","2026-09-29","Glasgow School District 1-A",1
 "Science","2026-09-29","Great Falls Public Schools",2
 "Science","2026-09-29","Harrison K-12 Schools",1
@@ -4906,7 +4869,6 @@
 "Science","2026-09-29","Lame Deer Public Schools",1
 "Science","2026-09-29","Miles City Unified School District 1",1
 "Science","2026-09-29","Plevna School District #55",1
-"Science","2026-09-29","Scobey Schools",1
 "Science","2026-09-29","Sweet Grass County High School",2
 "Science","2026-09-29","Westby School District 3",1
 "Science","2026-09-29","Whitewater Public Schools",1
@@ -4914,10 +4876,8 @@
 "Science","2026-10-06","Belgrade School District 44",1
 "Science","2026-10-06","Billings Public Schools",1
 "Science","2026-10-06","Cascade Public Schools",1
-"Science","2026-10-06","Drummond Public Schools",1
 "Science","2026-10-06","East Helena Public Schools",1
 "Science","2026-10-06","Gallatin Gateway School",1
-"Science","2026-10-06","Gardiner Public Schools",1
 "Science","2026-10-06","Glasgow School District 1-A",1
 "Science","2026-10-06","Great Falls Public Schools",2
 "Science","2026-10-06","Harrison K-12 Schools",1
@@ -4926,7 +4886,6 @@
 "Science","2026-10-06","Miles City Unified School District 1",1
 "Science","2026-10-06","Plevna School District #55",1
 "Science","2026-10-06","Rosebud K-12",1
-"Science","2026-10-06","Scobey Schools",1
 "Science","2026-10-06","Sweet Grass County High School",2
 "Science","2026-10-06","Westby School District 3",1
 "Science","2026-10-06","Whitewater Public Schools",1
@@ -4934,10 +4893,8 @@
 "Science","2026-10-13","Belgrade School District 44",1
 "Science","2026-10-13","Billings Public Schools",2
 "Science","2026-10-13","Cascade Public Schools",1
-"Science","2026-10-13","Drummond Public Schools",1
 "Science","2026-10-13","East Helena Public Schools",1
 "Science","2026-10-13","Gallatin Gateway School",1
-"Science","2026-10-13","Gardiner Public Schools",1
 "Science","2026-10-13","Glasgow School District 1-A",1
 "Science","2026-10-13","Great Falls Public Schools",2
 "Science","2026-10-13","Harrison K-12 Schools",1
@@ -4946,17 +4903,14 @@
 "Science","2026-10-13","Miles City Unified School District 1",1
 "Science","2026-10-13","Plevna School District #55",1
 "Science","2026-10-13","Rosebud K-12",1
-"Science","2026-10-13","Scobey Schools",1
 "Science","2026-10-13","Sweet Grass County High School",2
 "Science","2026-10-13","Whitewater Public Schools",1
 "Science","2026-10-20","Baker Public Schools",1
 "Science","2026-10-20","Belgrade School District 44",1
 "Science","2026-10-20","Billings Public Schools",2
 "Science","2026-10-20","Cascade Public Schools",1
-"Science","2026-10-20","Drummond Public Schools",1
 "Science","2026-10-20","East Helena Public Schools",1
 "Science","2026-10-20","Gallatin Gateway School",1
-"Science","2026-10-20","Gardiner Public Schools",1
 "Science","2026-10-20","Glasgow School District 1-A",1
 "Science","2026-10-20","Great Falls Public Schools",2
 "Science","2026-10-20","Harrison K-12 Schools",1
@@ -4966,7 +4920,6 @@
 "Science","2026-10-20","Miles City Unified School District 1",1
 "Science","2026-10-20","Plevna School District #55",1
 "Science","2026-10-20","Rosebud K-12",1
-"Science","2026-10-20","Scobey Schools",1
 "Science","2026-10-20","Sweet Grass County High School",2
 "Science","2026-10-20","Whitewater Public Schools",1
 "Science","2026-10-27","Baker Public Schools",1
@@ -4974,10 +4927,8 @@
 "Science","2026-10-27","Billings Public Schools",1
 "Science","2026-10-27","Cascade Public Schools",1
 "Science","2026-10-27","Cayuse Prairie School District #10",1
-"Science","2026-10-27","Drummond Public Schools",1
 "Science","2026-10-27","East Helena Public Schools",2
 "Science","2026-10-27","Gallatin Gateway School",1
-"Science","2026-10-27","Gardiner Public Schools",1
 "Science","2026-10-27","Glasgow School District 1-A",1
 "Science","2026-10-27","Great Falls Public Schools",2
 "Science","2026-10-27","Harrison K-12 Schools",1
@@ -4987,7 +4938,6 @@
 "Science","2026-10-27","Miles City Unified School District 1",1
 "Science","2026-10-27","Plevna School District #55",1
 "Science","2026-10-27","Rosebud K-12",1
-"Science","2026-10-27","Scobey Schools",1
 "Science","2026-10-27","Sweet Grass County High School",2
 "Science","2026-10-27","Whitewater Public Schools",1
 "Science","2026-11-03","Baker Public Schools",1
@@ -4995,9 +4945,7 @@
 "Science","2026-11-03","Brockton School District",1
 "Science","2026-11-03","Cascade Public Schools",1
 "Science","2026-11-03","Cayuse Prairie School District #10",1
-"Science","2026-11-03","Drummond Public Schools",1
 "Science","2026-11-03","East Helena Public Schools",2
-"Science","2026-11-03","Gardiner Public Schools",1
 "Science","2026-11-03","Glasgow School District 1-A",1
 "Science","2026-11-03","Great Falls Cent Cath HS",1
 "Science","2026-11-03","Harrison K-12 Schools",1
@@ -5006,7 +4954,6 @@
 "Science","2026-11-03","Miles City Unified School District 1",1
 "Science","2026-11-03","Plevna School District #55",1
 "Science","2026-11-03","Rosebud K-12",1
-"Science","2026-11-03","Scobey Schools",1
 "Science","2026-11-03","St Andrews H S",1
 "Science","2026-11-03","Yellowstone Academy Elem",1
 "Science","2026-11-10","Baker Public Schools",1
@@ -5014,9 +4961,7 @@
 "Science","2026-11-10","Brockton School District",1
 "Science","2026-11-10","Cascade Public Schools",1
 "Science","2026-11-10","Cayuse Prairie School District #10",1
-"Science","2026-11-10","Drummond Public Schools",1
 "Science","2026-11-10","East Helena Public Schools",2
-"Science","2026-11-10","Gardiner Public Schools",1
 "Science","2026-11-10","Glasgow School District 1-A",1
 "Science","2026-11-10","Great Falls Cent Cath HS",1
 "Science","2026-11-10","Harrison K-12 Schools",1
@@ -5025,7 +4970,6 @@
 "Science","2026-11-10","Miles City Unified School District 1",1
 "Science","2026-11-10","Plevna School District #55",1
 "Science","2026-11-10","Rosebud K-12",1
-"Science","2026-11-10","Scobey Schools",1
 "Science","2026-11-10","St Andrews H S",1
 "Science","2026-11-10","Yellowstone Academy Elem",1
 "Secondary Social Studies","2026-08-06","Bainville K-12 Schools",1
@@ -6128,55 +6072,120 @@
 "Special Education - General","2026-11-10","Wibaux Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-06","Kalispell Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-06","Missoula County Public Schools",1
+"CTE - Business & Family Sciences","2026-08-06","Billings Public Schools",1
+"Elementary","2026-08-06","Arrowhead Elementary School District #75",2
 "Special Education - Resource/Life Skills","2026-08-07","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-07","Kalispell Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-07","Missoula County Public Schools",1
+"CTE - Business & Family Sciences","2026-08-07","Billings Public Schools",1
+"Elementary","2026-08-07","Arrowhead Elementary School District #75",2
 "Special Education - Resource/Life Skills","2026-08-11","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-11","Kalispell Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-11","Missoula County Public Schools",2
+"CTE - Business & Family Sciences","2026-08-11","Wolf Point Public Schools",1
+"Elementary","2026-08-11","Arrowhead Elementary School District #75",2
 "Special Education - Resource/Life Skills","2026-08-18","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-18","Kalispell Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-18","Missoula County Public Schools",1
+"CTE - Business & Family Sciences","2026-08-18","Browning Public Schools",1
+"CTE - Business & Family Sciences","2026-08-18","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-08-18","Wolf Point Public Schools",1
+"Elementary","2026-08-18","Arrowhead Elementary School District #75",2
 "Special Education - Resource/Life Skills","2026-08-25","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-25","Kalispell Public Schools",1
 "Special Education - Resource/Life Skills","2026-08-25","Missoula County Public Schools",1
+"CTE - Business & Family Sciences","2026-08-25","Browning Public Schools",1
+"CTE - Business & Family Sciences","2026-08-25","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-08-25","Scobey Schools",1
+"Elementary","2026-08-25","Arrowhead Elementary School District #75",2
 "Special Education - Resource/Life Skills","2026-09-01","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-09-01","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-09-01","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-09-01","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-09-01","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-09-01","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-09-07","Belgrade School District 44",2
 "Special Education - Resource/Life Skills","2026-09-07","Big Sandy Public Schools",1
+"CTE - Business & Family Sciences","2026-09-07","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-09-07","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-09-07","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-09-07","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-09-08","Belgrade School District 44",2
 "Special Education - Resource/Life Skills","2026-09-08","Big Sandy Public Schools",1
+"CTE - Business & Family Sciences","2026-09-08","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-09-08","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-09-08","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-09-08","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-09-15","Belgrade School District 44",2
 "Special Education - Resource/Life Skills","2026-09-15","Big Sandy Public Schools",1
+"CTE - Business & Family Sciences","2026-09-15","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-09-15","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-09-15","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-09-15","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-09-22","Belgrade School District 44",2
 "Special Education - Resource/Life Skills","2026-09-22","Big Sandy Public Schools",2
+"CTE - Business & Family Sciences","2026-09-22","Billings Public Schools",1
+"CTE - Business & Family Sciences","2026-09-22","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-09-22","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-09-22","Kalispell Public Schools",1
+"CTE - Business & Family Sciences","2026-09-22","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-09-29","Belgrade School District 44",2
 "Special Education - Resource/Life Skills","2026-09-29","Big Sandy Public Schools",2
+"CTE - Business & Family Sciences","2026-09-29","Billings Public Schools",1
+"CTE - Business & Family Sciences","2026-09-29","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-09-29","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-09-29","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-10-06","Belgrade School District 44",2
 "Special Education - Resource/Life Skills","2026-10-06","Big Sandy Public Schools",2
+"CTE - Business & Family Sciences","2026-10-06","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-10-06","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-10-06","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-10-13","Belgrade School District 44",2
 "Special Education - Resource/Life Skills","2026-10-13","Big Sandy Public Schools",2
+"CTE - Business & Family Sciences","2026-10-13","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-10-13","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-10-13","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-10-20","Belgrade School District 44",3
 "Special Education - Resource/Life Skills","2026-10-20","Big Sandy Public Schools",2
+"CTE - Business & Family Sciences","2026-10-20","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-10-20","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-10-20","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-10-27","Belgrade School District 44",3
 "Special Education - Resource/Life Skills","2026-10-27","Big Sandy Public Schools",1
+"CTE - Business & Family Sciences","2026-10-27","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-10-27","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-10-27","Scobey Schools",1
 "Special Education - Resource/Life Skills","2026-11-03","Belgrade School District 44",3
 "Special Education - Resource/Life Skills","2026-11-03","Big Sandy Public Schools",1
+"CTE - Business & Family Sciences","2026-11-03","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-11-03","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-11-03","Lame Deer Public Schools",1
+"CTE - Business & Family Sciences","2026-11-03","Scobey Schools",1
+"CTE - Trades, Ag & Technical","2026-11-03","St Labre Indian H S",1
+"Language","2026-11-03","North Cheyenne Trib Elem",1
+"Music","2026-11-03","St Labre Indian H S",1
 "Special Education - Resource/Life Skills","2026-11-10","Belgrade School District 44",3
 "Special Education - Resource/Life Skills","2026-11-10","Big Sandy Public Schools",1
+"CTE - Business & Family Sciences","2026-11-10","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-11-10","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-11-10","Lame Deer Public Schools",1
+"CTE - Business & Family Sciences","2026-11-10","Scobey Schools",1
+"CTE - Trades, Ag & Technical","2026-11-10","St Labre Indian H S",1
+"Language","2026-11-10","North Cheyenne Trib Elem",1
+"Music","2026-11-10","St Labre Indian H S",1
 "Art","2026-11-17","Total",8
-"CTE - Business & Family Sciences","2026-11-17","Total",15
-"CTE - Trades, Ag & Technical","2026-11-17","Total",20
+"CTE - Business & Family Sciences","2026-11-17","Total",19
+"CTE - Trades, Ag & Technical","2026-11-17","Total",21
 "Early Childhood","2026-11-17","Total",4
 "Elementary","2026-11-17","Total",75
 "English Language Arts Secondary","2026-11-17","Total",12
-"Language","2026-11-17","Total",9
+"Language","2026-11-17","Total",10
 "Library Media","2026-11-17","Total",11
 "Math","2026-11-17","Total",20
-"Music","2026-11-17","Total",20
-"Other","2026-11-17","Total",23
+"Music","2026-11-17","Total",21
+"Other","2026-11-17","Total",19
 "Physical Education","2026-11-17","Total",19
-"Science","2026-11-17","Total",20
+"Science","2026-11-17","Total",17
 "Secondary Social Studies","2026-11-17","Total",14
 "Special Education - General","2026-11-17","Total",60
 "Special Education - Resource/Life Skills","2026-11-17","Total",5
@@ -6357,13 +6366,11 @@
 "Other","2026-11-17","Hamilton School District 3",1
 "Other","2026-11-17","Hays-Lodge Pole School District",1
 "Other","2026-11-17","Jefferson High School",1
-"Other","2026-11-17","Lame Deer Public Schools",1
 "Other","2026-11-17","Libby Public Schools",1
 "Other","2026-11-17","Lodge Grass Public Schools",1
-"Other","2026-11-17","North Cheyenne Trib Elem",1
 "Other","2026-11-17","Shelby School District",1
 "Other","2026-11-17","Shodair Specialty Hosp",1
-"Other","2026-11-17","St Labre Indian H S",3
+"Other","2026-11-17","St Labre Indian H S",1
 "Other","2026-11-17","Swan River School District #4",1
 "Other","2026-11-17","Upper West Shore School District #33",1
 "Other","2026-11-17","Whitefish School District",1
@@ -6388,10 +6395,8 @@
 "Science","2026-11-17","Brockton School District",1
 "Science","2026-11-17","Cascade Public Schools",1
 "Science","2026-11-17","Cayuse Prairie School District #10",1
-"Science","2026-11-17","Drummond Public Schools",1
 "Science","2026-11-17","East Helena Public Schools",2
 "Science","2026-11-17","Froid Public Schools",1
-"Science","2026-11-17","Gardiner Public Schools",1
 "Science","2026-11-17","Glasgow School District 1-A",1
 "Science","2026-11-17","Harrison K-12 Schools",1
 "Science","2026-11-17","Hays-Lodge Pole School District",1
@@ -6400,7 +6405,6 @@
 "Science","2026-11-17","Noxon Public Schools",1
 "Science","2026-11-17","Plevna School District #55",1
 "Science","2026-11-17","Rosebud K-12",1
-"Science","2026-11-17","Scobey Schools",1
 "Science","2026-11-17","St Andrews H S",1
 "Science","2026-11-17","Yellowstone Academy Elem",1
 "Secondary Social Studies","2026-11-17","Bainville K-12 Schools",1
@@ -6469,19 +6473,26 @@
 "Special Education - Resource/Life Skills","2026-11-17","Belgrade School District 44",3
 "Special Education - Resource/Life Skills","2026-11-17","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-11-17","Bozeman Public Schools",1
+"CTE - Business & Family Sciences","2026-11-17","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-11-17","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-11-17","Lame Deer Public Schools",1
+"CTE - Business & Family Sciences","2026-11-17","Scobey Schools",1
+"CTE - Trades, Ag & Technical","2026-11-17","St Labre Indian H S",1
+"Language","2026-11-17","North Cheyenne Trib Elem",1
+"Music","2026-11-17","St Labre Indian H S",1
 "Art","2026-11-19","Total",8
-"CTE - Business & Family Sciences","2026-11-19","Total",15
-"CTE - Trades, Ag & Technical","2026-11-19","Total",20
+"CTE - Business & Family Sciences","2026-11-19","Total",18
+"CTE - Trades, Ag & Technical","2026-11-19","Total",21
 "Early Childhood","2026-11-19","Total",4
 "Elementary","2026-11-19","Total",75
 "English Language Arts Secondary","2026-11-19","Total",13
-"Language","2026-11-19","Total",9
+"Language","2026-11-19","Total",10
 "Library Media","2026-11-19","Total",11
 "Math","2026-11-19","Total",19
-"Music","2026-11-19","Total",20
-"Other","2026-11-19","Total",22
+"Music","2026-11-19","Total",21
+"Other","2026-11-19","Total",19
 "Physical Education","2026-11-19","Total",18
-"Science","2026-11-19","Total",21
+"Science","2026-11-19","Total",18
 "Secondary Social Studies","2026-11-19","Total",14
 "Special Education - General","2026-11-19","Total",61
 "Special Education - Resource/Life Skills","2026-11-19","Total",5
@@ -6665,10 +6676,9 @@
 "Other","2026-11-19","Jefferson High School",1
 "Other","2026-11-19","Libby Public Schools",1
 "Other","2026-11-19","Lodge Grass Public Schools",1
-"Other","2026-11-19","North Cheyenne Trib Elem",1
 "Other","2026-11-19","Shelby School District",1
 "Other","2026-11-19","Shodair Specialty Hosp",1
-"Other","2026-11-19","St Labre Indian H S",3
+"Other","2026-11-19","St Labre Indian H S",1
 "Other","2026-11-19","Swan River School District #4",1
 "Other","2026-11-19","Upper West Shore School District #33",1
 "Other","2026-11-19","Whitefish School District",1
@@ -6693,10 +6703,8 @@
 "Science","2026-11-19","Cascade Public Schools",1
 "Science","2026-11-19","Cayuse Prairie School District #10",1
 "Science","2026-11-19","Dodson K-12",1
-"Science","2026-11-19","Drummond Public Schools",1
 "Science","2026-11-19","East Helena Public Schools",2
 "Science","2026-11-19","Froid Public Schools",1
-"Science","2026-11-19","Gardiner Public Schools",1
 "Science","2026-11-19","Glasgow School District 1-A",1
 "Science","2026-11-19","Harrison K-12 Schools",1
 "Science","2026-11-19","Hays-Lodge Pole School District",1
@@ -6705,7 +6713,6 @@
 "Science","2026-11-19","Noxon Public Schools",1
 "Science","2026-11-19","Plevna School District #55",1
 "Science","2026-11-19","Rosebud K-12",1
-"Science","2026-11-19","Scobey Schools",1
 "Science","2026-11-19","St Andrews H S",1
 "Science","2026-11-19","Yellowstone Academy Elem",1
 "Secondary Social Studies","2026-11-19","Bainville K-12 Schools",1
@@ -6775,19 +6782,25 @@
 "Special Education - Resource/Life Skills","2026-11-19","Belgrade School District 44",3
 "Special Education - Resource/Life Skills","2026-11-19","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-11-19","Bozeman Public Schools",1
+"CTE - Business & Family Sciences","2026-11-19","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-11-19","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-11-19","Scobey Schools",1
+"CTE - Trades, Ag & Technical","2026-11-19","St Labre Indian H S",1
+"Language","2026-11-19","North Cheyenne Trib Elem",1
+"Music","2026-11-19","St Labre Indian H S",1
 "Art","2026-11-23","Total",7
-"CTE - Business & Family Sciences","2026-11-23","Total",15
-"CTE - Trades, Ag & Technical","2026-11-23","Total",18
+"CTE - Business & Family Sciences","2026-11-23","Total",18
+"CTE - Trades, Ag & Technical","2026-11-23","Total",19
 "Early Childhood","2026-11-23","Total",4
 "Elementary","2026-11-23","Total",71
 "English Language Arts Secondary","2026-11-23","Total",11
-"Language","2026-11-23","Total",9
+"Language","2026-11-23","Total",10
 "Library Media","2026-11-23","Total",11
 "Math","2026-11-23","Total",18
-"Music","2026-11-23","Total",19
-"Other","2026-11-23","Total",21
+"Music","2026-11-23","Total",20
+"Other","2026-11-23","Total",18
 "Physical Education","2026-11-23","Total",17
-"Science","2026-11-23","Total",21
+"Science","2026-11-23","Total",18
 "Secondary Social Studies","2026-11-23","Total",13
 "Special Education - General","2026-11-23","Total",58
 "Special Education - Resource/Life Skills","2026-11-23","Total",5
@@ -6960,10 +6973,9 @@
 "Other","2026-11-23","Hays-Lodge Pole School District",1
 "Other","2026-11-23","Jefferson High School",1
 "Other","2026-11-23","Libby Public Schools",1
-"Other","2026-11-23","North Cheyenne Trib Elem",1
 "Other","2026-11-23","Shelby School District",1
 "Other","2026-11-23","Shodair Specialty Hosp",1
-"Other","2026-11-23","St Labre Indian H S",3
+"Other","2026-11-23","St Labre Indian H S",1
 "Other","2026-11-23","Swan River School District #4",1
 "Other","2026-11-23","Upper West Shore School District #33",1
 "Other","2026-11-23","Whitefish School District",1
@@ -6987,10 +6999,8 @@
 "Science","2026-11-23","Cascade Public Schools",1
 "Science","2026-11-23","Cayuse Prairie School District #10",1
 "Science","2026-11-23","Dodson K-12",1
-"Science","2026-11-23","Drummond Public Schools",1
 "Science","2026-11-23","East Helena Public Schools",2
 "Science","2026-11-23","Froid Public Schools",1
-"Science","2026-11-23","Gardiner Public Schools",1
 "Science","2026-11-23","Glasgow School District 1-A",1
 "Science","2026-11-23","Harrison K-12 Schools",1
 "Science","2026-11-23","Hays-Lodge Pole School District",1
@@ -6999,7 +7009,6 @@
 "Science","2026-11-23","Noxon Public Schools",1
 "Science","2026-11-23","Plevna School District #55",1
 "Science","2026-11-23","Rosebud K-12",1
-"Science","2026-11-23","Scobey Schools",1
 "Science","2026-11-23","St Andrews H S",1
 "Science","2026-11-23","Yellowstone Academy Elem",1
 "Secondary Social Studies","2026-11-23","Bainville K-12 Schools",1
@@ -7065,3 +7074,9 @@
 "Special Education - Resource/Life Skills","2026-11-23","Belgrade School District 44",3
 "Special Education - Resource/Life Skills","2026-11-23","Big Sandy Public Schools",1
 "Special Education - Resource/Life Skills","2026-11-23","Bozeman Public Schools",1
+"CTE - Business & Family Sciences","2026-11-23","Drummond Public Schools",1
+"CTE - Business & Family Sciences","2026-11-23","Gardiner Public Schools",1
+"CTE - Business & Family Sciences","2026-11-23","Scobey Schools",1
+"CTE - Trades, Ag & Technical","2026-11-23","St Labre Indian H S",1
+"Language","2026-11-23","North Cheyenne Trib Elem",1
+"Music","2026-11-23","St Labre Indian H S",1

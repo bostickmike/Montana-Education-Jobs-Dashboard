@@ -1005,7 +1005,7 @@
       "description": {
         "Package": "edjobs",
         "Title": "Shared Code for State Education Jobs Dashboards",
-        "Version": "0.73.0",
+        "Version": "0.84.0",
         "Authors@R": "person(\"Mike\", \"Bostick\", email = \"michael.bostick@montana.edu\", role = c(\"aut\", \"cre\"))",
         "Description": "Code shared by state education jobs dashboards (today Montana\n    and Wyoming): platform and site-family scrapers, posting classification and\n    posted pay, posting spells and listing durations, federal context sources,\n    the daily presence check, the checks each weekly run makes on its own output,\n    and shared app helpers. What differs by state comes in as data through\n    state_config(). Each state repository pins a tagged version.",
         "License": "MIT + file LICENSE",
@@ -1024,18 +1024,18 @@
         "RemoteHost": "api.github.com",
         "RemoteRepo": "edjobs",
         "RemoteUsername": "bostickmike",
-        "RemotePkgRef": "bostickmike/edjobs@v0.73.0",
-        "RemoteRef": "v0.73.0",
-        "RemoteSha": "50905762fe9897a1120a18f24d13957329b3b7cb",
+        "RemotePkgRef": "bostickmike/edjobs@v0.84.0",
+        "RemoteRef": "v0.84.0",
+        "RemoteSha": "973f06b106028ffc422432c4c42c711d2dbfb268",
         "GithubRepo": "edjobs",
         "GithubUsername": "bostickmike",
-        "GithubRef": "v0.73.0",
-        "GithubSHA1": "50905762fe9897a1120a18f24d13957329b3b7cb",
+        "GithubRef": "v0.84.0",
+        "GithubSHA1": "973f06b106028ffc422432c4c42c711d2dbfb268",
         "NeedsCompilation": "no",
-        "Packaged": "2026-11-23 16:51:08 UTC; runner",
+        "Packaged": "2026-11-23 19:01:53 UTC; mikebostick",
         "Author": "Mike Bostick [aut, cre]",
         "Maintainer": "Mike Bostick <michael.bostick@montana.edu>",
-        "Built": "R 4.6.2; ; 2026-11-23 16:51:10 UTC; unix"
+        "Built": "R 4.6.2; ; 2026-11-23 19:01:54 UTC; unix"
       }
     },
     "evaluate": {
@@ -3950,19 +3950,19 @@
       "checksum": "831541bf375469636084cc810b0c6a70"
     },
     "allnow.csv": {
-      "checksum": "7b88be3e4db516073afc545cc4a753ee"
+      "checksum": "c401618b34680ba9f51c2531eb5baa50"
     },
     "allsum_he.csv": {
       "checksum": "c5688e0be2611dd1813cf05169e2b1a6"
     },
     "allsum.csv": {
-      "checksum": "19ea3880dd4f88c60afc20cd25d65ec5"
+      "checksum": "28dadd7a45c8dcd3a0c5079de0cb8ef6"
     },
     "app.R": {
       "checksum": "e846250a0b9e8be7aaba2a061d6a2509"
     },
     "combinedclean.csv": {
-      "checksum": "51926850bae847d3c7e784561785bd8b"
+      "checksum": "04114fc94edc13c6dcfdaf637adc0d2c"
     },
     "data_dictionary.csv": {
       "checksum": "b3cda0dc7febeb68306102d09e9b20a6"
@@ -3986,19 +3986,19 @@
       "checksum": "a87128dc2e9046938dc7e5cf0397672f"
     },
     "job_duration_spells.csv": {
-      "checksum": "7af63c4c5dac589462102fcdfd537c37"
+      "checksum": "40cc93149277552afbf3d0167429b8c2"
     },
     "k12_district_weekly_totals.csv": {
-      "checksum": "6c8e89f2741916430662494e851f6004"
+      "checksum": "1c9b1c24339d5800ceea2b67ba15e129"
     },
     "k12_jobtype_weekly_totals.csv": {
-      "checksum": "573efe65713de2c80d47cd0328e10783"
+      "checksum": "db7f1299a4005a32b3dd890c7a994889"
     },
     "k12_salary_history.csv": {
       "checksum": "250fdf03f0c20fa6a81cac62ad2eb6b2"
     },
     "k12jobanalysis.csv": {
-      "checksum": "a17ee11ef23d6479862f0758f9f61e38"
+      "checksum": "65e27d2166e5df7480173dc6c60207be"
     },
     "llm_extract_shadow.csv": {
       "checksum": "31adf511503c8153570c4ab5d21ebc95"
@@ -4016,7 +4016,7 @@
       "checksum": "d3a7ee9b30ca7ce6982e4af677f2021f"
     },
     "posting_first_seen.csv": {
-      "checksum": "5de0702985871846cad207e496822bbf"
+      "checksum": "c695d246965a8e0420f973722fccb487"
     },
     "qcew_county_school_pay.csv": {
       "checksum": "106d551bb8f080d6b5996612a408d163"
