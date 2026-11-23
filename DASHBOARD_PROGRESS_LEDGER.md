@@ -1663,6 +1663,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     08-11. On the archives today (11-22, through the 11-19 run) it lists 7, all K-12: Lame Deer (27 postings, 14
     weeks), Lodge Grass (15, 14), Poplar (11, 14), Broadview (7, 13), Scobey (13, 13), Swan River (5, 13), White
     Sulphur Springs (5, 12); no HE board. Suite 3,270 passed, 0 failed.
+  * [x] Documentation review (2026-11-23; branches `docs-facts`, `docs-methods`; `claude-notes/2026-11-23_docs-review/`;
+    Mike's call: split roles). Stage 1: stale facts in the README (real tabs, live link, OPI-only districts are
+    mapped, what blocks vs only reports), the data dictionary (Data tab name; teaching / faculty-only files; days
+    listed is not time to fill; runs, not weeks) and two notes. Stage 2: the dictionary covers every shipped file
+    (69 rows, 12 files; college pay estimates are IPEDS staff averages); `test-data-dictionary.R` reads .xlsx and
+    fails on any undocumented file in `Mt_Ed_Jobs/`. Stage 3: `DATA_COOKBOOK.md` (7,400 words, headed "SUPERSEDED",
+    untested) becomes `METHODS.md` (~1,400 words, for a data user, sources linked); its column tables live in the
+    dictionary, its engineering notes in git history. References repointed (CLAUDE.md, README, code comments, the
+    Districts tab's poverty note, `scaffold_district.R`'s count sync). Same in WY; edjobs docs no longer link to
+    private notes.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the

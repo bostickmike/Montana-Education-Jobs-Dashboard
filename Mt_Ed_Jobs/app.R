@@ -146,8 +146,8 @@ combineddata <- combineddata %>%
 # (k12_district_registry.csv), not Montana's full ~398-district universe --
 # combineddata above has many more distinct District values (every district
 # the OPI statewide fallback feed surfaces), but only the registry's districts
-# have a Latitude/Longitude to put on the map. See DATA_COOKBOOK.md's "OPI
-# statewide fallback feed" note.
+# have a Latitude/Longitude to put on the map. See METHODS.md, "OPI postings:
+# when they count".
 # BLS QCEW average pay of public school employees by county, all roles (the
 # pipeline's qcew_county_school_pay.csv); county context in the map popup.
 # Optional: counties BLS withholds, or a missing file, show nothing.
@@ -607,7 +607,7 @@ IPEDS_SALARY_SOURCE_URL <- "https://educationdata.urban.org"
 # The Districts tab's pay and budget columns, their map popup lines, the compare plot's bars and the footnote's
 # state paragraphs (edjobs district_spec(), step 7 slice 3 part 3, 2026-11-21).
 # Teacher_Avg_Salary and its 10th/90th percentile band (MT DLI Teacher Compensation Report), not a base salary plus
-# prior year: see DATA_COOKBOOK.md for why this is a different metric.
+# prior year: see METHODS.md, "Pay", for why this is a different metric.
 DISTRICT_SPEC <- district_spec(
   columns = list(
     district_column("Teacher Avg Salary (%s)", value = "Teacher_Avg_Salary", year_col = "Salary_Year",
@@ -631,7 +631,7 @@ DISTRICT_SPEC <- district_spec(
     district_source_note("General Fund expenditure:", "Finance_Source", year_col = "Finance_FY", year_format = "(FY%s).",
                          after = "This is total day-to-day operating spending, not per-pupil or per-teacher spending.")
   ),
-  saipe_scope_note = ". District-level. For districts split between an elementary and a high-school district, this pools the two: children 5-17 in poverty summed over both districts, divided by their children 5-17 summed -- see DATA_COOKBOOK.md.",
+  saipe_scope_note = ". District-level. For districts split between an elementary and a high-school district, this pools the two: children 5-17 in poverty summed over both districts, divided by their children 5-17 summed.",
   saipe_standin_note = "A private or tribal school has no Census poverty estimate of its own; it shows its surrounding district's estimate (marked \"Surrounding district\").",
   other_employers_note = helpText(
     "Employers that aren't public school districts are on the map too: special-education cooperatives and a",

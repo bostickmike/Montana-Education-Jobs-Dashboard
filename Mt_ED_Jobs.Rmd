@@ -1646,8 +1646,8 @@ if (nrow(opi_df) > 0) {
   # District is NOT a canonical legal district name here -- OPI's feed only
   # exposes a City column, so District is that raw City value passed
   # through, the closest available proxy (same honesty tradeoff as every
-  # other source's raw `location` field, just one level up). Flagged in
-  # DATA_COOKBOOK.md once that's written.
+  # other source's raw `location` field, just one level up). Since 2026-11-01 the
+  # posting's own page names its district (OPI_District; METHODS.md).
   opi_df <- opi_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District = Location,
@@ -1966,7 +1966,7 @@ write.csv(k12_jobtype_weekly_totals, file.path("Mt_Ed_Jobs", "k12_jobtype_weekly
 
 # Every current and historical K-12 count uses the posting identity contract:
 # stable per-posting URLs where a source provides one, otherwise the explicit
-# source/OPI fallback documented in DATA_COOKBOOK.md.
+# source/OPI fallback documented in METHODS.md ("One posting, one ID").
 this_week_k12sumdistrict <- summarize_k12_posting_counts(this_week_k12jobs)
 
 this_week_k12sum <- this_week_k12sumdistrict %>%

@@ -644,7 +644,7 @@ test_that("parse_%s_postings returns zero rows on empty or non-matching HTML", {
 }
 
 # ---------------------------------------------------------------------------
-# 7. README.md & DATA_COOKBOOK.md (District count sync)
+# 7. README.md & METHODS.md (District count sync)
 # ---------------------------------------------------------------------------
 if (new_count > old_count) {
   readme_path <- here::here("README.md")
@@ -657,24 +657,18 @@ if (new_count > old_count) {
     cat(sprintf("[7/8] Updated README.md (count %d -> %d)\n", old_count, new_count))
   }
 
-  cookbook_path <- here::here("DATA_COOKBOOK.md")
-  if (file.exists(cookbook_path)) {
-    cb_content <- paste(readLines(cookbook_path, warn = FALSE), collapse = "\n")
-    cb_content <- gsub(sprintf("scraping scope (%d K-12 districts", old_count),
-                       sprintf("scraping scope (%d K-12 districts", new_count),
-                       cb_content, fixed = TRUE)
-    cb_content <- gsub(sprintf("Within that %d/23 scope", old_count),
-                       sprintf("Within that %d/23 scope", new_count),
-                       cb_content, fixed = TRUE)
-    cb_content <- gsub(sprintf("cover 32 of the %d K-12 districts", old_count),
-                       sprintf("cover 32 of the %d K-12 districts", new_count),
-                       cb_content, fixed = TRUE)
-    writeLines(cb_content, cookbook_path)
-    cat(sprintf("[8/8] Updated DATA_COOKBOOK.md (count %d -> %d)\n", old_count, new_count))
+  methods_path <- here::here("METHODS.md")
+  if (file.exists(methods_path)) {
+    mt_content <- paste(readLines(methods_path, warn = FALSE), collapse = "\n")
+    mt_content <- gsub(sprintf("the job boards of %d Montana public school districts", old_count),
+                       sprintf("the job boards of %d Montana public school districts", new_count),
+                       mt_content, fixed = TRUE)
+    writeLines(mt_content, methods_path)
+    cat(sprintf("[8/8] Updated METHODS.md (count %d -> %d)\n", old_count, new_count))
   }
 } else {
   cat("[7/8] README.md already at current count\n")
-  cat("[8/8] DATA_COOKBOOK.md already at current count\n")
+  cat("[8/8] METHODS.md already at current count\n")
 }
 
 cat("\n=== Scaffolding Complete! ===\n")
