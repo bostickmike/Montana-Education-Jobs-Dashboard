@@ -442,4 +442,28 @@ test_that("pool_only_board_districts() names boards whose every row is a substit
   expect_equal(pool_only_board_districts(d[0, ]), character(0))
   # A word that only starts with "sub" is not a pool.
   expect_equal(pool_only_board_districts(data.frame(District = "X", title = "Subject Area Coordinator")), character(0))
+  # A long-term substitute is a real fixed-term opening (Olney-Bissell's board, 2026 archives).
+  expect_equal(pool_only_board_districts(data.frame(District = "Olney-Bissell",
+                                                    title = "Long Term Substitute - Kindergarten")), character(0))
+  # A district whose page sends teaching jobs to OPI is never pool-only (Independent, Elysian: pages read 2026-11-23).
+  ind <- data.frame(District = c("Independent School", "Elysian School District #23"),
+                    title = c("SUBSTITUTES WANTED - POSITIONS AVAILABLE", "Guest Teachers (substitutes)"))
+  expect_equal(pool_only_board_districts(ind), character(0))
+  expect_setequal(pool_only_board_districts(ind, defers_to_opi = character(0)), ind$District)
+})
+
+test_that("the pool-only rule leaves archived weeks alone", {
+  direct <- read.csv(test_path("fixtures", "direct_postings_2026-10-27_reconcile.csv"), stringsAsFactors = FALSE)
+  cw <- "Cottonwood School District #57"
+  pools <- data.frame(title = "Substitute Teacher", date_posted = NA, location = "Cottonwood",
+                      url = "https://www.hellgate.k12.mt.us/fs/pages/3391", District = cw,
+                      Posting_Source = "district site (direct board)", stringsAsFactors = FALSE)
+  # Archive mode (opi_rule_for_archive(): stale_fallback = FALSE): nothing is dropped for being stale.
+  opi <- read.csv(test_path("fixtures", "opi_postings_2026-11-02_reconcile.csv"), stringsAsFactors = FALSE)
+  opi$District <- opi$location
+  r <- reconcile_opi_with_direct(opi, rbind(direct, pools), xw_fixture(),
+                                 read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE),
+                                 today = as.Date("2026-11-02"), stale_fallback = FALSE)
+  expect_false(any(r$opi_dropped$OPI_Drop_Reason %in% OPI_STALE_POOL_REASON))
+  expect_equal(sum(r$opi_keep$District == cw), 2)
 })

@@ -259,14 +259,26 @@ opi_only_registry_districts <- function(registry) {
 
 # Registry districts whose board returned rows this run, every one a standing substitute pool
 # (edjobs STANDING_POOL_PATTERN: "Substitute Teacher", "Guest Teachers (substitutes)", "Custodial substitutes").
+# A long-term substitute is a real fixed-term opening ("Long Term Substitute - Kindergarten", Olney-Bissell),
+# not a pool. Districts whose page sends teaching jobs to OPI are never pool-only: their board's silence says
+# nothing about a teaching posting (OPI_BOARD_DEFERS_TO_OPI).
 OPI_STALE_POOL_REASON <- "stale OPI listing, district board lists only substitute pools"
-pool_only_board_districts <- function(direct_df) {
+OPI_LONG_TERM_SUB_PATTERN <- "(?i)long[- ]?term|\\bLTS\\b"
+# Registry districts whose own job page says its teaching (or all) openings are on OPI's board, quoted as read.
+OPI_BOARD_DEFERS_TO_OPI <- c(
+  # https://www.independent.k12.mt.us/job-openings, read 2026-11-23
+  "Independent School" = "For Certified Teaching Positions, check OPI's Jobs for Montana Teachers website",
+  # https://sites.google.com/a/elysianschool.org/ely23/employment, read 2026-11-23
+  "Elysian School District #23" = "For a complete list of our current openings please visit OPI's website"
+)
+pool_only_board_districts <- function(direct_df, defers_to_opi = names(OPI_BOARD_DEFERS_TO_OPI)) {
   if (is.null(direct_df) || nrow(direct_df) == 0 || !all(c("District", "title") %in% names(direct_df))) return(character(0))
   d <- direct_df[!is.na(direct_df$District), , drop = FALSE]
   if (nrow(d) == 0) return(character(0))
-  pool <- grepl(edjobs::STANDING_POOL_PATTERN, as.character(d$title), perl = TRUE)
+  t <- as.character(d$title)
+  pool <- grepl(edjobs::STANDING_POOL_PATTERN, t, perl = TRUE) & !grepl(OPI_LONG_TERM_SUB_PATTERN, t, perl = TRUE)
   all_pool <- tapply(pool, d$District, all)
-  names(all_pool)[all_pool]
+  setdiff(names(all_pool)[all_pool], defers_to_opi)
 }
 
 # TRUE where a posted date (ISO or OPI's m/d/Y) is more than 60 days before
@@ -777,7 +789,7 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
       if (length(by_d) > max_districts) md <- c(md, sprintf("- ... and %d more districts", length(by_d) - max_districts))
       old <- sum(grepl("counted from OPI", qc$Discrepancy_Type) & grepl("over 60 days", qc$Discrepancy_Type))
       if (old > 0) md <- c(md, "", sprintf("(%d more, also counted, were posted on OPI over 60 days ago.)", old))
-      if (nrow(ghosts) > 0) md <- c(md, sprintf("(%d old OPI listings at districts whose board was empty were not used.)", nrow(ghosts)))
+      if (nrow(ghosts) > 0) md <- c(md, sprintf("(%d old OPI listings at districts whose board was empty or listed only substitute pools were not used.)", nrow(ghosts)))
       md <- c(md, "")
     }
   }
