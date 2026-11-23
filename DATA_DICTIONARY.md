@@ -28,7 +28,7 @@ Each dataset is accessible via the **Data** tab in the interactive web dashboard
 | **Active Higher Ed Jobs** | `hedata.xlsx` | Every college posting listed in the latest run, all job types, with posted pay, campus placement and pay estimates. | Posting level | Each run |
 | **IPEDS Staff Salaries** | `ipeds_staff_salaries.csv` | Average pay of full-time non-instructional staff by college and occupational category (categories with at least 3 staff). | College × Category | Annual |
 | **K-12 Teacher Salary History** | `k12_salary_history.csv` | Teacher pay by district for each Teacher Compensation Report edition this project has captured (DLI keeps no public archive). | District × Year | Annual |
-| **BLS Regional Pay by Role** | `oews_role_wages.csv` | Median pay for the occupations K-12 and college postings are matched to, by Montana OEWS area; the source of the Typical pay (BLS est.) columns. | Area × Occupation | Annual |
+| **BLS Regional Pay by Role** | `oews_role_wages.csv` | Median pay for the occupations K-12 postings are matched to, by Montana OEWS area; the source of the K-12 Typical pay (BLS est.) column. | Area × Occupation | Annual |
 | **OPI District Counties** | `opi_district_counties.csv` | The county of each district as OPI names it, used to give OPI postings a county. | District level | Each run |
 | **Posting First Seen** | `posting_first_seen.csv` | When the dashboard first found each currently listed posting; shown where the board gives no posted date. | Posting level | Each run |
 | **County Public School Pay** | `qcew_county_school_pay.csv` | Average annual pay and employment of public school (local government, NAICS 6111) employees by county, all roles together. | County level | Annual |
@@ -445,7 +445,7 @@ Teacher pay by district for each Teacher Compensation Report edition this projec
 
 ### S. BLS Regional Pay by Role (`oews_role_wages.csv`)
 
-Median pay for the occupations K-12 and college postings are matched to, by Montana OEWS area; the source of the Typical pay (BLS est.) columns.
+Median pay for the occupations K-12 postings are matched to, by Montana OEWS area; the source of the K-12 Typical pay (BLS est.) column.
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
