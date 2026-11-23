@@ -1600,6 +1600,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Services Cooperative"), and 3000053 "Missoula Area Education Coop", Missoula. The run builds their map rows
     (`build_other_employer_rows()`); `reference_audit.R` lists both under "no map row" until then. One run
     expectation for 11-23 (`unmapped_employers.csv`).
+  * [x] Dodson and Kinsey are OPI-only (2026-11-22; branch `opi-primary-dodson-kinsey`;
+    `claude-notes/2026-11-22_drift-triage/README.md`). Two of the drift issue's three adoption candidates go to
+    `opi_primary_districts.csv`. Dodson K-12: its employment page was one sentence deferring to OPI (backlog Group 2,
+    verified 10-29); on 11-22 dodsonschool.com no longer resolves and dodson.k12.mt.us answers with a JavaScript bot
+    challenge, so it was not rechecked. Kinsey Elem: no website (none on OPI, a web search finds only directory
+    sites; backlog Group 8). Cross-check replayed on the 11-22 rehearsal's inputs: adoption candidates 3 -> 1
+    (Troy, whose board is an unstructured Google Drive folder, blocked); "only board is OPI" 16 -> 18 districts,
+    27 -> 31 postings. Counting is unchanged: these postings already counted from OPI.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
