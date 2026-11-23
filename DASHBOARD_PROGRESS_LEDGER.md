@@ -1608,6 +1608,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     sites; backlog Group 8). Cross-check replayed on the 11-22 rehearsal's inputs: adoption candidates 3 -> 1
     (Troy, whose board is an unstructured Google Drive folder, blocked); "only board is OPI" 16 -> 18 districts,
     27 -> 31 postings. Counting is unchanged: these postings already counted from OPI.
+  * [x] Zurich, Pleasant Valley and Circle parsers error when their page structure is missing (2026-11-22; branch
+    `oneoff-parsers-error-on-layout`; `claude-notes/2026-11-22_silent-8/README.md`; Mike's call, step 8 finding 1).
+    These three one-off parsers have never produced a row, so "0 rows" couldn't tell an empty board from a page they
+    no longer read. Now each stops (a `safe_scrape()` error in scrape_log.csv, which the silent-source check lists
+    even for an acknowledged source) when its span or container is missing: Zurich's "Employment" ... "Submit
+    Contact Information Here" span, Pleasant Valley's and Circle's `#wsite-content` and its heading/paragraph
+    blocks. `html_element()` returns xml_missing, not NULL, so the old `is.null()` guards never fired. Today's live
+    pages: 0 rows, no error. Tests: each parser errors on the other site's real fixture.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
