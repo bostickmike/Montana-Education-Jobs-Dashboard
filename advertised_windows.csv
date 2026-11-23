@@ -1,16 +1,19 @@
 "Segment","Position","Postings","Median_Days"
-"HE","All",33,22
-"HE","Professional",10,22.5
-"HE","Management",6,28.5
-"HE","Instructor/Teacher/Faculty",5,36
+"HE","All",44,24
+"HE","Professional",11,24
+"HE","Instructor/Teacher/Faculty",9,46
+"HE","Management",7,28
 "HE","Advising and Student Services",3,12
+"HE","Culinary",3,15
 "HE","Maintenance & Service",3,15
 "HE","Support Services",3,14
 "HE","Administration",2,30
 "HE","Healthcare",1,20
-"K-12","All",70,245
+"HE","Research & Science",1,65
+"HE","Technical",1,17
+"K-12","All",71,245
+"K-12","Athletics",21,204
 "K-12","Paraprofessional",21,268
-"K-12","Athletics",20,214
 "K-12","Support Services",7,318
 "K-12","Food Services",6,225
 "K-12","Teacher",6,223.5
