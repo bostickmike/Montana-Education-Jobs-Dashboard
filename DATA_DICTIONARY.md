@@ -58,7 +58,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
 | `location` | String | Job posting (district job board or OPI Jobs for Teachers) | Specific school building, facility, or employer city/location label. |
 | `url` | URL | Job posting (district job board or OPI Jobs for Teachers) | Direct link to the job posting or district applicant tracking portal. |
-| `District` | String | This dashboard: district and college list | Canonical public school district name. OPI statewide rows: the registry district when the dashboard's own scrape of it returned nothing that week, else the district not scraped directly (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
+| `District` | String | This dashboard: district and college list | Canonical public school district name. OPI statewide rows: the name of the district whose board this dashboard reads, when that board came back empty that week, else the district not read directly (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
 | `Posting_Source` | String | This dashboard: posting tracking | Original job feed source (direct district ATS board vs OPI Jobs for Teachers feed). |
 | `Posting_Identity_Method` | String | This dashboard: posting tracking | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
 | `Posting_ID` | String | This dashboard: posting tracking | Durable unique posting identifier used to track openings across updates. |
@@ -142,7 +142,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Enrollment` | Integer | NCES Common Core of Data (CCD) | Total pre-K through grade 12 student enrollment count. |
 | `CCD_Year` | Integer | NCES Common Core of Data (CCD) | Data collection school year for federal CCD staffing and enrollment counts. |
 | `CCD_Source` | String | NCES Common Core of Data (CCD) | Federal source citation for NCES CCD public school district universe data. |
-| `Data_Coverage` | Categorical | This dashboard: coverage summary | Scraper coverage fidelity tier: Full (direct ATS integration) vs Partial (heuristic site scrape); "Postings via OPI's statewide board" for a district with no board of its own (registry Platform OPIOnly). |
+| `Data_Coverage` | Categorical | This dashboard: coverage summary | Scraper coverage fidelity tier: Full (direct ATS integration) vs Partial (read from the district's own website); "Postings via OPI's statewide board" for a district with no board of its own (registry Platform OPIOnly). |
 | `Median_Household_Income` | Currency ($) | US Census ACS 5-year | County median annual household income in inflation-adjusted dollars. |
 | `Median_Household_Income_MOE` | Currency ($) | US Census ACS 5-year | Census's 90% margin of error for Median_Household_Income (B19013_001M). Shown as ± on the dashboard. |
 | `Median_Gross_Rent` | Currency ($) | US Census ACS 5-year | County median monthly gross rent including estimated utilities. |
