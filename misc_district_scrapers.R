@@ -397,8 +397,11 @@ parse_zurich_postings <- function(html_text, url) {
 
   start_idx <- which(lines == "Employment")
   stop_idx <- which(lines == "Submit Contact Information Here")
-  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
-  if (start_idx[1] >= stop_idx[1]) return(empty)
+  # No span: not the employment page, or the site changed. An error, not 0 rows: Zurich has never had a posting
+  # here, so "0 rows" can't tell an empty board from a page the parser no longer reads (2026-11-22).
+  if (length(start_idx) == 0 || length(stop_idx) == 0 || start_idx[1] >= stop_idx[1]) {
+    stop("Zurich page has no 'Employment' ... 'Submit Contact Information Here' span: not the employment page, or the site changed")
+  }
   body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
   # Every other line in this span becomes a title, so any "nothing open"
   # wording is dropped, not just today's exact sentence ("There are no
@@ -2069,16 +2072,19 @@ parse_pleasantvalley_postings <- function(html, url) {
     Link = character(0),
     stringsAsFactors = FALSE
   )
-  if (!nzchar(html)) return(empty)
-
+  # An error, not 0 rows, when the page isn't the Weebly employment page it was (2026-11-22): Pleasant Valley has
+  # never had a posting here, so "0 rows" couldn't tell an empty board from a page the parser no longer reads.
+  # (html_element() returns xml_missing, not NULL, when nothing matches: the old is.null() test never fired.)
+  if (!nzchar(html)) stop("Pleasant Valley page is empty")
   doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
+  if (is.null(doc)) stop("Pleasant Valley page didn't parse as HTML")
 
   content <- html_element(doc, "#wsite-content")
-  if (is.null(content)) return(empty)
+  if (inherits(content, "xml_missing")) stop("Pleasant Valley page has no #wsite-content: not the employment page, or the site changed")
 
   h2s <- html_elements(content, "h2.wsite-content-title, .wsite-content-title")
-  if (length(h2s) == 0) return(empty)
+  # Even an empty board has its "Employment Opportunities" heading.
+  if (length(h2s) == 0) stop("Pleasant Valley page has no .wsite-content-title heading: the site changed")
 
   titles <- trimws(html_text2(h2s))
   titles <- titles[nzchar(titles)]
@@ -2116,16 +2122,19 @@ parse_circle_postings <- function(html, url) {
     Link = character(0),
     stringsAsFactors = FALSE
   )
-  if (!nzchar(html)) return(empty)
-
+  # An error, not 0 rows, when the page isn't the Weebly employment page it was (2026-11-22): Circle has never had
+  # a posting here, so "0 rows" couldn't tell an empty board from a page the parser no longer reads.
+  # (html_element() returns xml_missing, not NULL, when nothing matches: the old is.null() test never fired.)
+  if (!nzchar(html)) stop("Circle page is empty")
   doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
+  if (is.null(doc)) stop("Circle page didn't parse as HTML")
 
   content <- html_element(doc, "#wsite-content")
-  if (is.null(content)) return(empty)
+  if (inherits(content, "xml_missing")) stop("Circle page has no #wsite-content: not the employment page, or the site changed")
 
   h2s <- html_elements(content, "h2.wsite-content-title, .wsite-content-title, .paragraph")
-  if (length(h2s) == 0) return(empty)
+  # Even an empty board has its application-links paragraph.
+  if (length(h2s) == 0) stop("Circle page has no .wsite-content-title or .paragraph block: the site changed")
 
   raw_titles <- trimws(html_text2(h2s))
   raw_titles <- raw_titles[nzchar(raw_titles)]
