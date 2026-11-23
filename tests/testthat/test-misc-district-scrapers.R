@@ -191,36 +191,6 @@ test_that("fetch_scobey_postings fetches and parses a live-shaped response", {
 
 # Real fixture captured 2026-08-23 from roy.k12.mt.us (a plain Joomla site).
 
-# Real fixture captured 2026-08-23 from arrowheadk8.com/careers/ (a modern
-# WordPress/Divi site serving Pray and Emigrant).
-
-test_that("parse_arrowhead_postings extracts the 3 real h2-heading postings between the intro and boilerplate headings", {
-  html <- paste(readLines(test_path("fixtures", "arrowhead_careers.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-
-  result <- parse_arrowhead_postings(html, "url")
-
-  expect_equal(nrow(result), 3)
-  expect_equal(result$Title, c("Substitute Employment", "Special Education Paraprofessional", "Certified Teachers"))
-  expect_true(all(result$Location == "Pray"))
-})
-
-test_that("parse_arrowhead_postings returns zero rows (not an error) when there's no Join the Arrowhead Team heading", {
-  result <- parse_arrowhead_postings("<html><body><h2>Nothing here.</h2></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("fetch_arrowhead_postings fetches and parses a live-shaped response", {
-  fixture <- paste(readLines(test_path("fixtures", "arrowhead_careers.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  httr2::local_mocked_responses(
-    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
-  )
-
-  result <- fetch_arrowhead_postings()
-
-  expect_equal(nrow(result), 3)
-})
-
 # Real fixture captured 2026-08-23 from sites.google.com/nsschools.org's
 # Employment page (North Star Public Schools, serving both Rudyard and
 # Gildford).

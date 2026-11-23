@@ -66,7 +66,6 @@ MT_DLI_DISTRICT_MAP <- list(
   "Alberton School District" = list(region = "Western", report_name = "Alberton K-12 Schools"),
   "Anaconda School District #10" = list(region = "4Rivers", report_name = "Anaconda Public Schools"),
   "Arlee Joint School District" = list(region = "Western", report_name = "Arlee Public Schools"),
-  "Arrowhead Elementary School District #75" = list(region = "4Rivers", report_name = "Arrowhead Schools"),
   "Ashland Public School" = list(region = "SouthEast", report_name = "Ashland Elementary"),
   "Augusta School District #45" = list(region = "Western", report_name = "Augusta Public Schools"),
   "Baker Public Schools" = list(region = "SouthEast", report_name = "Baker K-12 Schools"),

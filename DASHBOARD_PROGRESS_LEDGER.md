@@ -1749,13 +1749,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   for day-precision ends (`claude-notes/2026-11-09_daily-presence-check-plan.md`): phase 0 built 2026-11-13 (42 districts, Red
   Rover included, plus OPI's statewide list keyed by a detail-page fingerprint, edjobs 0.15.0; runs daily once the
   PR merges); the audit after two weeks, then phase 1 (the spells read the sightings).
-- [ ] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
+- [x] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the page serves an ordinary request from home. Rechecked 2026-11-09: 3 postings, the same
   3 the last good CI run (09-01) captured -- Substitute Employment (standing pool, $120/day), Special Education
   Paraprofessional (full time), Certified Teachers ("various grades"); none on OPI now (OPI carried two of them
   04-07 to 08-25). Not worked around on purpose: user agents, proxies or other routes past the block circumvent the
   site's bot protection. Running it from the Mac: built and withdrawn the same day (Mike: no jobs on his computer).
-  Left: ask the district / its web host to let the weekly request through, or retire the source and say so.
+  **Taken out 2026-11-23** (branch `arrowhead-out`; Mike chose A of 3,
+  `claude-notes/2026-11-23_email-items-public-data.md`; emails are only for OPI and WY PTSB): registry row,
+  `salarymap2.csv` row, parser, Rmd block, tests, fixture, DLI map entry and Copilot allowlist line removed; the
+  Home tab's K-12 coverage card ends with a small note naming it and linking its careers page. Why: CI got 0 rows
+  every run while the page had 3 standing ads (sub pool, SpEd para, "certified teachers, various grades"), so the
+  map showed a false 0; little is lost. Archived rows and history (08-06 to 09-01) kept: real postings. Not chosen:
+  OPI-only (would show "via OPI" while it posts on its own site), leave as is. Registry 201 -> 200 districts. An
+  Arrowhead OPI posting, if one appears, counts under its CCD name like any district not scraped.
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
   still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad

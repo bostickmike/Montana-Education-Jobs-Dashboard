@@ -273,38 +273,10 @@ if (nrow(scobey_df) > 0) {
                            Posting_Source = character(0))
 }
 
-# Arrowhead (a modern WordPress/Divi site, found 2026-08-23) also has no
-# structured ATS -- a plain httr2 fetch, no chromote needed, same pattern
-# as Custer/Scobey/Ramsay/Roy above (its own fetch_arrowhead_postings()
-# uses a different, site-required User-Agent internally -- see that
-# function's own comment).
-arrowhead_districts <- registry[registry$Platform == "ArrowheadHeuristic", ]
-arrowhead_results <- lapply(seq_len(nrow(arrowhead_districts)), function(i) {
-  row <- arrowhead_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_arrowhead_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-arrowhead_df <- bind_rows(arrowhead_results)
-if (nrow(arrowhead_df) > 0) {
-  arrowhead_df <- arrowhead_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Arrowhead district site (direct board)")
-} else {
-  arrowhead_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                              location = character(0), url = character(0), District = character(0),
-                              Posting_Source = character(0))
-}
-
 # Ekalaka (a real Job Postings module, found 2026-08-23) also has no
 # structured ATS in this project's own platform list -- a plain httr2
 # fetch, no chromote needed, same pattern as Custer/Scobey/Ramsay/Roy/
-# Arrowhead/North Star/Shields Valley/Thompson Falls above.
+# North Star/Shields Valley/Thompson Falls above.
 ekalaka_districts <- registry[registry$Platform == "EkalakaHeuristic", ]
 ekalaka_results <- lapply(seq_len(nrow(ekalaka_districts)), function(i) {
   row <- ekalaka_districts[i, ]
@@ -1784,7 +1756,6 @@ redrover_df <- redrover_df %>% mutate(date_posted = standardize_date(date_posted
 lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_posted))
 broadview_df <- broadview_df %>% mutate(date_posted = standardize_date(date_posted))
 scobey_df <- scobey_df %>% mutate(date_posted = standardize_date(date_posted))
-arrowhead_df <- arrowhead_df %>% mutate(date_posted = standardize_date(date_posted))
 ekalaka_df <- ekalaka_df %>% mutate(date_posted = standardize_date(date_posted))
 terry_df <- terry_df %>% mutate(date_posted = standardize_date(date_posted))
 gallatingateway_df <- gallatingateway_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -1835,7 +1806,7 @@ opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_dfs <- list(
   applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, redrover_df,
-  lodgegrass_df, broadview_df, scobey_df, arrowhead_df, ekalaka_df, hysham_df, winnett_df, milescity_df, brockton_df, googledoc_df, clinton_df, miami_df, zurich_df, wibaux_df,
+  lodgegrass_df, broadview_df, scobey_df, ekalaka_df, hysham_df, winnett_df, milescity_df, brockton_df, googledoc_df, clinton_df, miami_df, zurich_df, wibaux_df,
   westvalley_df, swanvalley_df,
   cyberschool_df, googlesites_df, finalsite_df, wordpress_df, edlio_df, joomla_df, smithvalley_df, moore_df, boulder_df, jeffersonhigh_df, richey_df,
   judithgap_df, whitewater_df,

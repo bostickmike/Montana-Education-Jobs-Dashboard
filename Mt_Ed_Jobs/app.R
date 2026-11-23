@@ -994,6 +994,11 @@ ui <- page_navbar(
         class = "mb-0",
         "Districts this dashboard doesn't scrape directly appear on the Map and District Summary when they post on OPI, marked \u201c", OPI_ONLY_COVERAGE, "\u201d, with NCES location and staffing and the same salary, finance and Census context where those sources cover them. ",
         "Private and tribal schools, co-ops and other employers outside the public district list stay in the Jobs Table only."
+      ),
+      tags$p(
+        class = "small text-muted mt-2 mb-0",
+        "Not included: Arrowhead Elementary School District #75 (Pray), whose website blocks automated requests; its openings are on ",
+        tags$a(href = "https://arrowheadk8.com/careers/", target = "_blank", "its own careers page", .noWS = "after"), "."
       )
     )),
 
