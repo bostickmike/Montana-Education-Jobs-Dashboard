@@ -21,6 +21,18 @@ Each dataset is accessible via the **Data** tab in the interactive web dashboard
 | **K-12 Job Type Time Series** | `k12_jobtype_weekly_totals.csv` | Open job postings per run by K-12 position type, all and those not marked part-time, substitute or extra duty. | Job type × Run | Each run |
 | **Higher Ed Weekly Vacancy Time Series** | `he_institution_weekly_totals.csv` | Open posting counts per college in each run. | Institution × Run | Each run |
 | **Higher Ed Job Type Time Series** | `he_jobtype_weekly_totals.csv` | Open college job postings per run by job type, all and those not marked part-time, student or temporary. | Job type × Run | Each run |
+| **K-12 Current Category Counts** | `allnow.csv` | Teaching postings in the latest run by subject group and district, with statewide totals. | District × Category | Each run |
+| **K-12 Category Time Series** | `allsum.csv` | Teaching postings by subject group and district in every run, with statewide totals. | District × Category × Run | Each run |
+| **Higher Ed Current Category Counts** | `allnow_he.csv` | Faculty and adjunct postings in the latest run by discipline, type and college, with statewide totals. | College × Discipline × Type | Each run |
+| **Higher Ed Category Time Series** | `allsum_he.csv` | Faculty and adjunct postings by discipline, type and college in every run, with statewide totals. | College × Discipline × Type × Run | Each run |
+| **Active Higher Ed Jobs** | `hedata.xlsx` | Every college posting listed in the latest run, all job types, with posted pay, campus placement and pay estimates. | Posting level | Each run |
+| **IPEDS Staff Salaries** | `ipeds_staff_salaries.csv` | Average pay of full-time non-instructional staff by college and occupational category (categories with at least 3 staff). | College × Category | Annual |
+| **K-12 Teacher Salary History** | `k12_salary_history.csv` | Teacher pay by district for each Teacher Compensation Report edition this project has captured (DLI keeps no public archive). | District × Year | Annual |
+| **BLS Regional Pay by Role** | `oews_role_wages.csv` | Median pay for the occupations K-12 and college postings are matched to, by Montana OEWS area; the source of the Typical pay (BLS est.) columns. | Area × Occupation | Annual |
+| **OPI District Counties** | `opi_district_counties.csv` | The county of each district as OPI names it, used to give OPI postings a county. | District level | Each run |
+| **Posting First Seen** | `posting_first_seen.csv` | When the dashboard first found each currently listed posting; shown where the board gives no posted date. | Posting level | Each run |
+| **County Public School Pay** | `qcew_county_school_pay.csv` | Average annual pay and employment of public school (local government, NAICS 6111) employees by county, all roles together. | County level | Annual |
+| **Source Retrieval Dates** | `source_retrieved_dates.csv` | When each outside data source was last fetched successfully. | Source level | Each run |
 | **Data Dictionary & Codebook** | `data_dictionary.csv` | Machine-readable column definitions, types, and primary source authorities across all files. | Variable level | Static / Maintained |
 
 ---
@@ -328,3 +340,160 @@ Districts not scraped directly that posted on OPI Jobs for Teachers this week: t
 | `Mining_Employment_Share_MOE` | Proportion (0-1) | US Census ACS 5-year (derived) | 90% margin of error for Mining_Employment_Share, from Census's formula for a derived proportion (ACS handbook 2020, ch. 8, formula 6) using the S2403 MOEs. When it is at least the share itself, the share is not distinguishable from zero (Census's CV > 0.61 line) and the dashboard says so. Census's CV-based reliability rules are unstable for shares under 5% (National Research Council 2007, p. 67), so no reliability tier is given. |
 | `Population_Change_Pct` | Proportion | US Census ACS 5-year | County 5-year population change. |
 | `CCD_Year` | Integer | NCES Common Core of Data (CCD) | CCD directory year. |
+
+## 4. More Datasets
+
+Summary counts, current college postings, and the reference tables behind the pay estimates and dates.
+
+### L. K-12 Current Category Counts (`allnow.csv`)
+
+Teaching postings in the latest run by subject group and district, with statewide totals.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Broad_Category` | Categorical | This dashboard: teaching postings | Teaching subject group (Elementary, STEM, Special Education, Humanities, ...). Teaching postings only. |
+| `Sum` | Integer | This dashboard: teaching postings | Teaching postings in that subject group at that district in the latest run. |
+| `District` | String | This dashboard: teaching postings | District name, or "Total" for the statewide sum of the district rows. |
+
+### M. K-12 Category Time Series (`allsum.csv`)
+
+Teaching postings by subject group and district in every run, with statewide totals.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Broad_Category` | Categorical | This dashboard: teaching postings | Teaching subject group (Elementary, STEM, Special Education, Humanities, ...). Teaching postings only. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: teaching postings | Date of the run. |
+| `District` | String | This dashboard: teaching postings | District name, or "Total" for the statewide sum of that run's district rows. |
+| `sum` | Integer | This dashboard: teaching postings | Teaching postings in that subject group at that district in that run (distinct postings). |
+
+### N. Higher Ed Current Category Counts (`allnow_he.csv`)
+
+Faculty and adjunct postings in the latest run by discipline, type and college, with statewide totals.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Category` | String | This dashboard: faculty postings | Faculty discipline (Science, Humanities, Health, ...). |
+| `Job_Type` | Categorical | This dashboard: faculty postings | Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty (faculty postings only). |
+| `Sum` | Integer | This dashboard: faculty postings | Faculty postings of that discipline and type at that college in the latest run. |
+| `Institution` | String | This dashboard: faculty postings | College name, or "Total" for the statewide sum of the college rows. |
+
+### O. Higher Ed Category Time Series (`allsum_he.csv`)
+
+Faculty and adjunct postings by discipline, type and college in every run, with statewide totals.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Category` | String | This dashboard: faculty postings | Faculty discipline (Science, Humanities, Health, ...). |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: faculty postings | Date of the run. |
+| `Institution` | String | This dashboard: faculty postings | College name, or "Total" for the statewide sum of that run's college rows. |
+| `Job_Type` | Categorical | This dashboard: faculty postings | Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty (faculty postings only). |
+| `sum` | Integer | This dashboard: faculty postings | Faculty postings of that discipline and type at that college in that run. |
+
+### P. Active Higher Ed Jobs (`hedata.xlsx`)
+
+Every college posting listed in the latest run, all job types, with posted pay, campus placement and pay estimates.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Title` | String | Job posting (college job board) | Job title as the college's board gives it. |
+| `Location` | String | Job posting (college job board) | Location as the board gives it: a town on some platforms, a department on others. |
+| `Posted_Date` | String | Job posting (college job board) | Posted date as the board gives it; blank where the board shows none. |
+| `Institution` | String | Job posting (college job board) | College name. |
+| `Link` | String | Job posting (college job board) | Link to the posting. |
+| `Close_Date` | String | Job posting (college job board) | Closing date the posting page states (YYYY-MM-DD), where it gives one; PeopleAdmin boards only. |
+| `Pay_Min` | Numeric | Job posting (college job board) | Lowest pay amount stated in the posting itself, in Pay_Unit (blank when the posting states no dollar figure). Never converted between units. |
+| `Pay_Max` | Numeric | Job posting (college job board) | Highest pay amount stated in the posting (equals Pay_Min for a single figure). |
+| `Pay_Unit` | String | Job posting (college job board) | Unit of Pay_Min and Pay_Max: hour, day, month, year, credit hour or stipend. Blank when no pay is stated, or when the stated unit is implausible for the amount. |
+| `Pay_Text` | String | Job posting (college job board) | The posting text the pay was read from, kept so every figure can be checked against its source. |
+| `Archive_Date` | Date (YYYY-MM-DD) | Job posting (college job board) | Date of the run that saw the posting listed (runs are twice a week since 2026-11-17, weekly before). |
+| `Campus_Town` | String | Job posting (college job board) | The town the posting is mapped to when it is at a campus or site other than the college's main campus (Place_Basis other_town); blank otherwise. |
+| `Campus_County` | String | Job posting (college job board) | County of Campus_Town. |
+| `Campus_Latitude` | Numeric | Job posting (college job board) | Latitude of Campus_Town (Census place internal point). |
+| `Campus_Longitude` | Numeric | Job posting (college job board) | Longitude of Campus_Town (Census place internal point). |
+| `Place_Basis` | Categorical | Job posting (college job board) | Why the posting is mapped where it is: main (the main campus town), other_town (one other town in the state, named in its location, title or page), out_of_state, or no_town (nothing placeable, or several towns at once; shown at the main campus). |
+| `Est_Pay` | Numeric | Job posting (college job board) | Where the posting states no pay: the BLS OEWS median pay for the posting's role in its region, in Est_Pay_Unit. A regional estimate across all employers of that occupation, not this job's offer; NA for roles with no fair match (coaches, unclassified postings). |
+| `Est_Pay_Unit` | String | Job posting (college job board) | hour for roles usually paid hourly where BLS publishes an hourly median; otherwise year. |
+| `Est_Occupation` | String | Job posting (college job board) | The OEWS occupation the posting was matched to from its position and title. |
+| `Est_Area` | String | Job posting (college job board) | The OEWS area of the figure: the metro or nonmetro area holding the college's county, or the state where the local figure is suppressed. |
+| `Est_Year` | String | Job posting (college job board) | OEWS reference year (May of that year). |
+
+### Q. IPEDS Staff Salaries (`ipeds_staff_salaries.csv`)
+
+Average pay of full-time non-instructional staff by college and occupational category (categories with at least 3 staff).
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `IPEDS_UNITID` | Integer | IPEDS via Urban Institute Education Data Portal | IPEDS institution id; joins to salarymap.csv. |
+| `Staff_Category` | Integer | IPEDS via Urban Institute Education Data Portal | IPEDS occupational category code for full-time non-instructional staff (2 research ... 14 production and transportation). |
+| `Category_Label` | String | IPEDS via Urban Institute Education Data Portal | Short name of the category. |
+| `Staff_Count` | Numeric | IPEDS via Urban Institute Education Data Portal | Full-time non-instructional staff in the category. |
+| `Avg_Salary` | Numeric | IPEDS via Urban Institute Education Data Portal | Average salary: total salary outlays divided by staff count, rounded. |
+| `Year` | String | IPEDS via Urban Institute Education Data Portal | IPEDS year. |
+
+### R. K-12 Teacher Salary History (`k12_salary_history.csv`)
+
+Teacher pay by district for each Teacher Compensation Report edition this project has captured (DLI keeps no public archive).
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `District` | String | Montana Department of Labor & Industry | District name. |
+| `Salary_Year` | String | Montana Department of Labor & Industry | Data collection school year corresponding to the published DLI wage report. |
+| `Teacher_Count` | Integer | Montana Department of Labor & Industry | Total certified classroom teachers reported in the regional DLI compensation dataset. |
+| `Teacher_Salary_10th_Pctile` | Currency ($) | Montana Department of Labor & Industry | 10th percentile teacher salary published in the Montana DLI Regional Wage Report. |
+| `Teacher_Avg_Salary` | Currency ($) | Montana Department of Labor & Industry | Average annual compensation paid across all employed certified classroom teachers. |
+| `Teacher_Salary_90th_Pctile` | Currency ($) | Montana Department of Labor & Industry | 90th percentile teacher salary published in the Montana DLI Regional Wage Report. |
+
+### S. BLS Regional Pay by Role (`oews_role_wages.csv`)
+
+Median pay for the occupations K-12 and college postings are matched to, by Montana OEWS area; the source of the Typical pay (BLS est.) columns.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Area_Code` | String | BLS Occupational Employment and Wage Statistics (OEWS) | OEWS area code (keep as text: metro codes have leading zeros, e.g. `0013740`). |
+| `Area_Name` | String | BLS Occupational Employment and Wage Statistics (OEWS) | OEWS area name: the state, a metro area, or a nonmetropolitan area. |
+| `SOC` | String | BLS Occupational Employment and Wage Statistics (OEWS) | 2018 SOC code without the dash, e.g. `259045`. |
+| `Occupation` | String | BLS Occupational Employment and Wage Statistics (OEWS) | OEWS occupation title. |
+| `Annual_Median` | Numeric | BLS Occupational Employment and Wage Statistics (OEWS) | Annual median wage. `NA` where BLS suppresses the figure for that area. |
+| `Hourly_Median` | Numeric | BLS Occupational Employment and Wage Statistics (OEWS) | Hourly median, fetched only for roles usually paid hourly; `NA` where BLS publishes none (school-year roles such as teaching assistants). |
+| `Year` | String | BLS Occupational Employment and Wage Statistics (OEWS) | Reference year (May). |
+
+### T. OPI District Counties (`opi_district_counties.csv`)
+
+The county of each district as OPI names it, used to give OPI postings a county.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `OPI_District` | String | OPI school finance data files | As OPI writes it ("Absarokee Elem", "Absarokee H S"). |
+| `County` | String | OPI school finance data files | "Stillwater County", the registry's form. |
+
+### U. Posting First Seen (`posting_first_seen.csv`)
+
+When the dashboard first found each currently listed posting; shown where the board gives no posted date.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Segment` | Categorical | This dashboard: posting tracking | K-12 or HE. |
+| `Key` | String | This dashboard: posting tracking | District or college, title and link, lowercased and joined with " / ": the key the dashboard uses to look up a posting it shows. |
+| `First_Seen` | Date (YYYY-MM-DD) | This dashboard: posting tracking | First run that found the posting. The dashboard shows it where the board gives no posted date. |
+| `Left_Censored` | Logical | This dashboard: posting tracking | TRUE when the posting was already listed the first time this project read that board, so it may have been up longer (shown as "on the board since at least"). |
+
+### V. County Public School Pay (`qcew_county_school_pay.csv`)
+
+Average annual pay and employment of public school (local government, NAICS 6111) employees by county, all roles together.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `County` | String | BLS Quarterly Census of Employment and Wages (QCEW) | "Yellowstone County" (joined to `salarymap2.csv`'s `County` with any ", State" suffix dropped). |
+| `County_FIPS` | String | BLS Quarterly Census of Employment and Wages (QCEW) | Five-digit county FIPS. |
+| `School_Employment` | Numeric | BLS Quarterly Census of Employment and Wages (QCEW) | Annual average employment. |
+| `Avg_Annual_Pay` | Numeric | BLS Quarterly Census of Employment and Wages (QCEW) | Annual average pay per employee. |
+| `Year` | String | BLS Quarterly Census of Employment and Wages (QCEW) | QCEW reference year. |
+
+### W. Source Retrieval Dates (`source_retrieved_dates.csv`)
+
+When each outside data source was last fetched successfully.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `Source` | String | This dashboard: run log | An outside data source the dashboard uses (BLS OEWS, Census ACS, Urban IPEDS, ...). |
+| `Retrieved` | Date (YYYY-MM-DD) | This dashboard: run log | Last date that source was fetched successfully; shown on the Data tab. |
