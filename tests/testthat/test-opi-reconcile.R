@@ -401,6 +401,36 @@ test_that("replayed on the real 11-03 and 11-10 archives, the five postings chec
   expect_equal(sum(r_cur_alone$Counted) - sum(r_cur$Counted), 5)
 })
 
+test_that("links from every earlier archive: a run without the link doesn't reopen a closed twin", {
+  # The rule merged after the 11-10 data run, so 11-10 counted the postings
+  # matched on 11-03 whose twins were gone, and 11-17 (reading only 11-10)
+  # had no link for them. All earlier archives give it back.
+  xw <- read.csv(here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  arch <- function(d) here::here("Archivek12_Data", paste0("combined_", d, ".csv"))
+  cur <- read.csv(arch("2026-11-17"), colClasses = "character")
+  cur$OPI_Counted <- cur$OPI_Counted == "TRUE"
+  only_last <- read.csv(arch("2026-11-10"), colClasses = "character")
+  only_last$OPI_Matched_Posting_ID <- opi_matched_board_ids(only_last, xw, reg)
+  expect_equal(attr(close_opi_lost_twins(cur, only_last), "opi_twins_closed"), 0)
+  links <- opi_links_from_archives(c(arch("2026-10-27"), arch("2026-11-03"), arch("2026-11-10")), xw, reg)
+  expect_false(anyDuplicated(links$Posting_ID) > 0)
+  out <- close_opi_lost_twins(cur, links)
+  expect_equal(attr(out, "opi_twins_closed"), 4)
+  # newly closed (the archive already carries the two the real 11-17 run closed: Hays-Lodge Pole, Shelby)
+  closed <- out[out$OPI_Drop_Reason %in% OPI_TWIN_CLOSED_REASON & !cur$OPI_Drop_Reason %in% OPI_TWIN_CLOSED_REASON, ]
+  expect_setequal(closed$District, c("Stevensville Public Schools", "Glendive Public Schools",
+                                     "Whitefish School District", "Lolo School District 7"))
+  # the latest link wins
+  tmp <- withr::local_tempdir()
+  a <- data.frame(Posting_ID = c("o1", "o2"), OPI_Matched_Posting_ID = c("b1", NA))
+  b <- data.frame(Posting_ID = c("o1", "o2"), OPI_Matched_Posting_ID = c("b2", ""))
+  write.csv(a, file.path(tmp, "a.csv"), row.names = FALSE); write.csv(b, file.path(tmp, "b.csv"), row.names = FALSE)
+  l <- opi_links_from_archives(file.path(tmp, c("a.csv", "b.csv")), xw, reg)
+  expect_equal(l$OPI_Matched_Posting_ID[l$Posting_ID == "o1"], "b2")
+  expect_false("o2" %in% l$Posting_ID)
+})
+
 test_that("a board listing only substitute pools counts as empty for the 60-day rule", {
   # Hellgate, 2026-11-19: its board returned "Substitute Teacher" and "Custodial substitutes", so its two June 16
   # OPI para postings counted, while its page said "NO current positions open ... Para Educators. Updated 9/15/26"
