@@ -33,6 +33,30 @@ MT_HE_SPELL_RULES <- mt_spell_rules("fallback only")
 # endings on 08-07); they are left out. Every K-12 row's ID may be bridged
 # across consecutive runs (`Bridgeable`): AppliTrack's move to job IDs on
 # 2026-11-03 changed stable IDs too.
+# The title each OPI row of the panel takes: the description's job when OPI's
+# title names none (edjobs feed_description_title(), as combinedclean.csv). The
+# archives before 2026-11-03 carry no description, so a posting open across that
+# date gets its later rows' name in its earlier rows too: by Posting_ID, else by
+# district + OPI title + posted date when that names one posting. Without this
+# its earlier rows stay "Other", the bridge across its 11-03 ID change (Wyola,
+# Poplar, Lame Deer) no longer joins on title, and its spell splits into a false
+# ending and a false start.
+opi_panel_titles <- function(title, description, is_opi, posting_id, district, date_posted) {
+  has <- is_opi & !is.na(description) & nzchar(description)
+  out <- title
+  out[has] <- feed_description_title(title[has], description[has])
+  named <- has & out != title
+  if (!any(named)) return(out)
+  # Latest named row per posting id / per district + title + posted date.
+  by_id <- tapply(out[named], posting_id[named], function(x) x[length(x)])
+  key <- paste(district, title, date_posted, sep = "\r")
+  per_key <- tapply(out[named], key[named], function(x) if (length(unique(x)) == 1) x[1] else NA_character_)
+  gap <- is_opi & !has & title %in% FEED_GENERIC_TITLES
+  fill <- dplyr::coalesce(unname(by_id[posting_id[gap]]), unname(per_key[key[gap]]))
+  out[gap] <- dplyr::coalesce(fill, title[gap])
+  out
+}
+
 k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, registry, from = as.Date("2026-08-18")) {
   files <- list.files(archive_dir, "^combined_\\d{4}-\\d{2}-\\d{2}\\.csv$", full.names = TRUE)
   files <- files[as.Date(sub("^combined_(.*)\\.csv$", "\\1", basename(files))) >= from]
@@ -51,7 +75,9 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
     dplyr::filter(!is_placeholder_posting(title)) %>%
     # Same bucket as combinedclean.csv: OPI rows' descriptions refine it (edjobs::build_k12_combinedclean()).
     dplyr::mutate(Role_Hint = ifelse(Is_OPI == "TRUE" & !is.na(OPI_Description) & nzchar(OPI_Description),
-                                     k12_role_hint(OPI_Description), NA_character_)) %>%
+                                     k12_role_hint(OPI_Description), NA_character_),
+                  # And the same title: OPI's "Other" gives way to the description's job (edjobs 0.81.0).
+                  title = opi_panel_titles(title, OPI_Description, Is_OPI == "TRUE", Posting_ID, District, date_posted)) %>%
     dplyr::transmute(Run_Date = Archive_Date, Posting_ID, Posting_Identity_Method,
                      District, title, date_posted, Close_Date = parse_stated_close_date(Close_Date), url,
                      # Red Rover's boards were read inside the Apptegy batch (labelled

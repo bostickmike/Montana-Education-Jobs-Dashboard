@@ -1685,8 +1685,30 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     shows (no "biggest movers"); 196 boards read directly, not 200 (4 registry rows are OPI-only); CyberSchool 12, not
     seven, and the other website families named; app.R keeps no server blocks of its own; "update", not "run" or
     "week"; plain wording in place of "real", "deterministically migrate ... identity/provenance schema".
+  * [x] OPI's "Other" titles take the description's job; edjobs pinned at 0.81.0 (2026-11-22; branch
+    `bump-edjobs-0.81.0`; bostickmike/edjobs#83; `claude-notes/2026-11-22_opi-generic-titles/`; Mike's call: title
+    from the description, measured first). OPI's title is its category field, and "Other" / "Administrative - Other"
+    name no job. edjobs `feed_description_title()` takes a labeled title ("Job Title:", "POSITION:") or the role after
+    "looking for / seeking / recruiting / accepting applications for", leading adjectives dropped; not a name that
+    classifies as Other, nor a labeled building. 18 distinct generic-titled postings in the archives with
+    descriptions, hand-labeled: position + subject right for 16, was 9, none worse (still wrong: Billings' homeless
+    liaison, St. Mary's part-time Spanish); 224 specific-titled OPI postings held out: no title changes, no bucket
+    disagreement. `posting_spells.R` uses the same title (`opi_panel_titles()`), carried back to a posting's rows
+    before 11-03 (no descriptions) by Posting_ID or district + OPI title + posted date, so spells don't split at the
+    11-03 ID change; this also joins three spells that were split there (Jordan's head of maintenance, Lame Deer's FCS
+    teacher and business manager: 2979 -> 2976 spells). Also "Family Consumer Science" without "and" is FCS, not
+    Science Education (58 committed rows). Restated with 0.81.0 installed: combinedclean 3 positions (Wyola cook ->
+    Food Services, Stevensville payroll clerk -> Staff, Lame Deer business manager -> Staff), k12jobanalysis 73
+    categories, allsum weekly totals unchanged. New guard in `test-weekly-data-quality.R`: a posting open on the
+    latest run has the same title and position in the spells as in combinedclean. Two run expectations from 11-26.
+    Found on the way: `scripts/reclassify_committed_data.R` swaps in only the classifier file, so a change in
+    another edjobs file (here `build_k12_combinedclean()`) rebuilds with the installed edjobs and reports "nothing to
+    write"; restate with the new tag installed and `--skip-guard` (open item below).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] `scripts/reclassify_committed_data.R` sees only edjobs' `R/k12_he_classification.R`: its rebuild calls the
+  installed edjobs's `build_k12_combinedclean()`, so it can't show (or write) a change elsewhere in edjobs, and
+  reports "nothing to write" (found 2026-11-22 with 0.81.0). Rebuild in a process with the checkout installed.
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
   separate address, recommended; (B) an optional field whose address the app emails to Mike privately via a mail
