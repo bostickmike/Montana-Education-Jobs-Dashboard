@@ -1674,6 +1674,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Districts tab's poverty note, `scaffold_district.R`'s count sync). Same in WY; edjobs docs no longer link to
     private notes.
 
+  * [x] Dashboard text corrected (2026-11-23; branch `app-text-facts`; `claude-notes/2026-11-23_docs-review/app-text/`).
+    Data tab provenance: archive "2023-Present" -> August 2026; "180+" districts and "105+" with DLI pay -> counts
+    computed from the data (196 boards; 161 map districts with DLI pay); cadence twice weekly; the real platform
+    list. Downloads: the K-12 history is teaching postings only; the HE archive is faculty and adjuncts, no staff;
+    weekly totals are postings, not vacancies ("ideal for supply/demand modeling" dropped). Map about: "234 directly
+    tracked districts and 32 institutions" counted OPI-only districts and campus markers -> 196 boards, 38 OPI-only,
+    23 colleges. Partial badge names Red Rover; "District Summary" -> the Districts tab.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
