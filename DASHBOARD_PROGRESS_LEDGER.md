@@ -1681,6 +1681,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     weekly totals are postings, not vacancies ("ideal for supply/demand modeling" dropped). Map about: "234 directly
     tracked districts and 32 institutions" counted OPI-only districts and campus markers -> 196 boards, 38 OPI-only,
     23 colleges. Partial badge names Red Rover; "District Summary" -> the Districts tab.
+  * [x] README read against the running app and the registry (2026-11-23; branch `docs-readme`): Home lists what it
+    shows (no "biggest movers"); 196 boards read directly, not 200 (4 registry rows are OPI-only); CyberSchool 12, not
+    seven, and the other website families named; app.R keeps no server blocks of its own; "update", not "run" or
+    "week"; plain wording in place of "real", "deterministically migrate ... identity/provenance schema".
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
