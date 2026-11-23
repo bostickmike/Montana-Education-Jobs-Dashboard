@@ -1,20 +1,27 @@
 # Montana Education Jobs Dashboard
 
-A live, weekly-updated dashboard of K-12 and higher education job openings from covered Montana sources, with salary, staffing, and Census context data for directly scraped districts and institutions. A port of the [Wyoming Education Jobs Dashboard](https://github.com/bostickmike/Wyoming-Education-Jobs-Dashboard), adapted rather than copied wholesale — see `RESEARCH_NOTES.md` for the real structural differences between the two states (district counts, salary-source availability, FIPS codes) that shaped the port.
+A live dashboard of K-12 and higher education job openings from covered Montana sources, with salary, staffing, and Census context data for directly scraped districts and institutions. Updated twice a week.
+
+**Live dashboard:** https://bostickmike-montana-education-jobs-dashboard.share.connect.posit.cloud
+
+A port of the [Wyoming Education Jobs Dashboard](https://github.com/bostickmike/Wyoming-Education-Jobs-Dashboard), adapted rather than copied wholesale — see `RESEARCH_NOTES.md` for the real structural differences between the two states (district counts, salary-source availability, FIPS codes) that shaped the port.
 
 ## What it does
 
-- **Map** — every K-12 district and higher-ed institution with a current opening, plotted with two dimensions at once: circle size for number of openings, circle color for vacancy rate (openings as a share of teaching/faculty staff).
-- **Home** — headline KPIs (with week-over-week deltas), top-hiring tables with trend sparklines, "biggest mover" callouts, and leaderboards for highest vacancy rate.
-- **Jobs Tables** — every open posting, filterable and exportable (copy/CSV/print), per district or institution; K-12 exports include source provenance.
-- **District Summary / Institution Summary** — one row per district or college with current openings, vacancy rate, and salary figures, fully exportable.
-- **Longitudinal Trends** — postings over time by subject/category, with a Simple or Detailed category toggle so the chart stays readable either way.
-- **Current Trends** — a compact table per category: current count, a trend sparkline, and change vs. a month/quarter/year ago.
-- **New This Week** — postings that appeared since the previous weekly snapshot.
+- **Home**: headline counts with change since the last run, the districts and colleges hiring most (with trend sparklines), biggest movers, and how the K-12 numbers are put together.
+- **Map**: every directly tracked district and college, plus districts the dashboard doesn't scrape that posted on OPI's statewide board this run (marked in their popup). Circle size is current openings; color is the vacancy rate (openings as a share of teaching or faculty staff).
+- **K-12 and Higher Ed menus**, each with:
+  - **Jobs**: every open posting, filterable and exportable, with posted pay where the posting states it. A "New this week" filter shows postings that appeared since the previous run.
+  - **Districts** / **Colleges**: a directory with openings, vacancy rate, pay, budget and community context per district or college, and a head-to-head comparison of up to four.
+  - **Trends**: current counts by category with sparklines and change over a month, quarter or year, and multi-year charts.
+  - **Listing Duration**: how long postings stay listed, by job type.
+- **Data**: every dataset as a download, with the data dictionary and where each source comes from.
 
 ## Data sources
 
-K-12 covers 200 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV, Interfolio (University of Montana's faculty jobs), ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render — see Automation below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
+K-12 covers 200 directly-scraped districts (not Montana's full ~398-district universe — see `RESEARCH_NOTES.md`); higher ed covers 23 institutions (19 independently scraped, plus Highlands College, Helena College, University of Montana Western, and Missoula College, which ride a parent institution's shared job board and are attributed per-posting to their own real institution rather than getting their own scrape target). Platform coverage (`k12_district_registry.csv`/`he_institution_registry.csv`) spans AppliTrack, SchoolSpring, TedK12, Tyler Portico, Paycom, JazzHR, NEOGOV, Interfolio (University of Montana's faculty jobs), ADP Workforce Now, isolved Hire, and Apptegy (the last needing a live browser render, see below), plus several institutions with no structured ATS at all, heuristically scraped from their own site's real page structure (`misc_district_scrapers.R`/`misc_college_scrapers.R`).
+
+Many small districts run their sites on a school CMS. In `k12_district_registry.csv` (201 districts on 2026-11-21), 49 are on Apptegy (41 `Apptegy`, 6 `ApptegyPageBuilder`, 2 `ApptegyBespoke` with scrapers of their own), plus one college (Stone Child College). Apptegy ships no postings to a plain HTTP request, so a real headless Chrome renders these pages during the run. Seven more are on CyberSchool (`CyberSchool`, `CyberSchoolText`). Each site family has one reader in edjobs (`fetch_apptegy_postings()`, `fetch_cyberschool_postings()`), and each district's list rules are in the registry's `List_Start` / `List_Stop` / `List_Skip` columns.
 
 | Data | Source |
 |---|---|
@@ -36,20 +43,29 @@ MT DLI publishes only the current year's Teacher Compensation Report with no pub
 
 The K-12 Jobs Table combines 200 directly scraped district boards with OPI's statewide Jobs for Teachers feed. Its `Source` column/export explicitly labels OPI rows. OPI is a valuable statewide source, but this project has not independently established its publication rules or coverage as a complete census of Montana vacancies. An absent posting therefore does not establish that no vacancy exists.
 
-The Map and District Summary deliberately show only directly scraped districts: those records can be matched to verified district identities, coordinates, staffing, salary, and OPI General Fund expenditure data. OPI-only rows remain in the Jobs Table, but OPI exposes a raw location field rather than a canonical district identifier, so they cannot be reliably joined to district context or mapped.
+Each OPI posting's own page names its district, so OPI postings at districts this dashboard doesn't scrape directly also appear on the Map and in the Districts directory, badged "Postings via OPI's statewide board", with the same CCD, salary, finance and Census context where those sources cover them. Private and tribal schools, co-ops and other employers outside the public district list appear in the Jobs table only.
 
 K-12 current counts, vacancy numerators, longitudinal totals, and New This Week use one posting-identity contract. Stable per-posting URLs/IDs are used when structured sources provide them; sites without one use an explicit fallback. OPI's fallback is necessarily title + raw location + posted date and retains equal observed rows rather than claiming OPI gives a stable identifier. See `DATA_COOKBOOK.md` for the exact method and limits.
 
 ## Automation
 
-A GitHub Actions workflow runs twice a week (Mondays and Thursdays since 2026-11-17; never on Wyoming's Tuesdays and Fridays, since the two projects share one `CENSUS_API_KEY`), re-scrapes every source, regenerates every derived dataset, and commits + pushes if anything changed — which also triggers an automatic Posit Connect Cloud redeploy. Several non-blocking checks run alongside it:
+A GitHub Actions workflow runs twice a week (Mondays and Thursdays since 2026-11-17; never on Wyoming's Tuesdays and Fridays, since the two projects share one `CENSUS_API_KEY`), re-scrapes every source, regenerates every derived dataset, and commits and pushes if anything changed, which also redeploys the dashboard on Posit Connect Cloud. The workflow is a short caller of edjobs's reusable `weekly-run.yml`.
 
-- Full `testthat` suite must pass before any real data is touched.
-- A sanity check compares the new pull against the previous run and refuses to commit if either side dropped more than half its postings.
-- Drift detection flags any source whose posting count falls far below its own historical baseline, with a live `chromote` render of the page as corroboration before anything is filed as a GitHub Issue.
-- Salary-source coverage checks compare each source (DLI teacher pay, OPI finance, CCD staffing, IPEDS) with the last run's committed salary files and flag a source that comes back with values for fewer districts or colleges than before, or with values outside plausible bounds.
-- The same coverage + value-plausibility checks run for the Census ACS/SAIPE sources.
-- Many small districts run their sites on a school CMS. In `k12_district_registry.csv` (201 districts on 2026-11-21), 49 are on Apptegy (41 `Apptegy`, 6 `ApptegyPageBuilder`, 2 `ApptegyBespoke` with scrapers of their own), plus one college (Stone Child College). Apptegy ships no postings to a plain HTTP request, so a real headless Chrome (installed via `browser-actions/setup-chrome`) renders these pages during the run. Seven more are on CyberSchool (`CyberSchool`, `CyberSchoolText`). Each site family has one reader in edjobs (`fetch_apptegy_postings()`, `fetch_cyberschool_postings()`), and each district's list rules are in the registry's `List_Start` / `List_Stop` / `List_Skip` columns.
+These steps stop the run before anything is committed:
+
+- The full `testthat` suite, before any real data is touched.
+- A sanity check against the previous run: refuses to commit if either K-12 or higher ed lost more than half its postings.
+- A schema check (every column the dashboard reads is still there) and a data-quality sweep over the new files.
+
+These only report (in a rolling "Scraper drift check" GitHub issue), so one finding never blocks the data:
+
+- Drift: a source whose posting count falls far below its own history, corroborated by a live browser render of the page; a source that looks broken gets its own auto-fix issue.
+- Salary and Census sources: coverage against the last run's files, and values outside plausible bounds.
+- Posted pay that stopped arriving from a source, titles that aren't job titles, and sources with no rows in recent runs.
+- OPI cross-check: OPI postings the district scrapes missed, empty scrapes, and districts worth adopting.
+- A rebuild from the raw archives must reproduce the committed files; the run is checked against `run_expectations.csv`; and a meta-check reports any of these steps that crashed.
+
+Two smaller workflows: `presence.yml` records once a day which postings the platform boards and OPI's list carry (list pages only; nothing uses it yet: the plan is to date postings' endings to the day), and `upkeep.yml` keeps the schedule from being switched off by GitHub's 60-day inactivity rule and warns before a token expires.
 
 ## Repository layout
 
