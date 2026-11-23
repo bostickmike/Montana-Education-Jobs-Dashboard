@@ -340,7 +340,7 @@ parse_carroll_college_postings <- function(html_text, url) {
 # department (Admissions, Aviation, Athletics, etc.) rather than a city,
 # same "Location repurposed as department for a single-campus
 # institution" convention as JazzHR/PeopleAdmin multi-department schools
-# (see DATA_COOKBOOK.md). rocky.edu's host-level rate limiting has 429'd
+# (DATA_DICTIONARY.md, hedata.xlsx `Location`). rocky.edu's host-level rate limiting has 429'd
 # this scraper twice (2026-09-01, 2026-09-15 drift issue #1) even though
 # it's a single GET -- default perform_with_retry()'s 3 tries (~14s of
 # backoff) isn't enough to outlast whatever window it's enforcing, so this

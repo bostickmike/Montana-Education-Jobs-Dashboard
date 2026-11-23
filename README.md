@@ -45,7 +45,7 @@ The K-12 Jobs Table combines 200 directly scraped district boards with OPI's sta
 
 Each OPI posting's own page names its district, so OPI postings at districts this dashboard doesn't scrape directly also appear on the Map and in the Districts directory, badged "Postings via OPI's statewide board", with the same CCD, salary, finance and Census context where those sources cover them. Private and tribal schools, co-ops and other employers outside the public district list appear in the Jobs table only.
 
-K-12 current counts, vacancy numerators, longitudinal totals, and New This Week use one posting-identity contract. Stable per-posting URLs/IDs are used when structured sources provide them; sites without one use an explicit fallback. OPI's fallback is necessarily title + raw location + posted date and retains equal observed rows rather than claiming OPI gives a stable identifier. See `DATA_COOKBOOK.md` for the exact method and limits.
+K-12 current counts, vacancy numerators, longitudinal totals, and New This Week use one posting-identity contract. Stable per-posting URLs/IDs are used when structured sources provide them; sites without one use an explicit fallback. OPI's fallback is necessarily title + raw location + posted date and retains equal observed rows rather than claiming OPI gives a stable identifier. See [METHODS.md](METHODS.md) for the exact method and limits.
 
 ## Automation
 
@@ -79,6 +79,8 @@ Two smaller workflows: `presence.yml` records once a day which postings the plat
 - `EDJOBS_VERSION` — the [edjobs](https://github.com/bostickmike/edjobs) version this repo pins: the R package with the code Montana and Wyoming share (platform scrapers, classifier, posting spells, the weekly run's checks, the dashboard's tabs).
 - `history_accumulator.R` — appends each week's newly classified rows onto the existing accumulated datasets (idempotent, schema-checked) instead of reprocessing the full raw archive every run.
 - `k12_district_registry.csv` / `he_institution_registry.csv` — the hand-maintained list of every directly-scraped district/institution, its platform, and its real feed/job-board URL.
+- `METHODS.md` — how the numbers are made: what counts as a posting, OPI de-duplication, categories, pay, vacancy rate, listing duration, context data.
+- `DATA_DICTIONARY.md` (and `Mt_Ed_Jobs/data_dictionary.csv`, shown on the dashboard's Data tab) — every published file and column.
 - `RESEARCH_NOTES.md` — the original WY→MT scoping research (district counts, salary-source gap, FIPS codes) that shaped every structural decision in this port.
 - `Archivek12_Data/`, `Archived_HE_Data/` — one dated raw snapshot per week, still written every run as the durable source of truth. `scripts/rebuild_*_history_from_archive.R` rebuild the accumulated datasets from these from scratch, for disaster recovery or to verify the incremental path hasn't drifted. Run `Rscript scripts/rebuild_k12_history_from_archive.R` to deterministically migrate K-12 derived data to the current identity/provenance schema from committed archives.
 - `tests/testthat/` — the test suite, built almost entirely on real captured fixtures (real scraped HTML, real downloaded PDFs, real API responses) rather than synthetic data.

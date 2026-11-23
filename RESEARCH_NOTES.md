@@ -4,7 +4,7 @@ Findings from the initial research pass, before any scraper code was written. Th
 documents *why* the Montana version's scope and architecture will differ from
 Wyoming's in specific places, so those differences don't look like unexamined
 copy-paste later. Supersedes nothing yet — no code exists — but should inform
-`DATA_COOKBOOK.md` and `README.md` once the port starts producing real files.
+`METHODS.md`, `DATA_DICTIONARY.md` and `README.md` once the port starts producing real files.
 
 ## K-12 landscape
 
