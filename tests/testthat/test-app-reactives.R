@@ -767,6 +767,11 @@ test_that("OPI postings from before this school year are labeled, still counted,
     c("2026-06-30", "2026-07-01", "", "2026-05-01", NA, "2026-05-01"),
     "2026-11-19"),
     c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE))
+  # Not in July and August: spring postings for the coming year are likely still open then.
+  expect_false(env$is_old_opi_posting(env$OPI_SOURCE, "2026-05-01", "2026-08-31"))
+  expect_true(env$is_old_opi_posting(env$OPI_SOURCE, "2026-05-01", "2026-09-01"))
+  # Each value is read as ISO on its own: a non-ISO first value doesn't blank the rest.
+  expect_equal(env$is_old_opi_posting(env$OPI_SOURCE, c("11/13/2026", "2026-05-01"), "2026-11-19"), c(FALSE, TRUE))
 
   raw <- read.csv(here::here("Mt_Ed_Jobs", "combinedclean.csv"), colClasses = "character")
   raw <- raw[!duplicated(raw$Posting_ID), ]

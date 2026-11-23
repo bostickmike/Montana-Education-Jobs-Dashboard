@@ -34,7 +34,7 @@ POSTED_LISTED_NOTE <- paste0(
   "dashboard found the posting (\"First seen\"), or \"On the board since at least\" when the posting was already up ",
   "the first time this dashboard checked that board. ")
 
-# OPI postings dated before the July 1 that began the school year of the run (Archive_Date). OPI keeps "Open Until
+# OPI postings dated before the July 1 that began the school year of the run (Archive_Date), from September 1. OPI keeps "Open Until
 # Filled" postings up after they're filled; the dashboard can't tell which, so it still counts them and labels them.
 OPI_SOURCE <- "OPI Jobs for Teachers (statewide)"
 OLD_OPI_LABEL <- " \u00b7 may be filled"
@@ -43,10 +43,15 @@ school_year_start <- function(run_date) {
   yr <- as.integer(format(run_date, "%Y")) - (as.integer(format(run_date, "%m")) < 7)
   as.Date(paste0(yr, "-07-01"))
 }
+# Only once the school year is under way (runs from September 1): in July and August, spring postings for the
+# coming year are the ones most likely still open (about 70% of OPI rows in the 08-25 and 09-15 archives were dated
+# before July 1).
 is_old_opi_posting <- function(source, date_posted, run_date) {
-  posted <- suppressWarnings(as.Date(as.character(date_posted), optional = TRUE))
+  posted <- as.Date(as.character(date_posted), format = "%Y-%m-%d")
+  run_date <- as.Date(as.character(run_date), format = "%Y-%m-%d")
   start <- school_year_start(run_date)
-  !is.na(source) & source == OPI_SOURCE & !is.na(posted) & !is.na(start) & posted < start
+  under_way <- !is.na(run_date) & run_date >= start + 62  # July 1 + 62 days = September 1
+  !is.na(source) & source == OPI_SOURCE & !is.na(posted) & under_way & posted < start
 }
 old_opi_note <- function(n) {
   if (n == 0) return("")
@@ -108,7 +113,7 @@ for (col in c("Feed_District", "Also_On_Feed", "Pay_Min", "Pay_Max", "Pay_Unit",
 }
 oews_year <- na.omit(combineddata$Est_Year)[1]
 combineddata <- combineddata %>%
-  validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url",
+  validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url", "Archive_Date",
                             "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
                           "combinedclean.csv", on_missing = note_load_issue) %>%
   mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit),

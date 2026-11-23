@@ -1620,7 +1620,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     `opi-spring-label`; `claude-notes/2026-11-22_opi-spring/README.md`; Mike's call, option 2 of 3). An OPI posting
     dated before the July 1 that began the run's school year still counts (OPI still lists it, so a candidate can
     apply on paper), but its K-12 Jobs "Posted / listed" cell reads "2026-05-29 · may be filled", and the pay
-    columns note gives the count. App only; counts unchanged. On the committed 11-19 data: 72 of 186 OPI rows marked
+    columns note gives the count. Only from September 1 (in July and August spring postings for the coming year
+    are the likeliest to be open: ~70% of OPI rows in the 08-25 and 09-15 archives predate July 1; reviewer's
+    finding). App only; counts unchanged. On the committed 11-19 data: 72 of 186 OPI rows marked
     (1,369 rows, none dropped). Why: OPI keeps "Open Until Filled" postings up after they're filled; for 4-6 of the
     spring postings a same-subject board posting at the district came and went, but listings that look alike are
     often a filled job plus a new one, so nothing is dropped. Not chosen: drop those 4-6 (Mike's "censor, don't link"
