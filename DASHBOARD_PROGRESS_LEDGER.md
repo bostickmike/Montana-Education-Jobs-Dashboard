@@ -1655,6 +1655,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     other change (old rule: 0); ~10 s a run. From the next run on; archives keep their own `OPI_Counted`. Same-
     subject board postings the matcher never linked (Terry Music, Three Forks SpEd) are untouched (11-22 call).
     Tests: `test-opi-reconcile.R`.
+  * [x] Frozen-board check (2026-11-22; branch `mt-frozen-boards`; test-kit plan item 5). `.github/scripts/
+    check_frozen_boards.R`, Wyoming's check (edjobs `frozen_board_runs()`, thresholds 12+ weeks, 5+ postings) on MT's
+    archives: a K-12 district + the archive's `Posting_Source`, or an HE institution, whose posting set has been
+    identical in every run for 12+ weeks and still is goes into the drift issue (non-blocking; a second state check
+    after `check_opi_crosscheck.R`). K-12 from 2026-08-18 (earlier archives have no `Posting_Source`), HE from
+    08-11. On the archives today (11-22, through the 11-19 run) it lists 7, all K-12: Lame Deer (27 postings, 14
+    weeks), Lodge Grass (15, 14), Poplar (11, 14), Broadview (7, 13), Scobey (13, 13), Swan River (5, 13), White
+    Sulphur Springs (5, 12); no HE board. Suite 3,270 passed, 0 failed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
