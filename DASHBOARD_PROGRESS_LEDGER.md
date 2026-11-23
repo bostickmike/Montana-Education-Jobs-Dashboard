@@ -1685,8 +1685,61 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     shows (no "biggest movers"); 196 boards read directly, not 200 (4 registry rows are OPI-only); CyberSchool 12, not
     seven, and the other website families named; app.R keeps no server blocks of its own; "update", not "run" or
     "week"; plain wording in place of "real", "deterministically migrate ... identity/provenance schema".
+  * [x] OPI's "Other" titles take the description's job; edjobs pinned at 0.81.0 (2026-11-22; branch
+    `bump-edjobs-0.81.0`; bostickmike/edjobs#83; `claude-notes/2026-11-22_opi-generic-titles/`; Mike's call: title
+    from the description, measured first). OPI's title is its category field, and "Other" / "Administrative - Other"
+    name no job. edjobs `feed_description_title()` takes a labeled title ("Job Title:", "POSITION:") or the role after
+    "looking for / seeking / recruiting / accepting applications for", leading adjectives dropped; not a name that
+    classifies as Other, nor a labeled building. 18 distinct generic-titled postings in the archives with
+    descriptions, hand-labeled: position + subject right for 16, was 9, none worse (still wrong: Billings' homeless
+    liaison, St. Mary's part-time Spanish); 224 specific-titled OPI postings held out: no title changes, no bucket
+    disagreement. `posting_spells.R` uses the same title (`opi_panel_titles()`), carried back to a posting's rows
+    before 11-03 (no descriptions) by Posting_ID or district + OPI title + posted date, so spells don't split at the
+    11-03 ID change; this also joins three spells that were split there (Jordan's head of maintenance, Lame Deer's FCS
+    teacher and business manager: 2979 -> 2976 spells). Also "Family Consumer Science" without "and" is FCS, not
+    Science Education (58 committed rows). Restated with 0.81.0 installed: combinedclean 3 positions (Wyola cook ->
+    Food Services, Stevensville payroll clerk -> Staff, Lame Deer business manager -> Staff), k12jobanalysis 73
+    categories, allsum weekly totals unchanged. New guard in `test-weekly-data-quality.R`: a posting open on the
+    latest run has the same title and position in the spells as in combinedclean. Two run expectations from 11-26.
+    Found on the way: `scripts/reclassify_committed_data.R` swaps in only the classifier file, so a change in
+    another edjobs file (here `build_k12_combinedclean()`) rebuilds with the installed edjobs and reports "nothing to
+    write"; restate with the new tag installed and `--skip-guard` (open item below).
+  * [x] Seven never-produced sources acknowledged with an Empty_Text; edjobs pinned at 0.82.0 (2026-11-22; same
+    branch; bostickmike/edjobs#84; `claude-notes/2026-11-22_silent-8/README.md`; Mike's call, step 8 finding 1).
+    Checked live: Cottonwood, DeSmet, Fishtail, Nye, Zurich, Pleasant Valley and Circle are empty boards (no posting
+    in any archive). edjobs 0.82.0 `check_ack_empty_text()`: each acknowledgement's `Empty_Text` is a pattern its
+    board's visible text matches while empty, written heading to footer; each run fetches the board, and a page that
+    no longer matches (a posting, a redesign, a failed fetch) brings the source back as "needs a look". Each pattern
+    tested: matches today's page, breaks with a posting inserted at every content spot tried (`patterns_check.R`,
+    `patterns3.R`). This doesn't depend on the parser reading a posting it has never seen (WordPress, GoogleSites
+    read postings at 4 and 19 other districts; the 3 one-off parsers at none: MT #121 makes them error on a missing
+    layout). Sun River Valley not acknowledged: its registry link is the forms page ("Job Applications"); the
+    site's "Current Job Advertisements" page may be where postings go (open item below).
+  * [x] edjobs pinned at 0.84.0 (2026-11-23; same branch; bostickmike/edjobs#85-#88): "Last 12 Weeks" sparklines
+    plot the latest count in each of the last 12 weeks, and the dashboard text says "update", not "scrape" (dashboard
+    code only). Rebased on 11-23's main (data files taken from main) and restated with 0.84.0 installed
+    (`reclassify_committed_data.R --skip-guard --apply`): combinedclean 3 positions (Wyola cook -> Food Services,
+    Stevensville payroll clerk -> Staff, Lame Deer business manager -> Staff), k12jobanalysis 6 categories (3 FCS,
+    St. Labre's band and VoAg, Northern Cheyenne's culture teacher); every total in allsum, allnow and the weekly
+    totals unchanged. Found on the way: with Arrowhead's registry row gone (11-23), a rebuild put its OPI postings of
+    08-06 to 08-25 (archives before 11-01 match OPI by town) under OPI's label "Pray/Emigrant", while 09-01's board
+    rows kept "Arrowhead Elementary School District #75". `canonicalize_k12_district()` now maps "Pray/Emigrant" to
+    the district's name (only those five archives carry it), with a test in `test-data-integrity.R` replacing a
+    stale skip. The map's "has new" test now checks for an exact match rather than at least one row (WY's rehearsal
+    found a quiet stretch with none).
+    Full rehearsal (11-23, `claude-notes/2026-11-23_bump-0.84/rehearsal-mt.log`): every pipeline step and the
+    post-run suite (3,374) passed; rebuild parity 11/11; K-12 1335 -> 1332, HE 393 -> 391. The pre-run suite, which
+    runs alongside the render, had one failure: the boot smoke test's Jobs table had drawn no rows yet when checked.
+    The same file passed twice on that copy afterwards, so it was the busy machine, not the change.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
+  "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
+  7-12 music job 11-03..11-10 while the board scrape was empty). Check the Wayback history (k12.mt.us target) for a
+  past posting, then point the registry at the right page (the Edlio parser reads `/apps/pages/` pages too).
+- [ ] `scripts/reclassify_committed_data.R` sees only edjobs' `R/k12_he_classification.R`: its rebuild calls the
+  installed edjobs's `build_k12_combinedclean()`, so it can't show (or write) a change elsewhere in edjobs, and
+  reports "nothing to write" (found 2026-11-22 with 0.81.0). Rebuild in a process with the checkout installed.
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
   separate address, recommended; (B) an optional field whose address the app emails to Mike privately via a mail

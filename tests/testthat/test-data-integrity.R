@@ -57,21 +57,15 @@ test_that("allnow.csv: Total row equals sum of individual districts", {
   expect_total_matches_sum_of_parts(d, "District", value_col = "Sum")
 })
 
-test_that("no known name typos survive into the committed summary data", {
-  # Unlike Wyoming -- whose canonicalize_k12_district()/
-  # canonicalize_he_institution() fix several confirmed real-data
-  # misspellings (e.g. "Commmunity", "Lanugage", "Distrcit") -- Montana's
-  # versions in k12_he_classification.R are still empty pass-throughs as of
-  # this writing: no district/institution name typo has been confirmed in
-  # Montana's own scraped data yet (see that file's comments). Asserting
-  # against WY-specific typo strings here would test nothing real for
-  # Montana. Skipping with an explicit reason rather than inventing a
-  # placeholder assertion; add a real one here (and a matching canonicalize_*
-  # entry) the moment an actual scraped-data typo turns up.
-  skip(paste(
-    "canonicalize_k12_district()/canonicalize_he_institution() are still",
-    "empty pass-throughs -- no confirmed Montana name typo to test yet"
-  ))
+test_that("OPI's Pray/Emigrant label carries Arrowhead's name, in the function and the committed data", {
+  # Before 2026-11-01 OPI rows were matched to a district by town through the registry. Arrowhead #75's row was
+  # taken out 2026-11-23, so a rebuild left its OPI postings of 08-06 to 08-25 under "Pray/Emigrant" while its
+  # 09-01 board rows kept the district's name: one district under two names in the weekly totals.
+  expect_equal(canonicalize_k12_district(c("Pray/Emigrant", "PRAY/EMIGRANT, MT", "Billings Public Schools")),
+               c("Arrowhead Elementary School District #75", "Arrowhead Elementary School District #75",
+                 "Billings Public Schools"))
+  totals <- read_summary("k12_district_weekly_totals.csv")
+  expect_false(any(totals$District == "Pray/Emigrant"))
 })
 
 # Regression for the encoding bug (originally found in Wyoming) where

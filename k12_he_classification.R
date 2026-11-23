@@ -153,6 +153,10 @@ canonicalize_k12_district <- function(district) {
   d <- sub(",?[[:space:]]*(MT|Mt\\.?|Montana)\\.?$", "", d)
   all_caps <- !is.na(d) & grepl("[A-Z]", d) & d == toupper(d)
   d[all_caps] <- tools::toTitleCase(tolower(d[all_caps]))
+  # OPI's location for Arrowhead Elementary (Pray). Before 2026-11-01 OPI rows were matched to a district by town
+  # through the registry; Arrowhead's row was taken out 2026-11-23, so a rebuild left its OPI postings of
+  # 08-06 to 08-25 under this label while 09-01's board rows kept the district's name. Only those archives carry it.
+  d[!is.na(d) & d == "Pray/Emigrant"] <- "Arrowhead Elementary School District #75"
   d
 }
 

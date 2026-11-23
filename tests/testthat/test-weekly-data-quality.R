@@ -346,6 +346,23 @@ test_that("posting spells carry the bucket the current classifier gives their ti
   }
 })
 
+test_that("a posting open on the latest run has the same title and bucket in the spells as in combinedclean (2026-11-22)", {
+  # The spells classify the raw archives themselves (posting_spells.R), so OPI's "Other" titles
+  # could take the description's job in combinedclean.csv (edjobs 0.81.0) and not in the spells.
+  p <- here::here("posting_spells_k12.csv")
+  skip_if_not(file.exists(p) && file.exists(MT("combinedclean.csv")))
+  s <- utils::read.csv(p, stringsAsFactors = FALSE)
+  cc <- read_mt("combinedclean.csv")
+  latest <- max(cc$Archive_Date)
+  cc <- cc[cc$Archive_Date == latest, c("Posting_ID", "title", "position")]
+  m <- merge(cc, s[s$Last_Seen == latest, c("Posting_ID", "Title", "Position")], by = "Posting_ID")
+  expect_gt(nrow(m), 0)
+  off <- m[m$title != m$Title | m$position != m$Position, ]
+  expect(nrow(off) == 0, paste("spells and combinedclean disagree:",
+                               paste(head(paste0(off$title, " [", off$position, "] vs ", off$Title, " [", off$Position, "]"), 5),
+                                     collapse = " | ")))
+})
+
 test_that("duration-spell dummies agree with the position / job type they encode (item 10)", {
   # The 2026-11-01 audit found is_support_staff never set for Transportation
   # and Food Services.
