@@ -1616,6 +1616,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Contact Information Here" span, Pleasant Valley's and Circle's `#wsite-content` and its heading/paragraph
     blocks. `html_element()` returns xml_missing, not NULL, so the old `is.null()` guards never fired. Today's live
     pages: 0 rows, no error. Tests: each parser errors on the other site's real fixture.
+  * [x] OPI postings from before this school year are marked "may be filled" (2026-11-23; branch
+    `opi-spring-label`; `claude-notes/2026-11-22_opi-spring/README.md`; Mike's call, option 2 of 3). An OPI posting
+    dated before the July 1 that began the run's school year still counts (OPI still lists it, so a candidate can
+    apply on paper), but its K-12 Jobs "Posted / listed" cell reads "2026-05-29 · may be filled", and the pay
+    columns note gives the count. App only; counts unchanged. On the committed 11-19 data: 72 of 186 OPI rows marked
+    (1,369 rows, none dropped). Why: OPI keeps "Open Until Filled" postings up after they're filled; for 4-6 of the
+    spring postings a same-subject board posting at the district came and went, but listings that look alike are
+    often a filled job plus a new one, so nothing is dropped. Not chosen: drop those 4-6 (Mike's "censor, don't link"
+    rule), or emailing districts (Mike 11-23: settle from public data). Test: `test-app-reactives.R`.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
@@ -1720,8 +1729,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
   still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
-  text, up since May-June) still count as open. Open: whether to flag spring postings. (A weekly check of the 7
-  job-specific links: measured 11-09 and not built; it would mostly flag outages and email links.)
+  text, up since May-June) still count as open. Spring postings: marked "may be filled" on the K-12 Jobs tab since
+  2026-11-23 (entry above). Left: whether public data (district staff pages, posted board minutes) can show which
+  spring postings were filled. (A weekly check of the 7 job-specific links: measured 11-09 and not built; it would
+  mostly flag outages and email links.)
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Golden set 551 of 551, no known misses (2026-11-09:
