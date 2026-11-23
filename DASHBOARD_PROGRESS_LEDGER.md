@@ -1704,8 +1704,23 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Found on the way: `scripts/reclassify_committed_data.R` swaps in only the classifier file, so a change in
     another edjobs file (here `build_k12_combinedclean()`) rebuilds with the installed edjobs and reports "nothing to
     write"; restate with the new tag installed and `--skip-guard` (open item below).
+  * [x] Seven never-produced sources acknowledged with an Empty_Text; edjobs pinned at 0.82.0 (2026-11-22; same
+    branch; bostickmike/edjobs#84; `claude-notes/2026-11-22_silent-8/README.md`; Mike's call, step 8 finding 1).
+    Checked live: Cottonwood, DeSmet, Fishtail, Nye, Zurich, Pleasant Valley and Circle are empty boards (no posting
+    in any archive). edjobs 0.82.0 `check_ack_empty_text()`: each acknowledgement's `Empty_Text` is a pattern its
+    board's visible text matches while empty, written heading to footer; each run fetches the board, and a page that
+    no longer matches (a posting, a redesign, a failed fetch) brings the source back as "needs a look". Each pattern
+    tested: matches today's page, breaks with a posting inserted at every content spot tried (`patterns_check.R`,
+    `patterns3.R`). This doesn't depend on the parser reading a posting it has never seen (WordPress, GoogleSites
+    read postings at 4 and 19 other districts; the 3 one-off parsers at none: MT #121 makes them error on a missing
+    layout). Sun River Valley not acknowledged: its registry link is the forms page ("Job Applications"); the
+    site's "Current Job Advertisements" page may be where postings go (open item below).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
+  "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
+  7-12 music job 11-03..11-10 while the board scrape was empty). Check the Wayback history (k12.mt.us target) for a
+  past posting, then point the registry at the right page (the Edlio parser reads `/apps/pages/` pages too).
 - [ ] `scripts/reclassify_committed_data.R` sees only edjobs' `R/k12_he_classification.R`: its rebuild calls the
   installed edjobs's `build_k12_combinedclean()`, so it can't show (or write) a change elsewhere in edjobs, and
   reports "nothing to write" (found 2026-11-22 with 0.81.0). Rebuild in a process with the checkout installed.
