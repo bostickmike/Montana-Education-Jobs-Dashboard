@@ -268,47 +268,6 @@ parse_scobey_postings <- function(html_text, url) {
 }
 
 
-# Arrowhead Elementary School District #75 (arrowheadk8.com, serving Pray
-# and Emigrant) -- found in the same 2026-08-23 pass, a modern WordPress/
-# Divi site, no chromote needed. Real postings are each a genuine `<h2>`
-# heading inside their own Divi card, bounded by 2 real, stable page
-# headings that aren't postings themselves ("Join the Arrowhead Team" the
-# intro, "Equal Opportunity Employer" the boilerplate after) -- confirmed
-# live 2026-08-23, 3 real postings (Substitute Employment, Special
-# Education Paraprofessional, Certified Teachers). This site's WAF blocks
-# httr2's request with the same Mac/Chrome-120 UA every other plain-fetch
-# scraper in this file uses (a real HTTP 403, confirmed live) but allows a
-# Windows/Chrome-124 UA -- a real, confirmed site-specific requirement, not
-# an arbitrary swap.
-ARROWHEAD_START_HEADING <- "Join the Arrowhead Team"
-ARROWHEAD_STOP_HEADING <- "Equal Opportunity Employer"
-
-fetch_arrowhead_postings <- function(url = "https://arrowheadk8.com/careers/") {
-  resp <- request(url) %>%
-    perform_with_retry()
-  parse_arrowhead_postings(resp_body_string(resp), url)
-}
-
-parse_arrowhead_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  headings <- trimws(rvest::html_text2(rvest::html_elements(page, "h2")))
-
-  start_idx <- which(headings == ARROWHEAD_START_HEADING)
-  stop_idx <- which(headings == ARROWHEAD_STOP_HEADING)
-  if (length(start_idx) == 0 || length(stop_idx) == 0 || stop_idx[1] <= start_idx[1] + 1) return(empty)
-
-  titles <- headings[(start_idx[1] + 1):(stop_idx[1] - 1)]
-  titles <- titles[nzchar(titles)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Pray", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
 # Winnett Public Schools (winnettschool.org, found 2026-08-24) --
 # Squarespace, same platform as Terry above, plain httr2 fetch. 3 real
 # category headers (Certified/Classified/Coaching Positions Open:),
