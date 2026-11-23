@@ -1703,7 +1703,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     latest run has the same title and position in the spells as in combinedclean. Two run expectations from 11-26.
     Found on the way: `scripts/reclassify_committed_data.R` swaps in only the classifier file, so a change in
     another edjobs file (here `build_k12_combinedclean()`) rebuilds with the installed edjobs and reports "nothing to
-    write"; restate with the new tag installed and `--skip-guard` (open item below).
+    write"; restate with the new tag installed and `--skip-guard` (fixed: see the reclassify entry below).
   * [x] Seven never-produced sources acknowledged with an Empty_Text; edjobs pinned at 0.82.0 (2026-11-22; same
     branch; bostickmike/edjobs#84; `claude-notes/2026-11-22_silent-8/README.md`; Mike's call, step 8 finding 1).
     Checked live: Cottonwood, DeSmet, Fishtail, Nye, Zurich, Pleasant Valley and Circle are empty boards (no posting
@@ -1731,15 +1731,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     post-run suite (3,374) passed; rebuild parity 11/11; K-12 1335 -> 1332, HE 393 -> 391. The pre-run suite, which
     runs alongside the render, had one failure: the boot smoke test's Jobs table had drawn no rows yet when checked.
     The same file passed twice on that copy afterwards, so it was the busy machine, not the change.
+  * [x] `scripts/reclassify_committed_data.R` sees every edjobs change (2026-11-22; branch
+    `reclassify-sees-all-edjobs`; both states). Its rebuild runs in the installed edjobs's namespace, so sourcing the
+    checkout's classifier file reached nothing inside the package, and 0.81.0's feed titles (`R/k12_history.R`) came
+    out "nothing to write". Now the guard requires the pinned tag installed (it stops and says so otherwise), and when
+    the checkout's `R/` differs from the tag, steps 2-3 rerun in a child process with the checkout installed in a
+    temporary library (the spell builders inherit it). Tested on MT at the 0.80.0 commit with 0.80.0 installed:
+    guard passes, then the same moves as the manual restatement, and `--apply` writes the five files byte for byte
+    as committed in `bump-edjobs-0.81.0`; with 0.81.0 installed the guard stops. WY: no-change path, nothing to write.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
   "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
   7-12 music job 11-03..11-10 while the board scrape was empty). Check the Wayback history (k12.mt.us target) for a
   past posting, then point the registry at the right page (the Edlio parser reads `/apps/pages/` pages too).
-- [ ] `scripts/reclassify_committed_data.R` sees only edjobs' `R/k12_he_classification.R`: its rebuild calls the
-  installed edjobs's `build_k12_combinedclean()`, so it can't show (or write) a change elsewhere in edjobs, and
-  reports "nothing to write" (found 2026-11-22 with 0.81.0). Rebuild in a process with the checkout installed.
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
   separate address, recommended; (B) an optional field whose address the app emails to Mike privately via a mail
