@@ -755,3 +755,34 @@ test_that("Home switch: tables, sparklines and the Jobs links count the same pos
     expect_false(shared$he_not_marked_only())
   })
 })
+
+test_that("OPI postings from before this school year are labeled, still counted, and noted", {
+  # claude-notes/2026-11-22_opi-spring: OPI keeps "Open Until Filled" postings up after they're filled; the
+  # dashboard counts them (OPI still lists them) but labels them (Mike 11-23, option 2).
+  env <- load_app()
+  expect_equal(env$school_year_start(as.Date(c("2026-11-19", "2027-03-02", "2026-07-01", "2026-06-30"))),
+               as.Date(c("2026-07-01", "2026-07-01", "2026-07-01", "2025-07-01")))
+  expect_equal(env$is_old_opi_posting(
+    c(env$OPI_SOURCE, env$OPI_SOURCE, env$OPI_SOURCE, "Billings district site (direct board)", env$OPI_SOURCE, NA),
+    c("2026-06-30", "2026-07-01", "", "2026-05-01", NA, "2026-05-01"),
+    "2026-11-19"),
+    c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE))
+  # Not in July and August: spring postings for the coming year are likely still open then.
+  expect_false(env$is_old_opi_posting(env$OPI_SOURCE, "2026-05-01", "2026-08-31"))
+  expect_true(env$is_old_opi_posting(env$OPI_SOURCE, "2026-05-01", "2026-09-01"))
+  # Each value is read as ISO on its own: a non-ISO first value doesn't blank the rest.
+  expect_equal(env$is_old_opi_posting(env$OPI_SOURCE, c("11/13/2026", "2026-05-01"), "2026-11-19"), c(FALSE, TRUE))
+
+  raw <- read.csv(here::here("Mt_Ed_Jobs", "combinedclean.csv"), colClasses = "character")
+  raw <- raw[!duplicated(raw$Posting_ID), ]
+  expected <- sum(env$is_old_opi_posting(raw$Posting_Source, raw$date_posted, raw$Archive_Date))
+  labeled <- endsWith(env$combineddata$`Posted / listed`, env$OLD_OPI_LABEL)
+  expect_equal(sum(labeled), expected)
+  # Labeled, not dropped: every row is still in the table.
+  expect_equal(nrow(env$combineddata), nrow(raw))
+  expect_true(all(env$combineddata$Source[labeled] == env$OPI_SOURCE))
+  # The label follows the date the column already showed ("2026-05-29", "Listed since 2026-05-26").
+  expect_true(all(grepl("\\d{4}-\\d{2}-\\d{2} \u00b7 may be filled$", env$combineddata$`Posted / listed`[labeled])))
+  expect_match(env$old_opi_note(expected), paste0("^", expected, " OPI postings"))
+  expect_identical(env$old_opi_note(0), "")
+})

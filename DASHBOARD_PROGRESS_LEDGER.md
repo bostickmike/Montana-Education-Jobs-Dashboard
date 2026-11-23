@@ -1548,6 +1548,113 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Posting:", an unreadable document keeps its row. Live 11-22: 1 row, "Human Resources Manager". The .docx link
     is the stable posting identity, so the spell continues. Fixtures from the 11-22 capture (page, HR .docx, Birney
     text). Archived rows keep their old titles (the HE board seat stays in 10 past weeks).
+  * [x] Lodge Grass to OPI only (2026-11-22; branch `lodge-grass-opi-only`; Mike's call, option B of
+    `claude-notes/2026-11-22_lodge-grass/README.md`). Both board pages read "UPDATED: 4-30-2026", the same 15 titles
+    in every run since 08-11, and 7 of the same jobs came off OPI Aug-Oct. Registry Platform `OPIOnly` (as Ulm),
+    Job_Link OPI's listing; salarymap2's row gets the OPI-only badge and link now (the run rebuilds it the same way).
+    Replayed on the 11-19 archive with `reconcile_opi_with_direct()`: Lodge Grass 15 direct + 0 OPI -> 0 direct + 2
+    OPI (Elementary Curriculum, CTE Business and Marketing, posted 06-10). Archived rows kept (real postings,
+    likely stale). Parser, Rmd block and fixture tests kept, unused, until the district clerk answers (draft in
+    `claude-notes/2026-11-21_contact-drafts.md`, section 6); if the page is current, the registry row goes back
+    to `LodgeGrassHeuristic`. Two run expectations for 11-23. Suite 3,268 passed, 0 failed (test-drift-check: 2
+    fewer, Lodge Grass no longer resolves to a scraper).
+  * [x] Every posting parser has a captured, non-empty fixture with an exact title (2026-11-22; branch
+    `test-kit-parser-fixtures`; test-kit plan item 4). `tests/testthat/test-parser-fixtures.R` (same file in WY) reads
+    the code: each `parse_*_postings/_positions/_page/_vacancies/_requisitions/_jobs` function at the repo root
+    (salary parsers aside) needs a `test_that` block that reads a file from `fixtures/` (directly or through a test
+    helper that doesn't edit it) and asserts a literal title in a form that fails on 0 rows (`"X" %in% r$Title`,
+    `all(c(...) %in% r$Title)`, `expect_equal(r$Title..., "X")`). Otherwise it must be in
+    `parser-fixture-allowlist.csv` with a reason and a date; an entry that is no longer needed fails too. Today 61
+    parsers, 58 covered; allowlisted: Zurich, Pleasant Valley, Circle (boards empty in every capture; re-capture when
+    one lists a job). Dead code removed: `fetch_/parse_lockwood_postings` (Lockwood is read through AppliTrack; no
+    dispatch reached it), its 3 tests and fixture. Checked by breaking it both ways (an uncovered parser off the list;
+    a covered one on it): both fail and name the parser.
+  * [x] `drift_acknowledged.csv` started (2026-11-22; branch `drift-acknowledged-richey`; Mike's call). For edjobs
+    0.78.0's "new this run / still unresolved" block at the top of each drift comment (test-kit item 3, option B,
+    edjobs #80): an item listed here (Section, Item, Reason, Acknowledged) leaves both lists and stays in the full
+    report. First entry: Richey under "On OPI but not on our scrape", because it posts teaching jobs only on OPI
+    (page checked 11-21; the parser reads its one posting). On the replay of issue #11's last report: 23 -> 22
+    still unresolved. Acts from the pin bump to 0.78.0.
+  * [x] OPI matcher: two jobs no longer counted twice (2026-11-22; branch `fix-opi-matcher-phrase`;
+    `claude-notes/2026-11-22_drift-triage/README.md`; first pass over the drift issue's "still unresolved" list).
+    Of the 12 districts under "On OPI but not on our scrape", 10 post those jobs only on OPI (live boards checked
+    11-22; Baker, Monforton and Victor say so on their pages), and 2 were matcher misses, so the job was counted
+    from OPI next to its own board posting: Bozeman's GHS long-term English sub ("LONG TERM ENGLISH TEACHER SUBSTITUTE
+    AT GHS": `LTS` needed "long term" and "sub" side by side, so the title read as a substitute) and Great Falls'
+    music job (board "Elementary Instrumental Music Teacher"; OPI's says "Music K-12 endorsement" and names no
+    level). `opi_matcher.R`: `LTS` allows up to 3 words in between, ending on a whole "sub"/"subs"/"substitute"
+    word, and drops `SUB` when both match; a "K-12" OPI posting meets a board title's elementary level only when the
+    board title also names a subject the posting has and "K-12" sits within 25 characters of it. A first, looser K-12
+    rule matched Savage's K-12 PE posting to "Elementary Teacher" (subject condition); the review found district
+    boilerplate ("students in grades K-12") would let Lockwood's middle school librarian match an "Elementary
+    Librarian" (nearness condition), and that "long term goals and subsequent" read as LTS (whole-word ending).
+    Hand-labeled sets (166): unchanged (0 wrong, 1 missed, 2 false). Replay on every archive with OPI descriptions
+    (11-03 to 11-19, 1,030 OPI rows at scraped districts): 6 decisions change, all these two postings. Archived
+    decisions are kept (`OPI_Counted`); two run expectations for 11-23 (an error, not a pass, if the board posting
+    is gone). Suite 3,274 passed, 1 failed (the local edjobs 0.78.0 vs pinned 0.73.0 check; CI installs the pin).
+  * [x] Map dots for two special-education co-ops (2026-11-22; branch `coop-map-dots`;
+    `claude-notes/2026-11-22_drift-triage/README.md`). The drift issue had listed "Eastern Yellowstone Coop" and
+    "Missoula Area Education Coop" under "Employers with postings but no map dot" since 11-17 (an SLP and a school
+    psychologist, both on OPI). `other_employers.csv` gets a row each from CCD's 2024 directory (Urban Institute API,
+    read 11-22): 3000087 "E. Yellowstone Spec. Ser Coop", Worden (the posting names the "Eastern Yellowstone Special
+    Services Cooperative"), and 3000053 "Missoula Area Education Coop", Missoula. The run builds their map rows
+    (`build_other_employer_rows()`); `reference_audit.R` lists both under "no map row" until then. One run
+    expectation for 11-23 (`unmapped_employers.csv`).
+  * [x] Dodson and Kinsey are OPI-only (2026-11-22; branch `opi-primary-dodson-kinsey`;
+    `claude-notes/2026-11-22_drift-triage/README.md`). Two of the drift issue's three adoption candidates go to
+    `opi_primary_districts.csv`. Dodson K-12: its employment page was one sentence deferring to OPI (backlog Group 2,
+    verified 10-29); on 11-22 dodsonschool.com no longer resolves and dodson.k12.mt.us answers with a JavaScript bot
+    challenge, so it was not rechecked. Kinsey Elem: no website (none on OPI, a web search finds only directory
+    sites; backlog Group 8). Cross-check replayed on the 11-22 rehearsal's inputs: adoption candidates 3 -> 1
+    (Troy, whose board is an unstructured Google Drive folder, blocked); "only board is OPI" 16 -> 18 districts,
+    27 -> 31 postings. Counting is unchanged: these postings already counted from OPI.
+  * [x] Zurich, Pleasant Valley and Circle parsers error when their page structure is missing (2026-11-22; branch
+    `oneoff-parsers-error-on-layout`; `claude-notes/2026-11-22_silent-8/README.md`; Mike's call, step 8 finding 1).
+    These three one-off parsers have never produced a row, so "0 rows" couldn't tell an empty board from a page they
+    no longer read. Now each stops (a `safe_scrape()` error in scrape_log.csv, which the silent-source check lists
+    even for an acknowledged source) when its span or container is missing: Zurich's "Employment" ... "Submit
+    Contact Information Here" span, Pleasant Valley's and Circle's `#wsite-content` and its heading/paragraph
+    blocks. `html_element()` returns xml_missing, not NULL, so the old `is.null()` guards never fired. Today's live
+    pages: 0 rows, no error. Tests: each parser errors on the other site's real fixture.
+  * [x] OPI postings from before this school year are marked "may be filled" (2026-11-23; branch
+    `opi-spring-label`; `claude-notes/2026-11-22_opi-spring/README.md`; Mike's call, option 2 of 3). An OPI posting
+    dated before the July 1 that began the run's school year still counts (OPI still lists it, so a candidate can
+    apply on paper), but its K-12 Jobs "Posted / listed" cell reads "2026-05-29 · may be filled", and the pay
+    columns note gives the count. Only from September 1 (in July and August spring postings for the coming year
+    are the likeliest to be open: ~70% of OPI rows in the 08-25 and 09-15 archives predate July 1; reviewer's
+    finding). App only; counts unchanged. On the committed 11-19 data: 72 of 186 OPI rows marked
+    (1,369 rows, none dropped). Why: OPI keeps "Open Until Filled" postings up after they're filled; for 4-6 of the
+    spring postings a same-subject board posting at the district came and went, but listings that look alike are
+    often a filled job plus a new one, so nothing is dropped. Not chosen: drop those 4-6 (Mike's "censor, don't link"
+    rule), or emailing districts (Mike 11-23: settle from public data). Test: `test-app-reactives.R`.
+
+  * [x] A board listing only substitute pools counts as empty for OPI's 60-day rule (2026-11-23; branch
+    `pool-only-board-empty`; `claude-notes/2026-11-23_flagged-deep/README.md`; Mike's call). An OPI posting over 60
+    days old at a district whose board returned only standing substitute pools (edjobs `STANDING_POOL_PATTERN`:
+    "Substitute Teacher", "Guest Teachers (substitutes)"; a "Long Term Substitute ..." opening is not a pool) and
+    that matches none of them no longer counts (`OPI_Drop_Reason` "stale OPI listing, district board lists only
+    substitute pools"; QC line "Potential ghost posting ..."), as at an empty board. Not at a district whose page
+    sends teaching jobs to OPI (`OPI_BOARD_DEFERS_TO_OPI`, quoted: Independent, Elysian; pages read 11-23). Why:
+    Hellgate's page said "NO para professionals positions ... Updated 09/10/2026" while its two June OPI para
+    postings counted, because its board's two pools made it "active"; Seeley Lake, the 60-day rule's own case
+    (11-02), had gained "Substitute (All Areas)". All seven pool-only boards' pages read 11-23: Hellgate, Marion,
+    Miami, Bonner, Seeley Lake fit; Independent and Elysian point to OPI. Replay of `reconcile_opi_with_direct()`
+    on the 11-19 archive: 187 -> 180 counted OPI postings, exactly these 7 at 5 districts (Hellgate 2, Seeley Lake
+    2, Marion, Miami, Bonner), no other change; on every archive, the drop equals the pool drops. From the next run
+    on; archives keep their own `OPI_Counted`. Drift-issue line now reads "whose board was empty or listed only
+    substitute pools". Tests: `test-opi-reconcile.R`.
+
+  * [x] OPI twin rule reads links from every earlier archive, not just the last run's (2026-11-23; branch
+    `opi-twin-links-all-weeks`; `claude-notes/2026-11-23_flagged-deep/README.md`). Fixes the 11-10 rule
+    (`close_opi_lost_twins()`, Mike's), not a new one: new `opi_links_from_archives()` gives each OPI posting its
+    latest board link from any earlier archive (recomputed for 11-03 and 11-10, written before
+    `OPI_Matched_Posting_ID`). Why: the rule merged after the 11-10 data run, so the five postings matched on 11-03
+    whose board twins were gone by 11-10 (checked live 11-10) counted on 11-10, and 11-17, reading only 11-10, had
+    no link for them; four still counted on 11-19: Lolo Music, Whitefish SpEd, Glendive Coach, Stevensville
+    "Other" (Manhattan's had left OPI). Replay on the 11-17 and 11-19 archives: exactly these 4 newly closed, no
+    other change (old rule: 0); ~10 s a run. From the next run on; archives keep their own `OPI_Counted`. Same-
+    subject board postings the matcher never linked (Terry Music, Three Forks SpEd) are untouched (11-22 call).
+    Tests: `test-opi-reconcile.R`.
   * [x] Frozen-board check (2026-11-22; branch `mt-frozen-boards`; test-kit plan item 5). `.github/scripts/
     check_frozen_boards.R`, Wyoming's check (edjobs `frozen_board_runs()`, thresholds 12+ weeks, 5+ postings) on MT's
     archives: a K-12 district + the archive's `Posting_Source`, or an HE institution, whose posting set has been
@@ -1660,8 +1767,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
   still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
-  text, up since May-June) still count as open. Open: whether to flag spring postings. (A weekly check of the 7
-  job-specific links: measured 11-09 and not built; it would mostly flag outages and email links.)
+  text, up since May-June) still count as open. Spring postings: marked "may be filled" on the K-12 Jobs tab since
+  2026-11-23 (entry above). Left: whether public data (district staff pages, posted board minutes) can show which
+  spring postings were filled. (A weekly check of the 7 job-specific links: measured 11-09 and not built; it would
+  mostly flag outages and email links.)
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest
   parking (`claude-notes/2026-11-08_classifier-items-1-2-measured.md`). Golden set 551 of 551, no known misses (2026-11-09:

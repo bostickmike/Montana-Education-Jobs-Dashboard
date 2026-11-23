@@ -1,0 +1,4 @@
+fn,reason,added
+parse_zurich_postings,"Board empty in every capture since 2026-08-25 (""There are no current jobs open""); the one non-empty test edits that page. Capture the page when it lists a job (OPI or the drift check will show one).",2026-11-22
+parse_pleasantvalley_postings,"Board empty in every capture since 2026-10-27 (""No opening at this time""); the non-empty test is hand-written HTML. Capture the page when it lists a job.",2026-11-22
+parse_circle_postings,"Board shows only application forms in every capture since 2026-10-27; the non-empty test is hand-written HTML. Capture the page when it lists a job.",2026-11-22

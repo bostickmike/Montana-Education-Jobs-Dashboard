@@ -60,6 +60,8 @@ suppressMessages({
 
 
 # Lodge Grass Public Schools (lgschools.org) -- an "Educational Networks"
+# (Not run since 2026-11-22: the registry row is Platform OPIOnly, the
+# pages unchanged since 4-30-2026; kept until the district clerk answers.)
 # CMS with real openings split across 3 tabs of the same Employment page
 # (uREC_ID=373420): the default view ("Certified Job Opening"), pREC_ID
 # 1206958 ("Classified Job Openings"), and pREC_ID 1206962 ("Coach - Open
@@ -395,8 +397,11 @@ parse_zurich_postings <- function(html_text, url) {
 
   start_idx <- which(lines == "Employment")
   stop_idx <- which(lines == "Submit Contact Information Here")
-  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
-  if (start_idx[1] >= stop_idx[1]) return(empty)
+  # No span: not the employment page, or the site changed. An error, not 0 rows: Zurich has never had a posting
+  # here, so "0 rows" can't tell an empty board from a page the parser no longer reads (2026-11-22).
+  if (length(start_idx) == 0 || length(stop_idx) == 0 || start_idx[1] >= stop_idx[1]) {
+    stop("Zurich page has no 'Employment' ... 'Submit Contact Information Here' span: not the employment page, or the site changed")
+  }
   body <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
   # Every other line in this span becomes a title, so any "nothing open"
   # wording is dropped, not just today's exact sentence ("There are no
@@ -1283,44 +1288,6 @@ parse_jeffersonhigh_postings <- function(html_text, url) {
 }
 
 
-# Lockwood School District (lockwoodschool.org, found 2026-10-21
-# via OPI Directory) -- Yellowstone County K-12 district on Edlio CMS.
-# Confirmed live 2026-10-21: 8 active postings (Special Education Teacher,
-# High School Paraprofessional, High School Business Teacher, Speech Language
-# Pathologist, Softball Coach, Basketball Coach, Substitute Teachers, Crosswalk Guard).
-# Plain httr2 fetch, no chromote needed.
-fetch_lockwood_postings <- function(url = "https://www.lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_lockwood_postings(resp_body_string(resp), url)
-}
-
-parse_lockwood_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  page <- rvest::read_html(html_text)
-  text <- rvest::html_text2(page)
-  lines <- trimws(strsplit(text, "\n")[[1]])
-  lines <- lines[nzchar(lines)]
-  start_idx <- which(grepl("Lockwood Schools Open Positions", lines))
-  stop_idx <- which(grepl("Questions[?]|Fingerprinting & Background Checks", lines))
-  if (length(start_idx) == 0 || length(stop_idx) == 0) return(empty)
-
-  block <- lines[(start_idx[1] + 1):(stop_idx[1] - 1)]
-  exclude_patterns <- "Lockwood Schools Open Positions|Athletic Coaching|Rolling Job Openings|Application|Applications & Info|Maintenance and Custodial$|Transportation$|Crosswalk Guards & Transportation Aides$|Food Service$|Chartwells"
-
-  titles <- character(0)
-  for (l in block) {
-    if (grepl(exclude_patterns, l, ignore.case = TRUE)) next
-    if (nzchar(l) && nchar(l) < 90) titles <- c(titles, l)
-  }
-  if (length(titles) == 0) return(empty)
-  data.frame(Title = titles, Location = "Lockwood", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
 # Richey Public Schools (Dawson County) -- CyberSchool CMS,
 # plain httr2 fetch, no chromote needed. Active positions listed
 # in #maincontent .cs-html-widget strong / headings.
@@ -2105,16 +2072,19 @@ parse_pleasantvalley_postings <- function(html, url) {
     Link = character(0),
     stringsAsFactors = FALSE
   )
-  if (!nzchar(html)) return(empty)
-
+  # An error, not 0 rows, when the page isn't the Weebly employment page it was (2026-11-22): Pleasant Valley has
+  # never had a posting here, so "0 rows" couldn't tell an empty board from a page the parser no longer reads.
+  # (html_element() returns xml_missing, not NULL, when nothing matches: the old is.null() test never fired.)
+  if (!nzchar(html)) stop("Pleasant Valley page is empty")
   doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
+  if (is.null(doc)) stop("Pleasant Valley page didn't parse as HTML")
 
   content <- html_element(doc, "#wsite-content")
-  if (is.null(content)) return(empty)
+  if (inherits(content, "xml_missing")) stop("Pleasant Valley page has no #wsite-content: not the employment page, or the site changed")
 
   h2s <- html_elements(content, "h2.wsite-content-title, .wsite-content-title")
-  if (length(h2s) == 0) return(empty)
+  # Even an empty board has its "Employment Opportunities" heading.
+  if (length(h2s) == 0) stop("Pleasant Valley page has no .wsite-content-title heading: the site changed")
 
   titles <- trimws(html_text2(h2s))
   titles <- titles[nzchar(titles)]
@@ -2152,16 +2122,19 @@ parse_circle_postings <- function(html, url) {
     Link = character(0),
     stringsAsFactors = FALSE
   )
-  if (!nzchar(html)) return(empty)
-
+  # An error, not 0 rows, when the page isn't the Weebly employment page it was (2026-11-22): Circle has never had
+  # a posting here, so "0 rows" couldn't tell an empty board from a page the parser no longer reads.
+  # (html_element() returns xml_missing, not NULL, when nothing matches: the old is.null() test never fired.)
+  if (!nzchar(html)) stop("Circle page is empty")
   doc <- tryCatch(read_html(html), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
+  if (is.null(doc)) stop("Circle page didn't parse as HTML")
 
   content <- html_element(doc, "#wsite-content")
-  if (is.null(content)) return(empty)
+  if (inherits(content, "xml_missing")) stop("Circle page has no #wsite-content: not the employment page, or the site changed")
 
   h2s <- html_elements(content, "h2.wsite-content-title, .wsite-content-title, .paragraph")
-  if (length(h2s) == 0) return(empty)
+  # Even an empty board has its application-links paragraph.
+  if (length(h2s) == 0) stop("Circle page has no .wsite-content-title or .paragraph block: the site changed")
 
   raw_titles <- trimws(html_text2(h2s))
   raw_titles <- raw_titles[nzchar(raw_titles)]

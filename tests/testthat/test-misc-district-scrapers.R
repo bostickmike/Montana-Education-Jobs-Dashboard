@@ -848,10 +848,12 @@ test_that("parse_zurich_postings returns zero rows (not an error) for the curren
   expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
 })
 
-test_that("parse_zurich_postings returns zero rows (not an error) when there's no real start/stop marker at all", {
-  result <- parse_zurich_postings("<html><body><p>Nothing here.</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+test_that("parse_zurich_postings errors (not 0 rows) when the Employment span is missing (2026-11-22)", {
+  # Zurich has never had a posting, so 0 rows from a page the parser no longer reads would look like an empty
+  # board; the error reaches scrape_log.csv and the silent-source check lists it.
+  expect_error(parse_zurich_postings("<html><body><p>Nothing here.</p></body></html>", "url"), "no 'Employment'")
+  pv <- paste(readLines(test_path("fixtures", "pleasantvalley_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  expect_error(parse_zurich_postings(pv, "url"), "no 'Employment'")   # a real page of another site
 })
 
 # The real fixture with its "no jobs" sentence swapped for other wording:
@@ -1108,37 +1110,6 @@ test_that("fetch_jeffersonhigh_postings fetches and parses a live-shaped respons
   result <- fetch_jeffersonhigh_postings()
 
   expect_equal(nrow(result), 6)
-})
-
-test_that("parse_lockwood_postings extracts real positions from captured fixture", {
-  fixture <- paste(readLines(test_path("fixtures", "lockwood_edlio_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  url <- "https://www.lockwoodschool.org/apps/pages/index.jsp?uREC_ID=409277&type=d"
-
-  result <- parse_lockwood_postings(fixture, url)
-
-  expect_equal(nrow(result), 8)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-  expect_true("Special Education Teacher (K12)" %in% result$Title)
-  expect_true("Part-Time Crosswalk Guard" %in% result$Title)
-  expect_equal(unique(result$Location), "Lockwood")
-  expect_equal(unique(result$Link), url)
-})
-
-test_that("parse_lockwood_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_lockwood_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("fetch_lockwood_postings fetches and parses a live-shaped response", {
-  fixture <- paste(readLines(test_path("fixtures", "lockwood_edlio_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  httr2::local_mocked_responses(
-    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
-  )
-
-  result <- fetch_lockwood_postings()
-
-  expect_equal(nrow(result), 8)
 })
 
 test_that("parse_richey_postings extracts real positions from captured fixture", {
@@ -1488,10 +1459,12 @@ test_that("parse_pleasantvalley_postings extracts positions when present", {
   expect_equal(result$Link, url)
 })
 
-test_that("parse_pleasantvalley_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_pleasantvalley_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+test_that("parse_pleasantvalley_postings errors (not 0 rows) on an empty or different page (2026-11-22)", {
+  expect_error(parse_pleasantvalley_postings("<html><body><p>No jobs</p></body></html>", "url"), "no #wsite-content")
+  expect_error(parse_pleasantvalley_postings("", "url"), "empty")
+  expect_error(parse_pleasantvalley_postings('<div id="wsite-content"><p>x</p></div>', "url"), "no .wsite-content-title")
+  zurich <- paste(readLines(test_path("fixtures", "zurich_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  expect_error(parse_pleasantvalley_postings(zurich, "url"), "no #wsite-content")   # a real Wix page
 })
 
 test_that("parse_circle_postings returns zero rows on fixture with only generic applications", {
@@ -1515,10 +1488,11 @@ test_that("parse_circle_postings extracts real positions when present", {
   expect_equal(result$Link, url)
 })
 
-test_that("parse_circle_postings returns zero rows on empty or non-matching HTML", {
-  result <- parse_circle_postings("<html><body><p>No jobs</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+test_that("parse_circle_postings errors (not 0 rows) on an empty or different page (2026-11-22)", {
+  expect_error(parse_circle_postings("<html><body><p>No jobs</p></body></html>", "url"), "no #wsite-content")
+  expect_error(parse_circle_postings("", "url"), "empty")
+  zurich <- paste(readLines(test_path("fixtures", "zurich_employment.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+  expect_error(parse_circle_postings(zurich, "url"), "no #wsite-content")
 })
 
 test_that("parse_cji_postings extracts vacancies from PDF text fixture", {
