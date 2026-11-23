@@ -257,6 +257,18 @@ opi_only_registry_districts <- function(registry) {
   registry$District[registry$Platform %in% OPI_ONLY_PLATFORM]
 }
 
+# Registry districts whose board returned rows this run, every one a standing substitute pool
+# (edjobs STANDING_POOL_PATTERN: "Substitute Teacher", "Guest Teachers (substitutes)", "Custodial substitutes").
+OPI_STALE_POOL_REASON <- "stale OPI listing, district board lists only substitute pools"
+pool_only_board_districts <- function(direct_df) {
+  if (is.null(direct_df) || nrow(direct_df) == 0 || !all(c("District", "title") %in% names(direct_df))) return(character(0))
+  d <- direct_df[!is.na(direct_df$District), , drop = FALSE]
+  if (nrow(d) == 0) return(character(0))
+  pool <- grepl(edjobs::STANDING_POOL_PATTERN, as.character(d$title), perl = TRUE)
+  all_pool <- tapply(pool, d$District, all)
+  names(all_pool)[all_pool]
+}
+
 # TRUE where a posted date (ISO or OPI's m/d/Y) is more than 60 days before
 # `today`; unknown dates are not stale.
 opi_listing_is_stale <- function(date_posted, today, days = 60) {
@@ -325,6 +337,12 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   # 60-day limit and no "check the scraper" QC line.
   no_board <- scraped & a$Registry_District %in% opi_only_registry_districts(registry)
   empty_board <- scraped & !active & !no_board
+  # A board that returned only standing substitute pools ("Substitute Teacher", "Guest Teachers (substitutes)")
+  # says nothing about whether a teaching or para job is still open, so for the 60-day rule it counts as empty
+  # (Mike, 2026-11-23; Hellgate's page: "NO current positions open ... Para Educators. Updated 9/15/26", while
+  # its June OPI para postings still counted; Seeley Lake, the 60-day rule's own case, had gained a
+  # "Substitute (All Areas)" row). The OPI posting must still fail to match a board row.
+  pool_only <- scraped & active & a$Registry_District %in% pool_only_board_districts(direct_df)
   # OPI lists one job more than once (elementary and high-school district,
   # two schools): same district, same description -> one posting.
   dup <- opi_duplicate_listing(opi_df, ifelse(!is.na(a$Map_Entity), a$Map_Entity, as.character(opi_df$District)))
@@ -344,7 +362,8 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   # posting's Posting_ID once identities exist, for close_opi_lost_twins().
   direct_df$.board_row <- seq_len(nrow(direct_df))
   matched <- !is.na(m)
-  stale_empty <- empty_board & stale & stale_fallback
+  stale_pool <- pool_only & !matched & !dup & stale & stale_fallback
+  stale_empty <- (empty_board & stale & stale_fallback) | stale_pool
   covered <- dup | matched | stale_empty          # not counted
   fallback <- empty_board & !covered               # counted: the board was empty
   unmatched <- active & !covered                   # counted: not on the district's board
@@ -358,11 +377,13 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
                Location = as.character(opi_df$location[qc_rows]),
                Discrepancy_Type = ifelse(fallback[qc_rows],
                                          "Direct scrape returned no postings; OPI used instead (check the scraper)",
+                                         ifelse(stale_pool[qc_rows],
+                                                "Potential ghost posting on OPI (posted over 60 days ago; the district's board lists only substitute pools, not used)",
                                          ifelse(stale_empty[qc_rows],
                                                 "Potential ghost posting on OPI (posted over 60 days ago; our scrape returned nothing, not used)",
                                                 ifelse(stale[qc_rows],
                                                        "On OPI, not on our scrape, counted from OPI (posted over 60 days ago)",
-                                                       "On OPI, not on our scrape, counted from OPI (scraper miss or posted only on OPI)"))),
+                                                       "On OPI, not on our scrape, counted from OPI (scraper miss or posted only on OPI)")))),
                Detected_Date = as.character(today), stringsAsFactors = FALSE)
   } else empty_qc
 
@@ -371,7 +392,8 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   opi_dropped$District <- ifelse(!is.na(a$Registry_District), a$Registry_District,
                                  ifelse(!is.na(a$Map_Entity), a$Map_Entity, as.character(opi_df$District)))[covered]
   opi_dropped$OPI_Drop_Reason <- ifelse(dup, "OPI duplicate listing", ifelse(matched, "same opening on district board",
-                                        "stale OPI listing, district board empty"))[covered]
+                                        ifelse(stale_pool, OPI_STALE_POOL_REASON,
+                                               "stale OPI listing, district board empty")))[covered]
   opi_dropped$Also_On_OPI <- rep(FALSE, nrow(opi_dropped))
   opi_dropped$.opi_matched_row <- m[covered]
   opi_keep <- opi_df[keep, , drop = FALSE]
