@@ -411,11 +411,11 @@ Every college posting listed in the latest run, all job types, with posted pay, 
 | `Campus_Latitude` | Numeric | Job posting (college job board) | Latitude of Campus_Town (Census place internal point). |
 | `Campus_Longitude` | Numeric | Job posting (college job board) | Longitude of Campus_Town (Census place internal point). |
 | `Place_Basis` | Categorical | Job posting (college job board) | Why the posting is mapped where it is: main (the main campus town), other_town (one other town in the state, named in its location, title or page), out_of_state, or no_town (nothing placeable, or several towns at once; shown at the main campus). |
-| `Est_Pay` | Numeric | Job posting (college job board) | Where the posting states no pay: the BLS OEWS median pay for the posting's role in its region, in Est_Pay_Unit. A regional estimate across all employers of that occupation, not this job's offer; NA for roles with no fair match (coaches, unclassified postings). |
-| `Est_Pay_Unit` | String | Job posting (college job board) | hour for roles usually paid hourly where BLS publishes an hourly median; otherwise year. |
-| `Est_Occupation` | String | Job posting (college job board) | The OEWS occupation the posting was matched to from its position and title. |
-| `Est_Area` | String | Job posting (college job board) | The OEWS area of the figure: the metro or nonmetro area holding the college's county, or the state where the local figure is suppressed. |
-| `Est_Year` | String | Job posting (college job board) | OEWS reference year (May of that year). |
+| `Est_Pay` | Numeric | IPEDS via Urban Institute Education Data Portal | For a salaried staff posting: the college's average salary for full-time staff in the posting's IPEDS occupational category (Est_Occupation), per year. A college-wide average for the category, not this job's offer; given whether or not the posting states pay. |
+| `Est_Pay_Unit` | String | IPEDS via Urban Institute Education Data Portal | year. |
+| `Est_Occupation` | String | IPEDS via Urban Institute Education Data Portal | The IPEDS staff category the posting was matched to from its title. |
+| `Est_Area` | String | IPEDS via Urban Institute Education Data Portal | The college whose IPEDS figure is used. |
+| `Est_Year` | String | IPEDS via Urban Institute Education Data Portal | IPEDS year of the figure. |
 
 ### Q. IPEDS Staff Salaries (`ipeds_staff_salaries.csv`)
 
