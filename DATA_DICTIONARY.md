@@ -10,29 +10,29 @@ Each dataset is accessible via the **Data** tab in the interactive web dashboard
 
 | Dataset Layer | Primary File | Description | Granularity | Refresh Cadence |
 | :--- | :--- | :--- | :--- | :--- |
-| **Active K-12 Jobs** | `combinedclean.csv` | Every K-12 posting listed in the latest run: district boards plus OPI's statewide board. | Posting level | Each run |
-| **K-12 Historical Archive** | `k12jobanalysis.csv` | Every teaching posting in every run since August 2026 (teaching jobs only), with standardized categories. | Posting level | Each run |
-| **K-12 Job Duration Spells** | `job_duration_spells.csv` | One row per posting: first and last run it was seen, days listed, and job-type flags (STEM, special education, ...). | Posting spell | Each run |
-| **District Profiles & Benchmarks** | `salarymap2.csv` | District-level staffing, compensation benchmarks, and Census context. | District level | Each run / Annual |
-| **Higher Ed Historical Postings** | `facultydata.csv` | Every faculty and adjunct posting in every run since August 2026 (no staff postings). | Posting level | Each run |
-| **Higher Ed Job Duration Spells** | `he_job_duration_spells.csv` | One row per college posting: first and last run it was seen, days listed, and discipline flags. | Posting spell | Each run |
-| **Higher Ed Institutional Profiles** | `salarymap.csv` | College and university profiles: IPEDS instructional faculty salaries, enrollment, and Pell recipient shares. | Institution level | Each run / Annual |
-| **K-12 Weekly Vacancy Time Series** | `k12_district_weekly_totals.csv` | Open posting counts per district in each run. | District × Run | Each run |
-| **K-12 Job Type Time Series** | `k12_jobtype_weekly_totals.csv` | Open job postings per run by K-12 position type, all and those not marked part-time, substitute or extra duty. | Job type × Run | Each run |
-| **Higher Ed Weekly Vacancy Time Series** | `he_institution_weekly_totals.csv` | Open posting counts per college in each run. | Institution × Run | Each run |
-| **Higher Ed Job Type Time Series** | `he_jobtype_weekly_totals.csv` | Open college job postings per run by job type, all and those not marked part-time, student or temporary. | Job type × Run | Each run |
-| **K-12 Current Category Counts** | `allnow.csv` | Teaching postings in the latest run by subject group and district, with statewide totals. | District × Category | Each run |
-| **K-12 Category Time Series** | `allsum.csv` | Teaching postings by subject group and district in every run, with statewide totals. | District × Category × Run | Each run |
-| **Higher Ed Current Category Counts** | `allnow_he.csv` | Faculty and adjunct postings in the latest run by discipline, type and college, with statewide totals. | College × Discipline × Type | Each run |
-| **Higher Ed Category Time Series** | `allsum_he.csv` | Faculty and adjunct postings by discipline, type and college in every run, with statewide totals. | College × Discipline × Type × Run | Each run |
-| **Active Higher Ed Jobs** | `hedata.xlsx` | Every college posting listed in the latest run, all job types, with posted pay, campus placement and pay estimates. | Posting level | Each run |
+| **Active K-12 Jobs** | `combinedclean.csv` | Every K-12 posting listed in the latest update: district boards plus OPI's statewide board. | Posting level | Twice weekly |
+| **K-12 Historical Archive** | `k12jobanalysis.csv` | Every teaching posting in every update since August 2026 (teaching jobs only), with standardized categories. | Posting level | Twice weekly |
+| **K-12 Job Duration Spells** | `job_duration_spells.csv` | One row per posting: first and last update it was seen, days listed, and job-type flags (STEM, special education, ...). | Posting spell | Twice weekly |
+| **District Profiles & Benchmarks** | `salarymap2.csv` | District-level staffing, compensation benchmarks, and Census context. | District level | Twice weekly / Annual |
+| **Higher Ed Historical Postings** | `facultydata.csv` | Every faculty and adjunct posting in every update since August 2026 (no staff postings). | Posting level | Twice weekly |
+| **Higher Ed Job Duration Spells** | `he_job_duration_spells.csv` | One row per college posting: first and last update it was seen, days listed, and discipline flags. | Posting spell | Twice weekly |
+| **Higher Ed Institutional Profiles** | `salarymap.csv` | College and university profiles: IPEDS instructional faculty salaries, enrollment, and Pell recipient shares. | Institution level | Twice weekly / Annual |
+| **K-12 Weekly Vacancy Time Series** | `k12_district_weekly_totals.csv` | Open posting counts per district in each update. | District × Update | Twice weekly |
+| **K-12 Job Type Time Series** | `k12_jobtype_weekly_totals.csv` | Open job postings per update by K-12 position type, all and those not marked part-time, substitute or extra duty. | Job type × Update | Twice weekly |
+| **Higher Ed Weekly Vacancy Time Series** | `he_institution_weekly_totals.csv` | Open posting counts per college in each update. | Institution × Update | Twice weekly |
+| **Higher Ed Job Type Time Series** | `he_jobtype_weekly_totals.csv` | Open college job postings per update by job type, all and those not marked part-time, student or temporary. | Job type × Update | Twice weekly |
+| **K-12 Current Category Counts** | `allnow.csv` | Teaching postings in the latest update by subject group and district, with statewide totals. | District × Category | Twice weekly |
+| **K-12 Category Time Series** | `allsum.csv` | Teaching postings by subject group and district in every update, with statewide totals. | District × Category × Update | Twice weekly |
+| **Higher Ed Current Category Counts** | `allnow_he.csv` | Faculty and adjunct postings in the latest update by discipline, type and college, with statewide totals. | College × Discipline × Type | Twice weekly |
+| **Higher Ed Category Time Series** | `allsum_he.csv` | Faculty and adjunct postings by discipline, type and college in every update, with statewide totals. | College × Discipline × Type × Update | Twice weekly |
+| **Active Higher Ed Jobs** | `hedata.xlsx` | Every college posting listed in the latest update, all job types, with posted pay, campus placement and pay estimates. | Posting level | Twice weekly |
 | **IPEDS Staff Salaries** | `ipeds_staff_salaries.csv` | Average pay of full-time non-instructional staff by college and occupational category (categories with at least 3 staff). | College × Category | Annual |
 | **K-12 Teacher Salary History** | `k12_salary_history.csv` | Teacher pay by district for each Teacher Compensation Report edition this project has captured (DLI keeps no public archive). | District × Year | Annual |
 | **BLS Regional Pay by Role** | `oews_role_wages.csv` | Median pay for the occupations K-12 postings are matched to, by Montana OEWS area; the source of the K-12 Typical pay (BLS est.) column. | Area × Occupation | Annual |
-| **OPI District Counties** | `opi_district_counties.csv` | The county of each district as OPI names it, used to give OPI postings a county. | District level | Each run |
-| **Posting First Seen** | `posting_first_seen.csv` | When the dashboard first found each currently listed posting; shown where the board gives no posted date. | Posting level | Each run |
+| **OPI District Counties** | `opi_district_counties.csv` | The county of each district as OPI names it, used to give OPI postings a county. | District level | Twice weekly |
+| **Posting First Seen** | `posting_first_seen.csv` | When the dashboard first found each currently listed posting; shown where the board gives no posted date. | Posting level | Twice weekly |
 | **County Public School Pay** | `qcew_county_school_pay.csv` | Average annual pay and employment of public school (local government, NAICS 6111) employees by county, all roles together. | County level | Annual |
-| **Source Retrieval Dates** | `source_retrieved_dates.csv` | When each outside data source was last fetched successfully. | Source level | Each run |
+| **Source Retrieval Dates** | `source_retrieved_dates.csv` | When each outside data source was last fetched successfully. | Source level | Twice weekly |
 | **Data Dictionary & Codebook** | `data_dictionary.csv` | Machine-readable column definitions, types, and primary source authorities across all files. | Variable level | Static / Maintained |
 
 ---
@@ -53,7 +53,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `title` | String | Job posting (district job board or OPI Jobs for Teachers) | Official job vacancy title as published by the school district or OPI Jobs for Teachers feed. |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run that saw the posting listed (runs are twice a week since 2026-11-17, weekly before). |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update that saw the posting listed (the dashboard updates twice a week since 2026-11-17, weekly before). |
 | `date_posted` | String / Date | Job posting (district job board or OPI Jobs for Teachers) | Original posted date string as published on the district applicant tracking board. |
 | `position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
 | `location` | String | Job posting (district job board or OPI Jobs for Teachers) | Specific school building, facility, or employer city/location label. |
@@ -61,7 +61,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `District` | String | This dashboard: district and college list | Canonical public school district name. OPI statewide rows: the registry district when the dashboard's own scrape of it returned nothing that week, else the district not scraped directly (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
 | `Posting_Source` | String | This dashboard: posting tracking | Original job feed source (direct district ATS board vs OPI Jobs for Teachers feed). |
 | `Posting_Identity_Method` | String | This dashboard: posting tracking | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
-| `Posting_ID` | String | This dashboard: posting tracking | Durable unique posting identifier used to track openings across runs. |
+| `Posting_ID` | String | This dashboard: posting tracking | Durable unique posting identifier used to track openings across updates. |
 | `Feed_District` | String | OPI Jobs for Teachers | For OPI statewide rows, the employer's district as the posting's detail page names it, in OPI's naming ("Lockwood K-12", "Richey Elem"), which is NCES CCD's district name; NA for direct-board rows and where the detail page could not be read. Used to decide whether the posting counts (`opi_reconcile.R`). |
 | `Also_On_Feed` | Logical | This dashboard: posting tracking | TRUE for a direct-board posting that OPI Jobs for Teachers also lists as the same opening (`opi_matcher.R`). Counted once, from the direct board; OPI postings a district's board doesn't list are counted from OPI. |
 | `Close_Date` | String | Job posting (district job board or OPI Jobs for Teachers) | The posting's closing date as its board states it, unparsed (a date, or "Open Until Filled", "TBD" and similar). AppliTrack (from 2026-11-03), Tyler Portico rows with a real end date (Tyler fills open-ended postings with the fetch date plus a year, which is left NA), SchoolSpring (from 2026-11-04: the deadline applicants see, as YYYY-MM-DD; "Posted until filled" is NA), and OPI (from 2026-11-04: the grid's "Closing Date", a date as YYYY-MM-DD, otherwise as written, nearly always "Open Until Filled"); NA where the board gives none and for other sources. |
@@ -83,14 +83,14 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `title` | String | Job posting (district job board or OPI Jobs for Teachers) | Standardized job vacancy title as published by the school district or OPI feed. |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run that saw the posting listed (runs are twice a week since 2026-11-17, weekly before). |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update that saw the posting listed (the dashboard updates twice a week since 2026-11-17, weekly before). |
 | `position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
 | `location` | String | Job posting (district job board or OPI Jobs for Teachers) | Specific school building, facility, or employer city/location label. |
 | `url` | URL | Job posting (district job board or OPI Jobs for Teachers) | Direct URL link to the official job vacancy listing or district portal. |
 | `District` | String | This dashboard: district and college list | Canonical public school district name. |
 | `Posting_Source` | String | This dashboard: posting tracking | Original job feed source (direct district ATS board vs OPI statewide feed). |
 | `Posting_Identity_Method` | String | This dashboard: posting tracking | Durable identity fingerprint method used (Stable per-posting URL vs Source fallback). |
-| `Posting_ID` | String | This dashboard: posting tracking | Durable unique posting identifier, the same for a posting in every run it appears in. |
+| `Posting_ID` | String | This dashboard: posting tracking | Durable unique posting identifier, the same for a posting in every update it appears in. |
 | `Category` | String | This dashboard: job title classification | Fine-grained subject specialization or departmental role assignment. |
 | `Broad_Category` | Categorical | This dashboard: job title classification | Clustered high-level category grouping (Elementary, STEM, Special Education, Humanities, etc.). |
 | `Role_Hint` | Categorical | This dashboard: job title classification | What the posting's own description says about the role, used to refine its position bucket: Substitute (a long-term substitute), Paraprofessional, Part-Time (a part-time or under-1.0-FTE teacher), Teacher, Counselor or Administration (the role the description names first). OPI postings only, from 2026-11-03 (when OPI descriptions began to be archived): OPI's title is its subject-area field, which misfiles some postings (e.g. a long-term substitute, a paraeducator under "Elementary Curriculum", a teacher under "Administrative - Other"). NA when the description gives no clear signal, and for every other source. |
@@ -107,11 +107,11 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Category` | String | This dashboard: job title classification | Fine-grained subject area or functional assignment. |
 | `Broad_Category` | Categorical | This dashboard: job title classification | High-level clustered subject or role category. |
 | `Position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services). |
-| `First_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Earliest run in which this job posting was observed active. |
-| `Last_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Latest run in which this job posting was observed active. |
+| `First_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Earliest update in which this job posting was observed active. |
+| `Last_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Latest update in which this job posting was observed active. |
 | `Weeks_Observed` | Integer | This dashboard: posting tracking | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
 | `Estimated_Days_Open` | Integer | This dashboard: posting tracking | Estimated days the posting was listed, from its first to its last sighting. How long a listing stays up, not time to fill: filled jobs can stay posted and open jobs get reposted. |
-| `Status` | Categorical | This dashboard: posting tracking | Still Active (listed in the latest run) or Closed / Filled (no longer listed; whether it was filled isn't known). |
+| `Status` | Categorical | This dashboard: posting tracking | Still Active (listed in the latest update) or Closed / Filled (no longer listed; whether it was filled isn't known). |
 | `is_stem` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
 | `is_sped` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Special Education; 0 otherwise. |
 | `is_elementary` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Elementary Education; 0 otherwise. |
@@ -172,7 +172,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Posted_Date` | String / Date | Job posting (college job board) | Original date of vacancy posting as published by the college or university. |
 | `Institution` | String | This dashboard: district and college list | Collegiate institution canonical name. |
 | `Link` | URL | Job posting (college job board) | Direct web URL to the employment vacancy listing. |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run that saw the posting listed (runs are twice a week since 2026-11-17, weekly before). |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update that saw the posting listed (the dashboard updates twice a week since 2026-11-17, weekly before). |
 | `Job_Type` | Categorical | This dashboard: job title classification | Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty (this file holds faculty postings only). |
 | `Category` | String | This dashboard: job title classification | Academic discipline or administrative functional area. |
 
@@ -187,11 +187,11 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Title` | String | Job posting (college job board) | Standardized collegiate job vacancy title. |
 | `Category` | String | This dashboard: job title classification | Academic discipline or functional assignment area. |
 | `Job_Type` | Categorical | This dashboard: job title classification | Collegiate appointment type (Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty). |
-| `First_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Earliest run in which this job posting was observed active. |
-| `Last_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Latest run in which this job posting was observed active. |
+| `First_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Earliest update in which this job posting was observed active. |
+| `Last_Seen_Date` | Date (YYYY-MM-DD) | This dashboard: posting tracking | Latest update in which this job posting was observed active. |
 | `Weeks_Observed` | Integer | This dashboard: posting tracking | Number of distinct calendar weeks (ISO weeks) in which this posting was observed during the spell. A posting absent for more than 21 days that reappears under the same title starts a new spell. |
 | `Estimated_Days_Open` | Integer | This dashboard: posting tracking | Estimated days the posting was listed, from its first to its last sighting. How long a listing stays up, not time to fill: filled jobs can stay posted and open jobs get reposted. |
-| `Status` | Categorical | This dashboard: posting tracking | Still Active (listed in the latest run) or Closed / Filled (no longer listed; whether it was filled isn't known). |
+| `Status` | Categorical | This dashboard: posting tracking | Still Active (listed in the latest update) or Closed / Filled (no longer listed; whether it was filled isn't known). |
 | `is_stem` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Science, Technology, Engineering, or Math; 0 otherwise. |
 | `is_health` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Health Sciences, Nursing, or Medical; 0 otherwise. |
 | `is_cte` | Binary (0/1) | This dashboard: job title classification | Dummy indicator: 1 if position is Career & Technical Education or Trades; 0 otherwise. |
@@ -240,8 +240,8 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `District` | String | This dashboard: district and college list | Canonical public school district or employer location name. |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run. |
-| `n` | Integer | This dashboard: run snapshot | Total count of active job postings observed open for that district in that week. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update. |
+| `n` | Integer | This dashboard: snapshot at each update | Total count of active job postings observed open for that district in that week. |
 | `n_not_marked` | Integer | This dashboard: job classification | Of those, postings classify_work_schedule() (edjobs) does not mark as a substitute, extra-duty (coaching, activities, stipend), part-time, student or temporary/seasonal job. Sources never confirm full-time, so this is "not marked", not "full-time". The Home page's top districts table and its sparklines count these when its switch is on (the default). |
 
 ---
@@ -251,8 +251,8 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `Job_Type` | String | This dashboard: job classification | K-12 position bucket (position in combinedclean.csv). |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run. |
-| `n` | Integer | This dashboard: run snapshot | Count of active job postings of that type observed open on that run. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update. |
+| `n` | Integer | This dashboard: snapshot at each update | Count of active job postings of that type observed open on that update. |
 | `n_not_marked` | Integer | This dashboard: job classification | Of those, postings classify_work_schedule() (edjobs) does not mark as a substitute, extra-duty (coaching, activities, stipend), part-time, student or temporary/seasonal job. Sources never confirm full-time, so this is "not marked", not "full-time". The Home page's job-type tables count these. |
 
 ---
@@ -262,8 +262,8 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `Institution` | String | This dashboard: district and college list | College or university name. |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run. |
-| `n` | Integer | This dashboard: run snapshot | Total count of active job postings observed open for that higher education institution in that week. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update. |
+| `n` | Integer | This dashboard: snapshot at each update | Total count of active job postings observed open for that higher education institution in that week. |
 | `n_not_marked` | Integer | This dashboard: job classification | Of those, postings classify_work_schedule() (edjobs) does not mark as a substitute, extra-duty (coaching, activities, stipend), part-time, student or temporary/seasonal job. Sources never confirm full-time, so this is "not marked", not "full-time". The Home page's top colleges table and its sparklines count these when its switch is on (the default). |
 
 ---
@@ -273,15 +273,15 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `Job_Type` | String | This dashboard: job classification | College job type (classify_he_job_type(), every posting, not only faculty). |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run. |
-| `n` | Integer | This dashboard: run snapshot | Count of active college job postings of that type observed open on that run. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update. |
+| `n` | Integer | This dashboard: snapshot at each update | Count of active college job postings of that type observed open on that update. |
 | `n_not_marked` | Integer | This dashboard: job classification | Of those, postings classify_work_schedule() (edjobs) does not mark as a substitute, extra-duty (coaching, activities, stipend), part-time, student or temporary/seasonal job. Sources never confirm full-time, so this is "not marked", not "full-time". The Home page's job-type tables count these. |
 
 ---
 
 ### J. District Crosswalk (`mt_district_crosswalk.csv`)
 
-Every Montana public district in NCES CCD, tied to the registry district whose job board covers it (or none). Refreshed each run; drives which OPI postings count.
+Every Montana public district in NCES CCD, tied to the registry district whose job board covers it (or none). Refreshed each update; drives which OPI postings count.
 
 | Column | Type | Authority | Definition |
 |---|---|---|---|
@@ -347,51 +347,51 @@ Summary counts, current college postings, and the reference tables behind the pa
 
 ### L. K-12 Current Category Counts (`allnow.csv`)
 
-Teaching postings in the latest run by subject group and district, with statewide totals.
+Teaching postings in the latest update by subject group and district, with statewide totals.
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `Broad_Category` | Categorical | This dashboard: teaching postings | Teaching subject group (Elementary, STEM, Special Education, Humanities, ...). Teaching postings only. |
-| `Sum` | Integer | This dashboard: teaching postings | Teaching postings in that subject group at that district in the latest run. |
+| `Sum` | Integer | This dashboard: teaching postings | Teaching postings in that subject group at that district in the latest update. |
 | `District` | String | This dashboard: teaching postings | District name, or "Total" for the statewide sum of the district rows. |
 
 ### M. K-12 Category Time Series (`allsum.csv`)
 
-Teaching postings by subject group and district in every run, with statewide totals.
+Teaching postings by subject group and district in every update, with statewide totals.
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `Broad_Category` | Categorical | This dashboard: teaching postings | Teaching subject group (Elementary, STEM, Special Education, Humanities, ...). Teaching postings only. |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: teaching postings | Date of the run. |
-| `District` | String | This dashboard: teaching postings | District name, or "Total" for the statewide sum of that run's district rows. |
-| `sum` | Integer | This dashboard: teaching postings | Teaching postings in that subject group at that district in that run (distinct postings). |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: teaching postings | Date of the update. |
+| `District` | String | This dashboard: teaching postings | District name, or "Total" for the statewide sum of that update's district rows. |
+| `sum` | Integer | This dashboard: teaching postings | Teaching postings in that subject group at that district in that update (distinct postings). |
 
 ### N. Higher Ed Current Category Counts (`allnow_he.csv`)
 
-Faculty and adjunct postings in the latest run by discipline, type and college, with statewide totals.
+Faculty and adjunct postings in the latest update by discipline, type and college, with statewide totals.
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `Category` | String | This dashboard: faculty postings | Faculty discipline (Science, Humanities, Health, ...). |
 | `Job_Type` | Categorical | This dashboard: faculty postings | Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty (faculty postings only). |
-| `Sum` | Integer | This dashboard: faculty postings | Faculty postings of that discipline and type at that college in the latest run. |
+| `Sum` | Integer | This dashboard: faculty postings | Faculty postings of that discipline and type at that college in the latest update. |
 | `Institution` | String | This dashboard: faculty postings | College name, or "Total" for the statewide sum of the college rows. |
 
 ### O. Higher Ed Category Time Series (`allsum_he.csv`)
 
-Faculty and adjunct postings by discipline, type and college in every run, with statewide totals.
+Faculty and adjunct postings by discipline, type and college in every update, with statewide totals.
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
 | `Category` | String | This dashboard: faculty postings | Faculty discipline (Science, Humanities, Health, ...). |
-| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: faculty postings | Date of the run. |
-| `Institution` | String | This dashboard: faculty postings | College name, or "Total" for the statewide sum of that run's college rows. |
+| `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: faculty postings | Date of the update. |
+| `Institution` | String | This dashboard: faculty postings | College name, or "Total" for the statewide sum of that update's college rows. |
 | `Job_Type` | Categorical | This dashboard: faculty postings | Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty (faculty postings only). |
-| `sum` | Integer | This dashboard: faculty postings | Faculty postings of that discipline and type at that college in that run. |
+| `sum` | Integer | This dashboard: faculty postings | Faculty postings of that discipline and type at that college in that update. |
 
 ### P. Active Higher Ed Jobs (`hedata.xlsx`)
 
-Every college posting listed in the latest run, all job types, with posted pay, campus placement and pay estimates.
+Every college posting listed in the latest update, all job types, with posted pay, campus placement and pay estimates.
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
@@ -405,7 +405,7 @@ Every college posting listed in the latest run, all job types, with posted pay, 
 | `Pay_Max` | Numeric | Job posting (college job board) | Highest pay amount stated in the posting (equals Pay_Min for a single figure). |
 | `Pay_Unit` | String | Job posting (college job board) | Unit of Pay_Min and Pay_Max: hour, day, month, year, credit hour or stipend. Blank when no pay is stated, or when the stated unit is implausible for the amount. |
 | `Pay_Text` | String | Job posting (college job board) | The posting text the pay was read from, kept so every figure can be checked against its source. |
-| `Archive_Date` | Date (YYYY-MM-DD) | Job posting (college job board) | Date of the run that saw the posting listed (runs are twice a week since 2026-11-17, weekly before). |
+| `Archive_Date` | Date (YYYY-MM-DD) | Job posting (college job board) | Date of the update that saw the posting listed (the dashboard updates twice a week since 2026-11-17, weekly before). |
 | `Campus_Town` | String | Job posting (college job board) | The town the posting is mapped to when it is at a campus or site other than the college's main campus (Place_Basis other_town); blank otherwise. |
 | `Campus_County` | String | Job posting (college job board) | County of Campus_Town. |
 | `Campus_Latitude` | Numeric | Job posting (college job board) | Latitude of Campus_Town (Census place internal point). |
@@ -474,7 +474,7 @@ When the dashboard first found each currently listed posting; shown where the bo
 | :--- | :--- | :--- | :--- |
 | `Segment` | Categorical | This dashboard: posting tracking | K-12 or HE. |
 | `Key` | String | This dashboard: posting tracking | District or college, title and link, lowercased and joined with " / ": the key the dashboard uses to look up a posting it shows. |
-| `First_Seen` | Date (YYYY-MM-DD) | This dashboard: posting tracking | First run that found the posting. The dashboard shows it where the board gives no posted date. |
+| `First_Seen` | Date (YYYY-MM-DD) | This dashboard: posting tracking | First update that found the posting. The dashboard shows it where the board gives no posted date. |
 | `Left_Censored` | Logical | This dashboard: posting tracking | TRUE when the posting was already listed the first time this project read that board, so it may have been up longer (shown as "on the board since at least"). |
 
 ### V. County Public School Pay (`qcew_county_school_pay.csv`)
@@ -495,5 +495,5 @@ When each outside data source was last fetched successfully.
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `Source` | String | This dashboard: run log | An outside data source the dashboard uses (BLS OEWS, Census ACS, Urban IPEDS, ...). |
-| `Retrieved` | Date (YYYY-MM-DD) | This dashboard: run log | Last date that source was fetched successfully; shown on the Data tab. |
+| `Source` | String | This dashboard: update log | An outside data source the dashboard uses (BLS OEWS, Census ACS, Urban IPEDS, ...). |
+| `Retrieved` | Date (YYYY-MM-DD) | This dashboard: update log | Last date that source was fetched successfully; shown on the Data tab. |
