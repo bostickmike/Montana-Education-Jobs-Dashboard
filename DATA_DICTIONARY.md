@@ -173,7 +173,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Institution` | String | This dashboard: district and college list | Collegiate institution canonical name. |
 | `Link` | URL | Job posting (college job board) | Direct web URL to the employment vacancy listing. |
 | `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run that saw the posting listed (runs are twice a week since 2026-11-17, weekly before). |
-| `Job_Type` | Categorical | This dashboard: job title classification | Position appointment category (Instructor/Teacher/Faculty, Adjunct/Part-Time Faculty, Other/Staff). |
+| `Job_Type` | Categorical | This dashboard: job title classification | Instructor/Teacher/Faculty or Adjunct/Part-Time Faculty (this file holds faculty postings only). |
 | `Category` | String | This dashboard: job title classification | Academic discipline or administrative functional area. |
 
 ---
@@ -204,7 +204,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `Name` | String | This dashboard: district and college list | Official legal institution name of the public college or university. |
+| `Name` | String | This dashboard: district and college list | College or university name. |
 | `County` | String | US Census Bureau | County in which the collegiate campus is located. |
 | `Longitude` | Decimal Degrees | This dashboard: district and college list | Geographic longitude coordinate of main campus centroid. |
 | `Latitude` | Decimal Degrees | This dashboard: district and college list | Geographic latitude coordinate of main campus centroid. |
@@ -261,7 +261,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 
 | Column Name | Data Type | Source Authority | Description |
 | :--- | :--- | :--- | :--- |
-| `Institution` | String | This dashboard: district and college list | Canonical public college or university name. |
+| `Institution` | String | This dashboard: district and college list | College or university name. |
 | `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: run snapshot | Date of the run. |
 | `n` | Integer | This dashboard: run snapshot | Total count of active job postings observed open for that higher education institution in that week. |
 | `n_not_marked` | Integer | This dashboard: job classification | Of those, postings classify_work_schedule() (edjobs) does not mark as a substitute, extra-duty (coaching, activities, stipend), part-time, student or temporary/seasonal job. Sources never confirm full-time, so this is "not marked", not "full-time". The Home page's top colleges table and its sparklines count these when its switch is on (the default). |
