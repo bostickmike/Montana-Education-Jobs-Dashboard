@@ -75,6 +75,18 @@ opi_job_phrase <- function(desc, title = rep("", length(desc))) {
 }
 opi_clean_desc <- function(desc) gsub("(?i)reports? to:?\\s*[^.:]{0,40}|video from [^.]{0,40}|coaching positions? (may be |are )?available[^.]*", " ", desc, perl = TRUE)
 
+# The roles OPI's category title gives when the description's job phrase names none ("Rocky Boy Elementary School is
+# inviting ..."). A catch-all category (edjobs FEED_GENERIC_TITLES: "Other", "Administrative - Other") names no job,
+# so when the phrase names a teaching job it adds nothing (St. Labre's "High School Theology Teacher", filed under
+# "Administrative - Other", read as an administrator and failed to match the board's same-named posting, 2026-11-23).
+# A phrase naming only a school keeps it: Rocky Boy's "Administrative - Other" ("Rocky Boy Elementary School is
+# inviting ... to join our administrative team") is an administrator, not the board's 1st grade teacher.
+opi_title_role_tokens <- function(opi_title, phrase) {
+  if (grepl("(?i)\\b(teacher|instructor)s?\\b", phrase, perl = TRUE) &&
+      trimws(opi_title) %in% edjobs::FEED_GENERIC_TITLES) return(character(0))
+  opi_tokens(opi_title, OPI_ROLE_LEXICON)
+}
+
 opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc, generic_para_ok = FALSE) {
   opi_title <- sub("(?i)^cte\\s*[-\u2013]\\s*", "", opi_title, perl = TRUE)
   focus <- if (nzchar(trimws(phrase))) phrase else opi_title
@@ -82,7 +94,7 @@ opi_match_score <- function(opi_title, phrase, opi_full, school, d_title, d_loc,
   # The phrase names only a school or grade ("Rocky Boy Elementary School is
   # inviting ..."): OPI's category title supplies the role.
   if (!length(setdiff(ot, "ELEM"))) {
-    tt <- opi_tokens(opi_title, OPI_ROLE_LEXICON)
+    tt <- opi_title_role_tokens(opi_title, phrase)
     # ...but not its level: a phrase that states a grade band keeps it.
     if (length(opi_tokens(focus, OPI_LEVELS))) tt <- setdiff(tt, "ELEM")
     ot <- union(ot, tt)
@@ -172,7 +184,7 @@ opi_match_conflict <- function(opi_title, phrase, opi_full, d_title, d_loc) {
   if (length(og) && length(dg) && !length(intersect(og, dg))) return(TRUE)
   focus <- if (nzchar(trimws(phrase))) phrase else opi_title
   ot <- opi_tokens(focus, OPI_ROLE_LEXICON)
-  if (!length(setdiff(ot, "ELEM"))) { tt <- opi_tokens(opi_title, OPI_ROLE_LEXICON); if (length(opi_tokens(focus, OPI_LEVELS))) tt <- setdiff(tt, "ELEM"); ot <- union(ot, tt) }
+  if (!length(setdiff(ot, "ELEM"))) { tt <- opi_title_role_tokens(opi_title, phrase); if (length(opi_tokens(focus, OPI_LEVELS))) tt <- setdiff(tt, "ELEM"); ot <- union(ot, tt) }
   of <- opi_tokens(paste(opi_title, phrase, substr(opi_clean_desc(opi_full), 1, 300)), OPI_ROLE_LEXICON); dt <- opi_tokens(d_title, OPI_ROLE_LEXICON)
   ol <- opi_tokens(focus, OPI_LEVELS); dl <- opi_tokens(paste(d_title, d_loc), OPI_LEVELS)
   lo <- union(ol, intersect(ot, "ELEM")); ld <- union(dl, intersect(dt, "ELEM"))
