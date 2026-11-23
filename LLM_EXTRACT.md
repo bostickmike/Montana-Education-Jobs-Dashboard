@@ -1,6 +1,6 @@
 # LLM-extraction shadow pilot
 
-`llm_extract_scraper.R` reads job postings off K-12 district employment
+edjobs `R/llm_extract_scraper.R` reads job postings off K-12 district employment
 pages that publish their openings as **free-text prose with no structural
 marker** a hand-written parser can key on — the "declined: genuinely
 unstructured prose" tail of the full-OPI-coverage work (`memory`:

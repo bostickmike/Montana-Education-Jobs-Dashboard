@@ -1,5 +1,8 @@
 # Montana Port — Research Notes
 
+> **Status (2026-11-23):** written before the port's code (August 2026) and kept as the record of the scoping
+> decisions. Counts and plans here are from then; the current scope is in `README.md` and `METHODS.md`.
+
 Findings from the initial research pass, before any scraper code was written. This
 documents *why* the Montana version's scope and architecture will differ from
 Wyoming's in specific places, so those differences don't look like unexamined
