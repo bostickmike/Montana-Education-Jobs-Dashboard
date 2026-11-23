@@ -1644,6 +1644,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     on; archives keep their own `OPI_Counted`. Drift-issue line now reads "whose board was empty or listed only
     substitute pools". Tests: `test-opi-reconcile.R`.
 
+  * [x] OPI twin rule reads links from every earlier archive, not just the last run's (2026-11-23; branch
+    `opi-twin-links-all-weeks`; `claude-notes/2026-11-23_flagged-deep/README.md`). Fixes the 11-10 rule
+    (`close_opi_lost_twins()`, Mike's), not a new one: new `opi_links_from_archives()` gives each OPI posting its
+    latest board link from any earlier archive (recomputed for 11-03 and 11-10, written before
+    `OPI_Matched_Posting_ID`). Why: the rule merged after the 11-10 data run, so the five postings matched on 11-03
+    whose board twins were gone by 11-10 (checked live 11-10) counted on 11-10, and 11-17, reading only 11-10, had
+    no link for them; four still counted on 11-19: Lolo Music, Whitefish SpEd, Glendive Coach, Stevensville
+    "Other" (Manhattan's had left OPI). Replay on the 11-17 and 11-19 archives: exactly these 4 newly closed, no
+    other change (old rule: 0); ~10 s a run. From the next run on; archives keep their own `OPI_Counted`. Same-
+    subject board postings the matcher never linked (Terry Music, Three Forks SpEd) are untouched (11-22 call).
+    Tests: `test-opi-reconcile.R`.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a

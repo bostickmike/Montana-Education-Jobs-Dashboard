@@ -498,6 +498,29 @@ close_opi_lost_twins <- function(current, previous) {
   current
 }
 
+# The `previous` for close_opi_lost_twins(): every OPI posting's latest board
+# link across all the given archives (oldest first), not just the last run's.
+# With the last run alone, a link was lost whenever one run lacked it: the rule
+# merged after the 2026-11-10 data run, so the five postings matched on 11-03
+# whose board twins were gone by 11-10 counted from 11-10 on (Lolo, Whitefish,
+# Glendive, Stevensville still did on 11-19). Archives written before
+# OPI_Matched_Posting_ID existed get their links recomputed
+# (opi_matched_board_ids(); none before 11-03, which lack OPI_Description).
+# Returns Posting_ID, OPI_Matched_Posting_ID, one row per linked posting.
+opi_links_from_archives <- function(paths, crosswalk, registry) {
+  links <- lapply(paths, function(p) {
+    a <- utils::read.csv(p, colClasses = "character")
+    if (!"Posting_ID" %in% names(a)) return(NULL)
+    if (!"OPI_Matched_Posting_ID" %in% names(a)) a$OPI_Matched_Posting_ID <- opi_matched_board_ids(a, crosswalk, registry)
+    a <- a[!is.na(a$OPI_Matched_Posting_ID) & nzchar(a$OPI_Matched_Posting_ID), c("Posting_ID", "OPI_Matched_Posting_ID"), drop = FALSE]
+    if (nrow(a)) a else NULL
+  })
+  out <- do.call(rbind, c(list(data.frame(Posting_ID = character(0), OPI_Matched_Posting_ID = character(0))), links))
+  out <- out[!duplicated(out$Posting_ID, fromLast = TRUE), , drop = FALSE]   # the latest link wins
+  rownames(out) <- NULL
+  out
+}
+
 # The same rule for one raw archive week (Archivek12_Data/combined_*.csv,
 # identity fields already added by add_k12_posting_identity()): returns
 # Posting_ID, Is_OPI, Counted and District (the label a counted row carries;
