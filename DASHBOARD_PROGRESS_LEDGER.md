@@ -1753,7 +1753,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     writer and edjobs 0.80.0: 15 of 17 districts acknowledged; Bozeman and Great Falls stay listed until a run with
     the matcher fix above. `test-opi-reconcile.R` fails while `Details` are in use and the pin is below 0.80.0
     (0.78.0 ignores them and would acknowledge whole districts). Rebased on
-    11-23's main (pins 0.84.0).
+    11-23's main (pins 0.84.0): replay on the 11-23 archive with 0.84.0 installed lists 12 districts (19 postings),
+    all 12 acknowledged (`claude-notes/2026-11-22_drift-triage/ack_details_replay_latest.log`); suite 3,358 passed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
