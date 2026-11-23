@@ -191,6 +191,28 @@ if (nrow(redrover_df) > 0) {
                             Posting_Source = character(0))
 }
 
+# St. Labre Indian School's Trakstar board (fetch_st_labre_postings(), direct_api_scrapers.R; 2026-11-23): three
+# private Catholic schools (St. Labre, Ashland; St. Charles Mission, Pryor; Pretty Eagle Catholic Academy, Saint
+# Xavier), not in the registry (they have no NCES LEAID) and on the map from other_employers.csv. Each posting's own
+# page gives its posted date and the pay grade.
+st_labre_df <- safe_scrape(
+  "St Labre Indian H S",
+  scrape_fn = function() fetch_st_labre_postings(),
+  expected_cols = c("Title", "Location", "Posted_Date", "Link", "District")
+)
+if (nrow(st_labre_df) > 0) {
+  st_labre_df <- st_labre_df %>%
+    ensure_posted_pay_columns() %>%
+    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
+              location = Location, url = Link, District,
+              Posting_Source = "Trakstar (St. Labre's school board)",
+              Close_Date, Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
+} else {
+  st_labre_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                            location = character(0), url = character(0), District = character(0),
+                            Posting_Source = character(0))
+}
+
 # No registry row has this Platform since 2026-11-22: Lodge Grass is OPIOnly (its pages have read "UPDATED:
 # 4-30-2026" since April while OPI dropped most of the same jobs). The block and parser stay until the
 # district clerk says whether the page is kept current (claude-notes/2026-11-22_lodge-grass/README.md).
@@ -1753,6 +1775,7 @@ schoolspring_df <- schoolspring_df %>% mutate(date_posted = standardize_date(dat
 tylerportico_df <- tylerportico_df %>% mutate(date_posted = standardize_date(date_posted))
 tedk12_df <- tedk12_df %>% mutate(date_posted = standardize_date(date_posted))
 redrover_df <- redrover_df %>% mutate(date_posted = standardize_date(date_posted))
+st_labre_df <- st_labre_df %>% mutate(date_posted = standardize_date(date_posted))
 lodgegrass_df <- lodgegrass_df %>% mutate(date_posted = standardize_date(date_posted))
 broadview_df <- broadview_df %>% mutate(date_posted = standardize_date(date_posted))
 scobey_df <- scobey_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -1805,7 +1828,7 @@ apptegy_df <- apptegy_df
 opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 
 direct_dfs <- list(
-  applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, redrover_df,
+  applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, redrover_df, st_labre_df,
   lodgegrass_df, broadview_df, scobey_df, ekalaka_df, hysham_df, winnett_df, milescity_df, brockton_df, googledoc_df, clinton_df, miami_df, zurich_df, wibaux_df,
   westvalley_df, swanvalley_df,
   cyberschool_df, googlesites_df, finalsite_df, wordpress_df, edlio_df, joomla_df, smithvalley_df, moore_df, boulder_df, jeffersonhigh_df, richey_df,

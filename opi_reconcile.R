@@ -74,6 +74,11 @@ OPI_LEGACY_LOCATIONS <- c(
   "montana city" = "Montana City Elem"
 )
 
+# Employers outside CCD whose own board is read directly (no registry row: no NCES LEAID). OPI's employer name ->
+# the District their board postings carry. Their OPI postings are matched against that board posting by posting,
+# like a registry district's (St. Labre's Trakstar board, fetch_st_labre_postings(), 2026-11-23).
+OPI_NON_CCD_BOARDS <- c("St Labre Indian H S" = "St Labre Indian H S")
+
 # District names reduced to the town/name part: "Bigfork H S", "Bigfork Elem"
 # and "Bigfork School District 38" all -> "bigfork".
 mt_district_stem <- function(x) {
@@ -212,6 +217,10 @@ assign_opi_districts <- function(opi_df, crosswalk, registry) {
                                            ifelse(!is.na(name), "OPI district (not a CCD district)", NA_character_)),
                     OPI_District_Used = name,
                     stringsAsFactors = FALSE)
+  own_board <- is.na(hit) & !is.na(name) & name %in% names(OPI_NON_CCD_BOARDS)
+  out$Registry_District[own_board] <- unname(OPI_NON_CCD_BOARDS[name[own_board]])
+  out$Map_Entity[own_board] <- out$Registry_District[own_board]
+  out$Assign_Method[own_board] <- "OPI district (not a CCD district; its own board is read)"
   out$Assign_Method[legacy] <- paste(out$Assign_Method[legacy], "(from OPI location)")
 
   # No detail-page district: fall back to the town. Conservative on purpose:
@@ -651,6 +660,15 @@ build_other_employer_rows <- function(spec, posting_districts, saipe = NULL, cou
     rename(District = Map_Entity) %>%
     mutate(Data_Coverage = OPI_ONLY_COVERAGE, Job_Link = OPI_STATEWIDE_BOARD_URL)
   out <- as.data.frame(out)
+  # An employer whose own board is read (other_employers.csv Job_Link; St. Labre's three schools, 2026-11-23) links
+  # to that board and is "Full" like a registry district on a structured platform; the rest post only on OPI.
+  if ("Job_Link" %in% names(spec)) {
+    own <- spec$Job_Link[!is.na(spec$Job_Link) & nzchar(trimws(spec$Job_Link))]
+    names(own) <- spec$Map_Entity[!is.na(spec$Job_Link) & nzchar(trimws(spec$Job_Link))]
+    k <- out$District %in% names(own)
+    out$Job_Link[k] <- unname(own[out$District[k]])
+    out$Data_Coverage[k] <- "Full"
+  }
   out$Child_Poverty_Rate <- NA_real_; out$SAIPE_Year <- NA; out$Child_Poverty_Basis <- NA_character_
   out$SAIPE_Population <- NA_real_
   # A geocoder failure keeps last run's rate (`previous`, last week's
