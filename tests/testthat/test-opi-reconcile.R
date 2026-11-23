@@ -400,3 +400,70 @@ test_that("replayed on the real 11-03 and 11-10 archives, the five postings chec
   r_cur_alone <- opi_rule_for_archive(add_id(cur), xw, reg, recompute = TRUE)
   expect_equal(sum(r_cur_alone$Counted) - sum(r_cur$Counted), 5)
 })
+
+test_that("a board listing only substitute pools counts as empty for the 60-day rule", {
+  # Hellgate, 2026-11-19: its board returned "Substitute Teacher" and "Custodial substitutes", so its two June 16
+  # OPI para postings counted, while its page said "NO current positions open ... Para Educators. Updated 9/15/26"
+  # (Mike, 2026-11-23). Same fixture week as the 60-day test, with Hellgate's two pool rows on Cottonwood's board.
+  direct <- read.csv(test_path("fixtures", "direct_postings_2026-10-27_reconcile.csv"), stringsAsFactors = FALSE)
+  cw <- "Cottonwood School District #57"
+  pools <- data.frame(title = c("Substitute Teacher", "Custodial substitutes"), date_posted = NA, location = "Cottonwood",
+                      url = c("https://www.hellgate.k12.mt.us/fs/pages/3391", "https://www.hellgate.k12.mt.us/fs/pages/3392"),
+                      District = cw, Posting_Source = "district site (direct board)", stringsAsFactors = FALSE)
+  f <- reconcile_fixture(direct = rbind(direct, pools))
+  expect_false(any(f$r$opi_keep$District == cw))
+  dropped <- f$r$opi_dropped[f$r$opi_dropped$District == cw, ]
+  expect_equal(nrow(dropped), 2)
+  expect_true(all(dropped$OPI_Drop_Reason == OPI_STALE_POOL_REASON))
+  cw_qc <- f$r$qc[f$r$qc$District == cw, ]
+  expect_equal(nrow(cw_qc), 2)
+  expect_true(all(grepl("only substitute pools", cw_qc$Discrepancy_Type)))
+
+  # One real opening on the board besides the pool: the board says something about openings, so the old OPI
+  # postings count as at any active board (listed as over 60 days old).
+  real <- pools[1, ]; real$title <- "Paraprofessional - Instructional"; real$url <- "https://example.org/para"
+  g <- reconcile_fixture(direct = rbind(direct, pools, real))
+  expect_equal(sum(g$r$opi_keep$District == cw), 2)
+  expect_true(all(grepl("posted over 60 days ago", g$r$qc$Discrepancy_Type[g$r$qc$District == cw])))
+
+  # Recent postings at a pool-only board still count: on 2026-06-20 Cottonwood's (05-31, 06-08) are under 60 days old.
+  h <- reconcile_fixture(direct = rbind(direct, pools), today = as.Date("2026-06-20"))
+  expect_equal(sum(h$r$opi_keep$District == cw), 2)
+  expect_false(any(h$r$opi_dropped$OPI_Drop_Reason %in% OPI_STALE_POOL_REASON))
+})
+
+test_that("pool_only_board_districts() names boards whose every row is a substitute pool", {
+  # Real board titles from the 2026-11-19 archive.
+  d <- data.frame(District = c("Hellgate", "Hellgate", "Elysian", "Seeley Lake", "Bonner", "Missoula", "Missoula"),
+                  title = c("Substitute Teacher", "Custodial substitutes", "Guest Teachers (substitutes)",
+                            "Substitute (All Areas)", "Substitute Teachers, always hiring!", "Substitute Teacher",
+                            "Special Education Teacher"), stringsAsFactors = FALSE)
+  expect_setequal(pool_only_board_districts(d), c("Hellgate", "Elysian", "Seeley Lake", "Bonner"))
+  expect_equal(pool_only_board_districts(d[0, ]), character(0))
+  # A word that only starts with "sub" is not a pool.
+  expect_equal(pool_only_board_districts(data.frame(District = "X", title = "Subject Area Coordinator")), character(0))
+  # A long-term substitute is a real fixed-term opening (Olney-Bissell's board, 2026 archives).
+  expect_equal(pool_only_board_districts(data.frame(District = "Olney-Bissell",
+                                                    title = "Long Term Substitute - Kindergarten")), character(0))
+  # A district whose page sends teaching jobs to OPI is never pool-only (Independent, Elysian: pages read 2026-11-23).
+  ind <- data.frame(District = c("Independent School", "Elysian School District #23"),
+                    title = c("SUBSTITUTES WANTED - POSITIONS AVAILABLE", "Guest Teachers (substitutes)"))
+  expect_equal(pool_only_board_districts(ind), character(0))
+  expect_setequal(pool_only_board_districts(ind, defers_to_opi = character(0)), ind$District)
+})
+
+test_that("the pool-only rule leaves archived weeks alone", {
+  direct <- read.csv(test_path("fixtures", "direct_postings_2026-10-27_reconcile.csv"), stringsAsFactors = FALSE)
+  cw <- "Cottonwood School District #57"
+  pools <- data.frame(title = "Substitute Teacher", date_posted = NA, location = "Cottonwood",
+                      url = "https://www.hellgate.k12.mt.us/fs/pages/3391", District = cw,
+                      Posting_Source = "district site (direct board)", stringsAsFactors = FALSE)
+  # Archive mode (opi_rule_for_archive(): stale_fallback = FALSE): nothing is dropped for being stale.
+  opi <- read.csv(test_path("fixtures", "opi_postings_2026-11-02_reconcile.csv"), stringsAsFactors = FALSE)
+  opi$District <- opi$location
+  r <- reconcile_opi_with_direct(opi, rbind(direct, pools), xw_fixture(),
+                                 read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE),
+                                 today = as.Date("2026-11-02"), stale_fallback = FALSE)
+  expect_false(any(r$opi_dropped$OPI_Drop_Reason %in% OPI_STALE_POOL_REASON))
+  expect_equal(sum(r$opi_keep$District == cw), 2)
+})

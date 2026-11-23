@@ -1628,6 +1628,22 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     often a filled job plus a new one, so nothing is dropped. Not chosen: drop those 4-6 (Mike's "censor, don't link"
     rule), or emailing districts (Mike 11-23: settle from public data). Test: `test-app-reactives.R`.
 
+  * [x] A board listing only substitute pools counts as empty for OPI's 60-day rule (2026-11-23; branch
+    `pool-only-board-empty`; `claude-notes/2026-11-23_flagged-deep/README.md`; Mike's call). An OPI posting over 60
+    days old at a district whose board returned only standing substitute pools (edjobs `STANDING_POOL_PATTERN`:
+    "Substitute Teacher", "Guest Teachers (substitutes)"; a "Long Term Substitute ..." opening is not a pool) and
+    that matches none of them no longer counts (`OPI_Drop_Reason` "stale OPI listing, district board lists only
+    substitute pools"; QC line "Potential ghost posting ..."), as at an empty board. Not at a district whose page
+    sends teaching jobs to OPI (`OPI_BOARD_DEFERS_TO_OPI`, quoted: Independent, Elysian; pages read 11-23). Why:
+    Hellgate's page said "NO para professionals positions ... Updated 09/10/2026" while its two June OPI para
+    postings counted, because its board's two pools made it "active"; Seeley Lake, the 60-day rule's own case
+    (11-02), had gained "Substitute (All Areas)". All seven pool-only boards' pages read 11-23: Hellgate, Marion,
+    Miami, Bonner, Seeley Lake fit; Independent and Elysian point to OPI. Replay of `reconcile_opi_with_direct()`
+    on the 11-19 archive: 187 -> 180 counted OPI postings, exactly these 7 at 5 districts (Hellgate 2, Seeley Lake
+    2, Marion, Miami, Bonner), no other change; on every archive, the drop equals the pool drops. From the next run
+    on; archives keep their own `OPI_Counted`. Drift-issue line now reads "whose board was empty or listed only
+    substitute pools". Tests: `test-opi-reconcile.R`.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] **Later (Mike 11-16, parked): a way for someone sending feedback to get a reply.** An email can't go in the
   report: it becomes a public issue (edit history keeps it). Options: (A) a "want a reply? email ..." line with a
