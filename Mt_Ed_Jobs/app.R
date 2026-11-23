@@ -34,6 +34,32 @@ POSTED_LISTED_NOTE <- paste0(
   "dashboard found the posting (\"First seen\"), or \"On the board since at least\" when the posting was already up ",
   "the first time this dashboard checked that board. ")
 
+# OPI postings dated before the July 1 that began the school year of the run (Archive_Date), from September 1. OPI keeps "Open Until
+# Filled" postings up after they're filled; the dashboard can't tell which, so it still counts them and labels them.
+OPI_SOURCE <- "OPI Jobs for Teachers (statewide)"
+OLD_OPI_LABEL <- " \u00b7 may be filled"
+school_year_start <- function(run_date) {
+  run_date <- as.Date(run_date)
+  yr <- as.integer(format(run_date, "%Y")) - (as.integer(format(run_date, "%m")) < 7)
+  as.Date(paste0(yr, "-07-01"))
+}
+# Only once the school year is under way (runs from September 1): in July and August, spring postings for the
+# coming year are the ones most likely still open (about 70% of OPI rows in the 08-25 and 09-15 archives were dated
+# before July 1).
+is_old_opi_posting <- function(source, date_posted, run_date) {
+  posted <- as.Date(as.character(date_posted), format = "%Y-%m-%d")
+  run_date <- as.Date(as.character(run_date), format = "%Y-%m-%d")
+  start <- school_year_start(run_date)
+  under_way <- !is.na(run_date) & run_date >= start + 62  # July 1 + 62 days = September 1
+  !is.na(source) & source == OPI_SOURCE & !is.na(posted) & under_way & posted < start
+}
+old_opi_note <- function(n) {
+  if (n == 0) return("")
+  paste0(n, " OPI posting", if (n == 1) " is" else "s are", " dated before July 1, before this school year began. ",
+         "OPI still lists them, so they count, but OPI's \"Open Until Filled\" postings often stay up after the job ",
+         "is filled, so their date is marked \"may be filled\".")
+}
+
 
 # Same for higher-ed staff postings: the institution's IPEDS average for the
 # posting's staff category ("IPEDS average for full-time management staff,
@@ -87,7 +113,7 @@ for (col in c("Feed_District", "Also_On_Feed", "Pay_Min", "Pay_Max", "Pay_Unit",
 }
 oews_year <- na.omit(combineddata$Est_Year)[1]
 combineddata <- combineddata %>%
-  validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url",
+  validate_and_pad_schema(c("District", "title", "position", "location", "date_posted", "url", "Archive_Date",
                             "Posting_Source", "Posting_Identity_Method", "Posting_ID"),
                           "combinedclean.csv", on_missing = note_load_issue) %>%
   mutate(`Posted Pay` = format_posted_pay(Pay_Min, Pay_Max, Pay_Unit),
@@ -96,15 +122,20 @@ combineddata <- combineddata %>%
          # extra duty, part-time, student or temporary job (the same call as the pipeline's
          # k12_jobtype_weekly_totals.csv, so the counts agree).
          .Not_Marked = is.na(classify_work_schedule(title, k12_position = position, role_hint = Role_Hint))) %>%
-  select(District, title, position, location, `Posted Pay`, `Typical pay (BLS est.)`, date_posted, url,
+  select(District, title, position, location, `Posted Pay`, `Typical pay (BLS est.)`, date_posted, url, Archive_Date,
          Posting_Source, Posting_Identity_Method, Posting_ID, Also_On_Feed, Pay_Min, Pay_Max, Pay_Unit, Est_Pay, Est_Pay_Unit,
          .Not_Marked) %>%
   # A direct posting OPI also lists (counted once, from our scrape).
   mutate(Posting_Source = ifelse(Also_On_Feed %in% c(TRUE, "TRUE"), paste0(Posting_Source, " \u00b7 also on OPI"), Posting_Source)) %>%
   distinct(Posting_ID, .keep_all = TRUE) %>%
   mutate(District = str_squish(as.character(District))) %>%
+  mutate(.old_opi = is_old_opi_posting(Posting_Source, date_posted, Archive_Date)) %>%
   mutate(date_posted = format_posted_or_listed_date(date_posted)) %>%
   mutate(date_posted = fill_first_seen(date_posted, District, title, url, "K-12", lookup = first_seen_table)) %>%
+  # An OPI posting from before this school year (posted before July 1; flagged above, before the date is
+  # reformatted) still counts, since OPI still lists it, but many such postings are filled and left up
+  # (claude-notes/2026-11-22_opi-spring): say so after its date, so the column sorts as before.
+  mutate(date_posted = ifelse(.old_opi, paste0(date_posted, OLD_OPI_LABEL), date_posted)) %>%
   arrange(District, title) %>%
   mutate(url = paste0('<a href="', url, '" target="_blank">', url, '</a>')) %>%
   rename(Title = title, Position = position, Location = location,
@@ -984,7 +1015,8 @@ ui <- page_navbar(
   nav_menu(
     "K-12", icon = icon("school"),
     # K-12 Jobs tab: the layout and filters are edjobs's jobs_tab_panel(); this is Montana's pay note.
-    jobs_tab_panel("k12", pay_note = list(POSTED_LISTED_NOTE, paste0("Posted Pay is the pay the job posting itself states (hourly, daily, annual, or a season stipend, as written); blank where the posting gives no figure. ",
+    jobs_tab_panel("k12", pay_note = list(POSTED_LISTED_NOTE,
+      old_opi_note(sum(endsWith(combineddata$`Posted / listed`, OLD_OPI_LABEL), na.rm = TRUE)), " ", paste0("Posted Pay is the pay the job posting itself states (hourly, daily, annual, or a season stipend, as written); blank where the posting gives no figure. ",
         "Typical pay (BLS est.) fills in where the posting states none: the Bureau of Labor Statistics' ",
         if (!is.na(oews_year)) paste0("May ", oews_year, " ") else "",
         "median pay for that role in the posting's region (hover for the role and area; OEWS, all employers, not just schools), so treat it as a regional estimate, not this job's offer. "),
