@@ -1,5 +1,9 @@
 # District Scraper Tool Notes & Architecture Plan
 
+> **Status (2026-11-23):** a plan from 2026-10-21 that wasn't built as written: there is no `scripts/district_scraper.R`.
+> The job it describes (find a district's board, identify its platform, write a scraper) is done by the
+> `jobs-dash-scraper` skill (`.claude/skills/jobs-dash-scraper/`). The platform notes below are still useful background.
+
 This document synthesizes findings, platform heuristics, alternate viewing methods, and the architectural design for a dedicated `/district-scraper` command-line and interactive tool for the Montana Education Jobs Dashboard.
 
 ---
