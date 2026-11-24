@@ -1006,55 +1006,6 @@ fetch_geyser_postings <- function(chromote_session, url = "https://www.geyser.k1
 # direct_api_scrapers.R's.
 if (!exists("extract_posted_pay", mode = "function")) source("k12_he_classification.R")
 
-
-# Ekalaka Public Schools (ekalaka.net) -- found in the same follow-up
-# pass, a real Job Postings module (CSS classes prefixed `ss-`, assets
-# served from parentsquare.com -- a new platform for this project, not
-# used by any other district here), a plain httr2 fetch, no chromote
-# needed. Real postings are genuinely tagged, clean HTML: each is an
-# `<a class="ss-row ss-post-page-row">` wrapping a real
-# `<h2 class="ss-post-title">` and a real `<div class="ss-post-date">` --
-# confirmed live 2026-08-23, 7 real postings (an 8th "Certified and
-# Classified Applications" row is the standard-forms link, not a real
-# posting, excluded by exact title match).
-EKALAKA_BOILERPLATE_TITLES <- c("Certified and Classified Applications")
-
-fetch_ekalaka_postings <- function(url = "https://www.ekalaka.net/336413_2") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_ekalaka_postings(resp_body_string(resp), url)
-}
-
-parse_ekalaka_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-
-  page <- rvest::read_html(html_text)
-  rows <- rvest::html_elements(page, "a.ss-post-page-row")
-  if (length(rows) == 0) return(empty)
-
-  titles <- vapply(rows, function(r) {
-    el <- rvest::html_element(r, "h2.ss-post-title")
-    if (is.na(el)) NA_character_ else trimws(rvest::html_text2(el))
-  }, character(1))
-  dates_raw <- vapply(rows, function(r) {
-    el <- rvest::html_element(r, "div.ss-post-date")
-    if (is.na(el)) NA_character_ else trimws(rvest::html_text2(el))
-  }, character(1))
-
-  keep <- !is.na(titles) & nzchar(titles) & !(titles %in% EKALAKA_BOILERPLATE_TITLES)
-  titles <- titles[keep]
-  dates_raw <- dates_raw[keep]
-  if (length(titles) == 0) return(empty)
-
-  posted_date <- suppressWarnings(as.character(as.Date(dates_raw, format = "%B %d, %Y")))
-
-  data.frame(Title = titles, Location = "Ekalaka", Posted_Date = posted_date, Link = url, stringsAsFactors = FALSE)
-}
-
-
 # The Apptegy browser session: every district that needs a real browser
 # (Apptegy pages give a plain request a bot-challenge shell) shares one
 # chromote session, created once in fetch_apptegy_k12_postings() and closed at
