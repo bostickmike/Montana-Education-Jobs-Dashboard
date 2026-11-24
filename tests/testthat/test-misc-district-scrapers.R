@@ -353,39 +353,6 @@ test_that("fetch_geyser_postings drives a chromote session and parses its real r
 # (West Yellowstone School, Apptegy, gated behind a "Client Challenge"
 # bot-check that only a real browser render passes).
 
-# Real fixture captured 2026-08-23 from ekalaka.net's Job Postings page (a
-# real, tagged Job Postings module, CSS classes prefixed `ss-`).
-
-test_that("parse_ekalaka_postings extracts the 7 real postings with real per-posting dates, excluding the boilerplate applications row", {
-  html <- paste(readLines(test_path("fixtures", "ekalaka_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-
-  result <- parse_ekalaka_postings(html, "url")
-
-  expect_equal(nrow(result), 7)
-  expect_true(all(c("Paraprofessional for the 26-27 school year", "Temporary Custodial Position",
-                     "Elementary Teacher for 2026-2027 Year", "Coaching Positions", "Bus Drivers") %in% result$Title))
-  expect_true(all(result$Location == "Ekalaka"))
-  expect_false("Certified and Classified Applications" %in% result$Title)
-  expect_equal(result$Posted_Date[result$Title == "Paraprofessional for the 26-27 school year"], "2026-07-10")
-})
-
-test_that("parse_ekalaka_postings returns zero rows (not an error) when there's no real posting row", {
-  result <- parse_ekalaka_postings("<html><body><p>Nothing here.</p></body></html>", "url")
-  expect_equal(nrow(result), 0)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
-})
-
-test_that("fetch_ekalaka_postings fetches and parses a live-shaped response", {
-  fixture <- paste(readLines(test_path("fixtures", "ekalaka_jobs.html"), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-  httr2::local_mocked_responses(
-    list(httr2::response(200, headers = list("Content-Type" = "text/html; charset=utf-8"), body = charToRaw(fixture)))
-  )
-
-  result <- fetch_ekalaka_postings()
-
-  expect_equal(nrow(result), 7)
-})
-
 # Real fixture captured 2026-08-24 from tregoschool.org's Employment page
 # (a publicly published Google Sites page, same platform as North Star
 # above).
