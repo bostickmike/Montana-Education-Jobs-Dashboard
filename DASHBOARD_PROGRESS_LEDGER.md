@@ -1809,6 +1809,21 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Little Big Horn PDF links with spaces, which `xml2::url_absolute()` turns into NA; edjobs keeps the page's own
     text (as the old parser did), and the 11-24 page is a new fixture. Suite on 0.87.0: 3,393 passed, 0 failed.
 
+  * [x] Three district job pages on the CSS-selector reader (2026-11-24; branch `css-board-k12`; edjobs 0.88.0 pin, no
+    package change; package review step 8, slice 5; `claude-notes/2026-11-24_css-board-k12/README.md`). Swan Valley #3
+    (Weebly), Richey (CyberSchool text) and Rapelje (SmartSites text block) move from one-off parsers to registry
+    `Platform = CSSBoard`, read by edjobs `fetch_css_board_postings()` with their rows in `css_board_rules.csv` keyed by
+    District (the K-12 registry's own `css_board_spec()` reads Job_Link and City). Rapelje's rule is the one measured in
+    `claude-notes/2026-11-24_smartsites-family/`. Each rule has a `Board_CSS` (the container the old parser read inside),
+    so a moved page is a scrape error instead of 0 rows, as for Zurich, Pleasant Valley and Circle (11-22). The three
+    parsers and fetchers, their three Rmd blocks and their tests are gone; one K-12 loop keeps each district's
+    Posting_Source. Checks: old parsers vs the new reader identical on all 6 pages (4 fixtures, 1, 1, 3 and 1 rows, plus
+    Richey 11-21 and Rapelje 11-23 pages saved earlier: 1 and 1); on the 20 K-12 archives since 08-01, 0 of 30 rows from
+    the three boards would change. One live fetch each (the new Rmd block itself): Swan Valley 1, Richey 1, Rapelje 1,
+    old parsers identical on the same HTML; Swan Valley and Richey match the 11-23 archive, Rapelje has dropped
+    Preschool Teacher and Cooks Helper from its page (3 -> 1, a real page change; today's page is a new fixture).
+    Suite on 0.88.0 (rebased on #135): 3,390 passed, 0 failed.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
   "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its

@@ -581,29 +581,39 @@ if (nrow(westvalley_df) > 0) {
                               Posting_Source = character(0))
 }
 
-# Swan Valley School District #3 (found 2026-10-21) -- Weebly careers page,
-# plain httr2 fetch, no chromote needed.
-swanvalley_districts <- registry[registry$Platform == "SwanValleyHeuristic", ]
-swanvalley_results <- lapply(seq_len(nrow(swanvalley_districts)), function(i) {
-  row <- swanvalley_districts[i, ]
+# CSS boards (edjobs fetch_css_board_postings(), package review step 8, 2026-11-24): a district page with no
+# platform behind it, read by its selectors, a row of css_board_rules.csv keyed by District (the college pages use the
+# same file, keyed by Institution). Swan Valley, Richey and Rapelje had their own parsers until 2026-11-24; each keeps
+# the Posting_Source its own block wrote, so its spells don't read the switch as a move to another board.
+cssboard_k12_source_names <- c(
+  "Swan Valley School District #3" = "Swan Valley district site (direct board)",
+  "Richey Public Schools" = "Richey district site (direct board)",
+  "Rapelje School District" = "Rapelje district site (direct board)"
+)
+css_board_rules_k12 <- mt_css_board_rules()
+cssboard_k12_districts <- registry[registry$Platform == "CSSBoard", ]
+cssboard_k12_results <- lapply(seq_len(nrow(cssboard_k12_districts)), function(i) {
+  row <- cssboard_k12_districts[i, ]
   df <- safe_scrape(
     row$District,
-    scrape_fn = function() fetch_swanvalley_postings(row$Job_Link),
+    scrape_fn = function() fetch_css_board_postings(row$Job_Link, row$City,
+                                                    css_board_rule(css_board_rules_k12, row$District)),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$District <- row$District
   df
 })
-swanvalley_df <- bind_rows(swanvalley_results)
-if (nrow(swanvalley_df) > 0) {
-  swanvalley_df <- swanvalley_df %>%
+cssboard_k12_df <- bind_rows(cssboard_k12_results)
+if (nrow(cssboard_k12_df) > 0) {
+  cssboard_k12_df <- cssboard_k12_df %>%
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
-              Posting_Source = "Swan Valley district site (direct board)")
+              Posting_Source = dplyr::coalesce(unname(cssboard_k12_source_names[District]),
+                                               paste0(District, " site (direct board)")))
 } else {
-  swanvalley_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                              location = character(0), url = character(0), District = character(0),
-                              Posting_Source = character(0))
+  cssboard_k12_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
+                                location = character(0), url = character(0), District = character(0),
+                                Posting_Source = character(0))
 }
 
 # CyberSchool (IES) district sites, one routine for the family (edjobs 0.17.0,
@@ -1003,31 +1013,6 @@ if (nrow(jeffersonhigh_df) > 0) {
                                  Posting_Source = character(0))
 }
 
-# Richey Public Schools (found 2026-10-21 via OPI Directory) -- CyberSchool CMS,
-# plain httr2 fetch, no chromote needed.
-richey_districts <- registry[registry$Platform == "RicheyHeuristic", ]
-richey_results <- lapply(seq_len(nrow(richey_districts)), function(i) {
-  row <- richey_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_richey_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-richey_df <- bind_rows(richey_results)
-if (nrow(richey_df) > 0) {
-  richey_df <- richey_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Richey district site (direct board)")
-} else {
-  richey_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                          location = character(0), url = character(0), District = character(0),
-                          Posting_Source = character(0))
-}
-
 # Judith Gap Schools (found 2026-10-21 via OPI Directory) -- CyberSchool CMS,
 # plain httr2 fetch, no chromote needed.
 judithgap_districts <- registry[registry$Platform == "JudithGapHeuristic", ]
@@ -1076,31 +1061,6 @@ if (nrow(whitewater_df) > 0) {
   whitewater_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                               location = character(0), url = character(0), District = character(0),
                               Posting_Source = character(0))
-}
-
-# Rapelje School District (ParentSquare CMS, found 2026-10-21)
-# has no structured ATS -- a plain httr2 fetch, no chromote needed.
-rapelje_districts <- registry[registry$Platform == "RapeljeHeuristic", ]
-rapelje_results <- lapply(seq_len(nrow(rapelje_districts)), function(i) {
-  row <- rapelje_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_rapelje_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-rapelje_df <- bind_rows(rapelje_results)
-if (nrow(rapelje_df) > 0) {
-  rapelje_df <- rapelje_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Rapelje district site (direct board)")
-} else {
-  rapelje_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                           location = character(0), url = character(0), District = character(0),
-                           Posting_Source = character(0))
 }
 
 # Monforton School District #27 (WordPress page, found 2026-10-21)
@@ -1801,7 +1761,7 @@ miami_df <- miami_df %>% mutate(date_posted = standardize_date(date_posted))
 zurich_df <- zurich_df %>% mutate(date_posted = standardize_date(date_posted))
 wibaux_df <- wibaux_df %>% mutate(date_posted = standardize_date(date_posted))
 westvalley_df <- westvalley_df %>% mutate(date_posted = standardize_date(date_posted))
-swanvalley_df <- swanvalley_df %>% mutate(date_posted = standardize_date(date_posted))
+cssboard_k12_df <- cssboard_k12_df %>% mutate(date_posted = standardize_date(date_posted))
 cyberschool_df <- cyberschool_df %>% mutate(date_posted = standardize_date(date_posted))
 googlesites_df <- googlesites_df %>% mutate(date_posted = standardize_date(date_posted))
 finalsite_df <- finalsite_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -1812,10 +1772,8 @@ smithvalley_df <- smithvalley_df %>% mutate(date_posted = standardize_date(date_
 moore_df <- moore_df %>% mutate(date_posted = standardize_date(date_posted))
 boulder_df <- boulder_df %>% mutate(date_posted = standardize_date(date_posted))
 jeffersonhigh_df <- jeffersonhigh_df %>% mutate(date_posted = standardize_date(date_posted))
-richey_df <- richey_df %>% mutate(date_posted = standardize_date(date_posted))
 judithgap_df <- judithgap_df %>% mutate(date_posted = standardize_date(date_posted))
 whitewater_df <- whitewater_df %>% mutate(date_posted = standardize_date(date_posted))
-rapelje_df <- rapelje_df %>% mutate(date_posted = standardize_date(date_posted))
 monforton_df <- monforton_df %>% mutate(date_posted = standardize_date(date_posted))
 grassrange_df <- grassrange_df %>% mutate(date_posted = standardize_date(date_posted))
 heartbutte_df <- heartbutte_df %>% mutate(date_posted = standardize_date(date_posted))
@@ -1838,10 +1796,10 @@ opi_df <- opi_df %>% mutate(date_posted = standardize_date(date_posted))
 direct_dfs <- list(
   applitrack_df, schoolspring_df, tylerportico_df, tedk12_df, redrover_df, st_labre_df,
   lodgegrass_df, broadview_df, scobey_df, smartsites_df, hysham_df, winnett_df, milescity_df, brockton_df, googledoc_df, clinton_df, miami_df, zurich_df, wibaux_df,
-  westvalley_df, swanvalley_df,
-  cyberschool_df, googlesites_df, finalsite_df, wordpress_df, edlio_df, joomla_df, smithvalley_df, moore_df, boulder_df, jeffersonhigh_df, richey_df,
+  westvalley_df, cssboard_k12_df,
+  cyberschool_df, googlesites_df, finalsite_df, wordpress_df, edlio_df, joomla_df, smithvalley_df, moore_df, boulder_df, jeffersonhigh_df,
   judithgap_df, whitewater_df,
-  rapelje_df, monforton_df, grassrange_df,
+  monforton_df, grassrange_df,
   heartbutte_df, eastglacier_df,
   charlo_df, jordan_df, pioneer_df, opheim_df,
   pryor_df, westglacier_df, kila_df,

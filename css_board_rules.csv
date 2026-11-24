@@ -4,3 +4,6 @@
 "Salish Kootenai College","",".uabb-adv-accordion-button-label","","","","","","",""
 "Little Big Horn College","",".field--name-body table a[href$='.pdf']","@title","","","","","",""
 "Fort Peck Community College",".tile.w-dyn-item","h2.heading-h4","a.btn-secondary",".row.can-grow > h3:nth-of-type(2)","","","","",""
+"Swan Valley School District #3","","#wsite-content .wsite-content-title","","","#wsite-content","^(Careers|Employment|Application)","","",""
+"Richey Public Schools","","#maincontent .cs-html-widget strong, #maincontent .cs-html-widget h1, #maincontent .cs-html-widget h2, #maincontent .cs-html-widget h3, #maincontent .cs-html-widget h4","","","#maincontent .cs-html-widget","^(Current Job Posting|Current Job Openings?|Login|Career Opportunities|Posted On)$|^We are committed","","89",""
+"Rapelje School District","",".ss-editor-content span[style*='18px']","","",".ss-editor-content","apply|contact|opportunity|equal","","",""

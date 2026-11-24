@@ -452,39 +452,6 @@ parse_westvalley_postings <- function(html_text, url) {
   data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
 }
 
-# Swan Valley School District #3 (swanvalleyelementary.org, found 2026-10-21) --
-# Missoula County rural school in Condon running Weebly CMS (same as Scobey).
-# Positions are published under /careers.html with h2.wsite-content-title.
-# Confirmed live 2026-10-21: 1 active posting (Instructional paraprofessional,
-# or a candidate interested in a part-time teaching/part-time paraprofessional role).
-# Plain httr2 fetch, no chromote needed.
-fetch_swanvalley_postings <- function(url = "https://www.swanvalleyelementary.org/careers.html") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_swanvalley_postings(resp_body_string(resp), url)
-}
-
-parse_swanvalley_postings <- function(html_text, url) {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                       Posted_Date = character(0), Link = character(0),
-                       stringsAsFactors = FALSE)
-  page <- rvest::read_html(html_text)
-  content <- rvest::html_element(page, "#wsite-content")
-  if (is.null(content)) return(empty)
-
-  h2s <- rvest::html_elements(content, "h2.wsite-content-title, .wsite-content-title")
-  if (length(h2s) == 0) return(empty)
-
-  titles <- trimws(rvest::html_text(h2s))
-  titles <- titles[nzchar(titles)]
-  titles <- titles[!grepl("^(Careers|Employment|Application)", titles, ignore.case = TRUE)]
-  if (length(titles) == 0) return(empty)
-
-  data.frame(Title = titles, Location = "Condon", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
-}
-
-
 # Smith Valley School District #8 (smithvalleyschool.org, found 2026-10-21 via OPI Directory) --
 # Flathead County K-8 district west of Kalispell on Published Google Sites.
 # Openings sit under "Positions Available:" in h2 elements.
@@ -1198,45 +1165,6 @@ parse_jeffersonhigh_postings <- function(html_text, url) {
 }
 
 
-# Richey Public Schools (Dawson County) -- CyberSchool CMS,
-# plain httr2 fetch, no chromote needed. Active positions listed
-# in #maincontent .cs-html-widget strong / headings.
-fetch_richey_postings <- function(url = "https://www.richey.k12.mt.us/currentopenings") {
-  resp <- request(url) %>%
-    req_user_agent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36") %>%
-    perform_with_retry()
-  parse_richey_postings(resp_body_string(resp), url)
-}
-
-parse_richey_postings <- function(html_text, url = "https://www.richey.k12.mt.us/currentopenings") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  page <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(page)) return(empty)
-  elems <- rvest::html_elements(page, "#maincontent .cs-html-widget strong, #maincontent .cs-html-widget h1, #maincontent .cs-html-widget h2, #maincontent .cs-html-widget h3, #maincontent .cs-html-widget h4")
-  if (length(elems) == 0) return(empty)
-
-  raw_titles <- rvest::html_text(elems, trim = TRUE)
-  raw_titles <- gsub("\u00a0", " ", raw_titles)
-  raw_titles <- trimws(raw_titles)
-  raw_titles <- raw_titles[nzchar(raw_titles)]
-
-  exclude_patterns <- "^Current Job Posting$|^Current Job Openings?$|^Login$|^Career Opportunities$|^We are committed|^Posted On$"
-  titles <- raw_titles[!grepl(exclude_patterns, raw_titles, ignore.case = TRUE)]
-  titles <- titles[nchar(titles) < 90]
-  titles <- unique(titles)
-  if (length(titles) == 0) return(empty)
-
-  data.frame(
-    Title = titles,
-    Location = "Richey",
-    Posted_Date = NA_character_,
-    Link = url,
-    stringsAsFactors = FALSE
-  )
-}
-
 # ---------------------------------------------------------------------------
 # Judith Gap Schools (CyberSchool CMS AJAX Jobs Widget)
 # ---------------------------------------------------------------------------
@@ -1359,44 +1287,6 @@ parse_whitewater_postings <- function(html_text, url = "https://whitewater.k12.m
 
   if (length(rows) == 0) return(empty)
   dplyr::bind_rows(rows)
-}
-
-
-# ---------------------------------------------------------------------------
-# Rapelje School District (ParentSquare CMS)
-# ---------------------------------------------------------------------------
-fetch_rapelje_postings <- function(url = "https://www.rapelje.k12.mt.us/job-listings") {
-  resp <- request(url) %>%
-    req_headers("User-Agent" = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36") %>%
-    perform_with_retry()
-  parse_rapelje_postings(resp_body_string(resp), url = url)
-}
-
-parse_rapelje_postings <- function(html_text, url = "https://www.rapelje.k12.mt.us/job-listings") {
-  empty <- data.frame(Title = character(0), Location = character(0),
-                      Posted_Date = character(0), Link = character(0),
-                      stringsAsFactors = FALSE)
-  if (is.null(html_text) || !nzchar(trimws(html_text))) return(empty)
-
-  doc <- tryCatch(rvest::read_html(html_text), error = function(e) NULL)
-  if (is.null(doc)) return(empty)
-
-  spans <- rvest::html_elements(doc, "span[style*='18px']")
-  if (length(spans) == 0) return(empty)
-
-  roles <- trimws(gsub("[\u00a0\r\n\t ]+", " ", rvest::html_text(spans)))
-  roles <- roles[nzchar(roles)]
-  roles <- roles[!grepl("apply|contact|opportunity|equal", roles, ignore.case = TRUE)]
-  roles <- unique(roles)
-  if (length(roles) == 0) return(empty)
-
-  data.frame(
-    Title = roles,
-    Location = "Rapelje",
-    Posted_Date = NA_character_,
-    Link = url,
-    stringsAsFactors = FALSE
-  )
 }
 
 

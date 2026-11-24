@@ -71,9 +71,15 @@ test_that("every real registered K-12 row resolves to a real scraper function, c
     }
   }
   # (Hinsdale was the example here until it moved to the CyberSchool routine, 2026-11-14.)
+  # (Richey was the example after that, until it moved to the CSS-board reader, 2026-11-24.)
+  zurich <- resolve_scraper_call("Zurich Elementary School District #17")
+  expect_equal(zurich[c("fn", "session")], list(fn = "fetch_zurich_postings", session = FALSE))
+  expect_equal(zurich$args, list(k12$Job_Link[k12$District == "Zurich Elementary School District #17"]))
+  # CSSBoard (Richey since 2026-11-24): the page, the City and the District's rule.
   richey <- resolve_scraper_call("Richey Public Schools")
-  expect_equal(richey[c("fn", "session")], list(fn = "fetch_richey_postings", session = FALSE))
-  expect_equal(richey$args, list(k12$Job_Link[k12$District == "Richey Public Schools"]))
+  expect_equal(richey[c("fn", "session")], list(fn = "fetch_css_board_postings", session = FALSE))
+  expect_equal(richey$args[1:2], list(k12$Job_Link[k12$District == "Richey Public Schools"], "Richey"))
+  expect_equal(richey$args[[3]]$Source, "Richey Public Schools")
   tyler <- k12[k12$Platform == "TylerPortico", ][1, ]
   expect_equal(resolve_scraper_call(tyler$District)$args, list(tyler$Platform_Key, tyler$District))
   expect_equal(resolve_scraper_call(k12$District[k12$Platform == "BroadviewHeuristic"][1])$args, list())
@@ -143,9 +149,10 @@ test_that("an HTTP scraper's issue keeps the capture as context and asks for a r
   ev <- gather_autofix_evidence(call, row$name, "Route Bus Drivers\nDaycare Manager", repo_root = here::here())
   expect_false(ev$inner_text)
   expect_equal(ev$diff, character(0))
-  expect_true(length(ev$fixtures) > 0)
+  # Its own test block names it, so only its fixture is listed, not every CSS board's.
+  expect_equal(ev$fixtures, "richey_cscms_2026-10-21.html")
   body <- paste(build_autofix_issue_body(row, call, evidence = ev), collapse = "\n")
-  expect_match(body, "`fetch_richey_postings()`", fixed = TRUE)
+  expect_match(body, "`fetch_css_board_postings()`", fixed = TRUE)
   expect_match(body, "1. Fetch the live page", fixed = TRUE)
   expect_no_match(body, "Diff: newest text fixture", fixed = TRUE)
   expect_no_match(body, "rendered this page in CI", fixed = TRUE)
