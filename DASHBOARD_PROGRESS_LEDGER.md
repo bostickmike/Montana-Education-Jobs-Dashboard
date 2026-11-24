@@ -1833,6 +1833,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     with the fixture named in the block; no assertion changed. A new `test-drift-check.R` test checks each source's
     evidence names exactly its own fixtures (Little Big Horn and Rapelje two each, dated first); with main's
     `test-css-boards.R` it fails for 7 of the 8. Suite on 0.88.0: 3,415 passed, 0 failed.
+  * [x] edjobs pinned at 0.89.0 (2026-11-24; branch `pin-edjobs-0.89.0`; bostickmike/edjobs#94). A platform's
+    `scraper_spec()` can name its parser (`parse_fn`); the auto-fix evidence finds a source's fixtures from the tests of
+    the fetch function and that parser. Before, the parser was guessed as the fetch function's `parse_*` twin, which for
+    CSS boards (`fetch_css_board_postings()` -> `parse_css_board()`) named no function. Named in edjobs for CSS boards,
+    AppliTrack, SchoolSpring, Red Rover, NEOGOV and Trakstar. Also syncs the vendored `jobs-dash-scraper` skill (CSS-board
+    rules; SmartSites is an edjobs family). Suite on 0.89.0: 3,415 passed, 0 failed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
