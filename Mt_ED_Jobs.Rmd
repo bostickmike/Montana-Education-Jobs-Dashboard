@@ -2403,38 +2403,24 @@ if (nrow(interfolio_df) > 0) {
   interfolio_df$Unit <- NULL
 }
 
-# Carroll College has no structured ATS -- CarrollCollegeHeuristic scrapes
-# its accordion-widget positions page directly (misc_college_scrapers.R),
-# same heuristic-source caveat as Miles/Dawson CC above.
-carroll_institutions <- he_registry[he_registry$Platform == "CarrollCollegeHeuristic", ]
-carroll_results <- lapply(seq_len(nrow(carroll_institutions)), function(i) {
-  row <- carroll_institutions[i, ]
+# Carroll College, Rocky Mountain College, Salish Kootenai College, Little Big Horn College and Fort Peck
+# Community College have no structured ATS: each job page is read by CSS selectors (edjobs
+# fetch_css_board_postings(), package review step 8), its selectors a row of css_board_rules.csv keyed by
+# Institution. A heuristic source, with the same caveats as Miles/Dawson CC above.
+css_board_rules_he <- mt_css_board_rules()
+cssboard_institutions <- he_registry[he_registry$Platform == "CSSBoard", ]
+cssboard_results <- lapply(seq_len(nrow(cssboard_institutions)), function(i) {
+  row <- cssboard_institutions[i, ]
   df <- safe_scrape(
     row$Institution,
-    scrape_fn = function() fetch_carroll_college_postings(row$Feed_URL),
+    scrape_fn = function() fetch_css_board_postings(row$Feed_URL, row$Town,
+                                                    css_board_rule(css_board_rules_he, row$Institution)),
     expected_cols = c("Title", "Location", "Posted_Date", "Link")
   )
   if (nrow(df) > 0) df$Institution <- row$Institution
   df
 })
-carroll_df <- bind_rows(carroll_results)
-
-# Rocky Mountain College also has no structured ATS -- its own
-# WordPress/Elementor employment page is heuristic-scraped the same way
-# (misc_college_scrapers.R), though its markup is cleaner than the other
-# heuristic sources (real per-posting detail URLs and department terms).
-rockymtn_institutions <- he_registry[he_registry$Platform == "RockyMountainCollegeHeuristic", ]
-rockymtn_results <- lapply(seq_len(nrow(rockymtn_institutions)), function(i) {
-  row <- rockymtn_institutions[i, ]
-  df <- safe_scrape(
-    row$Institution,
-    scrape_fn = function() fetch_rocky_mountain_college_postings(row$Feed_URL),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$Institution <- row$Institution
-  df
-})
-rockymtn_df <- bind_rows(rockymtn_results)
+cssboard_df <- bind_rows(cssboard_results)
 
 # University of Providence runs ADP Workforce Now -- Feed_URL packs
 # "cid:ccId" since the platform's job-requisitions API needs both to
@@ -2452,49 +2438,6 @@ adp_results <- lapply(seq_len(nrow(adp_institutions)), function(i) {
   df
 })
 adp_df <- bind_rows(adp_results)
-
-# Salish Kootenai College, Little Big Horn College, and Fort Peck
-# Community College also have no structured ATS -- each gets its own
-# heuristic scraper in misc_college_scrapers.R tailored to its real page
-# structure, same caveats as the other heuristic sources above.
-skc_institutions <- he_registry[he_registry$Platform == "SKCHeuristic", ]
-skc_results <- lapply(seq_len(nrow(skc_institutions)), function(i) {
-  row <- skc_institutions[i, ]
-  df <- safe_scrape(
-    row$Institution,
-    scrape_fn = function() fetch_skc_postings(row$Feed_URL),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$Institution <- row$Institution
-  df
-})
-skc_df <- bind_rows(skc_results)
-
-lbhc_institutions <- he_registry[he_registry$Platform == "LBHCHeuristic", ]
-lbhc_results <- lapply(seq_len(nrow(lbhc_institutions)), function(i) {
-  row <- lbhc_institutions[i, ]
-  df <- safe_scrape(
-    row$Institution,
-    scrape_fn = function() fetch_lbhc_postings(row$Feed_URL),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$Institution <- row$Institution
-  df
-})
-lbhc_df <- bind_rows(lbhc_results)
-
-fpcc_institutions <- he_registry[he_registry$Platform == "FPCCHeuristic", ]
-fpcc_results <- lapply(seq_len(nrow(fpcc_institutions)), function(i) {
-  row <- fpcc_institutions[i, ]
-  df <- safe_scrape(
-    row$Institution,
-    scrape_fn = function() fetch_fpcc_postings(row$Feed_URL),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$Institution <- row$Institution
-  df
-})
-fpcc_df <- bind_rows(fpcc_results)
 
 # Stone Child College runs Apptegy, the same browser-requiring CMS as
 # misc_district_scrapers.R's Wolf Point/Plentywood -- own chromote session
@@ -2558,8 +2501,8 @@ standardize_he_df_date <- function(df) {
 }
 
 he_dfs <- list(peopleadmin_df, jazzhr_df, paycom_df, milescc_df, dawsoncc_df,
-               isolvedhire_df, neogov_df, interfolio_df, carroll_df, rockymtn_df, adp_df,
-               skc_df, lbhc_df, fpcc_df, stonechild_df, ancollege_df, cdkc_df)
+               isolvedhire_df, neogov_df, interfolio_df, cssboard_df, adp_df,
+               stonechild_df, ancollege_df, cdkc_df)
 he_dfs <- lapply(he_dfs, standardize_he_df_date)
 hedata_raw <- bind_rows(he_dfs)
 ```

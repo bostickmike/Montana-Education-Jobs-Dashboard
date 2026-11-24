@@ -25,11 +25,9 @@ MT_SCRAPER_SPECS <- scraper_specs(
   Paycom       = scraper_spec("fetch_paycom_postings",       c("Feed_URL", "Institution")),
   MilesCCHeuristic   = scraper_spec("fetch_miles_cc_postings",   "Feed_URL"),
   DawsonCCHeuristic  = scraper_spec("fetch_dawson_cc_postings",  "Feed_URL"),
-  CarrollCollegeHeuristic = scraper_spec("fetch_carroll_college_postings", "Feed_URL"),
-  RockyMountainCollegeHeuristic = scraper_spec("fetch_rocky_mountain_college_postings", "Feed_URL"),
-  SKCHeuristic       = scraper_spec("fetch_skc_postings",        "Feed_URL"),
-  LBHCHeuristic      = scraper_spec("fetch_lbhc_postings",       "Feed_URL"),
-  FPCCHeuristic      = scraper_spec("fetch_fpcc_postings",       "Feed_URL"),
+  # College job pages read by CSS selectors (edjobs 0.87.0): each one's selectors are its row of
+  # css_board_rules.csv, keyed by Institution.
+  CSSBoard           = css_board_spec(function() mt_css_board_rules(), "Feed_URL", "Town", "Institution"),
   AnCollegeHeuristic = scraper_spec("fetch_ancollege_postings",  "Feed_URL"),
   CDKCHeuristic      = scraper_spec("fetch_cdkc_postings",       "Feed_URL")
 )
@@ -42,6 +40,11 @@ MT_APPTEGY_MAP_SPEC <- scraper_spec(APPTEGY_DISPATCH_FN, "District", session = T
 # The registries sit at the repository root; tests run from tests/testthat.
 mt_registry <- function(file) function() {
   utils::read.csv(if (file.exists(file)) file else here::here(file), stringsAsFactors = FALSE)
+}
+# The CSS-board rules (css_board_rules.csv, edjobs css_board_rules()), read when a source is looked up.
+mt_css_board_rules <- function() {
+  file <- "css_board_rules.csv"
+  css_board_rules(if (file.exists(file)) file else here::here(file))
 }
 
 set_state_config(state_config(
