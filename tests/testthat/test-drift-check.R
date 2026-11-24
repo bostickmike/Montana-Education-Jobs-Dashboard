@@ -158,6 +158,30 @@ test_that("an HTTP scraper's issue keeps the capture as context and asks for a r
   expect_no_match(body, "rendered this page in CI", fixed = TRUE)
 })
 
+test_that("each CSS board's auto-fix evidence names exactly its own fixtures, newest first", {
+  # The blocks in test-css-boards.R are titled "fetch_css_board_postings: <registry name>" and name their fixture
+  # with test_path(). Before 2026-11-24 the colleges read theirs through a helper and the districts' blocks said
+  # "parse_css_board:", so every one of these got Richey's fixture.
+  expected <- list(
+    "Carroll College" = "carroll_college_positions.html",
+    "Rocky Mountain College" = "rocky_mountain_college_employment.html",
+    "Salish Kootenai College" = "skc_employment.html",
+    "Little Big Horn College" = c("lbhc_job_opportunities_2026-11-24.html", "lbhc_job_opportunities.html"),
+    "Fort Peck Community College" = "fpcc_employment.html",
+    "Swan Valley School District #3" = "swanvalley_careers_2026-10-21.html",
+    "Richey Public Schools" = "richey_cscms_2026-10-21.html",
+    "Rapelje School District" = c("rapelje_parentsquare_2026-11-23.html", "rapelje_parentsquare_2026-10-21.html"))
+  he <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
+  k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  expect_setequal(names(expected), c(he$Institution[he$Platform == "CSSBoard"], k12$District[k12$Platform == "CSSBoard"]))
+  for (s in names(expected)) {
+    ev <- gather_autofix_evidence(resolve_scraper_call(s), s, NA_character_, repo_root = here::here())
+    expect_equal(ev$fetch_fn, "fetch_css_board_postings", info = s)
+    expect_equal(ev$fixtures, expected[[s]], info = s)
+    expect_true(all(file.exists(test_path("fixtures", ev$fixtures))), info = s)
+  }
+})
+
 test_that("Lone Rock's real page and history: inconclusive text, a substitute-only LLM read, no auto-fix", {
   # Page text rendered 2026-11-10 (scripts/repro_scraper.R); the two real
   # openings were gone, the standing substitute list stayed.
