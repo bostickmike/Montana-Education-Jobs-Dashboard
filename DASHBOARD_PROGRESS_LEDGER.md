@@ -1840,6 +1840,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     run missing and no label changed; St. Labre's board new (36 rows); Rapelje and Fair-Mont-Egan down (3 to 1 each,
     real page changes). The only failures were the manifest pin on the scratch copy. Suite on 0.93.0: 3,552 passed, 0
     failed.
+  * [x] Higher-ed boards read by edjobs `scrape_registry_platforms()`; edjobs pinned at 0.94.0 (2026-11-24; branch
+    `he-registry-stage`; bostickmike/edjobs#100; review step 5 slice B). The higher-ed chunk's 12 per-platform blocks
+    become one call over `MT_HE_PLATFORMS` (`state_config.R`), keeping each scraper's own columns (`shape = "raw"`):
+    JazzHR's parser still sets its own Institution (Montana Tech, Highlands), NEOGOV's shared board is assigned by its
+    `after` hook, Interfolio (UM faculty) keeps its own block. ADP and isolved Hire get specs (ids packed in Feed_URL),
+    so both now have a live check and repro script. `test-drift-check.R`'s gap list is SharesBoard only.
+    Stub replay (`claude-notes/2026-11-24_step5-measure/replay/`): 13 of 13 frames and `hedata_raw` identical. Full
+    rehearsal on the tagged 0.94.0: rebuild parity 11 of 11 files; higher-ed rows 396 vs 393 on 11-23, by institution
+    (largest: University of Montana +3, Salish Kootenai +2, Aaniiih Nakoda -2, live changes); 43 of 1,221 board postings
+    flagged stale. One failure, the pre-run boot-smoke test beside the render (K-12 plot not drawn in time, the known
+    load flake; passed post-run, 3,583/0). Suite: 3,583 passed, 0 failed.
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
