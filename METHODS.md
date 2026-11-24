@@ -40,12 +40,16 @@ Many districts list the same teaching job on their own board and on OPI's. The d
    it: applications go through the district.
 4. When the district's board lists nothing, or only standing substitute pools, OPI postings more than 60 days old
    don't count (OPI keeps ads up after jobs are filled). Newer ones do. A district whose site has no job board
-   at all (Ulm, Lodge Grass, Potomac, Forsyth) is not "empty": all its OPI postings count.
+   at all (Ulm, Lodge Grass, Potomac, Forsyth) is not "empty": all its OPI postings count. The same 60-day limit
+   applies to an OPI posting missing from a board checked to list every opening the employer has (so far only St.
+   Labre's).
 5. OPI lists some jobs twice (under an elementary and a high-school district, say); a repeat with the same district
    and description counts once.
 6. OPI postings at districts the dashboard doesn't read count under that district and put it on the map, marked
    "Postings via OPI's statewide board". Co-ops, private and tribal schools and other employers outside the public
-   district list appear in the Jobs table only.
+   district list appear in the Jobs table only. St. Labre's three Catholic schools (St. Labre in Ashland, St. Charles
+   Mission in Pryor, Pretty Eagle Catholic Academy in Saint Xavier) are read from their own shared board, and St.
+   Labre's OPI postings are compared with it as in 1.
 
 From September 1, OPI postings dated before the July 1 that began the school year are marked "may be filled" in
 the Jobs table: OPI still lists them, but they are the likeliest to be filled. They still count. OPI is a statewide board, not a census of vacancies:

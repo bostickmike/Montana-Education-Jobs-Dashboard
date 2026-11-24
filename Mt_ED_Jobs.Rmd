@@ -206,7 +206,8 @@ if (nrow(st_labre_df) > 0) {
     transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
               location = Location, url = Link, District,
               Posting_Source = "Trakstar (St. Labre's school board)",
-              Close_Date, Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
+              Close_Date = if ("Close_Date" %in% names(.)) Close_Date else NA_character_,
+              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
 } else {
   st_labre_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
                             location = character(0), url = character(0), District = character(0),
