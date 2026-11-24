@@ -1794,6 +1794,30 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     old and new blocks give the same 3 rows as the 11-23 archive.
     Suite on 0.88.0 (rebased on the CSS-board merge): 3,385 passed, 0 failed. Rapelje and Pioneer (free text, no
     widget) are not moved.
+  * [x] Stale board ads flagged, not counted; edjobs pinned at 0.90.0 (2026-11-24; branch `stale-board-rule`;
+    bostickmike/edjobs#95; measured in `claude-notes/2026-11-24_stale-ats-ads/README.md`, built in
+    `claude-notes/2026-11-24_stale-rule/`). Mike: chose the recommendation (option C, "V1"), for scaling to more states
+    and the most complete and accurate data. A board posting whose posted date, or a stated closing date that parses,
+    is before the July 1 that began the previous school year is flagged (`Stale_Reason`) and not counted, except
+    standing pools and ongoing roles (bus, para/aide, custodial/maintenance, food service, athletic coaches; an
+    instructional coach is judged by its dates). edjobs `flag_stale_board_postings()` under `state_config(stale_rule = )`
+    (package default). Flagged before `reconcile_opi_with_direct()` (new `matchable`: OPI postings never match a
+    flagged ad; flagged rows still make the board non-empty, non-pool-only) and kept in the set
+    `close_opi_lost_twins()` checks; `opi_links_from_archives()` drops links to flagged ads. Raw archive keeps them;
+    `combined`, `read_counted_archive_week()` and so the rebuild leave them out; spells keep them (no false endings).
+    Forward-only: archives before the rule have no column and keep their counts (METHODS.md "Old board ads").
+    Replay of the 11-23 archive: 43 of 1,164 board rows flagged (2 Libby templates already not counted), 5 OPI rows
+    newly counted (Lame Deer Principal and Math, Poplar K-1 and 5-8 Counselor, Sidney SpEd), 0 lost; counted rows
+    1,354 -> 1,318. Full rehearsal (11-24, on the
+    branch build of 0.90.0): render, spells, sanity, schema, data quality, drift checks, OPI cross-check, frozen boards
+    and rebuild parity passed; the run flagged 43 of 1,202 board postings (Lame Deer 20, Poplar 8, Laurel 4), all
+    "posted before the previous school year"; `combinedclean.csv` 1,335 -> 1,309 rows; the 5 OPI postings count (6
+    rows with Poplar's HS counselor); 0 counted board rows the rule would flag; the 41 spells of flagged ads are all
+    "still listed", none in durations. Suites 3,424 (pre) and 3,428 (post) passed with 2 failures each, both
+    `test-app-no-local-copies.R`'s manifest pin (the copy was taken before the manifest was pinned); the manifest step
+    failed on the disk-installed edjobs. With the pinned manifest and the v0.90.0 tag installed from GitHub, that file
+    passed 6 of 6, `writeManifest()` ran clean, and the run expectations passed (`stale_board_ads_not_counted` 0,
+    `opi_released_from_stale_ads` 6).
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
@@ -1841,6 +1865,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     rules; SmartSites is an edjobs family). Suite on 0.89.0: 3,415 passed, 0 failed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
+  step down once and the legacy `job_duration_spells.csv` shows the flagged teaching ads as "Closed / Filled" at the
+  rule's start. Open choice for Mike: restate the history from the raw archives with the rule (each week's own cutoff).
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
   "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
   7-12 music job 11-03..11-10 while the board scrape was empty). Check the Wayback history (k12.mt.us target) for a

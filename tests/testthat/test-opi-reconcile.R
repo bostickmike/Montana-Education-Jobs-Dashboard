@@ -572,3 +572,49 @@ test_that("an employer with its own board links to it on the map and is Full; th
   jude <- rows[rows$District == "St Jude Thaddeus School", ]
   expect_equal(c(jude$Job_Link, jude$Data_Coverage), c(OPI_STATEWIDE_BOARD_URL, OPI_ONLY_COVERAGE))
 })
+
+# Stale board ads (edjobs flag_stale_board_postings(), 2026-11-24; claude-notes/2026-11-24_stale-ats-ads/README.md).
+test_that("on the real 11-23 archive, flagged stale board ads release exactly the five OPI postings matched to them", {
+  xw <- read.csv(here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  a <- read.csv(here::here("Archivek12_Data", "combined_2026-11-23.csv"), colClasses = "character")
+  is_opi <- grepl("^OPI ", a$Posting_Source) | is_opi_statewide_posting(a$url)
+  fl <- edjobs::flag_stale_board_postings(a, as.Date("2026-11-23"), board = !is_opi)
+  expect_equal(sum(edjobs::is_stale_flagged(fl$Stale_Reason)), 43)
+  expect_false(any(edjobs::is_stale_flagged(fl$Stale_Reason[is_opi])))
+  base <- opi_rule_for_archive(a, xw, reg, recompute = TRUE)
+  alt <- opi_rule_for_archive(fl, xw, reg, recompute = TRUE)
+  gained <- is_opi & !base$Counted & alt$Counted
+  expect_equal(sum(is_opi & base$Counted & !alt$Counted), 0)
+  expect_setequal(paste(alt$District[gained], a$title[gained]),
+                  c("Lame Deer Public Schools Administrative - Principal", "Lame Deer Public Schools Mathematics",
+                    "Poplar Public Schools Elementary Curriculum", "Poplar Public Schools School Counseling",
+                    "Sidney Public Schools Special Education"))
+  # A flagged ad still counts as the board having listed postings: Lame Deer is neither empty nor pool-only.
+  expect_true("Lame Deer Public Schools" %in% alt$District[!is_opi])
+  r <- reconcile_opi_with_direct(a[is_opi, ][0, ], fl[!is_opi, ], xw, reg)
+  expect_true(all(r$direct_df$Also_On_OPI == FALSE))
+})
+
+test_that("a stale ad is read back as not counted, kept for the spells, and its old OPI links are dropped", {
+  xw <- read.csv(here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  a <- read.csv(here::here("Archivek12_Data", "combined_2026-11-23.csv"), colClasses = "character", check.names = FALSE)
+  is_opi <- grepl("^OPI ", a$Posting_Source) | is_opi_statewide_posting(a$url)
+  fl <- edjobs::flag_stale_board_postings(a, as.Date("2026-11-23"), board = !is_opi)
+  tmp <- withr::local_tempdir()
+  utils::write.csv(fl, file.path(tmp, "combined_2026-11-23.csv"), row.names = FALSE)
+  counted <- read_counted_archive_week(file.path(tmp, "combined_2026-11-23.csv"), xw, reg)
+  as_is <- read_counted_archive_week(here::here("Archivek12_Data", "combined_2026-11-23.csv"), xw, reg)
+  # Archived OPI decisions are kept; the 41 flagged rows that aren't placeholders leave the count.
+  expect_equal(nrow(as_is) - nrow(counted), 41)
+  kept <- read_counted_archive_week(file.path(tmp, "combined_2026-11-23.csv"), xw, reg, keep_stale = TRUE)
+  expect_equal(nrow(kept), nrow(as_is))
+  # The 11-23 archive links Lame Deer's OPI principal to the 2024 board ad; once that ad is flagged the link is gone.
+  links_before <- opi_links_from_archives(here::here("Archivek12_Data", "combined_2026-11-23.csv"), xw, reg)
+  links_after <- opi_links_from_archives(file.path(tmp, "combined_2026-11-23.csv"), xw, reg)
+  stale_ids <- fl$Posting_ID[edjobs::is_stale_flagged(fl$Stale_Reason)]
+  expect_true(any(links_before$OPI_Matched_Posting_ID %in% stale_ids))
+  expect_false(any(links_after$OPI_Matched_Posting_ID %in% stale_ids))
+  expect_equal(nrow(links_before) - nrow(links_after), sum(links_before$OPI_Matched_Posting_ID %in% stale_ids))
+})
