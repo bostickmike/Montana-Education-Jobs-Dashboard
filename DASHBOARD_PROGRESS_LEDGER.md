@@ -1774,6 +1774,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     3,408 before and 3,412 after the render; the live board gave 36 (24 / 8 / 4; 36 with a posted date, 20 with pay);
     St. Labre's 6 OPI rows: 3 matched, 3 stale; the three schools' map rows "Full" with the board link; no unmapped
     employer. Mike: add `hire.trakstar.com` to the repo's Copilot firewall settings.
+  * [x] Live dashboard check, edjobs pinned at 0.86.0 (2026-11-24; branch `live-check-0.86.0`; bostickmike/edjobs#91;
+    Mike asked 11-23). Connect Cloud redeploys the app on every push to main, and every other check ran before that
+    push; nothing checked the app it then served. `.github/workflows/live-check.yml` (edjobs `live_check_step()`) reads
+    the live page's "Refreshed on" date until it equals the latest `Archive_Date` in `Mt_Ed_Jobs/allsum.csv` and
+    `allsum_he.csv`, reading again for up to 40 minutes while the app wakes or a redeploy finishes. A failure files one
+    "Live dashboard check" issue and a pass closes it. Runs after each weekly update (`workflow_run`: the data push
+    by the Actions token starts no push workflow), on merges that touch `Mt_Ed_Jobs/`, and daily. Checks the date only: after
+    a code-only change a pass shows the page loads with the right data, not that it runs the new code. Suite on 0.86.0: 3,408 passed, 0 failed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
