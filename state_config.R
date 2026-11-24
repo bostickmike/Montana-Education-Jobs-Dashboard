@@ -13,8 +13,8 @@ library(edjobs)
 # CyberSchool, Apptegy, PeopleAdmin, NEOGOV) come from
 # edjobs::default_scraper_specs() (edjobs 0.46.0); MT_SCRAPER_SPECS adds only
 # Montana's own scrapers. `session = TRUE`: the scraper's first argument is a
-# chromote session. Platforms with no entry (SharesBoard, split-feed
-# ADP/isolved) have no single-source live check. test-drift-check.R asserts
+# chromote session. Platforms with no entry (SharesBoard) have no
+# single-source live check. test-drift-check.R asserts
 # every function named here exists and every registered row resolves.
 MT_SCRAPER_SPECS <- scraper_specs(
   TylerPortico = scraper_spec("fetch_tylerportico_postings", c("Platform_Key", "District")),
@@ -25,6 +25,11 @@ MT_SCRAPER_SPECS <- scraper_specs(
   # Reads its openings-PDF link from the rendered page (2026-11-05).
   CJIHeuristic = scraper_spec("fetch_cji_postings", "Job_Link", session = TRUE),
   JazzHR       = scraper_spec("fetch_jazzhr_postings",       c("Feed_URL", "Institution")),
+  # "a:b" in Feed_URL: the two parts (IsolvedHire subdomain:domain_id, ADP cid:ccId); with the institution.
+  IsolvedHire  = scraper_spec("fetch_isolvedhire_postings", list(function(row) strsplit(row$Feed_URL, ":")[[1]][1],
+                                                                 function(row) strsplit(row$Feed_URL, ":")[[1]][2], "Institution")),
+  AdpWorkforceNow = scraper_spec("fetch_adp_workforcenow_postings", list(function(row) strsplit(row$Feed_URL, ":")[[1]][1],
+                                                                        function(row) strsplit(row$Feed_URL, ":")[[1]][2], "Institution")),
   Paycom       = scraper_spec("fetch_paycom_postings",       c("Feed_URL", "Institution")),
   MilesCCHeuristic   = scraper_spec("fetch_miles_cc_postings",   "Feed_URL"),
   DawsonCCHeuristic  = scraper_spec("fetch_dawson_cc_postings",  "Feed_URL"),
@@ -53,6 +58,17 @@ MT_DIRECT_BOARD_PLATFORMS <- list(
   westglacier = "WestGlacierHeuristic", kila = "KilaHeuristic", pleasantvalley = "PleasantValleyHeuristic",
   circle = "CircleHeuristic", bigfork = "BigforkHeuristic", terry = "TerryHeuristic", cji = "CJIHeuristic",
   marion = "MarionHeuristic", lima = "LimaHeuristic", gallatingateway = "GallatinGatewayHeuristic"
+)
+# The college boards Mt_ED_Jobs.Rmd reads with edjobs::scrape_registry_platforms() (0.94.0, 2026-11-24), in the
+# order the per-platform blocks they replaced were combined (he_dfs; Interfolio, UM's faculty board, isn't a
+# registry loop and is read in the Rmd after NEOGOV). Miles/Dawson CC, AnCollege and CDKC are heuristic
+# scrapers (misc_college_scrapers.R; CDKC's is expected to return nothing most weeks). Stone Child runs Apptegy.
+# University of Providence runs ADP Workforce Now and packs "cid:ccId" in Feed_URL; isolved Hire boards pack
+# "subdomain:domain_id" there (domain_id is per-institution and not derivable from the subdomain).
+MT_HE_PLATFORMS <- list(
+  peopleadmin = "PeopleAdmin", jazzhr = "JazzHR", paycom = "Paycom", milescc = "MilesCCHeuristic",
+  dawsoncc = "DawsonCCHeuristic", isolvedhire = "IsolvedHire", neogov = "Neogov", cssboard = "CSSBoard",
+  adp = "AdpWorkforceNow", stonechild = "Apptegy", ancollege = "AnCollegeHeuristic", cdkc = "CDKCHeuristic"
 )
 # The bespoke Apptegy-session districts (Shelby, Geyser: registry Platform
 # "ApptegyBespoke") are dispatched through misc_district_scrapers.R's

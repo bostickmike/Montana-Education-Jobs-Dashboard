@@ -24,3 +24,13 @@ test_that("Lima's live check reads the Thrillshare feed (the function's default)
   expect_identical(call$fn, "fetch_lima_postings")
   expect_length(call$args, 0)
 })
+
+test_that("every higher-ed registry platform is read once, by scrape_registry_platforms() or as a shared board", {
+  he <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
+  listed <- unlist(MT_HE_PLATFORMS, use.names = FALSE)
+  expect_false(anyDuplicated(listed) > 0)
+  # SharesBoard: rows whose postings come from another institution's board (assign_shared_board_institutions()).
+  expect_setequal(setdiff(unique(he$Platform), "SharesBoard"), listed)
+  rows <- he[he$Platform %in% listed, ]
+  for (i in rows$Institution) expect_false(is.null(resolve_scraper_call(i)), info = i)
+})

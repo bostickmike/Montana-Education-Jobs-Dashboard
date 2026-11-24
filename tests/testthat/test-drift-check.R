@@ -93,7 +93,7 @@ test_that("every real registered HE platform except the known gaps resolves to a
   he <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
   for (i in seq_len(nrow(he))) {
     call <- resolve_scraper_call(he$Institution[i])
-    if (he$Platform[i] %in% c("SharesBoard", "AdpWorkforceNow", "IsolvedHire")) {
+    if (he$Platform[i] %in% "SharesBoard") {
       expect_null(call, info = he$Platform[i])
     } else {
       expect_false(is.null(call), info = he$Platform[i])
@@ -101,6 +101,13 @@ test_that("every real registered HE platform except the known gaps resolves to a
     }
   }
   expect_null(resolve_scraper_call("No Such District"))
+  # ADP and isolved Hire boards pack two ids in Feed_URL ("cid:ccId", "subdomain:domain_id"); each call splits them.
+  for (p in c("AdpWorkforceNow", "IsolvedHire")) {
+    row <- he[he$Platform == p, ][1, ]
+    call <- resolve_scraper_call(row$Institution)
+    expect_equal(call$args, as.list(c(strsplit(row$Feed_URL, ":")[[1]], row$Institution)), info = p)
+    expect_length(call$args, 3)
+  }
 })
 
 test_that("scraper_fetch_fn follows the Apptegy map to the real fetch_* function, and the family to edjobs's", {
