@@ -1833,6 +1833,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     with the fixture named in the block; no assertion changed. A new `test-drift-check.R` test checks each source's
     evidence names exactly its own fixtures (Little Big Horn and Rapelje two each, dated first); with main's
     `test-css-boards.R` it fails for 7 of the 8. Suite on 0.88.0: 3,415 passed, 0 failed.
+  * [x] App boot smoke test waits for what it checks (2026-11-24; branch `boot-smoke-wait`;
+    `claude-notes/2026-11-24_boot-smoke/README.md`; same change in WY). `test-app-boot-smoke.R` failed when a suite or a
+    render ran beside it and passed alone. Causes: `AppDriver$new()` loads the first page on chromote's 10 s command
+    timeout, which `load_timeout` doesn't cover (a starved app server fails the boot at exactly 10 s, "timed out waiting
+    for response to command Page.navigate"); `set_inputs()` gives up silently after 30 s without an output change; each
+    widget was read after a fixed `wait_for_idle()`. Now every wait is for its condition, bounded by
+    `BOOT_SMOKE_TIMEOUT_S` (default 120): the server's `sidebar_tabs` equals the tab, Shiny idle 1 s, the widget's HTML
+    matches before it is read; chromote's timeout is raised for the boot. The longitudinal-plot check had passed on
+    the empty container since the plot moved to the Trends card's Historical tab (11-21): the test now opens that tab
+    and requires `js-plotly-plot|main-svg`. The popup test starts from Home. Proof: with the app server paused 15 s
+    after it starts listening, then 2.5 s of every 4 s, the old file failed 4 of 4 runs per state at boot; the new one
+    passed 5 of 5 per state (37 expectations each). Alone it takes about 25 s. Suite on 0.88.0:
+    3,431 passed, 0 failed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
