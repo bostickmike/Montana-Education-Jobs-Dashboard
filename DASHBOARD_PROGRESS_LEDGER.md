@@ -1782,6 +1782,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     "Live dashboard check" issue and a pass closes it. Runs after each weekly update (`workflow_run`: the data push
     by the Actions token starts no push workflow), on merges that touch `Mt_Ed_Jobs/`, and daily. Checks the date only: after
     a code-only change a pass shows the page loads with the right data, not that it runs the new code. Suite on 0.86.0: 3,408 passed, 0 failed.
+  * [x] Ekalaka on edjobs's SmartSites reader, edjobs pinned at 0.88.0 (2026-11-24; branch `smartsites-ekalaka`;
+    bostickmike/edjobs#92, #93; `claude-notes/2026-11-24_smartsites-family/` measured it,
+    `claude-notes/2026-11-24_smartsites-build/` built it). edjobs `fetch_smartsites_postings(url, location)` reads
+    the three SmartSites (ParentSquare) widgets (document list, image gallery, posts) with no per-district rules and
+    keeps posted dates; WY's Park 16 and Platte 1 moved onto it the same day. Registry Platform `EkalakaHeuristic` ->
+    `SmartSites`; the Ekalaka Rmd block is now the SmartSites family block (Ekalaka keeps its Posting_Source, so its
+    posting IDs and spells don't move); `fetch/parse_ekalaka_postings`, `EKALAKA_BOILERPLATE_TITLES`, 3 tests and the
+    fixture deleted (the fixture is in edjobs). Parity: on the fixture the new reader gives the old parser's 7 rows
+    exactly (Title, Location, Posted_Date, Link), and on the 11-23 page its 3. Live run of the step (11-23 22:44 MST):
+    old and new blocks give the same 3 rows as the 11-23 archive.
+    Suite on 0.88.0 (rebased on the CSS-board merge): 3,385 passed, 0 failed. Rapelje and Pioneer (free text, no
+    widget) are not moved.
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
