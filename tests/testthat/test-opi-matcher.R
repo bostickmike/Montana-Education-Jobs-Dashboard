@@ -128,3 +128,21 @@ test_that("the long-term-sub reach ends on a whole 'sub' word", {
   expect_true("LTS" %in% opi_tokens("long term literacy sub needed", OPI_ROLE_LEXICON))
   expect_false("LTS" %in% opi_tokens("a long term position with subsequent renewal", OPI_ROLE_LEXICON))
 })
+
+# OPI's catch-all category ("Administrative - Other") names no job: a description phrase naming a teaching job
+# isn't read as an administrator (St. Labre, 2026-11-23 archive; the board is its Trakstar list that day). A phrase
+# naming only a school keeps the category's role (Rocky Boy's administrator, in the answer key above).
+test_that("a teaching job filed under OPI's 'Administrative - Other' matches the board's same-named posting", {
+  desc <- paste("High School Theology Teacher Ashland, Montana, United States | Full-time Apply by: No close date",
+                "St. Labre Indian Catholic School Pretty Eagle Catholic Academy St. Charles Mission School Job Description",
+                "Job Title: High School Theology Teacher Department: St. Labre Indian Catholic School Reports To: High",
+                "School Principal")
+  opi <- data.frame(title = "Administrative - Other", OPI_Description = desc, OPI_School = "District Wide",
+                    stringsAsFactors = FALSE)
+  board <- data.frame(title = c("High School Math Teacher", "High School Theology Teacher", "Band Teacher HS/MS",
+                                "HS Secretary", "Director of Schools - To Begin 2026/2027 School Year"),
+                      location = "Ashland, Montana", District = "St Labre Indian H S", stringsAsFactors = FALSE)
+  expect_equal(board$title[match_opi_postings(opi, "St Labre Indian H S", board)], "High School Theology Teacher")
+  expect_length(opi_title_role_tokens("Administrative - Other", "High School Theology Teacher Department"), 0)
+  expect_equal(opi_title_role_tokens("Administrative - Other", "Rocky Boy Elementary School"), "ADMIN")
+})

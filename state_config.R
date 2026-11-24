@@ -102,7 +102,13 @@ set_state_config(state_config(
     scraper_registry(mt_registry("he_institution_registry.csv"), "Institution", "he_institution_registry.csv",
       # The one HE Apptegy site (Stone Child College), in place of the K-12 family routine.
       specs = scraper_specs(Apptegy = scraper_spec("fetch_stonechild_postings", "Feed_URL", session = TRUE),
-                            defaults = MT_SCRAPER_SPECS))
+                            defaults = MT_SCRAPER_SPECS)),
+    # Private schools whose own board is read but which have no registry row (no NCES LEAID): one board, three
+    # schools (fetch_st_labre_postings(), direct_api_scrapers.R).
+    scraper_calls(stats::setNames(rep(list(list(fn = "fetch_st_labre_postings", args = list(),
+                                                platform = "trakstar", url = "https://stlabre.hire.trakstar.com/")), 3),
+                                  c("St Labre Indian H S", "St Charles Mission School", "Pretty Eagle Catholic Academy")),
+                  "fetch_st_labre_postings() in direct_api_scrapers.R (St. Labre's Trakstar board)")
   ),
   # The auto-fix issue: scraper files read as text; fixture names here don't
   # carry the district, so a source's fixtures are found from its tests.

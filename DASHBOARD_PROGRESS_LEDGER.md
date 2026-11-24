@@ -1755,6 +1755,25 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (0.78.0 ignores them and would acknowledge whole districts). Rebased on
     11-23's main (pins 0.84.0): replay on the 11-23 archive with 0.84.0 installed lists 12 districts (19 postings),
     all 12 acknowledged (`claude-notes/2026-11-22_drift-triage/ack_details_replay_latest.log`); suite 3,358 passed.
+  * [x] St. Labre's Trakstar board read directly (2026-11-23; branch `trakstar-st-labre`; edjobs 0.85.0,
+    bostickmike/edjobs#90; `claude-notes/2026-11-24_trakstar/README.md`). One board, three private Catholic schools
+    outside CCD: St. Labre (Ashland), St. Charles Mission (Pryor), Pretty Eagle Catholic Academy (Saint Xavier).
+    `fetch_st_labre_postings()` (direct_api_scrapers.R) puts each posting under its school by town and drops volunteer
+    openings: 37 of 38 on 11-23 (25 / 8 / 4). Not registry rows (no NCES LEAID): a `scraper_calls()` group in
+    `state_config.R` lets the drift check find the scraper; `other_employers.csv` gains a `Job_Link` column (own board
+    -> the map links to it and shows "Full") and PSS 2023-24 rows for St. Charles (00791453) and Pretty Eagle
+    (A2102271). St. Labre's OPI postings are now matched against its board (`OPI_NON_CCD_BOARDS`): on the 11-23
+    archive Math, Theology and Band match. Theology needed a matcher fix: OPI's catch-all "Administrative - Other"
+    no longer adds a role when the description names a teaching job (answer key unchanged; 0 of 1,717 OPI rows in
+    the last 5 archives change match). The other three (HS Art, Career Counselor, VoTech/VoAg, posted 06-29) are gone
+    from the board: Mike (11-23) chose a short list of boards checked to list every opening
+    (`OPI_BOARD_IS_COMPLETE`, St. Labre only), where a 60+ day OPI posting not on the board doesn't count, over a rule
+    for every board (82 such postings at 46 districts on 11-23; 48 of them at 24 boards that list teacher jobs).
+    edjobs 0.85.0: `fetch_trakstar_postings()`, JSON-LD blocks with raw line breaks, pay grades' low-mid-high steps read
+    first to last (0 of 787 archived pay texts change). Full rehearsal (11-23 night): every step passed; suite
+    3,408 before and 3,412 after the render; the live board gave 36 (24 / 8 / 4; 36 with a posted date, 20 with pay);
+    St. Labre's 6 OPI rows: 3 matched, 3 stale; the three schools' map rows "Full" with the board link; no unmapped
+    employer. Mike: add `hire.trakstar.com` to the repo's Copilot firewall settings.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's

@@ -26,3 +26,20 @@ test_that("AppliTrack postings get their own per-posting link and closing date",
   expect_equal(ids$Posting_Identity_Method, rep("Stable per-posting URL", 2))
   expect_equal(ids$Posting_ID[1], paste0("url:", tolower(applitrack_posting_url("mcpsmt", "1"))))
 })
+
+test_that("St. Labre's board puts each posting under its school by town and drops volunteer openings", {
+  mock_st_labre_board()
+  p <- fetch_st_labre_postings(details = FALSE)
+  expect_equal(nrow(p), 37)   # 38 openings, less "WIP Volunteer"
+  expect_false(any(grepl("Volunteer", p$Title)))
+  expect_equal(as.integer(table(p$District)[c("St Labre Indian H S", "St Charles Mission School",
+                                              "Pretty Eagle Catholic Academy")]), c(25L, 8L, 4L))
+  expect_equal(unique(p$District[grepl("^Pryor", p$Location)]), "St Charles Mission School")
+  expect_equal(unique(p$District[grepl("^Saint Xavier", p$Location)]), "Pretty Eagle Catholic Academy")
+  # "Ashland, MT" in the city field still reads as Ashland.
+  expect_equal(p$District[p$Title == "Administrative Assistant"], "St Labre Indian H S")
+  # Every school's name has a map row, and the drift check can find the scraper for each.
+  spec <- read.csv(here::here("other_employers.csv"), stringsAsFactors = FALSE, colClasses = c(Source_ID = "character"))
+  expect_true(all(ST_LABRE_SCHOOLS %in% spec$Posting_District))
+  for (s in ST_LABRE_SCHOOLS) expect_equal(edjobs::resolve_scraper_call(s)$fn, "fetch_st_labre_postings")
+})

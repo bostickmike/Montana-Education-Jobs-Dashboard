@@ -741,3 +741,37 @@ parse_adp_workforcenow_postings <- function(json_text, cid, cc_id) {
   })
   do.call(rbind, rows)
 }
+
+# ---------------------------------------------------------------------------
+# St. Labre Indian School's Trakstar board (edjobs::fetch_trakstar_postings(), 0.85.0)
+# ---------------------------------------------------------------------------
+# Private Catholic schools outside CCD, so not in k12_district_registry.csv (keyed on NCES LEAIDs); each has a map
+# row in other_employers.csv (PSS 2023-24). One board (St. Labre Indian School Educational Association) lists three
+# schools' openings, each by its town (read 2026-11-23: 26 Ashland, 8 Pryor, 4 Saint Xavier, of 38); titles carry
+# the school too ("SCMS Math Teacher", "Cook II - PECA"). A town not in ST_LABRE_SCHOOLS stays with St. Labre, the
+# board's owner. "St Labre Indian H S" is OPI's name for St. Labre, so its OPI postings are matched against this
+# board posting by posting (opi_reconcile.R, OPI_NON_CCD_BOARDS). The board also lists volunteer openings ("WIP
+# Volunteer"): not jobs, dropped.
+ST_LABRE_TRAKSTAR_URL <- "https://stlabre.hire.trakstar.com/"
+ST_LABRE_SCHOOLS <- c("ashland" = "St Labre Indian H S",
+                      "pryor" = "St Charles Mission School",
+                      "saint xavier" = "Pretty Eagle Catholic Academy")
+ST_LABRE_VOLUNTEER_PATTERN <- "(?i)\\bvolunteers?\\b"
+
+#' St. Labre's board, each posting under its school
+#' @param url The board.
+#' @param ... Passed to edjobs::fetch_trakstar_postings() (`details`, `detail_delay`).
+#' @return The board's postings (fetch_trakstar_postings() columns) with `District`; volunteer openings dropped.
+fetch_st_labre_postings <- function(url = ST_LABRE_TRAKSTAR_URL, ...) {
+  p <- edjobs::fetch_trakstar_postings(url, ...)
+  if (nrow(p) == 0) return(cbind(p, District = character(0)))
+  town <- tolower(trimws(sub(",.*$", "", p$Location)))
+  p$District <- unname(ST_LABRE_SCHOOLS[town])
+  other <- is.na(p$District)
+  if (any(other)) {
+    message("St. Labre board: ", sum(other), " posting(s) in a town with no school listed (",
+            paste(unique(p$Location[other]), collapse = "; "), "); kept under St. Labre")
+    p$District[other] <- ST_LABRE_SCHOOLS[["ashland"]]
+  }
+  p[!grepl(ST_LABRE_VOLUNTEER_PATTERN, p$Title, perl = TRUE), , drop = FALSE]
+}

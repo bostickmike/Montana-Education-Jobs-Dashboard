@@ -519,3 +519,56 @@ test_that("the pool-only rule leaves archived weeks alone", {
   expect_false(any(r$opi_dropped$OPI_Drop_Reason %in% OPI_STALE_POOL_REASON))
   expect_equal(sum(r$opi_keep$District == cw), 2)
 })
+
+# St. Labre (2026-11-23): outside CCD, its own Trakstar board read directly (OPI_NON_CCD_BOARDS), and on the short
+# list of boards checked to list every opening (OPI_BOARD_IS_COMPLETE). Real rows: its six OPI postings from the
+# 11-23 archive, the board's list pages that day.
+st_labre_fixture <- function(board = TRUE, complete_boards = names(OPI_BOARD_IS_COMPLETE), env = parent.frame()) {
+  opi <- read.csv(test_path("fixtures", "opi_st_labre_2026-11-23.csv"), stringsAsFactors = FALSE)
+  direct <- if (board) {
+    mock_st_labre_board(env)
+    b <- fetch_st_labre_postings(details = FALSE)
+    data.frame(title = b$Title, location = b$Location, url = b$Link, District = b$District, stringsAsFactors = FALSE)
+  } else data.frame(title = character(0), location = character(0), url = character(0), District = character(0))
+  reconcile_opi_with_direct(opi, direct, xw_fixture(), read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE),
+                            today = as.Date("2026-11-23"), complete_boards = complete_boards)
+}
+
+test_that("St. Labre's OPI postings are matched against its own board, and the stale ones gone from it don't count", {
+  r <- st_labre_fixture()
+  expect_equal(nrow(r$opi_keep), 0)
+  d <- r$opi_dropped
+  matched <- d$OPI_Drop_Reason == "same opening on district board"
+  expect_equal(sort(r$direct_df$title[d$.opi_matched_row[matched]]),
+               c("Band Teacher HS/MS", "High School Math Teacher", "High School Theology Teacher"))
+  gone <- d[d$OPI_Drop_Reason == OPI_STALE_COMPLETE_REASON, ]
+  expect_equal(nrow(gone), 3)
+  expect_true(all(grepl("Art Teacher|Career Counselor|VoTech", gone$OPI_Description)))
+  expect_true(all(d$District == "St Labre Indian H S"))
+  expect_equal(nrow(r$adoption), 0)
+  expect_equal(sum(grepl("lists every opening", r$qc$Discrepancy_Type)), 3)
+})
+
+test_that("an employer not on the complete-board list keeps its stale unmatched OPI postings counting", {
+  r <- st_labre_fixture(complete_boards = character(0))
+  expect_equal(nrow(r$opi_keep), 3)
+  expect_true(all(r$opi_keep$District == "St Labre Indian H S"))
+  expect_true(all(grepl("counted from OPI \\(posted over 60 days ago\\)", r$qc$Discrepancy_Type)))
+})
+
+test_that("St. Labre's board returning nothing leaves its stale OPI postings out, like any empty board", {
+  r <- st_labre_fixture(board = FALSE)
+  expect_equal(nrow(r$opi_keep), 0)
+  expect_true(all(r$opi_dropped$OPI_Drop_Reason == "stale OPI listing, district board empty"))
+})
+
+test_that("an employer with its own board links to it on the map and is Full; the rest point at OPI", {
+  spec <- read.csv(here::here("other_employers.csv"), stringsAsFactors = FALSE, colClasses = c(Source_ID = "character"))
+  rows <- build_other_employer_rows(spec, c("St Labre Indian H S", "Pretty Eagle Catholic Academy", "St Jude Thaddeus School"))
+  own <- rows[rows$District %in% c("St Labre High School", "Pretty Eagle Catholic Academy"), ]
+  expect_equal(nrow(own), 2)
+  expect_true(all(own$Job_Link == "https://stlabre.hire.trakstar.com/"))
+  expect_true(all(own$Data_Coverage == "Full"))
+  jude <- rows[rows$District == "St Jude Thaddeus School", ]
+  expect_equal(c(jude$Job_Link, jude$Data_Coverage), c(OPI_STATEWIDE_BOARD_URL, OPI_ONLY_COVERAGE))
+})
