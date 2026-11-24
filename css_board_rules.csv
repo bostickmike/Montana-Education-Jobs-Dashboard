@@ -1,0 +1,6 @@
+"Source","Item_CSS","Title_CSS","Link_CSS","Location_CSS","Board_CSS","Exclude_Regex","Include_Regex","Max_Title_Chars","Max_Tries"
+"Carroll College","",".accordion__trigger","","","","","","",""
+"Rocky Mountain College","div.e-loop-item",".elementor-heading-title a","@title",".elementor-post-info__terms-list-item","","","","","6"
+"Salish Kootenai College","",".uabb-adv-accordion-button-label","","","","","","",""
+"Little Big Horn College","",".field--name-body table a[href$='.pdf']","@title","","","","","",""
+"Fort Peck Community College",".tile.w-dyn-item","h2.heading-h4","a.btn-secondary",".row.can-grow > h3:nth-of-type(2)","","","","",""

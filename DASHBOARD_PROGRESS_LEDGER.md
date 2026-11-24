@@ -1783,6 +1783,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     by the Actions token starts no push workflow), on merges that touch `Mt_Ed_Jobs/`, and daily. Checks the date only: after
     a code-only change a pass shows the page loads with the right data, not that it runs the new code. Suite on 0.86.0: 3,408 passed, 0 failed.
 
+  * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
+    bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
+    College, Rocky Mountain College, Salish Kootenai College, Little Big Horn College and Fort Peck CC each had a
+    one-off parser that differed from the others only in its selectors. Now registry `Platform = CSSBoard`, read by
+    edjobs `fetch_css_board_postings()`, each page's selectors a row of the new `css_board_rules.csv` keyed by
+    Institution (Item_CSS, Title_CSS, Link_CSS, Location_CSS, Board_CSS, Exclude/Include regex, Max_Title_Chars,
+    Max_Tries; Rocky's six tries kept). Design: a rules file of its own rather than new registry columns, so the
+    registry schema both states share doesn't change. The five parsers, their five Rmd blocks and five platform specs
+    are gone (one loop, one `css_board_spec()`). Checks: old parsers vs the new reader on the 5 fixtures, identical
+    (16, 7, 17, 4, 1 rows); on the 20 HE archives, 0 of 606 rows from the five would change; one live fetch of each
+    page gave 39 rows, the same Institution / Title / Link set as the 11-23 archive. The live run found two
+    Little Big Horn PDF links with spaces, which `xml2::url_absolute()` turns into NA; edjobs keeps the page's own
+    text (as the old parser did), and the 11-24 page is a new fixture. Suite on 0.87.0: 3,393 passed, 0 failed.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
   "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
