@@ -6,12 +6,14 @@
 
 css_rules <- mt_css_board_rules()
 css_registry <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
-read_css_fixture <- function(name) {
-  paste(readLines(test_path("fixtures", name), warn = FALSE, encoding = "UTF-8"), collapse = "\n")
-}
-parse_css_source <- function(institution, fixture) {
+# The auto-fix issue lists a source's fixtures from these blocks (edjobs fixtures_used_by_tests()): a block counts
+# when its description has the entry point `fetch_css_board_postings` and the source's registry name, and its
+# fixtures are the literal test_path("fixtures", "...") calls inside it. So each source's blocks start
+# "fetch_css_board_postings: <registry name>" and name their fixture in the block (test-drift-check.R checks it).
+read_css_page <- function(path) paste(readLines(path, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+parse_css_source <- function(institution, html) {
   row <- css_registry[css_registry$Institution == institution, ]
-  parse_css_board(read_css_fixture(fixture), row$Feed_URL, row$Town, css_board_rule(css_rules, institution))
+  parse_css_board(html, row$Feed_URL, row$Town, css_board_rule(css_rules, institution))
 }
 
 css_k12_registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
@@ -27,8 +29,8 @@ test_that("every CSSBoard registry row has a rule, and every rule a CSSBoard reg
   expect_false(anyDuplicated(board_rows) > 0)
 })
 
-test_that("Carroll College: all 16 accordion titles, the positions page, Helena", {
-  result <- parse_css_source("Carroll College", "carroll_college_positions.html")
+test_that("fetch_css_board_postings: Carroll College, all 16 accordion titles, the positions page, Helena", {
+  result <- parse_css_source("Carroll College", read_css_page(test_path("fixtures", "carroll_college_positions.html")))
   expect_equal(result$Title, c(
     "Founding Director, Master of Educational Leadership Program", "Part-time Clinical Nursing Faculty",
     "Principal Faculty for Physician Assistant Program", "Alumni & Community Engagement Coordinator",
@@ -42,8 +44,8 @@ test_that("Carroll College: all 16 accordion titles, the positions page, Helena"
   expect_true(all(is.na(result$Posted_Date)))
 })
 
-test_that("Rocky Mountain College: 7 postings with their own pages and departments; the template item is skipped", {
-  result <- parse_css_source("Rocky Mountain College", "rocky_mountain_college_employment.html")
+test_that("fetch_css_board_postings: Rocky Mountain College, 7 postings with their own pages and departments; the template item is skipped", {
+  result <- parse_css_source("Rocky Mountain College", read_css_page(test_path("fixtures", "rocky_mountain_college_employment.html")))
   expect_equal(result$Title, c(
     "Admissions Counselor", "Director of Flight Operations", "Adjunct Faculty Position in Theater",
     "Head Bears Cheer Coach", "Airframe & Powerplant Certified Mechanic with (I/ A) Inspection Authorization",
@@ -57,8 +59,8 @@ test_that("Rocky Mountain College: 7 postings with their own pages and departmen
   expect_equal(css_board_rule(css_rules, "Rocky Mountain College")$Max_Tries, "6")
 })
 
-test_that("Salish Kootenai College: all 17 accordion titles, the employment page, Pablo", {
-  result <- parse_css_source("Salish Kootenai College", "skc_employment.html")
+test_that("fetch_css_board_postings: Salish Kootenai College, all 17 accordion titles, the employment page, Pablo", {
+  result <- parse_css_source("Salish Kootenai College", read_css_page(test_path("fixtures", "skc_employment.html")))
   expect_equal(result$Title, c(
     "Soils & Groundwater Hydrology Instructor 9month", "Lab Instructor-Nursing Department 10 months",
     "College & Career Readiness Coach", "Grants and Contracts Manager MODIFIED TO REFLECT REVISED SALARY",
@@ -73,16 +75,16 @@ test_that("Salish Kootenai College: all 17 accordion titles, the employment page
   expect_equal(unique(result$Link), "https://www.skc.edu/employment/")
 })
 
-test_that("Little Big Horn College: the 4 PDF-linked titles, relative links made absolute, Crow Agency", {
-  result <- parse_css_source("Little Big Horn College", "lbhc_job_opportunities.html")
+test_that("fetch_css_board_postings: Little Big Horn College, the 4 PDF-linked titles, relative links made absolute, Crow Agency", {
+  result <- parse_css_source("Little Big Horn College", read_css_page(test_path("fixtures", "lbhc_job_opportunities.html")))
   expect_equal(result$Title, c("Chief Finance Officer", "Math Instructor", "Ag Instructor", "Web IT specialist"))
   expect_equal(result$Link, paste0("http://lbhc.edu/sites/default/files/lbhc/humanresources/", c(
     "2026_CFO_LBHC_final.pdf", "2026_Math_Instructor_Final.pdf", "Ag_Instructor.pdf", "Web_IT_Specialist.pdf")))
   expect_equal(unique(result$Location), "Crow Agency")
 })
 
-test_that("Little Big Horn College, 2026-11-24 page: links with spaces keep the page's own text", {
-  result <- parse_css_source("Little Big Horn College", "lbhc_job_opportunities_2026-11-24.html")
+test_that("fetch_css_board_postings: Little Big Horn College, 2026-11-24 page: links with spaces keep the page's own text", {
+  result <- parse_css_source("Little Big Horn College", read_css_page(test_path("fixtures", "lbhc_job_opportunities_2026-11-24.html")))
   expect_equal(result$Title, c("Dean of Student Services", "Human Resources Director", "Computer Science Instructor",
                                "Ag Instructor"))
   expect_equal(result$Link, paste0("http://lbhc.edu/sites/default/files/lbhc/humanresources/", c(
@@ -90,8 +92,8 @@ test_that("Little Big Horn College, 2026-11-24 page: links with spaces keep the 
     "Computer_Science_Instructor_Position.pdf", "Ag_Instructor.pdf")))
 })
 
-test_that("Fort Peck Community College: the 1 posting, its location field (2nd of 4) and its PDF", {
-  result <- parse_css_source("Fort Peck Community College", "fpcc_employment.html")
+test_that("fetch_css_board_postings: Fort Peck Community College, the 1 posting, its location field (2nd of 4) and its PDF", {
+  result <- parse_css_source("Fort Peck Community College", read_css_page(test_path("fixtures", "fpcc_employment.html")))
   expect_equal(result$Title, "Agriculture Assistant")
   expect_equal(result$Location, "Poplar")
   expect_equal(result$Link, paste0("https://cdn.prod.website-files.com/68de85d9627927ed05698b64/",
@@ -106,18 +108,17 @@ test_that("a CSSBoard source resolves to fetch_css_board_postings() with its pag
   expect_equal(call$args[[3]]$Title_CSS, ".uabb-adv-accordion-button-label")
 })
 
-test_that("fetch_css_board_postings() reads a live-shaped response for a registry source", {
+test_that("fetch_css_board_postings: Little Big Horn College, a live-shaped response", {
   httr2::local_mocked_responses(list(httr2::response(
     200, headers = list("Content-Type" = "text/html; charset=utf-8"),
-    body = charToRaw(read_css_fixture("lbhc_job_opportunities.html")))))
+    body = charToRaw(read_css_page(test_path("fixtures", "lbhc_job_opportunities.html"))))))
   row <- css_registry[css_registry$Institution == "Little Big Horn College", ]
   result <- fetch_css_board_postings(row$Feed_URL, row$Town, css_board_rule(css_rules, row$Institution))
   expect_equal(nrow(result), 4)
 })
 
-# K-12. Each block names the reader and the district, so the auto-fix issue finds the district's own fixtures
-# (edjobs fixtures_used_by_tests()).
-test_that("parse_css_board: Swan Valley School District #3, the 1 Weebly heading (a sentence), Condon", {
+# K-12: the same naming, so the auto-fix issue finds each district's own fixtures.
+test_that("fetch_css_board_postings: Swan Valley School District #3, the 1 Weebly heading (a sentence), Condon", {
   html <- paste(readLines(test_path("fixtures", "swanvalley_careers_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"),
                 collapse = "\n")
   result <- parse_css_district("Swan Valley School District #3", html)
@@ -129,7 +130,7 @@ test_that("parse_css_board: Swan Valley School District #3, the 1 Weebly heading
   expect_equal(result$Posted_Date, NA_character_)
 })
 
-test_that("parse_css_board: Richey Public Schools, the 1 bold title; headings and the notice are dropped", {
+test_that("fetch_css_board_postings: Richey Public Schools, the 1 bold title; headings and the notice are dropped", {
   html <- paste(readLines(test_path("fixtures", "richey_cscms_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"),
                 collapse = "\n")
   result <- parse_css_district("Richey Public Schools", html)
@@ -143,7 +144,7 @@ test_that("parse_css_board: Richey Public Schools, the 1 bold title; headings an
   expect_true(nrow(all_text) > nrow(result))
 })
 
-test_that("parse_css_board: Rapelje School District, the 3 18px headings in the editor block, Rapelje", {
+test_that("fetch_css_board_postings: Rapelje School District, the 3 18px headings in the editor block, Rapelje", {
   html <- paste(readLines(test_path("fixtures", "rapelje_parentsquare_2026-10-21.html"), warn = FALSE, encoding = "UTF-8"),
                 collapse = "\n")
   result <- parse_css_district("Rapelje School District", html)
@@ -153,7 +154,7 @@ test_that("parse_css_board: Rapelje School District, the 3 18px headings in the 
   expect_equal(result$Posted_Date, rep(NA_character_, 3))
 })
 
-test_that("parse_css_board: Rapelje School District, 2026-11-23 page: only the bus drivers are left", {
+test_that("fetch_css_board_postings: Rapelje School District, 2026-11-23 page: only the bus drivers are left", {
   # A real change on the page (Preschool Teacher and Cooks Helper taken down), not a reader fault.
   html <- paste(readLines(test_path("fixtures", "rapelje_parentsquare_2026-11-23.html"), warn = FALSE, encoding = "UTF-8"),
                 collapse = "\n")

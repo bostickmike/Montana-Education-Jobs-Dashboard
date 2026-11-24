@@ -1824,6 +1824,16 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Preschool Teacher and Cooks Helper from its page (3 -> 1, a real page change; today's page is a new fixture).
     Suite on 0.88.0 (rebased on #135): 3,390 passed, 0 failed.
 
+  * [x] The CSS boards' auto-fix issues list each source's own fixtures (2026-11-24; branch `css-fixture-evidence`;
+    edjobs 0.88.0, no package change; `claude-notes/2026-11-24_css-fixture-evidence/README.md`). edjobs
+    `fixtures_used_by_tests()` keeps a test block whose title has `fetch_css_board_postings` and the source's name and
+    takes the `test_path("fixtures", ...)` calls in it. The colleges read their pages through a helper, and the
+    district blocks said `parse_css_board:`, so on main all 8 CSSBoard sources (the 5 colleges, Swan Valley, Richey,
+    Rapelje) got Richey's fixture. `test-css-boards.R` blocks are now titled `fetch_css_board_postings: <registry name>`
+    with the fixture named in the block; no assertion changed. A new `test-drift-check.R` test checks each source's
+    evidence names exactly its own fixtures (Little Big Horn and Rapelje two each, dated first); with main's
+    `test-css-boards.R` it fails for 7 of the 8. Suite on 0.88.0: 3,415 passed, 0 failed.
+
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
   "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
