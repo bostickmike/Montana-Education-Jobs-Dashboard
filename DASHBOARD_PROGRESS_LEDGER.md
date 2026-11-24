@@ -1850,7 +1850,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the empty container since the plot moved to the Trends card's Historical tab (11-21): the test now opens that tab
     and requires `js-plotly-plot|main-svg`. The popup test starts from Home. Proof: with the app server paused 15 s
     after it starts listening, then 2.5 s of every 4 s, the old file failed 4 of 4 runs per state at boot; the new one
-    passed 5 of 5 per state (37 expectations each). Alone it takes about 25 s. Suite on 0.88.0:
+    passed 5 of 5 per state (37 expectations each). Alone it takes about 25 s. Suite on 0.89.0:
     3,431 passed, 0 failed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
