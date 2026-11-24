@@ -1818,6 +1818,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     failed on the disk-installed edjobs. With the pinned manifest and the v0.90.0 tag installed from GitHub, that file
     passed 6 of 6, `writeManifest()` ran clean, and the run expectations passed (`stale_board_ads_not_counted` 0,
     `opi_released_from_stale_ads` 6).
+  * [x] edjobs pinned at 0.91.0 (2026-11-24; branch `pin-edjobs-0.91.0`; bostickmike/edjobs#96, #97). K-12 Trends tab:
+    the counting note is a footnote at the bottom of the tab instead of a box under the multi-year plot, whose date
+    axis and legend it covered (both Trends plots are drawn 500px tall; their containers were 400px, now 500px). The
+    Current and Multi-Year help popovers say the counts are full teaching positions only. Checked by screenshot of
+    both sub-tabs (`claude-notes/2026-11-24_pin-0.91.0/trends-*.png`). Suite on 0.91.0: 3,442 passed, 0 failed.
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
