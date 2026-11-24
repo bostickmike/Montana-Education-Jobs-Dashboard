@@ -5,7 +5,7 @@
 #   1. k12_district_registry.csv (adds registry row, checks for duplicates)
 #   2. .github/copilot-allowlist.txt (adds domain and sorts alphabetically)
 #   3. tests/testthat/test-salary-scrapers.R (adds district to unmapped setdiff)
-#   4. Mt_ED_Jobs.Rmd (adds safe_scrape block, standardize_date, and bind_rows entry)
+#   4. state_config.R (adds the platform to MT_DIRECT_BOARD_PLATFORMS; no Rmd code since 2026-11-24)
 #   5. misc_district_scrapers.R (adds skeleton fetch_* and parse_* functions)
 #   6. tests/testthat/test-misc-district-scrapers.R (adds unit test skeleton)
 #
@@ -197,9 +197,10 @@ if (district %in% existing_reg$District) {
   new_count <- old_count + 1
   leaid_val <- if (!is.null(leaid) && nzchar(leaid)) leaid else ""
   # Columns: District, NCES_LEAID, City, County, Latitude, Longitude, Platform, Platform_Key, Job_Link,
-  # List_Start, List_Stop, List_Skip (the family routines' per-district rules).
+  # List_Start, List_Stop, List_Skip (the family routines' per-district rules), Posting_Source.
   rules_out <- if (exists("apptegy_rule")) apptegy_rule else c("", "", "")
-  new_reg_row <- sprintf('"%s",%s,"%s","%s",%s,%s,"%s","","%s",%s',
+  # Posting_Source blank: the stage labels the row "<District> site (direct board)" (edjobs registry_posting_source()).
+  new_reg_row <- sprintf('"%s",%s,"%s","%s",%s,%s,"%s","","%s",%s,""',
                          district, leaid_val, city, county, lat, lon, platform, url,
                          paste0('"', gsub('"', '""', rules_out, fixed = TRUE), '"', collapse = ","))
   # Append row
@@ -259,75 +260,25 @@ if (grepl(sprintf('"%s"', district), sal_content, fixed = TRUE)) {
 }
 
 # ---------------------------------------------------------------------------
-# 4. Mt_ED_Jobs.Rmd
+# 4. state_config.R: MT_DIRECT_BOARD_PLATFORMS
 # ---------------------------------------------------------------------------
-rmd_path <- here::here("Mt_ED_Jobs.Rmd")
-rmd_content <- paste(readLines(rmd_path, warn = FALSE), collapse = "\n")
-
+# Since 2026-11-24 (edjobs 0.92.0) Mt_ED_Jobs.Rmd reads every heuristic platform with
+# edjobs::scrape_registry_platforms() over this list; the platform's scraper is found by the Heuristic fallback in
+# state_config.R (fetch_<name>_postings(Job_Link)), so no Rmd code is written.
+cfg_path <- here::here("state_config.R")
+cfg_content <- paste(readLines(cfg_path, warn = FALSE), collapse = "\n")
 if (apptegy_mode) {
-  cat("[4/8] Mt_ED_Jobs.Rmd: nothing to add (the Apptegy family block reads the registry)\n")
-} else if (grepl(sprintf("%s_df <-", slug), rmd_content, fixed = TRUE)) {
-  cat(sprintf("[4/8] District slug '%s' already wired in Mt_ED_Jobs.Rmd\n", slug))
+  cat("[4/8] state_config.R: nothing to add (the Apptegy batch reads the registry)\n")
+} else if (grepl(sprintf('"%s"', platform), cfg_content, fixed = TRUE)) {
+  cat(sprintf("[4/8] Platform '%s' already in state_config.R\n", platform))
 } else {
-  # A. Insert scraper block right before Lincoln School District block
-  scrape_block <- sprintf('
-# %s (%s, found %s)
-%s_districts <- registry[registry$Platform == "%s", ]
-%s_results <- lapply(seq_len(nrow(%s_districts)), function(i) {
-  row <- %s_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_%s_postings(row$Job_Link),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-%s_df <- bind_rows(%s_results)
-if (nrow(%s_df) > 0) {
-  %s_df <- %s_df %%>%%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "%s site (direct board)")
-} else {
-  %s_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                      location = character(0), url = character(0), District = character(0),
-                      Posting_Source = character(0))
-}
-', district, url_host, Sys.Date(),
-     slug, platform,
-     slug, slug,
-     slug,
-     slug,
-     slug, slug,
-     slug,
-     slug, slug,
-     district,
-     slug)
-
-  lincoln_marker <- "# Lincoln School District #38"
-  if (grepl(lincoln_marker, rmd_content, fixed = TRUE)) {
-    rmd_content <- sub(lincoln_marker, paste0(trimws(scrape_block), "\n\n", lincoln_marker), rmd_content, fixed = TRUE)
-  } else {
-    cat("[WARNING] Could not find Lincoln School District marker in Mt_ED_Jobs.Rmd\n")
-  }
-
-  # B. Insert date standardization line
-  date_line <- sprintf("%s_df <- %s_df %%>%% mutate(date_posted = standardize_date(date_posted))\napptegy_df <- apptegy_df", slug, slug)
-  rmd_content <- sub("apptegy_df <- apptegy_df %>% mutate(date_posted = standardize_date(date_posted))",
-                     date_line, rmd_content, fixed = TRUE)
-
-  # C. Insert into direct_df bind_rows
-  # Insert before swanriver_df,
-  bind_marker <- "swanriver_df,"
-  if (grepl(bind_marker, rmd_content, fixed = TRUE)) {
-    rmd_content <- sub(bind_marker, sprintf("%s_df,\n                       %s", slug, bind_marker), rmd_content, fixed = TRUE)
-  } else {
-    cat("[WARNING] Could not find swanriver_df in Mt_ED_Jobs.Rmd direct_df bind_rows\n")
-  }
-
-  writeLines(rmd_content, rmd_path)
-  cat("[4/8] Updated Mt_ED_Jobs.Rmd (scraper block, standardize_date, direct_df)\n")
+  m <- regexpr("MT_DIRECT_BOARD_PLATFORMS <- list\\((.|\n)*?\n\\)", cfg_content, perl = TRUE)
+  if (m < 0) stop("Could not find MT_DIRECT_BOARD_PLATFORMS in state_config.R")
+  block <- regmatches(cfg_content, m)
+  new_block <- sub("\n\\)$", sprintf(",\n  %s = \"%s\"\n)", slug, platform), block)
+  regmatches(cfg_content, m) <- new_block
+  writeLines(cfg_content, cfg_path)
+  cat(sprintf("[4/8] Added %s = \"%s\" to MT_DIRECT_BOARD_PLATFORMS in state_config.R\n", slug, platform))
 }
 
 # ---------------------------------------------------------------------------

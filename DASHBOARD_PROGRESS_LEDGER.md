@@ -1823,6 +1823,23 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     axis and legend it covered (both Trends plots are drawn 500px tall; their containers were 400px, now 500px). The
     Current and Multi-Year help popovers say the counts are full teaching positions only. Checked by screenshot of
     both sub-tabs (`claude-notes/2026-11-24_pin-0.91.0/trends-*.png`). Suite on 0.91.0: 3,442 passed, 0 failed.
+  * [x] Direct boards read by edjobs `scrape_registry_platforms()`; edjobs pinned at 0.93.0 (2026-11-24; branch
+    `registry-stage`; bostickmike/edjobs#98 = 0.92.0, #99 = 0.93.0; review step 5 slice 4). The K-12 platforms chunk's
+    46 per-platform blocks (37 one-off heuristics, the CMS families, CSS boards, Google Docs, SmartSites) become one
+    call over `MT_DIRECT_BOARD_PLATFORMS` (`state_config.R`, in the old `direct_dfs` order): each registry row runs
+    its `scraper_spec()` (the call the live check and repro script make) and is labelled by the registry's new
+    `Posting_Source` column (99 labels taken from the old blocks; blank: "<District> site (direct board)"). The Rmd
+    goes from 2,736 to 1,340 lines. `test-direct-board-platforms.R`: every registry platform is read exactly once.
+    Lima's spec fixed (its live check and repro were reading the home page instead of the Thrillshare feed); Lodge
+    Grass's dead block removed; `scaffold_district.R` adds a new heuristic platform to the list instead of writing an
+    Rmd block. 0.93.0 also moves the Trends multi-year legend under the axis (screenshots in
+    `claude-notes/2026-11-24_trends-legend/`).
+    Stub replay (`claude-notes/2026-11-24_step5-measure/replay/`): 45 of 45 groups identical to the old blocks, same
+    105 scrape-log rows (now in list order). Full rehearsal on the 0.92.0 branch build: 43 of 1,219 board postings
+    flagged stale, `combinedclean` 1,322 rows, rebuild parity 11 of 11 files; no (source, district) pair from the 11-23
+    run missing and no label changed; St. Labre's board new (36 rows); Rapelje and Fair-Mont-Egan down (3 to 1 each,
+    real page changes). The only failures were the manifest pin on the scratch copy. Suite on 0.93.0: 3,552 passed, 0
+    failed.
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
