@@ -25,8 +25,8 @@ MT_SCRAPER_SPECS <- scraper_specs(
   Paycom       = scraper_spec("fetch_paycom_postings",       c("Feed_URL", "Institution")),
   MilesCCHeuristic   = scraper_spec("fetch_miles_cc_postings",   "Feed_URL"),
   DawsonCCHeuristic  = scraper_spec("fetch_dawson_cc_postings",  "Feed_URL"),
-  # College job pages read by CSS selectors (edjobs 0.87.0): each one's selectors are its row of
-  # css_board_rules.csv, keyed by Institution.
+  # Job pages read by CSS selectors (edjobs 0.87.0): each one's selectors are its row of
+  # css_board_rules.csv, keyed by Institution here; the K-12 registry's own spec below reads District.
   CSSBoard           = css_board_spec(function() mt_css_board_rules(), "Feed_URL", "Town", "Institution"),
   AnCollegeHeuristic = scraper_spec("fetch_ancollege_postings",  "Feed_URL"),
   CDKCHeuristic      = scraper_spec("fetch_cdkc_postings",       "Feed_URL")
@@ -95,7 +95,10 @@ set_state_config(state_config(
     yoy = data.frame(file = "salarymap.csv", current = "Faculty_Avg_Salary", prior = "Faculty_Avg_Salary_Y1Ago")),
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
-      specs = scraper_specs(ApptegyBespoke = MT_APPTEGY_MAP_SPEC, defaults = MT_SCRAPER_SPECS),
+      # CSSBoard districts (Swan Valley, Richey, Rapelje since 2026-11-24): the page, City and rule keyed by District.
+      specs = scraper_specs(ApptegyBespoke = MT_APPTEGY_MAP_SPEC,
+                            CSSBoard = css_board_spec(function() mt_css_board_rules(), "Job_Link", "City", "District"),
+                            defaults = MT_SCRAPER_SPECS),
       # Every other K-12 "<Name>Heuristic" platform is fetch_<lowercase name>_postings(Job_Link).
       fallback = function(platform, row) {
         if (grepl("Heuristic$", platform)) {
