@@ -56,6 +56,24 @@ the Jobs table: OPI still lists them, but they are the likeliest to be filled. T
 its rules for what gets posted aren't published, and a job missing from the dashboard is not evidence that no
 vacancy exists.
 
+## Old board ads
+
+A job board can keep an ad listed, and keep taking applications through it, until the district takes it down,
+whatever dates the ad shows: AppliTrack's closing date is a note the district types, not a deadline the board
+enforces. A few districts leave ads from past school years up and post their current openings on OPI. From the end
+of November 2026, a district board posting (AppliTrack, SchoolSpring, Tyler Portico, Red Rover, TedK12 or a dated
+district page) whose posted date, or stated closing date, is before the July 1 that began the previous school year
+(July 1, 2025 during the 2026-27 school year) doesn't count. Two kinds of ads count whatever their dates: standing
+pools (substitutes), and jobs districts advertise all year and fill again and again (bus drivers and bus aides,
+paraprofessionals and aides, custodians and maintenance staff, food service, athletic coaches). An OPI posting is
+never matched to one of these old ads, so the district's current OPI posting of the job counts. The raw postings
+keep the old ads, each with its reason (`Stale_Reason`); the counts and the Jobs table leave them out. On the
+November 23, 2026 postings the rule would have set aside 43 of 1,164 board postings (2 of them account-creation
+templates that already didn't count), and 5 OPI postings matched to them would have counted instead. A date can't
+show which old ads are still real openings: a specialist post a district has struggled to fill (a speech
+pathologist, a school psychologist) may be one. Earlier updates keep the counts they had (see "Files and history"), so the
+totals step down once, by about that many postings, when the rule begins.
+
 ## Categories
 
 - **K-12 position** (`position`), from the title: Teacher, Substitute, Paraprofessional, Athletics, Support Services,

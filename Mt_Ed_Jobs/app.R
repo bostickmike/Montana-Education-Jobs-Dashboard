@@ -1048,7 +1048,9 @@ ui <- page_navbar(
         "a job listed on both a district's own board and Montana OPI's statewide board counts once. ",
         "Since November 3, 2026 each OPI posting is checked against the district's board using its description; ",
         "earlier weeks were recomputed the same way but from OPI's subject titles alone, so they may include roughly 30 ",
-        "postings a week that OPI listed twice.")),
+        "postings a week that OPI listed twice. ",
+        # Stale board ads (edjobs flag_stale_board_postings(), 2026-11-24; METHODS.md "Old board ads").
+        "Since the end of November 2026, board ads posted (or closing) before the July 1 that began the previous school year aren't counted, except substitute pools and jobs districts advertise all year (bus drivers, paraprofessionals, custodians, food service, coaches); earlier weeks still count them.")),
     k12_spells_panel()
   ),
 
@@ -1101,7 +1103,7 @@ ui <- page_navbar(
                           source = "District job boards (AppliTrack, SchoolSpring, TedK12, Tyler Portico, Red Rover, district websites) + Montana OPI Jobs for Teachers",
                           cadence = "Twice weekly", badge = "success",
                           description = paste0("Postings on the job boards of ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE),
-                                               " Montana districts and on OPI's statewide board (which also covers districts without a board, co-ops and private and tribal schools), with a job listed on both counted once, categorized, and linked to the posting.")),
+                                               " Montana districts and on OPI's statewide board (which also covers districts without a board, co-ops and private and tribal schools), with a job listed on both counted once, board ads from before the previous school year left out (except substitute pools and jobs advertised all year), categorized, and linked to the posting.")),
       data_provenance_row(layer = "K-12 Historical Archive", source = "This project's archive (August 2026 onward)", cadence = "Twice weekly",
                           description = "Every update's postings, kept as raw snapshots and as the history files on this tab, for hiring over the school year by subject and place."),
       data_provenance_row(layer = "K-12 Teacher Compensation",

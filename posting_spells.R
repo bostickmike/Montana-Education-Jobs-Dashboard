@@ -63,8 +63,12 @@ k12_posting_panel <- function(archive_dir = "Archivek12_Data", crosswalk, regist
   # One file at a time (read_counted_archive_week(), opi_reconcile.R): binding
   # the archives first left older weeks with an all-NA OPI_Counted column, so
   # their OPI rows skipped reconciliation (all counted, under their raw town).
+  # Board ads flagged stale (Stale_Reason, 2026-11-24) stay in: a spell follows
+  # what the board listed, and leaving them out from the run the rule began would
+  # end each one there falsely. Posted over a year before their first sighting,
+  # nearly all are already out of durations (edjobs build_posting_spells(): Evergreen).
   d <- dplyr::bind_rows(lapply(files, function(f) {
-    w <- read_counted_archive_week(f, crosswalk, registry)
+    w <- read_counted_archive_week(f, crosswalk, registry, keep_stale = TRUE)
     w[] <- lapply(w, as.character)
     w
   })) %>%

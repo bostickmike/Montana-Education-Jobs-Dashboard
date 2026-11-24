@@ -339,8 +339,18 @@ opi_duplicate_listing <- function(opi_df, entity) {
 #   qc        -- OPI rows at districts we scrape that didn't match a direct
 #                posting, plus fallback rows (cases 2 and 4)
 #   adoption  -- OPI-only districts this week (case 3), with posting counts
+# matchable: the board rows an OPI posting may be matched to. By default every
+# row not flagged as a stale board ad (edjobs flag_stale_board_postings(),
+# `Stale_Reason`; 2026-11-24): a district's 2024 "High School Principal" ad,
+# still listed, mustn't stand in for its current OPI posting of the job. The
+# flagged rows still count as the board having returned postings (an empty or
+# pool-only board is judged on every row).
 reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, today = Sys.Date(),
-                                      stale_fallback = TRUE, complete_boards = names(OPI_BOARD_IS_COMPLETE)) {
+                                      stale_fallback = TRUE, complete_boards = names(OPI_BOARD_IS_COMPLETE),
+                                      matchable = NULL) {
+  if (is.null(matchable)) {
+    matchable <- if ("Stale_Reason" %in% names(direct_df)) !edjobs::is_stale_flagged(direct_df$Stale_Reason) else rep(TRUE, nrow(direct_df))
+  }
   direct_df$Also_On_OPI <- rep(FALSE, nrow(direct_df))
   empty_qc <- data.frame(District = character(0), OPI_District = character(0), Title = character(0),
                          Date_Posted = character(0), Location = character(0), Discrepancy_Type = character(0),
@@ -386,7 +396,8 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   m <- rep(NA_integer_, nrow(opi_df))
   if (any(active & !dup)) {
     idx <- which(active & !dup)
-    m[idx] <- match_opi_postings(opi_df[idx, , drop = FALSE], a$Registry_District[idx], direct_df)
+    pick <- which(matchable %in% TRUE)
+    m[idx] <- pick[match_opi_postings(opi_df[idx, , drop = FALSE], a$Registry_District[idx], direct_df[pick, , drop = FALSE])]
   }
   direct_df$Also_On_OPI[m[!is.na(m)]] <- TRUE
   # Which board row each OPI posting matched (.opi_matched_row -> the board
@@ -532,16 +543,22 @@ close_opi_lost_twins <- function(current, previous) {
 # OPI_Matched_Posting_ID existed get their links recomputed
 # (opi_matched_board_ids(); none before 11-03, which lack OPI_Description).
 # Returns Posting_ID, OPI_Matched_Posting_ID, one row per linked posting.
+# A link to a board posting any archive flags as a stale ad (`Stale_Reason`,
+# 2026-11-24) is dropped: the current rule wouldn't make it, so when the old
+# ad finally comes down it says nothing about the OPI posting.
 opi_links_from_archives <- function(paths, crosswalk, registry) {
+  stale_ids <- character(0)
   links <- lapply(paths, function(p) {
     a <- utils::read.csv(p, colClasses = "character")
     if (!"Posting_ID" %in% names(a)) return(NULL)
+    if ("Stale_Reason" %in% names(a)) stale_ids <<- c(stale_ids, a$Posting_ID[edjobs::is_stale_flagged(a$Stale_Reason)])
     if (!"OPI_Matched_Posting_ID" %in% names(a)) a$OPI_Matched_Posting_ID <- opi_matched_board_ids(a, crosswalk, registry)
     a <- a[!is.na(a$OPI_Matched_Posting_ID) & nzchar(a$OPI_Matched_Posting_ID), c("Posting_ID", "OPI_Matched_Posting_ID"), drop = FALSE]
     if (nrow(a)) a else NULL
   })
   out <- do.call(rbind, c(list(data.frame(Posting_ID = character(0), OPI_Matched_Posting_ID = character(0))), links))
   out <- out[!duplicated(out$Posting_ID, fromLast = TRUE), , drop = FALSE]   # the latest link wins
+  out <- out[!out$OPI_Matched_Posting_ID %in% stale_ids, , drop = FALSE]
   rownames(out) <- NULL
   out
 }
@@ -906,7 +923,12 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
 # bind_rows() of several archives, older weeks carry an all-NA OPI_Counted
 # column, which reads as "counted" and skips their reconciliation (the
 # rebuild and the posting panel both did this until 2026-11-04).
-read_counted_archive_week <- function(path, crosswalk, registry, recompute = FALSE) {
+# Board ads the run flagged as stale (`Stale_Reason`, edjobs
+# flag_stale_board_postings(), from 2026-11-24) are not counted either; archives
+# written before then have no flags and are read as they were counted
+# (forward-only). keep_stale = TRUE keeps them, with the column (the posting
+# spells, which follow what each board listed).
+read_counted_archive_week <- function(path, crosswalk, registry, recompute = FALSE, keep_stale = FALSE) {
   w <- utils::read.csv(path, colClasses = c(Archive_Date = "character"), stringsAsFactors = FALSE,
                        check.names = FALSE)
   w <- w[, setdiff(names(w), c("X", "Posting_ID", "Posting_Identity_Method")), drop = FALSE]
@@ -919,5 +941,6 @@ read_counted_archive_week <- function(path, crosswalk, registry, recompute = FAL
   rule <- opi_rule_for_archive(w, crosswalk, registry, recompute = recompute)
   w$Is_OPI <- rule$Is_OPI
   w$District <- canonicalize_k12_district(rule$District)
-  w[rule$Counted & !is_placeholder_posting(w$title), , drop = FALSE]
+  stale <- if ("Stale_Reason" %in% names(w) && !keep_stale) edjobs::is_stale_flagged(w$Stale_Reason) else rep(FALSE, nrow(w))
+  w[rule$Counted & !stale & !is_placeholder_posting(w$title), , drop = FALSE]
 }

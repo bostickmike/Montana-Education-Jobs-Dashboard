@@ -1811,6 +1811,16 @@ direct_dfs <- list(
 )
 direct_dfs <- lapply(direct_dfs, standardize_df_date)
 direct_df <- bind_rows(direct_dfs)
+# Stale board ads (edjobs flag_stale_board_postings(); Mike, 2026-11-24): a
+# board posting whose posted date, or stated closing date, is before the July 1
+# that began the previous school year is flagged in Stale_Reason and not
+# counted, except standing pools and ongoing roles (bus, para, custodial, food
+# service, athletic coaches). The raw archive keeps it. Flagged here, before the
+# OPI reconcile, so a stale ad can't stand in for a current OPI posting of the
+# job; it stays among the board postings close_opi_lost_twins() checks below.
+direct_df <- flag_stale_board_postings(direct_df, Sys.Date())
+message(sprintf("Stale board ads: %d of %d board posting(s) flagged (not counted).",
+                sum(is_stale_flagged(direct_df$Stale_Reason)), nrow(direct_df)))
 # OPI vs. our direct scrapes (opi_reconcile.R), posting by posting: an OPI
 # posting that is the same opening as a posting on its district's board isn't
 # counted (the board posting gets Also_On_OPI); every other OPI posting counts
@@ -1875,7 +1885,7 @@ combined_all <- tryCatch({
     out
   }
 }, error = function(e) { message("OPI twin check failed, nothing closed: ", conditionMessage(e)); combined_all })
-combined <- combined_all %>% filter(OPI_Counted)
+combined <- combined_all %>% filter(OPI_Counted, !is_stale_flagged(Stale_Reason))
 
 if (!dir.exists("Archivek12_Data")) dir.create("Archivek12_Data")
 file_name <- paste0("combined_", Sys.Date(), ".csv")
