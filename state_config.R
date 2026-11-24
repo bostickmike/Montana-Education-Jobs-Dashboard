@@ -19,6 +19,9 @@ library(edjobs)
 MT_SCRAPER_SPECS <- scraper_specs(
   TylerPortico = scraper_spec("fetch_tylerportico_postings", c("Platform_Key", "District")),
   BroadviewHeuristic = scraper_spec("fetch_broadview_postings"),
+  # Lima's scraper reads the Thrillshare feed its default names; Job_Link is the district's home page, which the
+  # Heuristic fallback below would pass (wrong page for the live check and repro until 2026-11-24).
+  LimaHeuristic = scraper_spec("fetch_lima_postings"),
   # Reads its openings-PDF link from the rendered page (2026-11-05).
   CJIHeuristic = scraper_spec("fetch_cji_postings", "Job_Link", session = TRUE),
   JazzHR       = scraper_spec("fetch_jazzhr_postings",       c("Feed_URL", "Institution")),
@@ -30,6 +33,26 @@ MT_SCRAPER_SPECS <- scraper_specs(
   CSSBoard           = css_board_spec(function() mt_css_board_rules(), "Feed_URL", "Town", "Institution"),
   AnCollegeHeuristic = scraper_spec("fetch_ancollege_postings",  "Feed_URL"),
   CDKCHeuristic      = scraper_spec("fetch_cdkc_postings",       "Feed_URL")
+)
+# The direct boards Mt_ED_Jobs.Rmd reads with edjobs::scrape_registry_platforms() (edjobs 0.92.0, 2026-11-24): one
+# group per platform, in the order the per-platform blocks it replaced were combined (direct_dfs), so the combined
+# rows come out in the same order. A new platform goes here (test-direct-board-platforms.R checks every registry
+# platform is either here or read by its own block: the ATS boards, the Apptegy batch, OPI only).
+MT_DIRECT_BOARD_PLATFORMS <- list(
+  broadview = "BroadviewHeuristic", scobey = "ScobeyHeuristic", smartsites = "SmartSites",
+  hysham = "HyshamHeuristic", winnett = "WinnettHeuristic", milescity = "MilesCityHeuristic",
+  brockton = "BrocktonHeuristic", googledoc = "GoogleDoc", clinton = "ClintonHeuristic", miami = "MiamiHeuristic",
+  zurich = "ZurichHeuristic", wibaux = "WibauxHeuristic", westvalley = "WestValleyHeuristic",
+  cssboard_k12 = "CSSBoard", cyberschool = c("CyberSchool", "CyberSchoolText"), googlesites = "GoogleSites",
+  finalsite = "Finalsite", wordpress = "WordPress", edlio = "Edlio", joomla = "Joomla",
+  smithvalley = "SmithValleyHeuristic", moore = "MooreHeuristic", boulder = "BoulderHeuristic",
+  jeffersonhigh = "JeffersonHighHeuristic", judithgap = "JudithGapHeuristic", whitewater = "WhitewaterHeuristic",
+  monforton = "MonfortonHeuristic", grassrange = "GrassRangeHeuristic", heartbutte = "HeartButteHeuristic",
+  eastglacier = "EastGlacierHeuristic", charlo = "CharloHeuristic", jordan = "JordanHeuristic",
+  pioneer = "PioneerHeuristic", opheim = "OpheimHeuristic", pryor = "PryorHeuristic",
+  westglacier = "WestGlacierHeuristic", kila = "KilaHeuristic", pleasantvalley = "PleasantValleyHeuristic",
+  circle = "CircleHeuristic", bigfork = "BigforkHeuristic", terry = "TerryHeuristic", cji = "CJIHeuristic",
+  marion = "MarionHeuristic", lima = "LimaHeuristic", gallatingateway = "GallatinGatewayHeuristic"
 )
 # The bespoke Apptegy-session districts (Shelby, Geyser: registry Platform
 # "ApptegyBespoke") are dispatched through misc_district_scrapers.R's

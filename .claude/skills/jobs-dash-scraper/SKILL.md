@@ -67,7 +67,8 @@ To minimize LLM token usage and prevent manual editing errors across coupled fil
    - `k12_district_registry.csv` (with duplicate prevention)
    - `.github/copilot-allowlist.txt` (alphabetized domain insertion)
    - `tests/testthat/test-salary-scrapers.R` (unmapped setdiff)
-   - `Mt_ED_Jobs.Rmd` (safe_scrape block, date standardization, direct_df bind)
+   - `state_config.R` (the platform added to `MT_DIRECT_BOARD_PLATFORMS`; since 2026-11-24 the Rmd reads these
+     platforms with `edjobs::scrape_registry_platforms()`, so no Rmd block is written)
    - `misc_district_scrapers.R` (CMS-specific boilerplate fetch/parse functions)
    - `tests/testthat/test-misc-district-scrapers.R` (unit test templates)
    - `README.md` (updates K-12 coverage count)
