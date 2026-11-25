@@ -72,9 +72,15 @@ test_that("every real registered K-12 row resolves to a real scraper function, c
   }
   # (Hinsdale was the example here until it moved to the CyberSchool routine, 2026-11-14.)
   # (Richey was the example after that, until it moved to the CSS-board reader, 2026-11-24.)
-  zurich <- resolve_scraper_call("Zurich Elementary School District #17")
-  expect_equal(zurich[c("fn", "session")], list(fn = "fetch_zurich_postings", session = FALSE))
-  expect_equal(zurich$args, list(k12$Job_Link[k12$District == "Zurich Elementary School District #17"]))
+  # (Zurich was, until it moved to the text-board reader, 2026-11-25.)
+  moore <- resolve_scraper_call("Moore Public Schools")
+  expect_equal(moore[c("fn", "session")], list(fn = "fetch_moore_postings", session = FALSE))
+  expect_equal(moore$args, list(k12$Job_Link[k12$District == "Moore Public Schools"]))
+  # TextBoard (Terry since 2026-11-25): the page, the City and the District's rule rows.
+  terry <- resolve_scraper_call("Terry Public Schools")
+  expect_equal(terry[c("fn", "session")], list(fn = "fetch_text_board_postings", session = FALSE))
+  expect_equal(terry$args[1:2], list(k12$Job_Link[k12$District == "Terry Public Schools"], "Terry"))
+  expect_equal(unique(terry$args[[3]]$Source), "Terry Public Schools")
   # CSSBoard (Richey since 2026-11-24): the page, the City and the District's rule.
   richey <- resolve_scraper_call("Richey Public Schools")
   expect_equal(richey[c("fn", "session")], list(fn = "fetch_css_board_postings", session = FALSE))
@@ -177,7 +183,11 @@ test_that("each CSS board's auto-fix evidence names exactly its own fixtures, ne
     "Fort Peck Community College" = "fpcc_employment.html",
     "Swan Valley School District #3" = "swanvalley_careers_2026-10-21.html",
     "Richey Public Schools" = "richey_cscms_2026-10-21.html",
-    "Rapelje School District" = c("rapelje_parentsquare_2026-11-23.html", "rapelje_parentsquare_2026-10-21.html"))
+    "Rapelje School District" = c("rapelje_parentsquare_2026-11-23.html", "rapelje_parentsquare_2026-10-21.html"),
+    "East Glacier Park Grade School" = "eastglacier_cyberschool_2026-10-21.html",
+    "Pryor Public Schools" = "pryor_jobs.html",
+    "Charlo School District 7J" = "charlo_jobs.html",
+    "Wibaux Public Schools" = "wibaux_employment_2026-10-21.html")
   he <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
   k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
   expect_setequal(names(expected), c(he$Institution[he$Platform == "CSSBoard"], k12$District[k12$Platform == "CSSBoard"]))
@@ -185,6 +195,17 @@ test_that("each CSS board's auto-fix evidence names exactly its own fixtures, ne
     ev <- gather_autofix_evidence(resolve_scraper_call(s), s, NA_character_, repo_root = here::here())
     expect_equal(ev$fetch_fn, "fetch_css_board_postings", info = s)
     expect_equal(ev$fixtures, expected[[s]], info = s)
+    expect_true(all(file.exists(test_path("fixtures", ev$fixtures))), info = s)
+  }
+})
+
+test_that("each text board's auto-fix evidence names its own fixtures", {
+  k12 <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  for (s in k12$District[k12$Platform == "TextBoard"]) {
+    ev <- gather_autofix_evidence(resolve_scraper_call(s), s, NA_character_, repo_root = here::here())
+    expect_equal(ev$fetch_fn, "fetch_text_board_postings", info = s)
+    slug <- sub(" .*", "", tolower(s))
+    expect_true(length(ev$fixtures) >= 1 && all(startsWith(ev$fixtures, slug)), info = paste(s, toString(ev$fixtures)))
     expect_true(all(file.exists(test_path("fixtures", ev$fixtures))), info = s)
   }
 })

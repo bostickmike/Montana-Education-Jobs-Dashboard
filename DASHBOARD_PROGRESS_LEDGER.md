@@ -1958,8 +1958,28 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     after it starts listening, then 2.5 s of every 4 s, the old file failed 4 of 4 runs per state at boot; the new one
     passed 5 of 5 per state (37 expectations each). Alone it takes about 25 s. Suite on 0.89.0:
     3,431 passed, 0 failed.
+  * [x] Sixteen district pages read by rules instead of one-off parsers; edjobs pinned at 0.99.0 (2026-11-25; branch
+    `text-boards`; bostickmike/edjobs#105; package review step 8; `claude-notes/2026-11-25_step8-tail/README.md`).
+    Twelve (Zurich, Winnett, Gallatin Gateway, Jefferson High, Brockton, Hysham, Bigfork, Clinton, Miami, Marion, Scobey,
+    Terry) move to the new `TextBoard` platform: edjobs `fetch_text_board_postings()` reads a page's lines with the
+    district's rows of `text_board_rules.csv` (start, stop, title pattern or repeated marker line, exclude, strip, which
+    lines state pay). Four (East Glacier, Pryor, Charlo, Wibaux) move to `CSSBoard` (`Strip_Regex`, `Link_CSS = "@item"`,
+    new in 0.99.0). 32 fetch/parse functions and 7 constants (755 lines) and 48 test blocks (464 lines) deleted;
+    `test-text-boards.R` pins each district's exact titles. A missing start, stop or board marker is now an error at
+    14 of the 16 (Clinton and Miami have no fixed heading). Old vs new on each fixture and a 2026-11-25 page: 15 of 25
+    text pages and 8 of 8 CSS pages identical; the other 10 differ on purpose: Clinton's "Classified Positions" (a
+    heading) is "Paraprofessionals"; Terry's "currently available" list is read (it was cut off) and its "No open positions"
+    line isn't a row; Scobey's and Terry's place is the town, not a section heading, and Miami's is Conrad; Marion's one
+    posting keeps the page's words. Posted pay is read at Bigfork (2), Clinton and Miami. Live dispatch run: 59 rows vs
+    60 in the 11-23 archive (Terry's "No open positions" line). Seven Scobey teacher rows count as new once (the place
+    is part of that key); listing durations bridge by title. Suite on 0.99.0: 3,636 passed and 1 failed (the weekly
+    workflow's own edjobs tag, then updated; that file passes).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [ ] Posted pay on one-off boards not read yet (2026-11-25; `claude-notes/2026-11-25_step8-tail/README.md`): Boulder
+  ($18 an hour), Smith Valley ($15 an hour), West Valley ($16.27 an hour), Charlo (its card cuts the text off; the
+  posting's own page has it). Brockton's $45,484 is a base salary for the whole page, not one posting's.
+- [ ] Heart Butte's board went from 9 rows (11-17) to 1 (11-23); the parser gave 1 on 11-25. Check the page by hand.
 - [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
   step down once and the legacy `job_duration_spells.csv` shows the flagged teaching ads as "Closed / Filled" at the
   rule's start. Open choice for Mike: restate the history from the raw archives with the rule (each week's own cutoff).
