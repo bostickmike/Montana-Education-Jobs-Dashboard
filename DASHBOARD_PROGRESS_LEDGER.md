@@ -1877,7 +1877,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Replay on the newest committed archive (`claude-notes/2026-11-24_step5-measure/replay/he_history_replay.R`): combined and
     finished tables identical, 5 of 5 history files byte-identical, for the same date and a new one. Live higher-ed scrape
     (branch build), old and new code on the same frames: combined and finished tables identical (395 rows). Rebuild
-    parity (branch build) 11 of 11 files. Suite on 0.97.0: 3,590 passed, 0 failed. No full rehearsal.
+    parity (branch build) 11 of 11 files. Suite on 0.97.0: 3,590 passed, 0 failed. Full rehearsal of slices C1 and D
+    together on v0.97.0 (11-25 UTC, `replay/rehearsal_mt_d.log`): all steps passed, rebuild parity 11 of 11, suites 3,590 (pre-run) and 3,595 (post-run) passed,
+    0 failed. K-12 rows 1,335 (11-23) to 1,326, higher ed 393 to 395. Of the
+    51 direct-board rows gone, 41 are stale flags (the rule's first run), 4 SchoolSpring endings on file, 1 a closed
+    AppliTrack page, 5 titles their live pages (Rapelje, Fair-Mont-Egan, Roy; opened 11-24) no longer list; 12 OPI rows also
+    gone, not traced one by one (6 are St. Labre's, now on its own board: 36 rows).
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
