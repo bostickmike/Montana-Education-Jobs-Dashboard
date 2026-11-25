@@ -1837,8 +1837,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Stub replay (`claude-notes/2026-11-24_step5-measure/replay/`): 45 of 45 groups identical to the old blocks, same
     105 scrape-log rows (now in list order). Full rehearsal on the 0.92.0 branch build: 43 of 1,219 board postings
     flagged stale, `combinedclean` 1,322 rows, rebuild parity 11 of 11 files; no (source, district) pair from the 11-23
-    run missing and no label changed; St. Labre's board new (36 rows); Rapelje and Fair-Mont-Egan down (3 to 1 each,
-    real page changes). The only failures were the manifest pin on the scratch copy. Suite on 0.93.0: 3,552 passed, 0
+    run missing and no label changed; St. Labre's board new (36 rows); Rapelje and Fair-Mont-Egan down (3 to 1 each;
+    their live pages, opened 11-24, list only the one left). 1,322 vs the stale-rule rehearsal's 1,309: three boards
+    timed out there (18 rows here, 4 OPI postings standing in there: +14 expected, +13 seen; the last row isn't traced). The only failures were the manifest pin on the scratch copy. Suite on 0.93.0: 3,552 passed, 0
     failed.
   * [x] Higher-ed boards read by edjobs `scrape_registry_platforms()`; edjobs pinned at 0.94.0 (2026-11-24; branch
     `he-registry-stage`; bostickmike/edjobs#100; review step 5 slice B). The higher-ed chunk's 12 per-platform blocks
@@ -1849,8 +1850,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Stub replay (`claude-notes/2026-11-24_step5-measure/replay/`): 13 of 13 frames and `hedata_raw` identical. Full
     rehearsal on the tagged 0.94.0: rebuild parity 11 of 11 files; higher-ed rows 396 vs 393 on 11-23, by institution
     (largest: University of Montana +3, Salish Kootenai +2, Aaniiih Nakoda -2, live changes); 43 of 1,221 board postings
-    flagged stale. One failure, the pre-run boot-smoke test beside the render (K-12 plot not drawn in time, the known
-    load flake; passed post-run, 3,583/0). Suite: 3,583 passed, 0 failed.
+    flagged stale. One failure, the pre-run boot-smoke test (K-12 plot not drawn): the Mac's display went off
+    mid-test (next entry; first written here as "the known load flake", untested). Passed post-run, 3,583/0. Suite:
+    3,583 passed, 0 failed.
+  * [x] Boot smoke keeps its page visible (2026-11-24; branch `boot-smoke-visible`;
+    `claude-notes/2026-11-24_legend-load/README.md`). When the Mac's display goes off, Chrome marks the test page hidden
+    and stops drawing it, so Shiny never learns that a newly opened tab is visible and renders nothing on it. That is why the
+    pre-run suites of two rehearsals failed on a plot (`caffeinate -u` wakes the display, which goes off about 15 s
+    later); edjobs 0.93.0's legend is not involved (0.92.0 fails the same way on a quiet Mac). The test now sets
+    Chrome's focus emulation and checks on every tab that the page is visible (the "every tab renders" check passed on
+    tabs that had rendered nothing). With the display going off mid-run: 36 passed, 1 failed before; 48 passed, 0 failed
+    twice after. Suite: 3,590 passed, 0 failed.
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
