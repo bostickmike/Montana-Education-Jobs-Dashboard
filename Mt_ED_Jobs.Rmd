@@ -843,14 +843,9 @@ library(writexl)
 # UM's NEOGOV board carry it; every other HE source is NA). It's kept in
 # hedata.xlsx and the raw archive, but not in the accumulated facultydata.csv
 # below.
-hedata <- hedata_raw %>%
-  ensure_posted_pay_columns() %>%
-  mutate(Close_Date = if ("Close_Date" %in% names(.)) as.character(Close_Date) else NA_character_) %>%
-  # Close_Date: PeopleAdmin's own close date (or "Open Until Filled") and NEOGOV's stated closing
-  # date (each posting's page; edjobs 0.11.0); NA for other HE sources.
-  select(Title, Location, Posted_Date, Institution, Link, Close_Date, all_of(POSTED_PAY_COLUMNS), any_of("Page_Places")) %>%
-  mutate(Posted_Date = as.character(Posted_Date),
-         Archive_Date = Sys.Date())
+# Close_Date: PeopleAdmin's own close date (or "Open Until Filled") and NEOGOV's stated closing
+# date (each posting's page; edjobs 0.11.0); NA for other HE sources.
+hedata <- combine_he_frames(hedata_raw)
 
 # Where each posting goes on the map (edjobs place_he_postings(), 2026-11-16):
 # a posting is placed at another MT town only when the posting itself names
@@ -901,22 +896,11 @@ tryCatch(refresh_coverage_calendar(
   # boards it shares are healthy only when both ran fine (edjobs 0.72.0).
   extra_sources = list("University of Montana" = UM_INTERFOLIO_SOURCE)),
   error = function(e) message("Coverage calendar not updated: ", conditionMessage(e)))
-# Non-postings (a scraped "Job Title" header, "No Jobs" notices) stay in the
-# raw archive above but are dropped from everything shown or counted.
-# Implausible posted pay is blanked the same way (drop_implausible_pay()).
-hedata <- hedata %>% filter(!is_placeholder_posting(Title)) %>% drop_implausible_pay()
-# Est_* is the institution's IPEDS average for the posting's staff category
-# (ipeds_staff_salaries.csv from the previous run), the labeled fallback for
-# staff postings that state no pay. Added after the raw archive write, so
-# the archive stays as scraped.
-library(edjobs)
-staff_path <- file.path("Mt_Ed_Jobs", "ipeds_staff_salaries.csv")
-if (file.exists(staff_path)) {
-  he_unitids <- read.csv(file.path("Mt_Ed_Jobs", "salarymap.csv"))[, c("Name", "IPEDS_UNITID")]
-  hedata <- attach_ipeds_staff_estimates(hedata, read.csv(staff_path, stringsAsFactors = FALSE,
-                                                          colClasses = c(Year = "character")),
-                                         he_unitids$IPEDS_UNITID[match(canonicalize_he_institution(hedata$Institution), he_unitids$Name)])
-}
+# Non-postings ("Job Title" headers, "No Jobs" notices) stay in the raw archive above but are dropped from
+# everything shown or counted, implausible posted pay is blanked, and staff postings that state no pay get the
+# institution's IPEDS average for their staff category (ipeds_staff_salaries.csv from the previous run), added
+# after the raw archive write (edjobs finish_he_rows()).
+hedata <- finish_he_rows(hedata, "Mt_Ed_Jobs", canonicalize_he_institution)
 write_xlsx(hedata, path = file.path("Mt_Ed_Jobs", "hedata.xlsx"))
 
 # Fix historical institution-name typos before anything downstream keys off
@@ -925,61 +909,9 @@ write_xlsx(hedata, path = file.path("Mt_Ed_Jobs", "hedata.xlsx"))
 # produced that week.
 hedata <- hedata %>% mutate(Institution = canonicalize_he_institution(Institution))
 
-this_week_he_cat <- hedata %>% mutate(Job_Type = classify_he_job_type(Title))
-# Pay_*, Est_* and Close_Date are left out of facultydata.csv: its accumulated
-# history predates them, and append_weekly_rows() refuses a changed column set.
-this_week_facultydata <- this_week_he_cat %>%
-  filter(Job_Type %in% c("Instructor/Teacher/Faculty", "Adjunct/Part-Time Faculty")) %>%
-  mutate(Category = classify_he_faculty_category(Title)) %>%
-  select(-all_of(POSTED_PAY_COLUMNS), -any_of(c("Est_Pay", "Est_Pay_Unit", "Est_Occupation", "Est_Area", "Est_Year", "Close_Date")), -any_of(HE_PLACE_COLUMNS))
-
-source("history_accumulator.R")
-
-facultydata <- append_weekly_rows(file.path("Mt_Ed_Jobs", "facultydata.csv"), as.data.frame(this_week_facultydata))
-write.csv(facultydata, file.path("Mt_Ed_Jobs", "facultydata.csv"), row.names = FALSE)
-
-# this_week_he_cat is hedata with Job_Type, which classify_work_schedule() reads for n_not_marked.
-this_week_he_totals <- posting_run_totals(this_week_he_cat, "Institution", "Job_Type", "Title", "college")
-he_institution_weekly_totals <- append_weekly_rows(
-  file.path("Mt_Ed_Jobs", "he_institution_weekly_totals.csv"), this_week_he_totals)
-write.csv(he_institution_weekly_totals, file.path("Mt_Ed_Jobs", "he_institution_weekly_totals.csv"), row.names = FALSE)
-
-# Per-run totals by college job type (every posting, not only faculty), all and not marked: the Home page's "Top
-# Higher Ed Job Types" table.
-he_jobtype_weekly_totals <- append_weekly_rows(
-  file.path("Mt_Ed_Jobs", "he_jobtype_weekly_totals.csv"),
-  jobtype_run_totals(this_week_he_cat, "Job_Type", "Title", "college"))
-write.csv(he_jobtype_weekly_totals, file.path("Mt_Ed_Jobs", "he_jobtype_weekly_totals.csv"), row.names = FALSE)
-
-this_week_hesum <- this_week_facultydata %>%
-  group_by(Category, Archive_Date, Job_Type) %>%
-  summarize(sum = n(), .groups = "drop") %>%
-  mutate(Institution = "Total") %>%
-  select(Category, Archive_Date, Institution, Job_Type, sum)
-
-this_week_hesuminst <- this_week_facultydata %>%
-  group_by(Category, Archive_Date, Institution, Job_Type) %>%
-  summarise(sum = n(), .groups = "drop")
-
-check_total_matches_parts(this_week_hesum, this_week_hesuminst,
-                           group_cols = c("Category", "Archive_Date", "Job_Type"))
-
-this_week_allsum_he <- bind_rows(this_week_hesum, this_week_hesuminst)
-Allsum_he <- append_weekly_rows(file.path("Mt_Ed_Jobs", "allsum_he.csv"), this_week_allsum_he)
-write.csv(Allsum_he, file = file.path("Mt_Ed_Jobs", "allsum_he.csv"), row.names = FALSE)
-
-henowsum <- this_week_hesum %>%
-  ungroup() %>%
-  rename(Sum = sum) %>%
-  select(Category, Job_Type, Sum, Institution)
-
-henowinstsum <- this_week_facultydata %>%
-  group_by(Category, Institution, Job_Type) %>%
-  summarize(Sum = n(), .groups = "drop") %>%
-  select(Category, Sum, Institution, Job_Type)
-
-Allnow_he <- bind_rows(henowsum, henowinstsum)
-write.csv(Allnow_he, file = file.path("Mt_Ed_Jobs", "allnow_he.csv"), row.names = FALSE)
+# The higher-ed history files (faculty rows, institution and job-type weekly totals, allsum_he, allnow_he), appended
+# in one call (edjobs 0.97.0); scripts/rebuild_he_history_from_archive.R builds them with the same build_he_history().
+write_he_history(hedata, "Mt_Ed_Jobs")
 ```
 
 ### HE faculty salary, enrollment, and Pell Grant recipient share (IPEDS via Urban Institute)

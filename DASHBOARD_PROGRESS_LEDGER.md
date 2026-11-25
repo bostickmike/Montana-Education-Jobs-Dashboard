@@ -1870,6 +1870,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     (`claude-notes/2026-11-24_step5-measure/replay/k12_history_replay.R`): 5 of 5 files byte-identical, for a same-day
     re-run and for a new run date. Rebuild parity on the branch build: 11 of 11 files. Suite on 0.96.0: 3,590 passed,
     0 failed. No full rehearsal (one step, replayed on real files).
+  * [x] Higher-ed stage after the scrapes in edjobs; edjobs pinned at 0.97.0 (2026-11-25 UTC; branch `he-stage`;
+    bostickmike/edjobs#103; review step 5 slice D). `combine_he_frames()`, `finish_he_rows()` (placeholders, implausible pay,
+    IPEDS staff estimates) and `write_he_history()` replace the hand-written steps; the rebuild script uses the same
+    `build_he_history()`. The map placing (`he_campus_departments.csv`) stays in the Rmd.
+    Replay on the newest committed archive (`claude-notes/2026-11-24_step5-measure/replay/he_history_replay.R`): combined and
+    finished tables identical, 5 of 5 history files byte-identical, for the same date and a new one. Live higher-ed scrape
+    (branch build), old and new code on the same frames: combined and finished tables identical (395 rows). Rebuild
+    parity (branch build) 11 of 11 files. Suite on 0.97.0: 3,590 passed, 0 failed. No full rehearsal.
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
