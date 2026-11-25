@@ -518,10 +518,11 @@ test_that("parse_westvalley_postings extracts real positions from captured fixtu
   result <- parse_westvalley_postings(fixture, url)
 
   expect_equal(nrow(result), 1)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text"))
   expect_equal(result$Title, "Paraprofessional Position")
   expect_equal(result$Location, "Kalispell")
   expect_true(grepl("paraprofessional-position$", result$Link))
+  expect_equal(result[, c("Pay_Min", "Pay_Max", "Pay_Unit")], data.frame(Pay_Min = 16.27, Pay_Max = 16.27, Pay_Unit = "hour"))
 })
 
 test_that("parse_westvalley_postings returns zero rows on empty or non-matching HTML", {
@@ -548,10 +549,12 @@ test_that("parse_smithvalley_postings extracts real positions from captured fixt
   result <- parse_smithvalley_postings(fixture, url)
 
   expect_equal(nrow(result), 2)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text"))
   expect_equal(result$Title, c("7/8 Grade Girls Basketball Coach", "Substitute Teacher"))
   expect_true(all(result$Location == "Kalispell"))
   expect_true(all(result$Link == url))
+  expect_equal(result$Pay_Min, c(NA, 15))          # "All substitutes are paid $15/hour."
+  expect_equal(result$Pay_Unit, c(NA, "hour"))
 })
 
 test_that("parse_smithvalley_postings returns zero rows on empty or non-matching HTML", {
@@ -609,11 +612,12 @@ test_that("parse_boulder_postings extracts real positions from captured fixture"
   result <- parse_boulder_postings(fixture, url)
 
   expect_equal(nrow(result), 2)
-  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link"))
+  expect_equal(names(result), c("Title", "Location", "Posted_Date", "Link", "Pay_Min", "Pay_Max", "Pay_Unit", "Pay_Text"))
   expect_true("Girls Basketball Coach" %in% result$Title)
   expect_true("After School Program Teachers/Subs" %in% result$Title)
   expect_equal(unique(result$Location), "Boulder")
   expect_equal(unique(result$Link), url)
+  expect_equal(result$Pay_Min[match(c("After School Program Teachers/Subs", "Girls Basketball Coach"), result$Title)], c(18, NA))
 })
 
 test_that("parse_boulder_postings returns zero rows on empty or non-matching HTML", {

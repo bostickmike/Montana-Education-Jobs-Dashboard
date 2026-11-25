@@ -1974,11 +1974,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     60 in the 11-23 archive (Terry's "No open positions" line). Seven Scobey teacher rows count as new once (the place
     is part of that key); listing durations bridge by title. Suite on 0.99.0: 3,636 passed and 1 failed (the weekly
     workflow's own edjobs tag, then updated; that file passes).
+  * [x] Posted pay read at three one-off boards (2026-11-25; branch `one-off-pay`; `claude-notes/2026-11-25_step8-tail/README.md`).
+    Smith Valley's substitutes ($15 an hour), Boulder's after-school line ($18 an hour) and West Valley's
+    paraprofessional ($16.27 an hour), each from its own line or block; same on the fixtures and on 2026-11-25's pages.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Posted pay on one-off boards not read yet (2026-11-25; `claude-notes/2026-11-25_step8-tail/README.md`): Boulder
-  ($18 an hour), Smith Valley ($15 an hour), West Valley ($16.27 an hour), Charlo (its card cuts the text off; the
-  posting's own page has it). Brockton's $45,484 is a base salary for the whole page, not one posting's.
+- [ ] Posted pay at Charlo (2026-11-25; `claude-notes/2026-11-25_step8-tail/README.md`): its card cuts the text off
+  ("$17.40 an ..."); the posting's own page has it. Brockton's $45,484 is a base salary for the whole page, not one posting's.
 - [ ] Heart Butte's board went from 9 rows (11-17) to 1 (11-23); the parser gave 1 on 11-25. Check the page by hand.
 - [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
   step down once and the legacy `job_duration_spells.csv` shows the flagged teaching ads as "Closed / Filled" at the
