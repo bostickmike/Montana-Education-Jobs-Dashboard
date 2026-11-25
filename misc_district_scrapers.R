@@ -251,7 +251,13 @@ parse_westvalley_postings <- function(html_text, url) {
     xml2::url_absolute(dec, url)
   }, character(1), USE.NAMES = FALSE)
 
-  data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE)
+  # Each title's guidelines, in the block after its heading, state its pay ("Starting pay is $16.27 per hour", 2026-11-25).
+  guidelines <- vapply(which(valid), function(i) {
+    block <- rvest::html_element(nodes[[i]], xpath = "ancestor::div[contains(concat(' ', @class, ' '), ' category ')][1]/following-sibling::div[1]")
+    if (inherits(block, "xml_missing")) NA_character_ else rvest::html_text2(block)
+  }, character(1))
+  cbind(data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = links, stringsAsFactors = FALSE),
+        extract_posted_pay(guidelines))
 }
 
 # Smith Valley School District #8 (smithvalleyschool.org, found 2026-10-21 via OPI Directory) --
@@ -286,7 +292,11 @@ parse_smithvalley_postings <- function(html_text, url) {
   }
 
   if (length(titles) == 0) return(empty)
-  data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+  out <- data.frame(Title = titles, Location = "Kalispell", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+  # Substitutes' pay is a line of its own ("All substitutes are paid $15/hour.", 2026-11-25).
+  lines <- strsplit(rvest::html_text2(page), "\n")[[1]]
+  sub_pay <- grep("^\\s*All substitutes are paid", lines, value = TRUE)
+  cbind(out, extract_posted_pay(ifelse(titles == "Substitute Teacher" & length(sub_pay) > 0, sub_pay[1], NA_character_)))
 }
 
 # Moore Public Schools (mooreschoolmt.com, found 2026-10-21 via OPI Directory) --
@@ -599,20 +609,25 @@ parse_boulder_postings <- function(html_text, url) {
   lines <- lines[nzchar(lines)]
 
   titles <- character(0)
+  pay_text <- character(0)
   in_coaching <- FALSE
   for (l in lines) {
     if (grepl("hiring .* for the After School Program", l, ignore.case = TRUE)) {
       titles <- c(titles, "After School Program Teachers/Subs")
+      pay_text <- c(pay_text, l)
     } else if (grepl("Coaching Positions:", l, ignore.case = TRUE)) {
       in_coaching <- TRUE
     } else if (grepl("Qualifications:|Stipend:|Closing Date:|To apply:", l, ignore.case = TRUE)) {
       in_coaching <- FALSE
     } else if (in_coaching && nzchar(l) && nchar(l) < 60) {
       titles <- c(titles, l)
+      pay_text <- c(pay_text, NA_character_)
     }
   }
   if (length(titles) == 0) return(empty)
-  data.frame(Title = titles, Location = "Boulder", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE)
+  # The after-school line states its pay ("Pay starts at $18 per hour"); a coach's is "District Pay Scale".
+  cbind(data.frame(Title = titles, Location = "Boulder", Posted_Date = NA_character_, Link = url, stringsAsFactors = FALSE),
+        extract_posted_pay(pay_text))
 }
 
 
