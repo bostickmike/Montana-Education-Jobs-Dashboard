@@ -1883,6 +1883,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     51 direct-board rows gone, 41 are stale flags (the rule's first run), 4 SchoolSpring endings on file, 1 a closed
     AppliTrack page, 5 titles their live pages (Rapelje, Fair-Mont-Egan, Roy; opened 11-24) no longer list; 12 OPI rows also
     gone, not traced one by one (6 are St. Labre's, now on its own board: 36 rows).
+  * [x] Reference and salary stages in edjobs; edjobs pinned at 0.98.0 (2026-11-25 UTC; branch `salary-stage`;
+    bostickmike/edjobs#104; review step 5 slice E). `refresh_pay_benchmarks()` (OEWS, QCEW), `refresh_ipeds_staff_pay()`,
+    `refresh_ipeds_he_salaries()`, `refresh_ccd_teacher_fte()` and `refresh_data_coverage()` replace the blocks both states wrote
+    out; the Rmd goes from 1,030 to 945 lines. DLI's salary report, the OPI finance and county tables and the crosswalk ids stay in the Rmd. The combine chunk no longer
+    standardizes six frames' dates twice (the second pass changes nothing: 9 of 9 Oct-Nov archives).
+    Replays with one live fetch fed to old and new code (`claude-notes/2026-11-24_step5-measure/replay/salary_stage_replay.R`,
+    `benchmark_stage_replay.R`): every value identical in `salarymap.csv` and `salarymap2.csv`; the three reference files, retrieval
+    dates and log rows identical. The edited Rmd chunks run live in a scratch copy (`run_e_chunks.R`): every fetch ok,
+    no value changed in either file. Suite on 0.98.0: 3,590 passed, 0 failed. No full rehearsal (each step replayed).
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
