@@ -1861,6 +1861,15 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Chrome's focus emulation and checks on every tab that the page is visible (the "every tab renders" check passed on
     tabs that had rendered nothing). With the display going off mid-run: 36 passed, 1 failed before; 48 passed, 0 failed
     twice after. Suite: 3,590 passed, 0 failed.
+  * [x] K-12 history files written by edjobs `write_k12_history()`; edjobs pinned at 0.96.0 (2026-11-25 UTC; branch
+    `k12-history-tail`; bostickmike/edjobs#102; review step 5 slice C1). The Rmd's hand-written steps after
+    `combinedclean` (teacher rows, district and job-type weekly totals, `allsum`, `allnow`) and the same steps in
+    `scripts/rebuild_k12_history_from_archive.R` become `write_k12_history()` / `build_k12_history()`.
+    Counted by distinct `Posting_ID`, as before.
+    Replay of the old steps against the new call on the committed files
+    (`claude-notes/2026-11-24_step5-measure/replay/k12_history_replay.R`): 5 of 5 files byte-identical, for a same-day
+    re-run and for a new run date. Rebuild parity on the branch build: 11 of 11 files. Suite on 0.96.0: 3,590 passed,
+    0 failed. No full rehearsal (one step, replayed on real files).
 
   * [x] Five college job pages read by one CSS-selector reader (2026-11-24; branch `css-board-he`; edjobs 0.87.0,
     bostickmike/edjobs#92; package review step 8, slice 4; `claude-notes/2026-11-24_css-board/README.md`). Carroll
