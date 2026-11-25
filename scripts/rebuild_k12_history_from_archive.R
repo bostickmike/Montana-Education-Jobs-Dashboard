@@ -59,40 +59,8 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
   district_county <- registry[, c("District", "County")]
   opi_counties <- read.csv(file.path(reference_dir, "opi_district_counties.csv"), stringsAsFactors = FALSE)
   combinedclean <- mt_k12_combinedclean(counted, oews_wages, district_county, opi_counties)
-  k12jobs <- build_k12_teacher_rows(combinedclean)
-
-  k12_district_weekly_totals <- posting_run_totals(combinedclean, "District", "position", "title", "k12",
-                                                   id_col = "Posting_ID")
-  k12_jobtype_weekly_totals <- jobtype_run_totals(combinedclean, "position", "title", "k12", id_col = "Posting_ID")
-
-  k12sumdistrict <- summarize_k12_posting_counts(k12jobs)
-
-  k12sum <- k12sumdistrict %>%
-    group_by(Broad_Category, Archive_Date) %>%
-    summarize(sum = sum(sum), .groups = "drop") %>%
-    mutate(District = "Total") %>%
-    select(Broad_Category, Archive_Date, District, sum)
-
-  allsum <- bind_rows(k12sum, k12sumdistrict)
-  latest_k12sumdistrict <- k12sumdistrict %>%
-    filter(Archive_Date == max(Archive_Date))
-  allnow <- bind_rows(
-    latest_k12sumdistrict %>%
-      group_by(Broad_Category) %>%
-      summarize(Sum = sum(sum), .groups = "drop") %>%
-      mutate(District = "Total"),
-    latest_k12sumdistrict %>%
-      transmute(Broad_Category, Sum = sum, District)
-  )
-
-  list(
-    combinedclean = combinedclean %>% filter(Archive_Date == max(Archive_Date)),
-    k12jobs = k12jobs,
-    k12_district_weekly_totals = k12_district_weekly_totals,
-    k12_jobtype_weekly_totals = k12_jobtype_weekly_totals,
-    allsum = allsum,
-    allnow = allnow
-  )
+  c(list(combinedclean = combinedclean %>% filter(Archive_Date == max(Archive_Date))),
+    build_k12_history(combinedclean, id_col = "Posting_ID"))
 }
 
 # Only runs when this file is executed directly (Rscript ...), not when
