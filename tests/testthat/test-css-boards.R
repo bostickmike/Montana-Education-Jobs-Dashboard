@@ -194,3 +194,39 @@ test_that("fetch_css_board_postings: Richey Public Schools, a live-shaped respon
   result <- fetch_css_board_postings(row$Job_Link, row$City, css_board_rule(css_rules, row$District))
   expect_equal(result$Title, "2026-27 Assistant Cook / Custodian")
 })
+
+test_that("fetch_css_board_postings: East Glacier Park Grade School, bold lines that name a role", {
+  result <- parse_css_district("East Glacier Park Grade School",
+                               read_css_page(test_path("fixtures", "eastglacier_cyberschool_2026-10-21.html")))
+  expect_equal(result$Title, "Licensed Teachers")
+  expect_equal(result$Location, "East Glacier Park")
+  expect_equal(result$Link, "https://eastglacierschool.com/employment")
+})
+
+test_that("fetch_css_board_postings: Pryor Public Schools, two blurbs with their own documents", {
+  result <- parse_css_district("Pryor Public Schools", read_css_page(test_path("fixtures", "pryor_jobs.html")))
+  expect_equal(result$Title, c("Literacy Tutors", "Bus Drivers"))
+  expect_equal(unique(result$Location), "Pryor")
+  expect_equal(result$Link, c("https://pryorwarriors.org/wp-content/uploads/2024/01/image-1.png",
+                              "https://pryorwarriors.org/wp-content/uploads/2023/08/BUS-DRIVER-FLYER.pdf"))
+})
+
+test_that("fetch_css_board_postings: Charlo School District 7J, 'Hiring' announcement cards and their pages", {
+  result <- parse_css_district("Charlo School District 7J", read_css_page(test_path("fixtures", "charlo_jobs.html")))
+  expect_equal(result$Title, c("Bus Drivers", "Paraprofessionals"))
+  expect_equal(unique(result$Location), "Charlo")
+  expect_equal(result$Link, paste0("https://charlo.k12.mt.us/announcements/", c("hiring-bus-drivers/", "hiring-paraprofessionals/")))
+})
+
+test_that("fetch_css_board_postings: Wibaux Public Schools, a button per posting", {
+  result <- parse_css_district("Wibaux Public Schools", read_css_page(test_path("fixtures", "wibaux_employment_2026-10-21.html")))
+  expect_equal(result$Title, "Special Education Teacher")
+  expect_equal(result$Location, "Wibaux")
+  expect_equal(result$Link, "https://www.wibauxschools.net/_files/ugd/571ae8_30fed258e54a4dd6bc8c899f1b0b448c.pdf")
+})
+
+test_that("the four 2026-11-25 districts' pages must be their board", {
+  other <- read_css_page(test_path("fixtures", "scobey_employment.html"))
+  for (d in c("East Glacier Park Grade School", "Pryor Public Schools", "Charlo School District 7J", "Wibaux Public Schools"))
+    expect_error(parse_css_district(d, other), "CSS board: the page has no", info = d)
+})

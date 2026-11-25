@@ -44,20 +44,17 @@ MT_SCRAPER_SPECS <- scraper_specs(
 # rows come out in the same order. A new platform goes here (test-direct-board-platforms.R checks every registry
 # platform is either here or read by its own block: the ATS boards, the Apptegy batch, OPI only).
 MT_DIRECT_BOARD_PLATFORMS <- list(
-  broadview = "BroadviewHeuristic", scobey = "ScobeyHeuristic", smartsites = "SmartSites",
-  hysham = "HyshamHeuristic", winnett = "WinnettHeuristic", milescity = "MilesCityHeuristic",
-  brockton = "BrocktonHeuristic", googledoc = "GoogleDoc", clinton = "ClintonHeuristic", miami = "MiamiHeuristic",
-  zurich = "ZurichHeuristic", wibaux = "WibauxHeuristic", westvalley = "WestValleyHeuristic",
-  cssboard_k12 = "CSSBoard", cyberschool = c("CyberSchool", "CyberSchoolText"), googlesites = "GoogleSites",
+  broadview = "BroadviewHeuristic", smartsites = "SmartSites",
+  textboard = "TextBoard", milescity = "MilesCityHeuristic", googledoc = "GoogleDoc",
+  westvalley = "WestValleyHeuristic", cssboard_k12 = "CSSBoard", cyberschool = c("CyberSchool", "CyberSchoolText"), googlesites = "GoogleSites",
   finalsite = "Finalsite", wordpress = "WordPress", edlio = "Edlio", joomla = "Joomla",
   smithvalley = "SmithValleyHeuristic", moore = "MooreHeuristic", boulder = "BoulderHeuristic",
-  jeffersonhigh = "JeffersonHighHeuristic", judithgap = "JudithGapHeuristic", whitewater = "WhitewaterHeuristic",
+  judithgap = "JudithGapHeuristic", whitewater = "WhitewaterHeuristic",
   monforton = "MonfortonHeuristic", grassrange = "GrassRangeHeuristic", heartbutte = "HeartButteHeuristic",
-  eastglacier = "EastGlacierHeuristic", charlo = "CharloHeuristic", jordan = "JordanHeuristic",
-  pioneer = "PioneerHeuristic", opheim = "OpheimHeuristic", pryor = "PryorHeuristic",
+  jordan = "JordanHeuristic",
+  pioneer = "PioneerHeuristic", opheim = "OpheimHeuristic",
   westglacier = "WestGlacierHeuristic", kila = "KilaHeuristic", pleasantvalley = "PleasantValleyHeuristic",
-  circle = "CircleHeuristic", bigfork = "BigforkHeuristic", terry = "TerryHeuristic", cji = "CJIHeuristic",
-  marion = "MarionHeuristic", lima = "LimaHeuristic", gallatingateway = "GallatinGatewayHeuristic"
+  circle = "CircleHeuristic", cji = "CJIHeuristic", lima = "LimaHeuristic"
 )
 # The college boards Mt_ED_Jobs.Rmd reads with edjobs::scrape_registry_platforms() (0.94.0, 2026-11-24), in the
 # order the per-platform blocks they replaced were combined (he_dfs; Interfolio, UM's faculty board, isn't a
@@ -84,6 +81,11 @@ mt_registry <- function(file) function() {
 mt_css_board_rules <- function() {
   file <- "css_board_rules.csv"
   css_board_rules(if (file.exists(file)) file else here::here(file))
+}
+# The text-board rules (text_board_rules.csv, edjobs text_board_rules(), 0.99.0), read when a source is looked up.
+mt_text_board_rules <- function() {
+  file <- "text_board_rules.csv"
+  text_board_rules(if (file.exists(file)) file else here::here(file))
 }
 
 set_state_config(state_config(
@@ -134,9 +136,10 @@ set_state_config(state_config(
     yoy = data.frame(file = "salarymap.csv", current = "Faculty_Avg_Salary", prior = "Faculty_Avg_Salary_Y1Ago")),
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
-      # CSSBoard districts (Swan Valley, Richey, Rapelje since 2026-11-24): the page, City and rule keyed by District.
+      # CSSBoard districts (since 2026-11-24) and TextBoard districts (2026-11-25): the page, City and rule keyed by District.
       specs = scraper_specs(ApptegyBespoke = MT_APPTEGY_MAP_SPEC,
                             CSSBoard = css_board_spec(function() mt_css_board_rules(), "Job_Link", "City", "District"),
+                            TextBoard = text_board_spec(function() mt_text_board_rules(), "Job_Link", "City", "District"),
                             defaults = MT_SCRAPER_SPECS),
       # Every other K-12 "<Name>Heuristic" platform is fetch_<lowercase name>_postings(Job_Link).
       fallback = function(platform, row) {
