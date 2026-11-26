@@ -1994,6 +1994,10 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     one-time false "new" from the 0.99.0 text boards reading the place or title right (Scobey 13, not the 7 noted
     11-25; Terry 8; Miami, Clinton, Marion 1 each). A wider pairing rule (any place change) would hide real new
     vacancies (MT 46, WY 177 over the history), so none was added (`claude-notes/2026-11-26_css-page-pay/README.md`).
+  * [x] Drift check skips OPI-only districts; edjobs pinned at 0.102.0 (2026-11-26; branch `drift-skip-opi-only`;
+    bostickmike/edjobs#108). Lodge Grass (OPI only since 11-22, its board frozen) kept its old board's baseline of 15 a
+    week, so the 11-26 check filed auto-fix #156 (Copilot's #157 changed nothing). `check_drift.R` now passes
+    `skip_platforms = "OPIOnly"`, as the silent-sources check does. Replayed on 11-26 data: 4 flagged -> 3. Suite 3,602 passed, 0 failed.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
