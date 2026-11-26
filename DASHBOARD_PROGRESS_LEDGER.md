@@ -1977,6 +1977,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   * [x] Posted pay read at three one-off boards (2026-11-25; branch `one-off-pay`; `claude-notes/2026-11-25_step8-tail/README.md`).
     Smith Valley's substitutes ($15 an hour), Boulder's after-school line ($18 an hour) and West Valley's
     paraprofessional ($16.27 an hour), each from its own line or block; same on the fixtures and on 2026-11-25's pages.
+  * [x] edjobs pinned at 0.100.0 (2026-11-26; branch `pin-edjobs-0.100.0`; bostickmike/edjobs#106). K-12 places from CCD
+    district towns, used by WY (`claude-notes/2026-11-26_wy-location/README.md`); nothing in MT calls it. Pin only.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Posted pay at Charlo (2026-11-25; `claude-notes/2026-11-25_step8-tail/README.md`): its card cuts the text off
