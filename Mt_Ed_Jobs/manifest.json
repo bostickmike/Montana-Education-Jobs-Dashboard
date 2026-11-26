@@ -806,7 +806,7 @@
         "Package": "curl",
         "Type": "Package",
         "Title": "A Modern and Flexible Web Client for R",
-        "Version": "8.1.0",
+        "Version": "8.2.0",
         "Authors@R": "c(\n    person(\"Jeroen\", \"Ooms\", role = c(\"aut\", \"cre\"), email = \"jeroenooms@gmail.com\",\n      comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Hadley\", \"Wickham\", role = \"ctb\"),\n    person(\"Posit Software, PBC\", role = \"cph\"))",
         "Description": "Bindings to 'libcurl' <https://curl.se/libcurl/> for performing fully\n    configurable HTTP/FTP requests where responses can be processed in memory, on\n    disk, or streaming via the callback or connection interfaces. Some knowledge\n    of 'libcurl' is recommended; for a more-user-friendly web client see the \n    'httr2' package which builds on this package with http specific tools and logic.",
         "License": "MIT + file LICENSE",
@@ -820,12 +820,12 @@
         "Language": "en-US",
         "Config/roxygen2/version": "8.0.0",
         "NeedsCompilation": "yes",
-        "Packaged": "2026-10-14 10:10:35 UTC; jeroen",
+        "Packaged": "2026-11-23 18:28:09 UTC; jeroen",
         "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Hadley Wickham [ctb],\n  Posit Software, PBC [cph]",
         "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
         "Repository": "RSPM",
-        "Date/Publication": "2026-10-14 12:12:13 UTC",
-        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-10-15 04:19:50 UTC; unix"
+        "Date/Publication": "2026-11-23 21:50:08 UTC",
+        "Built": "R 4.6.0; x86_64-pc-linux-gnu; 2026-11-24 06:30:49 UTC; unix"
       }
     },
     "data.table": {
@@ -1032,10 +1032,10 @@
         "GithubRef": "v0.100.0",
         "GithubSHA1": "af08b97b3ff70b19944f7880b8411957a59f44c0",
         "NeedsCompilation": "no",
-        "Packaged": "2026-11-25 04:49:58 UTC; mikebostick",
+        "Packaged": "2026-11-26 17:43:12 UTC; runner",
         "Author": "Mike Bostick [aut, cre]",
         "Maintainer": "Mike Bostick <michael.bostick@montana.edu>",
-        "Built": "R 4.6.2; ; 2026-11-25 04:49:58 UTC; unix"
+        "Built": "R 4.6.2; ; 2026-11-26 17:43:13 UTC; unix"
       }
     },
     "evaluate": {
@@ -3211,7 +3211,7 @@
     },
     "survival": {
       "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
+      "Repository": "https://packagemanager.posit.co/cran/latest",
       "description": {
         "Title": "Survival Analysis",
         "Priority": "recommended",
@@ -3518,7 +3518,7 @@
         "Package": "tinytex",
         "Type": "Package",
         "Title": "Helper Functions to Install and Maintain TeX Live, and Compile\nLaTeX Documents",
-        "Version": "0.61",
+        "Version": "0.62",
         "Authors@R": "c(\n  person(\"Yihui\", \"Xie\", role = c(\"aut\", \"cre\", \"cph\"), email = \"xie@yihui.name\", comment = c(ORCID = \"0000-0003-0645-5666\")),\n  person(given = \"Posit Software, PBC\", role = c(\"cph\", \"fnd\")),\n  person(\"Christophe\", \"Dervieux\", role = \"ctb\", comment = c(ORCID = \"0000-0003-4474-2498\")),\n  person(\"Devon\", \"Ryan\", role = \"ctb\", email = \"dpryan79@gmail.com\", comment = c(ORCID = \"0000-0002-8549-0971\")),\n  person(\"Ethan\", \"Heinzen\", role = \"ctb\"),\n  person(\"Fernando\", \"Cagua\", role = \"ctb\"),\n  person()\n  )",
         "Description": "Helper functions to install and maintain the 'LaTeX' distribution\n  named 'TinyTeX' (<https://yihui.org/tinytex/>), a lightweight, cross-platform,\n  portable, and easy-to-maintain version of 'TeX Live'. This package also\n  contains helper functions to compile 'LaTeX' documents, and install missing\n  'LaTeX' packages automatically.",
         "Imports": "xfun (>= 0.48)",
@@ -3529,12 +3529,12 @@
         "Encoding": "UTF-8",
         "RoxygenNote": "7.3.3",
         "NeedsCompilation": "no",
-        "Packaged": "2026-09-17 18:47:44 UTC; yihui",
+        "Packaged": "2026-11-25 03:20:23 UTC; yihui",
         "Author": "Yihui Xie [aut, cre, cph] (ORCID:\n    <https://orcid.org/0000-0003-0645-5666>),\n  Posit Software, PBC [cph, fnd],\n  Christophe Dervieux [ctb] (ORCID:\n    <https://orcid.org/0000-0003-4474-2498>),\n  Devon Ryan [ctb] (ORCID: <https://orcid.org/0000-0002-8549-0971>),\n  Ethan Heinzen [ctb],\n  Fernando Cagua [ctb]",
         "Maintainer": "Yihui Xie <xie@yihui.name>",
         "Repository": "RSPM",
-        "Date/Publication": "2026-09-17 20:40:02 UTC",
-        "Built": "R 4.6.0; ; 2026-09-26 06:35:38 UTC; unix"
+        "Date/Publication": "2026-11-25 04:30:02 UTC",
+        "Built": "R 4.6.0; ; 2026-11-26 04:25:14 UTC; unix"
       }
     },
     "tzdb": {
@@ -3947,64 +3947,64 @@
   },
   "files": {
     "allnow_he.csv": {
-      "checksum": "831541bf375469636084cc810b0c6a70"
+      "checksum": "6cb6b8d8b6c1687bf2cb18c00a16d1ae"
     },
     "allnow.csv": {
-      "checksum": "c401618b34680ba9f51c2531eb5baa50"
+      "checksum": "ca08359719a4378079ad9921c8b69137"
     },
     "allsum_he.csv": {
-      "checksum": "c5688e0be2611dd1813cf05169e2b1a6"
+      "checksum": "9bf9957c5d1da04dffa62ad605f9c61a"
     },
     "allsum.csv": {
-      "checksum": "28dadd7a45c8dcd3a0c5079de0cb8ef6"
+      "checksum": "6b679371645be0d18798733144fd27e6"
     },
     "app.R": {
       "checksum": "663d06ec35050aef6ca83d0392b2b726"
     },
     "combinedclean.csv": {
-      "checksum": "04114fc94edc13c6dcfdaf637adc0d2c"
+      "checksum": "63a8c389bbefb7d70bc3284eb810ffe9"
     },
     "data_dictionary.csv": {
       "checksum": "b3cda0dc7febeb68306102d09e9b20a6"
     },
     "facultydata.csv": {
-      "checksum": "a70dd66f33d68c65e0ce8281da356a66"
+      "checksum": "963577a6025f49a439d78d3b7f87d4b8"
     },
     "he_institution_weekly_totals.csv": {
-      "checksum": "80f0db06f4d6ee808515d64be69f9c11"
+      "checksum": "3442bde5f009591092ded024e09fbb86"
     },
     "he_job_duration_spells.csv": {
-      "checksum": "168e516ea9b077692d55451e763b0570"
+      "checksum": "74a566dc31b5cd5318f9855a6b09e5a2"
     },
     "he_jobtype_weekly_totals.csv": {
-      "checksum": "26f2a303aaf5f0071e96667559c37906"
+      "checksum": "b56fb2bb5a48fc7cecbe3105423a4e11"
     },
     "hedata.xlsx": {
-      "checksum": "3aaebbc7c16a7a9ac99d19f616f9282b"
+      "checksum": "5551ed5cbcbc22b4a489b9833cf3dcfe"
     },
     "ipeds_staff_salaries.csv": {
       "checksum": "a87128dc2e9046938dc7e5cf0397672f"
     },
     "job_duration_spells.csv": {
-      "checksum": "40cc93149277552afbf3d0167429b8c2"
+      "checksum": "18cf65b1428c48d2358817c9446b4b52"
     },
     "k12_district_weekly_totals.csv": {
-      "checksum": "1c9b1c24339d5800ceea2b67ba15e129"
+      "checksum": "4fe7a5644dd6abfd43128461f61a9bf2"
     },
     "k12_jobtype_weekly_totals.csv": {
-      "checksum": "db7f1299a4005a32b3dd890c7a994889"
+      "checksum": "a8a5fd5b0dd2d9ac15867d9b75eff26c"
     },
     "k12_salary_history.csv": {
       "checksum": "250fdf03f0c20fa6a81cac62ad2eb6b2"
     },
     "k12jobanalysis.csv": {
-      "checksum": "65e27d2166e5df7480173dc6c60207be"
+      "checksum": "8ece043f159ee16c07d91348cacc0c2b"
     },
     "llm_extract_shadow.csv": {
-      "checksum": "31adf511503c8153570c4ab5d21ebc95"
+      "checksum": "57b522dc6dba8cf62ea502a5d3cde3b6"
     },
     "mt_district_crosswalk.csv": {
-      "checksum": "1a75dd1388c3c442401ac8cd44b56a4d"
+      "checksum": "375b4b5d216c0a38ff5fe0912309229a"
     },
     "oews_role_wages.csv": {
       "checksum": "7592accc39e3cedd4887a35541a28336"
@@ -4013,10 +4013,10 @@
       "checksum": "989b4a9926d3effe643f7164971d08b2"
     },
     "opi_only_districts.csv": {
-      "checksum": "d3a7ee9b30ca7ce6982e4af677f2021f"
+      "checksum": "7079d0642c1e807545f1c77700ef8371"
     },
     "posting_first_seen.csv": {
-      "checksum": "c695d246965a8e0420f973722fccb487"
+      "checksum": "2e7115c86751358be9f38c9b6d8c006c"
     },
     "qcew_county_school_pay.csv": {
       "checksum": "106d551bb8f080d6b5996612a408d163"
@@ -4028,7 +4028,7 @@
       "checksum": "8863ccf02d1f8b6477512fb565db5ff4"
     },
     "source_retrieved_dates.csv": {
-      "checksum": "f55e085010371d90022b723535fd74df"
+      "checksum": "632ac6b261d797dfac80b6305af2b5d4"
     }
   },
   "users": null
