@@ -2099,6 +2099,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   for day-precision ends (`claude-notes/2026-11-09_daily-presence-check-plan.md`): phase 0 built 2026-11-13 (42 districts, Red
   Rover included, plus OPI's statewide list keyed by a detail-page fingerprint, edjobs 0.15.0; runs daily once the
   PR merges); the audit after two weeks, then phase 1 (the spells read the sightings).
+  Status 2026-11-26 (`claude-notes/2026-11-26_duration-checks/README.md`): (a) clean since 11-17, the last processing change
+  ("split posting spells at gaps", which took WY HE 59.5 -> 52.5 and MT K-12 25.5 -> 29); today's code on older archives
+  reproduces the medians committed then, so later moves are data (MT HE 32.5 -> 36.5 on 11-23); ~4 weeks puts (a) at
+  ~12-15. (b) preview on the pipeline's panels: endings with any artifact sign MT K-12 8.0%, MT HE 3.2%, WY K-12 6.7%,
+  WY HE 0.7% (ceilings; 68% on 11-02); rerun at (a)'s date. (c) done 11-10.
 - [x] Arrowhead Elementary #75: HTTP 403 from Cloudflare on every weekly CI run since 2026-09-07
   (`coverage_calendar.csv`); the page serves an ordinary request from home. Rechecked 2026-11-09: 3 postings, the same
   3 the last good CI run (09-01) captured -- Substitute Employment (standing pool, $120/day), Special Education
