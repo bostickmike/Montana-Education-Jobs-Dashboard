@@ -1979,11 +1979,17 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     paraprofessional ($16.27 an hour), each from its own line or block; same on the fixtures and on 2026-11-25's pages.
   * [x] edjobs pinned at 0.100.0 (2026-11-26; branch `pin-edjobs-0.100.0`; bostickmike/edjobs#106). K-12 places from CCD
     district towns, used by WY (`claude-notes/2026-11-26_wy-location/README.md`); nothing in MT calls it. Pin only.
+  * [x] Posted pay at Charlo and Rocky Mountain College, from each posting's own page; edjobs pinned at 0.101.0
+    (2026-11-26; branch `css-page-pay`; bostickmike/edjobs#107). Charlo's cards cut the pay off and Rocky's give none;
+    `css_board_rules.csv`'s new `Pay_Page_CSS` names the posting body on its own page. On the 11-23 archive, 12
+    CSS-board postings linked to their own page with no pay, and 7 state it there: Charlo's bus drivers $20.40 an hour,
+    paraprofessionals $17.40 an hour; Rocky 5 ($38,000 to $60,000 a year). Live run of every CSS board 11-26: same
+    rows as before, Charlo 2 of 2 and Rocky 5 of 10 with pay, no errors. Suite 3,598 passed, 0 failed.
+    Brockton's $45,484 stays unread (a base salary for the whole page, not one posting's).
+  * [x] Heart Butte's drop to 1 row is real (2026-11-26, checked by hand; the 11-17 archive has 8 board rows, not 9): the page's "Positions Available" lists only
+    "Bus Drivers" now, which is what the parser gives. No change.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Posted pay at Charlo (2026-11-25; `claude-notes/2026-11-25_step8-tail/README.md`): its card cuts the text off
-  ("$17.40 an ..."); the posting's own page has it. Brockton's $45,484 is a base salary for the whole page, not one posting's.
-- [ ] Heart Butte's board went from 9 rows (11-17) to 1 (11-23); the parser gave 1 on 11-25. Check the page by hand.
 - [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
   step down once and the legacy `job_duration_spells.csv` shows the flagged teaching ads as "Closed / Filled" at the
   rule's start. Open choice for Mike: restate the history from the raw archives with the rule (each week's own cutoff).
