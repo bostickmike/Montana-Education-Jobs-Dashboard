@@ -1986,7 +1986,7 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     paraprofessionals $17.40 an hour; Rocky 5 ($38,000 to $60,000 a year). Live run of every CSS board 11-26: same
     rows as before, Charlo 2 of 2 and Rocky 5 of 10 with pay, no errors. Suite 3,598 passed, 0 failed.
     Brockton's $45,484 stays unread (a base salary for the whole page, not one posting's).
-  * [x] Heart Butte's 9 rows to 1 is real (2026-11-26, checked by hand): the page's "Positions Available" lists only
+  * [x] Heart Butte's drop to 1 row is real (2026-11-26, checked by hand; the 11-17 archive has 8 board rows, not 9): the page's "Positions Available" lists only
     "Bus Drivers" now, which is what the parser gives. No change.
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
