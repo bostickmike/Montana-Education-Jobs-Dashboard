@@ -218,6 +218,21 @@ test_that("fetch_css_board_postings: Charlo School District 7J, 'Hiring' announc
   expect_equal(result$Link, paste0("https://charlo.k12.mt.us/announcements/", c("hiring-bus-drivers/", "hiring-paraprofessionals/")))
 })
 
+test_that("Pay_Page_CSS: Charlo and Rocky Mountain College read posted pay from each posting's own page", {
+  # Charlo's cards cut the pay off ("$17.40 an ..."); Rocky's cards give none. Pages captured 2026-11-26 (body only,
+  # a footer with its own figure added, which the selector must leave out).
+  charlo <- css_board_page_pay(read_css_page(test_path("fixtures", "charlo_bus_drivers_page_2026-11-26.html")),
+                               css_board_rule(css_rules, "Charlo School District 7J")$Pay_Page_CSS)
+  expect_equal(c(charlo$Pay_Min, charlo$Pay_Max), c(20.40, 20.40))
+  expect_equal(charlo$Pay_Unit, "hour")
+  rocky <- css_board_page_pay(read_css_page(test_path("fixtures", "rocky_admissions_counselor_page_2026-11-26.html")),
+                              css_board_rule(css_rules, "Rocky Mountain College")$Pay_Page_CSS)
+  expect_equal(c(rocky$Pay_Min, rocky$Pay_Max), c(35000, 43800))
+  expect_equal(rocky$Pay_Unit, "year")
+  others <- setdiff(css_rules$Source, c("Charlo School District 7J", "Rocky Mountain College"))
+  expect_true(all(css_rules$Pay_Page_CSS[css_rules$Source %in% others] == ""))
+})
+
 test_that("fetch_css_board_postings: Wibaux Public Schools, a button per posting", {
   result <- parse_css_district("Wibaux Public Schools", read_css_page(test_path("fixtures", "wibaux_employment_2026-10-21.html")))
   expect_equal(result$Title, "Special Education Teacher")
