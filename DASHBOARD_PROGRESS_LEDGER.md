@@ -1988,6 +1988,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     Brockton's $45,484 stays unread (a base salary for the whole page, not one posting's).
   * [x] Heart Butte's drop to 1 row is real (2026-11-26, checked by hand; the 11-17 archive has 8 board rows, not 9): the page's "Positions Available" lists only
     "Bus Drivers" now, which is what the parser gives. No change.
+  * [x] 11-26 update checked (2026-11-26; dispatched by hand 17:40 UTC, the scheduled run hadn't started; success).
+    1,514 K-12 rows (1,492 on 11-23); St. Labre's Trakstar board in (36 rows); run suite 3,641 passed, 0 failed; the only
+    error was the Urban IPEDS canary timing out. "New this week" 78: 36 St. Labre family (first update), 18 real, and 24
+    one-time false "new" from the 0.99.0 text boards reading the place or title right (Scobey 13, not the 7 noted
+    11-25; Terry 8; Miami, Clinton, Marion 1 each). A wider pairing rule (any place change) would hide real new
+    vacancies (MT 46, WY 177 over the history), so none was added (`claude-notes/2026-11-26_css-page-pay/README.md`).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
