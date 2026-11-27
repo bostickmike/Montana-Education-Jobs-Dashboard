@@ -189,11 +189,15 @@ OPI_ONLY_COVERAGE <- "Postings via OPI's statewide board"
 if (file.exists("opi_only_districts.csv")) {
   opi_only_k12 <- read.csv("opi_only_districts.csv", fileEncoding = "UTF-8", stringsAsFactors = FALSE)
   if (nrow(opi_only_k12) > 0) {
+    # A row's own coverage stands: St. Labre's three schools are "Full" (their Trakstar board is read, 2026-11-23);
+    # only a row without one gets the OPI badge (full review 2026-11-27: all were overwritten).
+    if (!"Data_Coverage" %in% names(opi_only_k12)) opi_only_k12$Data_Coverage <- NA_character_
     mapdata2_k12 <- bind_rows(
       mapdata2_k12,
       opi_only_k12 %>%
         rename(Name = District) %>%
-        mutate(Finance_FY = as.character(Finance_FY), CCD_Year = as.character(CCD_Year), Data_Coverage = OPI_ONLY_COVERAGE) %>%
+        mutate(Finance_FY = as.character(Finance_FY), CCD_Year = as.character(CCD_Year),
+               Data_Coverage = coalesce(na_if(trimws(Data_Coverage), ""), OPI_ONLY_COVERAGE)) %>%
         select(any_of(names(mapdata2_k12)))
     )
   }
@@ -583,8 +587,8 @@ he_new_this_week <- {
 # Combined map dataset -- one row per K-12 district or HE institution
 # registered in this project's registries, merging each entity's
 # location/salary reference data with a live current-openings count.
-# Unlike Wyoming, there's no Data_Coverage "Partial" tier here (every
-# registered entity is scraped from a real structured platform) and no
+# Data_Coverage: "Full" (a structured job-board platform), "Partial" (a monitor
+# of the district's own site) or OPI_ONLY_COVERAGE. There's no
 # merged-entity vacancy-rate case (each Montana HE institution has its own
 # independent IPEDS unitid) -- both of those pieces of Wyoming's app.R are
 # simply absent below rather than adapted.
@@ -980,8 +984,8 @@ ui <- page_navbar(
     extra = dash_card(
       "Montana K-12 coverage", class = "border-warning",
       tags$p(
-        "The K-12 Jobs Table combines postings from ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE),
-        " directly tracked district boards with Montana OPI's statewide Jobs for Teachers feed. ",
+        "The K-12 Jobs Table combines postings from the job boards of ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE),
+        " directly tracked districts and schools with Montana OPI's statewide Jobs for Teachers feed. ",
         "A job on both counts once: an OPI posting is checked, posting by posting, against the district's own board, and one that is the same opening ",
         "isn't counted again (the district's posting is marked \u201calso on OPI\u201d). OPI postings the district's board doesn't list count from OPI \u2014 ",
         "many districts post their teaching jobs only there \u2014 as do OPI postings for districts this dashboard doesn't read directly."
@@ -993,7 +997,7 @@ ui <- page_navbar(
       tags$p(
         class = "mb-0",
         "Districts this dashboard doesn't read directly appear on the Map and the Districts tab when they post on OPI, marked \u201c", OPI_ONLY_COVERAGE, "\u201d, with NCES location and staffing and the same salary, finance and Census context where those sources cover them. ",
-        "Private and tribal schools, co-ops and other employers outside the public district list stay in the Jobs Table only."
+        "Private and tribal schools, co-ops and other employers that post on OPI appear there too, marked the same way unless this dashboard reads their own board."
       ),
       tags$p(
         class = "small text-muted mt-2 mb-0",
@@ -1006,8 +1010,8 @@ ui <- page_navbar(
   map_tab_panel(
     "Montana",
     about = list(
-      p("The map shows the ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE), " districts whose job boards this dashboard reads, ",
-        sum(map_k12$Data_Coverage == OPI_ONLY_COVERAGE, na.rm = TRUE), " districts it doesn't read that posted on OPI's statewide board in the latest update, and ",
+      p("The map shows the ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE), " districts and schools whose job boards this dashboard reads, ",
+        sum(map_k12$Data_Coverage == OPI_ONLY_COVERAGE, na.rm = TRUE), " districts and other employers it doesn't read that posted on OPI's statewide board in the latest update, and ",
         n_distinct(mapdata2_he$Name), " colleges (a branch campus or site with current postings gets its own marker)."),
       p("The K-12 Jobs Table also includes OPI's statewide \"Jobs for Teachers\" feed, but OPI coverage is not independently verified as a complete census of Montana vacancies. OPI postings are matched to districts through the district each posting's OPI page names; districts this dashboard doesn't read directly are mapped from those postings."),
       p("Circle size reflects current openings; color reflects teacher/faculty vacancy rate where available. Click a marker to jump to its filtered Jobs Table.")
@@ -1103,7 +1107,7 @@ ui <- page_navbar(
                           source = "District job boards (AppliTrack, SchoolSpring, TedK12, Tyler Portico, Red Rover, district websites) + Montana OPI Jobs for Teachers",
                           cadence = "Twice weekly", badge = "success",
                           description = paste0("Postings on the job boards of ", sum(map_k12$Data_Coverage != OPI_ONLY_COVERAGE, na.rm = TRUE),
-                                               " Montana districts and on OPI's statewide board (which also covers districts without a board, co-ops and private and tribal schools), with a job listed on both counted once, board ads from before the previous school year left out (except substitute pools and jobs advertised all year), categorized, and linked to the posting.")),
+                                               " Montana districts and schools and on OPI's statewide board (which also covers districts without a board, co-ops and private and tribal schools), with a job listed on both counted once, board ads from before the previous school year left out (except substitute pools and jobs advertised all year), categorized, and linked to the posting.")),
       data_provenance_row(layer = "K-12 Historical Archive", source = "This project's archive (August 2026 onward)", cadence = "Twice weekly",
                           description = "Every update's postings, kept as raw snapshots and as the history files on this tab, for hiring over the school year by subject and place."),
       data_provenance_row(layer = "K-12 Teacher Compensation",

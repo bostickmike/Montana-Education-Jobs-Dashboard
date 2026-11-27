@@ -2013,6 +2013,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Coverage badge and text (full review 2026-11-27, `claude-notes/2026-11-27_full-review/README.md` 1.4; branch
+  `review-coverage-fixes`). `app.R` gave every `opi_only_districts.csv` row the OPI badge, overwriting "Full" on St.
+  Labre's three schools, whose Trakstar board is read (since 11-23); a row's own coverage now stands. The Home coverage
+  card still said private and tribal schools and co-ops "stay in the Jobs Table only" (they are on the map since 11-23);
+  the Home, Map and Data tab counts now say "districts and schools": 199 read directly (42 Full + 154 Partial + 3),
+  36 via OPI (4 + 32), checked in the running app. Stale "no Partial tier" comment corrected. The review's point about
+  the Partial note's platform list was checked and is right as written (`MT_DIRECT_API_PLATFORMS`). App tests on
+  edjobs 0.104.0: 1,245 passed, 0 failed (boot smoke included).
 - [x] Stale board ads: history restated under the rule (Mike, 2026-11-26; branch `stale-restate`; edjobs 0.104.0,
   bostickmike/edjobs#110; `claude-notes/2026-11-26_stale-restate/`). Was forward-only: the weeks before the rule still
   counted the old ads, so the Teacher chart would have read the rule's start as a drop. Now `read_counted_archive_week()`
