@@ -2026,7 +2026,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   "Old board ads", DATA_DICTIONARY.md, the K-12 Trends note and CLAUDE.md updated; run expectation
   `stale_history_restated` for 11-30. Correction to the 11-26 measurement note: its per-week OPI column double-counted
   the returning OPI postings on the archives with no OPI decision stored (08-11 to 10-27); the rebuilt files are the
-  numbers above.
+  numbers above. Full rehearsal (11-26, edjobs 0.104.0): every step passed, suites 3,669 passed, 0 failed
+  before and after the run; the render flagged 43 of 1,217 board postings and Custer's 2 filled ones; rebuild parity
+  held after the live run; with RUN_DATE 2026-11-30 the stale, filled-record and complete-board expectations all passed.
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
   "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
   7-12 music job 11-03..11-10 while the board scrape was empty). Check the Wayback history (k12.mt.us target) for a
