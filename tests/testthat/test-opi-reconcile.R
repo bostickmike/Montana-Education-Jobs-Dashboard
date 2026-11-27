@@ -610,7 +610,7 @@ test_that("a stale ad is read back as not counted, kept for the spells, and its 
   tmp <- withr::local_tempdir()
   utils::write.csv(fl, file.path(tmp, "combined_2026-11-23.csv"), row.names = FALSE)
   counted <- read_counted_archive_week(file.path(tmp, "combined_2026-11-23.csv"), xw, reg)
-  as_is <- read_counted_archive_week(here::here("Archivek12_Data", "combined_2026-11-23.csv"), xw, reg)
+  as_is <- read_counted_archive_week(here::here("Archivek12_Data", "combined_2026-11-23.csv"), xw, reg, restate = FALSE)
   # Archived OPI decisions are kept; the 41 flagged rows that aren't placeholders leave the count.
   expect_equal(nrow(as_is) - nrow(counted), 41)
   kept <- read_counted_archive_week(file.path(tmp, "combined_2026-11-23.csv"), xw, reg, keep_stale = TRUE)
@@ -622,6 +622,30 @@ test_that("a stale ad is read back as not counted, kept for the spells, and its 
   expect_true(any(links_before$OPI_Matched_Posting_ID %in% stale_ids))
   expect_false(any(links_after$OPI_Matched_Posting_ID %in% stale_ids))
   expect_equal(nrow(links_before) - nrow(links_after), sum(links_before$OPI_Matched_Posting_ID %in% stale_ids))
+})
+
+test_that("an archive written before the rule is restated: old ads out, OPI postings that had matched them back in", {
+  xw <- read.csv(here::here("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  f <- here::here("Archivek12_Data", "combined_2026-11-23.csv")
+  forward <- read_counted_archive_week(f, xw, reg, restate = FALSE)
+  restated <- read_counted_archive_week(f, xw, reg)
+  # Measured 2026-11-24 and 2026-11-26 (claude-notes/2026-11-26_stale-restate/): 41 old ads out, 5 OPI postings in.
+  expect_equal(nrow(forward) - nrow(restated), 36)
+  back <- restated[restated$Is_OPI & !restated$Posting_ID %in% forward$Posting_ID, ]
+  expect_setequal(paste(back$District, back$title),
+                  c("Lame Deer Public Schools Administrative - Principal", "Lame Deer Public Schools Mathematics",
+                    "Poplar Public Schools Elementary Curriculum", "Poplar Public Schools School Counseling",
+                    "Sidney Public Schools Special Education"))
+  expect_true(all(restated$Posting_ID[!restated$Is_OPI] %in% forward$Posting_ID[!forward$Is_OPI]))
+  # The spells keep the flagged rows, now with their reasons.
+  kept <- read_counted_archive_week(f, xw, reg, keep_stale = TRUE)
+  expect_equal(sum(edjobs::is_stale_flagged(kept$Stale_Reason)), 41)
+  # An archive the rule wrote is read as it was: nothing is re-judged.
+  a <- read.csv(here::here("Archivek12_Data", "combined_2026-11-26.csv"), colClasses = "character", check.names = FALSE)
+  expect_true("Stale_Reason" %in% names(a))
+  expect_equal(nrow(read_counted_archive_week(here::here("Archivek12_Data", "combined_2026-11-26.csv"), xw, reg)),
+               nrow(read_counted_archive_week(here::here("Archivek12_Data", "combined_2026-11-26.csv"), xw, reg, restate = FALSE)))
 })
 
 test_that("every employer on the complete-board list is a registry district or a board read directly, with what its check found", {

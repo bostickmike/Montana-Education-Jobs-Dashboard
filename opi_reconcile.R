@@ -948,12 +948,17 @@ build_opi_crosscheck_markdown <- function(qc, adoption, backlog_text = character
 # bind_rows() of several archives, older weeks carry an all-NA OPI_Counted
 # column, which reads as "counted" and skips their reconciliation (the
 # rebuild and the posting panel both did this until 2026-11-04).
-# Board ads the run flagged as stale (`Stale_Reason`, edjobs
-# flag_stale_board_postings(), from 2026-11-24) are not counted either; archives
-# written before then have no flags and are read as they were counted
-# (forward-only). keep_stale = TRUE keeps them, with the column (the posting
+# Board ads flagged as stale (`Stale_Reason`, edjobs flag_stale_board_postings())
+# are not counted either: the run's own flags from 2026-11-26, and archives
+# written before then judged now with their run's date (edjobs
+# stale_flags_for_archive(); restated 2026-11-26, Mike). In such an archive an
+# OPI posting the run didn't count is counted again when the flags alone change
+# that: the OPI rule recomputed without the flags drops it too, and with them
+# keeps it (it had matched an old ad); every other archived OPI decision stands.
+# restate = FALSE reads an old archive as it was counted (forward-only).
+# keep_stale = TRUE keeps the flagged rows, with the column (the posting
 # spells, which follow what each board listed).
-read_counted_archive_week <- function(path, crosswalk, registry, recompute = FALSE, keep_stale = FALSE) {
+read_counted_archive_week <- function(path, crosswalk, registry, recompute = FALSE, keep_stale = FALSE, restate = TRUE) {
   w <- utils::read.csv(path, colClasses = c(Archive_Date = "character"), stringsAsFactors = FALSE,
                        check.names = FALSE)
   w <- w[, setdiff(names(w), c("X", "Posting_ID", "Posting_Identity_Method")), drop = FALSE]
@@ -963,7 +968,22 @@ read_counted_archive_week <- function(path, crosswalk, registry, recompute = FAL
   }
   w <- add_k12_posting_identity(w)
   w <- w[!duplicated(w$Posting_ID), , drop = FALSE]
+  restated <- restate && !"Stale_Reason" %in% names(w)
+  if (restated) {
+    is_opi <- (if ("Posting_Source" %in% names(w)) grepl("^OPI ", w$Posting_Source) else FALSE) | is_opi_statewide_posting(w$url)
+    is_opi[is.na(is_opi)] <- FALSE
+    run <- as.Date(as.character(w$Archive_Date[!is.na(w$Archive_Date)][1]))
+    unflagged <- w
+    w <- edjobs::stale_flags_for_archive(w, run, board = !is_opi)
+  }
   rule <- opi_rule_for_archive(w, crosswalk, registry, recompute = recompute)
+  if (restated && !recompute && "OPI_Counted" %in% names(w) && any(edjobs::is_stale_flagged(w$Stale_Reason))) {
+    without <- opi_rule_for_archive(unflagged, crosswalk, registry, recompute = TRUE)
+    with <- opi_rule_for_archive(w, crosswalk, registry, recompute = TRUE)
+    released <- rule$Is_OPI & !rule$Counted & !without$Counted & with$Counted
+    rule$Counted[released] <- TRUE
+    rule$District[released] <- with$District[released]
+  }
   w$Is_OPI <- rule$Is_OPI
   w$District <- canonicalize_k12_district(rule$District)
   stale <- if ("Stale_Reason" %in% names(w) && !keep_stale) edjobs::is_stale_flagged(w$Stale_Reason) else rep(FALSE, nrow(w))

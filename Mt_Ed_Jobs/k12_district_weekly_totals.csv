@@ -16,6 +16,10 @@
 "Absarokee Elem / Absarokee H S","2026-10-27",3,3
 "Absarokee Elem / Absarokee H S","2026-11-03",1,0
 "Absarokee Elem / Absarokee H S","2026-11-10",1,0
+"Absarokee Elem / Absarokee H S","2026-11-17",1,0
+"Absarokee Elem / Absarokee H S","2026-11-19",1,0
+"Absarokee Elem / Absarokee H S","2026-11-23",1,0
+"Absarokee Elem / Absarokee H S","2026-11-26",1,0
 "Alberton School District","2026-09-01",2,0
 "Alberton School District","2026-09-07",2,0
 "Alberton School District","2026-09-08",2,0
@@ -27,8 +31,16 @@
 "Alberton School District","2026-10-27",2,0
 "Alberton School District","2026-11-03",2,0
 "Alberton School District","2026-11-10",2,0
+"Alberton School District","2026-11-17",3,2
+"Alberton School District","2026-11-19",3,2
+"Alberton School District","2026-11-23",3,2
+"Alberton School District","2026-11-26",3,2
 "Amsterdam Elem","2026-11-03",1,0
 "Amsterdam Elem","2026-11-10",1,0
+"Amsterdam Elem","2026-11-17",1,0
+"Amsterdam Elem","2026-11-19",1,0
+"Amsterdam Elem","2026-11-23",1,0
+"Amsterdam Elem","2026-11-26",1,0
 "Anaconda School District #10","2026-08-06",3,3
 "Anaconda School District #10","2026-08-07",3,3
 "Anaconda School District #10","2026-08-11",3,3
@@ -46,6 +58,10 @@
 "Anaconda School District #10","2026-10-27",7,5
 "Anaconda School District #10","2026-11-03",7,5
 "Anaconda School District #10","2026-11-10",9,6
+"Anaconda School District #10","2026-11-17",8,6
+"Anaconda School District #10","2026-11-19",8,6
+"Anaconda School District #10","2026-11-23",8,6
+"Anaconda School District #10","2026-11-26",9,6
 "Arlee Joint School District","2026-08-06",1,1
 "Arlee Joint School District","2026-08-07",1,1
 "Arlee Joint School District","2026-08-11",1,1
@@ -63,6 +79,15 @@
 "Arlee Joint School District","2026-10-27",7,3
 "Arlee Joint School District","2026-11-03",4,0
 "Arlee Joint School District","2026-11-10",4,0
+"Arlee Joint School District","2026-11-17",4,0
+"Arlee Joint School District","2026-11-19",5,0
+"Arlee Joint School District","2026-11-23",5,0
+"Arlee Joint School District","2026-11-26",5,0
+"Arrowhead Elementary School District #75","2026-08-06",3,3
+"Arrowhead Elementary School District #75","2026-08-07",3,3
+"Arrowhead Elementary School District #75","2026-08-11",3,3
+"Arrowhead Elementary School District #75","2026-08-18",3,3
+"Arrowhead Elementary School District #75","2026-08-25",3,3
 "Arrowhead Elementary School District #75","2026-09-01",3,2
 "Ashland Public School","2026-08-06",7,7
 "Ashland Public School","2026-08-07",7,7
@@ -81,6 +106,10 @@
 "Ashland Public School","2026-10-27",14,13
 "Ashland Public School","2026-11-03",7,6
 "Ashland Public School","2026-11-10",7,6
+"Ashland Public School","2026-11-17",7,6
+"Ashland Public School","2026-11-19",7,6
+"Ashland Public School","2026-11-23",7,6
+"Ashland Public School","2026-11-26",7,6
 "Augusta School District #45","2026-08-25",3,2
 "Augusta School District #45","2026-09-01",3,2
 "Augusta School District #45","2026-09-07",3,2
@@ -94,6 +123,10 @@
 "Augusta School District #45","2026-10-27",3,2
 "Augusta School District #45","2026-11-03",3,2
 "Augusta School District #45","2026-11-10",3,2
+"Augusta School District #45","2026-11-17",3,2
+"Augusta School District #45","2026-11-19",3,2
+"Augusta School District #45","2026-11-23",3,2
+"Augusta School District #45","2026-11-26",3,2
 "Bainville K-12 Schools","2026-08-06",3,3
 "Bainville K-12 Schools","2026-08-07",3,3
 "Bainville K-12 Schools","2026-08-11",3,3
@@ -109,6 +142,10 @@
 "Bainville K-12 Schools","2026-10-13",1,1
 "Bainville K-12 Schools","2026-11-03",7,4
 "Bainville K-12 Schools","2026-11-10",7,4
+"Bainville K-12 Schools","2026-11-17",7,4
+"Bainville K-12 Schools","2026-11-19",7,4
+"Bainville K-12 Schools","2026-11-23",7,4
+"Bainville K-12 Schools","2026-11-26",7,4
 "Baker Public Schools","2026-08-25",3,3
 "Baker Public Schools","2026-09-01",3,3
 "Baker Public Schools","2026-09-07",3,3
@@ -121,6 +158,10 @@
 "Baker Public Schools","2026-10-27",5,5
 "Baker Public Schools","2026-11-03",6,6
 "Baker Public Schools","2026-11-10",6,6
+"Baker Public Schools","2026-11-17",6,6
+"Baker Public Schools","2026-11-19",6,6
+"Baker Public Schools","2026-11-23",6,6
+"Baker Public Schools","2026-11-26",6,6
 "Belfry Public Schools","2026-08-06",7,7
 "Belfry Public Schools","2026-08-07",7,7
 "Belfry Public Schools","2026-08-11",7,7
@@ -138,21 +179,29 @@
 "Belfry Public Schools","2026-10-27",6,5
 "Belfry Public Schools","2026-11-03",3,2
 "Belfry Public Schools","2026-11-10",3,2
+"Belfry Public Schools","2026-11-17",3,2
+"Belfry Public Schools","2026-11-19",3,2
+"Belfry Public Schools","2026-11-23",3,2
+"Belfry Public Schools","2026-11-26",3,2
 "Belgrade School District 44","2026-08-11",23,12
 "Belgrade School District 44","2026-08-18",23,12
 "Belgrade School District 44","2026-08-25",23,12
 "Belgrade School District 44","2026-09-01",23,12
-"Belgrade School District 44","2026-09-07",40,25
-"Belgrade School District 44","2026-09-08",40,25
-"Belgrade School District 44","2026-09-15",41,25
-"Belgrade School District 44","2026-09-22",40,26
-"Belgrade School District 44","2026-09-29",39,26
-"Belgrade School District 44","2026-10-06",39,26
-"Belgrade School District 44","2026-10-13",36,23
-"Belgrade School District 44","2026-10-20",38,25
-"Belgrade School District 44","2026-10-27",35,25
-"Belgrade School District 44","2026-11-03",39,24
-"Belgrade School District 44","2026-11-10",38,23
+"Belgrade School District 44","2026-09-07",38,23
+"Belgrade School District 44","2026-09-08",38,23
+"Belgrade School District 44","2026-09-15",39,23
+"Belgrade School District 44","2026-09-22",38,24
+"Belgrade School District 44","2026-09-29",37,24
+"Belgrade School District 44","2026-10-06",37,24
+"Belgrade School District 44","2026-10-13",34,21
+"Belgrade School District 44","2026-10-20",36,23
+"Belgrade School District 44","2026-10-27",33,23
+"Belgrade School District 44","2026-11-03",37,22
+"Belgrade School District 44","2026-11-10",36,21
+"Belgrade School District 44","2026-11-17",36,21
+"Belgrade School District 44","2026-11-19",36,21
+"Belgrade School District 44","2026-11-23",36,21
+"Belgrade School District 44","2026-11-26",34,19
 "Belt Public Schools","2026-08-06",2,2
 "Belt Public Schools","2026-08-07",2,2
 "Belt Public Schools","2026-08-11",2,2
@@ -170,6 +219,10 @@
 "Belt Public Schools","2026-10-27",4,4
 "Belt Public Schools","2026-11-03",3,3
 "Belt Public Schools","2026-11-10",3,3
+"Belt Public Schools","2026-11-17",3,3
+"Belt Public Schools","2026-11-19",3,3
+"Belt Public Schools","2026-11-23",3,3
+"Belt Public Schools","2026-11-26",3,3
 "Big Sandy Public Schools","2026-08-06",7,7
 "Big Sandy Public Schools","2026-08-07",9,8
 "Big Sandy Public Schools","2026-08-11",16,15
@@ -187,6 +240,10 @@
 "Big Sandy Public Schools","2026-10-27",14,13
 "Big Sandy Public Schools","2026-11-03",13,11
 "Big Sandy Public Schools","2026-11-10",14,12
+"Big Sandy Public Schools","2026-11-17",13,11
+"Big Sandy Public Schools","2026-11-19",13,11
+"Big Sandy Public Schools","2026-11-23",13,11
+"Big Sandy Public Schools","2026-11-26",11,10
 "Big Sky School District 72","2026-08-06",2,2
 "Big Sky School District 72","2026-08-07",2,2
 "Big Sky School District 72","2026-08-11",2,2
@@ -204,9 +261,17 @@
 "Big Sky School District 72","2026-10-27",6,4
 "Big Sky School District 72","2026-11-03",6,4
 "Big Sky School District 72","2026-11-10",6,4
+"Big Sky School District 72","2026-11-17",5,3
+"Big Sky School District 72","2026-11-19",5,3
+"Big Sky School District 72","2026-11-23",5,3
+"Big Sky School District 72","2026-11-26",5,3
 "Big Timber Grade School","2026-10-27",3,2
 "Big Timber Grade School","2026-11-03",5,4
 "Big Timber Grade School","2026-11-10",5,4
+"Big Timber Grade School","2026-11-17",5,4
+"Big Timber Grade School","2026-11-19",5,4
+"Big Timber Grade School","2026-11-23",5,4
+"Big Timber Grade School","2026-11-26",5,4
 "Bigfork School District 38","2026-08-25",10,5
 "Bigfork School District 38","2026-09-01",10,5
 "Bigfork School District 38","2026-09-07",10,5
@@ -220,6 +285,10 @@
 "Bigfork School District 38","2026-10-27",9,3
 "Bigfork School District 38","2026-11-03",10,3
 "Bigfork School District 38","2026-11-10",9,3
+"Bigfork School District 38","2026-11-17",10,3
+"Bigfork School District 38","2026-11-19",10,3
+"Bigfork School District 38","2026-11-23",10,3
+"Bigfork School District 38","2026-11-26",10,3
 "Billings Public Schools","2026-08-06",77,58
 "Billings Public Schools","2026-08-07",77,58
 "Billings Public Schools","2026-08-11",91,70
@@ -237,12 +306,20 @@
 "Billings Public Schools","2026-10-27",73,54
 "Billings Public Schools","2026-11-03",60,43
 "Billings Public Schools","2026-11-10",57,40
+"Billings Public Schools","2026-11-17",64,43
+"Billings Public Schools","2026-11-19",65,42
+"Billings Public Schools","2026-11-23",66,42
+"Billings Public Schools","2026-11-26",67,43
 "Bitterroot Valley Coop","2026-11-03",1,1
 "Bloomfield Elem","2026-08-06",1,1
 "Bloomfield Elem","2026-08-07",1,1
 "Bloomfield Elem","2026-08-11",1,1
 "Blue Creek Elem","2026-11-03",2,2
 "Blue Creek Elem","2026-11-10",2,2
+"Blue Creek Elem","2026-11-17",2,2
+"Blue Creek Elem","2026-11-19",2,2
+"Blue Creek Elem","2026-11-23",2,2
+"Blue Creek Elem","2026-11-26",2,2
 "Bonner School District #14","2026-09-01",1,0
 "Bonner School District #14","2026-09-07",1,0
 "Bonner School District #14","2026-09-08",1,0
@@ -255,6 +332,10 @@
 "Bonner School District #14","2026-10-27",2,1
 "Bonner School District #14","2026-11-03",2,1
 "Bonner School District #14","2026-11-10",2,1
+"Bonner School District #14","2026-11-17",2,1
+"Bonner School District #14","2026-11-19",2,1
+"Bonner School District #14","2026-11-23",1,0
+"Bonner School District #14","2026-11-26",1,0
 "Boulder Elementary","2026-08-06",4,1
 "Boulder Elementary","2026-08-07",4,1
 "Boulder Elementary","2026-08-11",4,1
@@ -271,6 +352,10 @@
 "Boulder Elementary","2026-10-27",2,0
 "Boulder Elementary","2026-11-03",2,0
 "Boulder Elementary","2026-11-10",2,0
+"Boulder Elementary","2026-11-17",2,0
+"Boulder Elementary","2026-11-19",2,0
+"Boulder Elementary","2026-11-23",2,0
+"Boulder Elementary","2026-11-26",2,0
 "Box Elder","2026-08-06",7,7
 "Box Elder","2026-08-07",7,7
 "Box Elder","2026-08-11",7,7
@@ -288,6 +373,10 @@
 "Box Elder","2026-10-27",7,7
 "Box Elder Elem / Box Elder H S","2026-11-03",6,6
 "Box Elder Elem / Box Elder H S","2026-11-10",6,6
+"Box Elder Elem / Box Elder H S","2026-11-17",4,4
+"Box Elder Elem / Box Elder H S","2026-11-19",4,4
+"Box Elder Elem / Box Elder H S","2026-11-23",4,4
+"Box Elder Elem / Box Elder H S","2026-11-26",4,4
 "Bozeman Public Schools","2026-08-11",8,8
 "Bozeman Public Schools","2026-08-18",7,7
 "Bozeman Public Schools","2026-08-25",8,8
@@ -303,6 +392,10 @@
 "Bozeman Public Schools","2026-10-27",10,9
 "Bozeman Public Schools","2026-11-03",49,35
 "Bozeman Public Schools","2026-11-10",48,36
+"Bozeman Public Schools","2026-11-17",48,38
+"Bozeman Public Schools","2026-11-19",48,39
+"Bozeman Public Schools","2026-11-23",48,39
+"Bozeman Public Schools","2026-11-26",49,40
 "Bridger School District 2","2026-08-25",7,2
 "Bridger School District 2","2026-09-01",5,1
 "Bridger School District 2","2026-09-07",3,1
@@ -316,6 +409,10 @@
 "Bridger School District 2","2026-10-27",4,1
 "Bridger School District 2","2026-11-03",4,1
 "Bridger School District 2","2026-11-10",7,1
+"Bridger School District 2","2026-11-17",8,1
+"Bridger School District 2","2026-11-19",8,1
+"Bridger School District 2","2026-11-23",8,1
+"Bridger School District 2","2026-11-26",8,1
 "Broadus Public Schools","2026-08-06",5,5
 "Broadus Public Schools","2026-08-07",5,5
 "Broadus Public Schools","2026-08-11",5,5
@@ -333,6 +430,10 @@
 "Broadus Public Schools","2026-10-27",4,3
 "Broadus Public Schools","2026-11-03",4,3
 "Broadus Public Schools","2026-11-10",4,3
+"Broadus Public Schools","2026-11-17",4,3
+"Broadus Public Schools","2026-11-19",4,3
+"Broadus Public Schools","2026-11-23",4,3
+"Broadus Public Schools","2026-11-26",5,3
 "Broadview School District","2026-08-06",6,6
 "Broadview School District","2026-08-07",6,6
 "Broadview School District","2026-08-11",6,6
@@ -350,9 +451,17 @@
 "Broadview School District","2026-10-27",13,10
 "Broadview School District","2026-11-03",11,8
 "Broadview School District","2026-11-10",11,8
+"Broadview School District","2026-11-17",8,5
+"Broadview School District","2026-11-19",8,5
+"Broadview School District","2026-11-23",8,5
+"Broadview School District","2026-11-26",8,5
 "Brockton School District","2026-08-25",2,2
 "Brockton School District","2026-11-03",3,3
 "Brockton School District","2026-11-10",3,3
+"Brockton School District","2026-11-17",3,3
+"Brockton School District","2026-11-19",3,3
+"Brockton School District","2026-11-23",3,3
+"Brockton School District","2026-11-26",3,3
 "Browning Public Schools","2026-08-06",6,6
 "Browning Public Schools","2026-08-07",6,6
 "Browning Public Schools","2026-08-11",6,6
@@ -370,8 +479,16 @@
 "Browning Public Schools","2026-10-27",13,12
 "Browning Public Schools","2026-11-03",10,9
 "Browning Public Schools","2026-11-10",10,9
+"Browning Public Schools","2026-11-17",8,7
+"Browning Public Schools","2026-11-19",9,8
+"Browning Public Schools","2026-11-23",9,8
+"Browning Public Schools","2026-11-26",9,8
 "Butte Central High School","2026-11-03",1,1
 "Butte Central High School","2026-11-10",1,1
+"Butte Central High School","2026-11-17",1,1
+"Butte Central High School","2026-11-19",1,1
+"Butte Central High School","2026-11-23",1,1
+"Butte Central High School","2026-11-26",1,1
 "Butte School District 1","2026-08-11",2,2
 "Butte School District 1","2026-08-18",2,2
 "Butte School District 1","2026-08-25",2,2
@@ -387,9 +504,17 @@
 "Butte School District 1","2026-10-27",13,7
 "Butte School District 1","2026-11-03",16,6
 "Butte School District 1","2026-11-10",15,5
+"Butte School District 1","2026-11-17",14,5
+"Butte School District 1","2026-11-19",14,5
+"Butte School District 1","2026-11-23",14,5
+"Butte School District 1","2026-11-26",16,7
 "Canyon Creek School District","2026-10-27",1,1
 "Canyon Creek School District","2026-11-03",2,2
 "Canyon Creek School District","2026-11-10",2,2
+"Canyon Creek School District","2026-11-17",1,1
+"Canyon Creek School District","2026-11-19",1,1
+"Canyon Creek School District","2026-11-23",1,1
+"Canyon Creek School District","2026-11-26",1,1
 "Canyon Creek and Wolf Creek","2026-08-06",1,1
 "Canyon Creek and Wolf Creek","2026-08-07",1,1
 "Canyon Creek and Wolf Creek","2026-08-11",1,1
@@ -410,6 +535,10 @@
 "Cardwell Elementary School","2026-10-27",1,1
 "Cardwell Elementary School","2026-11-03",1,1
 "Cardwell Elementary School","2026-11-10",1,1
+"Cardwell Elementary School","2026-11-17",1,1
+"Cardwell Elementary School","2026-11-19",1,1
+"Cardwell Elementary School","2026-11-23",1,1
+"Cardwell Elementary School","2026-11-26",1,1
 "Cascade Public Schools","2026-08-06",3,3
 "Cascade Public Schools","2026-08-07",3,3
 "Cascade Public Schools","2026-08-11",3,3
@@ -427,9 +556,17 @@
 "Cascade Public Schools","2026-10-27",15,7
 "Cascade Public Schools","2026-11-03",14,7
 "Cascade Public Schools","2026-11-10",13,7
+"Cascade Public Schools","2026-11-17",12,6
+"Cascade Public Schools","2026-11-19",12,6
+"Cascade Public Schools","2026-11-23",12,6
+"Cascade Public Schools","2026-11-26",12,6
 "Cayuse Prairie School District #10","2026-10-27",2,2
 "Cayuse Prairie School District #10","2026-11-03",2,2
 "Cayuse Prairie School District #10","2026-11-10",2,2
+"Cayuse Prairie School District #10","2026-11-17",2,2
+"Cayuse Prairie School District #10","2026-11-19",2,2
+"Cayuse Prairie School District #10","2026-11-23",2,2
+"Cayuse Prairie School District #10","2026-11-26",2,2
 "Centerville Public Schools","2026-08-06",2,2
 "Centerville Public Schools","2026-08-07",2,2
 "Centerville Public Schools","2026-08-11",2,2
@@ -447,6 +584,10 @@
 "Centerville Public Schools","2026-10-27",6,2
 "Centerville Public Schools","2026-11-03",6,2
 "Centerville Public Schools","2026-11-10",6,2
+"Centerville Public Schools","2026-11-17",6,2
+"Centerville Public Schools","2026-11-19",3,1
+"Centerville Public Schools","2026-11-23",3,1
+"Centerville Public Schools","2026-11-26",3,1
 "Charlo School District 7J","2026-08-06",2,2
 "Charlo School District 7J","2026-08-07",2,2
 "Charlo School District 7J","2026-08-11",2,2
@@ -464,6 +605,10 @@
 "Charlo School District 7J","2026-10-27",3,3
 "Charlo School District 7J","2026-11-03",4,3
 "Charlo School District 7J","2026-11-10",4,3
+"Charlo School District 7J","2026-11-17",4,3
+"Charlo School District 7J","2026-11-19",4,3
+"Charlo School District 7J","2026-11-23",4,3
+"Charlo School District 7J","2026-11-26",3,3
 "Chester-Joplin-Inverness Public Schools","2026-08-06",2,2
 "Chester-Joplin-Inverness Public Schools","2026-08-07",2,2
 "Chester-Joplin-Inverness Public Schools","2026-08-11",2,2
@@ -481,6 +626,10 @@
 "Chester-Joplin-Inverness Public Schools","2026-10-27",2,2
 "Chester-Joplin-Inverness Public Schools","2026-11-03",6,4
 "Chester-Joplin-Inverness Public Schools","2026-11-10",3,0
+"Chester-Joplin-Inverness Public Schools","2026-11-17",3,0
+"Chester-Joplin-Inverness Public Schools","2026-11-19",3,0
+"Chester-Joplin-Inverness Public Schools","2026-11-23",3,0
+"Chester-Joplin-Inverness Public Schools","2026-11-26",3,0
 "Chinook Public Schools","2026-08-06",1,1
 "Chinook Public Schools","2026-08-07",1,1
 "Chinook Public Schools","2026-08-11",1,1
@@ -498,6 +647,10 @@
 "Chinook Public Schools","2026-10-27",6,2
 "Chinook Public Schools","2026-11-03",6,2
 "Chinook Public Schools","2026-11-10",6,2
+"Chinook Public Schools","2026-11-17",6,2
+"Chinook Public Schools","2026-11-19",6,2
+"Chinook Public Schools","2026-11-23",6,2
+"Chinook Public Schools","2026-11-26",6,2
 "Choteau School District","2026-08-06",4,4
 "Choteau School District","2026-08-07",4,4
 "Choteau School District","2026-08-11",4,4
@@ -515,6 +668,10 @@
 "Choteau School District","2026-10-27",5,3
 "Choteau School District","2026-11-03",4,2
 "Choteau School District","2026-11-10",4,2
+"Choteau School District","2026-11-17",4,2
+"Choteau School District","2026-11-19",4,2
+"Choteau School District","2026-11-23",4,2
+"Choteau School District","2026-11-26",4,2
 "Circle Public Schools","2026-08-06",2,2
 "Circle Public Schools","2026-08-07",2,2
 "Circle Public Schools","2026-08-11",2,2
@@ -538,23 +695,31 @@
 "Clinton School District #32","2026-10-27",1,0
 "Clinton School District #32","2026-11-03",1,0
 "Clinton School District #32","2026-11-10",1,0
+"Clinton School District #32","2026-11-17",1,0
+"Clinton School District #32","2026-11-19",1,0
+"Clinton School District #32","2026-11-23",2,1
+"Clinton School District #32","2026-11-26",2,1
 "Colstrip Public Schools","2026-08-06",7,7
-"Colstrip Public Schools","2026-08-07",19,17
-"Colstrip Public Schools","2026-08-11",20,18
-"Colstrip Public Schools","2026-08-18",19,16
-"Colstrip Public Schools","2026-08-25",19,16
-"Colstrip Public Schools","2026-09-01",19,16
-"Colstrip Public Schools","2026-09-07",19,16
-"Colstrip Public Schools","2026-09-08",19,16
-"Colstrip Public Schools","2026-09-15",19,16
-"Colstrip Public Schools","2026-09-22",19,16
-"Colstrip Public Schools","2026-09-29",19,16
-"Colstrip Public Schools","2026-10-06",20,17
-"Colstrip Public Schools","2026-10-13",20,17
-"Colstrip Public Schools","2026-10-20",20,17
-"Colstrip Public Schools","2026-10-27",20,17
-"Colstrip Public Schools","2026-11-03",21,18
-"Colstrip Public Schools","2026-11-10",23,21
+"Colstrip Public Schools","2026-08-07",16,15
+"Colstrip Public Schools","2026-08-11",17,16
+"Colstrip Public Schools","2026-08-18",16,14
+"Colstrip Public Schools","2026-08-25",16,14
+"Colstrip Public Schools","2026-09-01",16,14
+"Colstrip Public Schools","2026-09-07",16,14
+"Colstrip Public Schools","2026-09-08",16,14
+"Colstrip Public Schools","2026-09-15",16,14
+"Colstrip Public Schools","2026-09-22",16,14
+"Colstrip Public Schools","2026-09-29",16,14
+"Colstrip Public Schools","2026-10-06",17,15
+"Colstrip Public Schools","2026-10-13",17,15
+"Colstrip Public Schools","2026-10-20",17,15
+"Colstrip Public Schools","2026-10-27",17,15
+"Colstrip Public Schools","2026-11-03",18,16
+"Colstrip Public Schools","2026-11-10",21,19
+"Colstrip Public Schools","2026-11-17",21,19
+"Colstrip Public Schools","2026-11-19",22,20
+"Colstrip Public Schools","2026-11-23",22,20
+"Colstrip Public Schools","2026-11-26",22,20
 "Columbia Falls School District 6","2026-08-11",4,4
 "Columbia Falls School District 6","2026-08-18",4,4
 "Columbia Falls School District 6","2026-09-29",1,1
@@ -564,6 +729,10 @@
 "Columbia Falls School District 6","2026-10-27",1,1
 "Columbia Falls School District 6","2026-11-03",25,11
 "Columbia Falls School District 6","2026-11-10",23,10
+"Columbia Falls School District 6","2026-11-17",25,11
+"Columbia Falls School District 6","2026-11-19",25,11
+"Columbia Falls School District 6","2026-11-23",25,11
+"Columbia Falls School District 6","2026-11-26",25,11
 "Columbus Public Schools","2026-08-18",1,1
 "Columbus Public Schools","2026-08-25",1,1
 "Columbus Public Schools","2026-09-01",3,2
@@ -578,6 +747,10 @@
 "Columbus Public Schools","2026-10-27",5,4
 "Columbus Public Schools","2026-11-03",4,3
 "Columbus Public Schools","2026-11-10",4,3
+"Columbus Public Schools","2026-11-17",4,3
+"Columbus Public Schools","2026-11-19",4,3
+"Columbus Public Schools","2026-11-23",4,3
+"Columbus Public Schools","2026-11-26",4,3
 "Conrad Public Schools","2026-08-06",5,5
 "Conrad Public Schools","2026-08-07",5,5
 "Conrad Public Schools","2026-08-11",5,5
@@ -595,23 +768,31 @@
 "Conrad Public Schools","2026-10-27",5,5
 "Conrad Public Schools","2026-11-03",4,4
 "Conrad Public Schools","2026-11-10",4,4
+"Conrad Public Schools","2026-11-17",4,4
+"Conrad Public Schools","2026-11-19",4,4
+"Conrad Public Schools","2026-11-23",4,4
+"Conrad Public Schools","2026-11-26",4,4
 "Corvallis School District #1","2026-08-06",3,3
 "Corvallis School District #1","2026-08-07",3,3
 "Corvallis School District #1","2026-08-11",3,3
 "Corvallis School District #1","2026-08-18",3,3
-"Corvallis School District #1","2026-08-25",27,17
-"Corvallis School District #1","2026-09-01",24,16
-"Corvallis School District #1","2026-09-07",24,16
-"Corvallis School District #1","2026-09-08",24,16
-"Corvallis School District #1","2026-09-15",24,16
-"Corvallis School District #1","2026-09-22",22,15
-"Corvallis School District #1","2026-09-29",22,15
-"Corvallis School District #1","2026-10-06",20,13
-"Corvallis School District #1","2026-10-13",21,14
-"Corvallis School District #1","2026-10-20",21,14
-"Corvallis School District #1","2026-10-27",21,14
-"Corvallis School District #1","2026-11-03",20,13
-"Corvallis School District #1","2026-11-10",20,13
+"Corvallis School District #1","2026-08-25",26,16
+"Corvallis School District #1","2026-09-01",23,15
+"Corvallis School District #1","2026-09-07",23,15
+"Corvallis School District #1","2026-09-08",23,15
+"Corvallis School District #1","2026-09-15",23,15
+"Corvallis School District #1","2026-09-22",21,14
+"Corvallis School District #1","2026-09-29",21,14
+"Corvallis School District #1","2026-10-06",19,12
+"Corvallis School District #1","2026-10-13",20,13
+"Corvallis School District #1","2026-10-20",20,13
+"Corvallis School District #1","2026-10-27",20,13
+"Corvallis School District #1","2026-11-03",19,12
+"Corvallis School District #1","2026-11-10",19,12
+"Corvallis School District #1","2026-11-17",19,12
+"Corvallis School District #1","2026-11-19",19,12
+"Corvallis School District #1","2026-11-23",19,12
+"Corvallis School District #1","2026-11-26",18,11
 "Creston School District","2026-08-25",1,0
 "Creston School District","2026-09-01",1,0
 "Creston School District","2026-09-07",1,0
@@ -625,6 +806,10 @@
 "Creston School District","2026-10-27",1,0
 "Creston School District","2026-11-03",1,0
 "Creston School District","2026-11-10",1,0
+"Creston School District","2026-11-17",1,0
+"Creston School District","2026-11-19",1,0
+"Creston School District","2026-11-23",1,0
+"Creston School District","2026-11-26",1,0
 "Culbertson School District 17-C","2026-08-25",2,1
 "Culbertson School District 17-C","2026-09-01",2,1
 "Culbertson School District 17-C","2026-09-07",2,1
@@ -638,6 +823,10 @@
 "Culbertson School District 17-C","2026-10-27",2,1
 "Culbertson School District 17-C","2026-11-03",2,1
 "Culbertson School District 17-C","2026-11-10",2,1
+"Culbertson School District 17-C","2026-11-17",2,1
+"Culbertson School District 17-C","2026-11-19",2,1
+"Culbertson School District 17-C","2026-11-23",2,1
+"Culbertson School District 17-C","2026-11-26",2,1
 "Custer Public Schools","2026-08-06",5,5
 "Custer Public Schools","2026-08-07",5,5
 "Custer Public Schools","2026-08-11",5,5
@@ -655,6 +844,10 @@
 "Custer Public Schools","2026-10-27",6,6
 "Custer Public Schools","2026-11-03",6,6
 "Custer Public Schools","2026-11-10",6,6
+"Custer Public Schools","2026-11-17",6,6
+"Custer Public Schools","2026-11-19",6,6
+"Custer Public Schools","2026-11-23",6,6
+"Custer Public Schools","2026-11-26",6,6
 "Cut Bank School District #15","2026-08-06",3,3
 "Cut Bank School District #15","2026-08-07",3,3
 "Cut Bank School District #15","2026-08-11",3,3
@@ -672,6 +865,10 @@
 "Cut Bank School District #15","2026-10-27",8,6
 "Cut Bank School District #15","2026-11-03",8,6
 "Cut Bank School District #15","2026-11-10",8,6
+"Cut Bank School District #15","2026-11-17",3,1
+"Cut Bank School District #15","2026-11-19",3,1
+"Cut Bank School District #15","2026-11-23",3,1
+"Cut Bank School District #15","2026-11-26",3,1
 "Darby School District 9","2026-08-06",1,1
 "Darby School District 9","2026-08-07",1,1
 "Darby School District 9","2026-08-11",1,1
@@ -689,6 +886,10 @@
 "Darby School District 9","2026-10-27",4,2
 "Darby School District 9","2026-11-03",5,2
 "Darby School District 9","2026-11-10",5,2
+"Darby School District 9","2026-11-17",6,2
+"Darby School District 9","2026-11-19",6,2
+"Darby School District 9","2026-11-23",6,2
+"Darby School District 9","2026-11-26",6,2
 "Deer Lodge School District #1","2026-08-06",2,2
 "Deer Lodge School District #1","2026-08-07",2,2
 "Deer Lodge School District #1","2026-08-11",2,2
@@ -706,6 +907,10 @@
 "Deer Lodge School District #1","2026-10-27",10,4
 "Deer Lodge School District #1","2026-11-03",8,4
 "Deer Lodge School District #1","2026-11-10",8,4
+"Deer Lodge School District #1","2026-11-17",7,3
+"Deer Lodge School District #1","2026-11-19",7,3
+"Deer Lodge School District #1","2026-11-23",6,2
+"Deer Lodge School District #1","2026-11-26",6,2
 "Deer Park School District","2026-09-01",1,0
 "Deer Park School District","2026-09-07",1,0
 "Deer Park School District","2026-09-08",1,0
@@ -718,6 +923,10 @@
 "Deer Park School District","2026-10-27",1,0
 "Deer Park School District","2026-11-03",1,0
 "Deer Park School District","2026-11-10",1,0
+"Deer Park School District","2026-11-17",1,0
+"Deer Park School District","2026-11-19",1,0
+"Deer Park School District","2026-11-23",1,0
+"Deer Park School District","2026-11-26",1,0
 "Dillon School District 10","2026-09-01",3,2
 "Dillon School District 10","2026-09-07",3,2
 "Dillon School District 10","2026-09-08",3,2
@@ -730,6 +939,10 @@
 "Dillon School District 10","2026-10-27",2,1
 "Dillon School District 10","2026-11-03",2,1
 "Dillon School District 10","2026-11-10",2,1
+"Dillon School District 10","2026-11-17",2,1
+"Dillon School District 10","2026-11-19",3,2
+"Dillon School District 10","2026-11-23",3,2
+"Dillon School District 10","2026-11-26",3,2
 "Dixon School District #9","2026-08-25",3,1
 "Dixon School District #9","2026-09-01",3,1
 "Dixon School District #9","2026-09-07",3,1
@@ -743,6 +956,10 @@
 "Dixon School District #9","2026-10-27",3,1
 "Dixon School District #9","2026-11-03",2,0
 "Dixon School District #9","2026-11-10",2,0
+"Dixon School District #9","2026-11-17",2,0
+"Dixon School District #9","2026-11-19",2,0
+"Dixon School District #9","2026-11-23",2,0
+"Dixon School District #9","2026-11-26",2,0
 "Dodson K-12","2026-08-06",1,1
 "Dodson K-12","2026-08-07",1,1
 "Dodson K-12","2026-08-11",1,1
@@ -752,6 +969,10 @@
 "Dodson K-12","2026-09-07",1,1
 "Dodson K-12","2026-09-08",1,1
 "Dodson K-12","2026-09-15",1,1
+"Dodson K-12","2026-11-17",1,1
+"Dodson K-12","2026-11-19",2,2
+"Dodson K-12","2026-11-23",2,2
+"Dodson K-12","2026-11-26",2,2
 "Drummond Public Schools","2026-08-06",5,5
 "Drummond Public Schools","2026-08-07",5,5
 "Drummond Public Schools","2026-08-11",5,5
@@ -769,6 +990,10 @@
 "Drummond Public Schools","2026-10-27",8,3
 "Drummond Public Schools","2026-11-03",8,3
 "Drummond Public Schools","2026-11-10",8,3
+"Drummond Public Schools","2026-11-17",8,3
+"Drummond Public Schools","2026-11-19",8,3
+"Drummond Public Schools","2026-11-23",8,3
+"Drummond Public Schools","2026-11-26",8,3
 "Dutton/Brady Public School District","2026-08-06",1,1
 "Dutton/Brady Public School District","2026-08-07",1,1
 "Dutton/Brady Public School District","2026-08-11",1,1
@@ -786,26 +1011,42 @@
 "Dutton/Brady Public School District","2026-10-27",3,2
 "Dutton/Brady Public School District","2026-11-03",2,1
 "Dutton/Brady Public School District","2026-11-10",2,1
+"Dutton/Brady Public School District","2026-11-17",3,2
+"Dutton/Brady Public School District","2026-11-19",3,2
+"Dutton/Brady Public School District","2026-11-23",3,2
+"Dutton/Brady Public School District","2026-11-26",3,2
 "East Glacier Park Grade School","2026-10-27",1,1
 "East Glacier Park Grade School","2026-11-03",1,1
 "East Glacier Park Grade School","2026-11-10",1,1
-"East Helena Public Schools","2026-08-06",12,10
-"East Helena Public Schools","2026-08-07",12,10
-"East Helena Public Schools","2026-08-11",14,12
-"East Helena Public Schools","2026-08-18",13,11
-"East Helena Public Schools","2026-08-25",11,9
-"East Helena Public Schools","2026-09-01",9,7
-"East Helena Public Schools","2026-09-07",9,7
-"East Helena Public Schools","2026-09-08",9,7
-"East Helena Public Schools","2026-09-15",10,7
-"East Helena Public Schools","2026-09-22",6,5
-"East Helena Public Schools","2026-09-29",8,6
-"East Helena Public Schools","2026-10-06",8,6
-"East Helena Public Schools","2026-10-13",8,6
+"East Glacier Park Grade School","2026-11-17",1,1
+"East Glacier Park Grade School","2026-11-19",1,1
+"East Glacier Park Grade School","2026-11-23",1,1
+"East Glacier Park Grade School","2026-11-26",1,1
+"East Helena Public Schools","2026-08-06",11,9
+"East Helena Public Schools","2026-08-07",11,9
+"East Helena Public Schools","2026-08-11",13,11
+"East Helena Public Schools","2026-08-18",12,10
+"East Helena Public Schools","2026-08-25",10,8
+"East Helena Public Schools","2026-09-01",8,6
+"East Helena Public Schools","2026-09-07",8,6
+"East Helena Public Schools","2026-09-08",8,6
+"East Helena Public Schools","2026-09-15",9,6
+"East Helena Public Schools","2026-09-22",5,4
+"East Helena Public Schools","2026-09-29",7,5
+"East Helena Public Schools","2026-10-06",7,5
+"East Helena Public Schools","2026-10-13",7,5
 "East Helena Public Schools","2026-10-20",7,5
 "East Helena Public Schools","2026-10-27",8,5
 "East Helena Public Schools","2026-11-03",7,5
 "East Helena Public Schools","2026-11-10",9,5
+"East Helena Public Schools","2026-11-17",9,5
+"East Helena Public Schools","2026-11-19",9,5
+"East Helena Public Schools","2026-11-23",9,5
+"East Helena Public Schools","2026-11-26",9,5
+"Eastern Yellowstone Coop","2026-11-17",1,1
+"Eastern Yellowstone Coop","2026-11-19",1,1
+"Eastern Yellowstone Coop","2026-11-23",1,1
+"Eastern Yellowstone Coop","2026-11-26",1,1
 "Ekalaka Public Schools","2026-08-06",1,1
 "Ekalaka Public Schools","2026-08-07",1,1
 "Ekalaka Public Schools","2026-08-11",1,1
@@ -823,9 +1064,17 @@
 "Ekalaka Public Schools","2026-10-27",3,2
 "Ekalaka Public Schools","2026-11-03",3,2
 "Ekalaka Public Schools","2026-11-10",3,2
+"Ekalaka Public Schools","2026-11-17",3,2
+"Ekalaka Public Schools","2026-11-19",3,2
+"Ekalaka Public Schools","2026-11-23",3,2
+"Ekalaka Public Schools","2026-11-26",3,2
 "Elder Grove School District","2026-10-27",1,1
 "Elder Grove School District","2026-11-03",1,1
 "Elder Grove School District","2026-11-10",1,1
+"Elder Grove School District","2026-11-17",1,1
+"Elder Grove School District","2026-11-19",1,1
+"Elder Grove School District","2026-11-23",1,1
+"Elder Grove School District","2026-11-26",1,1
 "Elysian School District #23","2026-08-25",1,0
 "Elysian School District #23","2026-09-01",1,0
 "Elysian School District #23","2026-09-07",1,0
@@ -839,6 +1088,10 @@
 "Elysian School District #23","2026-10-27",1,0
 "Elysian School District #23","2026-11-03",3,2
 "Elysian School District #23","2026-11-10",3,2
+"Elysian School District #23","2026-11-17",3,2
+"Elysian School District #23","2026-11-19",3,2
+"Elysian School District #23","2026-11-23",3,2
+"Elysian School District #23","2026-11-26",3,2
 "Ennis Schools","2026-09-01",5,2
 "Ennis Schools","2026-09-07",5,2
 "Ennis Schools","2026-09-08",5,2
@@ -851,6 +1104,10 @@
 "Ennis Schools","2026-10-27",4,3
 "Ennis Schools","2026-11-03",4,3
 "Ennis Schools","2026-11-10",4,3
+"Ennis Schools","2026-11-17",4,3
+"Ennis Schools","2026-11-19",4,3
+"Ennis Schools","2026-11-23",1,1
+"Ennis Schools","2026-11-26",1,1
 "Eureka","2026-08-06",1,1
 "Eureka","2026-08-07",1,1
 "Eureka","2026-08-11",1,1
@@ -880,6 +1137,10 @@
 "Evergreen School District #50","2026-10-27",4,3
 "Evergreen School District #50","2026-11-03",3,2
 "Evergreen School District #50","2026-11-10",3,2
+"Evergreen School District #50","2026-11-17",3,2
+"Evergreen School District #50","2026-11-19",3,2
+"Evergreen School District #50","2026-11-23",3,2
+"Evergreen School District #50","2026-11-26",3,2
 "Fair-Mont-Egan Schools","2026-08-25",2,0
 "Fair-Mont-Egan Schools","2026-09-01",3,0
 "Fair-Mont-Egan Schools","2026-09-07",2,0
@@ -893,6 +1154,10 @@
 "Fair-Mont-Egan Schools","2026-10-27",2,0
 "Fair-Mont-Egan Schools","2026-11-03",3,1
 "Fair-Mont-Egan Schools","2026-11-10",6,3
+"Fair-Mont-Egan Schools","2026-11-17",3,0
+"Fair-Mont-Egan Schools","2026-11-19",3,0
+"Fair-Mont-Egan Schools","2026-11-23",3,0
+"Fair-Mont-Egan Schools","2026-11-26",1,0
 "Fairfield","2026-08-06",2,2
 "Fairfield","2026-08-07",2,2
 "Fairfield","2026-08-11",1,1
@@ -925,8 +1190,16 @@
 "Fairview Public Schools","2026-10-27",3,3
 "Fairview Public Schools","2026-11-03",3,3
 "Fairview Public Schools","2026-11-10",4,4
+"Fairview Public Schools","2026-11-17",5,5
+"Fairview Public Schools","2026-11-19",4,4
+"Fairview Public Schools","2026-11-23",4,4
+"Fairview Public Schools","2026-11-26",5,4
 "Flathead Special Ed. Coop.","2026-11-03",3,3
 "Flathead Special Ed. Coop.","2026-11-10",3,3
+"Flathead Special Ed. Coop.","2026-11-17",3,3
+"Flathead Special Ed. Coop.","2026-11-19",3,3
+"Flathead Special Ed. Coop.","2026-11-23",3,3
+"Flathead Special Ed. Coop.","2026-11-26",3,3
 "Florence-Carlton School District 15-6","2026-08-25",1,1
 "Florence-Carlton School District 15-6","2026-09-01",9,2
 "Florence-Carlton School District 15-6","2026-09-07",9,2
@@ -940,6 +1213,10 @@
 "Florence-Carlton School District 15-6","2026-10-27",8,3
 "Florence-Carlton School District 15-6","2026-11-03",7,2
 "Florence-Carlton School District 15-6","2026-11-10",7,2
+"Florence-Carlton School District 15-6","2026-11-17",7,2
+"Florence-Carlton School District 15-6","2026-11-19",7,2
+"Florence-Carlton School District 15-6","2026-11-23",7,2
+"Florence-Carlton School District 15-6","2026-11-26",7,2
 "Forsyth Public Schools","2026-08-06",1,1
 "Forsyth Public Schools","2026-08-07",1,1
 "Forsyth Public Schools","2026-08-11",1,1
@@ -955,6 +1232,8 @@
 "Forsyth Public Schools","2026-10-13",1,1
 "Forsyth Public Schools","2026-10-20",1,1
 "Forsyth Public Schools","2026-10-27",2,2
+"Forsyth Public Schools","2026-11-23",1,0
+"Forsyth Public Schools","2026-11-26",2,1
 "Fort Benton School District 1","2026-08-25",1,0
 "Fort Benton School District 1","2026-09-01",1,0
 "Fort Benton School District 1","2026-09-07",1,0
@@ -968,6 +1247,10 @@
 "Fort Benton School District 1","2026-10-27",1,0
 "Fort Benton School District 1","2026-11-03",1,0
 "Fort Benton School District 1","2026-11-10",1,0
+"Fort Benton School District 1","2026-11-17",1,0
+"Fort Benton School District 1","2026-11-19",1,0
+"Fort Benton School District 1","2026-11-23",1,0
+"Fort Benton School District 1","2026-11-26",1,0
 "Fortine Elem","2026-08-06",1,1
 "Fortine Elem","2026-08-07",1,1
 "Fortine Elem","2026-08-11",1,1
@@ -998,6 +1281,10 @@
 "Frazer Public Schools","2026-10-27",26,22
 "Frazer Public Schools","2026-11-03",26,22
 "Frazer Public Schools","2026-11-10",26,22
+"Frazer Public Schools","2026-11-17",26,22
+"Frazer Public Schools","2026-11-19",26,22
+"Frazer Public Schools","2026-11-23",26,22
+"Frazer Public Schools","2026-11-26",26,22
 "Frenchtown K-12 Schools","2026-08-06",5,5
 "Frenchtown K-12 Schools","2026-08-07",5,5
 "Frenchtown K-12 Schools","2026-08-11",5,5
@@ -1006,6 +1293,10 @@
 "Frenchtown K-12 Schools","2026-10-27",1,1
 "Frenchtown K-12 Schools","2026-11-03",6,1
 "Frenchtown K-12 Schools","2026-11-10",6,1
+"Frenchtown K-12 Schools","2026-11-17",6,1
+"Frenchtown K-12 Schools","2026-11-19",6,2
+"Frenchtown K-12 Schools","2026-11-23",6,2
+"Frenchtown K-12 Schools","2026-11-26",6,2
 "Froid Public Schools","2026-08-06",1,1
 "Froid Public Schools","2026-08-07",1,1
 "Froid Public Schools","2026-08-11",1,1
@@ -1023,6 +1314,10 @@
 "Froid Public Schools","2026-10-27",4,2
 "Froid Public Schools","2026-11-03",4,2
 "Froid Public Schools","2026-11-10",4,2
+"Froid Public Schools","2026-11-17",4,2
+"Froid Public Schools","2026-11-19",4,2
+"Froid Public Schools","2026-11-23",4,2
+"Froid Public Schools","2026-11-26",4,2
 "Fromberg Public Schools","2026-08-06",5,5
 "Fromberg Public Schools","2026-08-07",5,5
 "Fromberg Public Schools","2026-08-11",5,5
@@ -1034,8 +1329,16 @@
 "Fromberg Public Schools","2026-10-27",1,0
 "Fromberg Public Schools","2026-11-03",1,0
 "Fromberg Public Schools","2026-11-10",1,0
+"Fromberg Public Schools","2026-11-17",1,0
+"Fromberg Public Schools","2026-11-19",1,0
+"Fromberg Public Schools","2026-11-23",1,0
+"Fromberg Public Schools","2026-11-26",1,0
 "Frontier Elementary School","2026-11-03",2,2
 "Frontier Elementary School","2026-11-10",2,2
+"Frontier Elementary School","2026-11-17",2,2
+"Frontier Elementary School","2026-11-19",2,2
+"Frontier Elementary School","2026-11-23",2,2
+"Frontier Elementary School","2026-11-26",2,2
 "Gallatin Gateway School","2026-08-06",1,1
 "Gallatin Gateway School","2026-08-07",1,1
 "Gallatin Gateway School","2026-08-11",1,1
@@ -1052,6 +1355,10 @@
 "Gallatin Gateway School","2026-10-20",4,3
 "Gallatin Gateway School","2026-10-27",4,3
 "Gallatin Gateway School","2026-11-10",3,2
+"Gallatin Gateway School","2026-11-17",3,2
+"Gallatin Gateway School","2026-11-19",3,2
+"Gallatin Gateway School","2026-11-23",3,2
+"Gallatin Gateway School","2026-11-26",3,2
 "Gardiner Public Schools","2026-08-06",5,5
 "Gardiner Public Schools","2026-08-07",5,5
 "Gardiner Public Schools","2026-08-11",5,5
@@ -1069,6 +1376,10 @@
 "Gardiner Public Schools","2026-10-27",5,4
 "Gardiner Public Schools","2026-11-03",5,4
 "Gardiner Public Schools","2026-11-10",5,4
+"Gardiner Public Schools","2026-11-17",5,4
+"Gardiner Public Schools","2026-11-19",5,4
+"Gardiner Public Schools","2026-11-23",3,2
+"Gardiner Public Schools","2026-11-26",3,2
 "Geraldine K-12","2026-08-06",25,25
 "Geraldine K-12","2026-08-07",25,25
 "Geraldine K-12","2026-08-11",26,26
@@ -1086,6 +1397,10 @@
 "Geraldine K-12","2026-10-27",1,1
 "Geraldine K-12","2026-11-03",1,1
 "Geraldine K-12","2026-11-10",1,1
+"Geraldine K-12","2026-11-17",1,1
+"Geraldine K-12","2026-11-19",1,1
+"Geraldine K-12","2026-11-23",1,1
+"Geraldine K-12","2026-11-26",1,1
 "Geyser Public Schools","2026-08-06",3,3
 "Geyser Public Schools","2026-08-07",3,3
 "Geyser Public Schools","2026-08-11",3,3
@@ -1103,6 +1418,10 @@
 "Geyser Public Schools","2026-10-27",3,3
 "Geyser Public Schools","2026-11-03",1,1
 "Geyser Public Schools","2026-11-10",1,1
+"Geyser Public Schools","2026-11-17",1,1
+"Geyser Public Schools","2026-11-19",1,1
+"Geyser Public Schools","2026-11-23",1,1
+"Geyser Public Schools","2026-11-26",1,1
 "Gildford Colony Elem","2026-08-06",1,1
 "Gildford Colony Elem","2026-08-07",1,1
 "Glasgow School District 1-A","2026-08-25",7,2
@@ -1118,6 +1437,10 @@
 "Glasgow School District 1-A","2026-10-27",10,5
 "Glasgow School District 1-A","2026-11-03",10,5
 "Glasgow School District 1-A","2026-11-10",9,4
+"Glasgow School District 1-A","2026-11-17",9,4
+"Glasgow School District 1-A","2026-11-19",9,4
+"Glasgow School District 1-A","2026-11-23",9,4
+"Glasgow School District 1-A","2026-11-26",9,4
 "Glendive Public Schools","2026-08-06",6,5
 "Glendive Public Schools","2026-08-07",20,10
 "Glendive Public Schools","2026-08-11",18,9
@@ -1135,30 +1458,46 @@
 "Glendive Public Schools","2026-10-27",17,9
 "Glendive Public Schools","2026-11-03",15,8
 "Glendive Public Schools","2026-11-10",15,8
+"Glendive Public Schools","2026-11-17",15,8
+"Glendive Public Schools","2026-11-19",15,8
+"Glendive Public Schools","2026-11-23",15,8
+"Glendive Public Schools","2026-11-26",14,8
 "Golden Ridge Elem","2026-11-03",1,1
 "Golden Ridge Elem","2026-11-10",1,1
+"Golden Ridge Elem","2026-11-17",1,1
+"Golden Ridge Elem","2026-11-19",1,1
+"Golden Ridge Elem","2026-11-23",1,1
+"Golden Ridge Elem","2026-11-26",1,1
 "Grass Range Public Schools","2026-10-27",2,1
 "Grass Range Public Schools","2026-11-03",2,1
 "Grass Range Public Schools","2026-11-10",2,1
+"Grass Range Public Schools","2026-11-17",4,2
+"Grass Range Public Schools","2026-11-19",4,2
+"Grass Range Public Schools","2026-11-23",4,2
+"Grass Range Public Schools","2026-11-26",4,2
 "Great Falls Cent Cath HS","2026-11-03",1,1
 "Great Falls Cent Cath HS","2026-11-10",1,1
-"Great Falls Public Schools","2026-08-06",46,38
-"Great Falls Public Schools","2026-08-07",46,38
-"Great Falls Public Schools","2026-08-11",44,38
-"Great Falls Public Schools","2026-08-18",45,38
-"Great Falls Public Schools","2026-08-25",44,36
-"Great Falls Public Schools","2026-09-01",42,35
-"Great Falls Public Schools","2026-09-07",43,36
-"Great Falls Public Schools","2026-09-08",43,36
-"Great Falls Public Schools","2026-09-15",39,33
-"Great Falls Public Schools","2026-09-22",35,30
-"Great Falls Public Schools","2026-09-29",33,28
-"Great Falls Public Schools","2026-10-06",32,27
-"Great Falls Public Schools","2026-10-13",32,27
-"Great Falls Public Schools","2026-10-20",34,29
-"Great Falls Public Schools","2026-10-27",33,28
-"Great Falls Public Schools","2026-11-03",31,26
-"Great Falls Public Schools","2026-11-10",31,27
+"Great Falls Public Schools","2026-08-06",45,37
+"Great Falls Public Schools","2026-08-07",45,37
+"Great Falls Public Schools","2026-08-11",43,37
+"Great Falls Public Schools","2026-08-18",44,37
+"Great Falls Public Schools","2026-08-25",43,35
+"Great Falls Public Schools","2026-09-01",41,34
+"Great Falls Public Schools","2026-09-07",42,35
+"Great Falls Public Schools","2026-09-08",42,35
+"Great Falls Public Schools","2026-09-15",38,32
+"Great Falls Public Schools","2026-09-22",34,29
+"Great Falls Public Schools","2026-09-29",32,27
+"Great Falls Public Schools","2026-10-06",31,26
+"Great Falls Public Schools","2026-10-13",31,26
+"Great Falls Public Schools","2026-10-20",33,28
+"Great Falls Public Schools","2026-10-27",32,27
+"Great Falls Public Schools","2026-11-03",30,25
+"Great Falls Public Schools","2026-11-10",30,26
+"Great Falls Public Schools","2026-11-17",30,26
+"Great Falls Public Schools","2026-11-19",29,25
+"Great Falls Public Schools","2026-11-23",27,23
+"Great Falls Public Schools","2026-11-26",28,24
 "Hall Elem","2026-08-06",2,2
 "Hall Elem","2026-08-07",2,2
 "Hall Elem","2026-08-11",2,2
@@ -1175,6 +1514,10 @@
 "Hamilton School District 3","2026-10-27",14,8
 "Hamilton School District 3","2026-11-03",14,8
 "Hamilton School District 3","2026-11-10",16,10
+"Hamilton School District 3","2026-11-17",17,11
+"Hamilton School District 3","2026-11-19",17,11
+"Hamilton School District 3","2026-11-23",16,11
+"Hamilton School District 3","2026-11-26",16,11
 "Hardin Public Schools","2026-08-06",6,5
 "Hardin Public Schools","2026-08-07",6,5
 "Hardin Public Schools","2026-08-11",11,10
@@ -1192,6 +1535,10 @@
 "Hardin Public Schools","2026-10-27",3,2
 "Hardin Public Schools","2026-11-03",2,1
 "Hardin Public Schools","2026-11-10",3,2
+"Hardin Public Schools","2026-11-17",3,2
+"Hardin Public Schools","2026-11-19",3,2
+"Hardin Public Schools","2026-11-23",3,2
+"Hardin Public Schools","2026-11-26",4,3
 "Harlem Public Schools","2026-08-06",3,3
 "Harlem Public Schools","2026-08-07",3,3
 "Harlem Public Schools","2026-08-11",3,3
@@ -1209,6 +1556,10 @@
 "Harlem Public Schools","2026-10-27",11,4
 "Harlem Public Schools","2026-11-03",10,3
 "Harlem Public Schools","2026-11-10",10,3
+"Harlem Public Schools","2026-11-17",8,2
+"Harlem Public Schools","2026-11-19",8,2
+"Harlem Public Schools","2026-11-23",8,2
+"Harlem Public Schools","2026-11-26",8,2
 "Harlowton K-12","2026-08-06",2,2
 "Harlowton K-12","2026-08-07",2,2
 "Harlowton K-12","2026-08-11",2,2
@@ -1238,23 +1589,31 @@
 "Harrison K-12 Schools","2026-10-27",1,1
 "Harrison K-12 Schools","2026-11-03",1,1
 "Harrison K-12 Schools","2026-11-10",1,1
-"Havre Public Schools","2026-08-06",14,10
-"Havre Public Schools","2026-08-07",14,10
-"Havre Public Schools","2026-08-11",20,16
-"Havre Public Schools","2026-08-18",19,16
-"Havre Public Schools","2026-08-25",20,17
-"Havre Public Schools","2026-09-01",18,15
-"Havre Public Schools","2026-09-07",18,15
-"Havre Public Schools","2026-09-08",18,15
-"Havre Public Schools","2026-09-15",18,15
-"Havre Public Schools","2026-09-22",19,16
-"Havre Public Schools","2026-09-29",14,11
-"Havre Public Schools","2026-10-06",13,10
-"Havre Public Schools","2026-10-13",13,10
-"Havre Public Schools","2026-10-20",12,10
+"Harrison K-12 Schools","2026-11-17",1,1
+"Harrison K-12 Schools","2026-11-19",1,1
+"Harrison K-12 Schools","2026-11-23",1,1
+"Harrison K-12 Schools","2026-11-26",1,1
+"Havre Public Schools","2026-08-06",13,9
+"Havre Public Schools","2026-08-07",13,9
+"Havre Public Schools","2026-08-11",19,15
+"Havre Public Schools","2026-08-18",18,15
+"Havre Public Schools","2026-08-25",19,16
+"Havre Public Schools","2026-09-01",17,14
+"Havre Public Schools","2026-09-07",17,14
+"Havre Public Schools","2026-09-08",17,14
+"Havre Public Schools","2026-09-15",17,14
+"Havre Public Schools","2026-09-22",18,15
+"Havre Public Schools","2026-09-29",13,10
+"Havre Public Schools","2026-10-06",12,9
+"Havre Public Schools","2026-10-13",12,9
+"Havre Public Schools","2026-10-20",11,9
 "Havre Public Schools","2026-10-27",11,9
 "Havre Public Schools","2026-11-03",9,5
 "Havre Public Schools","2026-11-10",9,5
+"Havre Public Schools","2026-11-17",9,5
+"Havre Public Schools","2026-11-19",9,5
+"Havre Public Schools","2026-11-23",9,5
+"Havre Public Schools","2026-11-26",9,5
 "Hays-Lodge Pole School District","2026-08-06",3,3
 "Hays-Lodge Pole School District","2026-08-07",3,3
 "Hays-Lodge Pole School District","2026-08-11",3,3
@@ -1272,11 +1631,25 @@
 "Hays-Lodge Pole School District","2026-10-27",6,3
 "Hays-Lodge Pole School District","2026-11-03",7,4
 "Hays-Lodge Pole School District","2026-11-10",8,5
+"Hays-Lodge Pole School District","2026-11-17",9,5
+"Hays-Lodge Pole School District","2026-11-19",10,5
+"Hays-Lodge Pole School District","2026-11-23",10,5
+"Hays-Lodge Pole School District","2026-11-26",10,5
 "Headwaters Academy","2026-11-03",1,0
 "Headwaters Academy","2026-11-10",1,0
+"Headwaters Academy","2026-11-17",1,0
+"Headwaters Academy","2026-11-19",1,0
 "Heart Butte K-12 Schools","2026-10-27",8,3
 "Heart Butte K-12 Schools","2026-11-03",8,3
 "Heart Butte K-12 Schools","2026-11-10",8,3
+"Heart Butte K-12 Schools","2026-11-17",8,3
+"Heart Butte K-12 Schools","2026-11-19",1,1
+"Heart Butte K-12 Schools","2026-11-23",1,1
+"Heart Butte K-12 Schools","2026-11-26",1,1
+"Helena Flats School District #15","2026-11-17",3,2
+"Helena Flats School District #15","2026-11-19",3,2
+"Helena Flats School District #15","2026-11-23",3,2
+"Helena Flats School District #15","2026-11-26",3,2
 "Helena Public Schools","2026-08-06",34,19
 "Helena Public Schools","2026-08-07",34,19
 "Helena Public Schools","2026-08-11",35,20
@@ -1294,9 +1667,17 @@
 "Helena Public Schools","2026-10-27",28,17
 "Helena Public Schools","2026-11-03",24,13
 "Helena Public Schools","2026-11-10",23,14
+"Helena Public Schools","2026-11-17",21,14
+"Helena Public Schools","2026-11-19",23,15
+"Helena Public Schools","2026-11-23",21,14
+"Helena Public Schools","2026-11-26",22,15
 "Hellgate Elementary School District","2026-10-27",2,0
 "Hellgate Elementary School District","2026-11-03",4,2
 "Hellgate Elementary School District","2026-11-10",4,2
+"Hellgate Elementary School District","2026-11-17",4,2
+"Hellgate Elementary School District","2026-11-19",4,2
+"Hellgate Elementary School District","2026-11-23",2,0
+"Hellgate Elementary School District","2026-11-26",2,0
 "Highwood Public Schools","2026-08-06",1,1
 "Highwood Public Schools","2026-08-07",1,1
 "Highwood Public Schools","2026-08-11",1,1
@@ -1308,6 +1689,10 @@
 "Highwood Public Schools","2026-10-27",4,1
 "Highwood Public Schools","2026-11-03",4,1
 "Highwood Public Schools","2026-11-10",4,1
+"Highwood Public Schools","2026-11-17",4,1
+"Highwood Public Schools","2026-11-19",4,1
+"Highwood Public Schools","2026-11-23",4,1
+"Highwood Public Schools","2026-11-26",4,1
 "Hinsdale Public Schools","2026-09-01",3,3
 "Hinsdale Public Schools","2026-09-07",3,3
 "Hinsdale Public Schools","2026-09-08",3,3
@@ -1319,6 +1704,10 @@
 "Hinsdale Public Schools","2026-10-27",1,1
 "Hinsdale Public Schools","2026-11-03",1,1
 "Hinsdale Public Schools","2026-11-10",1,1
+"Hinsdale Public Schools","2026-11-17",1,1
+"Hinsdale Public Schools","2026-11-19",1,1
+"Hinsdale Public Schools","2026-11-23",1,1
+"Hinsdale Public Schools","2026-11-26",1,1
 "Hobson Public School","2026-08-06",1,1
 "Hobson Public School","2026-08-07",1,1
 "Hobson Public School","2026-08-11",1,1
@@ -1336,6 +1725,10 @@
 "Hobson Public School","2026-10-27",3,3
 "Hobson Public School","2026-11-03",3,3
 "Hobson Public School","2026-11-10",3,3
+"Hobson Public School","2026-11-17",3,3
+"Hobson Public School","2026-11-19",3,3
+"Hobson Public School","2026-11-23",3,3
+"Hobson Public School","2026-11-26",3,3
 "Hot Springs School District","2026-08-06",5,5
 "Hot Springs School District","2026-08-07",5,5
 "Hot Springs School District","2026-08-11",5,5
@@ -1352,6 +1745,10 @@
 "Hot Springs School District","2026-10-27",8,4
 "Hot Springs School District","2026-11-03",8,4
 "Hot Springs School District","2026-11-10",8,4
+"Hot Springs School District","2026-11-17",8,4
+"Hot Springs School District","2026-11-19",8,4
+"Hot Springs School District","2026-11-23",8,4
+"Hot Springs School District","2026-11-26",8,4
 "Huntley Project School District","2026-09-01",5,3
 "Huntley Project School District","2026-09-07",5,3
 "Huntley Project School District","2026-09-08",5,3
@@ -1364,6 +1761,10 @@
 "Huntley Project School District","2026-10-27",5,3
 "Huntley Project School District","2026-11-03",4,2
 "Huntley Project School District","2026-11-10",4,2
+"Huntley Project School District","2026-11-17",4,2
+"Huntley Project School District","2026-11-19",4,2
+"Huntley Project School District","2026-11-23",4,2
+"Huntley Project School District","2026-11-26",4,2
 "Hysham Public Schools","2026-08-06",1,1
 "Hysham Public Schools","2026-08-07",1,1
 "Hysham Public Schools","2026-08-11",1,1
@@ -1381,6 +1782,10 @@
 "Hysham Public Schools","2026-10-27",2,2
 "Hysham Public Schools","2026-11-03",2,2
 "Hysham Public Schools","2026-11-10",2,2
+"Hysham Public Schools","2026-11-17",2,2
+"Hysham Public Schools","2026-11-19",2,2
+"Hysham Public Schools","2026-11-23",2,2
+"Hysham Public Schools","2026-11-26",2,2
 "Independent School","2026-08-25",3,2
 "Independent School","2026-09-01",1,0
 "Independent School","2026-09-07",1,0
@@ -1394,6 +1799,10 @@
 "Independent School","2026-10-27",1,0
 "Independent School","2026-11-03",2,1
 "Independent School","2026-11-10",2,1
+"Independent School","2026-11-17",2,1
+"Independent School","2026-11-19",2,1
+"Independent School","2026-11-23",2,1
+"Independent School","2026-11-26",2,1
 "Itinerant","2026-09-29",3,3
 "Itinerant","2026-10-06",3,3
 "Itinerant","2026-10-13",3,3
@@ -1402,10 +1811,18 @@
 "Jefferson High School","2026-10-27",6,2
 "Jefferson High School","2026-11-03",6,2
 "Jefferson High School","2026-11-10",6,2
+"Jefferson High School","2026-11-17",6,2
+"Jefferson High School","2026-11-19",6,2
+"Jefferson High School","2026-11-23",6,2
+"Jefferson High School","2026-11-26",6,2
 "Joliet Public School District 86","2026-08-18",1,1
 "Joliet Public School District 86","2026-08-25",1,1
 "Joliet Public School District 86","2026-11-03",4,0
 "Joliet Public School District 86","2026-11-10",4,0
+"Joliet Public School District 86","2026-11-17",4,0
+"Joliet Public School District 86","2026-11-19",4,0
+"Joliet Public School District 86","2026-11-23",4,0
+"Joliet Public School District 86","2026-11-26",4,0
 "Jordan Public Schools","2026-08-06",3,3
 "Jordan Public Schools","2026-08-07",3,3
 "Jordan Public Schools","2026-08-11",3,3
@@ -1422,6 +1839,10 @@
 "Jordan Public Schools","2026-10-27",3,3
 "Jordan Public Schools","2026-11-03",2,2
 "Jordan Public Schools","2026-11-10",2,2
+"Jordan Public Schools","2026-11-17",1,1
+"Jordan Public Schools","2026-11-19",2,2
+"Jordan Public Schools","2026-11-23",2,2
+"Jordan Public Schools","2026-11-26",2,2
 "Judith Gap Schools","2026-08-06",6,6
 "Judith Gap Schools","2026-08-07",6,6
 "Judith Gap Schools","2026-08-11",6,6
@@ -1439,6 +1860,10 @@
 "Judith Gap Schools","2026-10-27",5,5
 "Judith Gap Schools","2026-11-03",3,3
 "Judith Gap Schools","2026-11-10",3,3
+"Judith Gap Schools","2026-11-17",2,2
+"Judith Gap Schools","2026-11-19",2,2
+"Judith Gap Schools","2026-11-23",2,2
+"Judith Gap Schools","2026-11-26",2,2
 "Kalispell Public Schools","2026-08-06",49,28
 "Kalispell Public Schools","2026-08-07",49,28
 "Kalispell Public Schools","2026-08-11",60,40
@@ -1456,9 +1881,21 @@
 "Kalispell Public Schools","2026-10-27",42,20
 "Kalispell Public Schools","2026-11-03",40,18
 "Kalispell Public Schools","2026-11-10",39,18
+"Kalispell Public Schools","2026-11-17",42,19
+"Kalispell Public Schools","2026-11-19",43,20
+"Kalispell Public Schools","2026-11-23",43,20
+"Kalispell Public Schools","2026-11-26",43,20
 "Kila School District #20","2026-10-27",4,1
 "Kila School District #20","2026-11-03",4,1
 "Kila School District #20","2026-11-10",4,1
+"Kila School District #20","2026-11-17",4,1
+"Kila School District #20","2026-11-19",4,1
+"Kila School District #20","2026-11-23",4,1
+"Kila School District #20","2026-11-26",4,1
+"Kinsey Elem","2026-11-17",1,1
+"Kinsey Elem","2026-11-19",1,1
+"Kinsey Elem","2026-11-23",1,1
+"Kinsey Elem","2026-11-26",1,1
 "LaMotte Elem","2026-08-06",1,1
 "LaMotte Elem","2026-08-07",1,1
 "LaMotte Elem","2026-08-11",1,1
@@ -1476,6 +1913,10 @@
 "LaMotte Elem","2026-10-27",1,1
 "LaMotte Elem","2026-11-03",1,0
 "LaMotte Elem","2026-11-10",1,0
+"LaMotte Elem","2026-11-17",1,0
+"LaMotte Elem","2026-11-19",1,0
+"LaMotte Elem","2026-11-23",1,0
+"LaMotte Elem","2026-11-26",1,0
 "Lambert Public Schools","2026-08-06",2,2
 "Lambert Public Schools","2026-08-07",2,2
 "Lambert Public Schools","2026-08-11",2,2
@@ -1493,40 +1934,52 @@
 "Lambert Public Schools","2026-10-27",1,1
 "Lambert Public Schools","2026-11-03",1,1
 "Lambert Public Schools","2026-11-10",1,1
+"Lambert Public Schools","2026-11-17",1,1
+"Lambert Public Schools","2026-11-19",1,1
+"Lambert Public Schools","2026-11-23",1,1
+"Lambert Public Schools","2026-11-26",1,1
 "Lame Deer Public Schools","2026-08-06",8,8
-"Lame Deer Public Schools","2026-08-07",30,27
-"Lame Deer Public Schools","2026-08-11",35,32
-"Lame Deer Public Schools","2026-08-18",35,32
-"Lame Deer Public Schools","2026-08-25",35,32
-"Lame Deer Public Schools","2026-09-01",35,32
-"Lame Deer Public Schools","2026-09-07",35,32
-"Lame Deer Public Schools","2026-09-08",35,32
-"Lame Deer Public Schools","2026-09-15",35,32
-"Lame Deer Public Schools","2026-09-22",35,32
-"Lame Deer Public Schools","2026-09-29",35,32
-"Lame Deer Public Schools","2026-10-06",35,32
-"Lame Deer Public Schools","2026-10-13",35,32
-"Lame Deer Public Schools","2026-10-20",35,32
-"Lame Deer Public Schools","2026-10-27",34,31
-"Lame Deer Public Schools","2026-11-03",32,29
-"Lame Deer Public Schools","2026-11-10",32,29
-"Laurel Public Schools","2026-08-06",21,12
-"Laurel Public Schools","2026-08-07",22,13
-"Laurel Public Schools","2026-08-11",24,16
-"Laurel Public Schools","2026-08-18",24,15
-"Laurel Public Schools","2026-08-25",26,14
-"Laurel Public Schools","2026-09-01",25,14
-"Laurel Public Schools","2026-09-07",23,14
-"Laurel Public Schools","2026-09-08",23,14
-"Laurel Public Schools","2026-09-15",24,16
-"Laurel Public Schools","2026-09-22",24,16
-"Laurel Public Schools","2026-09-29",23,15
-"Laurel Public Schools","2026-10-06",23,14
-"Laurel Public Schools","2026-10-13",22,14
-"Laurel Public Schools","2026-10-20",22,14
-"Laurel Public Schools","2026-10-27",22,14
-"Laurel Public Schools","2026-11-03",20,12
-"Laurel Public Schools","2026-11-10",20,12
+"Lame Deer Public Schools","2026-08-07",10,7
+"Lame Deer Public Schools","2026-08-11",18,15
+"Lame Deer Public Schools","2026-08-18",18,15
+"Lame Deer Public Schools","2026-08-25",19,16
+"Lame Deer Public Schools","2026-09-01",20,17
+"Lame Deer Public Schools","2026-09-07",20,17
+"Lame Deer Public Schools","2026-09-08",20,17
+"Lame Deer Public Schools","2026-09-15",20,17
+"Lame Deer Public Schools","2026-09-22",20,17
+"Lame Deer Public Schools","2026-09-29",20,17
+"Lame Deer Public Schools","2026-10-06",20,17
+"Lame Deer Public Schools","2026-10-13",20,17
+"Lame Deer Public Schools","2026-10-20",20,17
+"Lame Deer Public Schools","2026-10-27",16,13
+"Lame Deer Public Schools","2026-11-03",14,11
+"Lame Deer Public Schools","2026-11-10",14,11
+"Lame Deer Public Schools","2026-11-17",14,11
+"Lame Deer Public Schools","2026-11-19",13,10
+"Lame Deer Public Schools","2026-11-23",13,10
+"Lame Deer Public Schools","2026-11-26",13,10
+"Laurel Public Schools","2026-08-06",17,8
+"Laurel Public Schools","2026-08-07",18,9
+"Laurel Public Schools","2026-08-11",20,12
+"Laurel Public Schools","2026-08-18",20,11
+"Laurel Public Schools","2026-08-25",22,10
+"Laurel Public Schools","2026-09-01",21,10
+"Laurel Public Schools","2026-09-07",19,10
+"Laurel Public Schools","2026-09-08",19,10
+"Laurel Public Schools","2026-09-15",20,12
+"Laurel Public Schools","2026-09-22",20,12
+"Laurel Public Schools","2026-09-29",19,11
+"Laurel Public Schools","2026-10-06",19,10
+"Laurel Public Schools","2026-10-13",18,10
+"Laurel Public Schools","2026-10-20",18,10
+"Laurel Public Schools","2026-10-27",18,10
+"Laurel Public Schools","2026-11-03",16,8
+"Laurel Public Schools","2026-11-10",16,8
+"Laurel Public Schools","2026-11-17",17,9
+"Laurel Public Schools","2026-11-19",17,9
+"Laurel Public Schools","2026-11-23",17,9
+"Laurel Public Schools","2026-11-26",16,9
 "Lavina Public Schools","2026-08-06",1,1
 "Lavina Public Schools","2026-08-07",1,1
 "Lavina Public Schools","2026-08-11",1,1
@@ -1542,6 +1995,10 @@
 "Lavina Public Schools","2026-10-27",2,0
 "Lavina Public Schools","2026-11-03",2,0
 "Lavina Public Schools","2026-11-10",2,0
+"Lavina Public Schools","2026-11-17",2,0
+"Lavina Public Schools","2026-11-19",2,0
+"Lavina Public Schools","2026-11-23",2,0
+"Lavina Public Schools","2026-11-26",2,0
 "Lewistown Public Schools","2026-08-06",10,4
 "Lewistown Public Schools","2026-08-07",10,4
 "Lewistown Public Schools","2026-08-11",13,7
@@ -1559,6 +2016,10 @@
 "Lewistown Public Schools","2026-10-27",4,2
 "Lewistown Public Schools","2026-11-03",3,1
 "Lewistown Public Schools","2026-11-10",3,1
+"Lewistown Public Schools","2026-11-17",3,1
+"Lewistown Public Schools","2026-11-19",3,1
+"Lewistown Public Schools","2026-11-23",3,1
+"Lewistown Public Schools","2026-11-26",3,1
 "Libby Public Schools","2026-08-06",4,4
 "Libby Public Schools","2026-08-07",4,4
 "Libby Public Schools","2026-08-11",4,4
@@ -1576,6 +2037,10 @@
 "Libby Public Schools","2026-10-27",12,6
 "Libby Public Schools","2026-11-03",12,5
 "Libby Public Schools","2026-11-10",11,5
+"Libby Public Schools","2026-11-17",15,5
+"Libby Public Schools","2026-11-19",15,5
+"Libby Public Schools","2026-11-23",16,5
+"Libby Public Schools","2026-11-26",15,4
 "Lima School District #12","2026-08-06",6,6
 "Lima School District #12","2026-08-07",6,6
 "Lima School District #12","2026-08-11",6,6
@@ -1593,6 +2058,10 @@
 "Lima School District #12","2026-10-27",1,1
 "Lima School District #12","2026-11-03",4,4
 "Lima School District #12","2026-11-10",4,4
+"Lima School District #12","2026-11-17",4,4
+"Lima School District #12","2026-11-19",4,4
+"Lima School District #12","2026-11-23",4,4
+"Lima School District #12","2026-11-26",4,4
 "Lincoln School District #38","2026-08-06",1,1
 "Lincoln School District #38","2026-08-07",1,1
 "Lincoln School District #38","2026-08-11",1,1
@@ -1610,6 +2079,10 @@
 "Lincoln School District #38","2026-10-27",3,2
 "Lincoln School District #38","2026-11-03",3,2
 "Lincoln School District #38","2026-11-10",3,2
+"Lincoln School District #38","2026-11-17",2,1
+"Lincoln School District #38","2026-11-19",2,1
+"Lincoln School District #38","2026-11-23",2,1
+"Lincoln School District #38","2026-11-26",2,1
 "Lindsay Elem","2026-08-06",1,1
 "Lindsay Elem","2026-08-07",1,1
 "Livingston Public Schools","2026-08-06",8,8
@@ -1629,6 +2102,10 @@
 "Livingston Public Schools","2026-10-27",22,16
 "Livingston Public Schools","2026-11-03",19,13
 "Livingston Public Schools","2026-11-10",19,13
+"Livingston Public Schools","2026-11-17",15,12
+"Livingston Public Schools","2026-11-19",14,11
+"Livingston Public Schools","2026-11-23",11,8
+"Livingston Public Schools","2026-11-26",12,9
 "Lockwood Schools","2026-08-06",16,8
 "Lockwood Schools","2026-08-07",16,8
 "Lockwood Schools","2026-08-11",18,10
@@ -1646,6 +2123,10 @@
 "Lockwood Schools","2026-10-27",16,12
 "Lockwood Schools","2026-11-03",19,14
 "Lockwood Schools","2026-11-10",20,15
+"Lockwood Schools","2026-11-17",19,14
+"Lockwood Schools","2026-11-19",19,14
+"Lockwood Schools","2026-11-23",19,14
+"Lockwood Schools","2026-11-26",19,14
 "Lodge Grass Public Schools","2026-08-06",11,11
 "Lodge Grass Public Schools","2026-08-07",11,11
 "Lodge Grass Public Schools","2026-08-11",17,17
@@ -1663,6 +2144,10 @@
 "Lodge Grass Public Schools","2026-10-27",15,15
 "Lodge Grass Public Schools","2026-11-03",15,15
 "Lodge Grass Public Schools","2026-11-10",15,15
+"Lodge Grass Public Schools","2026-11-17",15,15
+"Lodge Grass Public Schools","2026-11-19",15,15
+"Lodge Grass Public Schools","2026-11-23",2,2
+"Lodge Grass Public Schools","2026-11-26",2,2
 "Lolo School District 7","2026-08-06",1,1
 "Lolo School District 7","2026-08-07",1,1
 "Lolo School District 7","2026-08-11",1,1
@@ -1680,6 +2165,10 @@
 "Lolo School District 7","2026-10-27",6,4
 "Lolo School District 7","2026-11-03",5,2
 "Lolo School District 7","2026-11-10",5,2
+"Lolo School District 7","2026-11-17",6,2
+"Lolo School District 7","2026-11-19",6,2
+"Lolo School District 7","2026-11-23",6,2
+"Lolo School District 7","2026-11-26",5,2
 "Lone Rock School District","2026-09-07",1,1
 "Lone Rock School District","2026-09-08",1,1
 "Lone Rock School District","2026-09-15",1,1
@@ -1713,12 +2202,20 @@
 "Lustre District 23","2026-10-27",3,1
 "Lustre District 23","2026-11-03",3,1
 "Lustre District 23","2026-11-10",3,2
+"Lustre District 23","2026-11-17",3,2
+"Lustre District 23","2026-11-19",3,2
+"Lustre District 23","2026-11-23",3,2
+"Lustre District 23","2026-11-26",3,2
 "Luther School","2026-08-06",1,1
 "Luther School","2026-08-25",1,1
 "Luther School","2026-09-01",1,1
 "Luther School","2026-10-27",2,2
 "Luther School","2026-11-03",2,2
 "Luther School","2026-11-10",2,2
+"Luther School","2026-11-17",2,2
+"Luther School","2026-11-19",2,2
+"Luther School","2026-11-23",1,1
+"Luther School","2026-11-26",1,1
 "Malta Public Schools","2026-08-06",4,4
 "Malta Public Schools","2026-08-07",4,4
 "Malta Public Schools","2026-08-11",4,4
@@ -1736,8 +2233,16 @@
 "Malta Public Schools","2026-10-27",9,8
 "Malta Public Schools","2026-11-03",9,8
 "Malta Public Schools","2026-11-10",9,8
+"Malta Public Schools","2026-11-17",9,8
+"Malta Public Schools","2026-11-19",9,8
+"Malta Public Schools","2026-11-23",9,8
+"Malta Public Schools","2026-11-26",9,8
 "Manhattan Christian","2026-11-03",1,0
 "Manhattan Christian","2026-11-10",1,0
+"Manhattan Christian","2026-11-17",1,0
+"Manhattan Christian","2026-11-19",1,0
+"Manhattan Christian","2026-11-23",1,0
+"Manhattan Christian","2026-11-26",1,0
 "Manhattan School District","2026-08-06",2,1
 "Manhattan School District","2026-08-07",2,1
 "Manhattan School District","2026-08-11",2,1
@@ -1755,13 +2260,25 @@
 "Manhattan School District","2026-10-27",4,4
 "Manhattan School District","2026-11-03",11,6
 "Manhattan School District","2026-11-10",11,6
+"Manhattan School District","2026-11-17",10,5
+"Manhattan School District","2026-11-19",10,5
+"Manhattan School District","2026-11-23",10,5
+"Manhattan School District","2026-11-26",10,5
 "Marion School District #54","2026-11-03",2,0
 "Marion School District #54","2026-11-10",2,0
+"Marion School District #54","2026-11-17",2,0
+"Marion School District #54","2026-11-19",2,0
+"Marion School District #54","2026-11-23",1,0
+"Marion School District #54","2026-11-26",1,0
 "McCormick Elem","2026-10-13",1,1
 "McCormick Elem","2026-10-20",1,1
 "McCormick Elem","2026-10-27",1,1
 "McCormick Elem","2026-11-03",2,2
 "McCormick Elem","2026-11-10",2,2
+"McCormick Elem","2026-11-17",2,2
+"McCormick Elem","2026-11-19",2,2
+"McCormick Elem","2026-11-23",2,2
+"McCormick Elem","2026-11-26",1,1
 "McLeod Elem","2026-08-06",1,1
 "McLeod Elem","2026-08-07",1,1
 "McLeod Elem","2026-08-11",1,1
@@ -1807,6 +2324,10 @@
 "Melstone Public Schools","2026-10-27",4,2
 "Melstone Public Schools","2026-11-03",3,1
 "Melstone Public Schools","2026-11-10",3,1
+"Melstone Public Schools","2026-11-17",8,3
+"Melstone Public Schools","2026-11-19",8,3
+"Melstone Public Schools","2026-11-23",8,3
+"Melstone Public Schools","2026-11-26",8,3
 "Melville Elem","2026-08-06",1,1
 "Melville Elem","2026-08-07",1,1
 "Melville Elem","2026-08-11",1,1
@@ -1834,6 +2355,10 @@
 "Miami Elementary School District #31","2026-10-27",1,0
 "Miami Elementary School District #31","2026-11-03",2,1
 "Miami Elementary School District #31","2026-11-10",2,1
+"Miami Elementary School District #31","2026-11-17",2,1
+"Miami Elementary School District #31","2026-11-19",2,1
+"Miami Elementary School District #31","2026-11-23",1,0
+"Miami Elementary School District #31","2026-11-26",1,0
 "Miles City Unified School District 1","2026-08-06",11,11
 "Miles City Unified School District 1","2026-08-07",11,11
 "Miles City Unified School District 1","2026-08-11",10,10
@@ -1851,6 +2376,14 @@
 "Miles City Unified School District 1","2026-10-27",20,13
 "Miles City Unified School District 1","2026-11-03",20,13
 "Miles City Unified School District 1","2026-11-10",20,13
+"Miles City Unified School District 1","2026-11-17",20,13
+"Miles City Unified School District 1","2026-11-19",20,13
+"Miles City Unified School District 1","2026-11-23",20,13
+"Miles City Unified School District 1","2026-11-26",20,13
+"Missoula Area Education Coop","2026-11-17",1,1
+"Missoula Area Education Coop","2026-11-19",1,1
+"Missoula Area Education Coop","2026-11-23",1,1
+"Missoula Area Education Coop","2026-11-26",1,1
 "Missoula County Public Schools","2026-08-06",44,27
 "Missoula County Public Schools","2026-08-07",44,27
 "Missoula County Public Schools","2026-08-11",50,33
@@ -1868,9 +2401,17 @@
 "Missoula County Public Schools","2026-10-27",30,20
 "Missoula County Public Schools","2026-11-03",22,11
 "Missoula County Public Schools","2026-11-10",18,9
+"Missoula County Public Schools","2026-11-17",20,10
+"Missoula County Public Schools","2026-11-19",21,10
+"Missoula County Public Schools","2026-11-23",18,9
+"Missoula County Public Schools","2026-11-26",19,11
 "Monforton School District #27","2026-10-27",2,2
 "Monforton School District #27","2026-11-03",6,6
 "Monforton School District #27","2026-11-10",6,6
+"Monforton School District #27","2026-11-17",6,6
+"Monforton School District #27","2026-11-19",6,6
+"Monforton School District #27","2026-11-23",6,6
+"Monforton School District #27","2026-11-26",6,6
 "Montana City Elementary School District #27","2026-08-06",6,6
 "Montana City Elementary School District #27","2026-08-07",6,6
 "Montana City Elementary School District #27","2026-08-11",7,7
@@ -1900,6 +2441,10 @@
 "Moore Public Schools","2026-10-27",1,1
 "Moore Public Schools","2026-11-03",1,1
 "Moore Public Schools","2026-11-10",1,1
+"Moore Public Schools","2026-11-17",1,1
+"Moore Public Schools","2026-11-19",1,1
+"Moore Public Schools","2026-11-23",1,1
+"Moore Public Schools","2026-11-26",1,1
 "Nashua Public Schools","2026-08-06",4,4
 "Nashua Public Schools","2026-08-07",4,4
 "Nashua Public Schools","2026-08-11",4,4
@@ -1917,10 +2462,22 @@
 "Nashua Public Schools","2026-10-27",5,1
 "Nashua Public Schools","2026-11-03",5,1
 "Nashua Public Schools","2026-11-10",5,1
+"Nashua Public Schools","2026-11-17",5,1
+"Nashua Public Schools","2026-11-19",5,1
+"Nashua Public Schools","2026-11-23",5,1
+"Nashua Public Schools","2026-11-26",5,1
 "North Cheyenne Trib Elem","2026-11-03",4,4
 "North Cheyenne Trib Elem","2026-11-10",4,4
+"North Cheyenne Trib Elem","2026-11-17",4,4
+"North Cheyenne Trib Elem","2026-11-19",4,4
+"North Cheyenne Trib Elem","2026-11-23",4,4
+"North Cheyenne Trib Elem","2026-11-26",4,4
 "North Ctrl Learn Res Ctr","2026-11-03",1,1
 "North Ctrl Learn Res Ctr","2026-11-10",1,1
+"North Ctrl Learn Res Ctr","2026-11-17",1,1
+"North Ctrl Learn Res Ctr","2026-11-19",1,1
+"North Ctrl Learn Res Ctr","2026-11-23",1,1
+"North Ctrl Learn Res Ctr","2026-11-26",1,1
 "North Harlem Colony Elem","2026-11-03",1,1
 "North Star Public Schools","2026-08-06",6,6
 "North Star Public Schools","2026-08-07",6,6
@@ -1939,6 +2496,10 @@
 "North Star Public Schools","2026-10-27",6,5
 "North Star Public Schools","2026-11-03",6,5
 "North Star Public Schools","2026-11-10",6,5
+"North Star Public Schools","2026-11-17",5,4
+"North Star Public Schools","2026-11-19",5,4
+"North Star Public Schools","2026-11-23",5,4
+"North Star Public Schools","2026-11-26",5,4
 "Northern Cheyenne Trib HS","2026-08-06",8,8
 "Northern Cheyenne Trib HS","2026-08-07",8,8
 "Northern Cheyenne Trib HS","2026-08-11",8,8
@@ -1956,7 +2517,19 @@
 "Northern Cheyenne Trib HS","2026-10-27",11,11
 "Northern Cheyenne Trib HS","2026-11-03",7,6
 "Northern Cheyenne Trib HS","2026-11-10",7,6
+"Northern Cheyenne Trib HS","2026-11-17",7,6
+"Northern Cheyenne Trib HS","2026-11-19",7,6
+"Northern Cheyenne Trib HS","2026-11-23",7,6
+"Northern Cheyenne Trib HS","2026-11-26",7,6
+"Noxon Public Schools","2026-11-17",1,1
+"Noxon Public Schools","2026-11-19",1,1
+"Noxon Public Schools","2026-11-23",1,1
+"Noxon Public Schools","2026-11-26",1,1
 "Olney-Bissell School District","2026-11-10",1,0
+"Olney-Bissell School District","2026-11-17",1,0
+"Olney-Bissell School District","2026-11-19",1,0
+"Olney-Bissell School District","2026-11-23",1,0
+"Olney-Bissell School District","2026-11-26",1,0
 "Opheim Public Schools","2026-08-06",2,2
 "Opheim Public Schools","2026-08-07",2,2
 "Opheim Public Schools","2026-08-11",2,2
@@ -1969,6 +2542,10 @@
 "Opheim Public Schools","2026-10-27",3,1
 "Opheim Public Schools","2026-11-03",3,1
 "Opheim Public Schools","2026-11-10",3,1
+"Opheim Public Schools","2026-11-17",3,1
+"Opheim Public Schools","2026-11-19",3,1
+"Opheim Public Schools","2026-11-23",3,1
+"Opheim Public Schools","2026-11-26",3,1
 "Park City Schools","2026-08-06",2,2
 "Park City Schools","2026-08-07",2,2
 "Park City Schools","2026-08-11",1,1
@@ -1986,6 +2563,10 @@
 "Park City Schools","2026-10-27",2,0
 "Park City Schools","2026-11-03",2,0
 "Park City Schools","2026-11-10",2,0
+"Park City Schools","2026-11-17",2,0
+"Park City Schools","2026-11-19",2,0
+"Park City Schools","2026-11-23",2,0
+"Park City Schools","2026-11-26",2,0
 "Philipsburg School District","2026-08-06",3,3
 "Philipsburg School District","2026-08-07",3,3
 "Philipsburg School District","2026-08-11",3,3
@@ -2003,6 +2584,10 @@
 "Philipsburg School District","2026-10-27",9,4
 "Philipsburg School District","2026-11-03",7,4
 "Philipsburg School District","2026-11-10",6,3
+"Philipsburg School District","2026-11-17",7,4
+"Philipsburg School District","2026-11-19",7,4
+"Philipsburg School District","2026-11-23",7,4
+"Philipsburg School District","2026-11-26",8,5
 "Pine Grove Elem","2026-08-06",2,2
 "Pine Grove Elem","2026-08-07",2,2
 "Pine Grove Elem","2026-08-11",2,2
@@ -2018,6 +2603,10 @@
 "Pioneer Elementary School District #41","2026-10-27",1,0
 "Pioneer Elementary School District #41","2026-11-03",1,0
 "Pioneer Elementary School District #41","2026-11-10",1,0
+"Pioneer Elementary School District #41","2026-11-17",1,0
+"Pioneer Elementary School District #41","2026-11-19",1,0
+"Pioneer Elementary School District #41","2026-11-23",1,0
+"Pioneer Elementary School District #41","2026-11-26",1,0
 "Pleasant Valley School District #27","2026-09-15",1,1
 "Pleasant Valley School District #27","2026-09-22",1,1
 "Pleasant Valley School District #27","2026-09-29",1,1
@@ -2042,6 +2631,10 @@
 "Plentywood Public Schools","2026-10-27",4,3
 "Plentywood Public Schools","2026-11-03",4,3
 "Plentywood Public Schools","2026-11-10",4,3
+"Plentywood Public Schools","2026-11-17",4,3
+"Plentywood Public Schools","2026-11-19",4,3
+"Plentywood Public Schools","2026-11-23",4,3
+"Plentywood Public Schools","2026-11-26",4,3
 "Plevna School District #55","2026-08-06",3,3
 "Plevna School District #55","2026-08-07",3,3
 "Plevna School District #55","2026-08-11",3,3
@@ -2059,6 +2652,10 @@
 "Plevna School District #55","2026-10-27",8,6
 "Plevna School District #55","2026-11-03",8,2
 "Plevna School District #55","2026-11-10",8,2
+"Plevna School District #55","2026-11-17",8,2
+"Plevna School District #55","2026-11-19",8,2
+"Plevna School District #55","2026-11-23",8,2
+"Plevna School District #55","2026-11-26",8,2
 "Polson School District","2026-08-11",2,2
 "Polson School District","2026-08-18",2,2
 "Polson School District","2026-08-25",2,2
@@ -2074,24 +2671,34 @@
 "Polson School District","2026-10-27",1,1
 "Polson School District","2026-11-03",3,2
 "Polson School District","2026-11-10",2,2
+"Polson School District","2026-11-17",3,2
+"Polson School District","2026-11-19",3,2
+"Polson School District","2026-11-23",3,2
+"Polson School District","2026-11-26",3,2
 "Poplar Public Schools","2026-08-06",5,5
-"Poplar Public Schools","2026-08-07",11,9
-"Poplar Public Schools","2026-08-11",13,11
-"Poplar Public Schools","2026-08-18",13,11
-"Poplar Public Schools","2026-08-25",13,11
-"Poplar Public Schools","2026-09-01",13,11
-"Poplar Public Schools","2026-09-07",13,11
-"Poplar Public Schools","2026-09-08",13,11
-"Poplar Public Schools","2026-09-15",13,11
-"Poplar Public Schools","2026-09-22",13,11
-"Poplar Public Schools","2026-09-29",13,11
-"Poplar Public Schools","2026-10-06",13,11
-"Poplar Public Schools","2026-10-13",13,11
-"Poplar Public Schools","2026-10-20",13,11
-"Poplar Public Schools","2026-10-27",13,11
-"Poplar Public Schools","2026-11-03",13,11
-"Poplar Public Schools","2026-11-10",14,12
+"Poplar Public Schools","2026-08-07",5,3
+"Poplar Public Schools","2026-08-11",9,7
+"Poplar Public Schools","2026-08-18",9,7
+"Poplar Public Schools","2026-08-25",9,7
+"Poplar Public Schools","2026-09-01",9,7
+"Poplar Public Schools","2026-09-07",9,7
+"Poplar Public Schools","2026-09-08",9,7
+"Poplar Public Schools","2026-09-15",9,7
+"Poplar Public Schools","2026-09-22",9,7
+"Poplar Public Schools","2026-09-29",9,7
+"Poplar Public Schools","2026-10-06",9,7
+"Poplar Public Schools","2026-10-13",9,7
+"Poplar Public Schools","2026-10-20",9,7
+"Poplar Public Schools","2026-10-27",9,7
+"Poplar Public Schools","2026-11-03",7,5
+"Poplar Public Schools","2026-11-10",8,6
+"Poplar Public Schools","2026-11-17",8,6
+"Poplar Public Schools","2026-11-19",8,6
+"Poplar Public Schools","2026-11-23",8,6
+"Poplar Public Schools","2026-11-26",8,6
 "Potomac Elementary School District #11","2026-11-03",1,1
+"Potomac Elementary School District #11","2026-11-23",1,1
+"Potomac Elementary School District #11","2026-11-26",1,1
 "Power Public Schools","2026-08-06",1,1
 "Power Public Schools","2026-08-07",1,1
 "Power Public Schools","2026-08-11",1,1
@@ -2099,6 +2706,11 @@
 "Power Public Schools","2026-10-27",3,0
 "Power Public Schools","2026-11-03",3,0
 "Power Public Schools","2026-11-10",3,0
+"Power Public Schools","2026-11-17",3,0
+"Power Public Schools","2026-11-19",3,0
+"Power Public Schools","2026-11-23",3,0
+"Power Public Schools","2026-11-26",3,0
+"Pretty Eagle Catholic Academy","2026-11-26",4,3
 "Pryor Public Schools","2026-08-06",2,2
 "Pryor Public Schools","2026-08-07",2,2
 "Pryor Public Schools","2026-08-11",2,2
@@ -2116,6 +2728,10 @@
 "Pryor Public Schools","2026-10-27",8,7
 "Pryor Public Schools","2026-11-03",8,7
 "Pryor Public Schools","2026-11-10",8,7
+"Pryor Public Schools","2026-11-17",6,5
+"Pryor Public Schools","2026-11-19",6,5
+"Pryor Public Schools","2026-11-23",6,5
+"Pryor Public Schools","2026-11-26",6,5
 "Ramsay School District #3","2026-08-06",3,3
 "Ramsay School District #3","2026-08-07",3,3
 "Ramsay School District #3","2026-08-11",3,3
@@ -2133,11 +2749,23 @@
 "Ramsay School District #3","2026-10-27",2,2
 "Ramsay School District #3","2026-11-03",2,2
 "Ramsay School District #3","2026-11-10",2,2
+"Ramsay School District #3","2026-11-17",2,2
+"Ramsay School District #3","2026-11-19",2,2
+"Ramsay School District #3","2026-11-23",2,2
+"Ramsay School District #3","2026-11-26",2,2
 "Rapelje School District","2026-10-27",3,3
 "Rapelje School District","2026-11-03",3,3
 "Rapelje School District","2026-11-10",3,3
+"Rapelje School District","2026-11-17",3,3
+"Rapelje School District","2026-11-19",3,3
+"Rapelje School District","2026-11-23",3,3
+"Rapelje School District","2026-11-26",1,1
 "Rau Elem","2026-11-03",3,3
 "Rau Elem","2026-11-10",3,3
+"Rau Elem","2026-11-17",3,3
+"Rau Elem","2026-11-19",3,3
+"Rau Elem","2026-11-23",3,3
+"Rau Elem","2026-11-26",3,3
 "Red Lodge School District 1","2026-08-25",4,3
 "Red Lodge School District 1","2026-09-29",4,3
 "Red Lodge School District 1","2026-10-13",4,3
@@ -2145,6 +2773,10 @@
 "Red Lodge School District 1","2026-10-27",4,3
 "Red Lodge School District 1","2026-11-03",4,3
 "Red Lodge School District 1","2026-11-10",4,3
+"Red Lodge School District 1","2026-11-17",4,3
+"Red Lodge School District 1","2026-11-19",4,3
+"Red Lodge School District 1","2026-11-23",4,3
+"Red Lodge School District 1","2026-11-26",4,3
 "Reed Point School District","2026-08-06",3,3
 "Reed Point School District","2026-08-07",3,3
 "Reed Point School District","2026-08-11",1,1
@@ -2162,6 +2794,10 @@
 "Reed Point School District","2026-10-27",2,0
 "Reed Point School District","2026-11-03",2,0
 "Reed Point School District","2026-11-10",2,0
+"Reed Point School District","2026-11-17",2,0
+"Reed Point School District","2026-11-19",2,0
+"Reed Point School District","2026-11-23",2,0
+"Reed Point School District","2026-11-26",2,0
 "Richey Public Schools","2026-08-06",3,3
 "Richey Public Schools","2026-08-07",3,3
 "Richey Public Schools","2026-08-11",3,3
@@ -2170,6 +2806,10 @@
 "Richey Public Schools","2026-10-27",11,11
 "Richey Public Schools","2026-11-03",6,3
 "Richey Public Schools","2026-11-10",6,3
+"Richey Public Schools","2026-11-17",6,3
+"Richey Public Schools","2026-11-19",6,3
+"Richey Public Schools","2026-11-23",6,3
+"Richey Public Schools","2026-11-26",6,3
 "Roberts Public School","2026-08-25",3,2
 "Roberts Public School","2026-09-01",3,2
 "Roberts Public School","2026-09-07",3,2
@@ -2180,6 +2820,10 @@
 "Roberts Public School","2026-10-20",3,2
 "Roberts Public School","2026-10-27",3,2
 "Roberts Public School","2026-11-10",2,0
+"Roberts Public School","2026-11-17",2,0
+"Roberts Public School","2026-11-19",2,0
+"Roberts Public School","2026-11-23",2,0
+"Roberts Public School","2026-11-26",2,0
 "Rocky Boy Public Schools","2026-08-06",8,8
 "Rocky Boy Public Schools","2026-08-07",28,21
 "Rocky Boy Public Schools","2026-08-11",32,25
@@ -2197,6 +2841,10 @@
 "Rocky Boy Public Schools","2026-10-27",17,10
 "Rocky Boy Public Schools","2026-11-03",16,9
 "Rocky Boy Public Schools","2026-11-10",17,10
+"Rocky Boy Public Schools","2026-11-17",17,10
+"Rocky Boy Public Schools","2026-11-19",17,10
+"Rocky Boy Public Schools","2026-11-23",17,10
+"Rocky Boy Public Schools","2026-11-26",17,10
 "Ronan Public Schools","2026-08-06",10,10
 "Ronan Public Schools","2026-08-07",20,11
 "Ronan Public Schools","2026-08-11",25,15
@@ -2214,6 +2862,10 @@
 "Ronan Public Schools","2026-10-27",14,5
 "Ronan Public Schools","2026-11-03",13,4
 "Ronan Public Schools","2026-11-10",14,4
+"Ronan Public Schools","2026-11-17",13,4
+"Ronan Public Schools","2026-11-19",13,4
+"Ronan Public Schools","2026-11-23",13,4
+"Ronan Public Schools","2026-11-26",13,4
 "Rosebud K-12","2026-08-06",1,1
 "Rosebud K-12","2026-08-07",1,1
 "Rosebud K-12","2026-08-11",1,1
@@ -2231,6 +2883,10 @@
 "Rosebud K-12","2026-10-27",2,2
 "Rosebud K-12","2026-11-03",2,2
 "Rosebud K-12","2026-11-10",2,2
+"Rosebud K-12","2026-11-17",2,2
+"Rosebud K-12","2026-11-19",2,2
+"Rosebud K-12","2026-11-23",2,2
+"Rosebud K-12","2026-11-26",2,2
 "Ross Elem","2026-08-06",1,1
 "Ross Elem","2026-08-07",1,1
 "Ross Elem","2026-08-11",1,1
@@ -2248,6 +2904,7 @@
 "Ross Elem","2026-10-27",1,1
 "Ross Elem","2026-11-03",1,1
 "Ross Elem","2026-11-10",1,1
+"Ross Elem","2026-11-17",1,1
 "Roundup School District","2026-08-06",2,1
 "Roundup School District","2026-08-07",2,1
 "Roundup School District","2026-08-11",2,1
@@ -2265,6 +2922,10 @@
 "Roundup School District","2026-10-27",9,3
 "Roundup School District","2026-11-03",9,3
 "Roundup School District","2026-11-10",9,3
+"Roundup School District","2026-11-17",9,3
+"Roundup School District","2026-11-19",9,3
+"Roundup School District","2026-11-23",9,3
+"Roundup School District","2026-11-26",9,3
 "Roy School District 74","2026-08-06",3,3
 "Roy School District 74","2026-08-07",3,3
 "Roy School District 74","2026-08-11",3,3
@@ -2282,6 +2943,10 @@
 "Roy School District 74","2026-10-27",3,3
 "Roy School District 74","2026-11-03",3,3
 "Roy School District 74","2026-11-10",3,3
+"Roy School District 74","2026-11-17",3,3
+"Roy School District 74","2026-11-19",3,3
+"Roy School District 74","2026-11-23",3,3
+"Roy School District 74","2026-11-26",2,2
 "Ryegate K-12 Schools","2026-08-06",1,1
 "Ryegate K-12 Schools","2026-08-07",1,1
 "Ryegate K-12 Schools","2026-08-11",1,1
@@ -2299,13 +2964,25 @@
 "Ryegate K-12 Schools","2026-10-27",2,2
 "Ryegate K-12 Schools","2026-11-03",2,2
 "Ryegate K-12 Schools","2026-11-10",2,2
+"Ryegate K-12 Schools","2026-11-17",1,1
+"Ryegate K-12 Schools","2026-11-19",1,1
+"Ryegate K-12 Schools","2026-11-23",1,1
+"Ryegate K-12 Schools","2026-11-26",1,1
 "Sanders County Ed ServicesCoop","2026-11-03",2,2
 "Sanders County Ed ServicesCoop","2026-11-10",2,2
+"Sanders County Ed ServicesCoop","2026-11-17",2,2
+"Sanders County Ed ServicesCoop","2026-11-19",2,2
+"Sanders County Ed ServicesCoop","2026-11-23",2,2
+"Sanders County Ed ServicesCoop","2026-11-26",2,2
 "Savage Public Schools","2026-08-06",1,1
 "Savage Public Schools","2026-08-07",1,1
 "Savage Public Schools","2026-08-11",1,1
 "Savage Public Schools","2026-11-03",9,6
 "Savage Public Schools","2026-11-10",9,6
+"Savage Public Schools","2026-11-17",5,5
+"Savage Public Schools","2026-11-19",5,5
+"Savage Public Schools","2026-11-23",5,5
+"Savage Public Schools","2026-11-26",5,5
 "Scobey Schools","2026-08-06",20,20
 "Scobey Schools","2026-08-07",20,20
 "Scobey Schools","2026-08-11",20,20
@@ -2323,6 +3000,10 @@
 "Scobey Schools","2026-10-27",13,9
 "Scobey Schools","2026-11-03",13,9
 "Scobey Schools","2026-11-10",13,9
+"Scobey Schools","2026-11-17",13,9
+"Scobey Schools","2026-11-19",13,9
+"Scobey Schools","2026-11-23",13,9
+"Scobey Schools","2026-11-26",13,9
 "Seeley Lake Elementary #34","2026-08-06",3,3
 "Seeley Lake Elementary #34","2026-08-07",3,3
 "Seeley Lake Elementary #34","2026-08-11",3,3
@@ -2338,6 +3019,10 @@
 "Seeley Lake Elementary #34","2026-10-13",3,3
 "Seeley Lake Elementary #34","2026-10-20",3,3
 "Seeley Lake Elementary #34","2026-10-27",3,3
+"Seeley Lake Elementary #34","2026-11-17",3,2
+"Seeley Lake Elementary #34","2026-11-19",3,2
+"Seeley Lake Elementary #34","2026-11-23",1,0
+"Seeley Lake Elementary #34","2026-11-26",1,0
 "Shelby School District","2026-08-06",2,2
 "Shelby School District","2026-08-07",2,2
 "Shelby School District","2026-08-11",2,2
@@ -2355,6 +3040,10 @@
 "Shelby School District","2026-10-27",6,5
 "Shelby School District","2026-11-03",5,4
 "Shelby School District","2026-11-10",5,4
+"Shelby School District","2026-11-17",5,3
+"Shelby School District","2026-11-19",5,3
+"Shelby School District","2026-11-23",5,3
+"Shelby School District","2026-11-26",5,3
 "Shepherd School District #37","2026-08-06",6,6
 "Shepherd School District #37","2026-08-07",6,6
 "Shepherd School District #37","2026-08-11",6,6
@@ -2372,6 +3061,10 @@
 "Shepherd School District #37","2026-10-27",1,1
 "Shepherd School District #37","2026-11-03",1,1
 "Shepherd School District #37","2026-11-10",1,1
+"Shepherd School District #37","2026-11-17",1,1
+"Shepherd School District #37","2026-11-19",1,1
+"Shepherd School District #37","2026-11-23",1,1
+"Shepherd School District #37","2026-11-26",1,1
 "Sheridan Public Schools","2026-08-06",4,4
 "Sheridan Public Schools","2026-08-07",4,4
 "Sheridan Public Schools","2026-08-11",4,4
@@ -2389,6 +3082,10 @@
 "Sheridan Public Schools","2026-10-27",5,1
 "Sheridan Public Schools","2026-11-03",5,1
 "Sheridan Public Schools","2026-11-10",4,0
+"Sheridan Public Schools","2026-11-17",4,0
+"Sheridan Public Schools","2026-11-19",4,0
+"Sheridan Public Schools","2026-11-23",4,0
+"Sheridan Public Schools","2026-11-26",4,0
 "Shields Valley Public Schools","2026-08-06",4,4
 "Shields Valley Public Schools","2026-08-07",4,4
 "Shields Valley Public Schools","2026-08-11",4,4
@@ -2406,38 +3103,72 @@
 "Shields Valley Public Schools","2026-10-27",8,8
 "Shields Valley Public Schools","2026-11-03",8,8
 "Shields Valley Public Schools","2026-11-10",7,7
+"Shields Valley Public Schools","2026-11-17",7,7
+"Shields Valley Public Schools","2026-11-19",7,7
+"Shields Valley Public Schools","2026-11-23",7,7
+"Shields Valley Public Schools","2026-11-26",7,7
 "Shodair Specialty Hosp","2026-11-03",1,1
 "Shodair Specialty Hosp","2026-11-10",1,1
+"Shodair Specialty Hosp","2026-11-17",2,2
+"Shodair Specialty Hosp","2026-11-19",2,2
+"Shodair Specialty Hosp","2026-11-23",2,2
+"Shodair Specialty Hosp","2026-11-26",2,2
 "Sidney Public Schools","2026-08-06",5,5
-"Sidney Public Schools","2026-08-07",9,6
-"Sidney Public Schools","2026-08-11",14,11
-"Sidney Public Schools","2026-08-18",12,9
-"Sidney Public Schools","2026-08-25",12,9
-"Sidney Public Schools","2026-09-01",12,9
-"Sidney Public Schools","2026-09-07",12,9
-"Sidney Public Schools","2026-09-08",12,9
-"Sidney Public Schools","2026-09-15",31,8
-"Sidney Public Schools","2026-09-22",31,8
+"Sidney Public Schools","2026-08-07",8,5
+"Sidney Public Schools","2026-08-11",13,10
+"Sidney Public Schools","2026-08-18",11,8
+"Sidney Public Schools","2026-08-25",11,8
+"Sidney Public Schools","2026-09-01",11,8
+"Sidney Public Schools","2026-09-07",11,8
+"Sidney Public Schools","2026-09-08",11,8
+"Sidney Public Schools","2026-09-15",30,7
+"Sidney Public Schools","2026-09-22",30,7
 "Sidney Public Schools","2026-09-29",31,8
 "Sidney Public Schools","2026-10-06",31,8
 "Sidney Public Schools","2026-10-13",31,8
 "Sidney Public Schools","2026-10-20",31,8
 "Sidney Public Schools","2026-10-27",31,8
-"Sidney Public Schools","2026-11-03",10,5
-"Sidney Public Schools","2026-11-10",10,5
+"Sidney Public Schools","2026-11-03",9,4
+"Sidney Public Schools","2026-11-10",9,4
+"Sidney Public Schools","2026-11-17",9,4
+"Sidney Public Schools","2026-11-19",9,4
+"Sidney Public Schools","2026-11-23",9,4
+"Sidney Public Schools","2026-11-26",9,4
 "Smith Valley School District #8","2026-10-27",2,0
 "Smith Valley School District #8","2026-11-03",2,0
 "Smith Valley School District #8","2026-11-10",2,0
+"Smith Valley School District #8","2026-11-17",2,0
+"Smith Valley School District #8","2026-11-19",2,0
+"Smith Valley School District #8","2026-11-23",2,0
+"Smith Valley School District #8","2026-11-26",2,0
 "St Andrews H S","2026-11-03",3,3
 "St Andrews H S","2026-11-10",3,3
+"St Andrews H S","2026-11-17",3,3
+"St Andrews H S","2026-11-19",3,3
+"St Andrews H S","2026-11-23",3,3
+"St Andrews H S","2026-11-26",3,3
+"St Charles Mission School","2026-11-26",8,7
 "St Josephs School","2026-11-03",1,1
 "St Josephs School","2026-11-10",1,1
+"St Josephs School","2026-11-17",1,1
 "St Jude Thaddeus School","2026-11-03",3,3
 "St Jude Thaddeus School","2026-11-10",3,3
+"St Jude Thaddeus School","2026-11-17",3,3
+"St Jude Thaddeus School","2026-11-19",3,3
+"St Jude Thaddeus School","2026-11-23",3,3
+"St Jude Thaddeus School","2026-11-26",3,3
 "St Labre Indian H S","2026-11-03",6,6
 "St Labre Indian H S","2026-11-10",6,6
+"St Labre Indian H S","2026-11-17",6,6
+"St Labre Indian H S","2026-11-19",6,6
+"St Labre Indian H S","2026-11-23",6,6
+"St Labre Indian H S","2026-11-26",24,21
 "St Mary's School","2026-11-03",2,1
 "St Mary's School","2026-11-10",2,1
+"St Mary's School","2026-11-17",2,1
+"St Mary's School","2026-11-19",2,1
+"St Mary's School","2026-11-23",2,1
+"St Mary's School","2026-11-26",2,1
 "St Regis School District","2026-09-01",14,2
 "St Regis School District","2026-09-07",14,2
 "St Regis School District","2026-09-08",14,2
@@ -2450,6 +3181,10 @@
 "St Regis School District","2026-10-27",14,5
 "St Regis School District","2026-11-03",14,5
 "St Regis School District","2026-11-10",12,3
+"St Regis School District","2026-11-17",12,3
+"St Regis School District","2026-11-19",13,3
+"St Regis School District","2026-11-23",13,3
+"St Regis School District","2026-11-26",13,3
 "St. Ignatius School District","2026-08-06",2,2
 "St. Ignatius School District","2026-08-07",2,2
 "St. Ignatius School District","2026-08-11",6,6
@@ -2467,6 +3202,10 @@
 "St. Ignatius School District","2026-10-27",4,3
 "St. Ignatius School District","2026-11-03",4,3
 "St. Ignatius School District","2026-11-10",4,3
+"St. Ignatius School District","2026-11-17",2,1
+"St. Ignatius School District","2026-11-19",2,1
+"St. Ignatius School District","2026-11-23",2,1
+"St. Ignatius School District","2026-11-26",2,1
 "Stanford Public Schools","2026-08-06",3,3
 "Stanford Public Schools","2026-08-07",2,2
 "Stanford Public Schools","2026-08-11",2,2
@@ -2484,6 +3223,10 @@
 "Stanford Public Schools","2026-10-27",2,1
 "Stanford Public Schools","2026-11-03",1,0
 "Stanford Public Schools","2026-11-10",1,0
+"Stanford Public Schools","2026-11-17",1,0
+"Stanford Public Schools","2026-11-19",1,0
+"Stanford Public Schools","2026-11-23",1,0
+"Stanford Public Schools","2026-11-26",1,0
 "Stevensville Public Schools","2026-08-06",8,8
 "Stevensville Public Schools","2026-08-07",18,8
 "Stevensville Public Schools","2026-08-11",26,16
@@ -2501,8 +3244,16 @@
 "Stevensville Public Schools","2026-10-27",21,9
 "Stevensville Public Schools","2026-11-03",19,7
 "Stevensville Public Schools","2026-11-10",17,7
+"Stevensville Public Schools","2026-11-17",17,7
+"Stevensville Public Schools","2026-11-19",17,7
+"Stevensville Public Schools","2026-11-23",18,8
+"Stevensville Public Schools","2026-11-26",19,7
 "Stillwater/Swt Grass Coop","2026-11-03",1,1
 "Stillwater/Swt Grass Coop","2026-11-10",1,1
+"Stillwater/Swt Grass Coop","2026-11-17",1,1
+"Stillwater/Swt Grass Coop","2026-11-19",1,1
+"Stillwater/Swt Grass Coop","2026-11-23",1,1
+"Stillwater/Swt Grass Coop","2026-11-26",1,1
 "Sun River Valley School District #24","2026-08-06",1,1
 "Sun River Valley School District #24","2026-08-07",1,1
 "Sun River Valley School District #24","2026-08-11",1,1
@@ -2535,6 +3286,10 @@
 "Sunburst Schools","2026-10-27",4,3
 "Sunburst Schools","2026-11-03",3,1
 "Sunburst Schools","2026-11-10",3,1
+"Sunburst Schools","2026-11-17",3,1
+"Sunburst Schools","2026-11-19",3,1
+"Sunburst Schools","2026-11-23",3,1
+"Sunburst Schools","2026-11-26",3,1
 "Superior School District","2026-08-06",2,2
 "Superior School District","2026-08-07",2,2
 "Superior School District","2026-08-11",2,2
@@ -2552,8 +3307,16 @@
 "Superior School District","2026-10-27",4,3
 "Superior School District","2026-11-03",4,3
 "Superior School District","2026-11-10",4,3
+"Superior School District","2026-11-17",3,2
+"Superior School District","2026-11-19",3,2
+"Superior School District","2026-11-23",3,2
+"Superior School District","2026-11-26",3,2
 "Surprise Creek School","2026-11-03",1,1
 "Surprise Creek School","2026-11-10",1,1
+"Surprise Creek School","2026-11-17",1,1
+"Surprise Creek School","2026-11-19",1,1
+"Surprise Creek School","2026-11-23",1,1
+"Surprise Creek School","2026-11-26",1,1
 "Swan River School District #4","2026-08-06",4,4
 "Swan River School District #4","2026-08-07",4,4
 "Swan River School District #4","2026-08-11",4,4
@@ -2571,6 +3334,10 @@
 "Swan River School District #4","2026-10-27",9,9
 "Swan River School District #4","2026-11-03",6,6
 "Swan River School District #4","2026-11-10",6,6
+"Swan River School District #4","2026-11-17",6,6
+"Swan River School District #4","2026-11-19",6,6
+"Swan River School District #4","2026-11-23",6,6
+"Swan River School District #4","2026-11-26",6,6
 "Swan Valley School District #3","2026-08-06",4,4
 "Swan Valley School District #3","2026-08-07",4,4
 "Swan Valley School District #3","2026-08-11",4,4
@@ -2588,6 +3355,10 @@
 "Swan Valley School District #3","2026-10-27",2,1
 "Swan Valley School District #3","2026-11-03",2,1
 "Swan Valley School District #3","2026-11-10",2,1
+"Swan Valley School District #3","2026-11-17",2,1
+"Swan Valley School District #3","2026-11-19",2,1
+"Swan Valley School District #3","2026-11-23",2,1
+"Swan Valley School District #3","2026-11-26",2,1
 "Sweet Grass County High School","2026-08-06",3,3
 "Sweet Grass County High School","2026-08-07",3,3
 "Sweet Grass County High School","2026-08-11",5,5
@@ -2605,6 +3376,10 @@
 "Sweet Grass County High School","2026-10-27",11,8
 "Sweet Grass County High School","2026-11-03",5,2
 "Sweet Grass County High School","2026-11-10",4,2
+"Sweet Grass County High School","2026-11-17",5,3
+"Sweet Grass County High School","2026-11-19",5,3
+"Sweet Grass County High School","2026-11-23",5,3
+"Sweet Grass County High School","2026-11-26",5,3
 "Target Range School District","2026-08-25",6,1
 "Target Range School District","2026-09-01",5,1
 "Target Range School District","2026-09-07",5,1
@@ -2618,6 +3393,10 @@
 "Target Range School District","2026-10-27",6,1
 "Target Range School District","2026-11-03",6,1
 "Target Range School District","2026-11-10",6,1
+"Target Range School District","2026-11-17",6,1
+"Target Range School District","2026-11-19",6,1
+"Target Range School District","2026-11-23",6,1
+"Target Range School District","2026-11-26",6,1
 "Terry Public Schools","2026-08-06",1,1
 "Terry Public Schools","2026-08-07",1,1
 "Terry Public Schools","2026-08-11",1,1
@@ -2635,6 +3414,10 @@
 "Terry Public Schools","2026-10-27",8,4
 "Terry Public Schools","2026-11-03",8,4
 "Terry Public Schools","2026-11-10",8,4
+"Terry Public Schools","2026-11-17",9,5
+"Terry Public Schools","2026-11-19",9,5
+"Terry Public Schools","2026-11-23",9,5
+"Terry Public Schools","2026-11-26",9,5
 "Thompson Falls Public Schools","2026-08-06",2,2
 "Thompson Falls Public Schools","2026-08-07",2,2
 "Thompson Falls Public Schools","2026-08-11",2,2
@@ -2652,6 +3435,10 @@
 "Thompson Falls Public Schools","2026-10-27",3,2
 "Thompson Falls Public Schools","2026-11-03",3,2
 "Thompson Falls Public Schools","2026-11-10",3,2
+"Thompson Falls Public Schools","2026-11-17",3,2
+"Thompson Falls Public Schools","2026-11-19",3,2
+"Thompson Falls Public Schools","2026-11-23",3,2
+"Thompson Falls Public Schools","2026-11-26",3,2
 "Three Forks Public Schools","2026-08-06",3,3
 "Three Forks Public Schools","2026-08-07",3,3
 "Three Forks Public Schools","2026-08-11",3,3
@@ -2669,6 +3456,10 @@
 "Three Forks Public Schools","2026-10-27",10,8
 "Three Forks Public Schools","2026-11-03",8,6
 "Three Forks Public Schools","2026-11-10",8,6
+"Three Forks Public Schools","2026-11-17",9,7
+"Three Forks Public Schools","2026-11-19",9,7
+"Three Forks Public Schools","2026-11-23",9,7
+"Three Forks Public Schools","2026-11-26",9,7
 "Townsend School District","2026-08-06",3,3
 "Townsend School District","2026-08-07",3,3
 "Townsend School District","2026-08-11",3,3
@@ -2686,6 +3477,10 @@
 "Townsend School District","2026-10-27",3,3
 "Townsend School District","2026-11-03",6,4
 "Townsend School District","2026-11-10",4,4
+"Townsend School District","2026-11-17",5,2
+"Townsend School District","2026-11-19",5,2
+"Townsend School District","2026-11-23",5,2
+"Townsend School District","2026-11-26",5,2
 "Trego School District 53","2026-08-06",1,1
 "Trego School District 53","2026-08-07",1,1
 "Trego School District 53","2026-08-11",1,1
@@ -2703,6 +3498,10 @@
 "Trego School District 53","2026-10-27",2,2
 "Trego School District 53","2026-11-03",2,2
 "Trego School District 53","2026-11-10",2,2
+"Trego School District 53","2026-11-17",2,2
+"Trego School District 53","2026-11-19",2,2
+"Trego School District 53","2026-11-23",2,2
+"Trego School District 53","2026-11-26",2,2
 "Trout Creek School District #6","2026-08-06",2,2
 "Trout Creek School District #6","2026-08-07",2,2
 "Trout Creek School District #6","2026-08-11",2,2
@@ -2717,6 +3516,10 @@
 "Trout Creek School District #6","2026-10-27",3,2
 "Trout Creek School District #6","2026-11-03",3,2
 "Trout Creek School District #6","2026-11-10",3,2
+"Trout Creek School District #6","2026-11-17",3,2
+"Trout Creek School District #6","2026-11-19",3,2
+"Trout Creek School District #6","2026-11-23",3,2
+"Trout Creek School District #6","2026-11-26",3,2
 "Troy","2026-08-06",1,1
 "Troy","2026-08-07",1,1
 "Troy","2026-08-11",1,1
@@ -2732,6 +3535,9 @@
 "Troy","2026-10-13",1,1
 "Troy","2026-10-20",1,1
 "Troy","2026-10-27",1,1
+"Troy Elem / Troy H S","2026-11-19",1,0
+"Troy Elem / Troy H S","2026-11-23",1,0
+"Troy Elem / Troy H S","2026-11-26",1,0
 "Turner Public Schools","2026-08-06",1,1
 "Turner Public Schools","2026-08-07",1,1
 "Turner Public Schools","2026-08-11",1,1
@@ -2749,6 +3555,10 @@
 "Turner Public Schools","2026-10-27",4,2
 "Turner Public Schools","2026-11-03",4,2
 "Turner Public Schools","2026-11-10",4,2
+"Turner Public Schools","2026-11-17",4,2
+"Turner Public Schools","2026-11-19",4,2
+"Turner Public Schools","2026-11-23",4,2
+"Turner Public Schools","2026-11-26",4,2
 "Ulm Public Schools","2026-08-06",1,1
 "Ulm Public Schools","2026-08-07",1,1
 "Ulm Public Schools","2026-08-11",1,1
@@ -2766,6 +3576,10 @@
 "Ulm Public Schools","2026-10-27",1,1
 "Ulm Public Schools","2026-11-03",1,1
 "Ulm Public Schools","2026-11-10",1,1
+"Ulm Public Schools","2026-11-17",1,1
+"Ulm Public Schools","2026-11-19",1,1
+"Ulm Public Schools","2026-11-23",1,1
+"Ulm Public Schools","2026-11-26",1,1
 "Upper West Shore School District #33","2026-08-25",2,1
 "Upper West Shore School District #33","2026-09-01",2,1
 "Upper West Shore School District #33","2026-09-07",2,1
@@ -2779,6 +3593,10 @@
 "Upper West Shore School District #33","2026-10-27",2,1
 "Upper West Shore School District #33","2026-11-03",2,1
 "Upper West Shore School District #33","2026-11-10",2,1
+"Upper West Shore School District #33","2026-11-17",3,2
+"Upper West Shore School District #33","2026-11-19",3,2
+"Upper West Shore School District #33","2026-11-23",3,2
+"Upper West Shore School District #33","2026-11-26",3,2
 "Valier School District #18","2026-08-25",1,0
 "Valier School District #18","2026-09-01",1,0
 "Valier School District #18","2026-09-07",1,0
@@ -2792,11 +3610,23 @@
 "Valier School District #18","2026-10-27",2,0
 "Valier School District #18","2026-11-03",2,0
 "Valier School District #18","2026-11-10",2,0
+"Valier School District #18","2026-11-17",2,0
+"Valier School District #18","2026-11-19",2,0
+"Valier School District #18","2026-11-23",2,0
+"Valier School District #18","2026-11-26",2,0
 "Valley View Elem","2026-11-03",1,1
 "Valley View Elem","2026-11-10",1,1
+"Valley View Elem","2026-11-17",1,1
+"Valley View Elem","2026-11-19",1,1
+"Valley View Elem","2026-11-23",1,1
+"Valley View Elem","2026-11-26",1,1
 "Vaughn Elementary School District #74","2026-10-27",1,0
 "Vaughn Elementary School District #74","2026-11-03",1,0
 "Vaughn Elementary School District #74","2026-11-10",1,0
+"Vaughn Elementary School District #74","2026-11-17",1,0
+"Vaughn Elementary School District #74","2026-11-19",1,0
+"Vaughn Elementary School District #74","2026-11-23",1,0
+"Vaughn Elementary School District #74","2026-11-26",1,0
 "Victor School District","2026-09-29",3,3
 "Victor School District","2026-10-06",3,3
 "Victor School District","2026-10-13",3,3
@@ -2804,6 +3634,10 @@
 "Victor School District","2026-10-27",6,4
 "Victor School District","2026-11-03",6,4
 "Victor School District","2026-11-10",6,4
+"Victor School District","2026-11-17",6,4
+"Victor School District","2026-11-19",6,4
+"Victor School District","2026-11-23",6,4
+"Victor School District","2026-11-26",6,4
 "Vida Elem","2026-08-06",3,3
 "Vida Elem","2026-08-07",3,3
 "Vida Elem","2026-08-11",3,3
@@ -2821,12 +3655,23 @@
 "Vida Elem","2026-10-27",3,3
 "Vida Elem","2026-11-03",2,2
 "Vida Elem","2026-11-10",2,2
+"Vida Elem","2026-11-17",2,2
+"Vida Elem","2026-11-19",2,2
+"Vida Elem","2026-11-23",2,2
 "West Glacier Elementary School District #8","2026-10-27",1,0
 "West Glacier Elementary School District #8","2026-11-03",1,0
 "West Glacier Elementary School District #8","2026-11-10",1,0
+"West Glacier Elementary School District #8","2026-11-17",1,0
+"West Glacier Elementary School District #8","2026-11-19",1,0
+"West Glacier Elementary School District #8","2026-11-23",1,0
+"West Glacier Elementary School District #8","2026-11-26",1,0
 "West Valley School District #1","2026-10-27",1,1
 "West Valley School District #1","2026-11-03",1,1
 "West Valley School District #1","2026-11-10",1,1
+"West Valley School District #1","2026-11-17",1,1
+"West Valley School District #1","2026-11-19",1,1
+"West Valley School District #1","2026-11-23",1,1
+"West Valley School District #1","2026-11-26",1,1
 "West Yellowstone School District","2026-09-01",3,1
 "West Yellowstone School District","2026-09-07",2,1
 "West Yellowstone School District","2026-09-08",2,1
@@ -2839,6 +3684,10 @@
 "West Yellowstone School District","2026-10-27",2,1
 "West Yellowstone School District","2026-11-03",2,1
 "West Yellowstone School District","2026-11-10",2,1
+"West Yellowstone School District","2026-11-17",2,1
+"West Yellowstone School District","2026-11-19",2,1
+"West Yellowstone School District","2026-11-23",2,1
+"West Yellowstone School District","2026-11-26",2,1
 "Westby School District 3","2026-08-06",6,6
 "Westby School District 3","2026-08-07",6,6
 "Westby School District 3","2026-08-11",6,6
@@ -2856,6 +3705,10 @@
 "Westby School District 3","2026-10-27",5,5
 "Westby School District 3","2026-11-03",5,5
 "Westby School District 3","2026-11-10",4,4
+"Westby School District 3","2026-11-17",4,4
+"Westby School District 3","2026-11-19",4,4
+"Westby School District 3","2026-11-23",4,4
+"Westby School District 3","2026-11-26",4,4
 "White Sulphur Springs Schools","2026-08-06",2,2
 "White Sulphur Springs Schools","2026-08-07",2,2
 "White Sulphur Springs Schools","2026-08-11",2,2
@@ -2873,26 +3726,38 @@
 "White Sulphur Springs Schools","2026-10-27",7,6
 "White Sulphur Springs Schools","2026-11-03",6,5
 "White Sulphur Springs Schools","2026-11-10",6,5
-"Whitefish School District","2026-08-06",13,7
-"Whitefish School District","2026-08-07",13,7
-"Whitefish School District","2026-08-11",13,7
-"Whitefish School District","2026-08-18",13,8
-"Whitefish School District","2026-08-25",13,8
-"Whitefish School District","2026-09-01",12,7
-"Whitefish School District","2026-09-07",18,7
-"Whitefish School District","2026-09-08",18,7
-"Whitefish School District","2026-09-15",19,7
-"Whitefish School District","2026-09-22",23,7
-"Whitefish School District","2026-09-29",20,6
+"White Sulphur Springs Schools","2026-11-17",6,5
+"White Sulphur Springs Schools","2026-11-19",6,5
+"White Sulphur Springs Schools","2026-11-23",6,5
+"White Sulphur Springs Schools","2026-11-26",6,5
+"Whitefish School District","2026-08-06",12,6
+"Whitefish School District","2026-08-07",12,6
+"Whitefish School District","2026-08-11",12,6
+"Whitefish School District","2026-08-18",12,7
+"Whitefish School District","2026-08-25",12,7
+"Whitefish School District","2026-09-01",11,6
+"Whitefish School District","2026-09-07",17,6
+"Whitefish School District","2026-09-08",17,6
+"Whitefish School District","2026-09-15",18,6
+"Whitefish School District","2026-09-22",22,6
+"Whitefish School District","2026-09-29",19,5
 "Whitefish School District","2026-10-06",17,6
 "Whitefish School District","2026-10-13",17,6
 "Whitefish School District","2026-10-20",19,7
 "Whitefish School District","2026-10-27",16,6
 "Whitefish School District","2026-11-03",14,4
 "Whitefish School District","2026-11-10",13,3
+"Whitefish School District","2026-11-17",13,4
+"Whitefish School District","2026-11-19",13,4
+"Whitefish School District","2026-11-23",12,4
+"Whitefish School District","2026-11-26",9,3
 "Whitehall Public Schools","2026-10-27",3,2
 "Whitehall Public Schools","2026-11-03",3,2
 "Whitehall Public Schools","2026-11-10",3,2
+"Whitehall Public Schools","2026-11-17",3,2
+"Whitehall Public Schools","2026-11-19",3,2
+"Whitehall Public Schools","2026-11-23",3,2
+"Whitehall Public Schools","2026-11-26",3,2
 "Whitewater Public Schools","2026-08-06",1,1
 "Whitewater Public Schools","2026-08-07",1,1
 "Whitewater Public Schools","2026-08-11",1,1
@@ -2910,6 +3775,10 @@
 "Whitewater Public Schools","2026-10-27",4,3
 "Whitewater Public Schools","2026-11-03",3,2
 "Whitewater Public Schools","2026-11-10",3,2
+"Whitewater Public Schools","2026-11-17",3,2
+"Whitewater Public Schools","2026-11-19",3,2
+"Whitewater Public Schools","2026-11-23",3,2
+"Whitewater Public Schools","2026-11-26",3,2
 "Wibaux Public Schools","2026-08-06",5,5
 "Wibaux Public Schools","2026-08-07",5,5
 "Wibaux Public Schools","2026-08-11",5,5
@@ -2927,6 +3796,10 @@
 "Wibaux Public Schools","2026-10-27",1,1
 "Wibaux Public Schools","2026-11-03",1,1
 "Wibaux Public Schools","2026-11-10",1,1
+"Wibaux Public Schools","2026-11-17",1,1
+"Wibaux Public Schools","2026-11-19",1,1
+"Wibaux Public Schools","2026-11-23",1,1
+"Wibaux Public Schools","2026-11-26",1,1
 "Winifred K-12 Schools","2026-08-06",2,2
 "Winifred K-12 Schools","2026-08-07",2,2
 "Winifred K-12 Schools","2026-08-11",2,2
@@ -2954,6 +3827,10 @@
 "Winnett Public Schools","2026-10-27",4,2
 "Winnett Public Schools","2026-11-03",4,2
 "Winnett Public Schools","2026-11-10",4,2
+"Winnett Public Schools","2026-11-17",4,2
+"Winnett Public Schools","2026-11-19",4,2
+"Winnett Public Schools","2026-11-23",4,2
+"Winnett Public Schools","2026-11-26",4,2
 "Wolf Creek, MT (Helena)","2026-08-11",1,1
 "Wolf Point Public Schools","2026-08-06",12,12
 "Wolf Point Public Schools","2026-08-07",12,12
@@ -2972,17 +3849,22 @@
 "Wolf Point Public Schools","2026-10-27",24,16
 "Wolf Point Public Schools","2026-11-03",21,13
 "Wolf Point Public Schools","2026-11-10",21,13
+"Wolf Point Public Schools","2026-11-17",20,13
+"Wolf Point Public Schools","2026-11-19",20,13
+"Wolf Point Public Schools","2026-11-23",20,13
+"Wolf Point Public Schools","2026-11-26",20,13
 "Woodman Elementary School District #3","2026-10-27",1,0
 "Woodman Elementary School District #3","2026-11-03",1,0
 "Woodman Elementary School District #3","2026-11-10",1,0
+"Woodman Elementary School District #3","2026-11-17",1,0
+"Woodman Elementary School District #3","2026-11-19",1,0
+"Woodman Elementary School District #3","2026-11-23",1,0
+"Woodman Elementary School District #3","2026-11-26",1,0
 "Wyola Elem","2026-08-06",3,3
 "Wyola Elem","2026-08-07",3,3
 "Wyola Elem","2026-08-11",3,3
-"Arrowhead Elementary School District #75","2026-08-11",3,3
 "Wyola Elem","2026-08-18",2,2
-"Arrowhead Elementary School District #75","2026-08-18",3,3
 "Wyola Elem","2026-08-25",2,2
-"Arrowhead Elementary School District #75","2026-08-25",3,3
 "Wyola Elem","2026-09-01",2,2
 "Wyola Elem","2026-09-07",2,2
 "Wyola Elem","2026-09-08",2,2
@@ -2995,897 +3877,15 @@
 "Wyola Elem","2026-10-27",1,1
 "Wyola Elem","2026-11-03",1,1
 "Wyola Elem","2026-11-10",1,1
+"Wyola Elem","2026-11-17",1,1
+"Wyola Elem","2026-11-19",1,1
+"Wyola Elem","2026-11-23",1,1
+"Wyola Elem","2026-11-26",1,1
 "Yaak","2026-08-06",1,1
-"Arrowhead Elementary School District #75","2026-08-06",3,3
 "Yaak","2026-08-07",1,1
-"Arrowhead Elementary School District #75","2026-08-07",3,3
 "Yellowstone Academy Elem","2026-11-03",1,1
 "Yellowstone Academy Elem","2026-11-10",1,1
-"Absarokee Elem / Absarokee H S","2026-11-17",1,0
-"Alberton School District","2026-11-17",3,2
-"Amsterdam Elem","2026-11-17",1,0
-"Anaconda School District #10","2026-11-17",8,6
-"Arlee Joint School District","2026-11-17",4,0
-"Ashland Public School","2026-11-17",7,6
-"Augusta School District #45","2026-11-17",3,2
-"Bainville K-12 Schools","2026-11-17",7,4
-"Baker Public Schools","2026-11-17",6,6
-"Belfry Public Schools","2026-11-17",3,2
-"Belgrade School District 44","2026-11-17",38,23
-"Belt Public Schools","2026-11-17",3,3
-"Big Sandy Public Schools","2026-11-17",13,11
-"Big Sky School District 72","2026-11-17",5,3
-"Big Timber Grade School","2026-11-17",5,4
-"Bigfork School District 38","2026-11-17",10,3
-"Billings Public Schools","2026-11-17",64,43
-"Blue Creek Elem","2026-11-17",2,2
-"Bonner School District #14","2026-11-17",2,1
-"Boulder Elementary","2026-11-17",2,0
-"Box Elder Elem / Box Elder H S","2026-11-17",4,4
-"Bozeman Public Schools","2026-11-17",48,38
-"Bridger School District 2","2026-11-17",8,1
-"Broadus Public Schools","2026-11-17",4,3
-"Broadview School District","2026-11-17",8,5
-"Brockton School District","2026-11-17",3,3
-"Browning Public Schools","2026-11-17",8,7
-"Butte Central High School","2026-11-17",1,1
-"Butte School District 1","2026-11-17",14,5
-"Canyon Creek School District","2026-11-17",1,1
-"Cardwell Elementary School","2026-11-17",1,1
-"Cascade Public Schools","2026-11-17",12,6
-"Cayuse Prairie School District #10","2026-11-17",2,2
-"Centerville Public Schools","2026-11-17",6,2
-"Charlo School District 7J","2026-11-17",4,3
-"Chester-Joplin-Inverness Public Schools","2026-11-17",3,0
-"Chinook Public Schools","2026-11-17",6,2
-"Choteau School District","2026-11-17",4,2
-"Clinton School District #32","2026-11-17",1,0
-"Colstrip Public Schools","2026-11-17",23,21
-"Columbia Falls School District 6","2026-11-17",25,11
-"Columbus Public Schools","2026-11-17",4,3
-"Conrad Public Schools","2026-11-17",4,4
-"Corvallis School District #1","2026-11-17",20,13
-"Creston School District","2026-11-17",1,0
-"Culbertson School District 17-C","2026-11-17",2,1
-"Custer Public Schools","2026-11-17",6,6
-"Cut Bank School District #15","2026-11-17",3,1
-"Darby School District 9","2026-11-17",6,2
-"Deer Lodge School District #1","2026-11-17",7,3
-"Deer Park School District","2026-11-17",1,0
-"Dillon School District 10","2026-11-17",2,1
-"Dixon School District #9","2026-11-17",2,0
-"Dodson K-12","2026-11-17",1,1
-"Drummond Public Schools","2026-11-17",8,3
-"Dutton/Brady Public School District","2026-11-17",3,2
-"East Glacier Park Grade School","2026-11-17",1,1
-"East Helena Public Schools","2026-11-17",9,5
-"Eastern Yellowstone Coop","2026-11-17",1,1
-"Ekalaka Public Schools","2026-11-17",3,2
-"Elder Grove School District","2026-11-17",1,1
-"Elysian School District #23","2026-11-17",3,2
-"Ennis Schools","2026-11-17",4,3
-"Evergreen School District #50","2026-11-17",3,2
-"Fair-Mont-Egan Schools","2026-11-17",3,0
-"Fairview Public Schools","2026-11-17",5,5
-"Flathead Special Ed. Coop.","2026-11-17",3,3
-"Florence-Carlton School District 15-6","2026-11-17",7,2
-"Fort Benton School District 1","2026-11-17",1,0
-"Frazer Public Schools","2026-11-17",26,22
-"Frenchtown K-12 Schools","2026-11-17",6,1
-"Froid Public Schools","2026-11-17",4,2
-"Fromberg Public Schools","2026-11-17",1,0
-"Frontier Elementary School","2026-11-17",2,2
-"Gallatin Gateway School","2026-11-17",3,2
-"Gardiner Public Schools","2026-11-17",5,4
-"Geraldine K-12","2026-11-17",1,1
-"Geyser Public Schools","2026-11-17",1,1
-"Glasgow School District 1-A","2026-11-17",9,4
-"Glendive Public Schools","2026-11-17",15,8
-"Golden Ridge Elem","2026-11-17",1,1
-"Grass Range Public Schools","2026-11-17",4,2
-"Great Falls Public Schools","2026-11-17",31,27
-"Hamilton School District 3","2026-11-17",17,11
-"Hardin Public Schools","2026-11-17",3,2
-"Harlem Public Schools","2026-11-17",8,2
-"Harrison K-12 Schools","2026-11-17",1,1
-"Havre Public Schools","2026-11-17",9,5
-"Hays-Lodge Pole School District","2026-11-17",9,5
-"Headwaters Academy","2026-11-17",1,0
-"Heart Butte K-12 Schools","2026-11-17",8,3
-"Helena Flats School District #15","2026-11-17",3,2
-"Helena Public Schools","2026-11-17",21,14
-"Hellgate Elementary School District","2026-11-17",4,2
-"Highwood Public Schools","2026-11-17",4,1
-"Hinsdale Public Schools","2026-11-17",1,1
-"Hobson Public School","2026-11-17",3,3
-"Hot Springs School District","2026-11-17",8,4
-"Huntley Project School District","2026-11-17",4,2
-"Hysham Public Schools","2026-11-17",2,2
-"Independent School","2026-11-17",2,1
-"Jefferson High School","2026-11-17",6,2
-"Joliet Public School District 86","2026-11-17",4,0
-"Jordan Public Schools","2026-11-17",1,1
-"Judith Gap Schools","2026-11-17",2,2
-"Kalispell Public Schools","2026-11-17",42,19
-"Kila School District #20","2026-11-17",4,1
-"Kinsey Elem","2026-11-17",1,1
-"LaMotte Elem","2026-11-17",1,0
-"Lambert Public Schools","2026-11-17",1,1
-"Lame Deer Public Schools","2026-11-17",32,29
-"Laurel Public Schools","2026-11-17",21,13
-"Lavina Public Schools","2026-11-17",2,0
-"Lewistown Public Schools","2026-11-17",3,1
-"Libby Public Schools","2026-11-17",15,5
-"Lima School District #12","2026-11-17",4,4
-"Lincoln School District #38","2026-11-17",2,1
-"Livingston Public Schools","2026-11-17",15,12
-"Lockwood Schools","2026-11-17",19,14
-"Lodge Grass Public Schools","2026-11-17",15,15
-"Lolo School District 7","2026-11-17",6,2
-"Lustre District 23","2026-11-17",3,2
-"Luther School","2026-11-17",2,2
-"Malta Public Schools","2026-11-17",9,8
-"Manhattan Christian","2026-11-17",1,0
-"Manhattan School District","2026-11-17",10,5
-"Marion School District #54","2026-11-17",2,0
-"McCormick Elem","2026-11-17",2,2
-"Melstone Public Schools","2026-11-17",8,3
-"Miami Elementary School District #31","2026-11-17",2,1
-"Miles City Unified School District 1","2026-11-17",20,13
-"Missoula Area Education Coop","2026-11-17",1,1
-"Missoula County Public Schools","2026-11-17",20,10
-"Monforton School District #27","2026-11-17",6,6
-"Moore Public Schools","2026-11-17",1,1
-"Nashua Public Schools","2026-11-17",5,1
-"North Cheyenne Trib Elem","2026-11-17",4,4
-"North Ctrl Learn Res Ctr","2026-11-17",1,1
-"North Star Public Schools","2026-11-17",5,4
-"Northern Cheyenne Trib HS","2026-11-17",7,6
-"Noxon Public Schools","2026-11-17",1,1
-"Olney-Bissell School District","2026-11-17",1,0
-"Opheim Public Schools","2026-11-17",3,1
-"Park City Schools","2026-11-17",2,0
-"Philipsburg School District","2026-11-17",7,4
-"Pioneer Elementary School District #41","2026-11-17",1,0
-"Plentywood Public Schools","2026-11-17",4,3
-"Plevna School District #55","2026-11-17",8,2
-"Polson School District","2026-11-17",3,2
-"Poplar Public Schools","2026-11-17",14,12
-"Power Public Schools","2026-11-17",3,0
-"Pryor Public Schools","2026-11-17",6,5
-"Ramsay School District #3","2026-11-17",2,2
-"Rapelje School District","2026-11-17",3,3
-"Rau Elem","2026-11-17",3,3
-"Red Lodge School District 1","2026-11-17",4,3
-"Reed Point School District","2026-11-17",2,0
-"Richey Public Schools","2026-11-17",6,3
-"Roberts Public School","2026-11-17",2,0
-"Rocky Boy Public Schools","2026-11-17",17,10
-"Ronan Public Schools","2026-11-17",13,4
-"Rosebud K-12","2026-11-17",2,2
-"Ross Elem","2026-11-17",1,1
-"Roundup School District","2026-11-17",9,3
-"Roy School District 74","2026-11-17",3,3
-"Ryegate K-12 Schools","2026-11-17",1,1
-"Sanders County Ed ServicesCoop","2026-11-17",2,2
-"Savage Public Schools","2026-11-17",5,5
-"Scobey Schools","2026-11-17",13,9
-"Seeley Lake Elementary #34","2026-11-17",3,2
-"Shelby School District","2026-11-17",5,3
-"Shepherd School District #37","2026-11-17",1,1
-"Sheridan Public Schools","2026-11-17",4,0
-"Shields Valley Public Schools","2026-11-17",7,7
-"Shodair Specialty Hosp","2026-11-17",2,2
-"Sidney Public Schools","2026-11-17",10,5
-"Smith Valley School District #8","2026-11-17",2,0
-"St Andrews H S","2026-11-17",3,3
-"St Josephs School","2026-11-17",1,1
-"St Jude Thaddeus School","2026-11-17",3,3
-"St Labre Indian H S","2026-11-17",6,6
-"St Mary's School","2026-11-17",2,1
-"St Regis School District","2026-11-17",12,3
-"St. Ignatius School District","2026-11-17",3,2
-"Stanford Public Schools","2026-11-17",1,0
-"Stevensville Public Schools","2026-11-17",17,7
-"Stillwater/Swt Grass Coop","2026-11-17",1,1
-"Sunburst Schools","2026-11-17",3,1
-"Superior School District","2026-11-17",3,2
-"Surprise Creek School","2026-11-17",1,1
-"Swan River School District #4","2026-11-17",6,6
-"Swan Valley School District #3","2026-11-17",2,1
-"Sweet Grass County High School","2026-11-17",5,3
-"Target Range School District","2026-11-17",6,1
-"Terry Public Schools","2026-11-17",9,5
-"Thompson Falls Public Schools","2026-11-17",3,2
-"Three Forks Public Schools","2026-11-17",9,7
-"Townsend School District","2026-11-17",5,2
-"Trego School District 53","2026-11-17",2,2
-"Trout Creek School District #6","2026-11-17",3,2
-"Turner Public Schools","2026-11-17",4,2
-"Ulm Public Schools","2026-11-17",1,1
-"Upper West Shore School District #33","2026-11-17",3,2
-"Valier School District #18","2026-11-17",2,0
-"Valley View Elem","2026-11-17",1,1
-"Vaughn Elementary School District #74","2026-11-17",1,0
-"Victor School District","2026-11-17",6,4
-"Vida Elem","2026-11-17",2,2
-"West Glacier Elementary School District #8","2026-11-17",1,0
-"West Valley School District #1","2026-11-17",1,1
-"West Yellowstone School District","2026-11-17",2,1
-"Westby School District 3","2026-11-17",4,4
-"White Sulphur Springs Schools","2026-11-17",6,5
-"Whitefish School District","2026-11-17",13,4
-"Whitehall Public Schools","2026-11-17",3,2
-"Whitewater Public Schools","2026-11-17",3,2
-"Wibaux Public Schools","2026-11-17",1,1
-"Winnett Public Schools","2026-11-17",4,2
-"Wolf Point Public Schools","2026-11-17",20,13
-"Woodman Elementary School District #3","2026-11-17",1,0
-"Wyola Elem","2026-11-17",1,1
 "Yellowstone Academy Elem","2026-11-17",1,1
-"Absarokee Elem / Absarokee H S","2026-11-19",1,0
-"Alberton School District","2026-11-19",3,2
-"Amsterdam Elem","2026-11-19",1,0
-"Anaconda School District #10","2026-11-19",8,6
-"Arlee Joint School District","2026-11-19",5,0
-"Ashland Public School","2026-11-19",7,6
-"Augusta School District #45","2026-11-19",3,2
-"Bainville K-12 Schools","2026-11-19",7,4
-"Baker Public Schools","2026-11-19",6,6
-"Belfry Public Schools","2026-11-19",3,2
-"Belgrade School District 44","2026-11-19",38,23
-"Belt Public Schools","2026-11-19",3,3
-"Big Sandy Public Schools","2026-11-19",13,11
-"Big Sky School District 72","2026-11-19",5,3
-"Big Timber Grade School","2026-11-19",5,4
-"Bigfork School District 38","2026-11-19",10,3
-"Billings Public Schools","2026-11-19",65,42
-"Blue Creek Elem","2026-11-19",2,2
-"Bonner School District #14","2026-11-19",2,1
-"Boulder Elementary","2026-11-19",2,0
-"Box Elder Elem / Box Elder H S","2026-11-19",4,4
-"Bozeman Public Schools","2026-11-19",48,39
-"Bridger School District 2","2026-11-19",8,1
-"Broadus Public Schools","2026-11-19",4,3
-"Broadview School District","2026-11-19",8,5
-"Brockton School District","2026-11-19",3,3
-"Browning Public Schools","2026-11-19",9,8
-"Butte Central High School","2026-11-19",1,1
-"Butte School District 1","2026-11-19",14,5
-"Canyon Creek School District","2026-11-19",1,1
-"Cardwell Elementary School","2026-11-19",1,1
-"Cascade Public Schools","2026-11-19",12,6
-"Cayuse Prairie School District #10","2026-11-19",2,2
-"Centerville Public Schools","2026-11-19",3,1
-"Charlo School District 7J","2026-11-19",4,3
-"Chester-Joplin-Inverness Public Schools","2026-11-19",3,0
-"Chinook Public Schools","2026-11-19",6,2
-"Choteau School District","2026-11-19",4,2
-"Clinton School District #32","2026-11-19",1,0
-"Colstrip Public Schools","2026-11-19",24,22
-"Columbia Falls School District 6","2026-11-19",25,11
-"Columbus Public Schools","2026-11-19",4,3
-"Conrad Public Schools","2026-11-19",4,4
-"Corvallis School District #1","2026-11-19",20,13
-"Creston School District","2026-11-19",1,0
-"Culbertson School District 17-C","2026-11-19",2,1
-"Custer Public Schools","2026-11-19",6,6
-"Cut Bank School District #15","2026-11-19",3,1
-"Darby School District 9","2026-11-19",6,2
-"Deer Lodge School District #1","2026-11-19",7,3
-"Deer Park School District","2026-11-19",1,0
-"Dillon School District 10","2026-11-19",3,2
-"Dixon School District #9","2026-11-19",2,0
-"Dodson K-12","2026-11-19",2,2
-"Drummond Public Schools","2026-11-19",8,3
-"Dutton/Brady Public School District","2026-11-19",3,2
-"East Glacier Park Grade School","2026-11-19",1,1
-"East Helena Public Schools","2026-11-19",9,5
-"Eastern Yellowstone Coop","2026-11-19",1,1
-"Ekalaka Public Schools","2026-11-19",3,2
-"Elder Grove School District","2026-11-19",1,1
-"Elysian School District #23","2026-11-19",3,2
-"Ennis Schools","2026-11-19",4,3
-"Evergreen School District #50","2026-11-19",3,2
-"Fair-Mont-Egan Schools","2026-11-19",3,0
-"Fairview Public Schools","2026-11-19",4,4
-"Flathead Special Ed. Coop.","2026-11-19",3,3
-"Florence-Carlton School District 15-6","2026-11-19",7,2
-"Fort Benton School District 1","2026-11-19",1,0
-"Frazer Public Schools","2026-11-19",26,22
-"Frenchtown K-12 Schools","2026-11-19",6,2
-"Froid Public Schools","2026-11-19",4,2
-"Fromberg Public Schools","2026-11-19",1,0
-"Frontier Elementary School","2026-11-19",2,2
-"Gallatin Gateway School","2026-11-19",3,2
-"Gardiner Public Schools","2026-11-19",5,4
-"Geraldine K-12","2026-11-19",1,1
-"Geyser Public Schools","2026-11-19",1,1
-"Glasgow School District 1-A","2026-11-19",9,4
-"Glendive Public Schools","2026-11-19",15,8
-"Golden Ridge Elem","2026-11-19",1,1
-"Grass Range Public Schools","2026-11-19",4,2
-"Great Falls Public Schools","2026-11-19",30,26
-"Hamilton School District 3","2026-11-19",17,11
-"Hardin Public Schools","2026-11-19",3,2
-"Harlem Public Schools","2026-11-19",8,2
-"Harrison K-12 Schools","2026-11-19",1,1
-"Havre Public Schools","2026-11-19",9,5
-"Hays-Lodge Pole School District","2026-11-19",10,5
-"Headwaters Academy","2026-11-19",1,0
-"Heart Butte K-12 Schools","2026-11-19",1,1
-"Helena Flats School District #15","2026-11-19",3,2
-"Helena Public Schools","2026-11-19",23,15
-"Hellgate Elementary School District","2026-11-19",4,2
-"Highwood Public Schools","2026-11-19",4,1
-"Hinsdale Public Schools","2026-11-19",1,1
-"Hobson Public School","2026-11-19",3,3
-"Hot Springs School District","2026-11-19",8,4
-"Huntley Project School District","2026-11-19",4,2
-"Hysham Public Schools","2026-11-19",2,2
-"Independent School","2026-11-19",2,1
-"Jefferson High School","2026-11-19",6,2
-"Joliet Public School District 86","2026-11-19",4,0
-"Jordan Public Schools","2026-11-19",2,2
-"Judith Gap Schools","2026-11-19",2,2
-"Kalispell Public Schools","2026-11-19",43,20
-"Kila School District #20","2026-11-19",4,1
-"Kinsey Elem","2026-11-19",1,1
-"LaMotte Elem","2026-11-19",1,0
-"Lambert Public Schools","2026-11-19",1,1
-"Lame Deer Public Schools","2026-11-19",31,28
-"Laurel Public Schools","2026-11-19",21,13
-"Lavina Public Schools","2026-11-19",2,0
-"Lewistown Public Schools","2026-11-19",3,1
-"Libby Public Schools","2026-11-19",15,5
-"Lima School District #12","2026-11-19",4,4
-"Lincoln School District #38","2026-11-19",2,1
-"Livingston Public Schools","2026-11-19",14,11
-"Lockwood Schools","2026-11-19",19,14
-"Lodge Grass Public Schools","2026-11-19",15,15
-"Lolo School District 7","2026-11-19",6,2
-"Lustre District 23","2026-11-19",3,2
-"Luther School","2026-11-19",2,2
-"Malta Public Schools","2026-11-19",9,8
-"Manhattan Christian","2026-11-19",1,0
-"Manhattan School District","2026-11-19",10,5
-"Marion School District #54","2026-11-19",2,0
-"McCormick Elem","2026-11-19",2,2
-"Melstone Public Schools","2026-11-19",8,3
-"Miami Elementary School District #31","2026-11-19",2,1
-"Miles City Unified School District 1","2026-11-19",20,13
-"Missoula Area Education Coop","2026-11-19",1,1
-"Missoula County Public Schools","2026-11-19",21,10
-"Monforton School District #27","2026-11-19",6,6
-"Moore Public Schools","2026-11-19",1,1
-"Nashua Public Schools","2026-11-19",5,1
-"North Cheyenne Trib Elem","2026-11-19",4,4
-"North Ctrl Learn Res Ctr","2026-11-19",1,1
-"North Star Public Schools","2026-11-19",5,4
-"Northern Cheyenne Trib HS","2026-11-19",7,6
-"Noxon Public Schools","2026-11-19",1,1
-"Olney-Bissell School District","2026-11-19",1,0
-"Opheim Public Schools","2026-11-19",3,1
-"Park City Schools","2026-11-19",2,0
-"Philipsburg School District","2026-11-19",7,4
-"Pioneer Elementary School District #41","2026-11-19",1,0
-"Plentywood Public Schools","2026-11-19",4,3
-"Plevna School District #55","2026-11-19",8,2
-"Polson School District","2026-11-19",3,2
-"Poplar Public Schools","2026-11-19",14,12
-"Power Public Schools","2026-11-19",3,0
-"Pryor Public Schools","2026-11-19",6,5
-"Ramsay School District #3","2026-11-19",2,2
-"Rapelje School District","2026-11-19",3,3
-"Rau Elem","2026-11-19",3,3
-"Red Lodge School District 1","2026-11-19",4,3
-"Reed Point School District","2026-11-19",2,0
-"Richey Public Schools","2026-11-19",6,3
-"Roberts Public School","2026-11-19",2,0
-"Rocky Boy Public Schools","2026-11-19",17,10
-"Ronan Public Schools","2026-11-19",13,4
-"Rosebud K-12","2026-11-19",2,2
-"Roundup School District","2026-11-19",9,3
-"Roy School District 74","2026-11-19",3,3
-"Ryegate K-12 Schools","2026-11-19",1,1
-"Sanders County Ed ServicesCoop","2026-11-19",2,2
-"Savage Public Schools","2026-11-19",5,5
-"Scobey Schools","2026-11-19",13,9
-"Seeley Lake Elementary #34","2026-11-19",3,2
-"Shelby School District","2026-11-19",5,3
-"Shepherd School District #37","2026-11-19",1,1
-"Sheridan Public Schools","2026-11-19",4,0
-"Shields Valley Public Schools","2026-11-19",7,7
-"Shodair Specialty Hosp","2026-11-19",2,2
-"Sidney Public Schools","2026-11-19",10,5
-"Smith Valley School District #8","2026-11-19",2,0
-"St Andrews H S","2026-11-19",3,3
-"St Jude Thaddeus School","2026-11-19",3,3
-"St Labre Indian H S","2026-11-19",6,6
-"St Mary's School","2026-11-19",2,1
-"St Regis School District","2026-11-19",13,3
-"St. Ignatius School District","2026-11-19",3,2
-"Stanford Public Schools","2026-11-19",1,0
-"Stevensville Public Schools","2026-11-19",17,7
-"Stillwater/Swt Grass Coop","2026-11-19",1,1
-"Sunburst Schools","2026-11-19",3,1
-"Superior School District","2026-11-19",3,2
-"Surprise Creek School","2026-11-19",1,1
-"Swan River School District #4","2026-11-19",6,6
-"Swan Valley School District #3","2026-11-19",2,1
-"Sweet Grass County High School","2026-11-19",5,3
-"Target Range School District","2026-11-19",6,1
-"Terry Public Schools","2026-11-19",9,5
-"Thompson Falls Public Schools","2026-11-19",3,2
-"Three Forks Public Schools","2026-11-19",9,7
-"Townsend School District","2026-11-19",5,2
-"Trego School District 53","2026-11-19",2,2
-"Trout Creek School District #6","2026-11-19",3,2
-"Troy Elem / Troy H S","2026-11-19",1,0
-"Turner Public Schools","2026-11-19",4,2
-"Ulm Public Schools","2026-11-19",1,1
-"Upper West Shore School District #33","2026-11-19",3,2
-"Valier School District #18","2026-11-19",2,0
-"Valley View Elem","2026-11-19",1,1
-"Vaughn Elementary School District #74","2026-11-19",1,0
-"Victor School District","2026-11-19",6,4
-"Vida Elem","2026-11-19",2,2
-"West Glacier Elementary School District #8","2026-11-19",1,0
-"West Valley School District #1","2026-11-19",1,1
-"West Yellowstone School District","2026-11-19",2,1
-"Westby School District 3","2026-11-19",4,4
-"White Sulphur Springs Schools","2026-11-19",6,5
-"Whitefish School District","2026-11-19",13,4
-"Whitehall Public Schools","2026-11-19",3,2
-"Whitewater Public Schools","2026-11-19",3,2
-"Wibaux Public Schools","2026-11-19",1,1
-"Winnett Public Schools","2026-11-19",4,2
-"Wolf Point Public Schools","2026-11-19",20,13
-"Woodman Elementary School District #3","2026-11-19",1,0
-"Wyola Elem","2026-11-19",1,1
 "Yellowstone Academy Elem","2026-11-19",1,1
-"Absarokee Elem / Absarokee H S","2026-11-23",1,0
-"Alberton School District","2026-11-23",3,2
-"Amsterdam Elem","2026-11-23",1,0
-"Anaconda School District #10","2026-11-23",8,6
-"Arlee Joint School District","2026-11-23",5,0
-"Ashland Public School","2026-11-23",7,6
-"Augusta School District #45","2026-11-23",3,2
-"Bainville K-12 Schools","2026-11-23",7,4
-"Baker Public Schools","2026-11-23",6,6
-"Belfry Public Schools","2026-11-23",3,2
-"Belgrade School District 44","2026-11-23",38,23
-"Belt Public Schools","2026-11-23",3,3
-"Big Sandy Public Schools","2026-11-23",13,11
-"Big Sky School District 72","2026-11-23",5,3
-"Big Timber Grade School","2026-11-23",5,4
-"Bigfork School District 38","2026-11-23",10,3
-"Billings Public Schools","2026-11-23",66,42
-"Blue Creek Elem","2026-11-23",2,2
-"Bonner School District #14","2026-11-23",1,0
-"Boulder Elementary","2026-11-23",2,0
-"Box Elder Elem / Box Elder H S","2026-11-23",4,4
-"Bozeman Public Schools","2026-11-23",48,39
-"Bridger School District 2","2026-11-23",8,1
-"Broadus Public Schools","2026-11-23",4,3
-"Broadview School District","2026-11-23",8,5
-"Brockton School District","2026-11-23",3,3
-"Browning Public Schools","2026-11-23",9,8
-"Butte Central High School","2026-11-23",1,1
-"Butte School District 1","2026-11-23",14,5
-"Canyon Creek School District","2026-11-23",1,1
-"Cardwell Elementary School","2026-11-23",1,1
-"Cascade Public Schools","2026-11-23",12,6
-"Cayuse Prairie School District #10","2026-11-23",2,2
-"Centerville Public Schools","2026-11-23",3,1
-"Charlo School District 7J","2026-11-23",4,3
-"Chester-Joplin-Inverness Public Schools","2026-11-23",3,0
-"Chinook Public Schools","2026-11-23",6,2
-"Choteau School District","2026-11-23",4,2
-"Clinton School District #32","2026-11-23",2,1
-"Colstrip Public Schools","2026-11-23",24,22
-"Columbia Falls School District 6","2026-11-23",25,11
-"Columbus Public Schools","2026-11-23",4,3
-"Conrad Public Schools","2026-11-23",4,4
-"Corvallis School District #1","2026-11-23",20,13
-"Creston School District","2026-11-23",1,0
-"Culbertson School District 17-C","2026-11-23",2,1
-"Custer Public Schools","2026-11-23",6,6
-"Cut Bank School District #15","2026-11-23",3,1
-"Darby School District 9","2026-11-23",6,2
-"Deer Lodge School District #1","2026-11-23",6,2
-"Deer Park School District","2026-11-23",1,0
-"Dillon School District 10","2026-11-23",3,2
-"Dixon School District #9","2026-11-23",2,0
-"Dodson K-12","2026-11-23",2,2
-"Drummond Public Schools","2026-11-23",8,3
-"Dutton/Brady Public School District","2026-11-23",3,2
-"East Glacier Park Grade School","2026-11-23",1,1
-"East Helena Public Schools","2026-11-23",9,5
-"Eastern Yellowstone Coop","2026-11-23",1,1
-"Ekalaka Public Schools","2026-11-23",3,2
-"Elder Grove School District","2026-11-23",1,1
-"Elysian School District #23","2026-11-23",3,2
-"Ennis Schools","2026-11-23",1,1
-"Evergreen School District #50","2026-11-23",3,2
-"Fair-Mont-Egan Schools","2026-11-23",3,0
-"Fairview Public Schools","2026-11-23",4,4
-"Flathead Special Ed. Coop.","2026-11-23",3,3
-"Florence-Carlton School District 15-6","2026-11-23",7,2
-"Forsyth Public Schools","2026-11-23",1,0
-"Fort Benton School District 1","2026-11-23",1,0
-"Frazer Public Schools","2026-11-23",26,22
-"Frenchtown K-12 Schools","2026-11-23",6,2
-"Froid Public Schools","2026-11-23",4,2
-"Fromberg Public Schools","2026-11-23",1,0
-"Frontier Elementary School","2026-11-23",2,2
-"Gallatin Gateway School","2026-11-23",3,2
-"Gardiner Public Schools","2026-11-23",3,2
-"Geraldine K-12","2026-11-23",1,1
-"Geyser Public Schools","2026-11-23",1,1
-"Glasgow School District 1-A","2026-11-23",9,4
-"Glendive Public Schools","2026-11-23",15,8
-"Golden Ridge Elem","2026-11-23",1,1
-"Grass Range Public Schools","2026-11-23",4,2
-"Great Falls Public Schools","2026-11-23",28,24
-"Hamilton School District 3","2026-11-23",16,11
-"Hardin Public Schools","2026-11-23",3,2
-"Harlem Public Schools","2026-11-23",8,2
-"Harrison K-12 Schools","2026-11-23",1,1
-"Havre Public Schools","2026-11-23",9,5
-"Hays-Lodge Pole School District","2026-11-23",10,5
-"Heart Butte K-12 Schools","2026-11-23",1,1
-"Helena Flats School District #15","2026-11-23",3,2
-"Helena Public Schools","2026-11-23",21,14
-"Hellgate Elementary School District","2026-11-23",2,0
-"Highwood Public Schools","2026-11-23",4,1
-"Hinsdale Public Schools","2026-11-23",1,1
-"Hobson Public School","2026-11-23",3,3
-"Hot Springs School District","2026-11-23",8,4
-"Huntley Project School District","2026-11-23",4,2
-"Hysham Public Schools","2026-11-23",2,2
-"Independent School","2026-11-23",2,1
-"Jefferson High School","2026-11-23",6,2
-"Joliet Public School District 86","2026-11-23",4,0
-"Jordan Public Schools","2026-11-23",2,2
-"Judith Gap Schools","2026-11-23",2,2
-"Kalispell Public Schools","2026-11-23",43,20
-"Kila School District #20","2026-11-23",4,1
-"Kinsey Elem","2026-11-23",1,1
-"LaMotte Elem","2026-11-23",1,0
-"Lambert Public Schools","2026-11-23",1,1
-"Lame Deer Public Schools","2026-11-23",31,28
-"Laurel Public Schools","2026-11-23",21,13
-"Lavina Public Schools","2026-11-23",2,0
-"Lewistown Public Schools","2026-11-23",3,1
-"Libby Public Schools","2026-11-23",16,5
-"Lima School District #12","2026-11-23",4,4
-"Lincoln School District #38","2026-11-23",2,1
-"Livingston Public Schools","2026-11-23",11,8
-"Lockwood Schools","2026-11-23",19,14
-"Lodge Grass Public Schools","2026-11-23",2,2
-"Lolo School District 7","2026-11-23",6,2
-"Lustre District 23","2026-11-23",3,2
-"Luther School","2026-11-23",1,1
-"Malta Public Schools","2026-11-23",9,8
-"Manhattan Christian","2026-11-23",1,0
-"Manhattan School District","2026-11-23",10,5
-"Marion School District #54","2026-11-23",1,0
-"McCormick Elem","2026-11-23",2,2
-"Melstone Public Schools","2026-11-23",8,3
-"Miami Elementary School District #31","2026-11-23",1,0
-"Miles City Unified School District 1","2026-11-23",20,13
-"Missoula Area Education Coop","2026-11-23",1,1
-"Missoula County Public Schools","2026-11-23",18,9
-"Monforton School District #27","2026-11-23",6,6
-"Moore Public Schools","2026-11-23",1,1
-"Nashua Public Schools","2026-11-23",5,1
-"North Cheyenne Trib Elem","2026-11-23",4,4
-"North Ctrl Learn Res Ctr","2026-11-23",1,1
-"North Star Public Schools","2026-11-23",5,4
-"Northern Cheyenne Trib HS","2026-11-23",7,6
-"Noxon Public Schools","2026-11-23",1,1
-"Olney-Bissell School District","2026-11-23",1,0
-"Opheim Public Schools","2026-11-23",3,1
-"Park City Schools","2026-11-23",2,0
-"Philipsburg School District","2026-11-23",7,4
-"Pioneer Elementary School District #41","2026-11-23",1,0
-"Plentywood Public Schools","2026-11-23",4,3
-"Plevna School District #55","2026-11-23",8,2
-"Polson School District","2026-11-23",3,2
-"Poplar Public Schools","2026-11-23",14,12
-"Potomac Elementary School District #11","2026-11-23",1,1
-"Power Public Schools","2026-11-23",3,0
-"Pryor Public Schools","2026-11-23",6,5
-"Ramsay School District #3","2026-11-23",2,2
-"Rapelje School District","2026-11-23",3,3
-"Rau Elem","2026-11-23",3,3
-"Red Lodge School District 1","2026-11-23",4,3
-"Reed Point School District","2026-11-23",2,0
-"Richey Public Schools","2026-11-23",6,3
-"Roberts Public School","2026-11-23",2,0
-"Rocky Boy Public Schools","2026-11-23",17,10
-"Ronan Public Schools","2026-11-23",13,4
-"Rosebud K-12","2026-11-23",2,2
-"Roundup School District","2026-11-23",9,3
-"Roy School District 74","2026-11-23",3,3
-"Ryegate K-12 Schools","2026-11-23",1,1
-"Sanders County Ed ServicesCoop","2026-11-23",2,2
-"Savage Public Schools","2026-11-23",5,5
-"Scobey Schools","2026-11-23",13,9
-"Seeley Lake Elementary #34","2026-11-23",1,0
-"Shelby School District","2026-11-23",5,3
-"Shepherd School District #37","2026-11-23",1,1
-"Sheridan Public Schools","2026-11-23",4,0
-"Shields Valley Public Schools","2026-11-23",7,7
-"Shodair Specialty Hosp","2026-11-23",2,2
-"Sidney Public Schools","2026-11-23",10,5
-"Smith Valley School District #8","2026-11-23",2,0
-"St Andrews H S","2026-11-23",3,3
-"St Jude Thaddeus School","2026-11-23",3,3
-"St Labre Indian H S","2026-11-23",6,6
-"St Mary's School","2026-11-23",2,1
-"St Regis School District","2026-11-23",13,3
-"St. Ignatius School District","2026-11-23",3,2
-"Stanford Public Schools","2026-11-23",1,0
-"Stevensville Public Schools","2026-11-23",18,8
-"Stillwater/Swt Grass Coop","2026-11-23",1,1
-"Sunburst Schools","2026-11-23",3,1
-"Superior School District","2026-11-23",3,2
-"Surprise Creek School","2026-11-23",1,1
-"Swan River School District #4","2026-11-23",6,6
-"Swan Valley School District #3","2026-11-23",2,1
-"Sweet Grass County High School","2026-11-23",5,3
-"Target Range School District","2026-11-23",6,1
-"Terry Public Schools","2026-11-23",9,5
-"Thompson Falls Public Schools","2026-11-23",3,2
-"Three Forks Public Schools","2026-11-23",9,7
-"Townsend School District","2026-11-23",5,2
-"Trego School District 53","2026-11-23",2,2
-"Trout Creek School District #6","2026-11-23",3,2
-"Troy Elem / Troy H S","2026-11-23",1,0
-"Turner Public Schools","2026-11-23",4,2
-"Ulm Public Schools","2026-11-23",1,1
-"Upper West Shore School District #33","2026-11-23",3,2
-"Valier School District #18","2026-11-23",2,0
-"Valley View Elem","2026-11-23",1,1
-"Vaughn Elementary School District #74","2026-11-23",1,0
-"Victor School District","2026-11-23",6,4
-"Vida Elem","2026-11-23",2,2
-"West Glacier Elementary School District #8","2026-11-23",1,0
-"West Valley School District #1","2026-11-23",1,1
-"West Yellowstone School District","2026-11-23",2,1
-"Westby School District 3","2026-11-23",4,4
-"White Sulphur Springs Schools","2026-11-23",6,5
-"Whitefish School District","2026-11-23",12,4
-"Whitehall Public Schools","2026-11-23",3,2
-"Whitewater Public Schools","2026-11-23",3,2
-"Wibaux Public Schools","2026-11-23",1,1
-"Winnett Public Schools","2026-11-23",4,2
-"Wolf Point Public Schools","2026-11-23",20,13
-"Woodman Elementary School District #3","2026-11-23",1,0
-"Wyola Elem","2026-11-23",1,1
 "Yellowstone Academy Elem","2026-11-23",1,1
-"Absarokee Elem / Absarokee H S","2026-11-26",1,0
-"Alberton School District","2026-11-26",3,2
-"Amsterdam Elem","2026-11-26",1,0
-"Anaconda School District #10","2026-11-26",9,6
-"Arlee Joint School District","2026-11-26",5,0
-"Ashland Public School","2026-11-26",7,6
-"Augusta School District #45","2026-11-26",3,2
-"Bainville K-12 Schools","2026-11-26",7,4
-"Baker Public Schools","2026-11-26",6,6
-"Belfry Public Schools","2026-11-26",3,2
-"Belgrade School District 44","2026-11-26",34,19
-"Belt Public Schools","2026-11-26",3,3
-"Big Sandy Public Schools","2026-11-26",11,10
-"Big Sky School District 72","2026-11-26",5,3
-"Big Timber Grade School","2026-11-26",5,4
-"Bigfork School District 38","2026-11-26",10,3
-"Billings Public Schools","2026-11-26",67,43
-"Blue Creek Elem","2026-11-26",2,2
-"Bonner School District #14","2026-11-26",1,0
-"Boulder Elementary","2026-11-26",2,0
-"Box Elder Elem / Box Elder H S","2026-11-26",4,4
-"Bozeman Public Schools","2026-11-26",49,40
-"Bridger School District 2","2026-11-26",8,1
-"Broadus Public Schools","2026-11-26",5,3
-"Broadview School District","2026-11-26",8,5
-"Brockton School District","2026-11-26",3,3
-"Browning Public Schools","2026-11-26",9,8
-"Butte Central High School","2026-11-26",1,1
-"Butte School District 1","2026-11-26",16,7
-"Canyon Creek School District","2026-11-26",1,1
-"Cardwell Elementary School","2026-11-26",1,1
-"Cascade Public Schools","2026-11-26",12,6
-"Cayuse Prairie School District #10","2026-11-26",2,2
-"Centerville Public Schools","2026-11-26",3,1
-"Charlo School District 7J","2026-11-26",3,3
-"Chester-Joplin-Inverness Public Schools","2026-11-26",3,0
-"Chinook Public Schools","2026-11-26",6,2
-"Choteau School District","2026-11-26",4,2
-"Clinton School District #32","2026-11-26",2,1
-"Colstrip Public Schools","2026-11-26",22,20
-"Columbia Falls School District 6","2026-11-26",25,11
-"Columbus Public Schools","2026-11-26",4,3
-"Conrad Public Schools","2026-11-26",4,4
-"Corvallis School District #1","2026-11-26",18,11
-"Creston School District","2026-11-26",1,0
-"Culbertson School District 17-C","2026-11-26",2,1
-"Custer Public Schools","2026-11-26",6,6
-"Cut Bank School District #15","2026-11-26",3,1
-"Darby School District 9","2026-11-26",6,2
-"Deer Lodge School District #1","2026-11-26",6,2
-"Deer Park School District","2026-11-26",1,0
-"Dillon School District 10","2026-11-26",3,2
-"Dixon School District #9","2026-11-26",2,0
-"Dodson K-12","2026-11-26",2,2
-"Drummond Public Schools","2026-11-26",8,3
-"Dutton/Brady Public School District","2026-11-26",3,2
-"East Glacier Park Grade School","2026-11-26",1,1
-"East Helena Public Schools","2026-11-26",9,5
-"Eastern Yellowstone Coop","2026-11-26",1,1
-"Ekalaka Public Schools","2026-11-26",3,2
-"Elder Grove School District","2026-11-26",1,1
-"Elysian School District #23","2026-11-26",3,2
-"Ennis Schools","2026-11-26",1,1
-"Evergreen School District #50","2026-11-26",3,2
-"Fair-Mont-Egan Schools","2026-11-26",1,0
-"Fairview Public Schools","2026-11-26",5,4
-"Flathead Special Ed. Coop.","2026-11-26",3,3
-"Florence-Carlton School District 15-6","2026-11-26",7,2
-"Forsyth Public Schools","2026-11-26",2,1
-"Fort Benton School District 1","2026-11-26",1,0
-"Frazer Public Schools","2026-11-26",26,22
-"Frenchtown K-12 Schools","2026-11-26",6,2
-"Froid Public Schools","2026-11-26",4,2
-"Fromberg Public Schools","2026-11-26",1,0
-"Frontier Elementary School","2026-11-26",2,2
-"Gallatin Gateway School","2026-11-26",3,2
-"Gardiner Public Schools","2026-11-26",3,2
-"Geraldine K-12","2026-11-26",1,1
-"Geyser Public Schools","2026-11-26",1,1
-"Glasgow School District 1-A","2026-11-26",9,4
-"Glendive Public Schools","2026-11-26",14,8
-"Golden Ridge Elem","2026-11-26",1,1
-"Grass Range Public Schools","2026-11-26",4,2
-"Great Falls Public Schools","2026-11-26",28,24
-"Hamilton School District 3","2026-11-26",16,11
-"Hardin Public Schools","2026-11-26",4,3
-"Harlem Public Schools","2026-11-26",8,2
-"Harrison K-12 Schools","2026-11-26",1,1
-"Havre Public Schools","2026-11-26",9,5
-"Hays-Lodge Pole School District","2026-11-26",10,5
-"Heart Butte K-12 Schools","2026-11-26",1,1
-"Helena Flats School District #15","2026-11-26",3,2
-"Helena Public Schools","2026-11-26",22,15
-"Hellgate Elementary School District","2026-11-26",2,0
-"Highwood Public Schools","2026-11-26",4,1
-"Hinsdale Public Schools","2026-11-26",1,1
-"Hobson Public School","2026-11-26",3,3
-"Hot Springs School District","2026-11-26",8,4
-"Huntley Project School District","2026-11-26",4,2
-"Hysham Public Schools","2026-11-26",2,2
-"Independent School","2026-11-26",2,1
-"Jefferson High School","2026-11-26",6,2
-"Joliet Public School District 86","2026-11-26",4,0
-"Jordan Public Schools","2026-11-26",2,2
-"Judith Gap Schools","2026-11-26",2,2
-"Kalispell Public Schools","2026-11-26",43,20
-"Kila School District #20","2026-11-26",4,1
-"Kinsey Elem","2026-11-26",1,1
-"LaMotte Elem","2026-11-26",1,0
-"Lambert Public Schools","2026-11-26",1,1
-"Lame Deer Public Schools","2026-11-26",13,10
-"Laurel Public Schools","2026-11-26",16,9
-"Lavina Public Schools","2026-11-26",2,0
-"Lewistown Public Schools","2026-11-26",3,1
-"Libby Public Schools","2026-11-26",15,4
-"Lima School District #12","2026-11-26",4,4
-"Lincoln School District #38","2026-11-26",2,1
-"Livingston Public Schools","2026-11-26",12,9
-"Lockwood Schools","2026-11-26",19,14
-"Lodge Grass Public Schools","2026-11-26",2,2
-"Lolo School District 7","2026-11-26",5,2
-"Lustre District 23","2026-11-26",3,2
-"Luther School","2026-11-26",1,1
-"Malta Public Schools","2026-11-26",9,8
-"Manhattan Christian","2026-11-26",1,0
-"Manhattan School District","2026-11-26",10,5
-"Marion School District #54","2026-11-26",1,0
-"McCormick Elem","2026-11-26",1,1
-"Melstone Public Schools","2026-11-26",8,3
-"Miami Elementary School District #31","2026-11-26",1,0
-"Miles City Unified School District 1","2026-11-26",20,13
-"Missoula Area Education Coop","2026-11-26",1,1
-"Missoula County Public Schools","2026-11-26",19,11
-"Monforton School District #27","2026-11-26",6,6
-"Moore Public Schools","2026-11-26",1,1
-"Nashua Public Schools","2026-11-26",5,1
-"North Cheyenne Trib Elem","2026-11-26",4,4
-"North Ctrl Learn Res Ctr","2026-11-26",1,1
-"North Star Public Schools","2026-11-26",5,4
-"Northern Cheyenne Trib HS","2026-11-26",7,6
-"Noxon Public Schools","2026-11-26",1,1
-"Olney-Bissell School District","2026-11-26",1,0
-"Opheim Public Schools","2026-11-26",3,1
-"Park City Schools","2026-11-26",2,0
-"Philipsburg School District","2026-11-26",8,5
-"Pioneer Elementary School District #41","2026-11-26",1,0
-"Plentywood Public Schools","2026-11-26",4,3
-"Plevna School District #55","2026-11-26",8,2
-"Polson School District","2026-11-26",3,2
-"Poplar Public Schools","2026-11-26",8,6
-"Potomac Elementary School District #11","2026-11-26",1,1
-"Power Public Schools","2026-11-26",3,0
-"Pretty Eagle Catholic Academy","2026-11-26",4,3
-"Pryor Public Schools","2026-11-26",6,5
-"Ramsay School District #3","2026-11-26",2,2
-"Rapelje School District","2026-11-26",1,1
-"Rau Elem","2026-11-26",3,3
-"Red Lodge School District 1","2026-11-26",4,3
-"Reed Point School District","2026-11-26",2,0
-"Richey Public Schools","2026-11-26",6,3
-"Roberts Public School","2026-11-26",2,0
-"Rocky Boy Public Schools","2026-11-26",17,10
-"Ronan Public Schools","2026-11-26",13,4
-"Rosebud K-12","2026-11-26",2,2
-"Roundup School District","2026-11-26",9,3
-"Roy School District 74","2026-11-26",2,2
-"Ryegate K-12 Schools","2026-11-26",1,1
-"Sanders County Ed ServicesCoop","2026-11-26",2,2
-"Savage Public Schools","2026-11-26",5,5
-"Scobey Schools","2026-11-26",13,9
-"Seeley Lake Elementary #34","2026-11-26",1,0
-"Shelby School District","2026-11-26",5,3
-"Shepherd School District #37","2026-11-26",1,1
-"Sheridan Public Schools","2026-11-26",4,0
-"Shields Valley Public Schools","2026-11-26",7,7
-"Shodair Specialty Hosp","2026-11-26",2,2
-"Sidney Public Schools","2026-11-26",9,4
-"Smith Valley School District #8","2026-11-26",2,0
-"St Andrews H S","2026-11-26",3,3
-"St Charles Mission School","2026-11-26",8,7
-"St Jude Thaddeus School","2026-11-26",3,3
-"St Labre Indian H S","2026-11-26",24,21
-"St Mary's School","2026-11-26",2,1
-"St Regis School District","2026-11-26",13,3
-"St. Ignatius School District","2026-11-26",2,1
-"Stanford Public Schools","2026-11-26",1,0
-"Stevensville Public Schools","2026-11-26",19,7
-"Stillwater/Swt Grass Coop","2026-11-26",1,1
-"Sunburst Schools","2026-11-26",3,1
-"Superior School District","2026-11-26",3,2
-"Surprise Creek School","2026-11-26",1,1
-"Swan River School District #4","2026-11-26",6,6
-"Swan Valley School District #3","2026-11-26",2,1
-"Sweet Grass County High School","2026-11-26",5,3
-"Target Range School District","2026-11-26",6,1
-"Terry Public Schools","2026-11-26",9,5
-"Thompson Falls Public Schools","2026-11-26",3,2
-"Three Forks Public Schools","2026-11-26",9,7
-"Townsend School District","2026-11-26",5,2
-"Trego School District 53","2026-11-26",2,2
-"Trout Creek School District #6","2026-11-26",3,2
-"Troy Elem / Troy H S","2026-11-26",1,0
-"Turner Public Schools","2026-11-26",4,2
-"Ulm Public Schools","2026-11-26",1,1
-"Upper West Shore School District #33","2026-11-26",3,2
-"Valier School District #18","2026-11-26",2,0
-"Valley View Elem","2026-11-26",1,1
-"Vaughn Elementary School District #74","2026-11-26",1,0
-"Victor School District","2026-11-26",6,4
-"West Glacier Elementary School District #8","2026-11-26",1,0
-"West Valley School District #1","2026-11-26",1,1
-"West Yellowstone School District","2026-11-26",2,1
-"Westby School District 3","2026-11-26",4,4
-"White Sulphur Springs Schools","2026-11-26",6,5
-"Whitefish School District","2026-11-26",9,3
-"Whitehall Public Schools","2026-11-26",3,2
-"Whitewater Public Schools","2026-11-26",3,2
-"Wibaux Public Schools","2026-11-26",1,1
-"Winnett Public Schools","2026-11-26",4,2
-"Wolf Point Public Schools","2026-11-26",20,13
-"Woodman Elementary School District #3","2026-11-26",1,0
-"Wyola Elem","2026-11-26",1,1
 "Yellowstone Academy Elem","2026-11-26",1,1
