@@ -28,15 +28,8 @@ test_that("every column in every public research CSV is documented in data_dicti
   # Columns documented ahead of the weekly run that first writes them go here
   # (file = columns), so this suite (the weekly run's first, blocking step)
   # doesn't stop that very run; remove each entry once a run has written it.
-  # Empty since the 2026-11-10 run wrote the lunch-share and Posting_Names columns.
-  # Written by the first run on edjobs 0.27.0 / 0.28.0 (SAIPE range, ACS MOEs; 2026-11-15/16): empty this
-  # once that run's files have the columns (run_expectations.csv "saipe_range_*"). CCD_Link / IPEDS_Link: the first
-  # run on edjobs 0.35.0 (source record links, 2026-11-16).
-  pending <- list(
-    "opi_only_districts.csv" = c("SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High", "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE"),
-    "salarymap.csv" = c("Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE", "IPEDS_Link"),
-    "salarymap2.csv" = c("SAIPE_Population", "Child_Poverty_Low", "Child_Poverty_High", "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE", "CCD_Link")
-  )
+  # Empty since 2026-11-27: every run since 11-16 has written the SAIPE range, ACS MOE and CCD/IPEDS link columns.
+  pending <- list()
 
   for (f in documented_files) {
     file_path <- file.path(app_dir, f)
