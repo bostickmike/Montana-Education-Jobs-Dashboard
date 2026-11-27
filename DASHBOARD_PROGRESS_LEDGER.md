@@ -1998,6 +1998,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     bostickmike/edjobs#108). Lodge Grass (OPI only since 11-22, its board frozen) kept its old board's baseline of 15 a
     week, so the 11-26 check filed auto-fix #156 (Copilot's #157 changed nothing). `check_drift.R` now passes
     `skip_platforms = "OPIOnly"`, as the silent-sources check does. Replayed on 11-26 data: 4 flagged -> 3. Suite 3,602 passed, 0 failed.
+  * [x] Spring OPI postings checked against public records; 8 filled postings stop counting (2026-11-26; branch
+    `opi-complete-boards`; bostickmike/edjobs#109, pinned 0.103.0; `claude-notes/2026-11-26_spring-opi-filled/`). An agent
+    checked the 83 OPI postings first posted May-June (48 districts) against minutes, staff pages and the districts' own
+    boards: filled 9, likely filled 13, still open 13, not determinable 27, blocked 21 (bot challenges, not worked
+    around). Built from it, one employer or posting at a time: Billings and Shields Valley join St. Labre on
+    `OPI_BOARD_IS_COMPLETE` (boards carrying teaching and support jobs; their 5 old OPI postings gone from them, 3 hired
+    per minutes or a personnel report), and `filled_postings_record.csv` (edjobs `filled_record()`, new) lists postings
+    a record shows as filled, each with its source and an end date: Custer's PE and Vo-Ag (still on its own page and on
+    OPI) and Big Timber's junior high history (OPI). Not added: Big Timber's board (its Pre-K posting not determinable),
+    North Star's (it doesn't list teaching jobs), Swan Valley's (one row since 10-27), Ulm's colony-teacher hire (may be
+    another colony school). Replayed on the 11-26 archive: exactly 8 postings stop counting, none start. METHODS.md
+    updated. Full rehearsal (11-26, edjobs 0.103.0): every step passed, suites 3,663 passed, 0 failed before and after
+    the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
@@ -2118,12 +2131,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   map showed a false 0; little is lost. Archived rows and history (08-06 to 09-01) kept: real postings. Not chosen:
   OPI-only (would show "via OPI" while it posts on its own site), leave as is. Registry 201 -> 200 districts. An
   Arrowhead OPI posting, if one appears, counts under its CCD name like any district not scraped.
-- [ ] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`). Standard (Mike, 11-09): open = a candidate can
+- [x] Old OPI postings (`claude-notes/2026-11-09_opi-old-postings.md`; closed 2026-11-26: the last part, below, is the entry above). Standard (Mike, 11-09): open = a candidate can
   still apply. All 357 live OPI postings read in full: every one gives a way to apply (general link 188, mail/phone/email
   162, job-specific link 7); 133 of 141 links work, 2 postings have only dead links. So the 4 "2025-26" ones (reused ad
   text, up since May-June) still count as open. Spring postings: marked "may be filled" on the K-12 Jobs tab since
-  2026-11-23 (entry above). Left: whether public data (district staff pages, posted board minutes) can show which
-  spring postings were filled. (A weekly check of the 7 job-specific links: measured 11-09 and not built; it would
+  2026-11-23 (entry above). Whether public data can show which spring postings were filled: checked 11-26
+  (entry above); minutes work by hand only, the district's own board is the repeatable signal. (A weekly check of the 7 job-specific links: measured 11-09 and not built; it would
   mostly flag outages and email links.)
 - [ ] Classification safeguards (`claude-notes/2026-11-01_classification-safeguards-proposal.md`): 3, 5, 6, 7, 8,
   9, 10, 11, 12, 13 done; 2 measured, no effect, not built; 1 has a small ceiling (Other is 1.6% MT, 0.1% WY), suggest

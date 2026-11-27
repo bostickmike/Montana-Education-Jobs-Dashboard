@@ -281,8 +281,23 @@ OPI_BOARD_IS_COMPLETE <- c(
   # https://stlabre.hire.trakstar.com/, read 2026-11-23: 38 openings (teachers, aides, coaches, cooks, clerks, dorm
   # staff) across its three schools; of St. Labre's six June OPI postings, the three still on the board match it
   # and the other three (HS Art, Career Counselor, VoTech/VoAg) are gone from it.
-  "St Labre Indian H S" = "38 openings of every kind on 2026-11-23; 3 of its 6 OPI postings gone from it"
+  "St Labre Indian H S" = "38 openings of every kind on 2026-11-23; 3 of its 6 OPI postings gone from it",
+  # https://www.applitrack.com/billings/onlineapp/default.aspx: 53 to 75 openings every run since 2026-08-18, 13 to 21
+  # teaching and 8 to 16 support. Its three June OPI postings (Math, Skyview assistant principal, West High social
+  # studies) are gone from it; the district's July personnel report lists the math hire
+  # (claude-notes/2026-11-26_spring-opi-filled/, checked 2026-11-26).
+  "Billings Public Schools" = "teaching and support openings every run; its 3 June OPI postings gone from it, the math one hired in July",
+  # https://svalleyk12.org/district/employment, read 2026-11-26: teachers (Early Literacy/Math, K-12 Art), a para,
+  # maintenance and an occupational therapist. Its two June OPI postings (Special Education, 5th grade) are gone from
+  # it, and the 2026-08-03 board minutes approve both contracts (same notes folder).
+  "Shields Valley Public Schools" = "teaching and support openings; its 2 June OPI postings gone from it, both hired 2026-08-03"
 )
+# Postings a public record shows as filled (edjobs filled_record(), 0.103.0): one row per posting, each with its source.
+MT_FILLED_RECORD_FILE <- "filled_postings_record.csv"
+mt_filled_record <- function(file = MT_FILLED_RECORD_FILE) {
+  path <- if (file.exists(file)) file else here::here(file)
+  edjobs::filled_record(path)
+}
 OPI_LONG_TERM_SUB_PATTERN <- "(?i)long[- ]?term|\\bLTS\\b"
 # Registry districts whose own job page says its teaching (or all) openings are on OPI's board, quoted as read.
 OPI_BOARD_DEFERS_TO_OPI <- c(
@@ -347,7 +362,7 @@ opi_duplicate_listing <- function(opi_df, entity) {
 # pool-only board is judged on every row).
 reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, today = Sys.Date(),
                                       stale_fallback = TRUE, complete_boards = names(OPI_BOARD_IS_COMPLETE),
-                                      matchable = NULL) {
+                                      matchable = NULL, filled_record = NULL) {
   if (is.null(matchable)) {
     matchable <- if ("Stale_Reason" %in% names(direct_df)) !edjobs::is_stale_flagged(direct_df$Stale_Reason) else rep(TRUE, nrow(direct_df))
   }
@@ -409,7 +424,17 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   stale_complete <- active & !matched & !dup & stale & stale_fallback & !pool_only &
     a$Registry_District %in% complete_boards
   stale_empty <- (empty_board & stale & stale_fallback) | stale_pool | stale_complete
-  covered <- dup | matched | stale_empty          # not counted
+  # A posting a public record shows as filled (filled_postings_record.csv, edjobs filled_record(); 2026-11-26):
+  # matched on the district it counts under, its OPI title and posted date, until the entry's Until date.
+  filled_why <- if (is.null(filled_record) || nrow(opi_df) == 0) rep(NA_character_, nrow(opi_df)) else {
+    under <- ifelse(!is.na(a$Registry_District), a$Registry_District,
+                    ifelse(!is.na(a$Map_Entity), a$Map_Entity, as.character(opi_df$District)))
+    edjobs::filled_record_reason(data.frame(District = under, title = as.character(opi_df$title),
+                                            date_posted = substr(as.character(opi_df$date_posted), 1, 10),
+                                            stringsAsFactors = FALSE), filled_record, today)
+  }
+  filled <- !is.na(filled_why) & !dup & !matched & !stale_empty
+  covered <- dup | matched | stale_empty | filled  # not counted
   fallback <- empty_board & !covered               # counted: the board was empty
   unmatched <- active & !covered                   # counted: not on the district's board
 
@@ -438,10 +463,10 @@ reconcile_opi_with_direct <- function(opi_df, direct_df, crosswalk, registry, to
   opi_dropped <- opi_df[covered, , drop = FALSE]
   opi_dropped$District <- ifelse(!is.na(a$Registry_District), a$Registry_District,
                                  ifelse(!is.na(a$Map_Entity), a$Map_Entity, as.character(opi_df$District)))[covered]
-  opi_dropped$OPI_Drop_Reason <- ifelse(dup, "OPI duplicate listing", ifelse(matched, "same opening on district board",
+  opi_dropped$OPI_Drop_Reason <- ifelse(filled, filled_why, ifelse(dup, "OPI duplicate listing", ifelse(matched, "same opening on district board",
                                         ifelse(stale_complete, OPI_STALE_COMPLETE_REASON,
                                         ifelse(stale_pool, OPI_STALE_POOL_REASON,
-                                               "stale OPI listing, district board empty"))))[covered]
+                                               "stale OPI listing, district board empty")))))[covered]
   opi_dropped$Also_On_OPI <- rep(FALSE, nrow(opi_dropped))
   opi_dropped$.opi_matched_row <- m[covered]
   opi_keep <- opi_df[keep, , drop = FALSE]
