@@ -2009,7 +2009,8 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     OPI) and Big Timber's junior high history (OPI). Not added: Big Timber's board (its Pre-K posting not determinable),
     North Star's (it doesn't list teaching jobs), Swan Valley's (one row since 10-27), Ulm's colony-teacher hire (may be
     another colony school). Replayed on the 11-26 archive: exactly 8 postings stop counting, none start. METHODS.md
-    updated.
+    updated. Full rehearsal (11-26, edjobs 0.103.0): every step passed, suites 3,663 passed, 0 failed before and after
+    the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
 - [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
