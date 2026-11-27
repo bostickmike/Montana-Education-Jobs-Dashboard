@@ -54,9 +54,14 @@ test_that("at a district we scrape, an OPI posting is dropped only when it match
   active <- unique(f$direct$District)
   # Every OPI row is either counted or dropped, never both or neither.
   expect_equal(nrow(f$r$opi_keep) + nrow(f$r$opi_dropped), nrow(f$opi))
-  # Each dropped row at an active district is a match, and flagged a board posting.
+  # Each dropped row at an active district is a match, and flagged a board posting -- or, at an employer on the
+  # complete-board list (Billings since 2026-11-26), an old OPI posting gone from its board.
   at_active <- f$r$opi_dropped$District %in% active
-  expect_true(all(f$r$opi_dropped$OPI_Drop_Reason[at_active] %in% c("same opening on district board", "OPI duplicate listing")))
+  reason <- f$r$opi_dropped$OPI_Drop_Reason
+  complete <- f$r$opi_dropped$District %in% names(OPI_BOARD_IS_COMPLETE)
+  expect_true(all(reason[at_active & !complete] %in% c("same opening on district board", "OPI duplicate listing")))
+  expect_true(all(reason[at_active & complete] %in% c("same opening on district board", "OPI duplicate listing", OPI_STALE_COMPLETE_REASON)))
+  expect_gt(sum(reason == OPI_STALE_COMPLETE_REASON), 0)
   expect_gt(sum(f$r$direct_df$Also_On_OPI), 0)
   expect_lte(sum(f$r$direct_df$Also_On_OPI), sum(f$r$opi_dropped$OPI_Drop_Reason == "same opening on district board"))
   # Unmatched OPI postings at active districts count, under the registry district, and are in the QC report.
@@ -617,4 +622,46 @@ test_that("a stale ad is read back as not counted, kept for the spells, and its 
   expect_true(any(links_before$OPI_Matched_Posting_ID %in% stale_ids))
   expect_false(any(links_after$OPI_Matched_Posting_ID %in% stale_ids))
   expect_equal(nrow(links_before) - nrow(links_after), sum(links_before$OPI_Matched_Posting_ID %in% stale_ids))
+})
+
+test_that("every employer on the complete-board list is a registry district or a board read directly, with what its check found", {
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  known <- c(reg$District[reg$Platform != OPI_ONLY_PLATFORM], "St Labre Indian H S")
+  expect_true(all(names(OPI_BOARD_IS_COMPLETE) %in% known))
+  expect_true(all(nchar(OPI_BOARD_IS_COMPLETE) > 20))
+  # Added 2026-11-26 after a check of each board and the fate of its old OPI postings (claude-notes/2026-11-26_spring-opi-filled/).
+  expect_true(all(c("Billings Public Schools", "Shields Valley Public Schools") %in% names(OPI_BOARD_IS_COMPLETE)))
+})
+
+# Postings a public record shows as filled (filled_postings_record.csv, edjobs filled_record(), 2026-11-26).
+test_that("the filled-postings record reads, and every entry is a registry district with a dated source", {
+  rec <- mt_filled_record()
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  expect_gt(nrow(rec), 0)
+  expect_true(all(rec$District %in% reg$District))
+  expect_false(any(grepl("\\\\b(Mr|Mrs|Ms|Dr)\\\\.? [A-Z]", rec$Evidence)))   # no names
+})
+
+test_that("an OPI posting on the filled record is dropped with its reason; a later ad of the same job still counts", {
+  rec <- edjobs::filled_record(data.frame(District = "Richey Public Schools", Title = "Music", Posted_Date = "2026-10-25",
+                                          Evidence = "Board minutes: hire of a K-12 music teacher", Source_URL = "https://example.org/m.pdf",
+                                          Record_Date = "2026-11-01", Until = "2027-06-30", stringsAsFactors = FALSE))
+  opi <- data.frame(title = c("Music", "Music", "Special Education"), date_posted = c("2026-10-25", "2026-11-02", "2026-10-25"),
+                    location = "Richey", District = "Richey", url = OPI_STATEWIDE_BOARD_URL, Posting_Source = "OPI Jobs for Teachers (statewide)",
+                    OPI_District = "Richey Elem",
+                    OPI_Description = c("Richey is seeking a K-12 Music teacher.", "Richey is seeking a K-12 Music teacher for spring.",
+                                        "Richey is seeking a K-12 Special Education teacher."), stringsAsFactors = FALSE)
+  reg <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+  dir <- data.frame(title = "2026-27 Assistant Cook / Custodian", date_posted = NA, location = "Richey", url = "https://example.org/a",
+                    District = "Richey Public Schools", Posting_Source = "Richey district site (direct board)", stringsAsFactors = FALSE)
+  xw <- data.frame(LEAID = "1", OPI_District = "Richey Elem", City = "Richey", County = "Dawson County", Latitude = 47.6,
+                   Longitude = -105.1, Registry_District = "Richey Public Schools", Match_Rule = "registry NCES id",
+                   Map_Entity = "Richey Public Schools", stringsAsFactors = FALSE)
+  r <- reconcile_opi_with_direct(opi, dir, xw, reg, today = as.Date("2026-11-03"), filled_record = rec)
+  expect_equal(nrow(r$opi_dropped), 1)
+  expect_match(r$opi_dropped$OPI_Drop_Reason, "^filled per public record \\(2026-11-01\\)")
+  expect_equal(sort(paste(r$opi_keep$title, r$opi_keep$date_posted)), c("Music 2026-11-02", "Special Education 2026-10-25"))
+  expect_false(any(grepl("Music", r$qc$Title[grepl("2026-10-25", r$qc$Date_Posted)])))
+  # Without the record, all three count.
+  expect_equal(nrow(reconcile_opi_with_direct(opi, dir, xw, reg, today = as.Date("2026-11-03"))$opi_keep), 3)
 })

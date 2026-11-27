@@ -41,8 +41,9 @@ Many districts list the same teaching job on their own board and on OPI's. The d
 4. When the district's board lists nothing, or only standing substitute pools, OPI postings more than 60 days old
    don't count (OPI keeps ads up after jobs are filled). Newer ones do. A district whose site has no job board
    at all (Ulm, Lodge Grass, Potomac, Forsyth) is not "empty": all its OPI postings count. The same 60-day limit
-   applies to an OPI posting missing from a board checked to list every opening the employer has (so far only St.
-   Labre's).
+   applies to an OPI posting missing from a board checked to list every opening the employer has (St. Labre's,
+   Billings' and Shields Valley's, each checked by reading the board and what became of the employer's old OPI
+   postings).
 5. OPI lists some jobs twice (under an elementary and a high-school district, say); a repeat with the same district
    and description counts once.
 6. OPI postings at districts the dashboard doesn't read count under that district and put it on the map, marked
@@ -73,6 +74,16 @@ templates that already didn't count), and 5 OPI postings matched to them would h
 show which old ads are still real openings: a specialist post a district has struggled to fill (a speech
 pathologist, a school psychologist) may be one. Earlier updates keep the counts they had (see "Files and history"), so the
 totals step down once, by about that many postings, when the rule begins.
+
+## Postings a public record shows as filled
+
+Some ads stay up after the job is filled: on a district's own page, or on OPI. When a district's own public record
+(posted board minutes or agendas, a personnel report) shows the hire for a posting that is still listed, that posting
+doesn't count, from the end of November 2026. Each one is listed in `filled_postings_record.csv` with what the record
+says (no names), its address and date, and an end date (the end of the school year), so the same job advertised again
+later counts. This is done one posting at a time, only where the record names the same job; it isn't a rule. The first
+check (November 26, 2026, of the 83 OPI postings first posted in May and June) found 3 such jobs still counting:
+Custer's PE and Vo-Ag jobs (on its own page and on OPI) and Big Timber's junior high history job (on OPI).
 
 ## Categories
 

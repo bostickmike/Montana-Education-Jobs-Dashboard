@@ -408,13 +408,21 @@ direct_df <- bind_rows(direct_dfs)
 direct_df <- flag_stale_board_postings(direct_df, Sys.Date())
 message(sprintf("Stale board ads: %d of %d board posting(s) flagged (not counted).",
                 sum(is_stale_flagged(direct_df$Stale_Reason)), nrow(direct_df)))
+# Postings a public record shows as filled (filled_postings_record.csv, edjobs filled_record(); 2026-11-26): a board
+# can keep an ad up after the hire (Custer's PE and Vo-Ag jobs, hired per its July and August board agendas). The
+# board row is flagged like a stale ad (not counted; the archive and the posting spells keep it), and the OPI copy is
+# dropped in the reconcile below with the same reason.
+filled_rec <- mt_filled_record()
+filled_why <- filled_record_reason(direct_df, filled_rec, Sys.Date())
+direct_df$Stale_Reason <- ifelse(is_stale_flagged(direct_df$Stale_Reason), direct_df$Stale_Reason, filled_why)
+message(sprintf("Filled per public record: %d board posting(s) flagged (not counted).", sum(!is.na(filled_why))))
 # OPI vs. our direct scrapes (opi_reconcile.R), posting by posting: an OPI
 # posting that is the same opening as a posting on its district's board isn't
 # counted (the board posting gets Also_On_OPI); every other OPI posting counts
 # and is listed in the QC report. OPI's repeat listings of one job count once.
 # The raw archive keeps every OPI row (OPI_Counted, OPI_Drop_Reason,
 # OPI_School, OPI_Description).
-opi_rec <- reconcile_opi_with_direct(opi_df, direct_df, district_crosswalk, registry)
+opi_rec <- reconcile_opi_with_direct(opi_df, direct_df, district_crosswalk, registry, filled_record = filled_rec)
 write.csv(opi_rec$qc, "mt_discrepancy_report.csv", row.names = FALSE)
 adoption <- opi_rec$adoption
 if (nrow(adoption) > 0) {
