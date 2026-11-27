@@ -61,8 +61,8 @@ vacancy exists.
 
 A job board can keep an ad listed, and keep taking applications through it, until the district takes it down,
 whatever dates the ad shows: AppliTrack's closing date is a note the district types, not a deadline the board
-enforces. A few districts leave ads from past school years up and post their current openings on OPI. From the end
-of November 2026, a district board posting (AppliTrack, SchoolSpring, Tyler Portico, Red Rover, TedK12 or a dated
+enforces. A few districts leave ads from past school years up and post their current openings on OPI. A
+district board posting (AppliTrack, SchoolSpring, Tyler Portico, Red Rover, TedK12 or a dated
 district page) whose posted date, or stated closing date, is before the July 1 that began the previous school year
 (July 1, 2025 during the 2026-27 school year) doesn't count. Two kinds of ads count whatever their dates: standing
 pools (substitutes), and jobs districts advertise all year and fill again and again (bus drivers and bus aides,
@@ -72,8 +72,10 @@ keep the old ads, each with its reason (`Stale_Reason`); the counts and the Jobs
 November 23, 2026 postings the rule would have set aside 43 of 1,164 board postings (2 of them account-creation
 templates that already didn't count), and 5 OPI postings matched to them would have counted instead. A date can't
 show which old ads are still real openings: a specialist post a district has struggled to fill (a speech
-pathologist, a school psychologist) may be one. Earlier updates keep the counts they had (see "Files and history"), so the
-totals step down once, by about that many postings, when the rule begins.
+pathologist, a school psychologist) may be one. The rule began with the November 26, 2026 update, and the same day
+the whole history, back to August 2026, was recomputed under it (see "Files and history"): each earlier update's ads
+are judged by that update's own date, and an OPI posting that update left out only because it matched one of them
+counts. Every earlier week is 8 to 38 postings lower (1% to 4%), 2 to 21 of them teaching postings.
 
 ## Postings a public record shows as filled
 

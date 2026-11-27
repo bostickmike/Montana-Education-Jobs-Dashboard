@@ -2013,9 +2013,20 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
-- [ ] Stale board ads (edjobs 0.90.0) apply forward-only: weeks before the rule still count the old ads, so totals
-  step down once and the legacy `job_duration_spells.csv` shows the flagged teaching ads as "Closed / Filled" at the
-  rule's start. Open choice for Mike: restate the history from the raw archives with the rule (each week's own cutoff).
+- [x] Stale board ads: history restated under the rule (Mike, 2026-11-26; branch `stale-restate`; edjobs 0.104.0,
+  bostickmike/edjobs#110; `claude-notes/2026-11-26_stale-restate/`). Was forward-only: the weeks before the rule still
+  counted the old ads, so the Teacher chart would have read the rule's start as a drop. Now `read_counted_archive_week()`
+  gives an archive written before the rule its flags (edjobs `stale_flags_for_archive()`, each run's own date) and
+  counts an OPI posting that run left out only because it matched one of those ads (the OPI rule recomputed without and
+  with the flags; every other archived OPI decision stands; `restate = FALSE` reads it as counted). History files rebuilt
+  once from the 21 archives: each week before 11-26 is 8 to 38 postings lower (1.0% to 4.0%), Teacher 2 to 21 lower
+  (11-23: 318 -> 298); the 11-26 snapshot is unchanged. `job_duration_spells.csv` 826 -> 806 spells,
+  `posting_spells_k12.csv` 3,049 -> 3,054 (the OPI postings back in, e.g. Lame Deer's, Poplar's, Sidney's). New test: the
+  restated 11-23 archive drops the 41 old ads and brings back exactly the 5 OPI postings measured on 11-24. METHODS.md
+  "Old board ads", DATA_DICTIONARY.md, the K-12 Trends note and CLAUDE.md updated; run expectation
+  `stale_history_restated` for 11-30. Correction to the 11-26 measurement note: its per-week OPI column double-counted
+  the returning OPI postings on the archives with no OPI decision stored (08-11 to 10-27); the rebuilt files are the
+  numbers above.
 - [ ] Sun River Valley's board: the registry reads `srvs.k12.mt.us/apps/jobs/` (application forms only); the nav's
   "Current Job Advertisements" (`/apps/pages/index.jsp?uREC_ID=628624&type=d`) may be where postings go (OPI had its
   7-12 music job 11-03..11-10 while the board scrape was empty). Check the Wayback history (k12.mt.us target) for a

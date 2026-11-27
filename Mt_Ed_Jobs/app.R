@@ -1049,8 +1049,8 @@ ui <- page_navbar(
         "Since November 3, 2026 each OPI posting is checked against the district's board using its description; ",
         "earlier weeks were recomputed the same way but from OPI's subject titles alone, so they may include roughly 30 ",
         "postings a week that OPI listed twice. ",
-        # Stale board ads (edjobs flag_stale_board_postings(), 2026-11-24; METHODS.md "Old board ads").
-        "Since the end of November 2026, board ads posted (or closing) before the July 1 that began the previous school year aren't counted, except substitute pools and jobs districts advertise all year (bus drivers, paraprofessionals, custodians, food service, coaches); earlier weeks still count them.")),
+        # Stale board ads (edjobs flag_stale_board_postings(), 2026-11-24; history restated 2026-11-26; METHODS.md "Old board ads").
+        "Board ads posted (or closing) before the July 1 that began the previous school year aren't counted, in any week shown (each week by its own date), except substitute pools and jobs districts advertise all year (bus drivers, paraprofessionals, custodians, food service, coaches).")),
     k12_spells_panel()
   ),
 
