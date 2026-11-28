@@ -2013,6 +2013,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Board rows through edjobs `k12_raw_rows()` (Utah phase 0, gap 1; branch `raw-rows`; edjobs 0.114.0). The five
+  platform-board blocks in the Rmd (AppliTrack, SchoolSpring, Tyler Portico, TedK12, Red Rover; 168 lines removed)
+  become one helper, `mt_board_rows()`: each registry row's fetch under `safe_scrape()`, mapped by `k12_raw_rows()`,
+  keeping each frame's columns (raw archive layout unchanged; `posting_id` waits for gap 2). Mike's calls 11-28: keep
+  the board's `position` (AppliTrack's was dropped; published tables recompute it from the title), and a blank place
+  takes the registry `City` on every platform (Red Rover's rule before). Fixture replay on 7 boards: same columns and
+  order, every cell equal except AppliTrack's `position`. Pin 0.114.0 (manifest edjobs entry by hand);
+  `test-pipeline-defensiveness.R` counts `mt_board_rows()` as a guard. Rehearsed 2026-11-28
+  (`claude-notes/logs/2026-11-28_rehearsal-mt-raw-rows.log`): every step ok, rebuild parity 11 of 11, pre- and post-run
+  suites 3688 passed, 0 failed. Against the same day's district-towns rehearsal: raw archive 1507 rows both, every
+  board's count equal (AppliTrack 358, Tyler Portico 122, SchoolSpring 115, Red Rover 44, TedK12 13), `position` filled
+  13 -> 371 (the 358 AppliTrack rows), `combinedclean.csv` (1308 rows) and `k12_recent_postings.csv` byte-identical.
 - [x] Places from district towns (full review 2026-11-27, 2.5; branch `district-towns`; as WY since 2026-11-26): a
   posting with no place, in a district whose schools are all in one town (CCD 2024, new `Mt_Ed_Jobs/district_towns.csv`,
   482 districts, refreshed each update), gets that town; a board's or OPI's place is kept. OPI's towns are not
