@@ -2013,6 +2013,12 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Listing Duration: days listed end halfway to the next update, not +7 (full review 2026-11-27, finding 2.4;
+  Mike's call; branch `durations-midpoint`). The flat 7 days assumed weekly updates (twice a week since 11-17); now a
+  gone posting's listing runs to the midpoint between its last sighting and the next update, as the posting spells
+  end one, and a still-listed posting gets nothing added. `job_duration_spells.csv` / `he_job_duration_spells.csv`
+  regenerated (only `Estimated_Days_Open` changes): ended-listing median K-12 35 -> 32, college 42 -> 39 days. METHODS.md and
+  the dictionary updated; the tab text changes with edjobs 0.110.0. Tests: 274 passed, 0 failed.
 - [x] Posting spells skip frozen boards, as Wyoming's do (full review 2026-11-27, finding 2.3; branch
   `spells-frozen-boards`). `scripts/build_posting_spells.R` now passes `frozen_board_runs()` (K-12 from 08-18, HE from
   08-11, the dates `check_frozen_boards.R` reads) to `build_posting_spells()`, and the advertised-window table leaves
