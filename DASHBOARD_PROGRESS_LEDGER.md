@@ -2020,7 +2020,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
   two `sapply()`s are `vapply(logical(1))` (`parse_westglacier_postings()`, `scripts/scaffold_district.R`). Manifest
   edjobs entry and app.R checksum by hand. App booted on 0.113.0 (shinytest2, Data tab: footer line present, 0
   error/warning log lines). Tests on 0.113.0: misc-district scrapers 211, run expectations 2, workflow ref 2, app boot
-  smoke 48, all 0 failed.
+  smoke 48, all 0 failed. Rehearsed 2026-11-28 (`claude-notes/logs/2026-11-28_rehearsal-mt-pin-0.113.0.log`): every
+  step ok, rebuild parity 11 of 11, pre- and post-run suites 3677 passed, 0 failed; recent-postings files hold
+  2026-11-19 and 2026-11-28 (K-12 1369 + 1308, college 381 + 394). Postings 1308, as in the #166 rehearsal an hour
+  earlier; `salarymap2.csv` as on main apart from floating-point last digits in 13 mining-share cells (no id, CCD or FRL
+  change from 0.112.0's padding).
 - [x] New This Week covers every role (full review 2026-11-27, finding 1.6; Mike's call; branch
   `new-this-week-all-roles`; edjobs 0.107.0). It compared the teaching/faculty histories, so the Jobs tabs' button on an
   all-roles table dropped every new support, para, coach and staff posting, and the map's and summary tables' "New
