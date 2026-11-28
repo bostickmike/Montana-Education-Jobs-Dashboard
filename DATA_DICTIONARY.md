@@ -31,6 +31,7 @@ Each dataset is accessible via the **Data** tab in the interactive web dashboard
 | **BLS Regional Pay by Role** | `oews_role_wages.csv` | Median pay for the occupations K-12 postings are matched to, by Montana OEWS area; the source of the K-12 Typical pay (BLS est.) column. | Area × Occupation | Annual |
 | **OPI District Counties** | `opi_district_counties.csv` | The county of each district as OPI names it, used to give OPI postings a county. | District level | Twice weekly |
 | **Posting First Seen** | `posting_first_seen.csv` | When the dashboard first found each currently listed posting; shown where the board gives no posted date. | Posting level | Twice weekly |
+| **Recent Postings (every role)** | `k12_recent_postings.csv`, `he_recent_postings.csv` | Every role's postings in the latest update of each of the last two weeks, only the columns compared; the dashboard's New This Week. | Posting level | Twice weekly |
 | **County Public School Pay** | `qcew_county_school_pay.csv` | Average annual pay and employment of public school (local government, NAICS 6111) employees by county, all roles together. | County level | Annual |
 | **Source Retrieval Dates** | `source_retrieved_dates.csv` | When each outside data source was last fetched successfully. | Source level | Twice weekly |
 | **Data Dictionary & Codebook** | `data_dictionary.csv` | Machine-readable column definitions, types, and primary source authorities across all files. | Variable level | Static / Maintained |

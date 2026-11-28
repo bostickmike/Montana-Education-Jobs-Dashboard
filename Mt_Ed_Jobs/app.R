@@ -570,18 +570,18 @@ he_history <- read.csv("facultydata.csv", fileEncoding = "UTF-8") %>%
     "Adjunct/Part-Time Faculty" = "Adjunct/part-time faculty"
   ))
 
-he_new_this_week <- {
-  dates <- sort(unique(he_history$Archive_Date))
-  if (length(dates) >= 2) {
-    latest <- dates[length(dates)]
-    previous <- dates[length(dates) - 1]
-    he_history %>%
-      filter(Archive_Date == latest) %>%
-      anti_join(he_history %>% filter(Archive_Date == previous), by = c("Title", "Location", "Institution"))
-  } else {
-    he_history[0, ]
-  }
+# "New this week" over every role (edjobs 0.107.0; full review 2026-11-27, Mike's call): the pipeline keeps the last
+# two weeks' postings of every role in k12_recent_postings.csv / he_recent_postings.csv. The teaching and faculty
+# histories above are the fallback until a file holds two weeks. Rules: edjobs find_k12_new_postings() (rule A,
+# 2026-11-21) and find_he_new_postings() (title, location, institution).
+read_recent_postings <- function(f) {
+  d <- tryCatch(read.csv(f, colClasses = "character", fileEncoding = "UTF-8"), error = function(e) NULL)
+  if (!is.null(d) && length(unique(d$Archive_Date)) >= 2) d else NULL
 }
+k12_recent <- read_recent_postings("k12_recent_postings.csv")
+if (!is.null(k12_recent)) k12_new_this_week <- find_k12_new_postings(k12_recent %>% mutate(District = relabel_employer(District)))
+he_recent <- read_recent_postings("he_recent_postings.csv")
+he_new_this_week <- find_he_new_postings(if (is.null(he_recent)) he_history else he_recent)
 
 #--------------------------------------------------
 # Combined map dataset -- one row per K-12 district or HE institution

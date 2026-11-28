@@ -2013,6 +2013,19 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] New This Week covers every role (full review 2026-11-27, finding 1.6; Mike's call; branch
+  `new-this-week-all-roles`; edjobs 0.107.0). It compared the teaching/faculty histories, so the Jobs tabs' button on an
+  all-roles table dropped every new support, para, coach and staff posting, and the map's and summary tables' "New
+  This Week" counted teachers and faculty only. The pipeline now keeps `k12_recent_postings.csv` /
+  `he_recent_postings.csv` (every role, last two weeks; edjobs `write_k12_history()` / `write_he_history()`); app.R
+  reads them (rule A unchanged; college rule now edjobs `find_he_new_postings()`), with the old histories as the
+  fallback. Seeded from git history (`claude-notes/2026-11-27_full-review/seed_recent_postings.R`). This week: K-12
+  28 -> 95 new (95 of 1,323 in the Jobs table), college 18 -> 44 (of 396), checked in the running app.
+  Data dictionary updated. App/dictionary/data tests on 0.107.0: 1,380 passed, 0 failed. Pinned 0.110.0 in the same
+  branch (`Pin edjobs 0.110.0`); rehearsed 2026-11-28 (`claude-notes/logs/2026-11-28_rehearsal-mt-pin-0.110.0.log`): every
+  step ok, rebuild parity 11 of 11 files, post-run suite 3677 passed, 0 failed; the recent-postings files hold
+  2026-11-19 and 2026-11-28 (K-12 1369 + 1308 rows, college 381 + 394). Swan River's site refused TLS during the
+  rehearsal (0 rows, was 5; `curl` gets the same "tlsv1 alert protocol version"): the site, not this change.
 - [x] Listing Duration: days listed end halfway to the next update, not +7 (full review 2026-11-27, finding 2.4;
   Mike's call; branch `durations-midpoint`). The flat 7 days assumed weekly updates (twice a week since 11-17); now a
   gone posting's listing runs to the midpoint between its last sighting and the next update, as the posting spells
