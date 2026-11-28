@@ -124,6 +124,8 @@ set_state_config(state_config(
     # the $500k floor flagged 13 real districts of 4-46 students every week ($7k-$27k a student; statewide $6.3k-$30.4k
     # on 11-19), while a misread digit gives ~$950 or ~$96k a student at any size. The dollar range is kept only for
     # rows with no CCD enrollment. claude-notes/2026-11-20_mt-general-fund-bound.md.
+    # 10th percentile floor $15,000 (2026-11-27): Swan River's real $16,900 (9 teachers, DLI 2022-23) was the one row
+    # under $20,000 and flagged every run; a dropped digit (~$25k+ read as ~$2.5k) still falls below it.
     bounds = data.frame(
       name = c("K-12 teacher avg salary (MT DLI)", "K-12 teacher 10th pctile salary (MT DLI)",
                "K-12 teacher 90th pctile salary (MT DLI)", "K-12 General Fund expenditure per student (OPI Finance / CCD)",
@@ -132,7 +134,7 @@ set_state_config(state_config(
       column = c("Teacher_Avg_Salary", "Teacher_Salary_10th_Pctile", "Teacher_Salary_90th_Pctile",
                  "Total_General_Fund_Expenditure", "Total_General_Fund_Expenditure", "Faculty_Avg_Salary"),
       per = c(NA, NA, NA, "Enrollment", NA, NA), unless = c(NA, NA, NA, NA, "Enrollment", NA),
-      min_ok = c(25000, 20000, 25000, 3000, 500000, 15000), max_ok = c(150000, 150000, 175000, 60000, 250000000, 150000)),
+      min_ok = c(25000, 15000, 25000, 3000, 500000, 15000), max_ok = c(150000, 150000, 175000, 60000, 250000000, 150000)),
     yoy = data.frame(file = "salarymap.csv", current = "Faculty_Avg_Salary", prior = "Faculty_Avg_Salary_Y1Ago")),
   scraper_sources = list(
     scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",

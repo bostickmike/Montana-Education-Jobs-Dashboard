@@ -2013,6 +2013,11 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Monitoring tidy-ups (full review 2026-11-27, findings 3.2 and 3.3; branch `review-monitoring-fixes`). The salary
+  check's 10th-percentile floor is $15,000 (was $20,000): Swan River's real $16,900 (9 teachers, DLI 2022-23) was the
+  only one of 122 rows under it and flagged every run; a dropped digit still falls below. `test-data-dictionary.R`'s
+  `pending` list emptied: every listed column (SAIPE range, ACS MOEs, CCD/IPEDS links) is in the committed files, so
+  dropping one now fails the test. Tests: 149 passed, 0 failed; the salary check no longer lists Swan River.
 - [x] Coverage badge and text (full review 2026-11-27, `claude-notes/2026-11-27_full-review/README.md` 1.4; branch
   `review-coverage-fixes`). `app.R` gave every `opi_only_districts.csv` row the OPI badge, overwriting "Full" on St.
   Labre's three schools, whose Trakstar board is read (since 11-23); a row's own coverage now stands. The Home coverage
