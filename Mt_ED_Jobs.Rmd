@@ -30,7 +30,7 @@ library(edjobs)
 source("direct_api_scrapers.R")
 source("misc_district_scrapers.R")
 
-registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
+registry <- read_k12_registry()
 
 # AppliTrack -- output columns (title/position/position2/date_posted/
 # location/closing_date) already match combinedclean's shape closely; only
@@ -361,7 +361,7 @@ crosswalk_path <- file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv")
 tryCatch({
   ccd_latest <- find_latest_ccd_directory_year()
   xw_new <- build_mt_district_crosswalk(ccd_latest$data,
-                                        read.csv("k12_district_registry.csv", stringsAsFactors = FALSE),
+                                        read_k12_registry(),
                                         MT_CCD_LEA_MAP)
   xw_new$CCD_Year <- rep(as.character(ccd_latest$year), nrow(xw_new))
   write_reference_file(xw_new, crosswalk_path, retrieved_source = "Urban CCD")
@@ -496,7 +496,7 @@ tryCatch(refresh_schoolspring_endings("Archivek12_Data", "schoolspring_endings.c
 # context). A failed, partial or implausible refresh keeps the committed file and is logged.
 library(edjobs)
 oews_wages <- refresh_pay_benchmarks()
-district_county <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)[, c("District", "County")]
+district_county <- read_k12_registry()[, c("District", "County")]
 source("opi_finance_scraper.R")
 # Each OPI district's county, from OPI's finance workbook, so OPI rows naming
 # their district (OPI_District) get a local OEWS area rather than the
@@ -550,7 +550,7 @@ teacher_salary <- safe_scrape(
 # salary/staffing chunk in this pipeline has (see Wyoming's equivalent
 # chunks) -- so salarymap2.csv is read back first (if it exists) rather
 # than rebuilt fresh from the registry every run.
-registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE) %>%
+registry <- read_k12_registry() %>%
   select(District, any_of("NCES_LEAID"), County, Latitude, Longitude, Job_Link)
 
 salarymap2_path <- file.path("Mt_Ed_Jobs", "salarymap2.csv")
@@ -585,7 +585,13 @@ if (nrow(teacher_salary) > 0) {
   message("MT DLI teacher compensation fetch failed -- leaving salarymap2.csv's salary columns untouched this run.")
 }
 
-write.csv(salarymap2, salarymap2_path, row.names = FALSE)
+# NCES_LEAID is text from read_k12_registry() (edjobs 0.113.0); write.csv() would quote it, changing every line of
+# the file. Keep the committed file's quoting (the values are the same).
+if (file.exists(salarymap2_path)) {
+  write_csv_keep_quoting(salarymap2, salarymap2_path)
+} else {
+  write.csv(salarymap2, salarymap2_path, row.names = FALSE)
+}
 
 # CCD teacher FTE and enrollment, every district the crosswalk ties to CCD, hand map entries first (edjobs 0.98.0;
 # a failed fetch leaves the columns alone).
@@ -633,7 +639,7 @@ refresh_file_columns("salarymap2.csv", "OPI per-district General Fund expenditur
 # crosswalk doesn't tie yet uses its registry NCES id) and the OPI-only
 # districts below (edjobs::fetch_ccd_frl_share(); each entity's
 # newest reporting year). salarymap2.csv keeps last run's values on a failure.
-frl_registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
+frl_registry <- read_k12_registry()
 frl_ids <- crosswalk_leaids(district_crosswalk)
 untied <- setdiff(frl_registry$District, names(frl_ids))
 frl_ids[untied] <- as.list(as.character(frl_registry$NCES_LEAID[match(untied, frl_registry$District)]))
@@ -748,7 +754,7 @@ library(edjobs)
 source("direct_api_scrapers.R")
 source("misc_college_scrapers.R")
 
-he_registry <- read.csv("he_institution_registry.csv", stringsAsFactors = FALSE)
+he_registry <- read_he_registry()
 
 # Every college board with a registry platform, read by edjobs::scrape_registry_platforms() (edjobs 0.94.0; review
 # step 5 slice B, 2026-11-24) as the K-12 chunk reads its boards: each registry row is scraped with its scraper_spec()
@@ -850,8 +856,8 @@ tryCatch(refresh_posting_status("Archivek12_Data", "Archived_HE_Data", "posting_
 library(edjobs)
 tryCatch(refresh_coverage_calendar(
   "coverage_calendar.csv", "scrape_log.csv",
-  k12_entities = read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)$District,
-  he_entities = read.csv("he_institution_registry.csv", stringsAsFactors = FALSE)$Institution,
+  k12_entities = read_k12_registry()$District,
+  he_entities = read_he_registry()$Institution,
   data_k12 = unique(combined_all$District), data_he = unique(hedata$Institution),
   feeds = c("OPI statewide feed" = "^OPI Jobs for Teachers",
             "Apptegy browser session (all Apptegy districts)" = "^Apptegy/chromote K-12 districts"),
@@ -895,7 +901,7 @@ refresh_ipeds_staff_pay()
 # he_institution_registry.csv, the same "read salarymap.csv back first if
 # it exists, don't blank out a failed fetch's columns" pattern
 # salarymap2.csv's chunk above uses.
-he_registry <- read.csv("he_institution_registry.csv", stringsAsFactors = FALSE) %>%
+he_registry <- read_he_registry() %>%
   transmute(Name = Institution, County, Longitude, Latitude, Link = Job_Link)
 
 salarymap_path <- file.path("Mt_Ed_Jobs", "salarymap.csv")

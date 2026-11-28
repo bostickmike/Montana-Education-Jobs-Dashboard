@@ -2016,6 +2016,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
 - [x] Full review 2026-11-27, 3.5 (branch `review-nits-3-5`): the LLM shadow-pilot chunk loaded edjobs twice, and its
   comment still named GitHub Models / GITHUB_TOKEN (retired; edjobs reads GEMINI_API_KEY). One `library()` removed and
   the comment corrected; no behavior change. 2.5's `CCD_Year` pad and `sapply()`s were already done in #168.
+- [x] Registry reads through edjobs `read_k12_registry()` / `read_he_registry()` (Utah phase 0, gap 4; branch
+  `registry-reader`; edjobs 0.113.0, already pinned). The Rmd's nine plain `read.csv()` registry reads,
+  `scraper_registry()` in `state_config.R` (`mt_registry()` removed), `read_k12_list_rules()` and six scripts use the
+  shared readers. On MT's files the one difference is `NCES_LEAID`, integer -> 7-digit text, same values; every existing
+  use already compared it as text. `salarymap2.csv` is written with `write_csv_keep_quoting()`, so the ids stay
+  unquoted: byte-identical to the old code's output on the committed file. `read_k12_list_rules()` keeps blank rules
+  NA; `k12_district_coverage_tiers()` keeps its own read (its tests pass two-column tables);
+  `scripts/generate_job_duration_spells.R` (no caller) and `scaffold_district.R` (writes the registry) unchanged.
+  Suite 3677 passed, 0 failed. Rehearsed 2026-11-28 (`claude-notes/logs/2026-11-28_rehearsal-mt-registry-reader.log`):
+  every step ok, rebuild parity 11 of 11, pre- and post-run suites 3677/0, postings 1308 (as the 0.113.0 rehearsal);
+  `salarymap2.csv` District/NCES_LEAID columns identical to main's. `manifest` failed only because edjobs had been
+  installed from the local checkout; passed after reinstalling from the v0.113.0 tag.
 - [x] Pin edjobs 0.113.0 (branch `pin-edjobs-0.113.0`): "Built with edjobs" as the data-sources footer's last line
   (`built_with_edjobs()`, 0.111.0); 0.112.0's CCD id padding and NEOGOV links (no MT data change: MT's ids are
   already 7 digits); 0.113.0's `read_k12_registry()` (not called by MT yet: MT's switch is its own PR). Full review

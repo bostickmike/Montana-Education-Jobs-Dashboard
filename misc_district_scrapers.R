@@ -501,8 +501,9 @@ k12_list_rule <- function(rules, district, col) {
 
 # Every district's list rules: k12_district_registry.csv's District, List_Start, List_Stop, List_Skip.
 read_k12_list_rules <- function(path = "k12_district_registry.csv") {
-  r <- utils::read.csv(path, stringsAsFactors = FALSE, na.strings = "", colClasses = "character")
-  r[, c("District", "List_Start", "List_Stop", "List_Skip")]
+  r <- read_k12_registry(path)[, c("District", "List_Start", "List_Stop", "List_Skip")]
+  r[r == ""] <- NA_character_   # a district with no rule: NA, as before the shared reader (edjobs 0.113.0)
+  r
 }
 
 # The family routine's calls, one function(session) per registry row, named

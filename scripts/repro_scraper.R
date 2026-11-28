@@ -31,8 +31,8 @@ source_name <- args[1]
 save_at <- which(args == "--save-text")
 save_path <- if (length(save_at) == 1 && length(args) > save_at) args[save_at + 1] else NULL
 
-k12 <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
-he <- read.csv("he_institution_registry.csv", stringsAsFactors = FALSE)
+k12 <- read_k12_registry()
+he <- read_he_registry()
 registry_row <- if (source_name %in% k12$District) k12[k12$District == source_name, ][1, ] else
                 if (source_name %in% he$Institution) he[he$Institution == source_name, ][1, ] else NULL
 if (is.null(registry_row)) stop("No registry row named '", source_name, "' in k12_district_registry.csv or he_institution_registry.csv")

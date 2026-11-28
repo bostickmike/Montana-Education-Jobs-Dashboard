@@ -23,7 +23,7 @@ library(edjobs)
 source(here::here("direct_api_scrapers.R"))
 source(here::here("k12_he_classification.R"))
 
-registry <- read.csv(here::here("k12_district_registry.csv"), stringsAsFactors = FALSE)
+registry <- read_k12_registry(here::here("k12_district_registry.csv"))
 
 # --- AppliTrack -------------------------------------------------------------
 

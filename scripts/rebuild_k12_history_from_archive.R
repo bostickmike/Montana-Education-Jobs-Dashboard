@@ -34,7 +34,7 @@ rebuild_k12_history_from_archive <- function(archive_dir = "Archivek12_Data",
     stop("rebuild_k12_history_from_archive(): no archive files found in ", archive_dir)
   }
   crosswalk <- read.csv(crosswalk_path, stringsAsFactors = FALSE, colClasses = c(LEAID = "character"))
-  registry <- read.csv(registry_path, stringsAsFactors = FALSE)
+  registry <- edjobs::read_k12_registry(registry_path)
 
   # Each week under the OPI rule on its own (read_counted_archive_week(),
   # opi_reconcile.R): bind_rows() first gave old weeks an all-NA OPI_Counted
