@@ -1095,7 +1095,7 @@ parse_westglacier_postings <- function(html_text, url = "https://www.westglacier
 
     if (grepl("(Teacher|Custodian|Maintenance|Aide|Paraprofessional|Driver|Coach|Nurse|Cook|Secretary)", clean_title, ignore.case = TRUE) &&
         !grepl("(Application|Handbook|Policy|Plan)", clean_title, ignore.case = TRUE)) {
-      if (length(titles) > 0 && any(sapply(titles, function(t) grepl(t, clean_title, fixed = TRUE) || grepl(clean_title, t, fixed = TRUE)))) {
+      if (length(titles) > 0 && any(vapply(titles, function(t) grepl(t, clean_title, fixed = TRUE) || grepl(clean_title, t, fixed = TRUE), logical(1)))) {
         next
       }
       abs_url <- xml2::url_absolute(href, url)

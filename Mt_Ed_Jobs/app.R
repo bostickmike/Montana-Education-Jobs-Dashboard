@@ -162,8 +162,9 @@ mapdata2_k12 <- read.csv("salarymap2.csv", fileEncoding = "UTF-8")
 # padded here rather than in validate_and_pad_schema(), which would flag their
 # absence as a data problem on the Home tab.
 # Child_Poverty_Low / _High: Census's approximate 90% range (edjobs 0.27.0, first written by the run after 2026-11-15).
+# CCD_Year: padded here too, since the mutate() below reads it (full review 2026-11-27, 2.5).
 for (col in c("Child_Poverty_Basis", "Free_Reduced_Lunch_Share", "FRL_Year", "Child_Poverty_Low", "Child_Poverty_High",
-               "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE")) {
+               "Median_Household_Income_MOE", "Median_Gross_Rent_MOE", "Mining_Employment_Share_MOE", "CCD_Year")) {
   if (!col %in% names(mapdata2_k12)) mapdata2_k12[[col]] <- NA
 }
 mapdata2_k12 <- mapdata2_k12 %>%
@@ -846,7 +847,8 @@ data_sources_footer <- tags$footer(
   tags$p(
     "This product uses the Census Bureau Data API but is not endorsed or certified by the Census Bureau.",
     "BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov."
-  )
+  ),
+  built_with_edjobs()
 )
 
 ui <- page_navbar(
