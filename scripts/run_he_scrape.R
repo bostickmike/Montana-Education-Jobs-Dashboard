@@ -16,7 +16,7 @@ library(edjobs)
 source(here::here("direct_api_scrapers.R"))
 source(here::here("k12_he_classification.R"))
 
-registry <- read.csv(here::here("he_institution_registry.csv"), stringsAsFactors = FALSE)
+registry <- read_he_registry(here::here("he_institution_registry.csv"))
 expected_cols <- c("Title", "Location", "Posted_Date", "Link")
 
 # --- PeopleAdmin -------------------------------------------------------------

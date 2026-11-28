@@ -22,7 +22,7 @@ source("posting_spells.R")
 
 crosswalk <- read.csv(file.path("Mt_Ed_Jobs", "mt_district_crosswalk.csv"), stringsAsFactors = FALSE,
                       colClasses = c(LEAID = "character"))
-registry <- read.csv("k12_district_registry.csv", stringsAsFactors = FALSE)
+registry <- edjobs::read_k12_registry()
 calendar <- if (file.exists("coverage_calendar.csv")) read.csv("coverage_calendar.csv", colClasses = "character") else NULL
 endings <- if (file.exists("schoolspring_endings.csv")) read.csv("schoolspring_endings.csv", colClasses = "character") else NULL
 statuses <- if (file.exists("posting_status.csv")) read.csv("posting_status.csv", colClasses = "character") else NULL

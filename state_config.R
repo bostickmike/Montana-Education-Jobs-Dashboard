@@ -73,10 +73,8 @@ MT_HE_PLATFORMS <- list(
 APPTEGY_DISPATCH_FN <- "APPTEGY_DISTRICT_SCRAPERS"
 MT_APPTEGY_MAP_SPEC <- scraper_spec(APPTEGY_DISPATCH_FN, "District", session = TRUE, map = TRUE,
                                     defined_in = "misc_district_scrapers.R")
-# The registries sit at the repository root; tests run from tests/testthat.
-mt_registry <- function(file) function() {
-  utils::read.csv(if (file.exists(file)) file else here::here(file), stringsAsFactors = FALSE)
-}
+# The registries are read with edjobs::read_k12_registry() / read_he_registry() (edjobs 0.113.0; text columns,
+# blanks "", NCES_LEAID as 7-digit text), which find the repository-root file from tests/testthat too.
 # The CSS-board rules (css_board_rules.csv, edjobs css_board_rules()), read when a source is looked up.
 mt_css_board_rules <- function() {
   file <- "css_board_rules.csv"
@@ -137,7 +135,7 @@ set_state_config(state_config(
       min_ok = c(25000, 15000, 25000, 3000, 500000, 15000), max_ok = c(150000, 150000, 175000, 60000, 250000000, 150000)),
     yoy = data.frame(file = "salarymap.csv", current = "Faculty_Avg_Salary", prior = "Faculty_Avg_Salary_Y1Ago")),
   scraper_sources = list(
-    scraper_registry(mt_registry("k12_district_registry.csv"), "District", "k12_district_registry.csv",
+    scraper_registry(read_k12_registry, "District", "k12_district_registry.csv",
       # CSSBoard districts (since 2026-11-24) and TextBoard districts (2026-11-25): the page, City and rule keyed by District.
       specs = scraper_specs(ApptegyBespoke = MT_APPTEGY_MAP_SPEC,
                             CSSBoard = css_board_spec(function() mt_css_board_rules(), "Job_Link", "City", "District"),
@@ -149,7 +147,7 @@ set_state_config(state_config(
           scraper_spec(paste0("fetch_", tolower(sub("Heuristic$", "", platform)), "_postings"), "Job_Link")
         }
       }),
-    scraper_registry(mt_registry("he_institution_registry.csv"), "Institution", "he_institution_registry.csv",
+    scraper_registry(read_he_registry, "Institution", "he_institution_registry.csv",
       # The one HE Apptegy site (Stone Child College), in place of the K-12 family routine.
       specs = scraper_specs(Apptegy = scraper_spec("fetch_stonechild_postings", "Feed_URL", session = TRUE),
                             defaults = MT_SCRAPER_SPECS)),
