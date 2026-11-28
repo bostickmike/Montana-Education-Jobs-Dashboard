@@ -2013,6 +2013,13 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Posting spells skip frozen boards, as Wyoming's do (full review 2026-11-27, finding 2.3; branch
+  `spells-frozen-boards`). `scripts/build_posting_spells.R` now passes `frozen_board_runs()` (K-12 from 08-18, HE from
+  08-11, the dates `check_frozen_boards.R` reads) to `build_posting_spells()`, and the advertised-window table leaves
+  out pools as WY's does. Replayed on the archives (unchanged script first: identical to the committed files): 92
+  K-12 spells on 8 frozen boards now `Frozen_Board` (was 0); one leaves the durations (Chinook's part-time custodian);
+  overall median unchanged (30.5 days), Custodial/Maintenance 20 -> 18.5; no HE board frozen; advertised windows
+  unchanged. Tests (spells, data quality, run expectations): 153 passed, 0 failed.
 - [x] Monitoring tidy-ups (full review 2026-11-27, findings 3.2 and 3.3; branch `review-monitoring-fixes`). The salary
   check's 10th-percentile floor is $15,000 (was $20,000): Swan River's real $16,900 (9 teachers, DLI 2022-23) was the
   only one of 122 rows under it and flagged every run; a dropped digit still falls below. `test-data-dictionary.R`'s

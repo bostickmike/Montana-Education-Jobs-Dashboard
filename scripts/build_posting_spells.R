@@ -28,13 +28,17 @@ endings <- if (file.exists("schoolspring_endings.csv")) read.csv("schoolspring_e
 statuses <- if (file.exists("posting_status.csv")) read.csv("posting_status.csv", colClasses = "character") else NULL
 
 panel <- split_posting_gaps(bridge_posting_ids(k12_posting_panel("Archivek12_Data", crosswalk, registry), MT_K12_SPELL_RULES))
-spells <- build_posting_spells(panel, calendar, endings, statuses = statuses, rules = MT_K12_SPELL_RULES)
+# Frozen boards (a board's whole posting set unchanged 12+ weeks) don't count toward durations, as in Wyoming (full
+# review 2026-11-27). From the dates check_frozen_boards.R reads: K-12 archives before 08-18 have no Posting_Source.
+frozen_k12 <- frozen_board_runs(panel[panel$Run_Date >= as.Date("2026-08-18"), , drop = FALSE])
+spells <- build_posting_spells(panel, calendar, endings, frozen = frozen_k12, statuses = statuses, rules = MT_K12_SPELL_RULES)
 durations <- bind_rows(summarize_posting_durations(spells),
                        summarize_posting_durations(spells, "Position")) %>%
   mutate(As_Of = max(spells$Last_Seen))
 
 write.csv(spells, "posting_spells_k12.csv", row.names = FALSE)
 write.csv(durations, "posting_durations_k12.csv", row.names = FALSE)
+cat("Frozen board stretches:", nrow(frozen_k12), "K-12\n")
 cat("posting_spells_k12.csv:", nrow(spells), "postings,", sum(spells$In_Durations), "in durations,",
     sum(spells$Event & spells$In_Durations), "endings. Median days listed (all):",
     durations$Median_Days[durations$Group == "All"], "\n")
@@ -42,7 +46,9 @@ cat("posting_spells_k12.csv:", nrow(spells), "postings,", sum(spells$In_Duration
 # Higher ed: each institution is its own source in the calendar's HE rows.
 he_calendar <- if (is.null(calendar)) NULL else calendar[calendar$Segment == "HE", , drop = FALSE]
 he_panel <- use_earliest_posted_date(split_posting_gaps(bridge_posting_ids(he_posting_panel("Archived_HE_Data"), MT_HE_SPELL_RULES)))
-he_spells <- build_posting_spells(he_panel, he_calendar, statuses = statuses, rules = MT_HE_SPELL_RULES)
+frozen_he <- frozen_board_runs(he_panel[he_panel$Run_Date >= as.Date("2026-08-11"), , drop = FALSE])  # first full HE run
+he_spells <- build_posting_spells(he_panel, he_calendar, frozen = frozen_he, statuses = statuses, rules = MT_HE_SPELL_RULES)
+cat("Frozen board stretches:", nrow(frozen_he), "HE\n")
 he_durations <- bind_rows(summarize_posting_durations(he_spells),
                           summarize_posting_durations(he_spells[he_spells$District != "Montana State University", ]) %>%
                             mutate(Group = "All except Montana State University"),
@@ -63,7 +69,7 @@ cat("posting_spells_he.csv:", nrow(he_spells), "postings,", sum(he_spells$In_Dur
 # Advertised application window: start to the stated closing date, where the
 # posting states one (needs no ending).
 stated <- bind_rows(`K-12` = spells, HE = he_spells, .id = "Segment") %>%
-  filter(!is.na(Advertised_Days), !Evergreen)
+  filter(!is.na(Advertised_Days), !Evergreen, !Pool)
 windows <- bind_rows(stated %>% mutate(Position = "All"), stated) %>%
   group_by(Segment, Position) %>%
   summarize(Postings = n(), Median_Days = median(Advertised_Days), .groups = "drop") %>%
