@@ -2013,6 +2013,14 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Pin edjobs 0.113.0 (branch `pin-edjobs-0.113.0`): "Built with edjobs" as the data-sources footer's last line
+  (`built_with_edjobs()`, 0.111.0); 0.112.0's CCD id padding and NEOGOV links (no MT data change: MT's ids are
+  already 7 digits); 0.113.0's `read_k12_registry()` (not called by MT yet: MT's switch is its own PR). Full review
+  2026-11-27, 2.5: `CCD_Year` joins app.R's optional-column pad (the `mutate()` read it before checking it exists); the
+  two `sapply()`s are `vapply(logical(1))` (`parse_westglacier_postings()`, `scripts/scaffold_district.R`). Manifest
+  edjobs entry and app.R checksum by hand. App booted on 0.113.0 (shinytest2, Data tab: footer line present, 0
+  error/warning log lines). Tests on 0.113.0: misc-district scrapers 211, run expectations 2, workflow ref 2, app boot
+  smoke 48, all 0 failed.
 - [x] New This Week covers every role (full review 2026-11-27, finding 1.6; Mike's call; branch
   `new-this-week-all-roles`; edjobs 0.107.0). It compared the teaching/faculty histories, so the Jobs tabs' button on an
   all-roles table dropped every new support, para, coach and staff posting, and the map's and summary tables' "New

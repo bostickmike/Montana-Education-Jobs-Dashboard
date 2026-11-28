@@ -218,9 +218,9 @@ url_host <- tolower(sub("^https?://([^/:?#]+).*$", "\\1", url))
 url_host <- sub("^www\\.", "", url_host)
 
 # Check if covered
-covered <- any(sapply(allow_lines, function(al) {
+covered <- any(vapply(allow_lines, function(al) {
   al == url_host || (nzchar(al) && !startsWith(al, "#") && endsWith(url_host, paste0(".", al)))
-}))
+}, logical(1)))
 
 if (!covered) {
   # Insert in place, leaving every existing line where it is (re-sorting the
