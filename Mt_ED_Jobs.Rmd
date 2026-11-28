@@ -445,7 +445,15 @@ combined_all <- bind_rows(direct_df, opi_df) %>%
   mutate(Close_Date = if ("Close_Date" %in% names(.)) as.character(Close_Date) else NA_character_,
     across(c(title, position, location, url, District, Posting_Source), normalize_posting_text),
     Archive_Date = Sys.Date()
-  ) %>%
+  )
+# A posting with no place takes its district's town when all the district's schools are in one town (edjobs
+# fill_k12_locations(), CCD towns in Mt_Ed_Jobs/district_towns.csv; as Wyoming since 2026-11-26). A board's or OPI's
+# place is kept: OPI's town is not corrected (measured 2026-11-28: it would rewrite 35 OPI towns, some wrongly).
+# Before the posting identity, which includes the place. claude-notes/2026-11-28_mt-district-towns/README.md.
+district_towns <- refresh_district_towns()
+combined_all <- fill_k12_locations(combined_all, district_towns, setNames(registry$NCES_LEAID, registry$District))
+message(sprintf("Places from district towns: %d filled.", attr(combined_all, "location_changes")[["filled"]]))
+combined_all <- combined_all %>%
   # Detail a board put in the title (a requirement, the pay, "Open Until
   # Filled", a file name) is cut off, and fills Posted Pay where the row has
   # none (edjobs); before the identity, so it's built from

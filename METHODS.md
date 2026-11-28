@@ -27,6 +27,17 @@ built from the board, district, title, location and posted date (`Posting_Identi
 gives no per-posting address, so its postings are identified by title, location and posted date; two OPI postings
 identical in all three are kept as two rows, not merged.
 
+## Where a K-12 posting is placed
+
+A posting's place (`location`) is what its board or OPI gives, often a school building. A few boards give none.
+Starting with the November 30, 2026 update, the district's towns from the federal school directory
+([CCD](https://nces.ed.gov/ccd/), `district_towns.csv`) fill some of those gaps:
+
+- a posting with no place, in a district whose schools are all in one town, gets that town;
+- a posting in a district with schools in several towns keeps a blank place, since the town can't be told from the
+  district alone;
+- a place the board or OPI gives is kept as written.
+
 ## OPI postings: when they count
 
 Many districts list the same teaching job on their own board and on OPI's. The dashboard counts it once:
