@@ -2013,6 +2013,18 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Places from district towns (full review 2026-11-27, 2.5; branch `district-towns`; as WY since 2026-11-26): a
+  posting with no place, in a district whose schools are all in one town (CCD 2024, new `Mt_Ed_Jobs/district_towns.csv`,
+  482 districts, refreshed each update), gets that town; a board's or OPI's place is kept. OPI's towns are not
+  corrected: treating them like WY's WSBA towns would rewrite 35 rows on the 11-26 archive, some wrongly (Cottonwood
+  #57's "Ronan" -> "Havre"); `claude-notes/2026-11-28_mt-district-towns/`. On the 11-26 archive: 2 blank places (Big Sandy,
+  Fort Benton; AppliTrack), both filled. Before the posting identity, so those 2 show once as new. File documented
+  (DATA_DICTIONARY.md X, data_dictionary.csv, METHODS.md "Where a K-12 posting is placed"); test-district-towns.R; run
+  expectation `blank_places_filled`. Rehearsed 2026-11-28 (`claude-notes/logs/2026-11-28_rehearsal-mt-district-towns.log`):
+  render logged "2 filled", every step ok, rebuild parity 11 of 11, pre-run suite 3688/0, `combinedclean.csv` 1308 rows
+  with 0 blank places. Post-run suite 3687/1: `test-app-no-local-copies.R` on the manifest the rehearsal had rewritten
+  from an edjobs installed with `remotes` (no RemotePkgRef); after reinstalling with pak, the manifest step and that
+  test pass (6/0); the committed manifest is unchanged.
 - [x] Full review 2026-11-27, 3.5 (branch `review-nits-3-5`): the LLM shadow-pilot chunk loaded edjobs twice, and its
   comment still named GitHub Models / GITHUB_TOKEN (retired; edjobs reads GEMINI_API_KEY). One `library()` removed and
   the comment corrected; no behavior change. 2.5's `CCD_Year` pad and `sapply()`s were already done in #168.
