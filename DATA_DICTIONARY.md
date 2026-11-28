@@ -33,6 +33,7 @@ Each dataset is accessible via the **Data** tab in the interactive web dashboard
 | **Posting First Seen** | `posting_first_seen.csv` | When the dashboard first found each currently listed posting; shown where the board gives no posted date. | Posting level | Twice weekly |
 | **Recent Postings (every role)** | `k12_recent_postings.csv`, `he_recent_postings.csv` | Every role's postings in the latest update of each of the last two weeks, only the columns compared; the dashboard's New This Week. | Posting level | Twice weekly |
 | **County Public School Pay** | `qcew_county_school_pay.csv` | Average annual pay and employment of public school (local government, NAICS 6111) employees by county, all roles together. | County level | Annual |
+| **District Towns** | `district_towns.csv` | The town of each district's office and of its schools, from CCD; gives a posting with no stated place its district's town when all its schools are in one town. | District | Annual |
 | **Source Retrieval Dates** | `source_retrieved_dates.csv` | When each outside data source was last fetched successfully. | Source level | Twice weekly |
 | **Data Dictionary & Codebook** | `data_dictionary.csv` | Machine-readable column definitions, types, and primary source authorities across all files. | Variable level | Static / Maintained |
 
@@ -57,7 +58,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update that saw the posting listed (the dashboard updates twice a week since 2026-11-17, weekly before). |
 | `date_posted` | String / Date | Job posting (district job board or OPI Jobs for Teachers) | Original posted date string as published on the district applicant tracking board. |
 | `position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
-| `location` | String | Job posting (district job board or OPI Jobs for Teachers) | Specific school building, facility, or employer city/location label. |
+| `location` | String | Job posting (district job board or OPI Jobs for Teachers); `district_towns.csv` | Specific school building, facility, or employer city/location label. From 2026-11-30, a blank place is filled with the district's town when all its schools are in one town (METHODS.md, "Where a K-12 posting is placed"). |
 | `url` | URL | Job posting (district job board or OPI Jobs for Teachers) | Direct link to the job posting or district applicant tracking portal. |
 | `District` | String | This dashboard: district and college list | Canonical public school district name. OPI statewide rows: the name of the district whose board this dashboard reads, when that board came back empty that week, else the district not read directly (one name per town, e.g. "Box Elder Elem / Box Elder H S"), else OPI's employer name (private and tribal schools, co-ops); raw city only where the posting's district couldn't be identified. See `opi_reconcile.R`. |
 | `Posting_Source` | String | This dashboard: posting tracking | Original job feed source (direct district ATS board vs OPI Jobs for Teachers feed). |
@@ -88,7 +89,7 @@ To support seamless merges with federal, state, and academic datasets, the follo
 | `title` | String | Job posting (district job board or OPI Jobs for Teachers) | Standardized job vacancy title as published by the school district or OPI feed. |
 | `Archive_Date` | Date (YYYY-MM-DD) | This dashboard: snapshot at each update | Date of the update that saw the posting listed (the dashboard updates twice a week since 2026-11-17, weekly before). |
 | `position` | Categorical | This dashboard: job title classification | Broad staff position group (Teacher, Administrator, Support Services, etc.). |
-| `location` | String | Job posting (district job board or OPI Jobs for Teachers) | Specific school building, facility, or employer city/location label. |
+| `location` | String | Job posting (district job board or OPI Jobs for Teachers); `district_towns.csv` | Specific school building, facility, or employer city/location label. From 2026-11-30, a blank place is filled with the district's town when all its schools are in one town (METHODS.md, "Where a K-12 posting is placed"). |
 | `url` | URL | Job posting (district job board or OPI Jobs for Teachers) | Direct URL link to the official job vacancy listing or district portal. |
 | `District` | String | This dashboard: district and college list | Canonical public school district name. |
 | `Posting_Source` | String | This dashboard: posting tracking | Original job feed source (direct district ATS board vs OPI statewide feed). |
@@ -500,3 +501,15 @@ When each outside data source was last fetched successfully.
 | :--- | :--- | :--- | :--- |
 | `Source` | String | This dashboard: update log | An outside data source the dashboard uses (BLS OEWS, Census ACS, Urban IPEDS, ...). |
 | `Retrieved` | Date (YYYY-MM-DD) | This dashboard: update log | Last date that source was fetched successfully; shown on the Data tab. |
+
+### X. District Towns (`district_towns.csv`)
+
+Where each district's office and schools are (NCES Common Core of Data, latest directory year), used to place postings
+that give no town.
+
+| Column Name | Data Type | Source Authority | Description |
+| :--- | :--- | :--- | :--- |
+| `NCES_LEAID` | String (7 digits) | NCES CCD via Urban Institute | District's NCES id; joins to the registry's NCES_LEAID. |
+| `Office_Town` | String | NCES CCD via Urban Institute | Town of the district's office. |
+| `School_Towns` | String | NCES CCD via Urban Institute | Towns of the district's schools, separated by semicolons. When there is one, it is the place given to the district's postings that state none. |
+| `CCD_Year` | String | NCES CCD via Urban Institute | Directory year the towns come from (refreshed each update; a failed refresh keeps the file). |
