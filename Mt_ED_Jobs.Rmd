@@ -310,16 +310,15 @@ library(dplyr)
 library(chromote)
 library(edjobs)
 source("history_accumulator.R")
-library(edjobs)
 
 # SHADOW PILOT -- see LLM_EXTRACT.md. Districts listed in
 # llm_extract_targets.csv have their free-text-prose employment pages read
-# by an LLM (GitHub Models, GITHUB_TOKEN) and the result written to
+# by an LLM (Gemini, GEMINI_API_KEY; edjobs llm_extract_scraper.R) and the result written to
 # Mt_Ed_Jobs/llm_extract_shadow.csv ONLY. Nothing in this chunk feeds
 # combinedclean.csv, hedata.xlsx, the map, the weekly totals, or any file
 # app.R reads -- so it cannot affect the live dashboard or the sanity/
 # schema/drift checks. A complete no-op when the target list is empty or
-# GITHUB_TOKEN is unset. The per-district outcomes are still written to
+# GEMINI_API_KEY is unset. The per-district outcomes are still written to
 # scrape_log.csv (source "LLMExtract: <district>") for weekly review.
 llm_shadow_raw <- safe_scrape(
   "LLMExtract shadow pilot (session)",

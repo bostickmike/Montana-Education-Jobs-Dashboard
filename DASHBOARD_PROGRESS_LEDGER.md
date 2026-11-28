@@ -2013,6 +2013,9 @@ Unlike ephemeral conversation logs or local scratch handoffs, this document live
     the run; the render logged "Filled per public record: 2 board posting(s) flagged" (Custer's two board ads).
 
 **Open work (moved here from claude-notes handoff, 2026-11-03; this list is the source of truth):**
+- [x] Full review 2026-11-27, 3.5 (branch `review-nits-3-5`): the LLM shadow-pilot chunk loaded edjobs twice, and its
+  comment still named GitHub Models / GITHUB_TOKEN (retired; edjobs reads GEMINI_API_KEY). One `library()` removed and
+  the comment corrected; no behavior change. 2.5's `CCD_Year` pad and `sapply()`s were already done in #168.
 - [x] Pin edjobs 0.113.0 (branch `pin-edjobs-0.113.0`): "Built with edjobs" as the data-sources footer's last line
   (`built_with_edjobs()`, 0.111.0); 0.112.0's CCD id padding and NEOGOV links (no MT data change: MT's ids are
   already 7 digits); 0.113.0's `read_k12_registry()` (not called by MT yet: MT's switch is its own PR). Full review
