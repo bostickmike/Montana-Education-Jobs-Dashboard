@@ -32,164 +32,62 @@ source("misc_district_scrapers.R")
 
 registry <- read_k12_registry()
 
-# AppliTrack -- output columns (title/position/position2/date_posted/
-# location/closing_date) already match combinedclean's shape closely; only
-# District needs adding.
-applitrack_districts <- registry[registry$Platform == "AppliTrack", ]
-applitrack_results <- lapply(seq_len(nrow(applitrack_districts)), function(i) {
-  row <- applitrack_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_applitrack_postings(row$Platform_Key),
-    expected_cols = c("title", "position", "position2", "date_posted", "location", "closing_date")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-# url is the posting's own AppliTrack page, built from its job ID
-# (applitrack_posting_url()), so each posting is identified by it rather than
-# by its title; the district's board URL only when no job ID was read.
-# Close_Date is the board's "Closing Date" as written ("open until filled"
-# or a date; raw archive and combinedclean).
-applitrack_raw <- bind_rows(applitrack_results)
-if (nrow(applitrack_raw) > 0) {
-  applitrack_df <- applitrack_raw %>%
-    # A failed scrape's safe_scrape() placeholder has no Pay_* columns.
-    ensure_posted_pay_columns() %>%
-    mutate(job_id = if ("job_id" %in% names(.)) job_id else NA_character_,
-           closing_date = if ("closing_date" %in% names(.)) closing_date else NA_character_) %>%
-    left_join(select(applitrack_districts, District, Platform_Key, Job_Link), by = "District") %>%
-    transmute(title, date_posted, position = NA_character_, location,
-              url = coalesce(applitrack_posting_url(Platform_Key, job_id), Job_Link), District,
-              Posting_Source = "AppliTrack (direct district board)",
-              Close_Date = closing_date,
-              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
-} else {
-  applitrack_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                              location = character(0), url = character(0), District = character(0),
-                              Posting_Source = character(0), Close_Date = character(0))
-}
-
-# SchoolSpring / Tyler Portico -- same output shape (Title/Location/
-# Posted_Date/Link), position is always recomputed from title downstream so
-# it's set NA_character_ here rather than kept from the source (matching
-# Wyoming's springer/SchoolSpring chunk's own convention).
-schoolspring_districts <- registry[registry$Platform == "SchoolSpring", ]
-schoolspring_results <- lapply(seq_len(nrow(schoolspring_districts)), function(i) {
-  row <- schoolspring_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_schoolspring_postings(row$Platform_Key),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-schoolspring_df <- bind_rows(schoolspring_results)
-# Each posting's own record adds Close_Date (the deadline applicants see; NA
-# for "Posted until filled"), Job_Status (raw archive only) and posted pay
-# (add_schoolspring_details()). A failed detail request leaves only that
-# posting's fields NA.
-if (nrow(schoolspring_df) > 0 && "Link" %in% names(schoolspring_df)) {
-  schoolspring_df <- add_schoolspring_details(schoolspring_df)
-}
-if (nrow(schoolspring_df) > 0) {
-  schoolspring_df <- schoolspring_df %>%
-    ensure_posted_pay_columns() %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "SchoolSpring (direct district board)",
-              Close_Date = if ("Close_Date" %in% names(.)) Close_Date else NA_character_,
-              Job_Status = if ("Job_Status" %in% names(.)) Job_Status else NA_character_,
-              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
-} else {
-  schoolspring_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                                 location = character(0), url = character(0), District = character(0),
-                                 Posting_Source = character(0), Close_Date = character(0))
-}
-
-tylerportico_districts <- registry[registry$Platform == "TylerPortico", ]
-tylerportico_results <- lapply(seq_len(nrow(tylerportico_districts)), function(i) {
-  row <- tylerportico_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_tylerportico_postings(row$Platform_Key, row$District),
-    expected_cols = c("Title", "Location", "Posted_Date", "Link")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-tylerportico_df <- bind_rows(tylerportico_results)
-if (nrow(tylerportico_df) > 0) {
-  tylerportico_df <- tylerportico_df %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Tyler Portico (direct district board)",
-              Close_Date = if ("Close_Date" %in% names(.)) Close_Date else NA_character_,   # real end dates only
-              Job_Code = if ("Job_Code" %in% names(.)) Job_Code else NA_character_)   # OPI matching key (raw archive only)
-} else {
-  tylerportico_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                                 location = character(0), url = character(0), District = character(0),
-                                 Posting_Source = character(0), Job_Code = character(0))
-}
-
-# TedK12 -- output columns (title/date_posted/position/location/url) already
-# match combinedclean's shape; only District needs adding.
-tedk12_districts <- registry[registry$Platform == "TedK12", ]
-tedk12_results <- lapply(seq_len(nrow(tedk12_districts)), function(i) {
-  row <- tedk12_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_tedk12_postings(row$Platform_Key),
-    expected_cols = c("title", "date_posted", "position", "location", "url")
-  )
-  if (nrow(df) > 0) df$District <- row$District
-  df
-})
-tedk12_df <- bind_rows(tedk12_results)
-if (nrow(tedk12_df) == 0) {
-  tedk12_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                           location = character(0), url = character(0), District = character(0),
-                           Posting_Source = character(0))
-} else {
-  tedk12_df <- tedk12_df %>%
-    mutate(Posting_Source = "TedK12 (direct district board)")
-}
-
-# Red Rover (St. Ignatius, Hamilton, Columbia Falls) -- the GraphQL API Red
-# Rover's own board calls (edjobs::fetch_redrover_postings(), 0.14.0; WY's
-# fetcher). Platform_Key is the board's numeric org ID; the link slug comes from
-# Job_Link. Read with Chrome inside the Apptegy batch until 2026-11, which gave
-# a per-posting link to only some postings; every row now carries its own
-# /opening/<n> page and the board's posted pay. A posting with no location
-# takes the district's city, as the Chrome parser did.
-redrover_districts <- registry[registry$Platform == "RedRoverK12", ]
-redrover_results <- lapply(seq_len(nrow(redrover_districts)), function(i) {
-  row <- redrover_districts[i, ]
-  df <- safe_scrape(
-    row$District,
-    scrape_fn = function() fetch_redrover_postings(row$Platform_Key, redrover_org_slug(row$Job_Link)),
-    expected_cols = c("Title", "Location", "Posted_Date", "Posting_ID", "Link")
-  )
-  if (nrow(df) > 0) {
-    df$District <- row$District
-    df$Location <- dplyr::coalesce(dplyr::na_if(trimws(df$Location), ""), row$City)
+# The platform boards (AppliTrack, SchoolSpring, Tyler Portico, TedK12, Red Rover): each registry row's fetch under
+# safe_scrape(), then one raw row per posting (edjobs k12_raw_rows(), 0.114.0; Utah phase 0 gap 1), the mapping
+# every state uses: AppliTrack's url is the posting's own page from its job ID (the board URL only without one), the
+# board's own position is kept (AppliTrack's was dropped here before; the published tables recompute it from the
+# title), a blank place takes the registry's City (Red Rover's rule here before; Mike, 2026-11-28, every platform),
+# Close_Date is the board's as written, posted pay is the board's. `keep`: the columns each platform's frame had
+# before, so the raw archive's layout doesn't change (k12_raw_rows()'s posting_id waits for the posting-identity step).
+mt_board_rows <- function(platform, fetch, expected_cols, keep, prep = NULL, extra = character(0)) {
+  rows <- registry[registry$Platform == platform, , drop = FALSE]
+  parts <- lapply(seq_len(nrow(rows)), function(i) {
+    row <- rows[i, , drop = FALSE]
+    df <- safe_scrape(row$District, scrape_fn = function() fetch(row), expected_cols = expected_cols)
+    if (nrow(df) > 0 && is.function(prep)) df <- prep(df)
+    k12_raw_rows(df, row, extra = extra)
+  })
+  out <- bind_rows(parts)
+  if (nrow(out) == 0) {
+    text_cols <- setdiff(keep, POSTED_PAY_COLUMNS)
+    return(as.data.frame(setNames(rep(list(character(0)), length(text_cols)), text_cols), stringsAsFactors = FALSE))
   }
-  df
-})
-redrover_df <- bind_rows(redrover_results)
-if (nrow(redrover_df) > 0) {
-  redrover_df <- redrover_df %>%
-    ensure_posted_pay_columns() %>%
-    transmute(title = Title, date_posted = Posted_Date, position = NA_character_,
-              location = Location, url = Link, District,
-              Posting_Source = "Red Rover (direct district board)",
-              Pay_Min, Pay_Max, Pay_Unit, Pay_Text)
-} else {
-  redrover_df <- data.frame(title = character(0), date_posted = character(0), position = character(0),
-                            location = character(0), url = character(0), District = character(0),
-                            Posting_Source = character(0))
+  out[keep]
 }
+K12_BOARD_COLS <- c("title", "date_posted", "position", "location", "url", "District", "Posting_Source")
+
+applitrack_df <- mt_board_rows(
+  "AppliTrack", function(row) fetch_applitrack_postings(row$Platform_Key),
+  expected_cols = c("title", "position", "position2", "date_posted", "location", "closing_date"),
+  keep = c(K12_BOARD_COLS, "Close_Date", POSTED_PAY_COLUMNS))
+
+# Each SchoolSpring posting's own record adds Close_Date (the deadline applicants see; NA for "Posted until
+# filled"), Job_Status (raw archive only) and posted pay (add_schoolspring_details()). A failed detail request
+# leaves only that posting's fields NA.
+schoolspring_df <- mt_board_rows(
+  "SchoolSpring", function(row) fetch_schoolspring_postings(row$Platform_Key),
+  expected_cols = c("Title", "Location", "Posted_Date", "Link"),
+  keep = c(K12_BOARD_COLS, "Close_Date", "Job_Status", POSTED_PAY_COLUMNS),
+  prep = function(df) if ("Link" %in% names(df)) add_schoolspring_details(df) else df)
+
+# Tyler Portico: Close_Date is a real end date only; Job_Code is the OPI matching key (raw archive only).
+tylerportico_df <- mt_board_rows(
+  "TylerPortico", function(row) fetch_tylerportico_postings(row$Platform_Key, row$District),
+  expected_cols = c("Title", "Location", "Posted_Date", "Link"),
+  keep = c(K12_BOARD_COLS, "Close_Date", "Job_Code"), extra = "Job_Code")
+
+tedk12_df <- mt_board_rows(
+  "TedK12", function(row) fetch_tedk12_postings(row$Platform_Key),
+  expected_cols = c("title", "date_posted", "position", "location", "url"),
+  keep = K12_BOARD_COLS)
+
+# Red Rover (St. Ignatius, Hamilton, Columbia Falls): the GraphQL API Red Rover's own board calls
+# (edjobs::fetch_redrover_postings(), 0.14.0). Platform_Key is the board's numeric org ID; the link slug comes from
+# Job_Link. Every row carries its own /opening/<n> page and the board's posted pay.
+redrover_df <- mt_board_rows(
+  "RedRoverK12", function(row) fetch_redrover_postings(row$Platform_Key, redrover_org_slug(row$Job_Link)),
+  expected_cols = c("Title", "Location", "Posted_Date", "Posting_ID", "Link"),
+  keep = c(K12_BOARD_COLS, POSTED_PAY_COLUMNS))
 
 # St. Labre Indian School's Trakstar board (fetch_st_labre_postings(), direct_api_scrapers.R; 2026-11-23): three
 # private Catholic schools (St. Labre, Ashland; St. Charles Mission, Pryor; Pretty Eagle Catholic Academy, Saint
